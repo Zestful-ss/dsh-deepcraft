@@ -403,7 +403,8 @@ ${footer}
   </div>
 </div>
 ${chatArea}
-<div data-conversation-scroll>
+<!-- The host keeps the composer inside its conversation scroller (the conversation's parts are marked within it, packages/engine/src/parts-table.ts), and the scroller's box reaches above the card: the transcript stands there. The stand-in has no transcript, so the padding stands for the room it takes. Without it the scroller's overflow clips the crab perched on the card's top edge, and a real press cannot reach it. -->
+<div data-conversation-scroll style="padding-top: 80px">
 <div class="_composerStack_h_1">
 <div data-composer-card${name === 'automode-hero' ? ' data-phase="hero"' : ''}>
 ${heroRow}

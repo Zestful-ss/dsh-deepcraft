@@ -19,6 +19,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 - 修复设置页导航里的 Claude Style 一格不显示 Claude 星芒的问题，这枚单色标记重新替下宿主的齿轮图标，浅色画布上取标签文字的颜色。
 - 修复流式输出很快时聊天区的跟随滑动跟不上内容的问题：滑动重新起步时改从动画自己画到的位置算起，一个回合开头读者自己那条消息在场期间让位结束后立刻恢复，一帧长高超过滑动一段距离的内容也照常滑完能滑的那一段，输入卡片的位置在整个回合里不再移动。
 - 修复窄窗口下对话区底部残留一条横向滚动条的问题：面板自身的横向溢出不再产生滚动条，面板内需要横向滚动的代码块与表格仍各自滚动。
+- 修复冒烟替身页裁掉螃蟹戳击区的问题：替身页的会话滚动区补出消息列占的高度，从卡片上沿伸出的螃蟹落在滚动区内，「点击左半边能戳到螃蟹」这条检查重新通过。
 
 ### 移除
 
@@ -42,6 +43,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 - Fix the Claude Style row in the settings navigation not drawing the Claude starburst, which replaces the host's gear again and takes the label's ink on the light canvas.
 - Fix the chat area's follow falling behind a fast answer: a restart of the stream slide is measured from where the animation itself has painted, the stand-down over the reader's own message ends with that message's entrance instead of a fixed window, and a frame growing by more than one slide carries is slid as far as a slide does; the composer's own box no longer moves through the turn.
 - Fix the horizontal scrollbar that appeared under the composer on a narrow window: the transcript pane's own horizontal overflow is clipped, while code blocks and tables inside it keep their own scrolling.
+- Fix the smoke stand-in page clipping the crab's poke area: the scroller now keeps the room the transcript takes, so the crab perched above the card's top edge stays inside its box and the check that a click on its left half reaches it passes again.
 
 ### Removals
 

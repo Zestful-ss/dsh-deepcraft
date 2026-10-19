@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 1,
+  "at": "2026-10-20",
+  "external": false,
+  "zh": "修复冒烟替身页裁掉螃蟹戳击区的问题：替身页的会话滚动区补出消息列占的高度，从卡片上沿伸出的螃蟹落在滚动区内，「点击左半边能戳到螃蟹」这条检查重新通过。",
+  "en": "Fix the smoke stand-in page clipping the crab's poke area: the scroller now keeps the room the transcript takes, so the crab perched above the card's top edge stays inside its box and the check that a click on its left half reaches it passes again."
+}
