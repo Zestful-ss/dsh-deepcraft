@@ -27,6 +27,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 ### 其他变更
 
 - README 改成展示文案：截图与动画帧在前，预览各一行说明，安装两个命令块，鸣谢四条。
+- 安装命令不再需要在仓库地址后附加分支名：默认分支改为只放发版打包产物的 `dist`，本文档与 README 的安装命令随之简化。
 
 <h3 id="en-unreleased">Improvements</h3>
 
@@ -49,6 +50,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 ### Chores
 
 - Make the READMEs presentation copy: screenshots and animation frames lead, each preview gets one line, installation is two command blocks, and the acknowledgements are four bullets.
+- The installation command no longer appends a branch name to the repository address: the default branch is now `dist`, which carries only the packaged release, and the README's install commands say so.
 
 ## [0.16.3] - 2026-10-18
 
