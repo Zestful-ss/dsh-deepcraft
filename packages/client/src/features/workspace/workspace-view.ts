@@ -2,16 +2,16 @@ import * as React from 'react'
 import * as primitives from '@deepseek-ai/dsh-client-ui-primitives'
 import * as reactDom from 'react-dom/client'
 import { SESSION_DELETE_ROUTE } from '../../constants'
-import { findSidebarRoot, hostLocale, hostSessions, hostWorkspaces } from '@dsh-claude-style/engine/host'
-import { observeMatches } from '@dsh-claude-style/engine/bus'
-import type { MatchList } from '@dsh-claude-style/engine/bus'
-import { buildElement, closestFrom, createStamp } from '@dsh-claude-style/engine/dom'
+import { findSidebarRoot, hostLocale, hostSessions, hostWorkspaces } from '@dsh-deepcraft/engine/host'
+import { observeMatches } from '@dsh-deepcraft/engine/bus'
+import type { MatchList } from '@dsh-deepcraft/engine/bus'
+import { buildElement, closestFrom, createStamp } from '@dsh-deepcraft/engine/dom'
 import { removeStrayNodes } from '../../shared/popover'
 import { VIEW_SWITCH_CLASS } from '../../shared/segment-control'
-import type { HostAnswer } from '@dsh-claude-style/engine/resource'
+import type { HostAnswer } from '@dsh-deepcraft/engine/resource'
 import { createSlidingPill } from '../../shared/sliding-pill'
-import type { HostContext } from '@dsh-claude-style/engine/host'
-import type { HostSessionsService, HostWorkspacesService } from '@dsh-claude-style/contracts/services'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
+import type { HostSessionsService, HostWorkspacesService } from '@dsh-deepcraft/contracts/services'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './workspace-view.manifest'
 import { copy } from './copy'
@@ -46,9 +46,9 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   let noticeRoot: reactDom.Root | null = null
   let noticeSeq = 0
   /** The section's view (active / archived), its heading and the host's tree, marked for workspace.css. */
-  const viewStamp = createStamp('data-dsh-claude-ws-view')
-  const labelStamp = createStamp('data-dsh-claude-ws-label')
-  const treeStamp = createStamp('data-dsh-claude-ws-tree')
+  const viewStamp = createStamp('data-dsh-deepcraft-ws-view')
+  const labelStamp = createStamp('data-dsh-deepcraft-ws-label')
+  const treeStamp = createStamp('data-dsh-deepcraft-ws-tree')
   const SEGMENTS: { id: string, key: CopyKey }[] = [
     { id: 'active', key: 'archiveActive' },
     { id: 'archived', key: 'archiveArchived' }
@@ -107,7 +107,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // The labels of every section the sidebar holds, kept current by the bus
     // (D40): which one dresses a control is decided here per pass, but the
     // document is walked once rather than on every pass.
-    labelWatch ??= observeMatches<HTMLElement>('[data-dsh-claude-part~="section-label"]')
+    labelWatch ??= observeMatches<HTMLElement>('[data-dsh-deepcraft-part~="section-label"]')
     const labels = labelWatch.all()
     for (let i = 0; i < labels.length; i++) {
       if (sectionOf(labels[i]) === null) continue
@@ -119,9 +119,9 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   }
 
   /** The tree's rows: the host's own row key, or either row part. */
-  const TREE_ROW_SELECTOR = '[data-row-key], [data-dsh-claude-part~="session-row"], [data-dsh-claude-part~="project-row"]'
+  const TREE_ROW_SELECTOR = '[data-row-key], [data-dsh-deepcraft-part~="session-row"], [data-dsh-deepcraft-part~="project-row"]'
   /** The section's list area, the sibling its header shares a parent with. */
-  const LIST_AREA_SELECTOR = '[data-dsh-claude-part~="list-area"]'
+  const LIST_AREA_SELECTOR = '[data-dsh-deepcraft-part~="list-area"]'
 
   /**
    * The section's list area, which is what the view mark rides: the mark goes on
@@ -263,7 +263,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       refusal.status = status
       throw refusal
     }).catch((reason: { status?: number, message?: string }) => {
-      console.warn('dsh-claude-style: session delete rejected:', reason)
+      console.warn('dsh-deepcraft: session delete rejected:', reason)
       notifyToast(reason?.status === 409
         ? copy('archiveDeleteOpen')
         : copy('archiveDeleteFailed', { detail: reason?.message ?? String(reason) }))
@@ -285,7 +285,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     if (followed === null || typeof followed.refresh !== 'function') return
     // Best effort against the host's sessions service: a rejection leaves the list as it stands (D12).
     followed.refresh().catch((reason: unknown) => {
-      console.warn('dsh-claude-style: session baseline refresh rejected:', reason)
+      console.warn('dsh-deepcraft: session baseline refresh rejected:', reason)
     })
   }
 
@@ -298,14 +298,14 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     if (followed === null) return
     // A refused unarchive keeps the row in the archive set; the host stays the owner of the verdict (D12).
     Promise.resolve(followed.unarchiveSession(id)).catch((reason: unknown) => {
-      console.warn('dsh-claude-style: session unarchive rejected:', reason)
+      console.warn('dsh-deepcraft: session unarchive rejected:', reason)
     })
   }
 
   /** One row action: the host's icon inside the host's tooltip. */
   function actionButton(kind: 'restore' | 'delete', label: string, onClick: (event: React.MouseEvent) => void) {
-    const wrapper = buildElement('span', 'dsh-claude-archive-action')
-    const className = kind === 'restore' ? 'dsh-claude-archive-restore' : 'dsh-claude-archive-delete'
+    const wrapper = buildElement('span', 'dsh-deepcraft-archive-action')
+    const className = kind === 'restore' ? 'dsh-deepcraft-archive-restore' : 'dsh-deepcraft-archive-delete'
     const Icon = kind === 'restore' ? primitives.IconUnarchiveOutlineRegular : primitives.IconTrashOutlineRegular
     const root = reactDom.createRoot(wrapper)
     actionRoots.push(root)
@@ -320,12 +320,12 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   }
 
   function buildArchivedRow(item: { id: string, title: string, at: number }) {
-    const row = buildElement('div', 'dsh-claude-archive-row')
+    const row = buildElement('div', 'dsh-deepcraft-archive-row')
     row.setAttribute('role', 'button')
     row.setAttribute('tabindex', '0')
     row.setAttribute('data-session-id', item.id)
-    row.appendChild(buildElement('span', 'dsh-claude-archive-title', item.title))
-    row.appendChild(buildElement('span', 'dsh-claude-archive-time', relativeTime(item.at)))
+    row.appendChild(buildElement('span', 'dsh-deepcraft-archive-title', item.title))
+    row.appendChild(buildElement('span', 'dsh-deepcraft-archive-time', relativeTime(item.at)))
     // The host's archived rows offer an unarchive action; the skin's list
     // carries the same pair, so leaving the archived view is not the only way
     // back to a conversation.
@@ -351,11 +351,11 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     actionRoots = []
     while (listHost.firstChild) listHost.removeChild(listHost.firstChild)
     if (items === null) {
-      listHost.appendChild(buildElement('div', 'dsh-claude-archive-status', copy('archiveLoading')))
+      listHost.appendChild(buildElement('div', 'dsh-deepcraft-archive-status', copy('archiveLoading')))
       return
     }
     if (items.length === 0) {
-      listHost.appendChild(buildElement('div', 'dsh-claude-archive-status', copy('archiveEmpty')))
+      listHost.appendChild(buildElement('div', 'dsh-deepcraft-archive-status', copy('archiveEmpty')))
       return
     }
     for (let i = 0; i < items.length; i++) listHost.appendChild(buildArchivedRow(items[i]))
@@ -364,17 +364,17 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   function buildControl() {
     // The shared small segment look (shared/segment-control.css); the feature
     // class stays for the placement and label crossfade in workspace.css.
-    const group = buildElement('div', `${VIEW_SWITCH_CLASS} dsh-claude-ws-segments`)
+    const group = buildElement('div', `${VIEW_SWITCH_CLASS} dsh-deepcraft-ws-segments`)
     group.setAttribute('role', 'radiogroup')
     for (let i = 0; i < SEGMENTS.length; i++) {
-      const item = buildElement('button', 'dsh-claude-ws-segment', '')
+      const item = buildElement('button', 'dsh-deepcraft-ws-segment', '')
       item.type = 'button'
       item.setAttribute('role', 'radio')
       item.setAttribute('data-view', SEGMENTS[i].id)
       group.appendChild(item)
     }
     group.addEventListener('click', event => {
-      const item = closestFrom(event.target, '.dsh-claude-ws-segment')
+      const item = closestFrom(event.target, '.dsh-deepcraft-ws-segment')
       if (item === null) return
       event.stopPropagation()
       event.preventDefault()
@@ -449,7 +449,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     if (host === null) return
     if (listHost === null || listHost.parentElement !== host) {
       if (listHost !== null && listHost.parentElement !== null) listHost.parentElement.removeChild(listHost)
-      listHost = buildElement('div', 'dsh-claude-archive-list')
+      listHost = buildElement('div', 'dsh-deepcraft-archive-list')
       host.insertBefore(listHost, tree.nextSibling)
       renderList()
     }
@@ -459,7 +459,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // sidebar the list lives in (core/host.ts): the sweep runs every pass, and
     // a whole-document query costs a walk of the conversation's rows too.
     const sidebar = findSidebarRoot()
-    removeStrayNodes(sidebar ?? document, '.dsh-claude-archive-list', [listHost])
+    removeStrayNodes(sidebar ?? document, '.dsh-deepcraft-archive-list', [listHost])
     viewStamp.mark(host, view)
   }
 

@@ -1,9 +1,9 @@
 import { motionReduced } from '../../core/prefs'
-import { buildElement } from '@dsh-claude-style/engine/dom'
+import { buildElement } from '@dsh-deepcraft/engine/dom'
 import { motionMs } from '../../shared/motion'
 
 /** One flash of a particle, in seconds: the period token the stylesheet's own shorthand runs (D9). */
-const FLASH_S = motionMs('--dsh-claude-period-flash') / 1000
+const FLASH_S = motionMs('--dsh-deepcraft-period-flash') / 1000
 
 /**
  * The dot matrix the reasoning-effort slider (effort/control.ts) shows on
@@ -127,7 +127,7 @@ export function createEffortMatrix(track: HTMLElement, matrix: HTMLElement) {
     for (let r = 0; r < lay.rows; r++) {
       for (let c = 0; c < lay.cols; c++) {
         const fx = lay.cols > 1 ? c / (lay.cols - 1) : 1
-        const cell = buildElement('div', 'dsh-claude-effort-matrix-cell')
+        const cell = buildElement('div', 'dsh-deepcraft-effort-matrix-cell')
         /* The entrance sweeps in from the right — the end the knob reached
            for — with a whisper of scatter so it does not read as a wipe.
            !important inline: the stylesheet's animation shorthand is
@@ -135,7 +135,7 @@ export function createEffortMatrix(track: HTMLElement, matrix: HTMLElement) {
            would silently lose. Standing still it is left off, for the same
            reason paintParticle leaves the cycle off (D40). */
         if (!motionReduced()) cell.style.setProperty('animation-delay', `${((1 - fx) * FLASH_S * 0.31 + cellUnit(r, c, 4) * FLASH_S * 0.055).toFixed(3)}s`, 'important')
-        const sq = buildElement('div', 'dsh-claude-effort-matrix-sq')
+        const sq = buildElement('div', 'dsh-deepcraft-effort-matrix-sq')
         /* The plume shape is a STATIC per-block opacity: the flash animates
            the colour through it, so the two never fight. */
         sq.style.opacity = cellFade(fx).toFixed(3)

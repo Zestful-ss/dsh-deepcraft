@@ -18,6 +18,7 @@
   "title": { "zh": "你的账户已被暂停", "en": "Your account is on hold" },
   "banLocaleTitle": { "zh": "封号彩蛋", "en": "Account-hold easter egg" },
   "banLocaleDesc": { "zh": "账号行打开的那张彩蛋页，按这里选的语言显示。", "en": "The account-hold page the account row opens, in the language chosen here." },
+  "banThemeRequired": { "zh": "仅在 Claude 主题下可用。", "en": "Only available in the Claude theme." },
   "banLocaleOff": { "zh": "关闭", "en": "Off" },
   "banLocaleZh": { "zh": "中文", "en": "中文" },
   "banLocaleEn": { "zh": "English", "en": "English" }

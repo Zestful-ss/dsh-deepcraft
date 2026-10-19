@@ -23,14 +23,14 @@ const { bound } = require('./bounds.cjs')
 
 /** The host's own classes this scenario reads, the seat the skin keeps out of the row, and the skin's own control, which the rail has no heading to lay over. */
 const RAIL = {
-  frame: '[data-dsh-claude-part~="layout-frame"]',
-  column: '[data-dsh-claude-part~="sidebar-column"]',
-  toggle: 'button[data-dsh-claude-part~="sidebar-toggle"]',
-  panelRow: '[data-dsh-claude-part~="panel-row"]',
-  glyph: '[data-dsh-claude-part~="panel-glyph"]',
-  newSession: 'button[data-dsh-claude-part~="new-session"]',
-  seat: '[data-dsh-claude-part~="new-session-mask"]',
-  segments: '.dsh-claude-ws-segments',
+  frame: '[data-dsh-deepcraft-part~="layout-frame"]',
+  column: '[data-dsh-deepcraft-part~="sidebar-column"]',
+  toggle: 'button[data-dsh-deepcraft-part~="sidebar-toggle"]',
+  panelRow: '[data-dsh-deepcraft-part~="panel-row"]',
+  glyph: '[data-dsh-deepcraft-part~="panel-glyph"]',
+  newSession: 'button[data-dsh-deepcraft-part~="new-session"]',
+  seat: '[data-dsh-deepcraft-part~="new-session-mask"]',
+  segments: '.dsh-deepcraft-ws-segments',
 }
 
 /** How far a control's centre may stand from the column's own line and still read as on it. */

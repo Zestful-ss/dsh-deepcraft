@@ -304,7 +304,7 @@ module.exports = {
       collapsed.texts.includes('app.js') && (collapsed.figures || []).join(' ') === '+1 -1',
       JSON.stringify({ figures: collapsed.figures, texts: collapsed.texts }))
     check('the settled row\'s summary carries the file link',
-      typeof collapsed.summary === 'string' && collapsed.summary.includes('dsh-claude-file-link'),
+      typeof collapsed.summary === 'string' && collapsed.summary.includes('dsh-deepcraft-file-link'),
       JSON.stringify(collapsed.summary))
     check('the row\'s title comes from the seat copy and stands in the collapsed content',
       (collapsed.disclosure || {}).title === '' && collapsed.texts.includes('t:tool.title.edit'),
@@ -315,19 +315,19 @@ module.exports = {
     check('expanded, the hunks the result metadata reported go into the diff card',
       ((expanded.diff || {}).diffs || []).length === 1, JSON.stringify(expanded.diff))
     check('the diff card is capped at the chat line count and carries the skin\'s class',
-      (expanded.diff || {}).maxLines === 9 && (expanded.diff || {}).className === 'dsh-claude-file-diff',
+      (expanded.diff || {}).maxLines === 9 && (expanded.diff || {}).className === 'dsh-deepcraft-file-diff',
       JSON.stringify(expanded.diff))
     check('the expanded row carries the inspect label', expanded.texts.includes('t:row.inspect'), JSON.stringify(expanded.texts))
     check('a failed call reads as an error row', (failed.root || {}).state === 'error', JSON.stringify(failed.root))
     check('a failed call draws no diff', failed.diff === null, JSON.stringify(failed.diff))
     check('the failed call\'s verdict colours the summary and hides the failed label',
-      typeof failed.summary === 'string' && failed.summary.includes('dsh-claude-file-error') &&
+      typeof failed.summary === 'string' && failed.summary.includes('dsh-deepcraft-file-error') &&
         failed.hiddenText === 't:row.failed',
       JSON.stringify({ summary: failed.summary, hidden: failed.hiddenText }))
     check('the failed call shows the tool\'s own error',
       failed.texts.includes('ToolError: permission_denied'), JSON.stringify(failed.texts))
     check('a write that is still running shows the change its arguments describe',
-      (running.diff || {}).className === 'dsh-claude-file-diff', JSON.stringify(running.diff))
+      (running.diff || {}).className === 'dsh-deepcraft-file-diff', JSON.stringify(running.diff))
     check('the running write announces the running state', running.hiddenText === 't:row.running', JSON.stringify(running.hiddenText))
     check('a call whose change cannot be derived draws no diff card', escalated.diff === null, JSON.stringify(escalated.diff))
     check('it keeps the host\'s IN/OUT card, with no output row',
@@ -344,7 +344,7 @@ module.exports = {
       (readRow.figures || []).length === 0, JSON.stringify(readRow.figures))
     check('expanded, a read shows the file\'s own window, read back out of its result',
       ((readRow.read || {}).lines || []).length === 2 && (readRow.read || {}).totalLines === 2 &&
-        (readRow.read || {}).className === 'dsh-claude-file-read',
+        (readRow.read || {}).className === 'dsh-deepcraft-file-read',
       JSON.stringify(readRow.read))
     check('a read that is still running shows the call alone and no window',
       (reading.root || {}).state === 'running' && reading.read === null && reading.texts.includes('t:row.running'),
@@ -372,7 +372,7 @@ module.exports = {
     const laneOf = (reading, name) => (reading.lanes || []).find((lane) => String(lane.name).includes(name)) || {}
     const numbers = (text) => (String(text).match(/-?[\d.]+/g) || []).map(Number)
     const LANE_DOTS = [['is-bounce', 3], ['is-line', 3], ['is-orbit', 4]]
-    const OPENINGS = ['dsh-claude-wait-dot', 'dsh-claude-wait-dot-line', 'dsh-claude-wait-dot-orbit-1']
+    const OPENINGS = ['dsh-deepcraft-wait-dot', 'dsh-deepcraft-wait-dot-line', 'dsh-deepcraft-wait-dot-orbit-1']
     // 三条轨道都在页面上、各带自己的球数（3 / 3 / 4），其中一条在用；开哪一条是随机的，
     // 所以这里只认「用的是三条之一」。
     check('加载点把三条轨道都建好了——三颗跳球、三颗走路、四颗交换四角——其中一条在用，主机的鲸鱼尾让位',
@@ -387,7 +387,7 @@ module.exports = {
     const bounceFrames = (wait.bounceLane || { frames: [] }).frames || []
     const bounceY = bounceFrames.map((frame) => numbers(frame.translate[0])[1]).filter((one) => Number.isFinite(one))
     check('跳球那条：一颗球从地面弹起 8px 再落回，三颗各错开一个相位',
-      bounceFrames.length >= 40 && bounceFrames[0].animation === 'dsh-claude-wait-dot' &&
+      bounceFrames.length >= 40 && bounceFrames[0].animation === 'dsh-deepcraft-wait-dot' &&
         bounceFrames[0].duration === '0.5s' && (bounceFrames[0].delays || []).join(',') === '-0.5s,-0.3s,-0.2s' &&
         Math.min(...bounceY) <= -7.5 && Math.max(...bounceY) >= -0.5,
       JSON.stringify({ readings: bounceFrames.length, low: Math.min(...bounceY), high: Math.max(...bounceY), head: bounceFrames[0] }))
@@ -418,7 +418,7 @@ module.exports = {
     const clash = phases.some((one, at) => phases.some((two, other) => other > at &&
       (Math.abs(one - two) < 0.02 || Math.abs(Math.abs(one - two) - 0.5) < 0.02)))
     check('走路那条：三颗各沿自己的线走简谐、两端停得比中间久、相位各错三分之一，去程与回程是同一条曲线，最长的一帧也不比跳球大',
-      lineFrames.length >= 45 && lineFrames[0].animation === 'dsh-claude-wait-dot-line' &&
+      lineFrames.length >= 45 && lineFrames[0].animation === 'dsh-deepcraft-wait-dot-line' &&
         lineFrames[0].duration === '1.25s' && phases.length === 3 && !clash &&
         highest - lowest >= 7 && Math.max(...sizes) <= 1.001 && drift <= 0.5 && sizeDrift <= 0.05 && dwell >= 0.38,
       JSON.stringify({
@@ -508,7 +508,7 @@ module.exports = {
       working.sweepOnLabel === false && wait.reduced?.sweepOnLabel === false,
       JSON.stringify({ working: working.sweepOnLabel, reduced: wait.reduced?.sweepOnLabel }))
     check('the Motion tab\'s other paint takes the line\'s words over: the copy runs the wash and its two loops, and the band returns when it is picked again',
-      wait.wash?.statusMotion === 'wash' && wait.wash?.sweep === 'dsh-claude-wash-hue, dsh-claude-wash-drift' &&
+      wait.wash?.statusMotion === 'wash' && wait.wash?.sweep === 'dsh-deepcraft-wash-hue, dsh-deepcraft-wash-drift' &&
         wait.sweepAgain?.statusMotion === 'sweep' && wait.sweepAgain?.sweep === BAND_ANIMATION,
       JSON.stringify({ wash: wait.wash, sweepAgain: wait.sweepAgain }))
     check('a model at work shows no overtime badge', working.badge === null, JSON.stringify(working))
@@ -682,7 +682,7 @@ module.exports = {
     check('the other entrance flies nothing: the echo waits hidden and no stand-in goes up',
       grow.waiting === true && grow.ghost === false, JSON.stringify(grow))
     check('the row that takes the echo\'s place grows about its own bottom-right corner, and can be seen from the first frame',
-      grow.marked === true && grow.animation === 'dsh-claude-enter-grow' && grow.duration !== '0s' && grow.visibility === 'visible' &&
+      grow.marked === true && grow.animation === 'dsh-deepcraft-enter-grow' && grow.duration !== '0s' && grow.visibility === 'visible' &&
         grow.grownLeft > 2 && grow.grownLeft + grow.grownTop > 4 * (grow.grownRight + grow.grownBottom),
       JSON.stringify(grow))
   },

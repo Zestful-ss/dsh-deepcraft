@@ -18,9 +18,9 @@
 /** The row's box, the dock's box, the pill's own box and the properties the overlay reads. */
 const readOverlay = (page) => page.evaluate(() => {
   const card = document.querySelector('[data-composer-card]')
-  const row = card?.querySelector('[data-dsh-claude-part~="trailing"]')?.parentElement ?? null
-  const cluster = card?.querySelector('[data-dsh-claude-part~="trailing"]') ?? null
-  const meter = document.querySelector('[data-dsh-claude-context-meter]')
+  const row = card?.querySelector('[data-dsh-deepcraft-part~="trailing"]')?.parentElement ?? null
+  const cluster = card?.querySelector('[data-dsh-deepcraft-part~="trailing"]') ?? null
+  const meter = document.querySelector('[data-dsh-deepcraft-context-meter]')
   const trigger = meter?.querySelector('button') ?? null
   const box = (el) => {
     if (el === null || el === undefined) return null
@@ -37,8 +37,8 @@ const readOverlay = (page) => page.evaluate(() => {
     meter: box(meter),
     pill: pillBox,
     pillGap: clusterBox === null || pillBox === null ? null : Math.round((pillBox.left - clusterBox.right) * 100) / 100,
-    offset: style.getPropertyValue('--dsh-claude-meter-row-offset').trim(),
-    height: style.getPropertyValue('--dsh-claude-meter-row-height').trim(),
+    offset: style.getPropertyValue('--dsh-deepcraft-meter-row-offset').trim(),
+    height: style.getPropertyValue('--dsh-deepcraft-meter-row-height').trim(),
   }
 })
 
@@ -68,7 +68,7 @@ const readOverlayWithGap = async (page, gap) => {
  */
 const readOverlayWithWidePill = async (page) => {
   const reading = await page.evaluate(() => {
-    const trigger = document.querySelector('[data-dsh-claude-context-meter] button')
+    const trigger = document.querySelector('[data-dsh-deepcraft-context-meter] button')
     if (trigger === null) return null
     trigger.style.marginLeft = '-14px'
     return true
@@ -77,7 +77,7 @@ const readOverlayWithWidePill = async (page) => {
   await page.waitForTimeout(900)
   const read = await readOverlay(page)
   await page.evaluate(() => {
-    const trigger = document.querySelector('[data-dsh-claude-context-meter] button')
+    const trigger = document.querySelector('[data-dsh-deepcraft-context-meter] button')
     if (trigger !== null) trigger.style.marginLeft = ''
   })
   await page.waitForTimeout(900)
@@ -93,13 +93,13 @@ function statsOverlayScenario({ check }) {
     script: 'greeting',
     prompt: 'hello there',
     patch: [
-      '- id: ui-skin-claude-style',
+      '- id: ui-skin-deepcraft',
       '  config:',
       '    statsPosition: context',
     ],
     async assert({ page, session }) {
       await page.waitForFunction(
-        () => document.querySelector('[data-dsh-claude-context-meter]') !== null,
+        () => document.querySelector('[data-dsh-deepcraft-context-meter]') !== null,
         undefined, { timeout: 20000 },
       ).catch(() => {})
       const resting = await readOverlay(page)

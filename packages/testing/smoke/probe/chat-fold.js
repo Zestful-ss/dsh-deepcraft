@@ -27,16 +27,16 @@
       // of it — read as the words around each standing digit; a roll's sizer
       // holds the digit too, so its text is no reading.
       var figuresOf = function (holder) {
-        return Array.prototype.map.call(holder.querySelectorAll(':scope > .dsh-claude-process-summary-part'), function (part) {
-          var words = part.querySelectorAll('.dsh-claude-process-summary-words')
-          var digit = part.querySelector('.dsh-claude-process-summary-roll [data-dsh-claude-roll]:not([data-dsh-claude-roll="exit"])')
+        return Array.prototype.map.call(holder.querySelectorAll(':scope > .dsh-deepcraft-process-summary-part'), function (part) {
+          var words = part.querySelectorAll('.dsh-deepcraft-process-summary-words')
+          var digit = part.querySelector('.dsh-deepcraft-process-summary-roll [data-dsh-deepcraft-roll]:not([data-dsh-deepcraft-roll="exit"])')
           return words[0].textContent + (digit === null ? '' : digit.textContent) + words[1].textContent
         }).join('')
       }
       var summaryOf = function () {
-        var summary = foldHeader.querySelector('.dsh-claude-process-summary')
+        var summary = foldHeader.querySelector('.dsh-deepcraft-process-summary')
         if (summary === null) return null
-        var fit = summary.querySelector('.dsh-claude-process-summary-fit')
+        var fit = summary.querySelector('.dsh-deepcraft-process-summary-fit')
         var style = getComputedStyle(foldHeader)
         var parentStyle = getComputedStyle(foldGroup)
         var gap = parseFloat(style.columnGap) || 0
@@ -51,29 +51,29 @@
           if (width > 0) room -= width + gap
         }
         return {
-          marked: foldGroup.hasAttribute('data-dsh-claude-summary'),
+          marked: foldGroup.hasAttribute('data-dsh-deepcraft-summary'),
           name: foldHeader.getAttribute('aria-label'),
-          form: summary.getAttribute('data-dsh-claude-summary-form'),
+          form: summary.getAttribute('data-dsh-deepcraft-summary-form'),
           // The summary's own figures: the band over a running one holds a copy
           // of them, which is read on its own below.
           text: figuresOf(summary),
           sentence: fit === null ? null : Math.round(fit.getBoundingClientRect().width),
           room: Math.round(room),
           headerWidth: foldHeader.clientWidth,
-          running: summary.hasAttribute('data-dsh-claude-summary-running'),
+          running: summary.hasAttribute('data-dsh-deepcraft-summary-running'),
           // The host's band over the running summary (shared/sweep-band.ts):
           // the two halves it runs, and the figures its copy holds.
           band: (function () {
-            var band = summary.querySelector(':scope > .dsh-claude-sweep-band')
+            var band = summary.querySelector(':scope > .dsh-deepcraft-sweep-band')
             if (band === null) return null
             return {
               animation: getComputedStyle(band).animationName + ', ' + getComputedStyle(band.firstElementChild).animationName,
               text: figuresOf(band.firstElementChild),
               // The copy's digits stand still while the summary's own roll.
-              rolling: band.querySelector('[data-dsh-claude-roll="enter"], [data-dsh-claude-roll="exit"]') !== null,
+              rolling: band.querySelector('[data-dsh-deepcraft-roll="enter"], [data-dsh-deepcraft-roll="exit"]') !== null,
             }
           })(),
-          rolling: summary.querySelector('[data-dsh-claude-roll="enter"]') !== null,
+          rolling: summary.querySelector('[data-dsh-deepcraft-roll="enter"]') !== null,
           wordsShown: getComputedStyle(foldWords).display !== 'none',
           summaryShown: getComputedStyle(summary).display !== 'none',
         }
@@ -132,8 +132,8 @@
         var textStyle = getComputedStyle(text)
         var matrix = /matrix\(1, 0, 0, 1, 0, (-?[\d.]+)\)/.exec(textStyle.transform)
         return {
-          on: body.hasAttribute('data-dsh-claude-reason-window'),
-          capped: body.hasAttribute('data-dsh-claude-reason-capped'),
+          on: body.hasAttribute('data-dsh-deepcraft-reason-window'),
+          capped: body.hasAttribute('data-dsh-deepcraft-reason-capped'),
           slotHeight: Math.round(body.getBoundingClientRect().height),
           bodyHeight: Math.round(body.closest('[data-variant="think"]').getBoundingClientRect().height),
           maxHeight: style.maxHeight,
@@ -191,9 +191,9 @@
           var body = bodyOf()
           return {
             present: body !== null,
-            rolling: body !== null && body.hasAttribute('data-dsh-claude-rolling'),
+            rolling: body !== null && body.hasAttribute('data-dsh-deepcraft-rolling'),
             clipped: body !== null && body.style.overflow === 'hidden',
-            rollingAnywhere: document.querySelector('[data-dsh-claude-rolling]') !== null,
+            rollingAnywhere: document.querySelector('[data-dsh-deepcraft-rolling]') !== null,
             clicks: clicksSince(),
           }
         }
@@ -250,13 +250,13 @@
       document.body.appendChild(foldedColumn)
       await probe.settle()
       var messageOf = function () {
-        var toggle = foldedRow.querySelector('.dsh-claude-message-fold-toggle')
+        var toggle = foldedRow.querySelector('.dsh-deepcraft-message-fold-toggle')
         var style = getComputedStyle(foldedBubble)
         return {
-          marked: foldedBubble.getAttribute('data-dsh-claude-message-fold'),
+          marked: foldedBubble.getAttribute('data-dsh-deepcraft-message-fold'),
           capped: Math.round(foldedBubble.clientHeight),
           full: Math.round(foldedBubble.scrollHeight),
-          cap: Math.round(parseFloat(style.getPropertyValue('--dsh-claude-message-fold-cap')) || 0),
+          cap: Math.round(parseFloat(style.getPropertyValue('--dsh-deepcraft-message-fold-cap')) || 0),
           mask: style.maskImage,
           toggle: toggle === null ? null : toggle.textContent,
         }
@@ -265,7 +265,7 @@
       foldedWords.style.height = '900px'
       await probe.settle()
       r.fold.message = messageOf()
-      var foldedToggle = foldedRow.querySelector('.dsh-claude-message-fold-toggle')
+      var foldedToggle = foldedRow.querySelector('.dsh-deepcraft-message-fold-toggle')
       foldedToggle.click()
       await probe.settle()
       r.fold.messageOpen = messageOf()
@@ -281,7 +281,7 @@
       var accessoryRolled = false
       wrappedRow.click()
       var rolled = rollOf(await probe.watch(function () {
-        if (wrappedAccessory.hasAttribute('data-dsh-claude-rolling')) accessoryRolled = true
+        if (wrappedAccessory.hasAttribute('data-dsh-deepcraft-rolling')) accessoryRolled = true
         return wrappedDoor()
       }))
       r.fold.wrappedRolled = {
@@ -296,7 +296,7 @@
       // The switch covers the door and the entrance fade as well as the automatic
       // folding: off, a press reaches the host's own handler in the same turn and
       // an inserted body carries no transition (fold-motion.css rides
-      // data-dsh-claude-chat-fold).
+      // data-dsh-deepcraft-chat-fold).
       var foldFlow = document.getElementById('debugFlow')
       var entranceOf = function () {
         var row = document.createElement('button')
@@ -350,15 +350,15 @@
       var offImmediate = window.__disclosureClicks - offBefore
       await probe.settle()
       r.fold.animationsOff = {
-        mark: document.body.hasAttribute('data-dsh-claude-chat-fold'),
+        mark: document.body.hasAttribute('data-dsh-deepcraft-chat-fold'),
         entrance: entranceOf(),
         wrappedEntrance: wrappedEntranceOf(),
         immediateClicks: offImmediate,
-        rolling: document.querySelector('[data-dsh-claude-rolling]') !== null,
+        rolling: document.querySelector('[data-dsh-deepcraft-rolling]') !== null,
       }
       window.__pushForm({ chatAnimations: true })
       await probe.settle()
-      r.fold.animationsBack = { mark: document.body.hasAttribute('data-dsh-claude-chat-fold') }
+      r.fold.animationsBack = { mark: document.body.hasAttribute('data-dsh-deepcraft-chat-fold') }
     })
   })
 })()

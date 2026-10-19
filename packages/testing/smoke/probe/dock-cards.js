@@ -18,12 +18,12 @@
         return { margin: s.margin, radius: s.borderRadius, border: s.borderTopWidth, shadow: s.boxShadow, overflow: s.overflow }
       }
       var divider = function () {
-        var line = document.querySelector('[data-dockkit-split] > [data-dsh-claude-part~="dock-divider"]')
+        var line = document.querySelector('[data-dockkit-split] > [data-dsh-deepcraft-part~="dock-divider"]')
         return getComputedStyle(line, '::before').backgroundColor
       }
       var snapshot = function () {
         return {
-          look: document.body.getAttribute('data-dsh-claude-dock-look'),
+          look: document.body.getAttribute('data-dsh-deepcraft-dock-look'),
           empty: read('debugDockEmpty'),
           pane: read('debugDockPane'),
           left: read('debugSplitLeft'),

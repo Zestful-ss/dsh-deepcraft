@@ -7,7 +7,7 @@
  * one process per run is what keeps a changed constant from being read stale.
  * The build cache (scripts/build-cache.mjs) is what makes that cheap.
  *
- * The runs carry DSH_CLAUDE_STYLE_DEBUG=1: a watched checkout is the linked one
+ * The runs carry DSH_DEEPCRAFT_DEBUG=1: a watched checkout is the linked one
  * whose live page hot-reloads to every new bundle, and the page still running the
  * previous one asks for that build's chunks (D72). A plain `npm run build`
  * afterwards leaves lib/assets/ holding one build's assets again.
@@ -48,7 +48,7 @@ function build(reason) {
   const child = spawn(process.execPath, [BUILD], {
     cwd: ROOT,
     stdio: 'inherit',
-    env: { ...process.env, DSH_CLAUDE_STYLE_DEBUG: '1', DSH_CLAUDE_STYLE_DEV: '1' },
+    env: { ...process.env, DSH_DEEPCRAFT_DEBUG: '1', DSH_DEEPCRAFT_DEV: '1' },
   })
   child.on('close', (code) => {
     const took = Date.now() - started
@@ -81,5 +81,5 @@ fs.watch(ROOT, (_event, name) => {
   if (name !== null && WATCHED_FILES.includes(name)) changed(name)
 })
 
-console.log(`[dev] watching ${[...WATCHED_DIRS.map((dir) => `${dir}/`), ...WATCHED_FILES].join(', ')} (builds carry DSH_CLAUDE_STYLE_DEBUG=1)`)
+console.log(`[dev] watching ${[...WATCHED_DIRS.map((dir) => `${dir}/`), ...WATCHED_FILES].join(', ')} (builds carry DSH_DEEPCRAFT_DEBUG=1)`)
 build('start')

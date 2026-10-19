@@ -62,7 +62,7 @@ test('entering the panel cancels pending hover work', () => {
 
 function card() {
   const element = document.createElement('div')
-  element.className = 'dsh-claude-popover-card'
+  element.className = 'dsh-deepcraft-popover-card'
   document.body.append(element)
   return element
 }

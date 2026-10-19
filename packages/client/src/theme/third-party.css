@@ -5,22 +5,22 @@
    tool name the skin's technical-meta mono voice (overriding the editorial
    serif the host's title rule lends it), the variant label a real
    pill, and the code preview card padding. */
-body[data-dsh-claude-style] .agy-tv-header {
+body[data-dsh-deepcraft] .agy-tv-header {
   display: flex;
   align-items: center;
   gap: 8px;
   min-height: 24px;
 }
-body[data-dsh-claude-style] .agy-tv-title {
-  font-family: var(--dsh-claude-font-code);
+body[data-dsh-deepcraft] .agy-tv-title {
+  font-family: var(--dsh-deepcraft-font-code);
   font-weight: 500;
   font-size: 12px;
   letter-spacing: 0;
   line-height: 24px;
   color: var(--dsw-alias-label-secondary);
 }
-body[data-dsh-claude-style] .agy-tv-badge {
-  font-family: var(--dsh-claude-font-code);
+body[data-dsh-deepcraft] .agy-tv-badge {
+  font-family: var(--dsh-deepcraft-font-code);
   font-size: 11px;
   line-height: 16px;
   padding: 0 6px;
@@ -28,7 +28,7 @@ body[data-dsh-claude-style] .agy-tv-badge {
   background: var(--dsw-alias-interactive-bg-hover);
   color: var(--dsw-alias-label-tertiary);
 }
-body[data-dsh-claude-style] .agy-tv-pre {
+body[data-dsh-deepcraft] .agy-tv-pre {
   padding: 10px 12px;
   overflow-x: auto;
 }
@@ -47,16 +47,16 @@ body[data-dsh-claude-style] .agy-tv-pre {
    whichever way round they were opened. Gated on the dock-look attribute like
    the card itself: flush panes need no seam taken in, and the dock's own
    resting line is the only thing left between them. */
-body[data-dsh-claude-style][data-dsh-claude-dock-look="card"] [data-dsh-claude-part~="rightbar-column"] [data-dockkit-split] > [data-dockkit-column] > [data-dockkit-pane] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-dock-look="card"] [data-dsh-deepcraft-part~="rightbar-column"] [data-dockkit-split] > [data-dockkit-column] > [data-dockkit-pane] {
   margin: 6px !important;
 }
-body[data-dsh-claude-style][data-dsh-claude-dock-look="card"] [data-dsh-claude-part~="rightbar-column"] [data-dockkit-split] > [data-dockkit-column="0"] > [data-dockkit-pane] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-dock-look="card"] [data-dsh-deepcraft-part~="rightbar-column"] [data-dockkit-split] > [data-dockkit-column="0"] > [data-dockkit-pane] {
   margin-right: 3px !important;
 }
-body[data-dsh-claude-style][data-dsh-claude-dock-look="card"] [data-dsh-claude-part~="rightbar-column"] [data-dockkit-split] > [data-dockkit-column="1"] > [data-dockkit-pane] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-dock-look="card"] [data-dsh-deepcraft-part~="rightbar-column"] [data-dockkit-split] > [data-dockkit-column="1"] > [data-dockkit-pane] {
   margin-left: 3px !important;
 }
-body[data-dsh-claude-style][data-dsh-claude-dock-look="card"] [data-dsh-claude-part~="rightbar-column"] [data-dockkit-split] > [data-dsh-claude-part~="dock-divider"]::before {
+body[data-dsh-deepcraft][data-dsh-deepcraft-dock-look="card"] [data-dsh-deepcraft-part~="rightbar-column"] [data-dockkit-split] > [data-dsh-deepcraft-part~="dock-divider"]::before {
   background: transparent !important;
 }
 

@@ -58,7 +58,7 @@ const PROPS = [
 function readInPage({ parts, props }) {
   const reading = {}
   for (const name of parts) {
-    const element = document.querySelector(`[data-dsh-claude-part~="${name}"]`)
+    const element = document.querySelector(`[data-dsh-deepcraft-part~="${name}"]`)
     if (element === null) continue
     const style = getComputedStyle(element)
     const values = {}

@@ -39,7 +39,7 @@ function hostForm(values: Record<string, unknown>) {
   }
   const forms = {
     describe: () => ({
-      getSnapshot: () => ({ status: 'ready', view: { namespaces: [{ ns: 'ui-skin-claude-style' }] } }),
+      getSnapshot: () => ({ status: 'ready', view: { namespaces: [{ ns: 'ui-skin-deepcraft' }] } }),
       subscribe: () => () => {},
       ensure: () => {},
     }),
@@ -47,7 +47,7 @@ function hostForm(values: Record<string, unknown>) {
   }
   const ctx = {
     get: (name: string) => name === 'configForms' ? forms : undefined,
-    fiber: { entry: { id: 'boot:ui-skin-claude-style' } },
+    fiber: { entry: { id: 'boot:ui-skin-deepcraft' } },
   } as unknown as HostContext
 
   return {
@@ -83,7 +83,7 @@ function boundHost(values: Record<string, unknown>) {
   const host = hostForm(values)
   const adopted: Record<string, unknown>[] = []
   const binding = createSettingsBinding({
-    namespaces: ['dsh-claude-style'],
+    namespaces: ['dsh-deepcraft'],
     adoptForm(value) { adopted.push(value) },
   })
   expect(binding.adopt(host.ctx)).toBe(true)
@@ -170,7 +170,7 @@ test('a write with no form bound holds nothing', async () => {
   const host = hostForm({ turnNav: true })
   const adopted: Record<string, unknown>[] = []
   const binding = createSettingsBinding({
-    namespaces: ['dsh-claude-style'],
+    namespaces: ['dsh-deepcraft'],
     adoptForm(value) { adopted.push(value) },
   })
   expect(await binding.save({ turnNav: false })).toBe(null)

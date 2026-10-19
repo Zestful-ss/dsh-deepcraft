@@ -1,6 +1,6 @@
 import { PACKAGE_NAME, QUIET_ATTR, READER_HOLD_ATTR } from '../client/src/constants'
 import { motionReduced } from '../client/src/core/prefs'
-import { adoptSkin } from '@dsh-claude-style/engine/skin'
+import { adoptSkin } from '@dsh-deepcraft/engine/skin'
 
 /**
  * Hand the engine the skin's own vocabulary before any test runs.

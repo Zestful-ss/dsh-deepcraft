@@ -1,5 +1,5 @@
 /**
- * Host half of dsh-claude-style.
+ * Host half of dsh-deepcraft.
  *
  * The skin's effect is browser-only. This half exists for the things a
  * browser-only plugin cannot do:
@@ -16,7 +16,7 @@
  *      the browser half's @font-face and the code face works with zero system
  *      installs. The Anthropic Sans/Serif/Mono faces are NOT in the npm
  *      package (they remain Anthropic's property), but a user who drops them
- *      into `$DSH_HOME/dsh-claude-style/fonts/` gets the same zero-install
+ *      into `$DSH_HOME/dsh-deepcraft/fonts/` gets the same zero-install
  *      treatment; a missing file simply 404s and the stack falls back to a
  *      system-installed copy, then to the look-alike faces this package does
  *      ship (Inter, Noto Serif, JetBrains Mono — SIL OFL).
@@ -37,9 +37,9 @@
  * The routes live in routes.ts, the HDSL account contract in hdsl.ts, and the
  * settings surface in settings.ts; this file only mounts them.
  */
-import { PACKAGE_NAME } from '@dsh-claude-style/contracts/package'
+import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
 import { registerRoutes } from './routes.js'
-import type { DshContext, DshScope } from '@dsh-claude-style/engine/node/dsh'
+import type { DshContext, DshScope } from '@dsh-deepcraft/engine/node/dsh'
 import { registerSettings } from './settings.js'
 
 export const name = PACKAGE_NAME

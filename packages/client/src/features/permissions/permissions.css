@@ -5,17 +5,17 @@
    host's button is the one packages/client/src/features/composer/composer.ts marks as the
    access control. The control itself is the shared large segment look
    (packages/client/src/shared/segment-control.css). */
-body[data-dsh-claude-style][data-dsh-claude-composer-active][data-dsh-claude-permissions] button[data-dsh-claude-control="access"] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-composer-active][data-dsh-deepcraft-permissions] button[data-dsh-deepcraft-control="access"] {
   display: none;
 }
 
 /* ---------- Claude Code layout: in-conversation permission popover ---------- */
-body[data-dsh-claude-style] .dsh-claude-perm-container {
+body[data-dsh-deepcraft] .dsh-deepcraft-perm-container {
   position: relative;
   display: inline-flex;
-  z-index: var(--dsh-claude-layer-picker);
+  z-index: var(--dsh-deepcraft-layer-picker);
 }
-body[data-dsh-claude-style] .dsh-claude-perm-btn {
+body[data-dsh-deepcraft] .dsh-deepcraft-perm-btn {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -34,23 +34,23 @@ body[data-dsh-claude-style] .dsh-claude-perm-btn {
   color: var(--dsw-alias-label-primary, #141413);
   cursor: pointer;
   user-select: none;
-  transition: background-color var(--dsh-claude-timing-feedback);
+  transition: background-color var(--dsh-deepcraft-timing-feedback);
 }
-body[data-dsh-claude-style] .dsh-claude-perm-label {
+body[data-dsh-deepcraft] .dsh-deepcraft-perm-label {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-body[data-dsh-claude-style][data-ds-dark-theme] .dsh-claude-perm-btn {
+body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-perm-btn {
   color: var(--dsw-alias-label-primary);
 }
-body[data-dsh-claude-style] .dsh-claude-perm-btn:hover,
-body[data-dsh-claude-style] .dsh-claude-perm-btn[data-open="true"] {
-  background: var(--dsh-claude-hover-bg, rgba(0, 0, 0, 0.08));
+body[data-dsh-deepcraft] .dsh-deepcraft-perm-btn:hover,
+body[data-dsh-deepcraft] .dsh-deepcraft-perm-btn[data-open="true"] {
+  background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
 }
 /* The preset list's card is the shared popover card (shared/popover.css). */
-body[data-dsh-claude-style] .dsh-claude-perm-popover {
+body[data-dsh-deepcraft] .dsh-deepcraft-perm-popover {
   position: fixed;
   min-width: 248px;
   display: flex;

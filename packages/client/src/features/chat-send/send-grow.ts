@@ -1,9 +1,9 @@
-import { subscribeMutations } from '@dsh-claude-style/engine/bus'
+import { subscribeMutations } from '@dsh-deepcraft/engine/bus'
 import { CHAT_FLYING_ATTR, MESSAGE_ENTER_ATTR, MESSAGE_ENTER_GROW } from '../../constants'
 import { motionReduced, readPrefs } from '../../core/prefs'
 import { motionMs } from '../../shared/motion'
 import { currentRow, lastUserRow, takeFreshEcho, touchesUserRow } from './send-rows'
-import { SUBMISSION_ECHO_SELECTOR } from '@dsh-claude-style/contracts/dom'
+import { SUBMISSION_ECHO_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 
 /**
  * The reader's message growing into its row instead of flying to it
@@ -75,7 +75,7 @@ export function watchGrowEnter() {
     row.addEventListener('animationend', (event) => {
       if (event.target === row) unmark()
     }, { once: true })
-    growRescue = window.setTimeout(unmark, motionMs('--dsh-claude-duration-enter') * 4)
+    growRescue = window.setTimeout(unmark, motionMs('--dsh-deepcraft-duration-enter') * 4)
   }
 
   const onEchoRecords = () => {
@@ -90,7 +90,7 @@ export function watchGrowEnter() {
     hidden = echo
     echo.setAttribute(CHAT_FLYING_ATTR, '')
     if (stopRowWatch === null) stopRowWatch = subscribeMutations(document.body, { childList: true, subtree: true }, growRow)
-    rescue = window.setTimeout(unwind, motionMs('--dsh-claude-duration-enter') * 4)
+    rescue = window.setTimeout(unwind, motionMs('--dsh-deepcraft-duration-enter') * 4)
   }
 
   const stopEchoWatch = subscribeMutations(document.body, { childList: true, subtree: true }, onEchoRecords)

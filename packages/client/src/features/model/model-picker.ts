@@ -3,14 +3,14 @@ import { MODEL_EMPTY_LABEL, MODEL_FALLBACK_LABEL, MODEL_LOADING_LABEL, MODEL_MOR
 import { activeLocale } from '../../core/i18n'
 import { loadModelCopy } from './model-copy'
 import { readPrefs } from '../../core/prefs'
-import { cacheFirstMatch } from '@dsh-claude-style/engine/host'
+import { cacheFirstMatch } from '@dsh-deepcraft/engine/host'
 import { createModelCatalog } from './catalog'
 import { byModelId, createModelRows } from './rows'
-import { buildElement, closestFrom, setAttributeIfChanged } from '@dsh-claude-style/engine/dom'
+import { buildElement, closestFrom, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { POPOVER_MARGIN, POPOVER_OPEN_DELAY, closeOtherPopovers, createHoverIntent, positionAnchoredPopover, pressKeepsPopoverOpen, registerPopover, removeStrayNodes, setMenuPopoverOpen, unregisterPopover } from '../../shared/popover'
 import { pageViewport } from '../../shared/page-zoom'
-import type { HostContext } from '@dsh-claude-style/engine/host'
-import type { FeatureHandle } from '@dsh-claude-style/engine/scheduler'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
+import type { FeatureHandle } from '@dsh-deepcraft/engine/scheduler'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './model-picker.manifest'
 import type { CatalogProvider, ModelCatalog } from './catalog'
@@ -261,7 +261,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     if (!showMore) return
     // The role is what the shared separator rule reads (shared/popover.css), so
     // this line is the same line as every separator the host draws in a card.
-    const divider = buildElement('div', 'dsh-claude-model-divider')
+    const divider = buildElement('div', 'dsh-deepcraft-model-divider')
     divider.setAttribute('role', 'separator')
     modelFooter.appendChild(divider)
     modelFooter.appendChild(modelRows.buildModelCell(copy('moreLabel')))
@@ -304,12 +304,12 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // nothing to show yet falls back to the loading line.
     const seated = groups.length > 0 && current !== null
     if (!seated && (status === 'idle' || status === 'loading' || status === 'selecting')) {
-      modelBody.appendChild(buildElement('div', 'dsh-claude-popover-status', copy('loading')))
+      modelBody.appendChild(buildElement('div', 'dsh-deepcraft-popover-status', copy('loading')))
       layoutModelFooter(false)
     } else {
       const sections = modelRows.levelOneSections(groups)
       if (sections.length === 0) {
-        modelBody.appendChild(buildElement('div', 'dsh-claude-popover-status', copy('empty')))
+        modelBody.appendChild(buildElement('div', 'dsh-deepcraft-popover-status', copy('empty')))
       } else {
         for (let s = 0; s < sections.length; s++) {
           const section = sections[s]
@@ -382,12 +382,12 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     for (let g2 = 0; g2 < rest.length; g2++) {
       const group = rest[g2]
       if (group.models.length === 0) continue
-      const groupSection = buildElement('div', 'dsh-claude-model-group-section')
-      const groupRow = buildElement('div', 'dsh-claude-model-group-row')
-      const groupLabel = buildElement('div', 'dsh-claude-model-group')
+      const groupSection = buildElement('div', 'dsh-deepcraft-model-group-section')
+      const groupRow = buildElement('div', 'dsh-deepcraft-model-group-row')
+      const groupLabel = buildElement('div', 'dsh-deepcraft-model-group')
       // The group label is the provider's name alone: a mark there would repeat
       // what the rows below already carry inside their lockups.
-      groupLabel.appendChild(buildElement('span', 'dsh-claude-model-group-name', group.name))
+      groupLabel.appendChild(buildElement('span', 'dsh-deepcraft-model-group-name', group.name))
       groupRow.appendChild(groupLabel)
       groupSection.appendChild(groupRow)
       // A provider's models read in id order, so the list is scannable and stays
@@ -401,7 +401,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       modelSubBody.appendChild(groupSection)
     }
     if (modelSubBody.firstChild === null) {
-        modelSubBody.appendChild(buildElement('div', 'dsh-claude-popover-status', copy('empty')))
+        modelSubBody.appendChild(buildElement('div', 'dsh-deepcraft-popover-status', copy('empty')))
     }
   }
 
@@ -440,13 +440,13 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // render signatures so the next pass repaints into the fresh nodes.
     if (modelPop === null || modelPop.parentElement === null) {
       modelPop = document.createElement('div')
-      modelPop.className = 'dsh-claude-popover-card dsh-claude-model-popover'
+      modelPop.className = 'dsh-deepcraft-popover-card dsh-deepcraft-model-popover'
       setMenuPopoverOpen(modelPop, false)
       modelBody = document.createElement('div')
-      modelBody.className = 'dsh-claude-popover-body'
+      modelBody.className = 'dsh-deepcraft-popover-body'
       modelPop.appendChild(modelBody)
       modelFooter = document.createElement('div')
-      modelFooter.className = 'dsh-claude-model-footer'
+      modelFooter.className = 'dsh-deepcraft-model-footer'
       modelPop.appendChild(modelFooter)
       modelPop.addEventListener('mouseenter', cancelCloseModel)
       // The second level belongs to its More-models cell: while it is open,
@@ -457,7 +457,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       // boundary event would never fire.
       modelPop.addEventListener('mouseover', e => {
         if (modelSubPop === null || modelSubPop.getAttribute('data-open') !== 'true') return
-        if (closestFrom(e.target, '.dsh-claude-model-cell')) return
+        if (closestFrom(e.target, '.dsh-deepcraft-model-cell')) return
         // Delayed, not immediate: the sub card sits BESIDE level 1, so a
         // pointer on its way from the cell to the sub crosses level 1's own
         // rows — folding on the spot made that journey impossible at any
@@ -478,10 +478,10 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     }
     if (modelSubPop === null || modelSubPop.parentElement === null) {
       modelSubPop = document.createElement('div')
-      modelSubPop.className = 'dsh-claude-popover-card dsh-claude-model-popover dsh-claude-model-popover-sub'
+      modelSubPop.className = 'dsh-deepcraft-popover-card dsh-deepcraft-model-popover dsh-deepcraft-model-popover-sub'
       setMenuPopoverOpen(modelSubPop, false)
       modelSubBody = document.createElement('div')
-      modelSubBody.className = 'dsh-claude-popover-body'
+      modelSubBody.className = 'dsh-deepcraft-popover-body'
       modelSubPop.appendChild(modelSubBody)
       modelSubPop.addEventListener('mouseenter', cancelCloseModel)
       modelSubPop.addEventListener('mouseleave', scheduleCloseModel)
@@ -495,13 +495,13 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * skin's trigger and popovers, drop the catalog subscription.
    */
   function dropModelControl() {
-    const allHosts = document.querySelectorAll('[data-dsh-claude-model-host]')
+    const allHosts = document.querySelectorAll('[data-dsh-deepcraft-model-host]')
     for (let h = 0; h < allHosts.length; h++) {
-      allHosts[h].removeAttribute('data-dsh-claude-model-host')
+      allHosts[h].removeAttribute('data-dsh-deepcraft-model-host')
     }
-    removeStrayNodes(document, '.dsh-claude-model-btn', [])
+    removeStrayNodes(document, '.dsh-deepcraft-model-btn', [])
     modelBtn = null
-    removeStrayNodes(document, '.dsh-claude-model-popover', [])
+    removeStrayNodes(document, '.dsh-deepcraft-model-popover', [])
     modelPop = null
     modelSubPop = null
     modelBody = null
@@ -537,17 +537,17 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // client HMR drops the old fiber's disposals, so a previous generation's
     // trigger and popovers are still in the DOM while this fresh scope starts
     // from null. Sweep the strays, or the seat renders twice.
-    removeStrayNodes(slot, '.dsh-claude-model-btn', [modelBtn])
-    removeStrayNodes(document, 'body > .dsh-claude-model-popover', [modelPop, modelSubPop])
+    removeStrayNodes(slot, '.dsh-deepcraft-model-btn', [modelBtn])
+    removeStrayNodes(document, 'body > .dsh-deepcraft-model-popover', [modelPop, modelSubPop])
     const hostRoot = slot.firstElementChild
-    if (hostRoot !== null) hostRoot.toggleAttribute('data-dsh-claude-model-host', true)
+    if (hostRoot !== null) hostRoot.toggleAttribute('data-dsh-deepcraft-model-host', true)
     if (modelBtn === null || modelBtn.parentElement !== slot) {
       if (modelBtn !== null && modelBtn.parentElement !== null) modelBtn.parentElement.removeChild(modelBtn)
       modelBtn = document.createElement('button')
       modelBtn.type = 'button'
-      modelBtn.className = 'dsh-claude-model-btn'
+      modelBtn.className = 'dsh-deepcraft-model-btn'
       modelBtn.setAttribute('aria-haspopup', 'menu')
-      modelBtn.innerHTML = '<span class="dsh-claude-model-btn-label"></span>'
+      modelBtn.innerHTML = '<span class="dsh-deepcraft-model-btn-label"></span>'
       // Same contract as the account trigger: hover under the "All" scope,
       // click-only otherwise.
       modelBtn.addEventListener('mouseenter', () => {
@@ -574,7 +574,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const current = modelCatalog.current(snap)
     const groupsNow = (snap && snap.groups) || []
     const label = current ? current.model.name : copy('fallbackLabel')
-    const labelEl = modelBtn.querySelector('.dsh-claude-model-btn-label')
+    const labelEl = modelBtn.querySelector('.dsh-deepcraft-model-btn-label')
     if (labelEl) {
       // Same-value guards: syncModelControl runs on every scheduler pass,
       // and an identical write still mutates the DOM (textContent replaces
@@ -589,12 +589,12 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       // through that same RPC), and a greyed-out trigger for that long
       // reads as broken rather than busy.
       const unsettled = !!(snap && (snap.status === 'loading' || snap.status === 'idle' || snap.status === 'selecting')) && !(groupsNow.length > 0 && current !== null)
-      labelEl.classList.toggle('dsh-claude-model-btn-loading', unsettled)
+      labelEl.classList.toggle('dsh-deepcraft-model-btn-loading', unsettled)
     }
     // The level is NOT part of this trigger any more: it has its own button
     // beside it (packages/client/src/features/effort/effort-picker.ts). A stale "· High" span from
     // an older generation is swept rather than reused.
-    const staleEffortEl = modelBtn.querySelector('.dsh-claude-model-btn-effort')
+    const staleEffortEl = modelBtn.querySelector('.dsh-deepcraft-model-btn-effort')
     if (staleEffortEl !== null) staleEffortEl.remove()
     const triggerAria = copy('triggerLabel', { model: label })
     setAttributeIfChanged(modelBtn, 'aria-label', triggerAria)

@@ -30,7 +30,7 @@ export interface PartsTableVocabulary {
  * part gate) and holds every part a stylesheet reads to the table here. A host
  * rename is one line in this file.
  */
-import { CONVERSATION_HEADER_SLOT_SELECTOR, CONVERSATION_SCROLL_SELECTOR, RIGHTBAR_COLUMN_SELECTOR, ROOT_SLOT_SELECTOR, SIDEBAR_SLOT_SELECTOR } from '@dsh-claude-style/contracts/dom'
+import { CONVERSATION_HEADER_SLOT_SELECTOR, CONVERSATION_SCROLL_SELECTOR, RIGHTBAR_COLUMN_SELECTOR, ROOT_SLOT_SELECTOR, SIDEBAR_SLOT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 
 /** Host CSS-module local name → the skin's part name. */
 export type PartTable = Record<string, string>
@@ -304,7 +304,7 @@ export function partNames(vocabulary: PartsTableVocabulary): string[] {
 /**
  * The structural relations a stylesheet reads as a hold: a rule naming an
  * element because of what its subtree contains (`A:has(B)`) reads
- * `data-dsh-claude-holds` instead, and core/parts.ts keeps that mark current
+ * `data-dsh-deepcraft-holds` instead, and core/parts.ts keeps that mark current
  * (D9). Each entry answers one question the walk already knows the answer to.
  *
  * `holder` names the element that takes the mark; `*` marks whichever ancestor
@@ -316,7 +316,7 @@ export function partNames(vocabulary: PartsTableVocabulary): string[] {
  * pass already watches class names.
  */
 export interface HoldRelation {
-  /** The word a stylesheet reads in `[data-dsh-claude-holds~="…"]`. */
+  /** The word a stylesheet reads in `[data-dsh-deepcraft-holds~="…"]`. */
   name: string
   /** The element that takes the mark, or `*` for any ancestor that holds the node. */
   holder: string
@@ -362,9 +362,9 @@ export function holdRelations(vocabulary: PartsTableVocabulary): HoldRelation[] 
   {
     name: 'account-row',
     holder: '*',
-    held: '[data-dsh-claude-account-host-row]',
+    held: '[data-dsh-deepcraft-account-host-row]',
     scope: part('foot-area'),
-    attributes: ['data-dsh-claude-account-host-row'],
+    attributes: ['data-dsh-deepcraft-account-host-row'],
   },
   ]
 }

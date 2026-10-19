@@ -3,7 +3,7 @@
  * probe.cjs — headless UI regression probe for the composer invariants.
  *
  * Drives a headless Chrome against a running DSH web GUI and asserts:
- *   1. the skin is applied (body[data-dsh-claude-style])
+ *   1. the skin is applied (body[data-dsh-deepcraft])
  *   2. a session page reaches phase "active"
  *   3. the composer seat is pinned to the viewport bottom (sticky contract)
  *   4. the composer field starts at one line (24px)
@@ -53,13 +53,13 @@ async function probe(page) {
   await page.goto(`${BASE}/?token=${TOKEN}`, { waitUntil: 'domcontentloaded' })
   await sleep(12000)
 
-  check('skin applied', await page.evaluate(() => document.body.hasAttribute('data-dsh-claude-style')))
+  check('skin applied', await page.evaluate(() => document.body.hasAttribute('data-dsh-deepcraft')))
 
   // Open the most recent existing session. The sidebar's "new session" row
   // opens the hero, which has no session composer, and sessions can sit under
   // collapsed projects.
   const openSession = `(() => {
-    const rows = Array.from(document.querySelectorAll('[data-dsh-claude-part~="session-row"]'))
+    const rows = Array.from(document.querySelectorAll('[data-dsh-deepcraft-part~="session-row"]'))
       .filter((r) => !/^(新会话|New session)$/i.test((r.textContent || '').trim()))
     if (!rows.length) return false
     const t = rows[0].closest('[role="treeitem"]') || rows[0]
@@ -72,7 +72,7 @@ async function probe(page) {
   })()`
   if (!(await page.evaluate(openSession))) {
     await page.evaluate(`(() => {
-      for (const p of document.querySelectorAll('[data-dsh-claude-part~="project-row"]')) {
+      for (const p of document.querySelectorAll('[data-dsh-deepcraft-part~="project-row"]')) {
         if (p.getAttribute('aria-expanded') !== 'true') p.click()
       }
     })()`)
@@ -122,8 +122,8 @@ async function probe(page) {
   // the two must not overlap.
   const clearance = () => page.evaluate(`(() => {
     const card = document.querySelector('[data-composer-card]')
-    const trailing = card === null ? null : card.querySelector('[data-dsh-claude-part~="row"] > [data-dsh-claude-part~="trailing"]')
-    const meter = document.querySelector('[data-dsh-claude-context-meter]')
+    const trailing = card === null ? null : card.querySelector('[data-dsh-deepcraft-part~="row"] > [data-dsh-deepcraft-part~="trailing"]')
+    const meter = document.querySelector('[data-dsh-deepcraft-context-meter]')
     if (trailing === null || meter === null) return null
     const t = trailing.getBoundingClientRect()
     const m = meter.getBoundingClientRect()
@@ -131,7 +131,7 @@ async function probe(page) {
       clear: t.right <= m.left + 1,
       trailingRight: Math.round(t.right),
       meterLeft: Math.round(m.left),
-      room: card.parentElement === null ? '(unset)' : card.parentElement.style.getPropertyValue('--dsh-claude-meter-room') || '(unset)',
+      room: card.parentElement === null ? '(unset)' : card.parentElement.style.getPropertyValue('--dsh-deepcraft-meter-room') || '(unset)',
     }
   })()`)
 

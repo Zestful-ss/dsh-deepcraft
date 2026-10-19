@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 import { chatFileOperation, chatFileOperationTitle, chatFileReadCard, chatFileReadEnvelope, chatFileReadMeta } from './file-row-model'
-import type { HostChatBlock } from '@dsh-claude-style/contracts/services'
+import type { HostChatBlock } from '@dsh-deepcraft/contracts/services'
 
 /** One settled read result: its arguments, its single text block and its own metadata. */
 function readResult(text: string, meta?: unknown): HostChatBlock {

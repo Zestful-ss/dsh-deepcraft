@@ -3,7 +3,7 @@
    display — the hidden row has to keep its layout box, because the stand-in
    measures the destination from it every frame. The attribute name is
    constants.ts's CHAT_FLYING_ATTR, spelled the same by the JS that writes it. */
-body[data-dsh-claude-style] [data-dsh-claude-send-flight] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-send-flight] {
   visibility: hidden;
 }
 
@@ -14,21 +14,21 @@ body[data-dsh-claude-style] [data-dsh-claude-send-flight] {
    side the message was sent from. The mark is written only on a row that
    replaced the echo of a submission the reader just made (send-grow.ts), and
    the growth is the only thing it does. */
-body[data-dsh-claude-style] [data-dsh-claude-message-enter] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-message-enter] {
   transform-origin: 100% 100%;
-  animation: dsh-claude-enter-grow var(--dsh-claude-duration-enter) var(--dsh-claude-ease-enter) both;
+  animation: dsh-deepcraft-enter-grow var(--dsh-deepcraft-duration-enter) var(--dsh-deepcraft-ease-enter) both;
 }
 
 /* The reader's animation choice (D40): the mark is not written on a still page,
    and this is the second net for one written before the choice changed. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] [data-dsh-claude-message-enter] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] [data-dsh-deepcraft-message-enter] {
   animation: none;
 }
 
 /* The stand-in flies over the whole window: nothing the page stacks may cut
    across the bubble on its way to its row (send-morph.ts builds it). */
-body[data-dsh-claude-style] [data-dsh-claude-send-ghost] {
-  z-index: var(--dsh-claude-layer-takeover);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-send-ghost] {
+  z-index: var(--dsh-deepcraft-layer-takeover);
 }
 
 /* The imitation ancestor chain is there for selector matching alone. Its links
@@ -36,7 +36,7 @@ body[data-dsh-claude-style] [data-dsh-claude-send-ghost] {
    desktop's layout frame draws its title bar strip as an absolutely placed
    `::before`, and on a link it lands on the stand-in's top 40px in the sidebar
    fill, over the bubble's own (send-snapshot.ts's CHAT_SEND_LINK_ATTR). */
-body[data-dsh-claude-style] [data-dsh-claude-send-ghost] [data-dsh-claude-send-link]::before,
-body[data-dsh-claude-style] [data-dsh-claude-send-ghost] [data-dsh-claude-send-link]::after {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-send-ghost] [data-dsh-deepcraft-send-link]::before,
+body[data-dsh-deepcraft] [data-dsh-deepcraft-send-ghost] [data-dsh-deepcraft-send-link]::after {
   content: none;
 }

@@ -29,7 +29,7 @@
       var row = waitSession.querySelector('[data-chat-running]')
       var words = document.getElementById('debugRunningWords')
       // The parts land on the pass after the subtree arrives (D3).
-      var icons = await probe.until(function () { return row.querySelector('[data-dsh-claude-part~="running-icon"]') },
+      var icons = await probe.until(function () { return row.querySelector('[data-dsh-deepcraft-part~="running-icon"]') },
         function (found) { return found[found.length - 1] !== null }, 'the running icon part')
       var whale = icons[icons.length - 1]
       var foreignLine = document.createElement('div')
@@ -39,7 +39,7 @@
       // child the copy carries, drawn only under the sweep, and its two halves
       // run one animation each; the wash rides the copy's pseudo-element.
       var paintOf = function (copy) {
-        var band = copy.querySelector('.dsh-claude-sweep-band')
+        var band = copy.querySelector('.dsh-deepcraft-sweep-band')
         if (band !== null && getComputedStyle(band).display !== 'none') {
           var held = getComputedStyle(band)
           var glyphs = getComputedStyle(band.firstElementChild)
@@ -49,22 +49,22 @@
         return { name: paint.animationName, state: paint.animationPlayState }
       }
       var lineOf = function () {
-        var line = row.querySelector('.dsh-claude-chat-wait')
+        var line = row.querySelector('.dsh-deepcraft-chat-wait')
         if (line === null) return null
         // The line's parts are read by their own names rather than by position:
         // the loader leads them, and where each of the rest sits is the
         // stylesheet's business (chat-wait.css).
-        var loader = line.querySelector('.dsh-claude-chat-wait-loader')
-        var label = line.querySelector('.dsh-claude-chat-wait-label')
-        var clock = line.querySelector('.dsh-claude-chat-wait-clock')
-        var badge = line.querySelector('.dsh-claude-chat-wait-badge')
+        var loader = line.querySelector('.dsh-deepcraft-chat-wait-loader')
+        var label = line.querySelector('.dsh-deepcraft-chat-wait-label')
+        var clock = line.querySelector('.dsh-deepcraft-chat-wait-clock')
+        var badge = line.querySelector('.dsh-deepcraft-chat-wait-badge')
         // The words swap over two copies (shared/swapping-text.ts): the one
         // leaving keeps the words it came with, the one arriving carries the
         // new ones, and the reading below is taken off whichever of them is
         // moving — the label itself only holds them.
-        var copies = label.querySelectorAll('.dsh-claude-swap-copy')
-        var leaving = label.querySelector('.dsh-claude-swap-copy.is-exit')
-        var entering = label.querySelector('.dsh-claude-swap-copy.is-enter-start')
+        var copies = label.querySelectorAll('.dsh-deepcraft-swap-copy')
+        var leaving = label.querySelector('.dsh-deepcraft-swap-copy.is-exit')
+        var entering = label.querySelector('.dsh-deepcraft-swap-copy.is-enter-start')
         // The copy the line is heading for: while a swap runs that is the one
         // arriving (its rest pose is the reading the entry is judged on), and
         // at rest it is the only copy there is.
@@ -76,7 +76,7 @@
         // both copies mid-swap, so it is never the reading.
         var settled = copies.length === 1 && leaving === null && entering === null
         return {
-          marked: row.hasAttribute('data-dsh-claude-wait'),
+          marked: row.hasAttribute('data-dsh-deepcraft-wait'),
           besideWords: line.previousElementSibling === words,
           word: copies.length === 0 ? label.textContent : (settled ? copies[0].textContent : (label.dataset.text || '')),
           copies: copies.length,
@@ -93,8 +93,8 @@
           // Whether that paint is running or held: the Reduced choice freezes
           // it, and a pressed animation left running would flicker.
           sweepState: copies.length > 0 ? paintOf(copies[copies.length - 1]).state : 'none',
-          statusMotion: document.body.getAttribute('data-dsh-claude-status-motion'),
-          sweepOnLabel: label.classList.contains('dsh-claude-swap-shimmer'),
+          statusMotion: document.body.getAttribute('data-dsh-deepcraft-status-motion'),
+          sweepOnLabel: label.classList.contains('dsh-deepcraft-swap-shimmer'),
           filter: movingStyle === null ? 'none' : movingStyle.filter,
           opacity: movingStyle === null ? '1' : movingStyle.opacity,
           clock: clock.hidden ? null : clock.textContent,
@@ -120,7 +120,7 @@
                 animation: laneDots.length === 0 ? null : getComputedStyle(laneDots[0]).animationName,
               }
             })
-            var playing = loader.querySelector('.dsh-claude-chat-wait-lane.is-active')
+            var playing = loader.querySelector('.dsh-deepcraft-chat-wait-lane.is-active')
             var playingDots = playing === null ? [] : Array.from(playing.children)
             var playingStyle = playingDots.length === 0 ? null : getComputedStyle(playingDots[0])
             return {
@@ -162,18 +162,18 @@
             // A wording longer than the label's box: the box clips it and the
             // copy draws an ellipsis (shared/swapping-text.css).
             clipped: (function () {
-              var copy = label.querySelector('.dsh-claude-swap-copy')
+              var copy = label.querySelector('.dsh-deepcraft-swap-copy')
               if (copy === null) return null
               return copy.scrollWidth > copy.clientWidth && getComputedStyle(copy).textOverflow === 'ellipsis'
             })(),
             sizer: (function () {
-              var sizer = label.querySelector('.dsh-claude-swap-sizer')
+              var sizer = label.querySelector('.dsh-deepcraft-swap-sizer')
               return sizer === null ? null : { text: sizer.textContent, width: sizer.getBoundingClientRect().width }
             })(),
             firstChildClass: label.firstElementChild === null ? null : label.firstElementChild.className,
           },
           wordsShown: getComputedStyle(words).display !== 'none',
-          wordsMarked: words.hasAttribute('data-dsh-claude-wait-words'),
+          wordsMarked: words.hasAttribute('data-dsh-deepcraft-wait-words'),
           foreignShown: getComputedStyle(foreignLine).display !== 'none',
         }
       }
@@ -214,9 +214,9 @@
       // loader's own choice is put back afterwards, and the next rotation puts
       // every lane back in its place anyway).
       var watchLane = async function (laneName, rounds, step) {
-        var line = row.querySelector('.dsh-claude-chat-wait')
-        var loader = line === null ? null : line.querySelector('.dsh-claude-chat-wait-loader')
-        var lane = loader === null ? null : loader.querySelector('.dsh-claude-chat-wait-lane.' + laneName)
+        var line = row.querySelector('.dsh-deepcraft-chat-wait')
+        var loader = line === null ? null : line.querySelector('.dsh-deepcraft-chat-wait-loader')
+        var lane = loader === null ? null : loader.querySelector('.dsh-deepcraft-chat-wait-lane.' + laneName)
         if (lane === null) return null
         var lanes = Array.prototype.slice.call(loader.children)
         var saved = lanes.map(function (one) { return one.className })
@@ -305,8 +305,8 @@
       calls.length = 0
       window.__dshSmokeHost.turnFixtureRunning.steps = []
       r.wait.silent = await framesToWord(function (reading) {
-        var label = row.querySelector('.dsh-claude-chat-wait-label')
-        var copy = label === null ? null : label.querySelector('.dsh-claude-swap-copy[data-text="Thinking…"]')
+        var label = row.querySelector('.dsh-deepcraft-chat-wait-label')
+        var copy = label === null ? null : label.querySelector('.dsh-deepcraft-swap-copy[data-text="Thinking…"]')
         if (copy !== null) {
           var style = getComputedStyle(copy)
           enterFrames.push({ opacity: Number(style.opacity), filter: style.filter, transform: style.transform })
@@ -380,17 +380,17 @@
       previousWords.replaceWith(words)
       await probe.settle()
       r.wait.replaced = {
-        previousMarked: previousWords.hasAttribute('data-dsh-claude-wait-words'),
+        previousMarked: previousWords.hasAttribute('data-dsh-deepcraft-wait-words'),
         current: lineOf(),
       }
       var ownership = function () {
         return {
-          line: row.querySelector('.dsh-claude-chat-wait') !== null,
-          marked: row.hasAttribute('data-dsh-claude-wait'),
-          wordsMarked: words.hasAttribute('data-dsh-claude-wait-words'),
+          line: row.querySelector('.dsh-deepcraft-chat-wait') !== null,
+          marked: row.hasAttribute('data-dsh-deepcraft-wait'),
+          wordsMarked: words.hasAttribute('data-dsh-deepcraft-wait-words'),
           externalHiding: words.style.display,
           foreignShown: foreignLine.checkVisibility(),
-          follow: document.body.hasAttribute('data-dsh-claude-chat-follow'),
+          follow: document.body.hasAttribute('data-dsh-deepcraft-chat-follow'),
         }
       }
       // A change of owner that is only a style is read on the line's own
@@ -423,10 +423,10 @@
       window.__pushForm({ chatWait: false })
       await probe.settle()
       r.wait.off = {
-        line: row.querySelector('.dsh-claude-chat-wait') !== null,
-        marked: row.hasAttribute('data-dsh-claude-wait'),
+        line: row.querySelector('.dsh-deepcraft-chat-wait') !== null,
+        marked: row.hasAttribute('data-dsh-deepcraft-wait'),
         wordsShown: getComputedStyle(words).display !== 'none',
-        wordsMarked: words.hasAttribute('data-dsh-claude-wait-words'),
+        wordsMarked: words.hasAttribute('data-dsh-deepcraft-wait-words'),
         foreignShown: getComputedStyle(foreignLine).display !== 'none',
       }
       window.__pushForm({ chatWait: true })
@@ -438,7 +438,7 @@
       // which is the state a running turn leaves behind.
       var pinOf = function () {
         return {
-          follow: document.body.hasAttribute('data-dsh-claude-chat-follow'),
+          follow: document.body.hasAttribute('data-dsh-deepcraft-chat-follow'),
           pinned: getComputedStyle(row).position === 'sticky',
         }
       }
@@ -459,7 +459,7 @@
       r.wait.pin.back = pinOf()
       waitSession.remove()
       await probe.settle()
-      r.wait.removed = { wordsMarked: words.hasAttribute('data-dsh-claude-wait-words') }
+      r.wait.removed = { wordsMarked: words.hasAttribute('data-dsh-deepcraft-wait-words') }
     })
   })
 })()

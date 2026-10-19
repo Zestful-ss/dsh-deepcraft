@@ -49,7 +49,7 @@ function instrument() {
     }).observe({ entryTypes: ['longtask'] })
   } catch (error) { /* a browser without long tasks measures the rest */ }
   window.__timing.probeLabel = () => {
-    const el = document.querySelector('.dsh-claude-model-btn-label')
+    const el = document.querySelector('.dsh-deepcraft-model-btn-label')
     window.__timing.label.push({ t: Math.round(performance.now()), text: el ? (el.textContent || '') : null })
   }
   setInterval(window.__timing.probeLabel, 250)
@@ -72,12 +72,12 @@ async function measure(page) {
   // Wait for the skin, then for the composer seat the picker replaces. `body` is
   // null until the parser gets there, so the first polls must not assume it.
   for (let i = 0; i < 120; i++) {
-    if (await page.evaluate(`!!(document.body && document.body.hasAttribute('data-dsh-claude-style'))`)) break
+    if (await page.evaluate(`!!(document.body && document.body.hasAttribute('data-dsh-deepcraft'))`)) break
     await sleep(250)
   }
   const skinAt = Date.now() - navigatedAt
   for (let i = 0; i < 120; i++) {
-    if (await page.evaluate(`!!document.querySelector('.dsh-claude-model-btn')`)) break
+    if (await page.evaluate(`!!document.querySelector('.dsh-deepcraft-model-btn')`)) break
     await sleep(250)
   }
   const triggerAt = Date.now() - navigatedAt
@@ -95,7 +95,7 @@ async function measure(page) {
   // timings: the copy document and the woff2 faces are the skin's only fetches.
   const resources = await page.evaluate(`
     performance.getEntriesByType('resource')
-      .filter(function (e) { return /dsh-claude-style|woff2|model-descriptions/.test(e.name) })
+      .filter(function (e) { return /dsh-deepcraft|woff2|model-descriptions/.test(e.name) })
       .map(function (e) { return { name: e.name.replace(location.origin, ''), start: Math.round(e.startTime), dur: Math.round(e.duration), size: e.transferSize || 0 } })
   `)
   console.log('  plugin resources:')
@@ -115,7 +115,7 @@ async function measure(page) {
   console.log('\n=== opening the picker ===')
   const heapBefore = await page.evaluate(`performance.memory ? performance.memory.usedJSHeapSize : null`)
   await page.evaluate(`(() => {
-    const btn = document.querySelector('.dsh-claude-model-btn')
+    const btn = document.querySelector('.dsh-deepcraft-model-btn')
     if (!btn) return false
     btn.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
     btn.click()
@@ -124,7 +124,7 @@ async function measure(page) {
   const openStart = Date.now()
   let rows = 0
   for (let i = 0; i < 200; i++) {
-    rows = await page.evaluate(`document.querySelectorAll('.dsh-claude-model-option').length`)
+    rows = await page.evaluate(`document.querySelectorAll('.dsh-deepcraft-model-option').length`)
     if (rows > 0) break
     await sleep(50)
   }
@@ -136,12 +136,12 @@ async function measure(page) {
   }
 
   const composition = await page.evaluate(`(() => {
-    const rows = document.querySelectorAll('.dsh-claude-model-option')
+    const rows = document.querySelectorAll('.dsh-deepcraft-model-option')
     let wordmarks = 0, faces = 0, marks = 0
     for (const row of rows) {
-      if (row.querySelector('.dsh-claude-model-wordmark')) wordmarks++
+      if (row.querySelector('.dsh-deepcraft-model-wordmark')) wordmarks++
       if (row.getAttribute('data-brand') === 'gemini') faces++
-      if (row.querySelector('.dsh-claude-model-brand svg, .dsh-claude-model-brand img')) marks++
+      if (row.querySelector('.dsh-deepcraft-model-brand svg, .dsh-deepcraft-model-brand img')) marks++
     }
     return { rows: rows.length, wordmarks, faces, marks }
   })()`)
@@ -150,7 +150,7 @@ async function measure(page) {
   // The wordmark markup the row builder assigns with innerHTML: a DOM stub cannot
   // measure the parse, this can. Timed on the live markup, then per row.
   const markupCost = await page.evaluate(`(() => {
-    const box = document.querySelector('.dsh-claude-model-wordmark')
+    const box = document.querySelector('.dsh-deepcraft-model-wordmark')
     if (!box) return null
     const markup = box.innerHTML
     const host = document.createElement('div')
@@ -186,12 +186,12 @@ async function measure(page) {
   const reloadAt = Date.now()
   await page.goto(`${BASE}/?token=${TOKEN}`, { waitUntil: 'domcontentloaded' })
   for (let i = 0; i < 200; i++) {
-    if (await page.evaluate(`!!document.querySelector('.dsh-claude-model-btn')`)) break
+    if (await page.evaluate(`!!document.querySelector('.dsh-deepcraft-model-btn')`)) break
     await sleep(250)
   }
   const trigger2At = Date.now() - reloadAt
   await page.evaluate(`(() => {
-    const btn = document.querySelector('.dsh-claude-model-btn')
+    const btn = document.querySelector('.dsh-deepcraft-model-btn')
     if (!btn) return false
     btn.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }))
     btn.click()
@@ -200,7 +200,7 @@ async function measure(page) {
   const open2Start = Date.now()
   let rows2 = 0
   for (let i = 0; i < 300; i++) {
-    rows2 = await page.evaluate(`document.querySelectorAll('.dsh-claude-model-option').length`)
+    rows2 = await page.evaluate(`document.querySelectorAll('.dsh-deepcraft-model-option').length`)
     if (rows2 > 0) break
     await sleep(50)
   }

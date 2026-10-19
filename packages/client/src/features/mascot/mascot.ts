@@ -2,13 +2,13 @@ import { MASCOT_CRAB, MASCOT_DEEPY, MASCOT_SCOPE_ALL } from '../../constants'
 import { readPrefs, resolveMascot } from '../../core/prefs'
 import { createMascotCrab } from './crab'
 import { createMascotWhale } from './whale'
-import type { HostContext } from '@dsh-claude-style/engine/host'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './mascot.manifest'
 
 /**
  * The mascot on the composer: Claude Code's pixel crab
- * (packages/client/src/features/mascot/crab.ts) or Deepy, the DeepSeek brand's pixel whale
+ * (packages/client/src/features/mascot/crab.ts) or Deepy, the DeepSeek brand's whale girl
  * (packages/client/src/features/mascot/whale.ts), both played by the agent's state
  * (packages/client/src/features/mascot/mascot-player.ts).
  *

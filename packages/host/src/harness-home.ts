@@ -1,6 +1,6 @@
-import { PACKAGE_NAME } from '@dsh-claude-style/contracts/package'
-import type { DshContext } from '@dsh-claude-style/engine/node/dsh'
-import { harnessPath } from '@dsh-claude-style/engine/node/harness-home'
+import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
+import type { DshContext } from '@dsh-deepcraft/engine/node/dsh'
+import { harnessPath } from '@dsh-deepcraft/engine/node/harness-home'
 
 /**
  * One path inside this plugin's own directory in the harness home, which holds

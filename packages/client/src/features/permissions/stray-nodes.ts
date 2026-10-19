@@ -22,9 +22,9 @@ export function createStrayScan() {
         }
       }
       return {
-        containers: [...document.querySelectorAll<HTMLElement>('.dsh-claude-perm-container')],
+        containers: [...document.querySelectorAll<HTMLElement>('.dsh-deepcraft-perm-container')],
         segments: [...document.querySelectorAll<HTMLElement>(`.${SEGMENTS_CLASS}[data-composer-segments]`)],
-        popover: document.querySelector<HTMLElement>('.dsh-claude-perm-popover'),
+        popover: document.querySelector<HTMLElement>('.dsh-deepcraft-perm-popover'),
       }
     },
     /** A pass adopted or swept what `existing` read: the scan is done for this install. */

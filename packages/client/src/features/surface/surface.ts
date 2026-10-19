@@ -1,13 +1,13 @@
-import { DS_BOT_ACCOUNT_SELECTOR, DS_BOT_AGENT_ITEM_SELECTOR, DS_BOT_RETURN_SELECTOR, DS_BOT_SIDEBAR_TOP_SELECTOR, SIDEBAR_BRAND_SELECTOR, SIDEBAR_ROOT_SELECTOR, SIDEBAR_TOGGLE_SELECTOR, WINDOWS_MENU_SELECTOR } from '@dsh-claude-style/contracts/dom'
-import { SURFACE_STYLESHEET } from 'virtual:dsh-claude-style/generated'
+import { DS_BOT_ACCOUNT_SELECTOR, DS_BOT_AGENT_ITEM_SELECTOR, DS_BOT_RETURN_SELECTOR, DS_BOT_SIDEBAR_TOP_SELECTOR, SIDEBAR_BRAND_SELECTOR, SIDEBAR_ROOT_SELECTOR, SIDEBAR_TOGGLE_SELECTOR, WINDOWS_MENU_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { SURFACE_STYLESHEET } from 'virtual:dsh-deepcraft/generated'
 import { QUIET_ATTR, SURFACE_PLUGIN_CSS, SURFACE_STYLE_ID } from '../../constants'
-import { observeSize, subscribeMutations } from '@dsh-claude-style/engine/bus'
-import { desktopBand } from '@dsh-claude-style/engine/desktop-band'
-import { cacheFirstMatch, findSidebarBrand, findSidebarRoot, findSidebarToggle, findWindowsMenu } from '@dsh-claude-style/engine/host'
-import { requestFrame } from '@dsh-claude-style/engine/frame'
+import { observeSize, subscribeMutations } from '@dsh-deepcraft/engine/bus'
+import { desktopBand } from '@dsh-deepcraft/engine/desktop-band'
+import { cacheFirstMatch, findSidebarBrand, findSidebarRoot, findSidebarToggle, findWindowsMenu } from '@dsh-deepcraft/engine/host'
+import { requestFrame } from '@dsh-deepcraft/engine/frame'
 import { onModelCopyLoaded } from '../model/model-copy'
 import { mountStylesheet } from '../../core/stylesheet'
-import { buildElement, createStamp, setAttributeIfChanged } from '@dsh-claude-style/engine/dom'
+import { buildElement, createStamp, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { dsBotInstalled, dsBotSurfaceActive, subscribePageOwner } from '../../shared/visual-owner'
 import { copy } from './copy'
 
@@ -30,15 +30,15 @@ import { copy } from './copy'
 type Mode = 'chat' | 'code'
 
 /** On `<body>` while the switch is live, naming the mode: the surface sheets' scope. */
-const SURFACE_ATTR = 'data-dsh-claude-surface'
+const SURFACE_ATTR = 'data-dsh-deepcraft-surface'
 /** On `<body>` while the switch presses ds-bot's account menu item: the menu stays out of sight. */
-const SWITCHING_ATTR = 'data-dsh-claude-surface-switching'
+const SWITCHING_ATTR = 'data-dsh-deepcraft-surface-switching'
 /** On the switch: the desktop caption strip, the strip with no room left beside the sidebar's controls, or a sidebar row. */
-const PLACE_ATTR = 'data-dsh-claude-surface-place'
+const PLACE_ATTR = 'data-dsh-deepcraft-surface-place'
 type Place = 'band' | 'tucked' | 'row'
 /** The custom properties the caption strip placement writes on the switch. */
-const LEFT_PROPERTY = '--dsh-claude-surface-left'
-const TOP_PROPERTY = '--dsh-claude-surface-top'
+const LEFT_PROPERTY = '--dsh-deepcraft-surface-left'
+const TOP_PROPERTY = '--dsh-deepcraft-surface-top'
 /** In the caption strip: the switch's right edge stands this far inside the sidebar column's, and this far clear of the controls left of it. */
 const BAND_INSET = 12
 const BAND_CLEARANCE = 8
@@ -87,12 +87,12 @@ export function install() {
   const seat = seats()
   const stopSheet = mountStylesheet(SURFACE_STYLE_ID, SURFACE_STYLESHEET, SURFACE_PLUGIN_CSS)
 
-  const root = buildElement('div', 'dsh-claude-surface-switch')
+  const root = buildElement('div', 'dsh-deepcraft-surface-switch')
   root.setAttribute('role', 'radiogroup')
   // Its own moves are no page change for the passes that watch the page, its own included.
   root.setAttribute(QUIET_ATTR, '')
   const options = MODES.map((mode) => {
-    const button = buildElement('button', 'dsh-claude-surface-option')
+    const button = buildElement('button', 'dsh-deepcraft-surface-option')
     button.type = 'button'
     button.setAttribute('role', 'radio')
     button.innerHTML = ICONS[mode]
@@ -101,7 +101,7 @@ export function install() {
     return { mode, button }
   })
   /** The web's sidebar row holding the switch, which takes a third column for it. */
-  const rowStamp = createStamp('data-dsh-claude-surface-row')
+  const rowStamp = createStamp('data-dsh-deepcraft-surface-row')
 
   /** ds-bot's own route back to its Bot surface. */
   function pressReturn() {

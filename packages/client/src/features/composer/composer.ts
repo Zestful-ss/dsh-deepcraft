@@ -1,14 +1,14 @@
 import { COMPOSER_ATTR, COMPOSER_HIDDEN_ATTR, HOME_LAYOUT_STUDIO, MOBILE_PORTRAIT_ATTR, STATS_POSITION_CONTEXT } from '../../constants'
-import { DIALOG_TRIGGER_SELECTOR, MOBILE_PORTRAIT_SELECTOR, MOBILE_STATS_SELECTOR, PHASE_ATTRIBUTE } from '@dsh-claude-style/contracts/dom'
-import { observeSize } from '@dsh-claude-style/engine/bus'
-import { COMPOSER_STACK, closestComposerCard, findAccessTrigger, findComposerPlaceholder, findComposerSeat, findConversationScroller, findDockedContextMeter, findHeroRoot, observeComposerCards, observeComposerPlaceholders } from '@dsh-claude-style/engine/host'
+import { DIALOG_TRIGGER_SELECTOR, MOBILE_PORTRAIT_SELECTOR, MOBILE_STATS_SELECTOR, PHASE_ATTRIBUTE } from '@dsh-deepcraft/contracts/dom'
+import { observeSize } from '@dsh-deepcraft/engine/bus'
+import { COMPOSER_STACK, closestComposerCard, findAccessTrigger, findComposerPlaceholder, findComposerSeat, findConversationScroller, findDockedContextMeter, findHeroRoot, observeComposerCards, observeComposerPlaceholders } from '@dsh-deepcraft/engine/host'
 import { composerRestyleRetired, readPrefs } from '../../core/prefs'
-import type { HostContext } from '@dsh-claude-style/engine/host'
-import type { FeatureHandle } from '@dsh-claude-style/engine/scheduler'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
+import type { FeatureHandle } from '@dsh-deepcraft/engine/scheduler'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './composer.manifest'
-import { closestFrom, setAttributeIfChanged } from '@dsh-claude-style/engine/dom'
-import { writeScroll } from '@dsh-claude-style/engine/scroll-owner'
+import { closestFrom, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
+import { writeScroll } from '@dsh-deepcraft/engine/scroll-owner'
 import { inPageBox } from '../../shared/page-zoom'
 import { createPlaceholderCopy } from './placeholder-copy'
 import { installWindowBlurMirror } from './selection-mirror'
@@ -56,7 +56,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * The attachment tiles the skin marked, read once at install so a generation
    * whose teardown a hot reload dropped still has its marks swept.
    */
-  const markedTiles = new Set<Element>(document.querySelectorAll(`[data-dsh-claude-attachment]`))
+  const markedTiles = new Set<Element>(document.querySelectorAll(`[data-dsh-deepcraft-attachment]`))
   /** The window-blur mirror the selection paints key on */
   const stopWindowBlur = installWindowBlurMirror()
 
@@ -103,21 +103,21 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * The attachment rails inside a card (ui-attachment): the shell rail and
    * its scrolling inner rail, both `_rail`.
    */
-  const ATTACHMENT_RAIL = '[data-dsh-claude-part~="attachment-rail"]'
+  const ATTACHMENT_RAIL = '[data-dsh-deepcraft-part~="attachment-rail"]'
   /**
    * Anything in a card that means it carries attachments: an image tile
    * (`_imageItem`, `_thumbnail`), or any item, image or file card
    * (FileCard's `_card`) on a rail.
    */
-  const ATTACHMENT_PRESENT = `[data-dsh-claude-part~="attachment-image-item"], [data-dsh-claude-part~="attachment-thumbnail"], ${ATTACHMENT_RAIL} :is([data-dsh-claude-part~="attachment-item"], img, [data-dsh-claude-part~="composer-card-box"])`
+  const ATTACHMENT_PRESENT = `[data-dsh-deepcraft-part~="attachment-image-item"], [data-dsh-deepcraft-part~="attachment-thumbnail"], ${ATTACHMENT_RAIL} :is([data-dsh-deepcraft-part~="attachment-item"], img, [data-dsh-deepcraft-part~="composer-card-box"])`
   /**
    * The attachment tiles the stylesheet reshapes into thumbnails. They are
    * found here once per pass and marked, so the rules read one attribute
    * instead of re-running this list, with its structural :has(img), on
    * every DOM change.
    */
-  const ATTACHMENT_TILES = `${ATTACHMENT_RAIL} :is([data-dsh-claude-part~="attachment-image-item"], [data-dsh-claude-part~="attachment-thumbnail"], [data-dsh-claude-part~="attachment-item"]:has(img), [data-dsh-claude-part~="composer-card-box"]:has(img))`
-  const ATTACHMENT_TILE_ATTR = 'data-dsh-claude-attachment'
+  const ATTACHMENT_TILES = `${ATTACHMENT_RAIL} :is([data-dsh-deepcraft-part~="attachment-image-item"], [data-dsh-deepcraft-part~="attachment-thumbnail"], [data-dsh-deepcraft-part~="attachment-item"]:has(img), [data-dsh-deepcraft-part~="composer-card-box"]:has(img))`
+  const ATTACHMENT_TILE_ATTR = 'data-dsh-deepcraft-attachment'
 
   /** Mark the cards that carry attachments, and the tiles inside them. */
   function syncAttachments(cards: readonly HTMLElement[]) {
@@ -144,11 +144,11 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     }
   }
 
-  const CONTROL_ATTR = 'data-dsh-claude-control'
+  const CONTROL_ATTR = 'data-dsh-deepcraft-control'
 
   /**
    * Mark each host control on the composer with what it is, so the
-   * stylesheets key on `data-dsh-claude-control` instead of the host's
+   * stylesheets key on `data-dsh-deepcraft-control` instead of the host's
    * button text — text that changes with the shell language and with each
    * host release. Read from the host's structure (InputBar):
    *   commands — the tools row's `+`, the one button that opens a listbox;
@@ -159,9 +159,9 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    */
   function syncControls(cards: readonly HTMLElement[]) {
     for (const card of cards) {
-      const commands = card.querySelector('[data-dsh-claude-part~="tools"] button[aria-haspopup="listbox"]')
+      const commands = card.querySelector('[data-dsh-deepcraft-part~="tools"] button[aria-haspopup="listbox"]')
       if (commands !== null) setAttributeIfChanged(commands, CONTROL_ATTR, 'commands')
-      for (const button of card.querySelectorAll('[data-dsh-claude-part~="trailing"] button[data-dsh-claude-part~="composer-primary"]')) {
+      for (const button of card.querySelectorAll('[data-dsh-deepcraft-part~="trailing"] button[data-dsh-deepcraft-part~="composer-primary"]')) {
         setAttributeIfChanged(button, CONTROL_ATTR, button.querySelector('svg rect') !== null ? 'stop' : 'send')
       }
     }
@@ -169,7 +169,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     if (access !== null) setAttributeIfChanged(access, CONTROL_ATTR, 'access')
   }
 
-  const DRAFT_EMPTY_ATTR = 'data-dsh-claude-draft-empty'
+  const DRAFT_EMPTY_ATTR = 'data-dsh-deepcraft-draft-empty'
 
   /**
    * Mark the cards whose draft is empty. The host's editor shows its
@@ -184,18 +184,18 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   }
 
   /** The custom properties the dock overlay reads to copy the toolbar row's own box. */
-  const METER_ROW_OFFSET = '--dsh-claude-meter-row-offset'
-  const METER_ROW_HEIGHT = '--dsh-claude-meter-row-height'
+  const METER_ROW_OFFSET = '--dsh-deepcraft-meter-row-offset'
+  const METER_ROW_HEIGHT = '--dsh-deepcraft-meter-row-height'
   /** How far the dock's own line stands above the band a mobile plugin's statistics strip took. */
-  const MOBILE_STATS_LIFT = '--dsh-claude-mobile-stats-lift'
+  const MOBILE_STATS_LIFT = '--dsh-deepcraft-mobile-stats-lift'
   /** The band-carrying spacer the dock's line is lifted by. */
-  const MOBILE_STATS_ATTR = 'data-dsh-claude-mobile-stats'
+  const MOBILE_STATS_ATTR = 'data-dsh-deepcraft-mobile-stats'
   let mobileStatsLift = ''
   /** The dock carrying MOBILE_STATS_LIFT right now, or null. */
   let liftHost: HTMLElement | null = null
   /** The room the meter takes at the toolbar row's right end, as the card's parent carries it. */
   let meterRoom = ''
-  /** The element carrying --dsh-claude-meter-room right now, or null. */
+  /** The element carrying --dsh-deepcraft-meter-room right now, or null. */
   let roomHost: HTMLElement | null = null
   /** The meter node the room was measured from, and the reading and scope it had then. */
   let meterNode: HTMLElement | null = null
@@ -234,7 +234,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   function stampMeterRow(card: HTMLElement | undefined, meter: HTMLElement | null) {
     const row = card === undefined || !active || readPrefs().statsPosition !== STATS_POSITION_CONTEXT || meter === null
       ? null
-      : card.querySelector('[data-dsh-claude-part~="trailing"]')?.parentElement ?? null
+      : card.querySelector('[data-dsh-deepcraft-part~="trailing"]')?.parentElement ?? null
     const stack = row === null ? null : closestFrom(row, COMPOSER_STACK)
     // The band a mobile plugin's strip took is measured on every pass: the strip
     // appears and leaves without any size of this row changing, so the row's own
@@ -308,7 +308,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    */
   function liftDockLine(card: HTMLElement | undefined) {
     const dock = card?.nextElementSibling ?? null
-    const strip = dock === null || !dock.matches('[data-dsh-claude-part~="composer-dock"]') ? null : dock.querySelector(MOBILE_STATS_SELECTOR)
+    const strip = dock === null || !dock.matches('[data-dsh-deepcraft-part~="composer-dock"]') ? null : dock.querySelector(MOBILE_STATS_SELECTOR)
     if (dock === null || strip === null) {
       releaseMobileStats()
       return
@@ -369,7 +369,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * it out crashed React's unmount (Node.removeChild). The stylesheet lays
    * the dock over the toolbar row and puts the meter at the row's right end,
    * after the model and effort triggers; the trailing cluster keeps that
-   * room free through --dsh-claude-meter-room — the pill the reader sees,
+   * room free through --dsh-deepcraft-meter-room — the pill the reader sees,
    * trigger and wrapper together, plus the cluster's own 8px gap. With the
    * session's numbers asked onto a line of their own the dock keeps the
    * host's placement, nothing overlays the row, and no room is measured.
@@ -397,7 +397,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     else if (meter === null) meter = findDockedContextMeter(card)
     let room = ''
     if (meter !== null) {
-      meter.toggleAttribute('data-dsh-claude-context-meter', true)
+      meter.toggleAttribute('data-dsh-deepcraft-context-meter', true)
       const reading = meter.textContent || ''
       // Re-measure when the reading moved or the restyle scope flipped:
       // either can change what the room should be.
@@ -420,10 +420,10 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // composer's subtree rather than the document (D9).
     const host = card === undefined ? null : card.parentElement
     if (roomHost !== null && roomHost !== host) {
-      roomHost.style.removeProperty('--dsh-claude-meter-room')
+      roomHost.style.removeProperty('--dsh-deepcraft-meter-room')
       roomHost = null
     }
-    const written = host === null ? '' : host.style.getPropertyValue('--dsh-claude-meter-room')
+    const written = host === null ? '' : host.style.getPropertyValue('--dsh-deepcraft-meter-room')
     if (room === written) {
       meterRoom = room
       roomHost = room === '' ? null : host
@@ -431,8 +431,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     }
     meterRoom = room
     roomHost = host
-    if (room === '') host?.style.removeProperty('--dsh-claude-meter-room')
-    else host!.style.setProperty('--dsh-claude-meter-room', room)
+    if (room === '') host?.style.removeProperty('--dsh-deepcraft-meter-room')
+    else host!.style.setProperty('--dsh-deepcraft-meter-room', room)
     // The room moves the trailing cluster, and the effort trigger is pinned to
     // the model trigger's box in a pass of its own (features/effort). Ask for
     // that pass here: this write is an inline style, which the scheduler's
@@ -568,12 +568,12 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     chatHidden = false
     for (const card of portraitCards) card.removeAttribute(MOBILE_PORTRAIT_ATTR)
     portraitCards.clear()
-    const marks = ['data-composer-variant', 'data-has-attachments', ATTACHMENT_TILE_ATTR, DRAFT_EMPTY_ATTR, CONTROL_ATTR, 'data-dsh-claude-context-meter']
+    const marks = ['data-composer-variant', 'data-has-attachments', ATTACHMENT_TILE_ATTR, DRAFT_EMPTY_ATTR, CONTROL_ATTR, 'data-dsh-deepcraft-context-meter']
     for (const mark of marks) {
       for (const marked of document.querySelectorAll(`[${mark}]`)) marked.removeAttribute(mark)
     }
     meterRoom = ''
-    roomHost?.style.removeProperty('--dsh-claude-meter-room')
+    roomHost?.style.removeProperty('--dsh-deepcraft-meter-room')
     roomHost = null
     if (stopMeterRow !== null) {
       stopMeterRow()

@@ -1,5 +1,5 @@
 {
-  "name": "@dsh-claude-style/engine",
+  "name": "@dsh-deepcraft/engine",
   "description": "The mechanism the skin shares with the host: in the browser the observation bus, the frame pipeline, host element access, scrolling and the seam the skin hands its own vocabulary over; in the host process the request handling, harness paths, cache files and static file serving",
   "version": "0.16.0",
   "private": true,

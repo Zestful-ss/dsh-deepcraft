@@ -32,11 +32,11 @@
       sendEcho.innerHTML = '<div style="width:220px;height:44px;background:rgb(240,240,240);border-radius:18px;padding:8px 12px;font-size:15px;line-height:24px">hello world</div>'
       sendFlow.appendChild(sendEcho)
       await sleep(90)
-      var sendGhost = document.querySelector('[data-dsh-claude-send-ghost]')
+      var sendGhost = document.querySelector('[data-dsh-deepcraft-send-ghost]')
       r.send.flying = {
         ghost: sendGhost !== null,
         clone: sendGhost !== null && sendGhost.querySelector('[data-composer-card]') !== null,
-        hidden: sendEcho.hasAttribute('data-dsh-claude-send-flight'),
+        hidden: sendEcho.hasAttribute('data-dsh-deepcraft-send-flight'),
         visibility: getComputedStyle(sendEcho).visibility,
         animations: sendGhost === null ? 0 : sendGhost.getAnimations({ subtree: true }).length,
       }
@@ -49,8 +49,8 @@
       for (var wait = 0; wait < 40; wait += 1) {
         await sleep(50)
         landedAt = {
-          ghost: document.querySelector('[data-dsh-claude-send-ghost]') !== null,
-          hidden: sendEcho.hasAttribute('data-dsh-claude-send-flight'),
+          ghost: document.querySelector('[data-dsh-deepcraft-send-ghost]') !== null,
+          hidden: sendEcho.hasAttribute('data-dsh-deepcraft-send-flight'),
           visibility: getComputedStyle(sendEcho).visibility,
         }
         if (landedAt.ghost === false) break
@@ -88,7 +88,7 @@
       var plateStarted = Date.now()
       while (Date.now() - plateStarted < 400) {
         await sleep(16)
-        var plateGhost = document.querySelector('[data-dsh-claude-send-ghost]')
+        var plateGhost = document.querySelector('[data-dsh-deepcraft-send-ghost]')
         if (plateGhost === null) continue
         var plateNodes = plateGhost.querySelectorAll('div')
         var plateShell = null
@@ -131,7 +131,7 @@
       await sleep(16)
       holdEcho.remove()
       await sleep(1500)
-      var holdGhost = document.querySelector('[data-dsh-claude-send-ghost]')
+      var holdGhost = document.querySelector('[data-dsh-deepcraft-send-ghost]')
       r.send.hold = { ghost: holdGhost !== null, opacity: holdGhost === null ? 0 : Number(getComputedStyle(holdGhost).opacity) }
       var holdRow = document.createElement('div')
       holdRow.setAttribute('data-chat-flow-kind', 'user')
@@ -139,8 +139,8 @@
       sendFlow.appendChild(holdRow)
       await sleep(300)
       r.send.handed = {
-        ghost: document.querySelector('[data-dsh-claude-send-ghost]') !== null,
-        hidden: holdRow.hasAttribute('data-dsh-claude-send-flight'),
+        ghost: document.querySelector('[data-dsh-deepcraft-send-ghost]') !== null,
+        hidden: holdRow.hasAttribute('data-dsh-deepcraft-send-flight'),
         visibility: getComputedStyle(holdRow).visibility,
       }
       holdRow.remove()
@@ -157,8 +157,8 @@
       sendFlow.appendChild(reducedEcho)
       await sleep(120)
       r.send.reduced = {
-        ghost: document.querySelector('[data-dsh-claude-send-ghost]') !== null,
-        hidden: reducedEcho.hasAttribute('data-dsh-claude-send-flight'),
+        ghost: document.querySelector('[data-dsh-deepcraft-send-ghost]') !== null,
+        hidden: reducedEcho.hasAttribute('data-dsh-deepcraft-send-flight'),
         visibility: getComputedStyle(reducedEcho).visibility,
       }
       reducedEcho.remove()
@@ -179,7 +179,7 @@
       await sleep(120)
       // Read while the echo is still the row the watcher is holding: as soon as
       // the real row is appended the mark moves off it.
-      var growWaiting = growEcho.hasAttribute('data-dsh-claude-send-flight')
+      var growWaiting = growEcho.hasAttribute('data-dsh-deepcraft-send-flight')
       // The host swaps the echo for the real row a level down, which is the one
       // the growth is played on.
       var growRow = document.createElement('div')
@@ -191,8 +191,8 @@
       var growStyle = getComputedStyle(growRow)
       var grow = {
         waiting: growWaiting,
-        ghost: document.querySelector('[data-dsh-claude-send-ghost]') !== null,
-        marked: growRow.hasAttribute('data-dsh-claude-message-enter'),
+        ghost: document.querySelector('[data-dsh-deepcraft-send-ghost]') !== null,
+        marked: growRow.hasAttribute('data-dsh-deepcraft-message-enter'),
         animation: growStyle.animationName,
         duration: growStyle.animationDuration,
         visibility: growStyle.visibility,

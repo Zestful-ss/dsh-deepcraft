@@ -37,9 +37,9 @@ export default defineConfig({
   // resolve it, from tsconfig.json's paths.
   resolve: {
     alias: {
-      '@dsh-claude-style/contracts': path.resolve(import.meta.dirname, 'packages/contracts/src'),
-      '@dsh-claude-style/engine': path.resolve(import.meta.dirname, 'packages/engine/src'),
-      'virtual:dsh-claude-style/generated': GENERATED_FILE,
+      '@dsh-deepcraft/contracts': path.resolve(import.meta.dirname, 'packages/contracts/src'),
+      '@dsh-deepcraft/engine': path.resolve(import.meta.dirname, 'packages/engine/src'),
+      'virtual:dsh-deepcraft/generated': GENERATED_FILE,
     },
   },
   test: {

@@ -7,11 +7,11 @@
    a press. The root's own positioning is the host's: the canvas is placed
    against it, which the host's page root already is. */
 
-body[data-dsh-claude-style] [data-dsh-claude-ripple] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ripple] {
   isolation: isolate;
 }
 
-body[data-dsh-claude-style] [data-dsh-claude-ripple] > .dsh-claude-ripple-canvas {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ripple] > .dsh-deepcraft-ripple-canvas {
   position: absolute;
   top: 0;
   left: 0;

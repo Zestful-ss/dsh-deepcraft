@@ -1,5 +1,5 @@
-import { SUBMISSION_ECHO_SELECTOR } from '@dsh-claude-style/contracts/dom'
-import { CHAT_ROW_SELECTOR, CHAT_USER_ROW_SELECTOR } from '@dsh-claude-style/engine/chat-dom'
+import { SUBMISSION_ECHO_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { CHAT_ROW_SELECTOR, CHAT_USER_ROW_SELECTOR } from '@dsh-deepcraft/engine/chat-dom'
 
 /**
  * The rows a submission is recognised by, for both answers to how a sent

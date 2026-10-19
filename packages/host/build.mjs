@@ -5,8 +5,8 @@
  * build output, so the packaged layout holds one `lib/` and no source tree.
  * Each module is built on its own: the half is ESM and the module loader
  * imports it by file, so the relative specifiers stay as they are. The values
- * of `@dsh-claude-style/contracts` and the engine's Node-side modules
- * (`@dsh-claude-style/engine/node/*`) are inlined into each module that reads
+ * of `@dsh-deepcraft/contracts` and the engine's Node-side modules
+ * (`@dsh-deepcraft/engine/node/*`) are inlined into each module that reads
  * them — neither package is among the published files, so a bare specifier
  * left in the output would not resolve at runtime — and every other
  * import (relative paths, `cordis`, `schemastery`, `node:*`) stays external.
@@ -24,8 +24,8 @@ const ROOT = path.resolve(PACKAGE, '..', '..')
 const SOURCE = path.join(PACKAGE, 'src')
 /** The package names a module's build resolves and inlines, each with the directory whose relative imports are inlined with it. */
 const INLINED = [
-  { prefix: '@dsh-claude-style/contracts/', dir: path.join(ROOT, 'packages', 'contracts', 'src') },
-  { prefix: '@dsh-claude-style/engine/node/', dir: path.join(ROOT, 'packages', 'engine', 'node') },
+  { prefix: '@dsh-deepcraft/contracts/', dir: path.join(ROOT, 'packages', 'contracts', 'src') },
+  { prefix: '@dsh-deepcraft/engine/node/', dir: path.join(ROOT, 'packages', 'engine', 'node') },
 ]
 
 /**

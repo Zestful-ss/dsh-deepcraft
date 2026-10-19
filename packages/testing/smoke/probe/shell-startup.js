@@ -18,16 +18,16 @@
       window.__dispose()
       await sleep(600)
       r.lateSlots = (window.__slots || []).map(function (entry) { return entry.key })
-      r.lateNodes = document.querySelectorAll(':is([class^="dsh-claude-"], [class*=" dsh-claude-"])').length
+      r.lateNodes = document.querySelectorAll(':is([class^="dsh-deepcraft-"], [class*=" dsh-deepcraft-"])').length
     })
     await probe.onlyFor(['late-forms'], async function () {
       // The directory has not answered yet: the skin holds the defaults.
-      r.lateBefore = document.body.getAttribute('data-dsh-claude-home-layout')
+      r.lateBefore = document.body.getAttribute('data-dsh-deepcraft-home-layout')
       window.__serveNamespace()
       // A pass is driven by a mutation, the way the live page drives one.
       document.body.appendChild(document.createElement('i'))
       await sleep(200)
-      r.lateAfter = document.body.getAttribute('data-dsh-claude-home-layout')
+      r.lateAfter = document.body.getAttribute('data-dsh-deepcraft-home-layout')
     })
     await probe.onlyFor(['popovers'], async function () {
       // The shared popover rule (shared/popover.ts): the dwell keeps a pointer that
@@ -35,13 +35,13 @@
       // at a time — whichever opens last folds the one before it.
       // The controls are built by the first scheduler pass, not by apply().
       await sleep(500)
-      var permTrigger = document.querySelector('.dsh-claude-perm-btn')
-      var drawerTrigger = document.querySelector('.dsh-claude-account-btn')
+      var permTrigger = document.querySelector('.dsh-deepcraft-perm-btn')
+      var drawerTrigger = document.querySelector('.dsh-deepcraft-account-btn')
       var heroTrigger = document.getElementById('hero-workspace')
       var presetTrigger = document.getElementById('hero-preset')
-      function permUp() { return document.querySelectorAll('.dsh-claude-perm-popover[data-open="true"]').length }
-      function drawerUp() { return document.querySelectorAll('.dsh-claude-account-popover[data-open="true"]').length }
-      function hostCards() { return document.querySelectorAll('body > [role="menu"]:not(:is([class^="dsh-claude"], [class*=" dsh-claude"]))').length }
+      function permUp() { return document.querySelectorAll('.dsh-deepcraft-perm-popover[data-open="true"]').length }
+      function drawerUp() { return document.querySelectorAll('.dsh-deepcraft-account-popover[data-open="true"]').length }
+      function hostCards() { return document.querySelectorAll('body > [role="menu"]:not(:is([class^="dsh-deepcraft"], [class*=" dsh-deepcraft"]))').length }
       // The dwell is 100 ms: at 50 ms a crossing pointer has opened nothing, and
       // by 250 ms a pointer that stayed has the card.
       permTrigger.dispatchEvent(new MouseEvent('mouseenter'))
@@ -50,7 +50,7 @@
       await sleep(200)
       r.permOpenPastDwell = permUp()
       // An open card is the one moment it may answer the host's menu role.
-      var openPermCard = document.querySelector('.dsh-claude-perm-popover[data-open="true"]')
+      var openPermCard = document.querySelector('.dsh-deepcraft-perm-popover[data-open="true"]')
       r.permCardRole = openPermCard !== null ? openPermCard.getAttribute('role') : null
       // The drawer opens over the permission card and folds it.
       drawerTrigger.dispatchEvent(new MouseEvent('mouseenter'))
@@ -102,19 +102,19 @@
       // The stamp names the picker, and only the workspace card is drawn as
       // Claude's folder menu: the preset card keeps its row glyph.
       function heroCardShape() {
-        var card = document.querySelector('[data-dsh-claude-hero-menu]')
+        var card = document.querySelector('[data-dsh-deepcraft-hero-menu]')
         if (card === null) return null
-        var icons = card.querySelectorAll('[data-dsh-claude-part~="menu-item-icon"]')
+        var icons = card.querySelectorAll('[data-dsh-deepcraft-part~="menu-item-icon"]')
         var row = card.querySelector('[role="menuitem"]')
         return {
-          kind: card.getAttribute('data-dsh-claude-hero-menu'),
+          kind: card.getAttribute('data-dsh-deepcraft-hero-menu'),
           iconsShown: Array.prototype.filter.call(icons, function (icon) { return getComputedStyle(icon).display !== 'none' }).length,
           rowHeight: row === null ? null : Math.round(row.getBoundingClientRect().height),
         }
       }
       /** Where the stamped card sits against its trigger, in the skin's own terms. */
       function heroCardPlacement() {
-        var card = document.querySelector('[data-dsh-claude-hero-menu]')
+        var card = document.querySelector('[data-dsh-deepcraft-hero-menu]')
         var row = document.getElementById('hero-workspace')
         if (card === null) return null
         var c = card.getBoundingClientRect()
@@ -140,7 +140,7 @@
       r.heroMenusLeft = window.__heroMenusOpen()
       // The row against the viewport's top edge leaves no room above: the card
       // flips below its trigger rather than leaving the screen.
-      var heroRow = document.querySelector('[data-dsh-claude-part~="hero-workspace-row"]')
+      var heroRow = document.querySelector('[data-dsh-deepcraft-part~="hero-workspace-row"]')
       heroRow.style.bottom = 'auto'
       heroRow.style.top = '0px'
       heroTrigger.click()

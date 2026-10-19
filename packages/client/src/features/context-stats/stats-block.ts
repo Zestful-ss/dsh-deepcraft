@@ -1,10 +1,10 @@
-import { buildElement, writeTextInPlace } from '@dsh-claude-style/engine/dom'
-import { findComposerStats } from '@dsh-claude-style/engine/host'
+import { buildElement, writeTextInPlace } from '@dsh-deepcraft/engine/dom'
+import { findComposerStats } from '@dsh-deepcraft/engine/host'
 import { createStatsCount } from './stats-count'
 import { sessionStatsSections } from './stats-model'
 import { CONTEXT_STATS_ATTR, contextPanel, hostStatsDetailed } from './stats-panel'
-import type { HostText } from '@dsh-claude-style/engine/host'
-import type { HostSessionStatsProjection, HostTokenUsageProjection } from '@dsh-claude-style/contracts/services'
+import type { HostText } from '@dsh-deepcraft/engine/host'
+import type { HostSessionStatsProjection, HostTokenUsageProjection } from '@dsh-deepcraft/contracts/services'
 import type { StatsReading } from './stats-count'
 import type { StatsValueReader } from './stats-model'
 
@@ -25,7 +25,7 @@ import type { StatsValueReader } from './stats-model'
  */
 
 /** The mark on the block while it holds the numbers' place. */
-const CONTEXT_SKELETON_ATTR = 'data-dsh-claude-context-skeleton'
+const CONTEXT_SKELETON_ATTR = 'data-dsh-deepcraft-context-skeleton'
 /**
  * How long the block may hold the numbers' place.
  *
@@ -111,7 +111,7 @@ export function createStatsBlock(read: StatsValueReader, chatText: () => HostTex
     let block = panel.querySelector(`[${CONTEXT_STATS_ATTR}]`)
     if (block === null) {
       block = document.createElement('div')
-      block.className = 'dsh-claude-context-stats'
+      block.className = 'dsh-deepcraft-context-stats'
       block.setAttribute(CONTEXT_STATS_ATTR, '')
       panel.appendChild(block)
     }
@@ -164,7 +164,7 @@ export function createStatsBlock(read: StatsValueReader, chatText: () => HostTex
     } else {
       const parts: HTMLElement[] = []
       for (const title of titles!) {
-        parts.push(buildElement('div', 'dsh-claude-context-stats-section', title), skeletonGrid(STATS_SKELETON_ROWS))
+        parts.push(buildElement('div', 'dsh-deepcraft-context-stats-section', title), skeletonGrid(STATS_SKELETON_ROWS))
       }
       block.replaceChildren(...parts)
     }
@@ -172,10 +172,10 @@ export function createStatsBlock(read: StatsValueReader, chatText: () => HostTex
 
   /** A grid of placeholder bars at a row's own size. */
   function skeletonGrid(rows: number) {
-    const grid = buildElement('div', 'dsh-claude-context-stats-grid')
+    const grid = buildElement('div', 'dsh-deepcraft-context-stats-grid')
     for (let r = 0; r < rows; r++) {
-      const item = buildElement('div', 'dsh-claude-context-stats-item')
-      item.append(buildElement('span', 'dsh-claude-context-stats-skeleton-label'), buildElement('span', 'dsh-claude-context-stats-skeleton-value'))
+      const item = buildElement('div', 'dsh-deepcraft-context-stats-item')
+      item.append(buildElement('span', 'dsh-deepcraft-context-stats-skeleton-label'), buildElement('span', 'dsh-deepcraft-context-stats-skeleton-value'))
       grid.appendChild(item)
     }
     return grid
@@ -208,13 +208,13 @@ export function createStatsBlock(read: StatsValueReader, chatText: () => HostTex
       const parts: HTMLElement[] = []
       const cells: HTMLElement[] = []
       for (const section of sections) {
-        if (section.title) parts.push(buildElement('div', 'dsh-claude-context-stats-section', section.title))
-        const grid = buildElement('div', 'dsh-claude-context-stats-grid')
+        if (section.title) parts.push(buildElement('div', 'dsh-deepcraft-context-stats-section', section.title))
+        const grid = buildElement('div', 'dsh-deepcraft-context-stats-grid')
         for (const row of section.rows) {
-          const item = buildElement('div', 'dsh-claude-context-stats-item')
-          const value = buildElement('div', 'dsh-claude-context-stats-value')
+          const item = buildElement('div', 'dsh-deepcraft-context-stats-item')
+          const value = buildElement('div', 'dsh-deepcraft-context-stats-value')
           cells.push(value)
-          item.append(buildElement('div', 'dsh-claude-context-stats-label', row.label), value)
+          item.append(buildElement('div', 'dsh-deepcraft-context-stats-label', row.label), value)
           grid.appendChild(item)
         }
         parts.push(grid)

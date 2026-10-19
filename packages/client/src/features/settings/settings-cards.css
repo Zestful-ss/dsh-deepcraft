@@ -7,7 +7,7 @@
    the row shell, the switches, the brand editor and the tab strip are the
    other. */
 
-body[data-dsh-claude-style] .dsh-claude-settings-row-block > :is(.dsh-claude-brand-picker, .dsh-claude-motion-picker, .dsh-claude-caret-picker, .dsh-claude-reveal-picker, .dsh-claude-enter-picker, .dsh-claude-ongoing-picker) {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-block > :is(.dsh-deepcraft-brand-picker, .dsh-deepcraft-motion-picker, .dsh-deepcraft-caret-picker, .dsh-deepcraft-reveal-picker, .dsh-deepcraft-enter-picker, .dsh-deepcraft-ongoing-picker) {
   align-self: stretch;
 }
 
@@ -22,13 +22,13 @@ body[data-dsh-claude-style] .dsh-claude-settings-row-block > :is(.dsh-claude-bra
    starburst, DeepSeek's whale in brand blue — inlined as CSS data URIs, so they
    read in full colour on either theme: a new brand is one option in
    settings-tab-general.ts and one [data-brand] rule here. */
-body[data-dsh-claude-style] :is(.dsh-claude-brand-picker, .dsh-claude-motion-picker, .dsh-claude-caret-picker, .dsh-claude-reveal-picker, .dsh-claude-enter-picker, .dsh-claude-ongoing-picker) {
+body[data-dsh-deepcraft] :is(.dsh-deepcraft-brand-picker, .dsh-deepcraft-motion-picker, .dsh-deepcraft-caret-picker, .dsh-deepcraft-reveal-picker, .dsh-deepcraft-enter-picker, .dsh-deepcraft-ongoing-picker) {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
   gap: 8px;
 }
 
-body[data-dsh-claude-style] :is(.dsh-claude-brand-card, .dsh-claude-motion-card, .dsh-claude-caret-card, .dsh-claude-reveal-card, .dsh-claude-enter-card, .dsh-claude-ongoing-card) {
+body[data-dsh-deepcraft] :is(.dsh-deepcraft-brand-card, .dsh-deepcraft-motion-card, .dsh-deepcraft-caret-card, .dsh-deepcraft-reveal-card, .dsh-deepcraft-enter-card, .dsh-deepcraft-ongoing-card) {
   appearance: none;
   margin: 0;
   display: flex;
@@ -44,23 +44,23 @@ body[data-dsh-claude-style] :is(.dsh-claude-brand-card, .dsh-claude-motion-card,
   color: var(--dsw-alias-label-primary);
   font: inherit;
   cursor: pointer;
-  transition: border-color var(--dsh-claude-timing-feedback);
+  transition: border-color var(--dsh-deepcraft-timing-feedback);
 }
 
-body[data-dsh-claude-style] :is(.dsh-claude-brand-card, .dsh-claude-motion-card, .dsh-claude-caret-card, .dsh-claude-reveal-card, .dsh-claude-enter-card, .dsh-claude-ongoing-card):hover {
+body[data-dsh-deepcraft] :is(.dsh-deepcraft-brand-card, .dsh-deepcraft-motion-card, .dsh-deepcraft-caret-card, .dsh-deepcraft-reveal-card, .dsh-deepcraft-enter-card, .dsh-deepcraft-ongoing-card):hover {
   border-color: var(--dsw-alias-border-l2);
 }
 
-body[data-dsh-claude-style] :is(.dsh-claude-brand-card, .dsh-claude-motion-card, .dsh-claude-caret-card, .dsh-claude-reveal-card, .dsh-claude-enter-card, .dsh-claude-ongoing-card):focus-visible {
+body[data-dsh-deepcraft] :is(.dsh-deepcraft-brand-card, .dsh-deepcraft-motion-card, .dsh-deepcraft-caret-card, .dsh-deepcraft-reveal-card, .dsh-deepcraft-enter-card, .dsh-deepcraft-ongoing-card):focus-visible {
   outline: 2px solid var(--dsw-alias-brand-primary, #d97757);
   outline-offset: 1px;
 }
 
-body[data-dsh-claude-style] :is(.dsh-claude-brand-card, .dsh-claude-motion-card, .dsh-claude-caret-card, .dsh-claude-reveal-card, .dsh-claude-enter-card, .dsh-claude-ongoing-card)[data-active] {
+body[data-dsh-deepcraft] :is(.dsh-deepcraft-brand-card, .dsh-deepcraft-motion-card, .dsh-deepcraft-caret-card, .dsh-deepcraft-reveal-card, .dsh-deepcraft-enter-card, .dsh-deepcraft-ongoing-card)[data-active] {
   border-color: var(--dsw-alias-brand-primary, #d97757);
 }
 
-body[data-dsh-claude-style] .dsh-claude-brand-card-logo {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-card-logo {
   width: 32px;
   height: 32px;
   background-position: center;
@@ -68,46 +68,46 @@ body[data-dsh-claude-style] .dsh-claude-brand-card-logo {
   background-size: contain;
 }
 
-body[data-dsh-claude-style] .dsh-claude-brand-card-logo[data-brand="claude"] {
-  background-image: var(--dsh-claude-image-claude-mark-clay);
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-card-logo[data-brand="claude"] {
+  background-image: var(--dsh-deepcraft-image-claude-mark-clay);
 }
 
-body[data-dsh-claude-style] .dsh-claude-brand-card-logo[data-brand="deepseek"] {
-  background-image: var(--dsh-claude-image-deepseek-mark);
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-card-logo[data-brand="deepseek"] {
+  background-image: var(--dsh-deepcraft-image-deepseek-mark);
 }
 
 /* The theme style's card reads left to right: the mark, then the brand's word.
    Claude's word is the sidebar's own wordmark, masked over the label colour;
    DeepSeek's lockup carries its whale and its word as one piece, the whale in
    brand blue on either canvas. */
-body[data-dsh-claude-style] .dsh-claude-brand-card {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-card {
   flex-direction: row;
   gap: 10px;
   min-height: 64px;
   padding: 14px 12px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-brand-card-word {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-card-word {
   flex: none;
   width: calc(16px * 512.22 / 121.54);
   height: 16px;
   background-color: currentColor;
 }
 
-body[data-dsh-claude-style] .dsh-claude-brand-card-lockup {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-card-lockup {
   display: block;
   height: 22px;
   max-width: 100%;
 }
 
-body[data-dsh-claude-style] .dsh-claude-brand-card-lockup svg {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-card-lockup svg {
   display: block;
   height: 100%;
   width: auto;
   overflow: visible;
 }
 
-body[data-dsh-claude-style] .dsh-claude-brand-card-lockup .dsh-combine-mark-mono:not(.dsh-combine-mark-color) {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-card-lockup .dsh-combine-mark-mono:not(.dsh-combine-mark-color) {
   display: none;
 }
 
@@ -115,7 +115,7 @@ body[data-dsh-claude-style] .dsh-claude-brand-card-lockup .dsh-combine-mark-mono
    the room a line's words need, whatever the sample is. The sample stands on
    the line's own metrics and never wraps, so the cards stay one height and a
    longer sample is cut where the line cuts it. */
-body[data-dsh-claude-style] .dsh-claude-motion-card {
+body[data-dsh-deepcraft] .dsh-deepcraft-motion-card {
   min-height: 64px;
   padding: 14px 12px;
   color: var(--dsw-alias-label-secondary);
@@ -126,7 +126,7 @@ body[data-dsh-claude-style] .dsh-claude-motion-card {
    place, on a loop. Both stand in one grid cell, so the box is as wide as the
    longer wording and neither the card nor the clock's place beside it would
    move when they change (settings-tab-motion.ts writes the two). */
-body[data-dsh-claude-style] .dsh-claude-motion-sample {
+body[data-dsh-deepcraft] .dsh-deepcraft-motion-sample {
   display: grid;
   font-size: 14px;
   line-height: 24px;
@@ -138,20 +138,20 @@ body[data-dsh-claude-style] .dsh-claude-motion-sample {
    from below at the end — the swap's own travel, blur and curve
    (shared/motion.css), on the preset card's period. The second wording is
    offset half a turn, so the two are never on the card together. */
-body[data-dsh-claude-style] .dsh-claude-motion-word {
+body[data-dsh-deepcraft] .dsh-deepcraft-motion-word {
   grid-area: 1 / 1;
   justify-self: center;
-  animation: dsh-claude-motion-word var(--dsh-claude-period-preview-swap) var(--dsh-claude-swap-ease) infinite;
+  animation: dsh-deepcraft-motion-word var(--dsh-deepcraft-period-preview-swap) var(--dsh-deepcraft-swap-ease) infinite;
 }
 
-body[data-dsh-claude-style] .dsh-claude-motion-word + .dsh-claude-motion-word {
-  animation-delay: calc(-0.5 * var(--dsh-claude-period-preview-swap));
+body[data-dsh-deepcraft] .dsh-deepcraft-motion-word + .dsh-deepcraft-motion-word {
+  animation-delay: calc(-0.5 * var(--dsh-deepcraft-period-preview-swap));
 }
 
-@keyframes dsh-claude-motion-word {
+@keyframes dsh-deepcraft-motion-word {
   0%, 45% { opacity: 1; filter: blur(0); transform: translateY(0); }
-  50% { opacity: 0; filter: blur(var(--dsh-claude-swap-blur)); transform: translateY(calc(-1 * var(--dsh-claude-swap-distance))); }
-  95% { opacity: 0; filter: blur(var(--dsh-claude-swap-blur)); transform: translateY(var(--dsh-claude-swap-distance)); }
+  50% { opacity: 0; filter: blur(var(--dsh-deepcraft-swap-blur)); transform: translateY(calc(-1 * var(--dsh-deepcraft-swap-distance))); }
+  95% { opacity: 0; filter: blur(var(--dsh-deepcraft-swap-blur)); transform: translateY(var(--dsh-deepcraft-swap-distance)); }
   100% { opacity: 1; filter: blur(0); transform: translateY(0); }
 }
 
@@ -159,13 +159,13 @@ body[data-dsh-claude-style] .dsh-claude-motion-word + .dsh-claude-motion-word {
    character, with the caret following it — on glides to each new place, off
    arrives there at once. The padding at the line's head is where a caret before
    the first character stands. */
-body[data-dsh-claude-style] .dsh-claude-caret-card {
+body[data-dsh-deepcraft] .dsh-deepcraft-caret-card {
   min-height: 64px;
   padding: 14px 12px;
   color: var(--dsw-alias-label-secondary);
 }
 
-body[data-dsh-claude-style] .dsh-claude-caret-sample {
+body[data-dsh-deepcraft] .dsh-deepcraft-caret-sample {
   position: relative;
   display: inline-block;
   font-size: 14px;
@@ -173,24 +173,24 @@ body[data-dsh-claude-style] .dsh-claude-caret-sample {
   white-space: nowrap;
 }
 
-body[data-dsh-claude-style] .dsh-claude-caret-sample-text {
+body[data-dsh-deepcraft] .dsh-deepcraft-caret-sample-text {
   padding-left: 6px;
 }
 
 /* A character that has not been typed yet holds its place in the line, so the
    line does not reflow as it is typed and the caret's own measure stays put. */
-body[data-dsh-claude-style] .dsh-claude-caret-piece {
+body[data-dsh-deepcraft] .dsh-deepcraft-caret-piece {
   visibility: hidden;
 }
 
-body[data-dsh-claude-style] .dsh-claude-caret-piece[data-in] {
+body[data-dsh-deepcraft] .dsh-deepcraft-caret-piece[data-in] {
   visibility: visible;
 }
 
 /* The caret stands where the last typed character ends: the card's own measure
    of that edge, written on the picker by settings-tab-motion.ts, and the head of
    the line while nothing has been typed. */
-body[data-dsh-claude-style] .dsh-claude-caret-sample-bar {
+body[data-dsh-deepcraft] .dsh-deepcraft-caret-sample-bar {
   position: absolute;
   top: 3px;
   bottom: 3px;
@@ -198,25 +198,25 @@ body[data-dsh-claude-style] .dsh-claude-caret-sample-bar {
   width: 2px;
   border-radius: 1px;
   background: currentColor;
-  transform: translateX(var(--dsh-claude-caret-x, 0px));
+  transform: translateX(var(--dsh-deepcraft-caret-x, 0px));
   /* The native caret's own cycle (caret.css's keyframes), running while the line
      stands whole. The drawn caret switches its blink back on with every move
      (features/caret/caret.ts), so the animation is off for the whole time the
      line is being typed and the caret is lit while it moves. */
-  animation: dsh-claude-caret-blink var(--dsh-claude-period-blink) step-end infinite;
+  animation: dsh-deepcraft-caret-blink var(--dsh-deepcraft-period-blink) step-end infinite;
 }
 
-body[data-dsh-claude-style] .dsh-claude-caret-sample-bar[data-typing] {
+body[data-dsh-deepcraft] .dsh-deepcraft-caret-sample-bar[data-typing] {
   animation: none;
 }
 
 /* The glide between two places: the on card takes the drawn caret's own
    duration, the off card's caret arrives at once the way the host's does. */
-body[data-dsh-claude-style] .dsh-claude-caret-sample-bar.dsh-claude-caret-typing {
-  transition: transform var(--dsh-claude-duration-instant) var(--dsh-claude-ease-standard);
+body[data-dsh-deepcraft] .dsh-deepcraft-caret-sample-bar.dsh-deepcraft-caret-typing {
+  transition: transform var(--dsh-deepcraft-duration-instant) var(--dsh-deepcraft-ease-standard);
 }
 
-body[data-dsh-claude-style] .dsh-claude-caret-sample-bar.dsh-claude-caret-off {
+body[data-dsh-deepcraft] .dsh-deepcraft-caret-sample-bar.dsh-deepcraft-caret-off {
   transition: none;
 }
 
@@ -228,27 +228,27 @@ body[data-dsh-claude-style] .dsh-claude-caret-sample-bar.dsh-claude-caret-off {
    own, because chrome.css presses every skin animation to a single 0.01 ms pass
    on this setting and a loop here would never come round again. Both wordings
    keep their cell, so the card is the same size in every setting. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-motion-word {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-motion-word {
   animation: none;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-motion-word + .dsh-claude-motion-word {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-motion-word + .dsh-deepcraft-motion-word {
   visibility: hidden;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] [data-dsh-claude-word-alt] .dsh-claude-motion-word {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] [data-dsh-deepcraft-word-alt] .dsh-deepcraft-motion-word {
   visibility: hidden;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] [data-dsh-claude-word-alt] .dsh-claude-motion-word + .dsh-claude-motion-word {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] [data-dsh-deepcraft-word-alt] .dsh-deepcraft-motion-word + .dsh-deepcraft-motion-word {
   visibility: visible;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-caret-piece {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-caret-piece {
   visibility: visible;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-caret-sample-bar {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-caret-sample-bar {
   animation: none;
   transform: none;
 }
@@ -257,13 +257,13 @@ body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-caret-
    another, centred and never wrapped. The fade card fades each character in as
    it is handed its turn; the other hands it over with nothing between, which is
    what the conversation looks like while the fade is off. */
-body[data-dsh-claude-style] .dsh-claude-reveal-card {
+body[data-dsh-deepcraft] .dsh-deepcraft-reveal-card {
   min-height: 64px;
   padding: 14px 12px;
   color: var(--dsw-alias-label-secondary);
 }
 
-body[data-dsh-claude-style] .dsh-claude-reveal-sample {
+body[data-dsh-deepcraft] .dsh-deepcraft-reveal-sample {
   display: block;
   font-size: 14px;
   line-height: 24px;
@@ -272,33 +272,33 @@ body[data-dsh-claude-style] .dsh-claude-reveal-sample {
 
 /* One character of the sample: unseen until its turn comes, holding its box
    while it waits so the line is the same width from the first frame. */
-body[data-dsh-claude-style] .dsh-claude-reveal-piece {
+body[data-dsh-deepcraft] .dsh-deepcraft-reveal-piece {
   opacity: 0;
 }
 
-body[data-dsh-claude-style] .dsh-claude-reveal-card:not([data-fade]) .dsh-claude-reveal-piece[data-in] {
+body[data-dsh-deepcraft] .dsh-deepcraft-reveal-card:not([data-fade]) .dsh-deepcraft-reveal-piece[data-in] {
   opacity: 1;
 }
 
 /* The fade card's character arrives the way a streamed one does: it lands on
    the reveal's own faintest step and settles over the reveal's own duration
    (constants.ts CHAT_REVEAL_MIN_OPACITY, tokens.json
-   --dsh-claude-duration-reveal). An animation rather than a transition, because
+   --dsh-deepcraft-duration-reveal). An animation rather than a transition, because
    the piece is handed its turn by an attribute and the frame it lands on has to
    be the faint one rather than a step along the way. */
-body[data-dsh-claude-style] .dsh-claude-reveal-card[data-fade] .dsh-claude-reveal-piece[data-in] {
+body[data-dsh-deepcraft] .dsh-deepcraft-reveal-card[data-fade] .dsh-deepcraft-reveal-piece[data-in] {
   opacity: 1;
-  animation: dsh-claude-reveal-piece var(--dsh-claude-duration-reveal) linear both;
+  animation: dsh-deepcraft-reveal-piece var(--dsh-deepcraft-duration-reveal) linear both;
 }
 
-@keyframes dsh-claude-reveal-piece {
+@keyframes dsh-deepcraft-reveal-piece {
   from { opacity: 0.2; }
   to { opacity: 1; }
 }
 
 /* The reader's animation choice (D40): both samples stand whole, which is what
    the conversation does while the fade is held still. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-reveal-piece {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-reveal-piece {
   opacity: 1;
   animation: none;
 }
@@ -308,18 +308,18 @@ body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-reveal
    swap: the word leaving rises with a blur, the one arriving rises in from
    below (shared/motion.css), the picker re-keying the pair every turn. The
    reader's animation choice above keeps its own say. */
-body[data-dsh-claude-style] [data-dsh-claude-precise] .dsh-claude-motion-word,
-body[data-dsh-claude-style] [data-dsh-claude-precise] .dsh-claude-motion-word + .dsh-claude-motion-word {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-precise] .dsh-deepcraft-motion-word,
+body[data-dsh-deepcraft] [data-dsh-deepcraft-precise] .dsh-deepcraft-motion-word + .dsh-deepcraft-motion-word {
   animation: none;
   visibility: visible;
 }
 
-body[data-dsh-claude-style]:not([data-dsh-claude-motion="reduced"]) [data-dsh-claude-precise] .dsh-claude-word-out {
-  animation: dsh-claude-swap-out var(--dsh-claude-swap-duration) var(--dsh-claude-swap-ease) forwards;
+body[data-dsh-deepcraft]:not([data-dsh-deepcraft-motion="reduced"]) [data-dsh-deepcraft-precise] .dsh-deepcraft-word-out {
+  animation: dsh-deepcraft-swap-out var(--dsh-deepcraft-swap-duration) var(--dsh-deepcraft-swap-ease) forwards;
 }
 
-body[data-dsh-claude-style]:not([data-dsh-claude-motion="reduced"]) [data-dsh-claude-precise] .dsh-claude-word-in {
-  animation: dsh-claude-swap-in var(--dsh-claude-swap-duration) var(--dsh-claude-swap-ease) both;
+body[data-dsh-deepcraft]:not([data-dsh-deepcraft-motion="reduced"]) [data-dsh-deepcraft-precise] .dsh-deepcraft-word-in {
+  animation: dsh-deepcraft-swap-in var(--dsh-deepcraft-swap-duration) var(--dsh-deepcraft-swap-ease) both;
 }
 
 /* A message-entrance card holds a two-row conversation of the reader's own
@@ -330,27 +330,27 @@ body[data-dsh-claude-style]:not([data-dsh-claude-motion="reduced"]) [data-dsh-cl
    cards differ in nothing but that arrival: the message growing where it lands
    (shared/motion.css) or the message coming up from below the box it was typed
    in (features/chat-send/, constants.ts MESSAGE_ENTER_MODES). */
-body[data-dsh-claude-style] .dsh-claude-enter-card {
+body[data-dsh-deepcraft] .dsh-deepcraft-enter-card {
   min-height: 64px;
   padding: 14px 12px;
   color: var(--dsw-alias-label-secondary);
   /* One bubble is 25px tall and two of them are a row apart: the card's own
      geometry, read by the column and by the picker's lift (settings-tab-motion.ts). */
-  --dsh-claude-enter-row: 28px;
-  --dsh-claude-enter-gap: 3px;
+  --dsh-deepcraft-enter-row: 28px;
+  --dsh-deepcraft-enter-gap: 3px;
 }
 
 /* Two rows, and nothing of a third: a message arriving from outside the box
    shows itself the moment it crosses the bottom edge, which is where the box it
    was typed in sits below the card. */
-body[data-dsh-claude-style] .dsh-claude-enter-sample {
+body[data-dsh-deepcraft] .dsh-deepcraft-enter-sample {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-self: stretch;
   width: 100%;
   box-sizing: border-box;
-  height: calc(2 * var(--dsh-claude-enter-row) - var(--dsh-claude-enter-gap));
+  height: calc(2 * var(--dsh-deepcraft-enter-row) - var(--dsh-deepcraft-enter-gap));
   overflow: hidden;
   font-size: 12px;
   line-height: 17px;
@@ -359,15 +359,15 @@ body[data-dsh-claude-style] .dsh-claude-enter-sample {
 
 /* The column of messages, against the right edge and a gap apart. Its lift is a
    transform, so the box stands still while the messages inside it move. */
-body[data-dsh-claude-style] .dsh-claude-enter-stack {
+body[data-dsh-deepcraft] .dsh-deepcraft-enter-stack {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--dsh-claude-enter-gap);
-  transition: transform var(--dsh-claude-duration-enter) var(--dsh-claude-ease-settle);
+  gap: var(--dsh-deepcraft-enter-gap);
+  transition: transform var(--dsh-deepcraft-duration-enter) var(--dsh-deepcraft-ease-settle);
 }
 
-body[data-dsh-claude-style] .dsh-claude-enter-bubble {
+body[data-dsh-deepcraft] .dsh-deepcraft-enter-bubble {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -382,8 +382,8 @@ body[data-dsh-claude-style] .dsh-claude-enter-bubble {
 
 /* The message growing where it lands: the row's own entrance, so the card and
    the conversation play the same animation. */
-body[data-dsh-claude-style] .dsh-claude-enter-card[data-enter="grow"] .dsh-claude-enter-bubble {
-  animation: dsh-claude-enter-grow var(--dsh-claude-duration-enter) var(--dsh-claude-ease-enter) both;
+body[data-dsh-deepcraft] .dsh-deepcraft-enter-card[data-enter="grow"] .dsh-deepcraft-enter-bubble {
+  animation: dsh-deepcraft-enter-grow var(--dsh-deepcraft-duration-enter) var(--dsh-deepcraft-ease-enter) both;
 }
 
 /* The message coming up from below, size and position together: the spring the
@@ -391,12 +391,12 @@ body[data-dsh-claude-style] .dsh-claude-enter-card[data-enter="grow"] .dsh-claud
    frequency 22 rad/s — a 5.4% overshoot, settled in about a quarter of a second)
    over a travel of one row, which is where the box it was typed in sits below
    the card. */
-body[data-dsh-claude-style] .dsh-claude-enter-card[data-enter="flight"] .dsh-claude-enter-bubble {
-  animation: dsh-claude-enter-card-rise var(--dsh-claude-duration-enter) linear both;
+body[data-dsh-deepcraft] .dsh-deepcraft-enter-card[data-enter="flight"] .dsh-deepcraft-enter-bubble {
+  animation: dsh-deepcraft-enter-card-rise var(--dsh-deepcraft-duration-enter) linear both;
 }
 
-@keyframes dsh-claude-enter-card-rise {
-  0% { transform: translateY(var(--dsh-claude-enter-row)) scale(0.6); }
+@keyframes dsh-deepcraft-enter-card-rise {
+  0% { transform: translateY(var(--dsh-deepcraft-enter-row)) scale(0.6); }
   6.25% { transform: translateY(25.79px) scale(0.632); }
   12.5% { transform: translateY(20.88px) scale(0.702); }
   18.75% { transform: translateY(15.19px) scale(0.783); }
@@ -418,17 +418,17 @@ body[data-dsh-claude-style] .dsh-claude-enter-card[data-enter="flight"] .dsh-cla
 /* A message already on the card when the reader arrives, and the one the lift
    has left behind: neither plays the arrival. This rule is written after the two
    above on purpose — same specificity, so order is what decides. */
-body[data-dsh-claude-style] .dsh-claude-enter-bubble[data-standing] {
+body[data-dsh-deepcraft] .dsh-deepcraft-enter-bubble[data-standing] {
   animation: none;
 }
 
 /* The reader's animation choice (D40): the messages stand where they are and the
    column does not move. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-enter-bubble {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-enter-bubble {
   animation: none;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-enter-stack {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-enter-stack {
   transition: none;
 }
 
@@ -436,13 +436,13 @@ body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-enter-
    choice gives it, then a title in the quiet ink. The mark's own paint is the
    sidebar's (theme/sidebar.css), so the card wears the mark rather than a
    picture of it, and the two cards are the same pair with the mark swapped. */
-body[data-dsh-claude-style] .dsh-claude-ongoing-card {
+body[data-dsh-deepcraft] .dsh-deepcraft-ongoing-card {
   min-height: 64px;
   padding: 14px 12px;
   color: var(--dsw-alias-label-secondary);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ongoing-sample {
+body[data-dsh-deepcraft] .dsh-deepcraft-ongoing-sample {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -452,7 +452,7 @@ body[data-dsh-claude-style] .dsh-claude-ongoing-sample {
   line-height: 20px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ongoing-sample-title {
+body[data-dsh-deepcraft] .dsh-deepcraft-ongoing-sample-title {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -464,31 +464,31 @@ body[data-dsh-claude-style] .dsh-claude-ongoing-sample-title {
    as stills that keep the two choices apart: the choice stays editable and the
    row says it takes no effect. The cards are dimmed with the row's note, and each
    still is a frame of the effect the card stands for. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] :is(.dsh-claude-motion-card, .dsh-claude-caret-card, .dsh-claude-reveal-card, .dsh-claude-enter-card) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] :is(.dsh-deepcraft-motion-card, .dsh-deepcraft-caret-card, .dsh-deepcraft-reveal-card, .dsh-deepcraft-enter-card) {
   opacity: 0.72;
 }
 
 /* The sweep's band parked across the middle of the words; the wash already
    holds its own first frame. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-motion-card .dsh-claude-sweep-band {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-motion-card .dsh-deepcraft-sweep-band {
   display: block;
   transform: none;
   animation: none;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-motion-card .dsh-claude-sweep-glyphs {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-motion-card .dsh-deepcraft-sweep-glyphs {
   transform: none;
   animation: none;
 }
 
 /* The caret stands at the end of the line; the glide's card trails the caret
    with the distance it has just covered, the other's caret has none. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-caret-sample-bar {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-caret-sample-bar {
   left: auto;
   right: 0;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-caret-sample-bar.dsh-claude-caret-typing::before {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-caret-sample-bar.dsh-deepcraft-caret-typing::before {
   content: "";
   position: absolute;
   top: 0;
@@ -501,34 +501,34 @@ body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-caret-
 
 /* The fade's last characters on the faintest steps of their arrival; the other
    card's line is whole. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-reveal-card[data-fade] .dsh-claude-reveal-piece:nth-last-child(1) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-reveal-card[data-fade] .dsh-deepcraft-reveal-piece:nth-last-child(1) {
   opacity: 0.2;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-reveal-card[data-fade] .dsh-claude-reveal-piece:nth-last-child(2) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-reveal-card[data-fade] .dsh-deepcraft-reveal-piece:nth-last-child(2) {
   opacity: 0.4;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-reveal-card[data-fade] .dsh-claude-reveal-piece:nth-last-child(3) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-reveal-card[data-fade] .dsh-deepcraft-reveal-piece:nth-last-child(3) {
   opacity: 0.6;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-reveal-card[data-fade] .dsh-claude-reveal-piece:nth-last-child(4) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-reveal-card[data-fade] .dsh-deepcraft-reveal-piece:nth-last-child(4) {
   opacity: 0.8;
 }
 
 /* The arriving message caught mid-way: grown part of the size about its own
    corner, or still below its place on the way up. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-enter-card[data-enter="grow"] .dsh-claude-enter-bubble:not([data-standing]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-enter-card[data-enter="grow"] .dsh-deepcraft-enter-bubble:not([data-standing]) {
   transform: scale(0.78);
 }
 
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-enter-card[data-enter="flight"] .dsh-claude-enter-bubble:not([data-standing]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-enter-card[data-enter="flight"] .dsh-deepcraft-enter-bubble:not([data-standing]) {
   transform: translateY(10px) scale(0.92);
 }
 
 /* The precise card keeps both wordings in the box so the swap can play between
    them; with no swap to play only the arriving one stands. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] [data-dsh-claude-precise] .dsh-claude-motion-word:not(:last-child) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] [data-dsh-deepcraft-precise] .dsh-deepcraft-motion-word:not(:last-child) {
   visibility: hidden;
 }

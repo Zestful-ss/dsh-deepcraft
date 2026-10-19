@@ -18,12 +18,8 @@
  * decompresses it for one that does not, so the package carries the sheets
  * once, small.
  *
- * Deepy's sheets are drawn as PNG but ship as the vector the browser already
- * plays: the same cell layout as the sprite's own geometry — every frame keeps
- * DEEPY_GUTTER of transparency on all four sides, or the downscale that draws
- * it samples the frame above's shadow along the cell's edge — with one path per
- * color, each row's runs extended downwards into rectangles. The PNGs are
- * inputs of the build and never reach `lib/`.
+ * The whale's sheets are drawn as SVG at build time by packages/assets/whale.mjs;
+ * this module only plans their delivery, like every other image.
  *
  * The manifest is also the gate: a file under `packages/assets/src/` that no table or
  * token claims fails the build, so an image added for one run cannot ship
@@ -40,7 +36,7 @@ import { brotliCompressSync } from 'node:zlib'
 /** The largest file that rides the bundle rather than the route. */
 export const INLINE_LIMIT_BYTES = 16 * 1024
 /** Where the host half serves the routed assets. */
-export const ASSETS_ROUTE = '/dsh-claude-style/assets/'
+export const ASSETS_ROUTE = '/dsh-deepcraft/assets/'
 /** The manifest the host half reads to decide what it may serve. */
 export const ASSETS_MANIFEST = 'manifest.json'
 /** The fonts under packages/assets/src/, delivered by buildFonts rather than by the manifest. */
@@ -88,183 +84,17 @@ export const SOURCE_ONLY = new Set([
 ])
 
 /**
- * The file name a mascot sheet may have, matching what the mascot's animation
- * table spells.
- */
-const SHEET_FILE = /^[a-z]+(?:-[a-z]+)*\.png$/
-
-/**
- * Hold one mascot's sheet directory to its animation table in packages/client/src/constants.ts.
- *
- * Each entry needs its files and a well-formed row — a frame count, a crop box
- * inside the character's grid, a still frame the sheet holds — and a file no
- * entry names is refused, so the package never ships a sheet the mascot cannot
- * play or an entry that would draw nothing.
- *
- * @param table - the table's name, for diagnostics.
- * @param sheets - animation → `{ frames, box, still }`.
- * @param grid - `[width, height]` of the character's grid.
- * @param dir - the sheet directory.
- * @param filesOf - animation → the file names its entry needs.
- */
-export function checkSheets(table, sheets, grid, dir, filesOf) {
-  const where = path.relative(process.cwd(), dir).replace(/\\/g, '/')
-  const wanted = new Set(Object.keys(sheets).flatMap(filesOf))
-  const files = fs.readdirSync(dir)
-  for (const file of files) {
-    if (!SHEET_FILE.test(file) || !wanted.has(file)) throw new Error(`build: ${where}/${file} has no entry in ${table}`)
-  }
-  for (const [name, sheet] of Object.entries(sheets)) {
-    const [x, y, w, h] = Array.isArray(sheet.box) ? sheet.box : []
-    const whole = [sheet.frames, sheet.still, x, y, w, h].every(Number.isInteger)
-    if (!whole || sheet.frames < 1 || sheet.still < 0 || sheet.still >= sheet.frames || x < 0 || y < 0 || w < 1 || h < 1 || x + w > grid[0] || y + h > grid[1]) {
-      throw new Error(`build: ${table}["${name}"] needs whole frames, still < frames and a box inside the ${grid[0]}×${grid[1]} grid`)
-    }
-    for (const file of filesOf(name)) {
-      if (!files.includes(file)) throw new Error(`build: ${table}["${name}"] has no ${file} in ${where}/`)
-    }
-  }
-}
-
-/**
- * Hold a sheet's own pixels to its entry: the crop box has to tile it whole,
- * and the cells have to hold every frame the table names. A sheet drawn on a
- * different grid, or cropped differently, would play a wrong slice of itself.
- *
- * @param table - the table's name, for diagnostics.
- * @param name - the animation.
- * @param image - the decoded sheet (`{ width, height }`).
- * @param sheet - the table's entry.
- * @param scale - device pixels to a logical pixel in this character's sheets.
- * @returns the cell grid: `{ columns, rows }`.
- */
-export function checkSheetPixels(table, name, image, sheet, scale) {
-  const innerWidth = sheet.box[2] * scale
-  const innerHeight = sheet.box[3] * scale
-  const cells = `${image.width}×${image.height} holds ${Math.round(image.width / innerWidth)}×${Math.round(image.height / innerHeight)} cells of ${innerWidth}×${innerHeight}px`
-  if (image.width % innerWidth !== 0 || image.height % innerHeight !== 0) {
-    throw new Error(`build: ${table}["${name}"]: ${cells}, which is not a whole number of cells`)
-  }
-  const columns = image.width / innerWidth
-  const rows = image.height / innerHeight
-  if (columns * rows < sheet.frames) {
-    throw new Error(`build: ${table}["${name}"]: ${cells} holds ${columns * rows} frames, fewer than the ${sheet.frames} the table names`)
-  }
-  return { columns, rows }
-}
-
-/** One run's color: an opaque pixel keeps its hex, a translucent one its alpha. */
-function colorAt(data, at) {
-  const r = data[at]
-  const g = data[at + 1]
-  const b = data[at + 2]
-  const a = data[at + 3]
-  return a === 255
-    ? `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`
-    : `rgba(${r},${g},${b},${(a / 255).toFixed(3)})`
-}
-
-/**
- * Lay the sheet's frames out one cell each, with the transparent margin the
- * sprite's geometry expects, and read every run of one color per row.
- *
- * @param image - the decoded sheet (`{ width, height, data }`, RGBA).
- * @param box - the frame's crop box `[x, y, width, height]` in logical pixels.
- * @param scale - device pixels to a logical pixel in this character's sheets.
- * @param gutter - the transparent margin in logical pixels.
- * @returns `{ data, width, height }` of the laid-out pixels.
- */
-function layoutCells(image, box, scale, gutter) {
-  const innerWidth = box[2] * scale
-  const innerHeight = box[3] * scale
-  const margin = gutter * scale
-  const cellWidth = innerWidth + margin * 2
-  const cellHeight = innerHeight + margin * 2
-  const columns = image.width / innerWidth
-  const rows = image.height / innerHeight
-  const width = columns * cellWidth
-  const height = rows * cellHeight
-  const data = Buffer.alloc(width * height * 4)
-  const sourceWidth = image.width * 4
-  for (let column = 0; column < columns; column++) {
-    for (let row = 0; row < rows; row++) {
-      for (let y = 0; y < innerHeight; y++) {
-        const from = (row * innerHeight + y) * sourceWidth + column * innerWidth * 4
-        const to = ((row * cellHeight + margin + y) * width + column * cellWidth + margin) * 4
-        image.data.copy(data, to, from, from + innerWidth * 4)
-      }
-    }
-  }
-  return { data, width, height }
-}
-
-/**
- * Rebuild one sheet as SVG text over the laid-out cells: a run of one color is
- * extended downwards for as long as the rows below carry the same color over
- * the same span, so a flat area becomes one rectangle instead of one per row.
- * Transparent pixels are simply absent.
- *
- * @param image - the decoded sheet.
- * @param box - the frame's crop box in logical pixels.
- * @param scale - device pixels to a logical pixel in this character's sheets.
- * @param gutter - the transparent margin in logical pixels.
- * @returns the SVG text and the box it draws into.
- */
-export function vectorizeSheet(image, box, scale, gutter) {
-  const { data, width, height } = layoutCells(image, box, scale, gutter)
-  /** Color string → the rectangles of that color, in drawing order. */
-  const paths = new Map()
-  const push = (color, chunk) => {
-    const known = paths.get(color)
-    if (known === undefined) paths.set(color, [chunk])
-    else known.push(chunk)
-  }
-  /** The rectangles still open, keyed by their column span; the row each began on. */
-  let open = new Map()
-  for (let y = 0; y <= height; y++) {
-    const next = new Map()
-    if (y < height) {
-      let x = 0
-      while (x < width) {
-        const at = (y * width + x) * 4
-        const color = colorAt(data, at)
-        let end = x + 1
-        while (end < width && colorAt(data, (y * width + end) * 4) === color) end++
-        if (data[at + 3] !== 0) {
-          const span = `${x}:${end - x}`
-          const running = open.get(span)
-          next.set(span, running !== undefined && running.color === color ? running : { color, from: y })
-        }
-        x = end
-      }
-    }
-    for (const [span, rect] of open) {
-      if (next.get(span) === rect) continue
-      const [x, run] = span.split(':').map(Number)
-      push(rect.color, `M${x} ${rect.from}h${run}v${y - rect.from}h${-run}z`)
-    }
-    open = next
-  }
-  const parts = [`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">`]
-  for (const [color, chunks] of paths) parts.push(`<path fill="${color}" d="${chunks.join('')}"/>`)
-  parts.push('</svg>')
-  return { svg: parts.join(''), width, height }
-}
-
-/**
  * Every file under the assets directory, with its content hash and the address
  * it is reached by.
  *
  * @param options.assetsDir - the directory the images live in.
  * @param options.generated - assets the build produced rather than read:
- *     path under the directory → text (a mascot's vector, in place of its source PNG).
- * @param options.replaced - paths under assets/ whose generated asset takes
- *     their place: the file is an input of the build and does not ship.
+ *     path under the directory → text (a mascot's vector or the plugin mark).
  * @param options.sourceOnly - paths under assets/ that do not ship.
  * @param options.limit - the largest file inlined.
  * @returns `{ entries, routed }`; `entries` is keyed by the path under assets/.
  */
-export function planAssets({ assetsDir, generated = new Map(), replaced = new Set(), sourceOnly = SOURCE_ONLY, limit = INLINE_LIMIT_BYTES }) {
+export function planAssets({ assetsDir, generated = new Map(), sourceOnly = SOURCE_ONLY, limit = INLINE_LIMIT_BYTES }) {
   const root = assetsDir
   const entries = new Map()
   const add = (file, bytes, text) => {
@@ -294,7 +124,7 @@ export function planAssets({ assetsDir, generated = new Map(), replaced = new Se
     return [file]
   })
   for (const file of walk('').sort()) {
-    if (sourceOnly.has(file) || replaced.has(file) || generated.has(file)) continue
+    if (sourceOnly.has(file) || generated.has(file)) continue
     add(file, fs.readFileSync(path.join(root, file)))
   }
   for (const [file, text] of generated) add(file, Buffer.from(text, 'utf8'), text)

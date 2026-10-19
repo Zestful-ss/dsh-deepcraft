@@ -61,7 +61,7 @@
         // The host's utilities seat, with the skin's own right-panel control in it,
         // the way the host's slot renders it: the pass shows or hides that node.
         '<div class="_headerUtilities_b_1" style="display:flex;width:114px;height:28px">' +
-        '<button type="button" class="dsh-claude-rightbar-close" style="width:28px;height:28px">close</button></div>' +
+        '<button type="button" class="dsh-deepcraft-rightbar-close" style="width:28px;height:28px">close</button></div>' +
         '<div class="_headerCorner_b_1" style="width:28px;height:28px"></div></div>' +
         '<div class="_tabs_b_1" role="tablist" style="width:152px;height:26px"></div>'
       document.body.insertBefore(header, document.body.firstChild)
@@ -74,18 +74,18 @@
         '<button type="button" data-sidebar-right-toggle style="width:28px;height:28px">collapse</button></div>'
       document.body.insertBefore(panel, document.body.firstChild)
       var hostToggle = panel.querySelector('[data-sidebar-right-toggle]')
-      var closeButton = header.querySelector('.dsh-claude-rightbar-close')
+      var closeButton = header.querySelector('.dsh-deepcraft-rightbar-close')
       // The parts land on the pass after the subtree arrives (D3).
       var row = null
       for (var look = 0; look < 40 && row === null; look++) {
         await sleep(50)
-        row = header.querySelector('[data-dsh-claude-part~="title-row"]')
+        row = header.querySelector('[data-dsh-deepcraft-part~="title-row"]')
       }
-      var title = header.querySelector('[data-dsh-claude-part~="header-title"]')
-      var actions = header.querySelector('[data-dsh-claude-part~="header-actions"]')
-      var utilities = header.querySelector('[data-dsh-claude-part~="header-utilities"]')
-      var corner = header.querySelector('[data-dsh-claude-part~="header-corner"]')
-      var strip = header.querySelector('[data-dsh-claude-part~="view-tabs"]')
+      var title = header.querySelector('[data-dsh-deepcraft-part~="header-title"]')
+      var actions = header.querySelector('[data-dsh-deepcraft-part~="header-actions"]')
+      var utilities = header.querySelector('[data-dsh-deepcraft-part~="header-utilities"]')
+      var corner = header.querySelector('[data-dsh-deepcraft-part~="header-corner"]')
+      var strip = header.querySelector('[data-dsh-deepcraft-part~="view-tabs"]')
       var box = function (el) {
         var b = el.getBoundingClientRect()
         return { x: Math.round(b.x), y: Math.round(b.y), right: Math.round(b.right) }

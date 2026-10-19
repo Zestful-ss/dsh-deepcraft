@@ -3,7 +3,7 @@ import { readPrefs, subscribePrefs } from '../../core/prefs'
 import { loadBrandImages, readBrandImages, resetBrandImages, subscribeBrandImages } from '../../shared/custom-brand'
 
 /**
- * The custom brand layer (D30): the reader's own name, images and accent
+ * The custom brand layer (D77): the reader's own name, images and accent
  * colour over whichever brand is chosen. Each part is written onto <body>
  * only while the reader has supplied it — an attribute the stylesheets switch
  * on (brand.css, and the account avatar's rule in account-footer.css) and the
@@ -12,12 +12,12 @@ import { loadBrandImages, readBrandImages, resetBrandImages, subscribeBrandImage
  */
 
 /** The custom properties written on <body>, read by the rules gated on the attributes. */
-const MARK_PROPERTY = '--dsh-claude-custom-mark'
-const WORD_PROPERTY = '--dsh-claude-custom-word'
-const WORD_RATIO_PROPERTY = '--dsh-claude-custom-word-ratio'
-const NAME_PROPERTY = '--dsh-claude-custom-name'
-const ACCENT_PROPERTY = '--dsh-claude-custom-accent'
-const ACCENT_INK_PROPERTY = '--dsh-claude-custom-accent-ink'
+const MARK_PROPERTY = '--dsh-deepcraft-custom-mark'
+const WORD_PROPERTY = '--dsh-deepcraft-custom-word'
+const WORD_RATIO_PROPERTY = '--dsh-deepcraft-custom-word-ratio'
+const NAME_PROPERTY = '--dsh-deepcraft-custom-name'
+const ACCENT_PROPERTY = '--dsh-deepcraft-custom-accent'
+const ACCENT_INK_PROPERTY = '--dsh-deepcraft-custom-accent-ink'
 const PROPERTIES = [MARK_PROPERTY, WORD_PROPERTY, WORD_RATIO_PROPERTY, NAME_PROPERTY, ACCENT_PROPERTY, ACCENT_INK_PROPERTY]
 const ATTRIBUTES = [CUSTOM_MARK_ATTR, CUSTOM_WORD_ATTR, CUSTOM_TINT_ATTR, ACCENT_ATTR]
 

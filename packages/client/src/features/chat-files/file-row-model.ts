@@ -1,8 +1,8 @@
 import { callString } from '../../shared/call-args'
 import type { CallArgs } from '../../shared/call-args'
 import type { CopyKey } from './copy'
-import type { HostText } from '@dsh-claude-style/engine/host'
-import type { HostChatBlock } from '@dsh-claude-style/contracts/services'
+import type { HostText } from '@dsh-deepcraft/engine/host'
+import type { HostChatBlock } from '@dsh-deepcraft/contracts/services'
 
 /**
  * The file-operation row's derivations, kept apart from its React component
@@ -91,86 +91,86 @@ export function chatFileCallId(block: HostChatBlock) {
 }
 
 /** The row root. */
-export const CHAT_FILE_ROW_CLASS = 'dsh-claude-file-root'
+export const CHAT_FILE_ROW_CLASS = 'dsh-deepcraft-file-root'
 /** The disclosure row's own element: the hover highlight hangs here. */
-export const CHAT_FILE_ROW_LINE_CLASS = 'dsh-claude-file-row'
+export const CHAT_FILE_ROW_LINE_CLASS = 'dsh-deepcraft-file-row'
 /** The icon slot. */
-export const CHAT_FILE_LEADING_CLASS = 'dsh-claude-file-leading'
+export const CHAT_FILE_LEADING_CLASS = 'dsh-deepcraft-file-leading'
 /** The open and close chevron. */
-export const CHAT_FILE_CHEVRON_CLASS = 'dsh-claude-file-chevron'
+export const CHAT_FILE_CHEVRON_CLASS = 'dsh-deepcraft-file-chevron'
 /** The title (read, edit or write). */
-export const CHAT_FILE_TITLE_CLASS = 'dsh-claude-file-title'
+export const CHAT_FILE_TITLE_CLASS = 'dsh-deepcraft-file-title'
 /** The dot between the title and the summary. */
-export const CHAT_FILE_SEP_CLASS = 'dsh-claude-file-sep'
+export const CHAT_FILE_SEP_CLASS = 'dsh-deepcraft-file-sep'
 /** The summary text. */
-export const CHAT_FILE_SUMMARY_CLASS = 'dsh-claude-file-summary'
+export const CHAT_FILE_SUMMARY_CLASS = 'dsh-deepcraft-file-summary'
 /** The failure colour on the summary. */
-export const CHAT_FILE_ERROR_CLASS = 'dsh-claude-file-error'
+export const CHAT_FILE_ERROR_CLASS = 'dsh-deepcraft-file-error'
 /** The stopped colour on the summary. */
-export const CHAT_FILE_STOPPED_CLASS = 'dsh-claude-file-stopped'
+export const CHAT_FILE_STOPPED_CLASS = 'dsh-deepcraft-file-stopped'
 /** The clickable file path. */
-export const CHAT_FILE_LINK_CLASS = 'dsh-claude-file-link'
+export const CHAT_FILE_LINK_CLASS = 'dsh-deepcraft-file-link'
 /** The container of the small statistics tail. */
-export const CHAT_FILE_SUFFIX_CLASS = 'dsh-claude-file-suffix'
+export const CHAT_FILE_SUFFIX_CLASS = 'dsh-deepcraft-file-suffix'
 /** The type size both statistics share. */
-export const CHAT_FILE_STAT_CLASS = 'dsh-claude-file-stat'
+export const CHAT_FILE_STAT_CLASS = 'dsh-deepcraft-file-stat'
 /** The added count. */
-export const CHAT_FILE_ADD_CLASS = 'dsh-claude-file-add'
+export const CHAT_FILE_ADD_CLASS = 'dsh-deepcraft-file-add'
 /** The removed count. */
-export const CHAT_FILE_DEL_CLASS = 'dsh-claude-file-del'
+export const CHAT_FILE_DEL_CLASS = 'dsh-deepcraft-file-del'
 /** One figure of the tail, which rolls character by character. */
-export const CHAT_FILE_ROLL_CLASS = 'dsh-claude-file-roll'
+export const CHAT_FILE_ROLL_CLASS = 'dsh-deepcraft-file-roll'
 /** One character of that figure, in its own box. */
-export const CHAT_FILE_ROLL_DIGIT_CLASS = 'dsh-claude-file-roll-digit'
+export const CHAT_FILE_ROLL_DIGIT_CLASS = 'dsh-deepcraft-file-roll-digit'
 /** On the character whose own digit changed: this one travels. */
-export const CHAT_FILE_ROLL_MOVING_CLASS = 'dsh-claude-file-roll-moving'
+export const CHAT_FILE_ROLL_MOVING_CLASS = 'dsh-deepcraft-file-roll-moving'
 /** The digit leaving upward. */
-export const CHAT_FILE_ROLL_OUT_CLASS = 'dsh-claude-file-roll-out'
+export const CHAT_FILE_ROLL_OUT_CLASS = 'dsh-deepcraft-file-roll-out'
 /** The digit in flow, which the leaving one makes way for. */
-export const CHAT_FILE_ROLL_IN_CLASS = 'dsh-claude-file-roll-in'
+export const CHAT_FILE_ROLL_IN_CLASS = 'dsh-deepcraft-file-roll-in'
 /**
  * On the row while its file's calls are read together: `head` on the row that
  * stands for the file, `member` on the rows it stands for, `gone` on a merged
  * row's carrier — the host's own call row — whose box comes off the page.
  */
-export const CHAT_FILE_MERGE_ATTR = 'data-dsh-claude-file-merge'
+export const CHAT_FILE_MERGE_ATTR = 'data-dsh-deepcraft-file-merge'
 export const CHAT_FILE_MERGE_HEAD = 'head'
 export const CHAT_FILE_MERGE_MEMBER = 'member'
 export const CHAT_FILE_MERGE_GONE = 'gone'
 /** The merged row's screen-reader sentence: the calls its file's other rows held. */
 export const CHAT_FILE_MERGED_COPY: CopyKey = 'fileRowMergedOperations'
 /** The expanded body. */
-export const CHAT_FILE_BODY_CLASS = 'dsh-claude-file-body'
+export const CHAT_FILE_BODY_CLASS = 'dsh-deepcraft-file-body'
 /** The diff card inside an expanded body. */
-export const CHAT_FILE_DIFF_CLASS = 'dsh-claude-file-diff'
+export const CHAT_FILE_DIFF_CLASS = 'dsh-deepcraft-file-diff'
 /** The IN/OUT card inside an expanded body. */
-export const CHAT_FILE_IO_CLASS = 'dsh-claude-file-io'
+export const CHAT_FILE_IO_CLASS = 'dsh-deepcraft-file-io'
 /** One section of the IN/OUT card. */
-export const CHAT_FILE_IO_SECTION_CLASS = 'dsh-claude-file-io-section'
+export const CHAT_FILE_IO_SECTION_CLASS = 'dsh-deepcraft-file-io-section'
 /** The hairline between IN and OUT. */
-export const CHAT_FILE_IO_DIVIDER_CLASS = 'dsh-claude-file-io-divider'
+export const CHAT_FILE_IO_DIVIDER_CLASS = 'dsh-deepcraft-file-io-divider'
 /** The IN and OUT side labels. */
-export const CHAT_FILE_IO_LABEL_CLASS = 'dsh-claude-file-io-label'
+export const CHAT_FILE_IO_LABEL_CLASS = 'dsh-deepcraft-file-io-label'
 /** The IN and OUT bodies. */
-export const CHAT_FILE_IO_TEXT_CLASS = 'dsh-claude-file-io-text'
+export const CHAT_FILE_IO_TEXT_CLASS = 'dsh-deepcraft-file-io-text'
 /** The trajectory entrance pill. */
-export const CHAT_FILE_INSPECT_CLASS = 'dsh-claude-file-inspect'
+export const CHAT_FILE_INSPECT_CLASS = 'dsh-deepcraft-file-inspect'
 /** The operation block: the file's icon and title, which swap when its work moves on. */
-export const CHAT_FILE_OP_CLASS = 'dsh-claude-file-op'
+export const CHAT_FILE_OP_CLASS = 'dsh-deepcraft-file-op'
 /** On that block while a swap is in flight. */
-export const CHAT_FILE_OP_SWAPPING_CLASS = 'dsh-claude-file-op-swapping'
+export const CHAT_FILE_OP_SWAPPING_CLASS = 'dsh-deepcraft-file-op-swapping'
 /** The operation leaving: it holds the block's own cell while the new one rises in. */
-export const CHAT_FILE_OP_OUT_CLASS = 'dsh-claude-file-op-out'
+export const CHAT_FILE_OP_OUT_CLASS = 'dsh-deepcraft-file-op-out'
 /** The operation in flow. */
-export const CHAT_FILE_OP_IN_CLASS = 'dsh-claude-file-op-in'
+export const CHAT_FILE_OP_IN_CLASS = 'dsh-deepcraft-file-op-in'
 /** The operation this row wears, for the stylesheet and for tests. */
-export const CHAT_FILE_OP_ATTR = 'data-dsh-claude-file-op'
+export const CHAT_FILE_OP_ATTR = 'data-dsh-deepcraft-file-op'
 /** The disclosure row's own title slot: it stays empty, so the label stands beside it. */
-export const CHAT_FILE_TITLE_SLOT_CLASS = 'dsh-claude-file-title-slot'
+export const CHAT_FILE_TITLE_SLOT_CLASS = 'dsh-deepcraft-file-title-slot'
 /** The read card inside an expanded body. */
-export const CHAT_FILE_READ_CLASS = 'dsh-claude-file-read'
+export const CHAT_FILE_READ_CLASS = 'dsh-deepcraft-file-read'
 /** The running state label only a screen reader reads. */
-export const CHAT_FILE_HIDDEN_CLASS = 'dsh-claude-file-hidden'
+export const CHAT_FILE_HIDDEN_CLASS = 'dsh-deepcraft-file-hidden'
 /** The seat the read, write and edit rows render through; the host's own rows sit at priority 0 and a keyed seat renders the lowest. */
 export const CHAT_FILE_SEAT = 'tool.call.toolview'
 

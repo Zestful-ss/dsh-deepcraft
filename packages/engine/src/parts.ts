@@ -10,7 +10,7 @@ import { subscribeMutations } from './bus'
  * The tables in core/parts-table.ts say which host class names the skin reads
  * and what it calls each one; this module walks the page once, reads each host
  * class name's local part exactly, and writes the skin's own names for it onto
- * the element as `data-dsh-claude-part`. A stylesheet then matches one
+ * the element as `data-dsh-deepcraft-part`. A stylesheet then matches one
  * attribute whole, so a match cannot take a neighbour that merely holds the
  * same fragment, a host rename leaves the rule quiet instead of wrong, and no
  * other plugin's class name can collide with these rules.
@@ -24,7 +24,7 @@ import { subscribeMutations } from './bus'
  * A rule that names an element because of what its subtree contains used to ask
  * the browser the same question on every change below it. The walk visits every
  * node anyway, so the relations in the same table are answered here and written
- * as `data-dsh-claude-holds`: one attribute read in the stylesheet, and the
+ * as `data-dsh-deepcraft-holds`: one attribute read in the stylesheet, and the
  * count behind a mark moves only where a held node arrived, left, or changed.
  */
 
@@ -49,7 +49,7 @@ let adopted: PartsVocabulary | null = null
  * attributes, so a pass running before the hand-over is a wiring mistake.
  */
 function vocabulary(): PartsVocabulary {
-  if (adopted === null) throw new Error('dsh-claude-style engine: parts were marked before the skin handed its vocabulary over')
+  if (adopted === null) throw new Error('dsh-deepcraft engine: parts were marked before the skin handed its vocabulary over')
   return adopted
 }
 

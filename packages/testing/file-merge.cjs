@@ -50,10 +50,10 @@ const NEW_LINES = ['const first = 2', 'const second = 2', 'const third = 2', 'co
  * the page as its source, the way motion.cjs carries watchReveal.
  */
 function figuresOf(root) {
-  return ['.dsh-claude-file-add', '.dsh-claude-file-del'].map((selector) => {
+  return ['.dsh-deepcraft-file-add', '.dsh-deepcraft-file-del'].map((selector) => {
     const figure = root.querySelector(selector)
     if (figure === null) return null
-    return [...figure.querySelectorAll('.dsh-claude-file-roll-in')].map((span) => span.textContent).join('')
+    return [...figure.querySelectorAll('.dsh-deepcraft-file-roll-in')].map((span) => span.textContent).join('')
   })
 }
 
@@ -68,18 +68,18 @@ const readRows = (page) => page.evaluate((figuresSource) => {
     const box = element.getBoundingClientRect()
     return Math.round((box.y + box.height / 2) * 10) / 10
   }
-  return [...document.querySelectorAll('.dsh-claude-file-root')].map((root) => {
+  return [...document.querySelectorAll('.dsh-deepcraft-file-root')].map((root) => {
     const box = root.closest('[data-chat-call-id]')
     const figures = figuresOf(root)
     // Where the operation's label sits against the row's own path, and whether
     // the host's now-empty title slot takes any room.
-    const label = root.querySelector('.dsh-claude-file-title')
-    const summary = root.querySelector('.dsh-claude-file-link, .dsh-claude-file-summary')
-    const slot = root.querySelector('.dsh-claude-file-title-slot')
+    const label = root.querySelector('.dsh-deepcraft-file-title')
+    const summary = root.querySelector('.dsh-deepcraft-file-link, .dsh-deepcraft-file-summary')
+    const slot = root.querySelector('.dsh-deepcraft-file-title-slot')
     return {
-      merge: root.getAttribute('data-dsh-claude-file-merge'),
-      op: root.getAttribute('data-dsh-claude-file-op'),
-      label: root.querySelector('.dsh-claude-file-title .dsh-claude-file-op-in')?.textContent ?? null,
+      merge: root.getAttribute('data-dsh-deepcraft-file-merge'),
+      op: root.getAttribute('data-dsh-deepcraft-file-op'),
+      label: root.querySelector('.dsh-deepcraft-file-title .dsh-deepcraft-file-op-in')?.textContent ?? null,
       path: summary?.textContent ?? null,
       labelCentre: centreOf(label),
       labelSize: label === null ? null : getComputedStyle(label).fontSize,
@@ -106,9 +106,9 @@ const readRows = (page) => page.evaluate((figuresSource) => {
  */
 const HEAD_FACTS = ([suffix, figuresSource]) => {
   const figuresOf = (0, eval)(`(${figuresSource})`)
-  const roots = [...document.querySelectorAll('.dsh-claude-file-root')]
-  const ofFile = (root) => (root.querySelector('.dsh-claude-file-link, .dsh-claude-file-summary')?.textContent ?? '').endsWith(suffix)
-  const mark = (root) => root.getAttribute('data-dsh-claude-file-merge')
+  const roots = [...document.querySelectorAll('.dsh-deepcraft-file-root')]
+  const ofFile = (root) => (root.querySelector('.dsh-deepcraft-file-link, .dsh-deepcraft-file-summary')?.textContent ?? '').endsWith(suffix)
+  const mark = (root) => root.getAttribute('data-dsh-deepcraft-file-merge')
   // The row that stands, or the file's one row before a second change joins it.
   const head = roots.find((root) => mark(root) === 'head') ?? roots.find((root) => ofFile(root) && mark(root) === null)
   if (head === undefined) return null
@@ -119,29 +119,29 @@ const HEAD_FACTS = ([suffix, figuresSource]) => {
   // arrival; each is counted on its own for the check's own detail.
   const running = (selector) => [...head.querySelectorAll(selector)]
     .some((span) => span.getAnimations().some((animation) => animation.playState === 'running'))
-  const leaving = running('.dsh-claude-file-roll-out')
-  const rising = running('.dsh-claude-file-roll-in')
+  const leaving = running('.dsh-deepcraft-file-roll-out')
+  const rising = running('.dsh-deepcraft-file-roll-in')
   return {
     add: figures[0] ?? null,
     del: figures[1] ?? null,
-    op: head.getAttribute('data-dsh-claude-file-op'),
-    label: head.querySelector('.dsh-claude-file-title .dsh-claude-file-op-in')?.textContent ?? null,
+    op: head.getAttribute('data-dsh-deepcraft-file-op'),
+    label: head.querySelector('.dsh-deepcraft-file-title .dsh-deepcraft-file-op-in')?.textContent ?? null,
     leaving,
     rising,
     rolling: leaving && rising,
     // The operation swapping: the label taking its place is animating in, and
     // both states stand in the block's own cell.
-    swapping: running('.dsh-claude-file-title .dsh-claude-file-op-in'),
-    swapNames: [...new Set([...head.querySelectorAll('.dsh-claude-file-title .dsh-claude-file-op-in')]
+    swapping: running('.dsh-deepcraft-file-title .dsh-deepcraft-file-op-in'),
+    swapNames: [...new Set([...head.querySelectorAll('.dsh-deepcraft-file-title .dsh-deepcraft-file-op-in')]
       .flatMap((span) => span.getAnimations().filter((animation) => animation.playState === 'running').map((animation) => animation.animationName ?? '?')))],
-    labelBoxes: [...head.querySelectorAll('.dsh-claude-file-title .dsh-claude-file-op-out, .dsh-claude-file-title .dsh-claude-file-op-in')]
+    labelBoxes: [...head.querySelectorAll('.dsh-deepcraft-file-title .dsh-deepcraft-file-op-out, .dsh-deepcraft-file-title .dsh-deepcraft-file-op-in')]
       .map((span) => ({ x: Math.round(span.getBoundingClientRect().x), of: (span.parentElement?.className ?? '?').split(' ')[0] })),
     // The host renders the collapsed head a second time inside its own highlight
     // container, an inert copy with no text of its own; the reader sees the one
     // label the row draws.
-    labels: head.querySelectorAll('.dsh-claude-file-title').length,
-    labelsTexted: [...head.querySelectorAll('.dsh-claude-file-title')].filter((label) => (label.textContent ?? '') !== '').length,
-    iconBoxes: [...head.querySelectorAll('.dsh-claude-file-leading .dsh-claude-file-op-out, .dsh-claude-file-leading .dsh-claude-file-op-in')]
+    labels: head.querySelectorAll('.dsh-deepcraft-file-title').length,
+    labelsTexted: [...head.querySelectorAll('.dsh-deepcraft-file-title')].filter((label) => (label.textContent ?? '') !== '').length,
+    iconBoxes: [...head.querySelectorAll('.dsh-deepcraft-file-leading .dsh-deepcraft-file-op-out, .dsh-deepcraft-file-leading .dsh-deepcraft-file-op-in')]
       .map((span) => Math.round(span.getBoundingClientRect().x)),
     visible: roots.filter((root) => ofFile(root) && root.checkVisibility()).length,
   }
@@ -160,7 +160,7 @@ const startRecording = (page, file) => page.evaluate(([suffix, factsSource, figu
   const facts = (0, eval)(`(${factsSource})`)
   const figuresOf = (0, eval)(`(${figuresSource})`)
   const ofRow = (node) => node instanceof Element &&
-    (node.closest('.dsh-claude-file-root') !== null || node.querySelector('.dsh-claude-file-root') !== null)
+    (node.closest('.dsh-deepcraft-file-root') !== null || node.querySelector('.dsh-deepcraft-file-root') !== null)
   window.__fileMergeSamples = []
   new MutationObserver((records) => {
     if (!records.some((record) => ofRow(record.target) || [...record.addedNodes].some(ofRow))) return
@@ -219,24 +219,24 @@ function fileMergeScenario({ check }) {
       // card caps its lines, so its own fold control is pressed first. The press
       // goes to the row's leading icon — the row opens from anywhere on its line
       // except the path button, which opens the file instead (chat-files.ts).
-      const head = page.locator('.dsh-claude-file-root[data-dsh-claude-file-merge="head"]').first()
-      await head.locator('.dsh-claude-file-leading').click()
+      const head = page.locator('.dsh-deepcraft-file-root[data-dsh-deepcraft-file-merge="head"]').first()
+      await head.locator('.dsh-deepcraft-file-leading').click()
       await page.waitForTimeout(300)
       const fold = head.locator('[data-diff] button[aria-expanded="false"]')
       if (await fold.count() > 0) await fold.first().click()
       await page.waitForTimeout(300)
-      context.notes.card = await head.evaluate((root) => root.querySelector('.dsh-claude-file-diff')?.textContent ?? null)
+      context.notes.card = await head.evaluate((root) => root.querySelector('.dsh-deepcraft-file-diff')?.textContent ?? null)
       // The file that was only read: the row that stands for it opens onto the
       // window its calls read, and carries no change card at all. A press landing
       // while the row is still settling is pressed again, the way a reader who
       // saw nothing happen would; one that did open it is left open.
-      const readOnly = page.locator('.dsh-claude-file-root[data-dsh-claude-file-merge="head"]').filter({ hasText: 'plain.md' }).first()
+      const readOnly = page.locator('.dsh-deepcraft-file-root[data-dsh-deepcraft-file-merge="head"]').filter({ hasText: 'plain.md' }).first()
       const closedLine = readOnly.locator('[data-disclosure-row][aria-expanded="false"]')
       for (let press = 0; press < 4 && await closedLine.count() > 0; press += 1) {
-        await readOnly.locator('.dsh-claude-file-leading').click()
+        await readOnly.locator('.dsh-deepcraft-file-leading').click()
         await page.waitForTimeout(400)
       }
-      context.notes.readCard = await readOnly.evaluate((root) => root.querySelector('.dsh-claude-file-read')?.textContent ?? null)
+      context.notes.readCard = await readOnly.evaluate((root) => root.querySelector('.dsh-deepcraft-file-read')?.textContent ?? null)
     },
     async assert({ session, notes }) {
       const rows = notes.rows ?? []

@@ -3,4 +3,4 @@
  * it by: the browser half's stylesheet and settings keys, the host half's
  * directories under the harness home and the prefix of every log line.
  */
-export const PACKAGE_NAME = 'dsh-claude-style'
+export const PACKAGE_NAME = 'dsh-deepcraft'

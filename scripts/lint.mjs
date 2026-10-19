@@ -94,9 +94,9 @@ for (const file of sources.filter((candidate) => /^packages\/engine\/(?:src|node
   const text = fs.readFileSync(file, 'utf8')
   for (const match of text.matchAll(/from '([^']+)'/g)) {
     const specifier = match[1]
-    const intoSkin = specifier.startsWith('@dsh-claude-style/client')
-      || specifier.startsWith('@dsh-claude-style/host')
-      || specifier.startsWith('virtual:dsh-claude-style/')
+    const intoSkin = specifier.startsWith('@dsh-deepcraft/client')
+      || specifier.startsWith('@dsh-deepcraft/host')
+      || specifier.startsWith('virtual:dsh-deepcraft/')
       || specifier.includes('../client/')
       || specifier.includes('../host/')
     if (intoSkin) problems.push(`${relative(file)}: the engine imports ${specifier}; the skin hands what the engine needs over the seam (packages/engine/src/skin.ts, D73)`)

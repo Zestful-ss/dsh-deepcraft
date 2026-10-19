@@ -24,7 +24,7 @@
       r.claudePalette.dark = {
         canvas: claudeDark.backgroundColor,
         accent: claudeDark.getPropertyValue('--dsw-alias-brand-primary').trim(),
-        raised: claudeDark.getPropertyValue('--dsh-claude-raised').trim(),
+        raised: claudeDark.getPropertyValue('--dsh-deepcraft-raised').trim(),
       }
       document.body.removeAttribute('data-ds-dark-theme')
     })
@@ -58,28 +58,28 @@
       // The classic hero's permission control is the segment group; the studio
       // hero's is the conversation's trigger
       // (packages/client/src/features/permissions/permissions.ts).
-      var heroModes = document.querySelector('[data-composer-card] [data-dsh-claude-part~="modes"]')
+      var heroModes = document.querySelector('[data-composer-card] [data-dsh-deepcraft-part~="modes"]')
       r.classicSegments = heroModes === null ? null
-        : Array.prototype.map.call(heroModes.querySelectorAll('.dsh-claude-segments > .dsh-claude-segment'), function (item) { return item.textContent })
-      r.classicPermTrigger = heroModes !== null && heroModes.querySelector('.dsh-claude-perm-btn') !== null
+        : Array.prototype.map.call(heroModes.querySelectorAll('.dsh-deepcraft-segments > .dsh-deepcraft-segment'), function (item) { return item.textContent })
+      r.classicPermTrigger = heroModes !== null && heroModes.querySelector('.dsh-deepcraft-perm-btn') !== null
       // The crab stands on the classic home page's card too, as Deepy does.
-      r.classicCrab = document.querySelector('[data-composer-card] > .dsh-claude-crab') !== null
+      r.classicCrab = document.querySelector('[data-composer-card] > .dsh-deepcraft-crab') !== null
       // The glyph field stands in the hero root, under its content, and takes no
       // press; its switch, off as the page opens, mounts it and takes it back off.
-      r.ripple = { off: greetRoot.querySelector('.dsh-claude-ripple-canvas') === null && !greetRoot.hasAttribute('data-dsh-claude-ripple') }
+      r.ripple = { off: greetRoot.querySelector('.dsh-deepcraft-ripple-canvas') === null && !greetRoot.hasAttribute('data-dsh-deepcraft-ripple') }
       window.__pushForm({ homeRipple: true })
       await sleep(150)
-      var rippleCanvas = greetRoot.querySelector(':scope > .dsh-claude-ripple-canvas')
-      r.ripple.stamped = greetRoot.hasAttribute('data-dsh-claude-ripple')
+      var rippleCanvas = greetRoot.querySelector(':scope > .dsh-deepcraft-ripple-canvas')
+      r.ripple.stamped = greetRoot.hasAttribute('data-dsh-deepcraft-ripple')
       r.ripple.canvas = rippleCanvas !== null
       r.ripple.pointerEvents = rippleCanvas === null ? null : getComputedStyle(rippleCanvas).pointerEvents
       r.ripple.order = rippleCanvas === null ? null : getComputedStyle(rippleCanvas).zIndex
       window.__pushForm({ homeRipple: false })
       await sleep(150)
-      r.ripple.gone = !greetRoot.hasAttribute('data-dsh-claude-ripple') && greetRoot.querySelector('.dsh-claude-ripple-canvas') === null
+      r.ripple.gone = !greetRoot.hasAttribute('data-dsh-deepcraft-ripple') && greetRoot.querySelector('.dsh-deepcraft-ripple-canvas') === null
       window.__pushForm({ homeRipple: true })
       await sleep(150)
-      r.ripple.back = greetRoot.hasAttribute('data-dsh-claude-ripple') && greetRoot.querySelector(':scope > .dsh-claude-ripple-canvas') !== null
+      r.ripple.back = greetRoot.hasAttribute('data-dsh-deepcraft-ripple') && greetRoot.querySelector(':scope > .dsh-deepcraft-ripple-canvas') !== null
       document.body.appendChild(document.createElement('i'))
       await sleep(150)
       r.greeting.held = greetSpan.textContent
@@ -122,7 +122,7 @@
         for (var ruleIndex = 0; ruleIndex < sheetRules.length; ruleIndex++) {
           var mediaRule = sheetRules[ruleIndex]
           if (mediaRule instanceof CSSMediaRule && /prefers-reduced-motion/.test(mediaRule.conditionText) &&
-            mediaRule.cssText.indexOf('data-dsh-claude-pill') !== -1) r.viewPill.reducedMotionRules++
+            mediaRule.cssText.indexOf('data-dsh-deepcraft-pill') !== -1) r.viewPill.reducedMotionRules++
         }
       }
     })
@@ -130,11 +130,11 @@
       // The composer's host controls are marked by what they are, read from
       // the host's structure; the submit button turning into stop (its glyph
       // becomes a rect) moves its mark with it.
-      var controlOf = function (id) { var el = document.getElementById(id); return el && el.getAttribute('data-dsh-claude-control') }
+      var controlOf = function (id) { var el = document.getElementById(id); return el && el.getAttribute('data-dsh-deepcraft-control') }
       // The host's own access button, skipping the skin's controls by their own
       // class namespace, read as whole class tokens.
-      var accessButton = document.querySelector('[data-slot="conversation.input.permission"] button:not([class^="dsh-claude-"], [class*=" dsh-claude-"])')
-      r.controls = { commands: controlOf('commands'), send: controlOf('send'), access: accessButton && accessButton.getAttribute('data-dsh-claude-control') }
+      var accessButton = document.querySelector('[data-slot="conversation.input.permission"] button:not([class^="dsh-deepcraft-"], [class*=" dsh-deepcraft-"])')
+      r.controls = { commands: controlOf('commands'), send: controlOf('send'), access: accessButton && accessButton.getAttribute('data-dsh-deepcraft-control') }
       var sendButton = document.getElementById('send')
       var sendSvg = sendButton.querySelector('svg')
       var sendGlyph = sendSvg.innerHTML
@@ -184,8 +184,8 @@
         '<input class="_searchInput_n_1" type="text" tabindex="-1"></div></div></div>'
       document.body.appendChild(sidebarSlot)
       await sleep(150)
-      var logoRow = sidebarSlot.querySelector('[data-dsh-claude-part~="logo-row"]')
-      var searchTrigger = logoRow.querySelector('.dsh-claude-search-trigger')
+      var logoRow = sidebarSlot.querySelector('[data-dsh-deepcraft-part~="logo-row"]')
+      var searchTrigger = logoRow.querySelector('.dsh-deepcraft-search-trigger')
       var rootsBefore = window.__roots.length
       if (searchTrigger) searchTrigger.click()
       await sleep(60)
@@ -196,12 +196,12 @@
         window.__pushForm({ searchStyle: style })
         sidebarSlot.appendChild(document.createElement('i'))
         await sleep(200)
-        var box = document.querySelector('.dsh-claude-search-trigger')
-        var ownRow = document.querySelector('.dsh-claude-search-bar')
-        var slot = sidebarSlot.querySelector('[data-dsh-claude-part~="search-slot"]')
+        var box = document.querySelector('.dsh-deepcraft-search-trigger')
+        var ownRow = document.querySelector('.dsh-deepcraft-search-bar')
+        var slot = sidebarSlot.querySelector('[data-dsh-deepcraft-part~="search-slot"]')
         return {
-          triggerInRow: !!logoRow.querySelector('.dsh-claude-search-trigger'),
-          rowMarked: logoRow.hasAttribute('data-dsh-claude-search-row'),
+          triggerInRow: !!logoRow.querySelector('.dsh-deepcraft-search-trigger'),
+          rowMarked: logoRow.hasAttribute('data-dsh-deepcraft-search-row'),
           barAfterRow: !!ownRow && ownRow.parentElement === logoRow.parentElement && ownRow.previousElementSibling === logoRow,
           triggerInBar: !!ownRow && !!box && box.parentElement === ownRow,
           triggerVisibility: box ? getComputedStyle(box).visibility : null,
@@ -213,7 +213,7 @@
       }
       r.search = {
         placed: !!searchTrigger && searchTrigger.previousElementSibling === logoRow.firstElementChild,
-        rowMarked: logoRow.hasAttribute('data-dsh-claude-search-row'),
+        rowMarked: logoRow.hasAttribute('data-dsh-deepcraft-search-row'),
         resting: searchTrigger ? getComputedStyle(searchTrigger).visibility : null,
         modalRendered: !!probe.searchRoot && probe.searchRoot.renders > 0,
       }
@@ -222,7 +222,7 @@
       // The host's own button is live again in the icon style; a listener on an
       // ancestor stands in for the host's own click handling, which the skin's
       // takeover must keep from running.
-      var hostButton = sidebarSlot.querySelector('[data-dsh-claude-part~="search-button"]')
+      var hostButton = sidebarSlot.querySelector('[data-dsh-deepcraft-part~="search-button"]')
       var reachedHost = 0
       var countHost = function () { reachedHost++ }
       sidebarSlot.addEventListener('click', countHost)
@@ -246,10 +246,10 @@
         }
       }
       var sample = document.createElement('kbd')
-      sample.className = 'dsh-claude-search-key'
+      sample.className = 'dsh-deepcraft-search-key'
       sample.textContent = 'Ctrl'
       sidebarSlot.appendChild(sample)
-      var shortcutCaps = [].slice.call(sidebarSlot.querySelectorAll('[data-dsh-claude-part~="new-session-shortcut"] kbd'))
+      var shortcutCaps = [].slice.call(sidebarSlot.querySelectorAll('[data-dsh-deepcraft-part~="new-session-shortcut"] kbd'))
       r.search.keycaps = {
         shortcut: shortcutCaps.filter(function (cap) { return !/separator/.test(cap.className) }).map(capStyle),
         separators: shortcutCaps.filter(function (cap) { return /separator/.test(cap.className) }).map(function (cap) { return getComputedStyle(cap).display }),

@@ -9,11 +9,11 @@
    check reads: the hidden span inside it holds the sentence, and while that
    sentence is wider than this room the summary stands in the compact figures. */
 
-body[data-dsh-claude-style][data-dsh-claude-chat-fold] [data-step-process][data-dsh-claude-summary] button[data-process-activity] > :not([aria-hidden="true"]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-fold] [data-step-process][data-dsh-deepcraft-summary] button[data-process-activity] > :not([aria-hidden="true"]) {
   display: none;
 }
 
-body[data-dsh-claude-style] .dsh-claude-process-summary {
+body[data-dsh-deepcraft] .dsh-deepcraft-process-summary {
   position: relative;
   display: inline-flex;
   flex: 1 1 auto;
@@ -26,7 +26,7 @@ body[data-dsh-claude-style] .dsh-claude-process-summary {
 /* The hidden measurement: the sentence laid out where it takes no room and no
    width from the summary's own box, so the header's room can be compared with
    the sentence as it would be written. */
-body[data-dsh-claude-style] .dsh-claude-process-summary-fit {
+body[data-dsh-deepcraft] .dsh-deepcraft-process-summary-fit {
   position: absolute;
   width: max-content;
   visibility: hidden;
@@ -34,7 +34,7 @@ body[data-dsh-claude-style] .dsh-claude-process-summary-fit {
   pointer-events: none;
 }
 
-body[data-dsh-claude-style] .dsh-claude-process-summary-part {
+body[data-dsh-deepcraft] .dsh-deepcraft-process-summary-part {
   display: inline-flex;
   flex: none;
   align-items: baseline;
@@ -42,13 +42,13 @@ body[data-dsh-claude-style] .dsh-claude-process-summary-part {
 
 /* The figure's words keep their spaces: the separator in front of a later
    figure would collapse at the start of its own box. */
-body[data-dsh-claude-style] .dsh-claude-process-summary-words {
+body[data-dsh-deepcraft] .dsh-deepcraft-process-summary-words {
   white-space: pre;
 }
 
 /* A count rolls in place: the sizer holds the width, the old digit leaves
    upward as the new one rises (160 ms). */
-body[data-dsh-claude-style] .dsh-claude-process-summary-roll {
+body[data-dsh-deepcraft] .dsh-deepcraft-process-summary-roll {
   position: relative;
   display: inline-flex;
   flex-shrink: 0;
@@ -57,11 +57,11 @@ body[data-dsh-claude-style] .dsh-claude-process-summary-roll {
   font-variant-numeric: tabular-nums;
 }
 
-body[data-dsh-claude-style] .dsh-claude-process-summary-sizer {
+body[data-dsh-deepcraft] .dsh-deepcraft-process-summary-sizer {
   visibility: hidden;
 }
 
-body[data-dsh-claude-style] .dsh-claude-process-summary-digit {
+body[data-dsh-deepcraft] .dsh-deepcraft-process-summary-digit {
   position: absolute;
   inset: 0;
   display: flex;
@@ -69,20 +69,20 @@ body[data-dsh-claude-style] .dsh-claude-process-summary-digit {
   justify-content: center;
 }
 
-body[data-dsh-claude-style] .dsh-claude-process-summary-digit[data-dsh-claude-roll="exit"] {
-  animation: dsh-claude-summary-roll-out var(--dsh-claude-duration-roll) var(--dsh-claude-ease-roll) forwards;
+body[data-dsh-deepcraft] .dsh-deepcraft-process-summary-digit[data-dsh-deepcraft-roll="exit"] {
+  animation: dsh-deepcraft-summary-roll-out var(--dsh-deepcraft-duration-roll) var(--dsh-deepcraft-ease-roll) forwards;
 }
 
-body[data-dsh-claude-style] .dsh-claude-process-summary-digit[data-dsh-claude-roll="enter"] {
-  animation: dsh-claude-summary-roll-in var(--dsh-claude-duration-roll) var(--dsh-claude-ease-roll) forwards;
+body[data-dsh-deepcraft] .dsh-deepcraft-process-summary-digit[data-dsh-deepcraft-roll="enter"] {
+  animation: dsh-deepcraft-summary-roll-in var(--dsh-deepcraft-duration-roll) var(--dsh-deepcraft-ease-roll) forwards;
 }
 
-@keyframes dsh-claude-summary-roll-out {
+@keyframes dsh-deepcraft-summary-roll-out {
   from { transform: translateY(0); opacity: 1; }
   to { transform: translateY(-100%); opacity: 0; }
 }
 
-@keyframes dsh-claude-summary-roll-in {
+@keyframes dsh-deepcraft-summary-roll-in {
   from { transform: translateY(100%); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
@@ -91,7 +91,7 @@ body[data-dsh-claude-style] .dsh-claude-process-summary-digit[data-dsh-claude-ro
    host's own band (shared/motion.css), whose copy holds the summary's figures
    as they stand, the rolling digits settled (process-summary.ts). The copy is
    laid out the way the summary lays out its figures. */
-body[data-dsh-claude-style] .dsh-claude-sweep-glyphs.dsh-claude-process-summary-glyphs {
+body[data-dsh-deepcraft] .dsh-deepcraft-sweep-glyphs.dsh-deepcraft-process-summary-glyphs {
   display: flex;
   align-items: baseline;
 }
@@ -100,6 +100,6 @@ body[data-dsh-claude-style] .dsh-claude-sweep-glyphs.dsh-claude-process-summary-
    reduced sets every count down at once, and the band stands down with every
    other band (shared/motion.css). The attribute already folds in the system
    setting, so no media query here. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-process-summary-digit {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-process-summary-digit {
   animation: none;
 }

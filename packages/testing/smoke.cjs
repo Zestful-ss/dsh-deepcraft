@@ -256,7 +256,7 @@ async function browserHalf(planned, jobs) {
     if (name === 'client.js') {
       res.writeHead(200, { 'content-type': 'text/javascript; charset=utf-8' })
       res.end(fs.readFileSync(CLIENT))
-    } else if (name === 'dsh-claude-style/hdsl-skin.png') {
+    } else if (name === 'dsh-deepcraft/hdsl-skin.png') {
       // The launcher's atlas, which the skin loads outside `fetch`, so the
       // page-side stand-in cannot answer it. `hdsl-broken` models a file the
       // player removed after the launcher wrote the contract.
@@ -267,7 +267,7 @@ async function browserHalf(planned, jobs) {
       }
       res.writeHead(200, { 'content-type': 'image/png' })
       res.end(fs.readFileSync(SKIN_FIXTURE))
-    } else if (name === 'dsh-claude-style/brand/mark' || name === 'dsh-claude-style/brand/wordmark') {
+    } else if (name === 'dsh-deepcraft/brand/mark' || name === 'dsh-deepcraft/brand/wordmark') {
       // The custom-brand case's images, loaded outside `fetch` like the
       // launcher's atlas: a one-pixel mark, and a wordmark whose only size is
       // a 4:1 viewBox, so the measured proportions are observable.
@@ -283,11 +283,11 @@ async function browserHalf(planned, jobs) {
       }
       res.writeHead(200, { 'content-type': 'image/svg+xml' })
       res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100"><rect width="400" height="100"/></svg>')
-    } else if (name.startsWith('dsh-claude-style/assets/')) {
+    } else if (name.startsWith('dsh-deepcraft/assets/')) {
       // The routed assets, from the build output the host half serves them from
       // The manifest is the same gate here: a name the build did not
       // produce answers 404.
-      const file = name.slice('dsh-claude-style/assets/'.length)
+      const file = name.slice('dsh-deepcraft/assets/'.length)
       const asset = ASSETS[file]
       // The chunk-fault case's route carries none of the feature chunks, the
       // way a host still serving the bundle it read before an update answers (D72).

@@ -16,8 +16,8 @@ function mountMessage(height: number, options: { echo?: boolean } = {}) {
   if (options.echo === true) row.setAttribute('data-submission-echo', '')
   const bubble = document.createElement('div')
   bubble.style.background = 'rgb(20, 20, 19)'
-  bubble.style.setProperty('--dsh-claude-message-fold-cap', '100px')
-  bubble.style.setProperty('--dsh-claude-message-fold-fade', '10px')
+  bubble.style.setProperty('--dsh-deepcraft-message-fold-cap', '100px')
+  bubble.style.setProperty('--dsh-deepcraft-message-fold-fade', '10px')
   const words = document.createElement('div')
   words.style.height = `${height}px`
   bubble.append(words)

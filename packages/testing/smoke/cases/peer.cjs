@@ -74,7 +74,7 @@ module.exports = {
       owner.sheet === false, JSON.stringify(owner.sheet))
     check('the theme claims no body attribute while yielded',
       owner.live === false && owner.handoff === false &&
-        !bodyAttrs.some(name => name.indexOf('data-dsh-claude') === 0),
+        !bodyAttrs.some(name => name.indexOf('data-dsh-deepcraft') === 0),
       JSON.stringify(bodyAttrs))
     check('the settings page leaves with the theme',
       owner.settingsSeats === 0, JSON.stringify(owner.settingsSeats))

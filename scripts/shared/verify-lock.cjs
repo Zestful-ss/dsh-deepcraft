@@ -6,7 +6,7 @@
  * page change under it. Every entry that writes `lib/` or drives a browser
  * through it takes this lock — `scripts/build.mjs`, the smoke, the end-to-end
  * lane and the live probes — and `npm run verify` owns the run that starts the
- * gates, so a gate it starts inherits `DSH_CLAUDE_STYLE_LOCK_HELD` and takes
+ * gates, so a gate it starts inherits `DSH_DEEPCRAFT_LOCK_HELD` and takes
  * nothing. A rebuild the watcher behind `npm run dev` starts takes nothing
  * either: it happens while the reader is looking at the page, and waiting
  * minutes for a test run would freeze the loop it exists to serve.
@@ -23,8 +23,8 @@ const ROOT = path.resolve(__dirname, '..', '..')
 const LOCK = path.join(ROOT, '.debug', 'verify.lock')
 const OWNER = path.join(LOCK, 'owner.json')
 /** Set on the gates of a run and on the rebuilds of the watcher. */
-const HELD = 'DSH_CLAUDE_STYLE_LOCK_HELD'
-const DEV = 'DSH_CLAUDE_STYLE_DEV'
+const HELD = 'DSH_DEEPCRAFT_LOCK_HELD'
+const DEV = 'DSH_DEEPCRAFT_DEV'
 /** A lock whose owner file cannot be read is given this long before it is read as a run that died taking it. */
 const OWNER_GRACE_MS = 60_000
 /**

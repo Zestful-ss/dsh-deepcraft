@@ -1,5 +1,5 @@
-import { subscribeMutations } from '@dsh-claude-style/engine/bus'
-import { requestFrame } from '@dsh-claude-style/engine/frame'
+import { subscribeMutations } from '@dsh-deepcraft/engine/bus'
+import { requestFrame } from '@dsh-deepcraft/engine/frame'
 import { CHAT_FLYING_ATTR, MESSAGE_ENTER_GROW, MESSAGE_FOLD_ATTR } from '../../constants'
 import { motionReduced, readPrefs } from '../../core/prefs'
 import { startMorph } from './send-morph'
@@ -7,12 +7,12 @@ import { currentRow, lastUserRow, takeFreshEcho, touchesUserRow } from './send-r
 import { watchGrowEnter } from './send-grow'
 import { CHAT_FLIGHT_MS, CHAT_LANDING_MS } from './send-shape'
 import { snapshotComposer } from './send-snapshot'
-import { CHAT_FLOW_SELECTOR, COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, FLOW_KIND_ATTRIBUTE, SUBMISSION_ECHO_SELECTOR, USER_ROW_KIND } from '@dsh-claude-style/contracts/dom'
-import { CHAT_USER_ROW_SELECTOR, userBubble } from '@dsh-claude-style/engine/chat-dom'
+import { CHAT_FLOW_SELECTOR, COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, FLOW_KIND_ATTRIBUTE, SUBMISSION_ECHO_SELECTOR, USER_ROW_KIND } from '@dsh-deepcraft/contracts/dom'
+import { CHAT_USER_ROW_SELECTOR, userBubble } from '@dsh-deepcraft/engine/chat-dom'
 import { motionEase } from '../../shared/motion'
 import { inPageBox, pageViewport } from '../../shared/page-zoom'
-import type { HostContext } from '@dsh-claude-style/engine/host'
-import type { FeatureHandle } from '@dsh-claude-style/engine/scheduler'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
+import type { FeatureHandle } from '@dsh-deepcraft/engine/scheduler'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './send-flight.manifest'
 import type { ComposerSnapshot } from './send-snapshot'
@@ -262,7 +262,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     followTarget(activeFlight, true)
     const fade = activeFlight.morph.wrapper.animate([{ opacity: 1 }, { opacity: 0 }], {
       duration: CHAT_LANDING_MS,
-      easing: motionEase('--dsh-claude-ease-out'),
+      easing: motionEase('--dsh-deepcraft-ease-out'),
       fill: 'forwards',
     })
     activeFlight.morph.animations.push(fade)

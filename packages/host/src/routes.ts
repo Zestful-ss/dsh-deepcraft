@@ -9,19 +9,19 @@
  * registered on its own: one path the web server refuses is reported, and the
  * other routes still register.
  *
- * The paths are the shared contract (`@dsh-claude-style/contracts/routes`, * D73): the browser half addresses the same names.
+ * The paths are the shared contract (`@dsh-deepcraft/contracts/routes`, * D73): the browser half addresses the same names.
  */
-import { PACKAGE_NAME } from '@dsh-claude-style/contracts/package'
-import { HDSL_PATH, HDSL_SKIN_PATH, PEAKRATE_PATH, ROUTE_PREFIX, SESSION_DELETE_PATH, SESSION_SEARCH_PATH, USAGE_PATH, USERNAME_PATH } from '@dsh-claude-style/contracts/routes'
+import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
+import { HDSL_PATH, HDSL_SKIN_PATH, PEAKRATE_PATH, ROUTE_PREFIX, SESSION_DELETE_PATH, SESSION_SEARCH_PATH, USAGE_PATH, USERNAME_PATH } from '@dsh-deepcraft/contracts/routes'
 import { existsSync, readFileSync, readdirSync, realpathSync, rmSync, statSync } from 'node:fs'
 import { userInfo } from 'node:os'
 import { dirname, join, resolve, sep } from 'node:path'
 import { brandRoutes } from './brand.js'
-import type { DshContext, DshRequest, DshResponse, DshRoute, DshScope } from '@dsh-claude-style/engine/node/dsh'
-import { harnessPath } from '@dsh-claude-style/engine/node/harness-home'
+import type { DshContext, DshRequest, DshResponse, DshRoute, DshScope } from '@dsh-deepcraft/engine/node/dsh'
+import { harnessPath } from '@dsh-deepcraft/engine/node/harness-home'
 import { pluginPath } from './harness-home.js'
-import { fenceRefused, methodRefused, readRequestBody, refusalOf, sendJson } from '@dsh-claude-style/engine/node/http'
-import { createStaticFiles } from '@dsh-claude-style/engine/node/static-files'
+import { fenceRefused, methodRefused, readRequestBody, refusalOf, sendJson } from '@dsh-deepcraft/engine/node/http'
+import { createStaticFiles } from '@dsh-deepcraft/engine/node/static-files'
 import { createHdslAccount } from './hdsl.js'
 import type { HdslReading } from './hdsl.js'
 import { packageRoot } from './package-root.js'
@@ -38,7 +38,7 @@ const COPY_FILE = 'model-descriptions.json'
  * path traversal is possible.
  *
  * A name is looked up in the user's own drop point first — the harness home's
- * `dsh-claude-style/fonts/` — and then in the package's `lib/fonts/` (D75). The
+ * `dsh-deepcraft/fonts/` — and then in the package's `lib/fonts/` (D75). The
  * JetBrains Mono files and the two look-alike faces behind the Anthropic ones
  * (Inter, Noto Serif) ship in the npm package; the Anthropic faces do not
  * (copyright), so only a copy the user dropped in answers them. A name neither

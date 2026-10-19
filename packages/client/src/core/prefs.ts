@@ -1,9 +1,9 @@
-import { BRAND_ATTR, BRAND_DEEPSEEK, COMPOSER_ATTR, DOCK_LOOK_ATTR, DOCK_LOOK_CARD, DOCK_LOOK_FLUSH, FOOTER_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, ONGOING_INDICATOR_ATTR, PAGE_ZOOM_ATTR, PAGE_ZOOM_SYSTEM, PACKAGE_NAME, PALETTE_ATTR, PREF_DEFAULTS, SEARCH_STYLE_ATTR, SETTINGS_ENTRY_FALLBACK, SIDEBAR_LAYOUT_ATTR, STATS_POSITION_ATTR, STATUS_MOTION_ATTR, TYPEFACE_ATTR } from '../constants'
+import { BRAND_ATTR, BRAND_DEEPSEEK, COMPOSER_ATTR, DOCK_LOOK_ATTR, DOCK_LOOK_CARD, DOCK_LOOK_FLUSH, FOOTER_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, ONGOING_INDICATOR_ATTR, PAGE_ZOOM_ATTR, PAGE_ZOOM_SYSTEM, PACKAGE_NAME, PALETTE_ATTR, SEARCH_STYLE_ATTR, SETTINGS_ENTRY_FALLBACK, SIDEBAR_LAYOUT_ATTR, STATS_POSITION_ATTR, STATUS_MOTION_ATTR, TYPEFACE_ATTR } from '../constants'
 import type { PrefKey, Prefs } from '../constants'
-import type { HostContext } from '@dsh-claude-style/engine/host'
-import { clampPrefs, PREFS } from '@dsh-claude-style/contracts/prefs'
-import { notifyAll } from '@dsh-claude-style/engine/notify'
-import { createSettingsBinding } from '@dsh-claude-style/engine/settings-binding'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
+import { clampPrefs } from '@dsh-deepcraft/contracts/prefs'
+import { notifyAll } from '@dsh-deepcraft/engine/notify'
+import { createSettingsBinding } from '@dsh-deepcraft/engine/settings-binding'
 import { pageOwner } from '../shared/visual-owner'
 
 /**
@@ -20,7 +20,6 @@ const binding = createSettingsBinding({
   namespaces: [PACKAGE_NAME, SETTINGS_ENTRY_FALLBACK],
   adoptForm(value) {
     adoptPrefs(clampPrefs(value))
-    moveLocalPrefs(value)
   },
 })
 
@@ -185,45 +184,6 @@ export function motionReduced() {
 export function resolveMascot(current: Prefs) {
   if (current.mascot !== MASCOT_BRAND) return current.mascot
   return current.brand === BRAND_DEEPSEEK ? MASCOT_DEEPY : MASCOT_CRAB
-}
-
-/**
- * Values an earlier build kept in this browser's local storage, by preference:
- * the first time the form carries values, each field the form does not hold
- * yet is written through the form and the local copy dropped.
- */
-const LOCAL_PREF_KEYS: Partial<Record<PrefKey, string>> = {
-  username: 'dsh-claude-style.username',
-  banLocale: 'dsh-claude-style.banLocale',
-}
-let localPrefsMoved = false
-
-/** Whether a stored local value is one this build still accepts for that preference. */
-function localValueUsable(key: PrefKey, stored: string) {
-  const spec = PREFS[key]
-  if (stored === '' || stored === spec.default) return false
-  if (spec.type === 'choice') return spec.values.some((value: string) => value === stored)
-  if (spec.type === 'text') return stored.trim().length <= spec.max
-  return false
-}
-
-function moveLocalPrefs(formValue: Record<string, unknown>) {
-  if (localPrefsMoved) return
-  localPrefsMoved = true
-  for (const [key, storageKey] of Object.entries(LOCAL_PREF_KEYS) as [PrefKey, string][]) {
-    const stored = localStorage.getItem(storageKey)
-    if (stored === null) continue
-    const held = formValue[key] !== undefined && formValue[key] !== PREF_DEFAULTS[key]
-    if (held || !localValueUsable(key, stored)) {
-      localStorage.removeItem(storageKey)
-      continue
-    }
-    // The value was held to the table just above, and each key here is one of
-    // the two string-shaped preferences: the write carries its own type.
-    savePrefs({ [key]: stored } as Partial<Prefs>).then(saved => {
-      if (saved !== null && saved[key] === stored) localStorage.removeItem(storageKey)
-    })
-  }
 }
 
 /**

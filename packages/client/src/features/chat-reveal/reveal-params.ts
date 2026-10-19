@@ -12,7 +12,7 @@ export { CHAT_REVEAL_COLOR_VAR, CHAT_REVEAL_HIGHLIGHT_PREFIX, CHAT_REVEAL_MIN_OP
  * pace the chat area's own entrances run at (D9). Moving it means weighing the
  * step count (constants.ts) again: each step stands this long divided by it.
  */
-export const CHAT_REVEAL_MS = motionMs('--dsh-claude-duration-reveal')
+export const CHAT_REVEAL_MS = motionMs('--dsh-deepcraft-duration-reveal')
 /** The share of one fade a batch's stagger spreads over: proportional to the fade, so neither pace lets staggering take over. */
 export const CHAT_REVEAL_STAGGER_DIVISOR = 50
 /** The stagger step's bounds: smaller shows no sweep, larger makes the last characters late. */

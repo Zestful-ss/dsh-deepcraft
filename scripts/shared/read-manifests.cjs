@@ -101,6 +101,11 @@ function checkManifests(manifests) {
         fail(manifest, 'needs "prefValues": a non-empty list of the preference values the feature runs under')
       }
     }
+    if (manifest.brands !== undefined) {
+      if (!Array.isArray(manifest.brands) || manifest.brands.length === 0 || manifest.brands.some((value) => typeof value !== 'string' || !PREFS.brand.values.includes(value))) {
+        fail(manifest, 'needs "brands": a non-empty list of the brand values the feature belongs to')
+      }
+    }
     if (manifest.settingsRows !== undefined) {
       if (!Array.isArray(manifest.settingsRows) || manifest.settingsRows.length === 0) fail(manifest, 'needs "settingsRows": a non-empty list of the rows this feature owns')
       const copyFile = path.join(FEATURES, manifest.dir, `${manifest.dir}.copy.json`)

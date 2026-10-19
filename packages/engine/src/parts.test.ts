@@ -94,7 +94,7 @@ test('a dialog holding the host\'s statistics reads the mark, and one outside th
 test('the foot area marks its boxes around the host row, and nothing above the scope', async () => {
   document.body.innerHTML =
     '<div data-slot="sidebar"><div class="_root_ab"><div class="_footArea_ab"><div class="_settingsArea_ab">' +
-    '<div class="_triggerRow_ab"><button data-dsh-claude-account-host-row=""></button></div></div></div></div></div>'
+    '<div class="_triggerRow_ab"><button data-dsh-deepcraft-account-host-row=""></button></div></div></div></div></div>'
   cleanups.push(installParts(TEST_VOCABULARY))
   expect(holds(document.querySelector('[data-test-part~="settings-trigger"]'))).toBe('account-row')
   expect(holds(document.querySelector('[data-test-part~="settings-area"]'))).toBe('account-row')
@@ -103,7 +103,7 @@ test('the foot area marks its boxes around the host row, and nothing above the s
   const foot = document.querySelector('[data-test-part~="foot-area"]')
   expect(holds(foot)).toBeNull()
 
-  document.querySelector('[data-dsh-claude-account-host-row]')!.remove()
+  document.querySelector('[data-dsh-deepcraft-account-host-row]')!.remove()
   await settle()
   expect(holds(document.querySelector('[data-test-part~="settings-trigger"]'))).toBeNull()
 })

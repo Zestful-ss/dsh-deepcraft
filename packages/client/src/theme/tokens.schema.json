@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "dsh-claude-style design tokens",
+  "title": "dsh-deepcraft design tokens",
   "description": "The skin's custom properties: the build generates the token stylesheet and the docs/STYLE.md token table from this document (D9).",
   "type": "object",
   "required": ["typeface", "apex", "palette", "motion", "layer"],
@@ -64,7 +64,7 @@
         "required": ["token", "value", "use"],
         "additionalProperties": false,
         "properties": {
-          "token": { "type": "string", "pattern": "^--dsh-claude-(duration|period|ease|distance|blur|scale|timing)-[a-z0-9-]+$" },
+          "token": { "type": "string", "pattern": "^--dsh-deepcraft-(duration|period|ease|distance|blur|scale|timing)-[a-z0-9-]+$" },
           "value": { "$ref": "#/$defs/value" },
           "use": { "description": "The role the token plays, for the docs/STYLE.md motion table.", "type": "string", "minLength": 1 },
           "note": { "$ref": "#/$defs/note" }
@@ -79,7 +79,7 @@
         "required": ["token", "value", "use"],
         "additionalProperties": false,
         "properties": {
-          "token": { "type": "string", "pattern": "^--dsh-claude-layer-[a-z0-9-]+$" },
+          "token": { "type": "string", "pattern": "^--dsh-deepcraft-layer-[a-z0-9-]+$" },
           "value": { "type": "string", "pattern": "^[1-9][0-9]+$" },
           "use": { "description": "What stands on this level and what it has to clear, for the docs/STYLE.md layer table.", "type": "string", "minLength": 1 },
           "note": { "$ref": "#/$defs/note" }
@@ -88,7 +88,7 @@
     }
   },
   "$defs": {
-    "token": { "type": "string", "pattern": "^--(dsw|dsh-claude)-[a-z0-9-]+$" },
+    "token": { "type": "string", "pattern": "^--(dsw|dsh-deepcraft)-[a-z0-9-]+$" },
     "value": { "type": "string", "minLength": 1, "pattern": "^[^;{}]+$" },
     "note": { "description": "Why the value has this shape; kept for maintainers, not emitted.", "type": "string", "minLength": 1 },
     "themes": {

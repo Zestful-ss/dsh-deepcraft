@@ -15,20 +15,20 @@ import { HEAT_TIP_EDGE_ATTR, HEAT_TIP_SIDE_ATTR, HEAT_TIP_SIDE_BELOW, placeHeatT
  */
 const STYLE = `
   .test-panel { width: 480px; padding: 12px; overflow: auto; box-sizing: border-box; }
-  .test-panel[data-short] .dsh-claude-home-heat { height: 24px; }
-  .dsh-claude-home-heat {
+  .test-panel[data-short] .dsh-deepcraft-home-heat { height: 24px; }
+  .dsh-deepcraft-home-heat {
     display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 1fr);
     grid-auto-columns: 1fr; gap: 3px;
   }
-  .dsh-claude-home-heat-cell { position: relative; aspect-ratio: 1; }
-  .dsh-claude-home-heat-cell[data-tip]::after {
+  .dsh-deepcraft-home-heat-cell { position: relative; aspect-ratio: 1; }
+  .dsh-deepcraft-home-heat-cell[data-tip]::after {
     content: attr(data-tip); position: absolute; bottom: calc(100% + 6px);
     left: 50%; transform: translateX(-50%); padding: 5px 10px; white-space: nowrap;
     font: 500 13px/18px sans-serif;
   }
-  .dsh-claude-home-heat-cell[data-edge="start"]::after { left: 0; transform: none; }
-  .dsh-claude-home-heat-cell[data-edge="end"]::after { left: auto; right: 0; transform: none; }
-  .dsh-claude-home-heat-cell[data-side="below"]::after { top: calc(100% + 6px); bottom: auto; }
+  .dsh-deepcraft-home-heat-cell[data-edge="start"]::after { left: 0; transform: none; }
+  .dsh-deepcraft-home-heat-cell[data-edge="end"]::after { left: auto; right: 0; transform: none; }
+  .dsh-deepcraft-home-heat-cell[data-side="below"]::after { top: calc(100% + 6px); bottom: auto; }
 `
 
 const COLUMNS = 26
@@ -45,10 +45,10 @@ function mount(options: { short?: boolean } = {}) {
   panel.className = 'test-panel'
   if (options.short === true) panel.setAttribute('data-short', '')
   const grid = document.createElement('div')
-  grid.className = 'dsh-claude-home-heat'
+  grid.className = 'dsh-deepcraft-home-heat'
   for (let i = 0; i < COLUMNS * 7; i += 1) {
     const cell = document.createElement('span')
-    cell.className = 'dsh-claude-home-heat-cell'
+    cell.className = 'dsh-deepcraft-home-heat-cell'
     cell.setAttribute('data-tip', '9月29日 — 4.1B Token')
     grid.append(cell)
   }

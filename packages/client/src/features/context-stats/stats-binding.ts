@@ -1,7 +1,7 @@
 import { AUTO_POPOVER_ALL } from '../../constants'
-import { observeSize } from '@dsh-claude-style/engine/bus'
+import { observeSize } from '@dsh-deepcraft/engine/bus'
 import { readPrefs } from '../../core/prefs'
-import { setAttributeIfChanged } from '@dsh-claude-style/engine/dom'
+import { setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { POPOVER_CLOSE_DELAY, POPOVER_OPEN_DELAY, createHoverIntent, isProgrammaticPress, pressKeepsPopoverOpen, programmaticPress } from '../../shared/popover'
 import { inPageBox, pageViewport } from '../../shared/page-zoom'
 import { CONTEXT_PANEL_ALIGNED_ATTR, CONTEXT_PANEL_ATTR, contextPanel, contextTrigger, findContextMeter } from './stats-panel'
@@ -15,7 +15,7 @@ import { copy } from './copy'
  */
 
 /** The custom property the stylesheet reads to line the panel up with the meter. */
-const CONTEXT_PANEL_LEFT = '--dsh-claude-context-panel-left'
+const CONTEXT_PANEL_LEFT = '--dsh-deepcraft-context-panel-left'
 /** The viewport margin the host keeps for this panel (ui-chat's stat-dialog). */
 const CONTEXT_PANEL_MARGIN = 12
 

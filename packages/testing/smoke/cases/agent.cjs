@@ -116,7 +116,7 @@ module.exports = {
     check('mirrored plugin label and badge rendered as text', r.mirroredText === MARKUP && r.mirroredBadge === MARKUP, JSON.stringify([r.mirroredText, r.mirroredBadge]))
     check('account-hold toast renders the username as text', r.banToast === MARKUP + ': account_banned', JSON.stringify(r.banToast))
     check('avatar URL adds no attribute to the page',
-      r.avatarAttrs !== null && r.avatarAttrs.every((a) => a === 'class' || a === 'data-dsh-claude-photo') &&
+      r.avatarAttrs !== null && r.avatarAttrs.every((a) => a === 'class' || a === 'data-dsh-deepcraft-photo') &&
       (r.photo === null || r.photo.attrs.every((a) => !/^on/i.test(a))), JSON.stringify([r.avatarAttrs, r.photo]))
     commonChecks(r)
   },
@@ -134,7 +134,7 @@ module.exports = {
     // shipped values want asks for its chunk here.
     check('each deferred feature the page wants was switched off once, and nothing else',
       same(switchedOff, [...deferredWanted(SHIPPED_PREFS)].sort()), r.errors.join(' | '))
-    check('each report names the chunk that did not load', r.errors.every((line) => line.includes('/dsh-claude-style/assets/') && line.includes('failed to load')), r.errors.join(' | '))
+    check('each report names the chunk that did not load', r.errors.every((line) => line.includes('/dsh-deepcraft/assets/') && line.includes('failed to load')), r.errors.join(' | '))
     check('the features in the bundle keep running', r.composerRestyle === true && r.accountUser === 'Tester', JSON.stringify({ restyle: r.composerRestyle, account: r.accountUser }))
     commonChecks(r)
   },

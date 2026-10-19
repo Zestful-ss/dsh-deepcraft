@@ -44,8 +44,8 @@ test('the rise overshoots by the damping ratio\'s amount, and is back on the row
   // one message a few pixels apart. That is also the gate the real row waits
   // behind (send-flight.ts's arrived(): half a pixel), so what is left at the
   // end has to be under half a pixel over any rise the reader can see.
-  const flightMs = motionMs('--dsh-claude-duration-flight')
-  const fadeAt = (flightMs + motionMs('--dsh-claude-duration-surface')) / flightMs
+  const flightMs = motionMs('--dsh-deepcraft-duration-flight')
+  const fadeAt = (flightMs + motionMs('--dsh-deepcraft-duration-surface')) / flightMs
   const atFade = Math.abs(chatSendRiseProgress(fadeAt) - 1)
   expect(fadeAt).toBeGreaterThan(1)
   expect(atFade).toBeLessThan(0.01)

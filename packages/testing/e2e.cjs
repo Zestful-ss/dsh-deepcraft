@@ -113,7 +113,7 @@ async function captureFailure(session, out, name, say) {
       dialogs: [...document.querySelectorAll('[role="dialog"]')]
         .filter((node) => node.offsetParent !== null)
         .map((node) => (node.innerText || '').replace(/\s+/g, ' ').slice(0, 160)),
-      skin: document.body.getAttribute('data-dsh-claude-style'),
+      skin: document.body.getAttribute('data-dsh-deepcraft'),
       // Whatever a scenario left in the title: a page under test has no other
       // channel out of the browser, and a failure is when it is worth reading.
       title: document.title,

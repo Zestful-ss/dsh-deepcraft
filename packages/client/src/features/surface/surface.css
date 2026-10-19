@@ -5,7 +5,7 @@
    Code side, ds-bot on the Chat side — paints the switch, and its plate and
    dark-mode fill are the translucent tints that read on either canvas
    (docs/STYLE.md). The shape is the small view switch's (shared/segment-control.css). */
-body[data-dsh-claude-surface] .dsh-claude-surface-switch {
+body[data-dsh-deepcraft-surface] .dsh-deepcraft-surface-switch {
   display: inline-flex;
   flex: none;
   align-items: center;
@@ -17,11 +17,11 @@ body[data-dsh-claude-surface] .dsh-claude-surface-switch {
   -webkit-app-region: no-drag;
 }
 
-body[data-dsh-claude-surface][data-ds-dark-theme] .dsh-claude-surface-switch {
+body[data-dsh-deepcraft-surface][data-ds-dark-theme] .dsh-deepcraft-surface-switch {
   background: rgba(255, 255, 255, 0.08);
 }
 
-body[data-dsh-claude-surface] .dsh-claude-surface-option {
+body[data-dsh-deepcraft-surface] .dsh-deepcraft-surface-option {
   appearance: none;
   display: inline-flex;
   align-items: center;
@@ -37,19 +37,19 @@ body[data-dsh-claude-surface] .dsh-claude-surface-option {
   cursor: pointer;
 }
 
-body[data-dsh-claude-surface] .dsh-claude-surface-option:hover {
+body[data-dsh-deepcraft-surface] .dsh-deepcraft-surface-option:hover {
   color: var(--dsw-alias-label-primary);
 }
 
 /* The checked chip is cut from the conversation canvas, which both painters
    repaint: it stands out of the sidebar's darker fill. */
-body[data-dsh-claude-surface] .dsh-claude-surface-option[aria-checked="true"] {
+body[data-dsh-deepcraft-surface] .dsh-deepcraft-surface-option[aria-checked="true"] {
   background: var(--dsw-alias-bg-base);
   color: var(--dsw-alias-label-primary);
   box-shadow: 0 1px 2px rgba(20, 20, 19, 0.10);
 }
 
-body[data-dsh-claude-surface][data-ds-dark-theme] .dsh-claude-surface-option[aria-checked="true"] {
+body[data-dsh-deepcraft-surface][data-ds-dark-theme] .dsh-deepcraft-surface-option[aria-checked="true"] {
   background: rgba(255, 255, 255, 0.14);
   box-shadow: none;
 }
@@ -57,25 +57,25 @@ body[data-dsh-claude-surface][data-ds-dark-theme] .dsh-claude-surface-option[ari
 /* The desktop caption strip: surface.ts measures the sidebar column and the
    strip and writes where the switch stands. Tucked, it keeps its box for the
    next measurement and gives up its place on screen. */
-body[data-dsh-claude-surface] .dsh-claude-surface-switch:is([data-dsh-claude-surface-place="band"], [data-dsh-claude-surface-place="tucked"]) {
+body[data-dsh-deepcraft-surface] .dsh-deepcraft-surface-switch:is([data-dsh-deepcraft-surface-place="band"], [data-dsh-deepcraft-surface-place="tucked"]) {
   position: fixed;
-  left: var(--dsh-claude-surface-left);
-  top: var(--dsh-claude-surface-top);
+  left: var(--dsh-deepcraft-surface-left);
+  top: var(--dsh-deepcraft-surface-top);
   z-index: 1;
 }
 
-body[data-dsh-claude-surface] .dsh-claude-surface-switch[data-dsh-claude-surface-place="tucked"] {
+body[data-dsh-deepcraft-surface] .dsh-deepcraft-surface-switch[data-dsh-deepcraft-surface-place="tucked"] {
   visibility: hidden;
 }
 
 /* The web's brand row is a grid of the brand and the collapse toggle; the
    switch takes a column between them. */
-body[data-dsh-claude-surface] [data-dsh-claude-surface-row] {
+body[data-dsh-deepcraft-surface] [data-dsh-deepcraft-surface-row] {
   grid-template-columns: minmax(0, 1fr) auto auto;
 }
 
 /* ds-bot's account menu while the switch presses its Agent mode item: it
    opens and closes within two frames, and the reader never sees it. */
-body[data-dsh-claude-surface][data-dsh-claude-surface-switching] .bt-account-menu {
+body[data-dsh-deepcraft-surface][data-dsh-deepcraft-surface-switching] .bt-account-menu {
   visibility: hidden;
 }

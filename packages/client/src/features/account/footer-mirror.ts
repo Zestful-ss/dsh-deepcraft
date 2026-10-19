@@ -1,6 +1,6 @@
-import { FOOTER_ACTIONS_SELECTOR } from '@dsh-claude-style/contracts/dom'
-import { findFootArea } from '@dsh-claude-style/engine/host'
-import { hasSkinClass } from '@dsh-claude-style/engine/dom'
+import { FOOTER_ACTIONS_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { findFootArea } from '@dsh-deepcraft/engine/host'
+import { hasSkinClass } from '@dsh-deepcraft/engine/dom'
 import { buildPopoverItem } from '../../shared/popover'
 import { copy } from './copy'
 
@@ -20,7 +20,7 @@ export function createFooterMirror(options: {
   /** The popover body, while sync and its helpers run (sync returns early without one). */
   function openBody() {
     const body = options.body()
-    if (body === null) throw new Error('dsh-claude-style: the footer mirror has no popover body')
+    if (body === null) throw new Error('dsh-deepcraft: the footer mirror has no popover body')
     return body
   }
 
@@ -31,10 +31,10 @@ export function createFooterMirror(options: {
    * (toggles, selects, status chips) straight into the sidebar footer.
    * Redirection therefore works on ENTRIES, not on
    * `querySelectorAll('button')`:
-   *   - every entry is marked `data-dsh-claude-footer-entry` (CSS
+   *   - every entry is marked `data-dsh-deepcraft-footer-entry` (CSS
    *     collapses its box so nothing paints in the sidebar);
    *   - entries without a floating overlay are hidden wholesale via
-   *     `data-dsh-claude-footer-hidden`;
+   *     `data-dsh-deepcraft-footer-hidden`;
    *   - entries hosting an overlay — a fixed-position panel (the cordis
    *     inventory panel) or a dialog/menu/listbox — stay visible, but
    *     every branch of their subtree that does not lead to the overlay
@@ -45,17 +45,17 @@ export function createFooterMirror(options: {
     const entries = footerEntriesIn(footArea)
     for (let i = 0; i < entries.length; i++) {
       const entry = entries[i]
-      entry.setAttribute('data-dsh-claude-footer-entry', '')
+      entry.setAttribute('data-dsh-deepcraft-footer-entry', '')
       const all = entry.querySelectorAll('*')
       for (let j = 0; j < all.length; j++) {
         const el = all[j]
-        if (el.hasAttribute('data-dsh-claude-footer-overlay')) continue
+        if (el.hasAttribute('data-dsh-deepcraft-footer-overlay')) continue
         const role = el.getAttribute('role') || ''
         let overlay = role === 'dialog' || role === 'menu' || role === 'listbox'
         if (!overlay) {
           overlay = window.getComputedStyle(el).position === 'fixed'
         }
-        if (overlay) el.setAttribute('data-dsh-claude-footer-overlay', '')
+        if (overlay) el.setAttribute('data-dsh-deepcraft-footer-overlay', '')
       }
       markFooterHiddenBranches(entry)
     }
@@ -83,7 +83,7 @@ export function createFooterMirror(options: {
         entries.push(...footerEntriesOf(kid))
         continue
       }
-      if (kid.matches('[data-dsh-claude-part~="settings-area"]')) continue
+      if (kid.matches('[data-dsh-deepcraft-part~="settings-area"]')) continue
       if (hasSkinClass(kid)) continue
       entries.push(kid)
     }
@@ -118,17 +118,17 @@ export function createFooterMirror(options: {
 
   /** Hide every branch of `el`'s subtree that does not carry an overlay. */
   function markFooterHiddenBranches(el: Element) {
-    if (el.hasAttribute('data-dsh-claude-footer-overlay')) {
-      el.removeAttribute('data-dsh-claude-footer-hidden')
+    if (el.hasAttribute('data-dsh-deepcraft-footer-overlay')) {
+      el.removeAttribute('data-dsh-deepcraft-footer-hidden')
       return
     }
-    if (el.querySelector('[data-dsh-claude-footer-overlay]') !== null) {
-      el.removeAttribute('data-dsh-claude-footer-hidden')
+    if (el.querySelector('[data-dsh-deepcraft-footer-overlay]') !== null) {
+      el.removeAttribute('data-dsh-deepcraft-footer-hidden')
       const kids = el.children
       for (let i = 0; i < kids.length; i++) markFooterHiddenBranches(kids[i])
       return
     }
-    el.setAttribute('data-dsh-claude-footer-hidden', '')
+    el.setAttribute('data-dsh-deepcraft-footer-hidden', '')
   }
 
   /**
@@ -138,20 +138,20 @@ export function createFooterMirror(options: {
    * markup, and is replaced only when the source's markup changed.
    */
   function syncMirrorItem(item: Element, iconEl: Element | null, text: string, badge: string) {
-    const iconBox = item.querySelector('.dsh-claude-popover-item-icon')
+    const iconBox = item.querySelector('.dsh-deepcraft-popover-item-icon')
     const iconHtml = iconEl ? iconEl.outerHTML : ''
     if (iconBox !== null && iconBox.__dshIconHtml !== iconHtml) {
       iconBox.__dshIconHtml = iconHtml
       while (iconBox.firstChild) iconBox.removeChild(iconBox.firstChild)
       if (iconEl) iconBox.appendChild(iconEl.cloneNode(true))
     }
-    const textBox = item.querySelector('.dsh-claude-popover-item-text')
+    const textBox = item.querySelector('.dsh-deepcraft-popover-item-text')
     if (textBox !== null && textBox.textContent !== text) textBox.textContent = text
-    let badgeBox = item.querySelector('.dsh-claude-popover-item-badge')
+    let badgeBox = item.querySelector('.dsh-deepcraft-popover-item-badge')
     if (badge) {
       if (badgeBox === null) {
         badgeBox = document.createElement('span')
-        badgeBox.className = 'dsh-claude-popover-item-badge'
+        badgeBox.className = 'dsh-deepcraft-popover-item-badge'
         item.appendChild(badgeBox)
       }
       if (badgeBox.textContent !== badge) badgeBox.textContent = badge
@@ -207,7 +207,7 @@ export function createFooterMirror(options: {
       acceptNode(node) {
         let p = node.parentElement
         while (p && p !== entry) {
-          if (p.hasAttribute('data-dsh-claude-footer-overlay')) return 2 // REJECT
+          if (p.hasAttribute('data-dsh-deepcraft-footer-overlay')) return 2 // REJECT
           p = p.parentElement
         }
         return 1 // ACCEPT
@@ -237,7 +237,7 @@ export function createFooterMirror(options: {
     let embed = openBody().querySelector<HTMLElement>(`[data-embed-index="${idx}"]`)
     if (!embed) {
       const built = document.createElement('div')
-      built.className = 'dsh-claude-popover-embed'
+      built.className = 'dsh-deepcraft-popover-embed'
       built.setAttribute('data-embed-index', String(idx))
       built.addEventListener('click', e => {
         if (!built.__dshEntry) return
@@ -257,17 +257,17 @@ export function createFooterMirror(options: {
     }
     const clone = entry.cloneNode(true) as Element
     clone.removeAttribute('id')
-    clone.removeAttribute('data-dsh-claude-footer-entry')
-    clone.removeAttribute('data-dsh-claude-footer-hidden')
-    clone.removeAttribute('data-dsh-claude-footer-overlay')
-    const overlays = clone.querySelectorAll('[data-dsh-claude-footer-overlay]')
+    clone.removeAttribute('data-dsh-deepcraft-footer-entry')
+    clone.removeAttribute('data-dsh-deepcraft-footer-hidden')
+    clone.removeAttribute('data-dsh-deepcraft-footer-overlay')
+    const overlays = clone.querySelectorAll('[data-dsh-deepcraft-footer-overlay]')
     for (let o = 0; o < overlays.length; o++) {
       overlays[o].remove()
     }
-    const stripped = clone.querySelectorAll('[id], [data-dsh-claude-footer-hidden]')
+    const stripped = clone.querySelectorAll('[id], [data-dsh-deepcraft-footer-hidden]')
     for (let s = 0; s < stripped.length; s++) {
       stripped[s].removeAttribute('id')
-      stripped[s].removeAttribute('data-dsh-claude-footer-hidden')
+      stripped[s].removeAttribute('data-dsh-deepcraft-footer-hidden')
     }
     const html = clone.outerHTML
     if (embed.getAttribute('data-embed-html') !== html) {
@@ -335,7 +335,7 @@ export function createFooterMirror(options: {
   function hasOverlayAncestor(el: Element, entry: Element) {
     let node: Element | null = el
     while (node && node !== entry) {
-      if (node.hasAttribute('data-dsh-claude-footer-overlay')) return true
+      if (node.hasAttribute('data-dsh-deepcraft-footer-overlay')) return true
       node = node.parentElement
     }
     return false
@@ -349,7 +349,7 @@ export function createFooterMirror(options: {
   function findFooterTrigger(entry: Element): HTMLElement | null {
     const selector = INTERACTIVE_SELECTOR
     if (entry instanceof HTMLElement && entry.matches(selector) &&
-        !entry.hasAttribute('data-dsh-claude-footer-overlay')) {
+        !entry.hasAttribute('data-dsh-deepcraft-footer-overlay')) {
       return entry
     }
     const found = entry.querySelectorAll<HTMLElement>(selector)
@@ -358,7 +358,7 @@ export function createFooterMirror(options: {
       let node: Element | null = candidate
       let insideOverlay = false
       while (node && node !== entry) {
-        if (node.hasAttribute('data-dsh-claude-footer-overlay')) {
+        if (node.hasAttribute('data-dsh-deepcraft-footer-overlay')) {
           insideOverlay = true
           break
         }
@@ -523,12 +523,12 @@ export function createFooterMirror(options: {
   /** Drop every takeover marker from the host's footer entries. */
   function clear(footArea: Element) {
     const marked = footArea.querySelectorAll(
-      '[data-dsh-claude-footer-entry], [data-dsh-claude-footer-hidden], [data-dsh-claude-footer-overlay]',
+      '[data-dsh-deepcraft-footer-entry], [data-dsh-deepcraft-footer-hidden], [data-dsh-deepcraft-footer-overlay]',
     )
     for (let i = 0; i < marked.length; i++) {
-      marked[i].removeAttribute('data-dsh-claude-footer-entry')
-      marked[i].removeAttribute('data-dsh-claude-footer-hidden')
-      marked[i].removeAttribute('data-dsh-claude-footer-overlay')
+      marked[i].removeAttribute('data-dsh-deepcraft-footer-entry')
+      marked[i].removeAttribute('data-dsh-deepcraft-footer-hidden')
+      marked[i].removeAttribute('data-dsh-deepcraft-footer-overlay')
     }
   }
 

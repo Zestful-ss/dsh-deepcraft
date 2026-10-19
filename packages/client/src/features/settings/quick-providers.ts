@@ -1,9 +1,9 @@
 import { MODEL_OFFICIAL_GROUP } from '../model/copy-fallbacks'
 import { readPrefs } from '../../core/prefs'
-import { buildElement } from '@dsh-claude-style/engine/dom'
+import { buildElement } from '@dsh-deepcraft/engine/dom'
 import { POPOVER_CHECK_SVG, buildPopoverItem, closeOtherPopovers, positionAnchoredPopover, registerPopover, setMenuPopoverOpen, unregisterPopover } from '../../shared/popover'
-import type { HostContext } from '@dsh-claude-style/engine/host'
-import type { CloseReason, FeatureHandle } from '@dsh-claude-style/engine/scheduler'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
+import type { CloseReason, FeatureHandle } from '@dsh-deepcraft/engine/scheduler'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './quick-providers.manifest'
 import type { CatalogProvider } from '../model/catalog'
@@ -72,7 +72,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   function buildRow(provider: CatalogProvider, chosen: boolean, stale: boolean) {
     const built = buildPopoverItem({ role: 'menuitemcheckbox', badge: true, check: true })
     const row = built.row
-    if (stale) row.classList.add('dsh-claude-popover-item-stale')
+    if (stale) row.classList.add('dsh-deepcraft-popover-item-stale')
     row.setAttribute('aria-checked', chosen ? 'true' : 'false')
     built.text.textContent = provider.name
     // badge and check were both asked for above.
@@ -94,7 +94,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     if (cardBody === null) return
     while (cardBody.firstChild) cardBody.removeChild(cardBody.firstChild)
     if (providers.length === 0) {
-      cardBody.appendChild(buildElement('div', 'dsh-claude-popover-status', copy('quickLoading')))
+      cardBody.appendChild(buildElement('div', 'dsh-deepcraft-popover-status', copy('quickLoading')))
       return
     }
     const chosen = readPrefs().quickProviders
@@ -130,9 +130,9 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
         renderBody()
       })
     }
-    card = buildElement('div', 'dsh-claude-popover-card dsh-claude-quick-popover')
+    card = buildElement('div', 'dsh-deepcraft-popover-card dsh-deepcraft-quick-popover')
     setMenuPopoverOpen(card, true)
-    cardBody = buildElement('div', 'dsh-claude-popover-body')
+    cardBody = buildElement('div', 'dsh-deepcraft-popover-body')
     card.appendChild(cardBody)
     renderBody()
     document.body.appendChild(card)

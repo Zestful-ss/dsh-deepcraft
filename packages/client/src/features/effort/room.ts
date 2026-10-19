@@ -18,7 +18,7 @@
  */
 
 /** The composer row the seat's controls share: the width the reserve has to fit in. */
-export const EFFORT_ROW_SELECTOR = '[data-dsh-claude-part~="row"]'
+export const EFFORT_ROW_SELECTOR = '[data-dsh-deepcraft-part~="row"]'
 
 /**
  * Reserve `need` pixels on the model trigger's right edge, out of the row's

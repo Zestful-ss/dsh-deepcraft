@@ -1,5 +1,5 @@
-import type { HostContext } from '@dsh-claude-style/engine/host'
-import type { HostModelEntry } from '@dsh-claude-style/contracts/services'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
+import type { HostModelEntry } from '@dsh-deepcraft/contracts/services'
 import { localized } from '../../core/i18n'
 import { modelCopy } from './model-copy'
 import { textOf } from '../../shared/format'

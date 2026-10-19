@@ -5,14 +5,14 @@ import { createFileMerge, rowCarrier } from './file-row-merge'
 import { copy } from './copy'
 import { callArgsOf } from '../../shared/call-args'
 import { motionReduced } from '../../core/prefs'
-import { createStamp } from '@dsh-claude-style/engine/dom'
+import { createStamp } from '@dsh-deepcraft/engine/dom'
 import { motionMs } from '../../shared/motion'
 import type { FileReadCard, FileRowOperation, FileRowState } from './file-row-model'
-import type { HostContext, HostFiber, HostText } from '@dsh-claude-style/engine/host'
-import type { HostChatBlock } from '@dsh-claude-style/contracts/services'
+import type { HostContext, HostFiber, HostText } from '@dsh-deepcraft/engine/host'
+import type { HostChatBlock } from '@dsh-deepcraft/contracts/services'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './chat-files.manifest'
-import { hostSlots } from '@dsh-claude-style/engine/host'
+import { hostSlots } from '@dsh-deepcraft/engine/host'
 
 /** The seat's owner payload for a file tool row, plus the seat's copy. */
 interface ChatFileRowProps {
@@ -27,10 +27,10 @@ interface ChatFileRowProps {
 }
 
 /** How long one figure's turn takes: the roll the stylesheet's own animations run (D9). */
-const ROLL_MS = motionMs('--dsh-claude-duration-roll')
+const ROLL_MS = motionMs('--dsh-deepcraft-duration-roll')
 
 /** How long one operation swap takes: the shared swap the block's classes play (shared/motion.css, D9). */
-const SWAP_MS = motionMs('--dsh-claude-duration-swap')
+const SWAP_MS = motionMs('--dsh-deepcraft-duration-swap')
 
 /**
  * The file row: a read, an edit or a write rendered as the host's own file row,
@@ -349,7 +349,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
           releaseSeats()
           if (typeof stopSeat === 'function') stopSeat()
         }
-      }, 'dsh-claude-style: file change row')
+      }, 'dsh-deepcraft: file change row')
     })
   }
   return () => {

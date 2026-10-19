@@ -51,20 +51,20 @@
           var props = node.props || {}
           if (typeof props.className === 'string') {
             out.classes.push(props.className)
-            if (props.className.indexOf('dsh-claude-file-root') >= 0) {
-              out.root = { variant: props['data-variant'], tool: props['data-tool'], state: props['data-state'], merge: props['data-dsh-claude-file-merge'] || null }
+            if (props.className.indexOf('dsh-deepcraft-file-root') >= 0) {
+              out.root = { variant: props['data-variant'], tool: props['data-tool'], state: props['data-state'], merge: props['data-dsh-deepcraft-file-merge'] || null }
             }
-            if (props.className.indexOf('dsh-claude-file-summary') >= 0 || props.className.indexOf('dsh-claude-file-link') >= 0) out.summary = props.className
-            if (props.className.indexOf('dsh-claude-file-diff') >= 0) out.diff = props
-            if (props.className.indexOf('dsh-claude-file-io ') >= 0 || props.className === 'dsh-claude-file-io') out.io = props
-            if (props.className.indexOf('dsh-claude-file-hidden') >= 0) {
+            if (props.className.indexOf('dsh-deepcraft-file-summary') >= 0 || props.className.indexOf('dsh-deepcraft-file-link') >= 0) out.summary = props.className
+            if (props.className.indexOf('dsh-deepcraft-file-diff') >= 0) out.diff = props
+            if (props.className.indexOf('dsh-deepcraft-file-io ') >= 0 || props.className === 'dsh-deepcraft-file-io') out.io = props
+            if (props.className.indexOf('dsh-deepcraft-file-hidden') >= 0) {
               out.hidden = props
               out.hiddenText = Array.isArray(props.children) ? props.children[0] : props.children
             }
             // A tail figure rolls character by character, so its number is the
             // characters in flow of its own element, read in order The
             // trees this reads are settled ones, where no digit is leaving.
-            if (props.className.indexOf('dsh-claude-file-stat') >= 0) {
+            if (props.className.indexOf('dsh-deepcraft-file-stat') >= 0) {
               var figure = ''
               walkTree(props.children, function (inner) {
                 if (inner.type === '#text') figure += String(inner.props.children)
@@ -150,18 +150,18 @@
       // the peer's doing rather than the default.
       window.__pushForm({ chatReveal: 'on' })
       await sleep(150)
-      var revealBeforePeer = document.body.hasAttribute('data-dsh-claude-chat-reveal')
+      var revealBeforePeer = document.body.hasAttribute('data-dsh-deepcraft-chat-reveal')
       document.head.appendChild(filePeerStyle)
       await sleep(250)
       r.files.peerOn = {
         seats: fileSeats(),
-        foldMark: document.body.hasAttribute('data-dsh-claude-chat-fold'),
-        revealMark: document.body.hasAttribute('data-dsh-claude-chat-reveal'),
+        foldMark: document.body.hasAttribute('data-dsh-deepcraft-chat-fold'),
+        revealMark: document.body.hasAttribute('data-dsh-deepcraft-chat-reveal'),
         revealBeforePeer: revealBeforePeer,
       }
       filePeerStyle.remove()
       await sleep(250)
-      r.files.peerOff = { seats: fileSeats(), foldMark: document.body.hasAttribute('data-dsh-claude-chat-fold') }
+      r.files.peerOff = { seats: fileSeats(), foldMark: document.body.hasAttribute('data-dsh-deepcraft-chat-fold') }
     })
   })
 })()

@@ -20,7 +20,7 @@
         // The reveal registers one highlight per step under this prefix
         // (constants.ts's CHAT_REVEAL_HIGHLIGHT_PREFIX); any of them is a live engine.
         var count = 0
-        registry.forEach(function (_highlight, name) { if (name.indexOf('dsh-claude-tok-') === 0) count += 1 })
+        registry.forEach(function (_highlight, name) { if (name.indexOf('dsh-deepcraft-tok-') === 0) count += 1 })
         return count
       }
       // A chat area and a focused composer: live features would mark, fold or
@@ -42,11 +42,11 @@
       await sleep(300)
       r.peer = {
         marks: {
-          follow: document.body.hasAttribute('data-dsh-claude-chat-follow'),
-          fold: document.body.hasAttribute('data-dsh-claude-chat-fold'),
-          reveal: document.body.hasAttribute('data-dsh-claude-chat-reveal'),
-          caretLayer: document.querySelector('[data-dsh-claude-caret-layer]') !== null,
-          caretMark: peerEditor !== null && peerEditor.hasAttribute('data-dsh-claude-caret'),
+          follow: document.body.hasAttribute('data-dsh-deepcraft-chat-follow'),
+          fold: document.body.hasAttribute('data-dsh-deepcraft-chat-fold'),
+          reveal: document.body.hasAttribute('data-dsh-deepcraft-chat-reveal'),
+          caretLayer: document.querySelector('[data-dsh-deepcraft-caret-layer]') !== null,
+          caretMark: peerEditor !== null && peerEditor.hasAttribute('data-dsh-deepcraft-caret'),
         },
         seats: (window.__slots || []).filter(function (entry) { return entry.key === 'tool.call.toolview' }).length,
         highlights: peerHighlights(),
@@ -58,7 +58,7 @@
       // the chat-area animation on the Conversation tab, the caret on the Motion
       // tab — which of them refuse input, which carry the line naming the owner,
       // and what answer each control shows.
-      var PeerSection = (window.__slotComponents || {})['claude-style']
+      var PeerSection = (window.__slotComponents || {})['deepcraft']
       var PEER_TABS = ['conversation', 'motion']
       var peerWalk = function (node, visit) {
         if (node === null || node === undefined || typeof node !== 'object') return
@@ -81,7 +81,7 @@
         var found = false
         peerWalk(node, function (child) {
           var className = (child.props || {}).className
-          if (typeof className === 'string' && className.split(' ').indexOf('dsh-claude-settings-row-note') >= 0) found = true
+          if (typeof className === 'string' && className.split(' ').indexOf('dsh-deepcraft-settings-row-note') >= 0) found = true
         })
         return found
       }
@@ -95,7 +95,7 @@
         peerWalk(node, function (child) {
           var props = child.props || {}
           if (props['data-on'] === '') answer.on = true
-          if (typeof props.className === 'string' && props.className.split(' ').indexOf('dsh-claude-segment') !== -1) answer.options.push(props.key)
+          if (typeof props.className === 'string' && props.className.split(' ').indexOf('dsh-deepcraft-segment') !== -1) answer.options.push(props.key)
           if (props['aria-pressed'] === 'true') answer.option = props.key
           var prefs = props.prefs
           if (typeof prefs === 'object' && prefs !== null && typeof prefs[key] === 'string') answer.option = prefs[key]
@@ -112,7 +112,7 @@
           var page = { rows: [], refusing: [], managed: [], answers: {} }
           peerWalk(peerTree, function (node) {
             var props = node.props || {}
-            if (typeof props.className === 'string' && /(^| )dsh-claude-settings-row( |$)/.test(props.className)) {
+            if (typeof props.className === 'string' && /(^| )dsh-deepcraft-settings-row( |$)/.test(props.className)) {
               page.rows.push(props.key)
               if (peerDisabled(props.children)) page.refusing.push(props.key)
               if (peerManages(props.children)) page.managed.push(props.key)
@@ -154,9 +154,9 @@
       // page is on the page: the component map keeps what was registered.
       await sleep(400)
       var owner = {
-        sheet: document.getElementById('dsh-claude-style-style') !== null,
-        live: document.body.hasAttribute('data-dsh-claude-style'),
-        handoff: document.body.hasAttribute('data-dsh-claude-style-handoff'),
+        sheet: document.getElementById('dsh-deepcraft-style') !== null,
+        live: document.body.hasAttribute('data-dsh-deepcraft'),
+        handoff: document.body.hasAttribute('data-dsh-deepcraft-handoff'),
         bodyAttrs: attrs(document.body),
         settingsSeats: settingsSeats(),
         uncaught: window.__uncaught.length,
@@ -165,17 +165,17 @@
       document.documentElement.removeAttribute('data-dsh-skin')
       await sleep(300)
       owner.afterRelease = {
-        sheet: document.getElementById('dsh-claude-style-style') !== null,
-        live: document.body.hasAttribute('data-dsh-claude-style'),
-        handoff: document.body.hasAttribute('data-dsh-claude-style-handoff'),
+        sheet: document.getElementById('dsh-deepcraft-style') !== null,
+        live: document.body.hasAttribute('data-dsh-deepcraft'),
+        handoff: document.body.hasAttribute('data-dsh-deepcraft-handoff'),
         settingsSeats: await seatsSettled(2),
       }
       // And it returns: the theme gives the page back without a reload.
       document.documentElement.setAttribute('data-dsh-skin', 'blue-fantasy')
       await sleep(300)
       owner.afterReturn = {
-        sheet: document.getElementById('dsh-claude-style-style') !== null,
-        live: document.body.hasAttribute('data-dsh-claude-style'),
+        sheet: document.getElementById('dsh-deepcraft-style') !== null,
+        live: document.body.hasAttribute('data-dsh-deepcraft'),
         settingsSeats: settingsSeats(),
       }
       r.owner = owner
@@ -186,24 +186,24 @@
       await sleep(400)
       var arrival = {
         before: {
-          sheet: document.getElementById('dsh-claude-style-style') !== null,
-          live: document.body.hasAttribute('data-dsh-claude-style'),
+          sheet: document.getElementById('dsh-deepcraft-style') !== null,
+          live: document.body.hasAttribute('data-dsh-deepcraft'),
           settingsSeats: await seatsSettled(2),
         },
       }
       document.documentElement.setAttribute('data-dsh-skin', 'blue-fantasy')
       await sleep(300)
       arrival.yielded = {
-        sheet: document.getElementById('dsh-claude-style-style') !== null,
-        live: document.body.hasAttribute('data-dsh-claude-style'),
-        handoff: document.body.hasAttribute('data-dsh-claude-style-handoff'),
+        sheet: document.getElementById('dsh-deepcraft-style') !== null,
+        live: document.body.hasAttribute('data-dsh-deepcraft'),
+        handoff: document.body.hasAttribute('data-dsh-deepcraft-handoff'),
         settingsSeats: settingsSeats(),
       }
       document.documentElement.removeAttribute('data-dsh-skin')
       await sleep(300)
       arrival.back = {
-        sheet: document.getElementById('dsh-claude-style-style') !== null,
-        live: document.body.hasAttribute('data-dsh-claude-style'),
+        sheet: document.getElementById('dsh-deepcraft-style') !== null,
+        live: document.body.hasAttribute('data-dsh-deepcraft'),
         settingsSeats: await seatsSettled(2),
       }
       r.arrival = arrival

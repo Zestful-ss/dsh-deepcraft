@@ -22,7 +22,7 @@ const path = require('node:path')
 const { argOf } = require('./cli-args.cjs')
 
 /** The token the stored grant carries; the platform answers any request bearing it. */
-const LANE_TOKEN = 'dsh-claude-style-lane'
+const LANE_TOKEN = 'dsh-deepcraft-lane'
 
 /** The picture the profile names, served from this origin so the avatar's <img> loads. */
 const PICTURE = path.join(__dirname, 'smoke', 'fixtures', 'skin-64.png')

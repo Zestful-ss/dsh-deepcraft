@@ -1,16 +1,16 @@
 import { CHAT_FOLLOW_ATTR, FOLLOW_HOLD_ATTR, READER_HOLD_ATTR } from '../../constants'
-import { observeSize, subscribeMutations } from '@dsh-claude-style/engine/bus'
-import { requestFrame } from '@dsh-claude-style/engine/frame'
+import { observeSize, subscribeMutations } from '@dsh-deepcraft/engine/bus'
+import { requestFrame } from '@dsh-deepcraft/engine/frame'
 import { motionReduced } from '../../core/prefs'
 import { createChatProcessFollow } from './process-follow'
-import { CHAT_CALL_SELECTOR, CHAT_RUNNING_SELECTOR, CONVERSATION_SCROLL_SELECTOR, FLOW_BLOCK_SELECTOR, FOLLOWING_TAIL_ATTRIBUTE, FOLLOWING_TAIL_SELECTOR, ROW_PHASE_ATTRIBUTE, RUNNING_STATE, SHIMMER_SELECTOR, STREAMING_SELECTOR, THINK_ROW_SELECTOR } from '@dsh-claude-style/contracts/dom'
-import { conversationColumn, conversationScroller, findFollowTailButton } from '@dsh-claude-style/engine/chat-dom'
-import { createStamp } from '@dsh-claude-style/engine/dom'
+import { CHAT_CALL_SELECTOR, CHAT_RUNNING_SELECTOR, CONVERSATION_SCROLL_SELECTOR, FLOW_BLOCK_SELECTOR, FOLLOWING_TAIL_ATTRIBUTE, FOLLOWING_TAIL_SELECTOR, ROW_PHASE_ATTRIBUTE, RUNNING_STATE, SHIMMER_SELECTOR, STREAMING_SELECTOR, THINK_ROW_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { conversationColumn, conversationScroller, findFollowTailButton } from '@dsh-deepcraft/engine/chat-dom'
+import { createStamp } from '@dsh-deepcraft/engine/dom'
 import { motionEase, motionEaseAt, motionMs } from '../../shared/motion'
 import { inPageBox, pageViewport } from '../../shared/page-zoom'
-import { observeComposerCards } from '@dsh-claude-style/engine/host'
-import { SCROLL_EASE_LEAD_PX, handBackFollow, joinScrollOwner, readerHolds, submissionHolds } from '@dsh-claude-style/engine/scroll-owner'
-import type { HostContext } from '@dsh-claude-style/engine/host'
+import { observeComposerCards } from '@dsh-deepcraft/engine/host'
+import { SCROLL_EASE_LEAD_PX, handBackFollow, joinScrollOwner, readerHolds, submissionHolds } from '@dsh-deepcraft/engine/scroll-owner'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './chat-follow.manifest'
 
@@ -42,14 +42,14 @@ export const FOLLOW_ACTIVITY_GRACE_MS = 2000
 export const FOLLOW_FOLD_WAIT_MS = 150
 export const FOLLOW_FOLD_WAIT_ATTEMPTS = 4
 /** The host's own back-to-end button, marked for the stylesheet that places it. */
-export const FOLLOW_TAIL_ATTR = 'data-dsh-claude-follow-tail'
+export const FOLLOW_TAIL_ATTR = 'data-dsh-deepcraft-follow-tail'
 /** How far above the composer's top edge that button floats. */
 export const FOLLOW_TAIL_AIR_PX = 12
 /** The button's fixed placement, written as numbers because the column moves under it. */
-const FOLLOW_TAIL_LEFT = '--dsh-claude-follow-tail-left'
-const FOLLOW_TAIL_BOTTOM = '--dsh-claude-follow-tail-bottom'
+const FOLLOW_TAIL_LEFT = '--dsh-deepcraft-follow-tail-left'
+const FOLLOW_TAIL_BOTTOM = '--dsh-deepcraft-follow-tail-bottom'
 /** The curve the stream's slide travels on; its own reading of it has to match (shared/motion.ts). */
-const GLIDE_TOKEN = '--dsh-claude-ease-glide'
+const GLIDE_TOKEN = '--dsh-deepcraft-ease-glide'
 
 /**
  * The conversation's own composer card: the lowest of the cards on the page,
@@ -237,7 +237,7 @@ export function createChatFollowGuard(options: { foldBusy: () => boolean, submis
   const startSlide = (column: HTMLElement, grew: number) => {
     const from = Math.min(SCROLL_EASE_LEAD_PX, slideCarried() + grew)
     stopSlide()
-    const duration = motionMs('--dsh-claude-duration-slide')
+    const duration = motionMs('--dsh-deepcraft-duration-slide')
     const timing = { duration, easing: motionEase(GLIDE_TOKEN) }
     const columnSlide = column.animate([{ transform: `translateY(${from}px)` }, { transform: 'translateY(0px)' }], timing)
     // The host draws the live turn's row as the flow's last row.

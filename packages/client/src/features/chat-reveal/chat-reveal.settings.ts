@@ -27,7 +27,7 @@ function RevealPicker(props: SettingsRowView) {
   const [tick, setTick] = React.useState(0)
   React.useEffect(() => {
     const count = Array.from(sample).length
-    const period = motionMs('--dsh-claude-period-preview-reveal')
+    const period = motionMs('--dsh-deepcraft-period-preview-reveal')
     const arrival = Math.round(period * REVEAL_PREVIEW_ARRIVAL_SHARE)
     const gap = Math.max(1, Math.round(arrival / count))
     // The ticks the sample is on show before the next wipe: the rest of the
@@ -48,13 +48,13 @@ function RevealPicker(props: SettingsRowView) {
   ]
   return React.createElement(
     'div',
-    { className: 'dsh-claude-reveal-picker', role: 'group' },
+    { className: 'dsh-deepcraft-reveal-picker', role: 'group' },
     options.map(option => React.createElement(
       'button',
       {
         key: option.value,
         type: 'button',
-        className: 'dsh-claude-reveal-card',
+        className: 'dsh-deepcraft-reveal-card',
         // The card whose pieces wear the fade (settings-cards.css); the other
         // hands them their turn with nothing between.
         'data-fade': option.value === CHAT_REVEAL_ON ? '' : undefined,
@@ -66,10 +66,10 @@ function RevealPicker(props: SettingsRowView) {
       },
       React.createElement(
         'span',
-        { className: 'dsh-claude-reveal-sample', 'aria-hidden': 'true' },
+        { className: 'dsh-deepcraft-reveal-sample', 'aria-hidden': 'true' },
         Array.from(sample).map((piece, index) => React.createElement(
           'span',
-          { key: `${index}-${piece}`, className: 'dsh-claude-reveal-piece', 'data-in': index < shown ? '' : undefined },
+          { key: `${index}-${piece}`, className: 'dsh-deepcraft-reveal-piece', 'data-in': index < shown ? '' : undefined },
           piece,
         )),
       ),

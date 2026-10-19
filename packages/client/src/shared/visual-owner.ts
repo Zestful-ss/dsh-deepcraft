@@ -1,6 +1,6 @@
-import { DS_BOT_SURFACE_ATTRIBUTE } from '@dsh-claude-style/contracts/dom'
+import { DS_BOT_SURFACE_ATTRIBUTE } from '@dsh-deepcraft/contracts/dom'
 import { SKIN_STAMP_ATTR } from '../constants'
-import { subscribeMutations } from '@dsh-claude-style/engine/bus'
+import { subscribeMutations } from '@dsh-deepcraft/engine/bus'
 
 /**
  * Who has this page instead of the theme (D74): a skin, or ds-bot's Bot

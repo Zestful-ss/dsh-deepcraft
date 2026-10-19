@@ -1,6 +1,6 @@
-import { CHAT_CALL_SELECTOR, CONVERSATION_SCROLL_SELECTOR, STREAMING_SELECTOR } from '@dsh-claude-style/contracts/dom'
-import { subscribeMutations } from '@dsh-claude-style/engine/bus'
-import { findConversationScroller } from '@dsh-claude-style/engine/host'
+import { CHAT_CALL_SELECTOR, CONVERSATION_SCROLL_SELECTOR, STREAMING_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { subscribeMutations } from '@dsh-deepcraft/engine/bus'
+import { findConversationScroller } from '@dsh-deepcraft/engine/host'
 
 /**
  * The tokens a streaming answer has added so far, as an estimate.

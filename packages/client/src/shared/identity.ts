@@ -1,6 +1,6 @@
 import { HDSL_ROUTE, HDSL_SKIN_ROUTE, USERNAME_MAX, USERNAME_ROUTE } from '../constants'
 import { readPrefs } from '../core/prefs'
-import { createHostResource } from '@dsh-claude-style/engine/resource'
+import { createHostResource } from '@dsh-deepcraft/engine/resource'
 
 /**
  * Who the skin shows. Nickname: the custom nickname, the signed-in account's
@@ -25,7 +25,7 @@ export function setAccountIdentity(name: unknown, avatar: unknown) {
 let usernameFromHost = ''
 
 /** Last OS-user probe this browser saw; the cache that outlives the page. */
-const PROBED_USERNAME_KEY = 'dsh-claude-style.probed-username'
+const PROBED_USERNAME_KEY = 'dsh-deepcraft.probed-username'
 let probedUsername = readStoredProbeUsername()
 
 function readStoredProbeUsername() {

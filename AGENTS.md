@@ -1,6 +1,6 @@
 # AGENTS.md
 
-`dsh-claude-style` is a theme plugin for DeepSeek Harness that replicates the look and interaction of Claude Code Desktop. It is a layer over the host: until the host offers an extension point for something, the effect is made with CSS and DOM overrides in the browser (D43).
+`dsh-deepcraft` is a theme plugin for DeepSeek Harness that replicates the look and interaction of Claude Code Desktop. It is a layer over the host: until the host offers an extension point for something, the effect is made with CSS and DOM overrides in the browser (D43).
 
 The shape of the tree, the two halves and the invariants that cross them are in [ARCHITECTURE.md](ARCHITECTURE.md). A direction is recorded in [docs/adr/](docs/adr/README.md) as one page: the background it answers, the decision, what follows from it, and what would make it worth revisiting. Read the ones a change touches before making it; the numbers code comments cite are those files' names.
 
@@ -40,7 +40,7 @@ The shape of the tree, the two halves and the invariants that cross them are in 
 - Read the ADRs a structural change touches before making it; never contradict one. A direction is overturned by writing the replacing ADR first, naming the numbers it replaces (D48).
 - A change earns an ADR only by D48's threshold: one-time moves go to `docs/changes/` and the commit message, tool-enforceable rules go to lint or the build checks, and an ADR constrains future changes with reasoning the code and tests cannot carry. An ADR keeps its own number for good: the number is the handle code comments cite, a replaced one is recorded as void on the replacing ADR's 取代 line, and amendments are never stacked as separate files.
 - Public documentation (the bilingual READMEs, the CHANGELOG) never shows decision numbers.
-- The Anthropic Sans/Serif/Mono fonts are Anthropic's, for personal use, not covered by MIT, and never shipped in the npm package; `packages/assets/src/fonts/anthropic/` is a repository-only download, and a user's own copy is served from `$DSH_HOME/dsh-claude-style/fonts/`. JetBrains Mono, Inter and Noto Serif ship under the SIL OFL 1.1. The pixel crab is Anthropic's character and its sheets are not covered by MIT. Deepy's sheets are by calmly-eating-bugs (@wp3171216237); `docs/gifs/` holds that author's GIFs and stays out of the package.
+- The Anthropic Sans/Serif/Mono fonts are Anthropic's, for personal use, not covered by MIT, and never shipped in the npm package; `packages/assets/src/fonts/anthropic/` is a repository-only download, and a user's own copy is served from `$DSH_HOME/dsh-deepcraft/fonts/`. JetBrains Mono, Inter and Noto Serif ship under the SIL OFL 1.1. The pixel crab is Anthropic's character and its sheets are not covered by MIT. Deepy's sheets are by calmly-eating-bugs (@wp3171216237); `docs/gifs/` holds that author's GIFs and stays out of the package.
 - Local debug scripts, screenshots and intermediate artifacts go into `.debug/` and are never committed. Drafts are deleted when the task ends; a probe worth keeping becomes a scenario in `packages/testing/scenarios.cjs` (D66).
 
 ## Stop Lines
@@ -54,10 +54,10 @@ Hard stops: stop the moment one triggers, without first judging whether it is wo
 
 ### CSS
 
-- Stylesheets are plain CSS: attributes are spelled out, and a brand mark is read as `var(--dsh-claude-image-<name>)`. The build checks scope, the composer gate, `:has()` placement, the token gates and that every `data-dsh-*` attribute a selector reads is written somewhere in the TypeScript, on the syntax tree (D9). Dark tokens are the base, light overrides go under `:not([data-ds-dark-theme])`. Light canvas `#FCFCFB`, dark `#141413`, accent ember orange `#D97757`; no pure white, pure black or cold grays.
+- Stylesheets are plain CSS: attributes are spelled out, and a brand mark is read as `var(--dsh-deepcraft-image-<name>)`. The build checks scope, the composer gate, `:has()` placement, the token gates and that every `data-dsh-*` attribute a selector reads is written somewhere in the TypeScript, on the syntax tree (D9). Dark tokens are the base, light overrides go under `:not([data-ds-dark-theme])`. Light canvas `#FCFCFB`, dark `#141413`, accent ember orange `#D97757`; no pure white, pure black or cold grays.
 - `!important` only where the page needs it: over a host `!important`, an inline style or another skin rule. The lane's `importance` scenario drops each one on the real page and fails on any that changes nothing (D9); run it after writing one.
 - Token values and host aliases live in `packages/client/src/theme/tokens.json`; the token stylesheet and the token, motion and layer tables in `docs/STYLE.md` are generated from it. A time, an easing curve (D9) and a z-index above 9 (D9) are read from it, never written.
-- A feature never borrows another feature's class names; shared looks use the neutral shared classes (`dsh-claude-popover-card`, `dsh-claude-popover-item`, …).
+- A feature never borrows another feature's class names; shared looks use the neutral shared classes (`dsh-deepcraft-popover-card`, `dsh-deepcraft-popover-item`, …).
 - Design tokens and shape rules are in `docs/STYLE.md`; read it before changing visuals.
 
 ### Host Selectors
@@ -132,7 +132,7 @@ Every test run goes through `npm run verify` (D66), and a run belongs to the str
 ### Live Inspection
 
 - Desktop window: `node D:\DSH\dsh-desktop-bridge\bin\bridge.cjs "<expression>"` evaluates in the window the user sees (`--stdin` reads a script file). While that window is in the background its animation frames are paused: a probe waiting on `requestAnimationFrame` hangs, and anything it put in the page must be cleaned up by hand.
-- Which build a page runs: `document.body.getAttribute('data-dsh-claude-style')`; `npm run build` prints the id it wrote. Hot reload swaps the bundle without reloading the page; reload a page that went through many hot reloads before treating it as evidence.
+- Which build a page runs: `document.body.getAttribute('data-dsh-deepcraft')`; `npm run build` prints the id it wrote. Hot reload swaps the bundle without reloading the page; reload a page that went through many hot reloads before treating it as evidence.
 - Host sources: the globally installed `@deepseek-ai/dsh` carries the host's client packages under `node_modules/@deepseek-ai/dsh-client-*/lib/`; the desktop's own copies are fetched from the `url` of each entry in the page's `__DSH_BOOT__.entries`.
 - A scratch worktree under `.debug/` that borrows this tree's `node_modules` through a directory link is taken off with `node scripts/worktree.mjs remove .debug/<name>`: `git worktree remove` follows the link on Windows and deletes the directory it names, which for `node_modules` is the main tree's own.
 - A scratch `dsh web` that has `@alm-allen/dsh-chat-ux` installed makes the skin's chat features stand down; to match a profile without it, filter that entry out of both `__DSH_BOOT__.entries` and every `batches[].entries` before the page boots. A scratch instance on a real model creates real sessions and usage when a message is sent.

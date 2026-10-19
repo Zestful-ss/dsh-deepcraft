@@ -30,12 +30,12 @@ const HOST = {
  * that stand-in flies, which the flight stylesheet hides.
  */
 const SKIN = {
-  sendGhost: '[data-dsh-claude-send-ghost]', // CHAT_SEND_GHOST_ATTR
-  sendLink: '[data-dsh-claude-send-link]', // CHAT_SEND_LINK_ATTR
-  flyingMark: 'data-dsh-claude-send-flight', // CHAT_FLYING_ATTR
+  sendGhost: '[data-dsh-deepcraft-send-ghost]', // CHAT_SEND_GHOST_ATTR
+  sendLink: '[data-dsh-deepcraft-send-link]', // CHAT_SEND_LINK_ATTR
+  flyingMark: 'data-dsh-deepcraft-send-flight', // CHAT_FLYING_ATTR
   echoAttribute: 'data-submission-echo', // SUBMISSION_ECHO_SELECTOR without its brackets
   // The other mark the pin reads while a door rolls (FOLLOW_HOLD_ATTR).
-  hold: '[data-dsh-claude-follow-hold]', // FOLLOW_HOLD_ATTR
+  hold: '[data-dsh-deepcraft-follow-hold]', // FOLLOW_HOLD_ATTR
 }
 
 /** Both tables, for the sampler that runs inside the page. */

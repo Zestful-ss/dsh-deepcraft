@@ -1,9 +1,9 @@
 import { AUTO_POPOVER_ALL, HERO_MENU_ATTR } from '../../constants'
-import { cacheFirstMatch, findHostMenu } from '@dsh-claude-style/engine/host'
+import { cacheFirstMatch, findHostMenu } from '@dsh-deepcraft/engine/host'
 import { readPrefs } from '../../core/prefs'
-import { closestFrom, createStamp } from '@dsh-claude-style/engine/dom'
+import { closestFrom, createStamp } from '@dsh-deepcraft/engine/dom'
 import { POPOVER_CLOSE_DELAY, POPOVER_OPEN_DELAY, anchorSpace, closeOtherPopovers, createHoverIntent, isProgrammaticPress, pressKeepsPopoverOpen, programmaticPress, registerPopover, resolveAnchoredPosition, unregisterPopover } from '../../shared/popover'
-import type { HostContext } from '@dsh-claude-style/engine/host'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './hero-menu.manifest'
 
@@ -52,7 +52,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   /** Air between the trigger and its card, as the skin's other pickers take. */
   const GAP = 6
   /** The two triggers, and the card once it is stamped. */
-  const TRIGGER_SELECTOR = '[data-dsh-claude-part~="hero-workspace-row"] [aria-haspopup="menu"]'
+  const TRIGGER_SELECTOR = '[data-dsh-deepcraft-part~="hero-workspace-row"] [aria-haspopup="menu"]'
 
 /**
  * The composer card's own workspace trigger, the second view of the same picker
@@ -60,7 +60,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
  * the pass that reads it every time pays the page's own size only when the page
  * changed (D9).
  */
-const findCardTrigger = cacheFirstMatch<HTMLElement>('[data-dsh-claude-part~="card-workspace-trigger"] [aria-expanded="true"]')
+const findCardTrigger = cacheFirstMatch<HTMLElement>('[data-dsh-deepcraft-part~="card-workspace-trigger"] [aria-expanded="true"]')
   const CARD_SELECTOR = `[${HERO_MENU_ATTR}]`
   /** The open card, marked with the picker it belongs to, and the trigger it was stamped for. */
   const cardStamp = createStamp<HTMLElement>(HERO_MENU_ATTR)
@@ -213,8 +213,8 @@ const findCardTrigger = cacheFirstMatch<HTMLElement>('[data-dsh-claude-part~="ca
    * the agent-preset seat.
    */
   function pickerKind(trigger: HTMLElement) {
-    if (trigger.querySelector('[data-dsh-claude-part~="workspace-chip-label"]') !== null) return 'workspace'
-    if (closestFrom(trigger, '[data-dsh-claude-part~="card-workspace-trigger"]') !== null) return 'workspace'
+    if (trigger.querySelector('[data-dsh-deepcraft-part~="workspace-chip-label"]') !== null) return 'workspace'
+    if (closestFrom(trigger, '[data-dsh-deepcraft-part~="card-workspace-trigger"]') !== null) return 'workspace'
     return 'preset'
   }
 
@@ -225,7 +225,7 @@ const findCardTrigger = cacheFirstMatch<HTMLElement>('[data-dsh-claude-part~="ca
 
   /** The hero row's open pickers: the workspace chip and the preset seat. */
   function rowTriggers() {
-    const nodes = document.querySelectorAll<HTMLElement>('[data-dsh-claude-part~="hero-workspace-row"] [aria-haspopup="menu"][aria-expanded="true"]')
+    const nodes = document.querySelectorAll<HTMLElement>('[data-dsh-deepcraft-part~="hero-workspace-row"] [aria-haspopup="menu"][aria-expanded="true"]')
     const found: HTMLElement[] = []
     for (let i = 0; i < nodes.length; i++) found.push(nodes[i])
     return found
@@ -268,8 +268,8 @@ const findCardTrigger = cacheFirstMatch<HTMLElement>('[data-dsh-claude-part~="ca
     // properties are read in.
     const space = anchorSpace(trigger)
     const { x, y } = resolveAnchoredPosition(space.rect, width, height, { gap: GAP, viewport: space.viewport })
-    card.style.setProperty('--dsh-claude-hero-menu-x', `${Math.round(x)}px`)
-    card.style.setProperty('--dsh-claude-hero-menu-y', `${Math.round(y)}px`)
+    card.style.setProperty('--dsh-deepcraft-hero-menu-x', `${Math.round(x)}px`)
+    card.style.setProperty('--dsh-deepcraft-hero-menu-y', `${Math.round(y)}px`)
   }
 
   /** Re-place an open card after a scroll or a resize moved its anchor. */
@@ -303,7 +303,7 @@ const findCardTrigger = cacheFirstMatch<HTMLElement>('[data-dsh-claude-part~="ca
       return
     }
     // The host's own card, read through the one accessor that keeps the answer
-    // (D40): the skin's popovers carry a `dsh-claude-` class token, and opening
+    // (D40): the skin's popovers carry a `dsh-deepcraft-` class token, and opening
     // a menu folds the shell's others, so the open host card is the one to place
     // against.
     const card = findHostMenu()

@@ -31,25 +31,25 @@
       // computed position stays the host's.
       statsDock.style.position = 'relative'
       await sleep(300)
-      var statsMeter = document.querySelector('[data-dsh-claude-context-meter]')
+      var statsMeter = document.querySelector('[data-dsh-deepcraft-context-meter]')
       if (statsMeter !== null) statsMeter.dispatchEvent(new MouseEvent('mouseenter'))
       await sleep(700)
       // No projection frame yet: the block holds the numbers' place, under the
       // host's own headings, at a row's own size.
-      var statsSkeleton = document.querySelector('[data-dsh-claude-context-skeleton]')
+      var statsSkeleton = document.querySelector('[data-dsh-deepcraft-context-skeleton]')
       r.context = {
-        panelStamped: document.querySelector('[data-dsh-claude-context-panel]') !== null,
-        skeletonSections: statsSkeleton === null ? null : Array.prototype.map.call(statsSkeleton.querySelectorAll('.dsh-claude-context-stats-section'), function (s) {
+        panelStamped: document.querySelector('[data-dsh-deepcraft-context-panel]') !== null,
+        skeletonSections: statsSkeleton === null ? null : Array.prototype.map.call(statsSkeleton.querySelectorAll('.dsh-deepcraft-context-stats-section'), function (s) {
           return (s.textContent || '').trim()
         }),
-        skeletonRows: statsSkeleton === null ? 0 : statsSkeleton.querySelectorAll('.dsh-claude-context-stats-skeleton-value').length,
-        skeletonItemHeight: statsSkeleton === null ? null : Math.round(statsSkeleton.querySelector('.dsh-claude-context-stats-item').getBoundingClientRect().height),
+        skeletonRows: statsSkeleton === null ? 0 : statsSkeleton.querySelectorAll('.dsh-deepcraft-context-stats-skeleton-value').length,
+        skeletonItemHeight: statsSkeleton === null ? null : Math.round(statsSkeleton.querySelector('.dsh-deepcraft-context-stats-item').getBoundingClientRect().height),
       }
       // The first projection frame: the numbers replace the place, in full.
       window.__pushStats('sessionStats', { turns: 2, steps: 3, llmMs: 1200, toolMs: 400, ttftMs: 800, ttftSteps: 1, decodeMs: 2000, decodeTokens: 210 })
       window.__pushStats('tokenUsage', { uncachedInputTokens: 1000, outputTokens: 105, cacheReadTokens: 9000, cacheWriteTokens: 0 })
       await sleep(200)
-      var statsBlock = document.querySelector('.dsh-claude-context-stats')
+      var statsBlock = document.querySelector('.dsh-deepcraft-context-stats')
       var statsPanel = statsBlock === null ? null : statsBlock.closest('[role="dialog"]')
       r.context.opened = statsPanel !== null
       // Another plugin's popover is on the page, holding a `dl` of its own, and
@@ -59,12 +59,12 @@
       r.context.strayBlockGone = document.getElementById('stray-context-block') === null
       var foreignPopover = document.getElementById('foreign-popover')
       r.context.foreignUnmarked = foreignPopover !== null &&
-        !foreignPopover.hasAttribute('data-dsh-claude-context-panel') &&
-        !foreignPopover.hasAttribute('data-dsh-claude-context-aligned')
+        !foreignPopover.hasAttribute('data-dsh-deepcraft-context-panel') &&
+        !foreignPopover.hasAttribute('data-dsh-deepcraft-context-aligned')
       r.context.expanded = statsMeter === null ? null : statsMeter.querySelector('button').getAttribute('aria-expanded')
       // The meter's reading is a pie in both positions: the surface the numbers
       // live on never changes the ring's own look.
-      r.context.meterPie = statsMeter !== null && statsMeter.hasAttribute('data-dsh-claude-meter-pie')
+      r.context.meterPie = statsMeter !== null && statsMeter.hasAttribute('data-dsh-deepcraft-meter-pie')
       // A press on the ring whose panel the dwell opened leaves the panel up:
       // the host's trigger toggles on a click, and the skin stops that press on
       // its way to the host (shared/popover.ts::pressKeepsPopoverOpen).
@@ -80,20 +80,20 @@
       // room left of the window's edge.
       var statsWidth = statsPanel === null ? 0 : statsPanel.offsetWidth
       var statsMeterRight = statsMeter === null ? 0 : Math.round(statsMeter.getBoundingClientRect().right)
-      var statsLeft = statsPanel === null ? NaN : parseInt(statsPanel.style.getPropertyValue('--dsh-claude-context-panel-left'), 10)
-      r.context.aligned = statsPanel !== null && statsPanel.hasAttribute('data-dsh-claude-context-aligned')
+      var statsLeft = statsPanel === null ? NaN : parseInt(statsPanel.style.getPropertyValue('--dsh-deepcraft-context-panel-left'), 10)
+      r.context.aligned = statsPanel !== null && statsPanel.hasAttribute('data-dsh-deepcraft-context-aligned')
       r.context.edgeAligned = statsPanel !== null && statsWidth > 0 && !isNaN(statsLeft) &&
         (statsLeft + statsWidth === statsMeterRight ||
           statsLeft === 12 ||
           statsLeft === window.innerWidth - statsWidth - 12)
-      r.context.skeletonGone = statsBlock !== null && !statsBlock.hasAttribute('data-dsh-claude-context-skeleton')
-      r.context.sections = statsBlock === null ? null : Array.prototype.map.call(statsBlock.querySelectorAll('.dsh-claude-context-stats-section'), function (s) {
+      r.context.skeletonGone = statsBlock !== null && !statsBlock.hasAttribute('data-dsh-deepcraft-context-skeleton')
+      r.context.sections = statsBlock === null ? null : Array.prototype.map.call(statsBlock.querySelectorAll('.dsh-deepcraft-context-stats-section'), function (s) {
         return (s.textContent || '').trim()
       })
-      r.context.labels = statsBlock === null ? null : Array.prototype.map.call(statsBlock.querySelectorAll('.dsh-claude-context-stats-label'), function (s) {
+      r.context.labels = statsBlock === null ? null : Array.prototype.map.call(statsBlock.querySelectorAll('.dsh-deepcraft-context-stats-label'), function (s) {
         return (s.textContent || '').trim()
       })
-      r.context.values = statsBlock === null ? null : Array.prototype.map.call(statsBlock.querySelectorAll('.dsh-claude-context-stats-value'), function (s) {
+      r.context.values = statsBlock === null ? null : Array.prototype.map.call(statsBlock.querySelectorAll('.dsh-deepcraft-context-stats-value'), function (s) {
         return (s.textContent || '').trim()
       })
       // A projection frame while the popover is open: the block is rewritten
@@ -103,21 +103,21 @@
       // neither the one before nor the one it heads for.
       window.__pushStats('sessionStats', { llmMs: 61000 })
       await sleep(120)
-      var statsDuring = document.querySelector('.dsh-claude-context-stats .dsh-claude-context-stats-value')
+      var statsDuring = document.querySelector('.dsh-deepcraft-context-stats .dsh-deepcraft-context-stats-value')
       r.context.pushedDuring = statsDuring === null ? null : (statsDuring.textContent || '').trim()
       await sleep(330)
-      var statsPushed = document.querySelector('.dsh-claude-context-stats .dsh-claude-context-stats-value')
+      var statsPushed = document.querySelector('.dsh-deepcraft-context-stats .dsh-deepcraft-context-stats-value')
       r.context.pushed = statsPushed === null ? null : (statsPushed.textContent || '').trim()
       if (statsMeter !== null) statsMeter.dispatchEvent(new MouseEvent('mouseleave'))
       await sleep(500)
-      r.context.closedAfterLeave = document.querySelector('.dsh-claude-context-stats') === null
+      r.context.closedAfterLeave = document.querySelector('.dsh-deepcraft-context-stats') === null
       // The room the skin keeps for the meter is what holds the model trigger
       // clear of the ring. A pass that measures the meter with no box — the seat
       // is display: none while another conversation tab is up — is no reading,
       // so the row keeps its room and the pass after the box returns measures
       // again. Taking the room away here left the trigger under the ring until
       // the reading itself moved.
-      r.context.roomBefore = statsCard.parentElement.style.getPropertyValue('--dsh-claude-meter-room')
+      r.context.roomBefore = statsCard.parentElement.style.getPropertyValue('--dsh-deepcraft-meter-room')
       // The host rewrites the reading beside the ring (ContextMeter's `<span>`).
       var meterReading = statsMeter === null ? null : statsMeter.querySelector('button > span')
       if (statsMeter !== null) statsMeter.style.display = 'none'
@@ -127,7 +127,7 @@
       if (statsMeter !== null) statsMeter.style.display = ''
       statsCard.appendChild(document.createElement('span'))
       await sleep(400)
-      r.context.roomAfter = statsCard.parentElement.style.getPropertyValue('--dsh-claude-meter-room')
+      r.context.roomAfter = statsCard.parentElement.style.getPropertyValue('--dsh-deepcraft-meter-room')
 
       // Another plugin's statistics strip shares the dock's band with the skin's
       // overlay (issue #47). The strip's height is what the line above it has to
@@ -135,13 +135,13 @@
       // the strip is gone again.
       var readBand = function () {
         var strip = statsDock.querySelector('[data-mobile-nav="stats"]')
-        var lift = statsDock.style.getPropertyValue('--dsh-claude-mobile-stats-lift')
+        var lift = statsDock.style.getPropertyValue('--dsh-deepcraft-mobile-stats-lift')
         if (strip === null) return { lift: lift, gone: true }
         var stripBox = strip.getBoundingClientRect()
         var lowest = null
         for (var o = 0; o < statsDock.children.length; o++) {
           var child = statsDock.children[o]
-          if (child === strip || child.getAttribute('data-dsh-claude-mobile-stats') !== null) continue
+          if (child === strip || child.getAttribute('data-dsh-deepcraft-mobile-stats') !== null) continue
           var box = child.getBoundingClientRect()
           if (box.width <= 0 || box.height <= 0) continue
           lowest = lowest === null ? box.bottom : Math.max(lowest, box.bottom)
@@ -174,16 +174,16 @@
       window.__pushForm({ composerScope: 'off' })
       await sleep(600)
       r.context.composerOff = {
-        gate: document.body.hasAttribute('data-dsh-claude-composer-active'),
-        marked: statsMeter !== null && statsMeter.hasAttribute('data-dsh-claude-context-meter'),
-        ramp: statsMeter === null ? null : statsMeter.getAttribute('data-dsh-claude-ramp'),
-        pie: statsMeter !== null && statsMeter.hasAttribute('data-dsh-claude-meter-pie'),
+        gate: document.body.hasAttribute('data-dsh-deepcraft-composer-active'),
+        marked: statsMeter !== null && statsMeter.hasAttribute('data-dsh-deepcraft-context-meter'),
+        ramp: statsMeter === null ? null : statsMeter.getAttribute('data-dsh-deepcraft-ramp'),
+        pie: statsMeter !== null && statsMeter.hasAttribute('data-dsh-deepcraft-meter-pie'),
       }
       window.__pushForm({ composerScope: 'all' })
       await sleep(600)
       r.context.composerBack = {
-        gate: document.body.hasAttribute('data-dsh-claude-composer-active'),
-        marked: statsMeter !== null && statsMeter.hasAttribute('data-dsh-claude-context-meter'),
+        gate: document.body.hasAttribute('data-dsh-deepcraft-composer-active'),
+        marked: statsMeter !== null && statsMeter.hasAttribute('data-dsh-deepcraft-context-meter'),
       }
     })
   })
@@ -209,13 +209,13 @@
       window.__pushStats('sessionStats', { turns: 2, steps: 374, decodeMs: 2000, decodeTokens: 558 })
       window.__pushStats('tokenUsage', { uncachedInputTokens: 6345457, cacheReadTokens: 771000000, cacheWriteTokens: 0, outputTokens: 7345457 })
       await sleep(400)
-      var line = document.querySelector('[data-dsh-claude-inline-stats]')
-      var meter = document.querySelector('[data-dsh-claude-context-meter]')
+      var line = document.querySelector('[data-dsh-deepcraft-inline-stats]')
+      var meter = document.querySelector('[data-dsh-deepcraft-context-meter]')
       var row = document.querySelector('[data-composer-stat]')
-      var cache = line === null ? null : line.querySelector('[data-dsh-claude-ramp="cache"]')
-      var cacheFigure = cache === null ? null : cache.querySelector('.dsh-claude-digit-group')
-      var cacheTail = cache === null ? null : cache.querySelector('.dsh-claude-inline-tail')
-      var cacheLabel = cache === null ? null : cache.querySelector('.dsh-claude-inline-label')
+      var cache = line === null ? null : line.querySelector('[data-dsh-deepcraft-ramp="cache"]')
+      var cacheFigure = cache === null ? null : cache.querySelector('.dsh-deepcraft-digit-group')
+      var cacheTail = cache === null ? null : cache.querySelector('.dsh-deepcraft-inline-tail')
+      var cacheLabel = cache === null ? null : cache.querySelector('.dsh-deepcraft-inline-label')
       var meterTrigger = meter === null ? null : meter.querySelector('button')
       var meterRing = meterTrigger === null ? null : meterTrigger.querySelector('svg')
       var meterReading = meterTrigger === null ? null : meterTrigger.querySelector('span')
@@ -225,37 +225,37 @@
       // The line keeps the figures the ladder has taken away in the document
       // (they are hidden rather than removed, so they can come back), so every
       // reading below counts what the reader can see.
-      var visible = '.dsh-claude-inline-seg:not([hidden])'
+      var visible = '.dsh-deepcraft-inline-seg:not([hidden])'
       var segments = function () {
         return line === null ? [] : Array.prototype.slice.call(line.querySelectorAll(visible))
       }
       r.statsInline = {
-        attr: document.body.getAttribute('data-dsh-claude-stats-position'),
+        attr: document.body.getAttribute('data-dsh-deepcraft-stats-position'),
         text: segments().map(function (segment) { return (segment.textContent || '').trim() }).join(' · '),
-        figures: line === null ? null : Array.prototype.map.call(line.querySelectorAll(visible + ' .dsh-claude-digit-group'), function (group) {
+        figures: line === null ? null : Array.prototype.map.call(line.querySelectorAll(visible + ' .dsh-deepcraft-digit-group'), function (group) {
           return (group.textContent || '').trim()
         }),
-        digits: line === null ? 0 : line.querySelectorAll(visible + ' .dsh-claude-digit').length,
+        digits: line === null ? 0 : line.querySelectorAll(visible + ' .dsh-deepcraft-digit').length,
         glyphs: line === null ? 0 : line.querySelectorAll('svg, img').length,
         rowDisplay: row === null ? null : getComputedStyle(row).display,
         dockPosition: dock === null ? null : getComputedStyle(dock).position,
         meterPosition: meter === null ? null : getComputedStyle(meter).position,
         cacheRamp: cache === null ? null : {
-          span: cache.getAttribute('data-dsh-claude-ramp-span'),
+          span: cache.getAttribute('data-dsh-deepcraft-ramp-span'),
           // The band reaches the figure and the percent sign after it; the
           // label before them keeps the line's own colour.
           color: cacheFigure === null ? null : getComputedStyle(cacheFigure).color,
           tail: cacheTail === null ? null : getComputedStyle(cacheTail).color,
         },
         meterRamp: meter === null ? null : {
-          kind: meter.getAttribute('data-dsh-claude-ramp'),
-          span: meter.getAttribute('data-dsh-claude-ramp-span'),
+          kind: meter.getAttribute('data-dsh-deepcraft-ramp'),
+          span: meter.getAttribute('data-dsh-deepcraft-ramp-span'),
         },
         cacheLabelColor: cacheLabel === null ? null : getComputedStyle(cacheLabel).color,
         // The meter's reading is a pie in the band's own colour: the host's ring
         // is hidden inside the cell it keeps, and the trigger's background is
         // the image the browser half computed.
-        pie: meter !== null && meter.hasAttribute('data-dsh-claude-meter-pie'),
+        pie: meter !== null && meter.hasAttribute('data-dsh-deepcraft-meter-pie'),
         ringVisibility: meterRing === null ? null : getComputedStyle(meterRing).visibility,
         pieTone: pieDraw !== null && readingColor !== null &&
           pieDraw.indexOf('fill="' + readingColor + '"') !== -1,
@@ -266,8 +266,8 @@
       }
       // The line is the panel's second trigger: pressing it opens the panel the
       // meter owns and fills with the session's rows (stats-binding.ts).
-      var panelBlock = function () { return document.querySelector('.dsh-claude-context-stats') }
-      var linePanel = function () { return document.querySelector('[data-dsh-claude-context-panel]') }
+      var panelBlock = function () { return document.querySelector('.dsh-deepcraft-context-stats') }
+      var linePanel = function () { return document.querySelector('[data-dsh-deepcraft-context-panel]') }
       if (line !== null) {
         // The pointer path is the meter's alone; a press is what the line answers.
         line.dispatchEvent(new MouseEvent('mouseenter', { bubbles: false }))
@@ -277,7 +277,7 @@
         line.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
         await sleep(300)
         r.statsInline.panelOpened = linePanel() !== null
-        r.statsInline.panelRows = panelBlock() === null ? 0 : panelBlock().querySelectorAll('.dsh-claude-context-stats-item').length
+        r.statsInline.panelRows = panelBlock() === null ? 0 : panelBlock().querySelectorAll('.dsh-deepcraft-context-stats-item').length
         r.statsInline.expanded = line.getAttribute('aria-expanded')
         line.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
         await sleep(300)
@@ -299,16 +299,16 @@
         return element === null ? null : element.getClientRects().length > 0
       }
       var readFit = function () {
-        var total = line === null ? null : line.querySelector('.dsh-claude-inline-total .dsh-claude-digit-group')
+        var total = line === null ? null : line.querySelector('.dsh-deepcraft-inline-total .dsh-deepcraft-digit-group')
         var number = meter === null ? null : meter.querySelector('button > span')
         return {
-          counts: shows('.dsh-claude-inline-seg'),
-          cacheLabel: shows('.dsh-claude-inline-label'),
-          input: shows('.dsh-claude-inline-input'),
-          output: shows('.dsh-claude-inline-output'),
-          total: shows('.dsh-claude-inline-total'),
+          counts: shows('.dsh-deepcraft-inline-seg'),
+          cacheLabel: shows('.dsh-deepcraft-inline-label'),
+          input: shows('.dsh-deepcraft-inline-input'),
+          output: shows('.dsh-deepcraft-inline-output'),
+          total: shows('.dsh-deepcraft-inline-total'),
           totalText: total === null ? null : (total.textContent || '').trim(),
-          meterTight: meter !== null && meter.hasAttribute('data-dsh-claude-meter-tight'),
+          meterTight: meter !== null && meter.hasAttribute('data-dsh-deepcraft-meter-tight'),
           meterNumber: number === null ? null : number.getClientRects().length > 0,
           cardWidth: fitCard === null ? null : fitCard.clientWidth,
           needed: line === null || meter === null ? null
@@ -339,7 +339,7 @@
       // by character. Read them just after the push, part way through the
       // count's stretch, and once it has arrived.
       var readFigures = function () {
-        return line === null ? [] : Array.prototype.map.call(line.querySelectorAll(visible + ' .dsh-claude-digit-group'), function (group) {
+        return line === null ? [] : Array.prototype.map.call(line.querySelectorAll(visible + ' .dsh-deepcraft-digit-group'), function (group) {
           return (group.textContent || '').trim()
         })
       }
@@ -354,8 +354,8 @@
       // numbers back and the line goes.
       window.__pushForm({ statsPosition: 'context' })
       await sleep(600)
-      r.statsInline.backAttr = document.body.getAttribute('data-dsh-claude-stats-position')
-      r.statsInline.backLine = document.querySelectorAll('[data-dsh-claude-inline-stats]').length
+      r.statsInline.backAttr = document.body.getAttribute('data-dsh-deepcraft-stats-position')
+      r.statsInline.backLine = document.querySelectorAll('[data-dsh-deepcraft-inline-stats]').length
     })
   })
 })()

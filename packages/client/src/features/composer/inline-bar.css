@@ -4,8 +4,8 @@
    named by their exact place in the seat, so a menu another plugin nests
    inside the seat keeps its own layout, and the seat root the picker hides is
    never matched — a display here would outrank the hide rule below. */
-body[data-dsh-claude-style] [data-composer-card][data-composer-variant="inline"] [data-slot="conversation.input.model"] > [data-dsh-claude-part~="host-root"] > [data-dsh-claude-part~="trigger"],
-body[data-dsh-claude-style] [data-composer-card][data-composer-variant="inline"] [data-slot="conversation.input.model"] > .dsh-claude-model-btn {
+body[data-dsh-deepcraft] [data-composer-card][data-composer-variant="inline"] [data-slot="conversation.input.model"] > [data-dsh-deepcraft-part~="host-root"] > [data-dsh-deepcraft-part~="trigger"],
+body[data-dsh-deepcraft] [data-composer-card][data-composer-variant="inline"] [data-slot="conversation.input.model"] > .dsh-deepcraft-model-btn {
   display: inline-flex;
   align-items: center;
   font-size: 13px;
@@ -19,10 +19,10 @@ body[data-dsh-claude-style] [data-composer-card][data-composer-variant="inline"]
    root is marked and hidden by syncModelControl). One button, one hover
    background — the shipped seat stacks an icon + label + effort + chevron,
    each with its own surface. */
-body[data-dsh-claude-style] [data-dsh-claude-model-host] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-model-host] {
   display: none;
 }
-body[data-dsh-claude-style] [data-dsh-claude-part~="trailing"] .dsh-claude-model-btn {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-btn {
   display: inline-flex;
   align-items: center;
   gap: 2px;
@@ -40,20 +40,20 @@ body[data-dsh-claude-style] [data-dsh-claude-part~="trailing"] .dsh-claude-model
   box-sizing: border-box;
   min-width: 0;
 }
-body[data-dsh-claude-style] [data-dsh-claude-part~="trailing"] .dsh-claude-model-btn-label.dsh-claude-model-btn-loading {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-btn-label.dsh-deepcraft-model-btn-loading {
   color: var(--dsw-alias-label-caption, #a6a094) !important;
 }
-body[data-dsh-claude-style] [data-dsh-claude-part~="trailing"] .dsh-claude-model-btn:hover {
-  background: var(--dsh-claude-hover-bg, rgba(0, 0, 0, 0.08));
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-btn:hover {
+  background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
   color: var(--dsw-alias-label-primary);
 }
 
 /* Only the whole trigger gets the hover plate; its label/effort spans stay
    transparent so no smaller inner background appears. */
-body[data-dsh-claude-style] [data-dsh-claude-part~="trailing"] .dsh-claude-model-btn > * {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-btn > * {
   background: transparent;
 }
-body[data-dsh-claude-style] [data-dsh-claude-part~="trailing"] .dsh-claude-model-btn-label {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-btn-label {
   text-overflow: ellipsis;
   white-space: nowrap;
   min-width: 0;
@@ -73,29 +73,29 @@ body[data-dsh-claude-style] [data-dsh-claude-part~="trailing"] .dsh-claude-model
    and keep the host's own placement.
 
    The overlay copies the row's own box: its distance above the containing block
-   and its height come from --dsh-claude-meter-row-offset / -height, which the
+   and its height come from --dsh-deepcraft-meter-row-offset / -height, which the
    composer pass measures off the row (features/composer/composer.ts) because
    both are the host's — a host whose card leaves a different gap under that row
    would otherwise put the meter several pixels off the row's line. The values
    here are this window's own fallbacks, for the frames before the first
    reading. With the numbers asked onto a line of their own the dock keeps the
    host's own placement instead, and every rule here stands aside. */
-body[data-dsh-claude-style][data-dsh-claude-stats-position="context"] [data-dsh-claude-part~="composer-stack"]:not([data-composer-variant="hero"]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-stats-position="context"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) {
   position: relative;
 }
-body[data-dsh-claude-style][data-dsh-claude-stats-position="context"] [data-dsh-claude-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] + [data-dsh-claude-part~="composer-dock"] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-stats-position="context"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] + [data-dsh-deepcraft-part~="composer-dock"] {
   position: absolute;
   /* The line sits in the band the dock's height and offset measure out, and the
      lift a mobile plugin's statistics strip cost moves it up by exactly that
      much: the offset raises the box, the height grows with it so the band inside
      stays the row's own 28px, and the spacer the composer pass parks in the dock
      is what carries the band (features/composer/composer.ts liftDockLine). */
-  bottom: calc(var(--dsh-claude-meter-row-offset, 4px) + var(--dsh-claude-mobile-stats-lift, 0px));
+  bottom: calc(var(--dsh-deepcraft-meter-row-offset, 4px) + var(--dsh-deepcraft-mobile-stats-lift, 0px));
   left: var(--dsh-composer-side-clearance, 0px);
   right: var(--dsh-composer-side-clearance, 0px);
-  height: calc(var(--dsh-claude-meter-row-height, 28px) + var(--dsh-claude-mobile-stats-lift, 0px));
+  height: calc(var(--dsh-deepcraft-meter-row-height, 28px) + var(--dsh-deepcraft-mobile-stats-lift, 0px));
   margin: 0 auto;
-  padding: 0 calc(160px + var(--dsh-claude-meter-room, 0px)) 0 140px;
+  padding: 0 calc(160px + var(--dsh-deepcraft-meter-room, 0px)) 0 140px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -107,27 +107,27 @@ body[data-dsh-claude-style][data-dsh-claude-stats-position="context"] [data-dsh-
 }
 /* The band the lift cost, as the flex child that re-enters the flow to hold it:
    the strip itself is out of flow, so only a box in the flow moves the line. */
-body[data-dsh-claude-style] [data-dsh-claude-mobile-stats] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-mobile-stats] {
   flex: 0 0 auto;
   pointer-events: none;
 }
-body[data-dsh-claude-style][data-dsh-claude-stats-position="context"] [data-dsh-claude-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] + [data-dsh-claude-part~="composer-dock"] > * {
+body[data-dsh-deepcraft][data-dsh-deepcraft-stats-position="context"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] + [data-dsh-deepcraft-part~="composer-dock"] > * {
   pointer-events: auto;
 }
 /* The meter holds the row's right end, inside the row's own 4px inset, after
    the model and effort triggers: the trailing cluster keeps that room free
-   (--dsh-claude-meter-room, measured by the permissions pass). Centred by
+   (--dsh-deepcraft-meter-room, measured by the permissions pass). Centred by
    stretching over the dock's height, never by a transform — the meter's panel
    is position: fixed, and a transform here would anchor it to the meter. */
-body[data-dsh-claude-style][data-dsh-claude-stats-position="context"] [data-dsh-claude-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] + [data-dsh-claude-part~="composer-dock"] > [data-dsh-claude-context-meter] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-stats-position="context"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] + [data-dsh-deepcraft-part~="composer-dock"] > [data-dsh-deepcraft-context-meter] {
   position: absolute;
   top: 0;
   bottom: 0;
   right: 4px;
   align-items: center;
 }
-body[data-dsh-claude-style][data-dsh-claude-stats-position="context"] [data-dsh-claude-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] [data-dsh-claude-part~="row"] > [data-dsh-claude-part~="trailing"] {
-  margin-right: var(--dsh-claude-meter-room, 0px);
+body[data-dsh-deepcraft][data-dsh-deepcraft-stats-position="context"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] [data-dsh-deepcraft-part~="row"] > [data-dsh-deepcraft-part~="trailing"] {
+  margin-right: var(--dsh-deepcraft-meter-room, 0px);
 }
 /* A portrait mobile plugin reserves that same band with padding of its own: 38px
    on the line's left for the command button it floats over the row, and 78px on
@@ -135,7 +135,7 @@ body[data-dsh-claude-style][data-dsh-claude-stats-position="context"] [data-dsh-
    (the row is one line, features/composer/inline.css) and the meter's room above
    covers the second, so the padding only took the width the model name and the
    tier trigger needed. */
-body[data-dsh-claude-style] [data-composer-card][data-dsh-claude-mobile-portrait] [data-dsh-claude-part~="row"] > [data-dsh-claude-part~="trailing"] {
+body[data-dsh-deepcraft] [data-composer-card][data-dsh-deepcraft-mobile-portrait] [data-dsh-deepcraft-part~="row"] > [data-dsh-deepcraft-part~="trailing"] {
   padding-left: 0;
   padding-right: 0;
 }
@@ -148,8 +148,8 @@ body[data-dsh-claude-style] [data-composer-card][data-dsh-claude-mobile-portrait
    from the compact one, and the session's numbers are read from the host's
    projections (features/context-stats/session-stats.ts) into whichever surface
    the position names — the context popover, or the line of their own below. */
-body[data-dsh-claude-style] [data-composer-stats],
-body[data-dsh-claude-style] [data-composer-stat] {
+body[data-dsh-deepcraft] [data-composer-stats],
+body[data-dsh-deepcraft] [data-composer-stat] {
   display: none;
 }
 
@@ -160,10 +160,10 @@ body[data-dsh-claude-style] [data-composer-stat] {
    size. They share one line now, so they read as one family — same face, same
    size, same weight, same tone. The ring's trigger is targeted explicitly
    because the host sets its own colour and size on that button. */
-body[data-dsh-claude-style] [data-dsh-claude-context-meter],
-body[data-dsh-claude-style] [data-dsh-claude-context-meter] button,
-body[data-dsh-claude-style] [data-dsh-claude-part~="composer-stack"] [data-composer-stats],
-body[data-dsh-claude-style] [data-composer-card] [data-dsh-claude-part~="row"] .dsh-claude-model-btn {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter],
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter] button,
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="composer-stack"] [data-composer-stats],
+body[data-dsh-deepcraft] [data-composer-card] [data-dsh-deepcraft-part~="row"] .dsh-deepcraft-model-btn {
   font-family: var(--dsw-font-family);
   font-size: 13px;
   font-weight: 500;
@@ -175,7 +175,7 @@ body[data-dsh-claude-style] [data-composer-card] [data-dsh-claude-part~="row"] .
 /* The host renders two separate stat dialogs; hide them — their numbers are
    read into the context popover instead — for as long as the context
    statistics, which own that read, are installed. */
-body[data-dsh-claude-style][data-dsh-claude-session-stats] [role="dialog"][data-dsh-claude-holds~="host-stats"] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-session-stats] [role="dialog"][data-dsh-deepcraft-holds~="host-stats"] {
   display: none !important;
 }
 
@@ -187,8 +187,8 @@ body[data-dsh-claude-style][data-dsh-claude-session-stats] [role="dialog"][data-
    The panel itself is the host's, and the host mounts it with no entrance of
    its own. The feature stamps the panel, and it takes the cards' own short
    rise (the shared keyframe), so hovering either control opens the same way. */
-body[data-dsh-claude-style] [data-dsh-claude-context-panel] {
-  animation: dsh-claude-surface-in var(--dsh-claude-timing-surface);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-panel] {
+  animation: dsh-deepcraft-surface-in var(--dsh-deepcraft-timing-surface);
 }
 /* The host places the panel from the anchor's LEFT edge and only then clamps it
    into the viewport, which at the end of the composer row parks it against the
@@ -197,10 +197,10 @@ body[data-dsh-claude-style] [data-dsh-claude-context-panel] {
    the hand-over the hero menu makes for the menu the host places below its own
    trigger. The mark is written together with the value, so this declaration
    never runs on a reading that has gone. */
-body[data-dsh-claude-style] [data-dsh-claude-context-panel][data-dsh-claude-context-aligned] {
-  left: var(--dsh-claude-context-panel-left) !important;
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-panel][data-dsh-deepcraft-context-aligned] {
+  left: var(--dsh-deepcraft-context-panel-left) !important;
 }
-body[data-dsh-claude-style] .dsh-claude-context-stats {
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -210,25 +210,25 @@ body[data-dsh-claude-style] .dsh-claude-context-stats {
   min-width: 0;
   font-family: var(--dsw-font-family);
 }
-body[data-dsh-claude-style] .dsh-claude-context-stats-grid {
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px 10px;
   min-width: 0;
 }
-body[data-dsh-claude-style] .dsh-claude-context-stats-section {
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-section {
   color: var(--dsw-alias-label-tertiary);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.04em;
 }
-body[data-dsh-claude-style] .dsh-claude-context-stats-item {
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-item {
   display: flex;
   flex-direction: column;
   gap: 1px;
   min-width: 0;
 }
-body[data-dsh-claude-style] .dsh-claude-context-stats-label {
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-label {
   color: var(--dsw-alias-label-tertiary);
   font-size: 12px;
   line-height: 16px;
@@ -236,7 +236,7 @@ body[data-dsh-claude-style] .dsh-claude-context-stats-label {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-body[data-dsh-claude-style] .dsh-claude-context-stats-value {
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-value {
   color: var(--dsw-alias-label-primary);
   font-size: 14px;
   font-weight: 500;
@@ -264,7 +264,7 @@ body[data-dsh-claude-style] .dsh-claude-context-stats-value {
    opens the panel holding the same session's rows
    (features/context-stats/stats-binding.ts), and the shared focus ring marks it
    where the reader tabs to it. */
-body[data-dsh-claude-style] .dsh-claude-inline-stats {
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-stats {
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -278,8 +278,8 @@ body[data-dsh-claude-style] .dsh-claude-inline-stats {
   white-space: nowrap;
   cursor: pointer;
 }
-body[data-dsh-claude-style] .dsh-claude-inline-seg,
-body[data-dsh-claude-style] .dsh-claude-inline-figure {
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-seg,
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-figure {
   display: inline-flex;
   align-items: center;
   gap: 3px;
@@ -288,17 +288,17 @@ body[data-dsh-claude-style] .dsh-claude-inline-figure {
 /* A segment the session has no figure for yet, or one the ladder has given up:
    hidden rather than drawn empty. Named with the line in front of it so it
    outranks the display above. */
-body[data-dsh-claude-style] .dsh-claude-inline-stats .dsh-claude-inline-seg[hidden] {
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-stats .dsh-deepcraft-inline-seg[hidden] {
   display: none;
 }
 /* The line's measuring twin: laid out beside the line for one reading and taken
    off before anything paints. Out of flow, so the dock keeps its layout. */
-body[data-dsh-claude-style] .dsh-claude-inline-stats[data-dsh-claude-inline-probe] {
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-stats[data-dsh-deepcraft-inline-probe] {
   position: absolute;
   visibility: hidden;
   pointer-events: none;
 }
-body[data-dsh-claude-style] .dsh-claude-inline-arrow {
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-arrow {
   color: var(--dsw-alias-label-tertiary);
 }
 /* The ladder's third step: the meter keeps its ring and gives up the number
@@ -308,17 +308,17 @@ body[data-dsh-claude-style] .dsh-claude-inline-arrow {
    tail to: a trigger that loses its line here moves every message, so the step
    gives up the number's width alone and the trigger keeps the one 20px line the
    type above sets inside the host's own 1px padding. */
-body[data-dsh-claude-style] [data-dsh-claude-context-meter][data-dsh-claude-meter-tight] button {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter][data-dsh-deepcraft-meter-tight] button {
   min-height: 22px;
 }
-body[data-dsh-claude-style] [data-dsh-claude-context-meter][data-dsh-claude-meter-tight] button > span {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter][data-dsh-deepcraft-meter-tight] button > span {
   display: none;
 }
 
 /* ---------- the line's figures ---------- */
 /* A figure is its words laid out in a row, on the line's baseline
    (features/context-stats/inline-stats.ts builds one). */
-body[data-dsh-claude-style] .dsh-claude-digit-group {
+body[data-dsh-deepcraft] .dsh-deepcraft-digit-group {
   display: inline-flex;
   align-items: baseline;
 }
@@ -330,77 +330,77 @@ body[data-dsh-claude-style] .dsh-claude-digit-group {
    values stand in features/composer/vars.css, outside the composer gate. */
 /* The cache share: red below 90%, orange, yellow and lime through the nineties,
    dark green from 99% on. */
-body[data-dsh-claude-style] [data-dsh-claude-ramp="cache"][data-dsh-claude-ramp-span="low"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-red);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="low"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-red);
 }
-body[data-dsh-claude-style] [data-dsh-claude-ramp="cache"][data-dsh-claude-ramp-span="0"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-red);
-  --dsh-claude-ramp-to: var(--dsh-claude-tone-orange);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="0"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-red);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-orange);
 }
-body[data-dsh-claude-style] [data-dsh-claude-ramp="cache"][data-dsh-claude-ramp-span="1"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-orange);
-  --dsh-claude-ramp-to: var(--dsh-claude-tone-yellow);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="1"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-orange);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-yellow);
 }
-body[data-dsh-claude-style] [data-dsh-claude-ramp="cache"][data-dsh-claude-ramp-span="2"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-yellow);
-  --dsh-claude-ramp-to: var(--dsh-claude-tone-lime);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="2"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-yellow);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-lime);
 }
-body[data-dsh-claude-style] [data-dsh-claude-ramp="cache"][data-dsh-claude-ramp-span="3"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-lime);
-  --dsh-claude-ramp-to: var(--dsh-claude-tone-green-light);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="3"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-lime);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-green-light);
 }
-body[data-dsh-claude-style] [data-dsh-claude-ramp="cache"][data-dsh-claude-ramp-span="4"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-green-light);
-  --dsh-claude-ramp-to: var(--dsh-claude-tone-green);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="4"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-green-light);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-green);
 }
-body[data-dsh-claude-style] [data-dsh-claude-ramp="cache"][data-dsh-claude-ramp-span="high"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-green);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="high"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-green);
 }
 /* The context occupancy: green below 40%, through light green, yellow and
    orange, to red from 80% on. */
-body[data-dsh-claude-style] [data-dsh-claude-ramp="context"][data-dsh-claude-ramp-span="low"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-green);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="low"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-green);
 }
-body[data-dsh-claude-style] [data-dsh-claude-ramp="context"][data-dsh-claude-ramp-span="0"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-green);
-  --dsh-claude-ramp-to: var(--dsh-claude-tone-green-light);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="0"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-green);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-green-light);
 }
-body[data-dsh-claude-style] [data-dsh-claude-ramp="context"][data-dsh-claude-ramp-span="1"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-green-light);
-  --dsh-claude-ramp-to: var(--dsh-claude-tone-yellow);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="1"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-green-light);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-yellow);
 }
-body[data-dsh-claude-style] [data-dsh-claude-ramp="context"][data-dsh-claude-ramp-span="2"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-yellow);
-  --dsh-claude-ramp-to: var(--dsh-claude-tone-orange);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="2"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-yellow);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-orange);
 }
-body[data-dsh-claude-style] [data-dsh-claude-ramp="context"][data-dsh-claude-ramp-span="3"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-orange);
-  --dsh-claude-ramp-to: var(--dsh-claude-tone-red-orange);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="3"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-orange);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-red-orange);
 }
-body[data-dsh-claude-style] [data-dsh-claude-ramp="context"][data-dsh-claude-ramp-span="4"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-red-orange);
-  --dsh-claude-ramp-to: var(--dsh-claude-tone-red);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="4"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-red-orange);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-red);
 }
-body[data-dsh-claude-style] [data-dsh-claude-ramp="context"][data-dsh-claude-ramp-span="high"] {
-  --dsh-claude-ramp-from: var(--dsh-claude-tone-red);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="high"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-red);
 }
 /* The reading takes the mixed colour, the ring the same two ends while it
    stands in for a reading that could not be taken, and the pie samples the
    reading's own colour, so the three can never disagree. The cache share's band
    is written on the segment its figure and percent sign stand in, and reaches
    those two alone: the label before them keeps the line's tone. */
-body[data-dsh-claude-style] .dsh-claude-inline-stats [data-dsh-claude-ramp="cache"] {
-  --dsh-claude-ramp-ink: color-mix(in oklch, var(--dsh-claude-ramp-from), var(--dsh-claude-ramp-to, var(--dsh-claude-ramp-from)) var(--dsh-claude-ramp-position, 0%));
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-stats [data-dsh-deepcraft-ramp="cache"] {
+  --dsh-deepcraft-ramp-ink: color-mix(in oklch, var(--dsh-deepcraft-ramp-from), var(--dsh-deepcraft-ramp-to, var(--dsh-deepcraft-ramp-from)) var(--dsh-deepcraft-ramp-position, 0%));
 }
-body[data-dsh-claude-style] .dsh-claude-inline-stats [data-dsh-claude-ramp="cache"] > .dsh-claude-digit-group,
-body[data-dsh-claude-style] .dsh-claude-inline-stats [data-dsh-claude-ramp="cache"] > .dsh-claude-inline-tail {
-  color: var(--dsh-claude-ramp-ink);
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-stats [data-dsh-deepcraft-ramp="cache"] > .dsh-deepcraft-digit-group,
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-stats [data-dsh-deepcraft-ramp="cache"] > .dsh-deepcraft-inline-tail {
+  color: var(--dsh-deepcraft-ramp-ink);
 }
-body[data-dsh-claude-style] [data-dsh-claude-context-meter][data-dsh-claude-ramp="context"] button > span {
-  color: color-mix(in oklch, var(--dsh-claude-ramp-from), var(--dsh-claude-ramp-to, var(--dsh-claude-ramp-from)) var(--dsh-claude-ramp-position, 0%));
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter][data-dsh-deepcraft-ramp="context"] button > span {
+  color: color-mix(in oklch, var(--dsh-deepcraft-ramp-from), var(--dsh-deepcraft-ramp-to, var(--dsh-deepcraft-ramp-from)) var(--dsh-deepcraft-ramp-position, 0%));
 }
-body[data-dsh-claude-style] [data-dsh-claude-context-meter][data-dsh-claude-ramp="context"] circle[stroke-dasharray] {
-  stroke: color-mix(in oklch, var(--dsh-claude-ramp-from), var(--dsh-claude-ramp-to, var(--dsh-claude-ramp-from)) var(--dsh-claude-ramp-position, 0%));
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter][data-dsh-deepcraft-ramp="context"] circle[stroke-dasharray] {
+  stroke: color-mix(in oklch, var(--dsh-deepcraft-ramp-from), var(--dsh-deepcraft-ramp-to, var(--dsh-deepcraft-ramp-from)) var(--dsh-deepcraft-ramp-position, 0%));
 }
 
 /* ---------- the meter's pie ---------- */
@@ -409,7 +409,7 @@ body[data-dsh-claude-style] [data-dsh-claude-context-meter][data-dsh-claude-ramp
    keeps for it stay the host's — while the pie is the trigger's background
    image. Nothing is drawn until the browser half has painted one, so a reading
    it cannot take leaves the ring the host drew. */
-body[data-dsh-claude-style] [data-dsh-claude-context-meter][data-dsh-claude-meter-pie] button > svg {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter][data-dsh-deepcraft-meter-pie] button > svg {
   visibility: hidden;
 }
 
@@ -420,22 +420,22 @@ body[data-dsh-claude-style] [data-dsh-claude-context-meter][data-dsh-claude-mete
    while the session's projections have answered nothing AND within the short
    deadline the feature allows — a host that serves no such projection falls
    back to the panel the host drew, rather than keeping placeholder bars. */
-body[data-dsh-claude-style] .dsh-claude-context-stats[data-dsh-claude-context-skeleton] .dsh-claude-context-stats-item {
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats[data-dsh-deepcraft-context-skeleton] .dsh-deepcraft-context-stats-item {
   min-height: 37px !important;
   justify-content: center !important;
 }
-body[data-dsh-claude-style] .dsh-claude-context-stats-skeleton-label,
-body[data-dsh-claude-style] .dsh-claude-context-stats-skeleton-value {
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-skeleton-label,
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-skeleton-value {
   display: block !important;
   border-radius: 3px !important;
   background: var(--dsw-alias-interactive-bg-hover-solid, rgba(0, 0, 0, 0.06)) !important;
-  animation: dsh-claude-pulse var(--dsh-claude-period-pulse) var(--dsh-claude-ease-in-out) infinite !important;
+  animation: dsh-deepcraft-pulse var(--dsh-deepcraft-period-pulse) var(--dsh-deepcraft-ease-in-out) infinite !important;
 }
-body[data-dsh-claude-style] .dsh-claude-context-stats-skeleton-label {
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-skeleton-label {
   width: 68% !important;
   height: 12px !important;
 }
-body[data-dsh-claude-style] .dsh-claude-context-stats-skeleton-value {
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-skeleton-value {
   width: 46% !important;
   height: 14px !important;
 }
@@ -454,10 +454,10 @@ body[data-dsh-claude-style] .dsh-claude-context-stats-skeleton-value {
    The trailing cluster's own shrink is not a phone rule: it carries the model
    name's compression at every width (inline.css). */
 @media (max-width: 480px) {
-  body[data-dsh-claude-style] [data-dsh-claude-context-meter] button > span {
+  body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter] button > span {
     display: none;
   }
-  body[data-dsh-claude-style][data-dsh-claude-stats-position="context"] [data-dsh-claude-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] + [data-dsh-claude-part~="composer-dock"] {
+  body[data-dsh-deepcraft][data-dsh-deepcraft-stats-position="context"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] + [data-dsh-deepcraft-part~="composer-dock"] {
     padding: 0;
   }
 }

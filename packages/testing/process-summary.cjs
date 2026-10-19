@@ -30,15 +30,15 @@ const fill = (template, count) => template.replace('{count}', String(count))
 /** What the reader sees of the running row: the skin's line, its parts, and the host's words. */
 const readWait = (page) => page.evaluate(() => {
   const row = document.querySelector('[data-chat-running]')
-  const line = row === null ? null : row.querySelector('.dsh-claude-chat-wait')
+  const line = row === null ? null : row.querySelector('.dsh-deepcraft-chat-wait')
   const words = row === null ? null : row.querySelector(':scope > span > :not([aria-hidden="true"])')
   if (line === null) return { row: row !== null, line: false }
   // The line's parts are read by their own names rather than by position: the
   // loader leads them (chat-wait.css), and where each of the rest sits is the
   // stylesheet's business.
-  const label = line.querySelector('.dsh-claude-chat-wait-label')
-  const clock = line.querySelector('.dsh-claude-chat-wait-clock')
-  const badge = line.querySelector('.dsh-claude-chat-wait-badge')
+  const label = line.querySelector('.dsh-deepcraft-chat-wait-label')
+  const clock = line.querySelector('.dsh-deepcraft-chat-wait-clock')
+  const badge = line.querySelector('.dsh-deepcraft-chat-wait-badge')
   return {
     row: true,
     line: true,
@@ -62,19 +62,19 @@ const readWait = (page) => page.evaluate(() => {
  */
 const readHeaders = (page) => page.evaluate(() => [...document.querySelectorAll('[data-step-process]')].map((group) => {
   const header = group.querySelector('button[data-process-activity]')
-  const summary = header?.querySelector('.dsh-claude-process-summary') ?? null
+  const summary = header?.querySelector('.dsh-deepcraft-process-summary') ?? null
   // The host's words are the one child of the control it does not mark
   // decorative; the icon and the chevron sit in an aria-hidden span, and the
   // summary is the skin's own.
   const words = header === null ? null : [...header.children].find((child) => child.getAttribute('aria-hidden') !== 'true') ?? null
-  const text = summary === null ? null : [...summary.querySelectorAll('.dsh-claude-process-summary-part')].map((part) => {
-    const parts = part.querySelectorAll('.dsh-claude-process-summary-words')
-    const digit = part.querySelector('.dsh-claude-process-summary-roll [data-dsh-claude-roll]:not([data-dsh-claude-roll="exit"])')
+  const text = summary === null ? null : [...summary.querySelectorAll('.dsh-deepcraft-process-summary-part')].map((part) => {
+    const parts = part.querySelectorAll('.dsh-deepcraft-process-summary-words')
+    const digit = part.querySelector('.dsh-deepcraft-process-summary-roll [data-dsh-deepcraft-roll]:not([data-dsh-deepcraft-roll="exit"])')
     return `${parts[0].textContent}${digit === null ? '' : digit.textContent}${parts[1].textContent}`
   }).join('')
   return {
     name: header?.getAttribute('aria-label') ?? null,
-    form: summary?.getAttribute('data-dsh-claude-summary-form') ?? null,
+    form: summary?.getAttribute('data-dsh-deepcraft-summary-form') ?? null,
     text,
     headerWidth: header === null ? null : Math.round(header.clientWidth),
     summaryWidth: summary === null ? null : Math.round(summary.clientWidth),
@@ -91,10 +91,10 @@ function processSummaryScenario({ check }) {
     async duringTurn(context) {
       const { page } = context
       // The model holds its first event for 11.5 s: the badge rises at 10 s.
-      await page.waitForFunction(() => document.querySelector('[data-chat-running] .dsh-claude-chat-wait') !== null, undefined, { timeout: 15000 })
+      await page.waitForFunction(() => document.querySelector('[data-chat-running] .dsh-deepcraft-chat-wait') !== null, undefined, { timeout: 15000 })
       context.notes.waitEarly = await readWait(page)
       await page.waitForFunction(() => {
-        const badge = document.querySelector('[data-chat-running] .dsh-claude-chat-wait-badge')
+        const badge = document.querySelector('[data-chat-running] .dsh-deepcraft-chat-wait-badge')
         return badge !== null && badge.checkVisibility()
       }, undefined, { timeout: 15000 }).catch(() => {})
       context.notes.waitOvertime = await readWait(page)

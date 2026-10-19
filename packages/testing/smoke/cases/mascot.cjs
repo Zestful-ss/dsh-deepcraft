@@ -57,8 +57,8 @@ module.exports = {
       JSON.stringify({ accent: deepy.accent, link: deepy.link, dark: deepy.dark }))
     // The sheet is the vector the build produced, served from the assets route
     // under the name its own content gives it
-    const served = (value) => /^url\("https?:\/\/[^"]*\/dsh-claude-style\/assets\/[0-9a-f]{12}\.svg"\)$/.test(value || '')
-    check('the whale takes the crab\'s place on the home card, idling, playing the vector the build rebuilt from its sheet',
+    const served = (value) => /^url\("https?:\/\/[^"]*\/dsh-deepcraft\/assets\/[0-9a-f]{12}\.svg"\)$/.test(value || '')
+    check('the whale takes the crab\'s place on the home card, idling, playing the vector the build draws',
       is(deepy.home, 'idle', 'card') && deepy.crab === false && served(deepy.home.sheet),
       JSON.stringify({ home: deepy.home, crab: deepy.crab }))
     check('its frames change on its own node without waking a pass',

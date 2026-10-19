@@ -21,23 +21,23 @@ const { openSkinSettings } = require('./remote-settings.cjs')
 
 /** The host's page markers this scenario reads. */
 const HOST = {
-  brandMark: '[data-dsh-claude-part~="hero-mark"]', // the hero's brand mark seat (theme/hero.css)
-  greeting: '[data-dsh-claude-part~="hero-mark"] + [data-dsh-claude-part~="hero-title-group"]', // the hero's greeting beside it
+  brandMark: '[data-dsh-deepcraft-part~="hero-mark"]', // the hero's brand mark seat (theme/hero.css)
+  greeting: '[data-dsh-deepcraft-part~="hero-mark"] + [data-dsh-deepcraft-part~="hero-title-group"]', // the hero's greeting beside it
 }
 
 /** The skin's own marks (the stylesheets and modules each names). */
 const SKIN = {
-  revealing: 'data-dsh-claude-revealing', // home-layout.ts
-  statValue: '.dsh-claude-home-stat-value',
-  page: '.dsh-claude-settings',
-  switch: 'fieldset.dsh-claude-settings-rows .dsh-claude-settings-switch:not(:disabled)',
-  tab: '.dsh-claude-settings-tabs [role="tab"]',
-  rows: '.dsh-claude-settings-pages > fieldset.dsh-claude-settings-rows',
-  leaving: '.dsh-claude-settings-leaving',
-  badge: '.dsh-claude-chat-wait-badge',
-  badgeLeaving: 'data-dsh-claude-wait-badge-leaving', // chat-wait.ts
-  modelButton: '.dsh-claude-model-btn',
-  modelCard: '.dsh-claude-model-popover:not(.dsh-claude-model-popover-sub)',
+  revealing: 'data-dsh-deepcraft-revealing', // home-layout.ts
+  statValue: '.dsh-deepcraft-home-stat-value',
+  page: '.dsh-deepcraft-settings',
+  switch: 'fieldset.dsh-deepcraft-settings-rows .dsh-deepcraft-settings-switch:not(:disabled)',
+  tab: '.dsh-deepcraft-settings-tabs [role="tab"]',
+  rows: '.dsh-deepcraft-settings-pages > fieldset.dsh-deepcraft-settings-rows',
+  leaving: '.dsh-deepcraft-settings-leaving',
+  badge: '.dsh-deepcraft-chat-wait-badge',
+  badgeLeaving: 'data-dsh-deepcraft-wait-badge-leaving', // chat-wait.ts
+  modelButton: '.dsh-deepcraft-model-btn',
+  modelCard: '.dsh-deepcraft-model-popover:not(.dsh-deepcraft-model-popover-sub)',
 }
 
 /** Record every hand-over the usage panel plays, from the page's first frame. */
@@ -71,7 +71,7 @@ const animationOf = (page, selector) => page.evaluate((target) => {
 /** The first settings switch's knob, read inside the page, with whether its own motion is still running. */
 function knobInPage(marks) {
   const element = document.querySelector(marks.switch)
-  const knob = element.querySelector('.dsh-claude-settings-switch-knob')
+  const knob = element.querySelector('.dsh-deepcraft-settings-switch-knob')
   const style = getComputedStyle(knob)
   return {
     label: element.getAttribute('aria-label'),
@@ -111,9 +111,9 @@ function slideInPage(marks) {
   const rows = document.querySelector(marks.rows)
   const still = document.querySelector(`${marks.leaving} > *`)
   return {
-    enter: rows === null ? null : rows.getAttribute('data-dsh-claude-page-enter'),
+    enter: rows === null ? null : rows.getAttribute('data-dsh-deepcraft-page-enter'),
     enterAnimation: rows === null ? null : getComputedStyle(rows).animationName,
-    leave: still === null ? null : still.getAttribute('data-dsh-claude-page-leave'),
+    leave: still === null ? null : still.getAttribute('data-dsh-deepcraft-page-leave'),
     leaveAnimation: still === null ? null : getComputedStyle(still).animationName,
     hidden: still === null ? null : still.getAttribute('aria-hidden') === 'true' && still.hasAttribute('inert') && !still.hasAttribute('role'),
     leaving: document.querySelectorAll(`${marks.leaving} > *`).length,
@@ -171,7 +171,7 @@ function motionScenario({ check }) {
     prompt: 'take your time, then answer',
     viewport: { width: 1280, height: 900 },
     patch: [
-      '- id: ui-skin-claude-style',
+      '- id: ui-skin-deepcraft',
       '  config:',
       '    homeLayout: studio',
     ],
@@ -221,22 +221,22 @@ function motionScenario({ check }) {
       const closedScale = Number.parseFloat(menu.closed?.scale ?? 'NaN')
       return [
         check('首页标题的标志与问候语错开升起',
-          notes.mark?.name === 'dsh-claude-hero-rise' && notes.greeting?.name === 'dsh-claude-hero-rise' && notes.greeting?.delay !== '0s' && notes.mark?.delay === '0s',
+          notes.mark?.name === 'dsh-deepcraft-hero-rise' && notes.greeting?.name === 'dsh-deepcraft-hero-rise' && notes.greeting?.delay !== '0s' && notes.mark?.delay === '0s',
           JSON.stringify({ mark: notes.mark, greeting: notes.greeting })),
         check('用量面板的数字到达时从占位里显出来',
-          reveal.length > 0 && reveal[0].words === 'dsh-claude-home-reveal-words', JSON.stringify(reveal)),
+          reveal.length > 0 && reveal[0].words === 'dsh-deepcraft-home-reveal-words', JSON.stringify(reveal)),
         check('开关打开页面时静止，按下的那一刻才弹跳着过去，最后留下原来的值',
           sw.before?.moved === false && sw.before?.animation === 'none' &&
             sw.pressed?.[0]?.moved === true && sw.pressed[0].on !== sw.before?.on &&
-            sw.pressed[0].animation === (sw.pressed[0].on ? 'dsh-claude-switch-on' : 'dsh-claude-switch-off') &&
+            sw.pressed[0].animation === (sw.pressed[0].on ? 'dsh-deepcraft-switch-on' : 'dsh-deepcraft-switch-off') &&
             sw.after?.on === sw.before?.on,
           JSON.stringify(sw)),
         check('切到右侧的标签时新页从右侧滑入，旧页的静止副本向左滑出、不进入读屏与 Tab 顺序，播完即移除',
-          (slide.during ?? []).length > 0 && slide.during.every((frame) => frame.enter === 'forward' && frame.enterAnimation === 'dsh-claude-page-in' &&
-            frame.leave === 'forward' && frame.leaveAnimation === 'dsh-claude-page-out' && frame.hidden === true) && slide.after === 0,
+          (slide.during ?? []).length > 0 && slide.during.every((frame) => frame.enter === 'forward' && frame.enterAnimation === 'dsh-deepcraft-page-in' &&
+            frame.leave === 'forward' && frame.leaveAnimation === 'dsh-deepcraft-page-out' && frame.hidden === true) && slide.after === 0,
           JSON.stringify({ during: (slide.during ?? []).slice(0, 2), frames: (slide.during ?? []).length, after: slide.after })),
         check('超时徽标弹出时滑入，离开时先播完退出再隐藏',
-          notes.badgeIn?.name === 'dsh-claude-wait-badge-in' &&
+          notes.badgeIn?.name === 'dsh-deepcraft-wait-badge-in' &&
             JSON.stringify(notes.badgeSteps) === JSON.stringify([{ leaving: true, hidden: false }, { leaving: false, hidden: true }]),
           JSON.stringify({ in: notes.badgeIn, steps: notes.badgeSteps })),
         check('菜单卡片展开后停在原尺寸，收起后回到从触发点长出的起始比例',

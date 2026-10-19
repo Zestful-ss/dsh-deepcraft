@@ -1,5 +1,5 @@
-import { colorAlpha, colorParts } from '@dsh-claude-style/engine/chat-dom'
-import { COMPOSER_SCROLL_SELECTOR } from '@dsh-claude-style/contracts/dom'
+import { colorAlpha, colorParts } from '@dsh-deepcraft/engine/chat-dom'
+import { COMPOSER_SCROLL_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { inPageBox } from '../../shared/page-zoom'
 
 /**
@@ -12,9 +12,9 @@ import { inPageBox } from '../../shared/page-zoom'
  * layout the browser has already resolved, plus one cloneNode.
  */
 /** Marks the stand-in while it is on the page. A handle for looking things up; no rule hangs off it. */
-export const CHAT_SEND_GHOST_ATTR = 'data-dsh-claude-send-ghost'
+export const CHAT_SEND_GHOST_ATTR = 'data-dsh-deepcraft-send-ghost'
 /** Marks each link of the stand-in's imitation ancestor chain; send-flight.css takes their pseudo-elements away. */
-export const CHAT_SEND_LINK_ATTR = 'data-dsh-claude-send-link'
+export const CHAT_SEND_LINK_ATTR = 'data-dsh-deepcraft-send-link'
 // The mark put on the real row while the stand-in flies is constants.ts's
 // CHAT_FLYING_ATTR; the stylesheet hides it (send-flight.css). The composer
 // card, its scroll area and the echo bubble are the host's own attributes,
@@ -72,7 +72,7 @@ export const CHAT_INHERITED_PROPERTIES = [
  * in-page anchors for everyone.
  */
 export const CHAT_IDENTITY_ATTRIBUTES = [
-  'id', 'contenteditable', 'data-lexical-editor', 'data-dsh-claude-caret', 'tabindex', 'autofocus',
+  'id', 'contenteditable', 'data-lexical-editor', 'data-dsh-deepcraft-caret', 'tabindex', 'autofocus',
 ]
 
 /**
@@ -208,7 +208,7 @@ export function chatSendScrub(root: Element) {
   for (const element of all) {
     for (const name of CHAT_IDENTITY_ATTRIBUTES) element.removeAttribute(name)
   }
-  for (const layer of root.querySelectorAll('[data-dsh-claude-caret-layer]')) layer.remove()
+  for (const layer of root.querySelectorAll('[data-dsh-deepcraft-caret-layer]')) layer.remove()
 }
 
 /**

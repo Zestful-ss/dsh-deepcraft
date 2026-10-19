@@ -3,11 +3,11 @@ import { MODEL_OFFICIAL_GROUP } from './copy-fallbacks'
 import { readPrefs } from '../../core/prefs'
 import { buildModelLabel, modelBrand } from './brand'
 import { modelDescription } from './copy-lookup'
-import { buildElement } from '@dsh-claude-style/engine/dom'
+import { buildElement } from '@dsh-deepcraft/engine/dom'
 import { POPOVER_CHECK_SVG, buildPopoverItem } from '../../shared/popover'
 import type { createHoverIntent } from '../../shared/popover'
-import type { HostContext } from '@dsh-claude-style/engine/host'
-import type { HostModelEntry, HostModelGroup } from '@dsh-claude-style/contracts/services'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
+import type { HostModelEntry, HostModelGroup } from '@dsh-deepcraft/contracts/services'
 
 /**
  * Model picker rows: the row/cell builders and the two level-1 list selectors,
@@ -52,8 +52,8 @@ export function createModelRows(options: {
    * stay clean.
    */
   function buildProviderRule(name: string) {
-    const rule = buildElement('div', 'dsh-claude-model-rule')
-    if (name) rule.appendChild(buildElement('span', 'dsh-claude-model-rule-name', name))
+    const rule = buildElement('div', 'dsh-deepcraft-model-rule')
+    if (name) rule.appendChild(buildElement('span', 'dsh-deepcraft-model-rule-name', name))
     return rule
   }
 
@@ -69,12 +69,12 @@ export function createModelRows(options: {
   function buildModelRow(group: HostModelGroup, model: HostModelEntry, selected: boolean, withDescription: boolean, onPick: () => void) {
     // The shared row skeleton; the copy block keeps its own class, and
     // the vendor typography rides on the label inside it.
-    const built = buildPopoverItem({ className: 'dsh-claude-model-option', role: 'menuitemradio', textClass: 'dsh-claude-model-copy', check: true })
+    const built = buildPopoverItem({ className: 'dsh-deepcraft-model-option', role: 'menuitemradio', textClass: 'dsh-deepcraft-model-copy', check: true })
     const item = built.row
     item.setAttribute('aria-checked', selected ? 'true' : 'false')
     const brand = modelBrand(model.id)
     // The brand id is the row's styling hook — it is what gives a vendor's rows
-    // their own typography (see .dsh-claude-model-name in
+    // their own typography (see .dsh-deepcraft-model-name in
     // features/model/model-picker.css). The vendor's mark rides inside the
     // label's lockup. The scheduler's attributeFilter
     // does not watch data-*, so this write cannot re-trigger a pass.
@@ -91,7 +91,7 @@ export function createModelRows(options: {
     // line has its own switch under the picker's settings row, and a row built
     // without it is the same row with the copy block left as the name alone.
     const desc = withDescription && readPrefs().modelDescriptions !== false ? modelDescription(ctx, group.id, model) : ''
-    if (desc) copy.appendChild(buildElement('span', 'dsh-claude-model-desc', desc))
+    if (desc) copy.appendChild(buildElement('span', 'dsh-deepcraft-model-desc', desc))
     // The peak rate meter rides in front of the check: the row is compared by
     // its rate before it is picked, and a model whose provider bills on no
     // clock carries no badge at all (packages/client/src/features/peakrate/).
@@ -121,11 +121,11 @@ export function createModelRows(options: {
 
   /** The More-models row: label + chevron, hover opens the second level. */
   function buildModelCell(label: string) {
-    const cell = buildElement('button', 'dsh-claude-model-cell')
+    const cell = buildElement('button', 'dsh-deepcraft-model-cell')
     cell.type = 'button'
     cell.setAttribute('role', 'menuitem')
-    cell.appendChild(buildElement('span', 'dsh-claude-model-cell-label', label))
-    const chevron = buildElement('span', 'dsh-claude-model-cell-chevron')
+    cell.appendChild(buildElement('span', 'dsh-deepcraft-model-cell-label', label))
+    const chevron = buildElement('span', 'dsh-deepcraft-model-cell-chevron')
     chevron.innerHTML = MODEL_CHEVRON_SVG
     cell.appendChild(chevron)
     cell.addEventListener('mouseenter', () => {

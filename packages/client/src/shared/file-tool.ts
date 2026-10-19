@@ -1,5 +1,5 @@
 import { callArgsOf, callString } from './call-args'
-import type { HostChatBlock } from '@dsh-claude-style/contracts/services'
+import type { HostChatBlock } from '@dsh-deepcraft/contracts/services'
 
 /**
  * The file tools, read off a call's own block: which operation a call is, and

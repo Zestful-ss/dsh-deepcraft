@@ -1,5 +1,5 @@
 /* ---------- Sliding pill: the segmented controls' shared highlight ---------- */
-/* packages/client/src/shared/sliding-pill.ts marks a control with data-dsh-claude-pill and
+/* packages/client/src/shared/sliding-pill.ts marks a control with data-dsh-deepcraft-pill and
    writes the active item's own box; this draws one box there and slides it on
    every later change. The whole box is written — offset and size on both
    axes — so the pill still covers exactly its item when a control wraps onto
@@ -10,19 +10,19 @@
    The slide ignores the system's reduced-motion request on purpose: a
    quarter-second move of one small box is how the switch reads, and the user
    asked for it to always play. */
-body[data-dsh-claude-style] [data-dsh-claude-pill]::before {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-pill]::before {
   content: "";
   position: absolute;
   left: 0;
   top: 0;
-  width: var(--dsh-claude-pill-w, 0px);
-  height: var(--dsh-claude-pill-h, 0px);
-  transform: translate(var(--dsh-claude-pill-x, 0px), var(--dsh-claude-pill-y, 0px));
+  width: var(--dsh-deepcraft-pill-w, 0px);
+  height: var(--dsh-deepcraft-pill-h, 0px);
+  transform: translate(var(--dsh-deepcraft-pill-x, 0px), var(--dsh-deepcraft-pill-y, 0px));
   pointer-events: none;
-  transition: transform var(--dsh-claude-duration-slide) var(--dsh-claude-ease-glide), width var(--dsh-claude-duration-slide) var(--dsh-claude-ease-glide), height var(--dsh-claude-duration-slide) var(--dsh-claude-ease-glide);
+  transition: transform var(--dsh-deepcraft-duration-slide) var(--dsh-deepcraft-ease-glide), width var(--dsh-deepcraft-duration-slide) var(--dsh-deepcraft-ease-glide), height var(--dsh-deepcraft-duration-slide) var(--dsh-deepcraft-ease-glide);
 }
 /* The items paint above the pill, which is the control's first painted box. */
-body[data-dsh-claude-style] [data-dsh-claude-pill] > * {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-pill] > * {
   position: relative;
   z-index: 1;
 }

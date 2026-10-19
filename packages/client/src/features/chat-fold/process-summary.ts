@@ -1,14 +1,14 @@
 import { QUIET_ATTR } from '../../constants'
-import { observeSize, subscribeMutations } from '@dsh-claude-style/engine/bus'
-import { requestFrame } from '@dsh-claude-style/engine/frame'
+import { observeSize, subscribeMutations } from '@dsh-deepcraft/engine/bus'
+import { requestFrame } from '@dsh-deepcraft/engine/frame'
 import { copy } from './copy'
 import type { CopyKey } from './copy'
 import { motionReduced } from '../../core/prefs'
-import { buildElement } from '@dsh-claude-style/engine/dom'
+import { buildElement } from '@dsh-deepcraft/engine/dom'
 import { motionMs } from '../../shared/motion'
 import { inPagePixels } from '../../shared/page-zoom'
 import { SWEEP_BAND_CLASS, buildSweepBand } from '../../shared/sweep-band'
-import { ASSISTANT_STEP_KIND, CHAT_GROUP_PART_ATTRIBUTE, CHAT_GROUP_PART_REASONING, FLOW_KIND_ATTRIBUTE, PROCESS_ACTIVITY_SELECTOR, PROCESS_CONTENT_SELECTOR, PROCESS_GROUP_SELECTOR, SHIMMER_ATTRIBUTE, SHIMMER_LEGACY_ATTRIBUTE, SHIMMER_SELECTOR, TOOL_CALL_KIND } from '@dsh-claude-style/contracts/dom'
+import { ASSISTANT_STEP_KIND, CHAT_GROUP_PART_ATTRIBUTE, CHAT_GROUP_PART_REASONING, FLOW_KIND_ATTRIBUTE, PROCESS_ACTIVITY_SELECTOR, PROCESS_CONTENT_SELECTOR, PROCESS_GROUP_SELECTOR, SHIMMER_ATTRIBUTE, SHIMMER_LEGACY_ATTRIBUTE, SHIMMER_SELECTOR, TOOL_CALL_KIND } from '@dsh-deepcraft/contracts/dom'
 
 /**
  * A process group's header names what the group holds — 「执行 2 次思考，调用 1 次
@@ -74,20 +74,20 @@ const FIGURE_COPY: Record<ProcessFigure, { full: { one: CopyText, other: CopyTex
 const FULL_SEPARATOR = () => copy('processSummaryFullSeparator')
 const COMPACT_SEPARATOR = ' · '
 /** On a group root while its header shows the summary; the stylesheet hides the host's words under it. */
-export const PROCESS_SUMMARY_ATTR = 'data-dsh-claude-summary'
+export const PROCESS_SUMMARY_ATTR = 'data-dsh-deepcraft-summary'
 /** On the summary while the group's section still runs, which is while its band stands (syncBand). */
-export const PROCESS_SUMMARY_RUNNING_ATTR = 'data-dsh-claude-summary-running'
+export const PROCESS_SUMMARY_RUNNING_ATTR = 'data-dsh-deepcraft-summary-running'
 /** On the summary: the wording it stands in. */
-export const PROCESS_SUMMARY_FORM_ATTR = 'data-dsh-claude-summary-form'
+export const PROCESS_SUMMARY_FORM_ATTR = 'data-dsh-deepcraft-summary-form'
 /** On a rolling digit: `enter` rises into place, `exit` leaves upward, `settled` stands. */
-const ROLL_ATTR = 'data-dsh-claude-roll'
+const ROLL_ATTR = 'data-dsh-deepcraft-roll'
 /** How long a digit takes to roll, as the stylesheet's animations run it (D9). */
-const ROLL_MS = motionMs('--dsh-claude-duration-roll')
-const SUMMARY_CLASS = 'dsh-claude-process-summary'
+const ROLL_MS = motionMs('--dsh-deepcraft-duration-roll')
+const SUMMARY_CLASS = 'dsh-deepcraft-process-summary'
 /** The hidden span holding the sentence, whose natural width tells whether the header has room for it. */
-const FIT_CLASS = 'dsh-claude-process-summary-fit'
+const FIT_CLASS = 'dsh-deepcraft-process-summary-fit'
 /** On the band's copy of the figures, which lays them out the way the summary does (fold.css). */
-const GLYPHS_CLASS = 'dsh-claude-process-summary-glyphs'
+const GLYPHS_CLASS = 'dsh-deepcraft-process-summary-glyphs'
 
 /**
  * What one group holds: its body's own rows, a thought or an output by the step
@@ -216,7 +216,7 @@ export function createProcessSummary() {
         }, ROLL_MS))
       } else current.remove()
     }
-    const digit = buildElement('span', 'dsh-claude-process-summary-digit', text)
+    const digit = buildElement('span', 'dsh-deepcraft-process-summary-digit', text)
     digit.setAttribute(ROLL_ATTR, animate ? 'enter' : 'settled')
     roll.appendChild(digit)
   }
@@ -356,10 +356,10 @@ export function createProcessSummary() {
     for (const part of parts) {
       let element = summary.querySelector<HTMLElement>(`:scope > [data-figure="${part.figure}"]`)
       if (element === null) {
-        element = buildElement('span', 'dsh-claude-process-summary-part')
+        element = buildElement('span', 'dsh-deepcraft-process-summary-part')
         element.dataset.figure = part.figure
-        element.append(buildElement('span', 'dsh-claude-process-summary-words'), buildElement('span', 'dsh-claude-process-summary-roll'), buildElement('span', 'dsh-claude-process-summary-words'))
-        element.children[1].appendChild(buildElement('span', 'dsh-claude-process-summary-sizer'))
+        element.append(buildElement('span', 'dsh-deepcraft-process-summary-words'), buildElement('span', 'dsh-deepcraft-process-summary-roll'), buildElement('span', 'dsh-deepcraft-process-summary-words'))
+        element.children[1].appendChild(buildElement('span', 'dsh-deepcraft-process-summary-sizer'))
       }
       // Parts keep the figure order: a figure that appears later slots in behind its predecessor.
       const place: Element | null = previous === null ? fitOf(summary).nextElementSibling : previous.nextElementSibling

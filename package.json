@@ -1,10 +1,10 @@
 {
-  "name": "dsh-claude-style",
-  "description": "Claude Code Desktop theme for DeepSeek Harness (dsh) web GUI — visual & interaction overhaul",
+  "name": "dsh-deepcraft",
+  "description": "DeepCraft — Claude and DeepSeek themes for the DeepSeek Harness (dsh) web GUI: visual and interaction overhaul",
   "version": "0.16.3",
   "type": "module",
   "main": "lib/host/index.js",
-  "icon": "lib/claude-mark.svg",
+  "icon": "lib/deepcraft-mark.svg",
   "workspaces": [
     "packages/*"
   ],
@@ -74,12 +74,9 @@
   "author": "Nwflower",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Nwflower/dsh-claude-style.git"
+    "url": "git+https://github.com/Zestful-ss/dsh-claude-style.git"
   },
-  "homepage": "https://github.com/Nwflower/dsh-claude-style#readme",
-  "bugs": {
-    "url": "https://github.com/Nwflower/dsh-claude-style/issues"
-  },
+  "homepage": "https://github.com/Zestful-ss/dsh-claude-style#readme",
   "peerDependencies": {
     "@deepseek-ai/dsh-client-ui-primitives": ">=0.1.5-rc.1",
     "@deepseek-ai/schemastery": ">=3.18.0",

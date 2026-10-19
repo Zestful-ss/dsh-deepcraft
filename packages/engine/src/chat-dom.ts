@@ -1,4 +1,4 @@
-import { CHAT_FLOW_SELECTOR, CONVERSATION_SCROLL_SELECTOR, FLOW_KIND_ATTRIBUTE, FOLLOW_THRESHOLD_PX, SUBMISSION_ECHO_SELECTOR, USER_ROW_KIND } from '@dsh-claude-style/contracts/dom'
+import { CHAT_FLOW_SELECTOR, CONVERSATION_SCROLL_SELECTOR, FLOW_KIND_ATTRIBUTE, FOLLOW_THRESHOLD_PX, SUBMISSION_ECHO_SELECTOR, USER_ROW_KIND } from '@dsh-deepcraft/contracts/dom'
 
 /**
  * The chat area's DOM helpers: the column and the session's scroll container, the

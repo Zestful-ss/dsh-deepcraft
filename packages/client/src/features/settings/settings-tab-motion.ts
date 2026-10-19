@@ -29,13 +29,13 @@ export function createSettingsMotionTab(): SettingsTab {
     ]
     return React.createElement(
       'div',
-      { className: 'dsh-claude-ongoing-picker', role: 'group' },
+      { className: 'dsh-deepcraft-ongoing-picker', role: 'group' },
       options.map(option => React.createElement(
         'button',
         {
           key: option.value,
           type: 'button',
-          className: 'dsh-claude-ongoing-card',
+          className: 'dsh-deepcraft-ongoing-card',
           'data-active': option.value === prefs.ongoingIndicator ? '' : undefined,
           'aria-pressed': option.value === prefs.ongoingIndicator ? 'true' : 'false',
           'aria-label': option.label,
@@ -43,11 +43,11 @@ export function createSettingsMotionTab(): SettingsTab {
         },
         React.createElement(
           'span',
-          { className: 'dsh-claude-ongoing-sample', 'aria-hidden': 'true' },
+          { className: 'dsh-deepcraft-ongoing-sample', 'aria-hidden': 'true' },
           // The look is fixed to the card's own choice, so both cards show
           // their mark whatever the page is set to.
-          React.createElement('span', { className: 'dsh-claude-ongoing-mark', 'data-look': option.value }),
-          React.createElement('span', { className: 'dsh-claude-ongoing-sample-title' }, copy('ongoingSample')),
+          React.createElement('span', { className: 'dsh-deepcraft-ongoing-mark', 'data-look': option.value }),
+          React.createElement('span', { className: 'dsh-deepcraft-ongoing-sample-title' }, copy('ongoingSample')),
         ),
       )),
     )

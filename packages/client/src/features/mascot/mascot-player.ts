@@ -1,11 +1,11 @@
-import { COMPOSER_STACK, conversationSessionId, findComposerCard, findComposerSeat, findConversationSession, findHeroRoot } from '@dsh-claude-style/engine/host'
+import { COMPOSER_STACK, conversationSessionId, findComposerCard, findComposerSeat, findConversationSession, findHeroRoot } from '@dsh-deepcraft/engine/host'
 import { motionReduced } from '../../core/prefs'
 import { createMascotSignals } from './mascot-signals'
 import type { MascotMoment } from './mascot-signals'
 import { decideStage, finishStage, freshStage, nextDecisionAt, switchSettles, takeMoment } from './mascot-stage'
 import type { MascotPick, PlayMode } from './mascot-stage'
-import { buildElement, createStamp, setAttributeIfChanged } from '@dsh-claude-style/engine/dom'
-import type { HostContext } from '@dsh-claude-style/engine/host'
+import { buildElement, createStamp, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './mascot.manifest'
 
@@ -60,7 +60,7 @@ export interface MascotCharacter {
  * @param ui - shared handle table (`ui.composer`).
  * @param character - `{ name, sheets, frameMs, gutter, extras, createSheets }`:
  *     `name` prefixes the class names, the custom properties and the anchor
- *     mark (`dsh-claude-<name>`); `sheets` is the animation table
+ *     mark (`dsh-deepcraft-<name>`); `sheets` is the animation table
  *     (`{ frames, box, still }` per key, every key the signals, moments,
  *     sleep, extras and reactions name); `gutter` the transparent margin
  *     each frame cell carries in the character's sheets, in logical pixels
@@ -74,7 +74,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   const TICKLE_CLICKS = 4
   /** How far a press travels before it lifts the mascot. */
   const LIFT_PX = 4
-  const PREFIX = `dsh-claude-${character.name}` as const
+  const PREFIX = `dsh-deepcraft-${character.name}` as const
   /** The transparent margin each frame cell carries in this character's sheets (DEEPY_GUTTER), in logical pixels. */
   const GUTTER = character.gutter ?? 0
   /** A marker on the host element the mascot stands on, which makes it the mascot's containing block. */
@@ -323,7 +323,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     style.setProperty(`--${PREFIX}-w`, String(sheet.box[2]))
     // The sprite's height is the one custom property both characters share:
     // crab.css reads it in the merged sprite rule.
-    style.setProperty('--dsh-claude-mascot-h', String(sheet.box[3]))
+    style.setProperty('--dsh-deepcraft-mascot-h', String(sheet.box[3]))
     style.setProperty(`--${PREFIX}-cell-w`, String(cellWidth))
     style.setProperty(`--${PREFIX}-strip-h`, String(cellHeight * Math.ceil(sheet.frames / 8)))
     setAttributeIfChanged(root, 'data-animation', next.key)

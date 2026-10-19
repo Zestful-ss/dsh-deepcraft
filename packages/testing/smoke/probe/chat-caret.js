@@ -14,12 +14,12 @@
     await probe.onlyFor(['caret'], async function () {
       var caretEditor = document.querySelector('[data-composer-input]')
       var caretOf = function () {
-        var layer = document.querySelector('[data-dsh-claude-caret-layer]')
+        var layer = document.querySelector('[data-dsh-deepcraft-caret-layer]')
         return {
           layer: layer !== null,
-          visible: layer !== null && layer.hasAttribute('data-dsh-claude-caret-visible'),
+          visible: layer !== null && layer.hasAttribute('data-dsh-deepcraft-caret-visible'),
           transform: layer === null ? null : layer.style.transform,
-          marked: caretEditor.hasAttribute('data-dsh-claude-caret'),
+          marked: caretEditor.hasAttribute('data-dsh-deepcraft-caret'),
           nativeHidden: getComputedStyle(caretEditor).caretColor === 'rgba(0, 0, 0, 0)',
         }
       }
@@ -48,11 +48,11 @@
         answer.selectionEnd = answer.value.length
         document.dispatchEvent(new Event('selectionchange'))
         await probe.settle()
-        var answerLayer = answer.parentElement.querySelector('[data-dsh-claude-caret-layer]')
+        var answerLayer = answer.parentElement.querySelector('[data-dsh-deepcraft-caret-layer]')
         r.caret.plain = {
           layer: answerLayer !== null,
-          marked: answer.hasAttribute('data-dsh-claude-caret'),
-          visible: answerLayer !== null && answerLayer.hasAttribute('data-dsh-claude-caret-visible'),
+          marked: answer.hasAttribute('data-dsh-deepcraft-caret'),
+          visible: answerLayer !== null && answerLayer.hasAttribute('data-dsh-deepcraft-caret-visible'),
           nativeHidden: getComputedStyle(answer).caretColor === 'rgba(0, 0, 0, 0)',
         }
         caretSelect()
@@ -68,7 +68,7 @@
       // rule (caret.css), which is what D40's resolved attribute is for.
       window.__pushForm({ motion: 'reduced' })
       await probe.settle()
-      var reducedLayer = document.querySelector('[data-dsh-claude-caret-layer]')
+      var reducedLayer = document.querySelector('[data-dsh-deepcraft-caret-layer]')
       r.caret.reduced = reducedLayer === null ? null : {
         layer: true,
         transition: getComputedStyle(reducedLayer).transitionDuration,

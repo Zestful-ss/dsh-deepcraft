@@ -3,12 +3,12 @@ import { MODEL_EFFORT_LABEL } from '../model/copy-fallbacks'
 import { readPrefs } from '../../core/prefs'
 import { createEffortControl } from './control'
 import type { EffortTrackBox } from './control'
-import type { HostContext } from '@dsh-claude-style/engine/host'
-import type { CloseReason } from '@dsh-claude-style/engine/scheduler'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
+import type { CloseReason } from '@dsh-deepcraft/engine/scheduler'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './effort-picker.manifest'
 import type { ModelCatalog } from '../model/catalog'
-import { setAttributeIfChanged } from '@dsh-claude-style/engine/dom'
+import { setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { POPOVER_CLOSE_DELAY, POPOVER_OPEN_DELAY, closeOtherPopovers, createHoverIntent, positionAnchoredPopover, pressKeepsPopoverOpen, registerPopover, removeStrayNodes, setMenuPopoverOpen, unregisterPopover } from '../../shared/popover'
 import { inPageBox } from '../../shared/page-zoom'
 import { EFFORT_ROW_SELECTOR, releaseEffortRoom, reserveEffortRoom } from './room'
@@ -168,7 +168,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     }
     // The trigger's size follows its label: re-measure only when it moved
     // (offsetWidth/offsetHeight force a layout the pass would rather not pay).
-    const labelEl = effortBtn.querySelector('.dsh-claude-effort-btn-label')
+    const labelEl = effortBtn.querySelector('.dsh-deepcraft-effort-btn-label')
     const label = labelEl === null ? '' : labelEl.textContent
     const fresh = label !== effortPlace.widthLabel
     if (fresh) {
@@ -289,11 +289,11 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    */
   function ensureEffortChrome() {
     const slot = seat()
-    if (slot !== null) removeStrayNodes(slot, '.dsh-claude-effort-btn', [effortBtn])
-    removeStrayNodes(document, 'body > .dsh-claude-effort-popover', [effortPop])
+    if (slot !== null) removeStrayNodes(slot, '.dsh-deepcraft-effort-btn', [effortBtn])
+    removeStrayNodes(document, 'body > .dsh-deepcraft-effort-popover', [effortPop])
     if (effortPop === null || effortPop.parentElement === null) {
       effortPop = document.createElement('div')
-      effortPop.className = 'dsh-claude-popover-card dsh-claude-effort-popover'
+      effortPop.className = 'dsh-deepcraft-popover-card dsh-deepcraft-effort-popover'
       setMenuPopoverOpen(effortPop, false)
       effortPop.addEventListener('mouseenter', cancelCloseEffort)
       effortPop.addEventListener('mouseleave', () => {
@@ -371,9 +371,9 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       if (effortBtn !== null && effortBtn.parentElement !== null) effortBtn.parentElement.removeChild(effortBtn)
       effortBtn = document.createElement('button')
       effortBtn.type = 'button'
-      effortBtn.className = 'dsh-claude-effort-btn'
+      effortBtn.className = 'dsh-deepcraft-effort-btn'
       effortBtn.setAttribute('aria-haspopup', 'menu')
-      effortBtn.innerHTML = '<span class="dsh-claude-effort-btn-label"></span>'
+      effortBtn.innerHTML = '<span class="dsh-deepcraft-effort-btn-label"></span>'
       // Same contract as the model trigger: hover under the "All" scope,
       // click-only otherwise.
       effortBtn.addEventListener('mouseenter', () => {
@@ -399,7 +399,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // Same-value guards: sync runs on every scheduler pass, and an identical
     // write still mutates the DOM (textContent replaces the text node;
     // setAttribute queues a record the scheduler's observer sees).
-    const labelEl = effortBtn.querySelector('.dsh-claude-effort-btn-label')
+    const labelEl = effortBtn.querySelector('.dsh-deepcraft-effort-btn-label')
     if (labelEl !== null && labelEl.textContent !== info.label) labelEl.textContent = info.label
     const aria = `${copy('effortLabel')} ${info.label}`
     setAttributeIfChanged(effortBtn, 'aria-label', aria)

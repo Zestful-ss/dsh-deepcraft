@@ -1,5 +1,5 @@
-import { CHAT_CALL_SELECTOR, FLOW_BLOCK_SELECTOR, PROCESS_CONTENT_SELECTOR } from '@dsh-claude-style/contracts/dom'
-import { notifyAll } from '@dsh-claude-style/engine/notify'
+import { CHAT_CALL_SELECTOR, FLOW_BLOCK_SELECTOR, PROCESS_CONTENT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { notifyAll } from '@dsh-deepcraft/engine/notify'
 import type { FileHunk, FileReadCard, FileRowOperation, FileRowState } from './file-row-model'
 
 /**

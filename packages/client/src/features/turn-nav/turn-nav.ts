@@ -1,16 +1,16 @@
-import { requestFrame } from '@dsh-claude-style/engine/frame'
+import { requestFrame } from '@dsh-deepcraft/engine/frame'
 import { QUIET_ATTR } from '../../constants'
-import { conversationSessionId, findConversationSession } from '@dsh-claude-style/engine/host'
+import { conversationSessionId, findConversationSession } from '@dsh-deepcraft/engine/host'
 import { motionReduced } from '../../core/prefs'
 import { createTurnNavHost } from './turn-nav-host'
 import type { TurnItem } from './turn-nav-host'
-import { CHAT_TURN_ATTRIBUTE, FOREGROUND_SELECTOR, PEER_SHEET_SELECTOR, TURN_RAIL_CURRENT_SELECTOR } from '@dsh-claude-style/contracts/dom'
-import { buildElement, closestFrom } from '@dsh-claude-style/engine/dom'
+import { CHAT_TURN_ATTRIBUTE, FOREGROUND_SELECTOR, PEER_SHEET_SELECTOR, TURN_RAIL_CURRENT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { buildElement, closestFrom } from '@dsh-deepcraft/engine/dom'
 import { POPOVER_CLOSE_DELAY, closeOtherPopovers, createHoverIntent, registerPopover, unregisterPopover } from '../../shared/popover'
 import { inPageBox } from '../../shared/page-zoom'
-import { easeScrollFor, holdReader, scrollPositionFor, writeScroll } from '@dsh-claude-style/engine/scroll-owner'
+import { easeScrollFor, holdReader, scrollPositionFor, writeScroll } from '@dsh-deepcraft/engine/scroll-owner'
 import { motionMs } from '../../shared/motion'
-import type { HostContext } from '@dsh-claude-style/engine/host'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './turn-nav.manifest'
 
@@ -50,11 +50,11 @@ import type manifest from './turn-nav.manifest'
  */
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   /** On the host's rail while the skin's rail stands in for it: the stylesheet hides it, keeping its layout. */
-  const TURN_NAV_REPLACED_ATTR = 'data-dsh-claude-turn-nav-replaced'
+  const TURN_NAV_REPLACED_ATTR = 'data-dsh-deepcraft-turn-nav-replaced'
   /** On the skin's rail while the card is open over it: its marks step back. */
-  const TURN_NAV_OPEN_ATTR = 'data-dsh-claude-turn-nav-open'
+  const TURN_NAV_OPEN_ATTR = 'data-dsh-deepcraft-turn-nav-open'
   /** On the first row of the turn a jump landed on, while its line shows. */
-  const TURN_NAV_LANDED_ATTR = 'data-dsh-claude-turn-nav-landed'
+  const TURN_NAV_LANDED_ATTR = 'data-dsh-deepcraft-turn-nav-landed'
   /** The card's name in the popover registry */
   const TURN_NAV_POPOVER = 'turnNav'
   /** One turn's height on the rail and in the card: the two have to match for a row to sit on its mark. */
@@ -66,7 +66,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    */
   const TURN_NAV_GLIDE_LEAD_PX = 480
   /** How long the landing line stays: its animation (turn-nav.css) at its own period (D9). */
-  const LANDED_MS = motionMs('--dsh-claude-period-landed')
+  const LANDED_MS = motionMs('--dsh-deepcraft-period-landed')
   /** How long a jump to a turn outside the loaded window may take to bring its rows in. */
   const LANDING_WAIT_MS = 10000
   /**
@@ -113,11 +113,11 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   /** @returns the skin's rail, built the first time. */
   function ensureRail() {
     if (rail !== null) return rail
-    const built = buildElement('div', 'dsh-claude-turn-rail')
+    const built = buildElement('div', 'dsh-deepcraft-turn-rail')
     built.setAttribute('aria-hidden', 'true')
     // The marks change with the reading position; none of that is news to a pass.
     built.setAttribute(QUIET_ATTR, '')
-    track = buildElement('div', 'dsh-claude-turn-rail-track')
+    track = buildElement('div', 'dsh-deepcraft-turn-rail-track')
     built.appendChild(track)
     built.addEventListener('pointerenter', openCard)
     rail = built
@@ -156,21 +156,21 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     drawnItems = items
     const marks = document.createDocumentFragment()
     for (let i = 0; i < items.length; i++) {
-      const mark = buildElement('span', 'dsh-claude-turn-rail-mark')
+      const mark = buildElement('span', 'dsh-deepcraft-turn-rail-mark')
       mark.style.top = `${i * TURN_NAV_PITCH}px`
       if (!items[i].loaded) mark.setAttribute('data-unloaded', '')
       marks.appendChild(mark)
     }
     track!.replaceChildren(marks)
     track!.style.height = `${items.length * TURN_NAV_PITCH}px`
-    rail!.style.setProperty('--dsh-claude-turn-rail-height', `${items.length * TURN_NAV_PITCH}px`)
+    rail!.style.setProperty('--dsh-deepcraft-turn-rail-height', `${items.length * TURN_NAV_PITCH}px`)
     current = -1
     currentMark = null
   }
 
   /**
    * The rail's height: its marks' own height up to the limit the stylesheet
-   * gives it (turn-nav.css's `--dsh-claude-turn-rail-height` and `max-height`).
+   * gives it (turn-nav.css's `--dsh-deepcraft-turn-rail-height` and `max-height`).
    * The limit is read in the pass's read phase; a height read here would land
    * after this frame's writes and lay the page out a second time (D40).
    */
@@ -243,23 +243,23 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
 
   /** The rail, while a host rail it stands beside is found (the card opens from it). */
   function mountedRail() {
-    if (rail === null) throw new Error('dsh-claude-style: the turn rail is not built')
+    if (rail === null) throw new Error('dsh-deepcraft: the turn rail is not built')
     return rail
   }
 
   /** The card, once ensureCard built it. */
   function builtCard() {
-    if (card === null) throw new Error('dsh-claude-style: the turn card is not built')
+    if (card === null) throw new Error('dsh-deepcraft: the turn card is not built')
     return card
   }
 
   function ensureCard() {
     if (card !== null) return
-    const built = buildElement('div', 'dsh-claude-popover-card dsh-claude-turn-nav')
+    const built = buildElement('div', 'dsh-deepcraft-popover-card dsh-deepcraft-turn-nav')
     built.setAttribute('data-open', 'false')
     // Rows are rebuilt while the card is open; none of that is news to a pass.
     built.setAttribute(QUIET_ATTR, '')
-    const rows = buildElement('div', 'dsh-claude-turn-nav-list')
+    const rows = buildElement('div', 'dsh-deepcraft-turn-nav-list')
     built.appendChild(rows)
     built.addEventListener('mouseenter', () => { hoverIntent.cancel() })
     built.addEventListener('mouseleave', () => { hoverIntent.scheduleClose() })
@@ -280,14 +280,14 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const rows = document.createDocumentFragment()
     for (let i = 0; i < items.length; i++) {
       const item = items[i]
-      const row = buildElement('button', 'dsh-claude-turn-nav-row')
+      const row = buildElement('button', 'dsh-deepcraft-turn-nav-row')
       row.type = 'button'
       row.dataset.index = String(i)
       row.setAttribute('aria-label', chat('chat.turnNavigation.jump', { turn: item.turn }))
       if (!item.loaded) row.setAttribute('data-unloaded', '')
       if (i === current) row.setAttribute('data-current', '')
-      row.appendChild(buildElement('span', 'dsh-claude-turn-nav-text', item.prompt !== '' ? item.prompt : chat('chat.turnNavigation.turn', { turn: item.turn })))
-      row.appendChild(buildElement('span', 'dsh-claude-turn-nav-dash'))
+      row.appendChild(buildElement('span', 'dsh-deepcraft-turn-nav-text', item.prompt !== '' ? item.prompt : chat('chat.turnNavigation.turn', { turn: item.turn })))
+      row.appendChild(buildElement('span', 'dsh-deepcraft-turn-nav-dash'))
       rows.appendChild(row)
     }
     list.replaceChildren(rows)
@@ -309,7 +309,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // Only while the card is open: the rail is mounted in its slot and the card is built.
     const rail = mountedRail()
     const card = builtCard()
-    const list = card.querySelector<HTMLElement>(':scope > .dsh-claude-turn-nav-list')!
+    const list = card.querySelector<HTMLElement>(':scope > .dsh-deepcraft-turn-nav-list')!
     const slot = rail.parentElement!
     if (card.parentElement !== slot) slot.appendChild(card)
     const frame = inPageBox(slot.getBoundingClientRect())
@@ -356,7 +356,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   const hoverIntent = createHoverIntent(openCard, closeCard, 0, POPOVER_CLOSE_DELAY)
 
   function onRowClick(event: MouseEvent) {
-    const row = closestFrom(event.target, '.dsh-claude-turn-nav-row')
+    const row = closestFrom(event.target, '.dsh-deepcraft-turn-nav-row')
     if (row === null || rowItems === null) return
     const item = rowItems[Number(row.dataset.index)]
     if (item !== undefined) jumpTo(item.turn)

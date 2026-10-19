@@ -1,4 +1,4 @@
-import type { HostContext } from '@dsh-claude-style/engine/host'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
 import { resetIdentity } from '../shared/identity'
 
 /**

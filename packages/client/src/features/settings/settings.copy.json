@@ -78,6 +78,6 @@
   "motionStillNote": { "zh": "动画设为「减弱」时这一项不生效，卡片只显示定格画面。", "en": "No effect while Animation is Reduced; the cards show stills." },
   "experimental": { "zh": "实验性", "en": "Experimental" },
   "unavailable": { "zh": "ERROR : 设置存储服务异常，改动不会被保存。", "en": "The settings store is unavailable, so changes will not be saved." },
-  "title": { "zh": "Claude Style", "en": "Claude Style" },
+  "title": { "zh": "DeepCraft", "en": "DeepCraft" },
   "composerRequired": { "zh": "「重绘对话框」为「关闭」时不生效。", "en": "No effect while Composer restyle is Off." }
 }

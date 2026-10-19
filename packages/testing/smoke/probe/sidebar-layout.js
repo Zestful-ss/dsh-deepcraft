@@ -12,13 +12,13 @@
   probe.step(async function () {
     await probe.onlyFor(['sidebar-layout'], async function () {
       var snapshot = function () {
-        var row = document.querySelector('[data-dsh-claude-part~="session-row"]')
-        var foot = document.querySelector('[data-dsh-claude-part~="foot-area"]')
+        var row = document.querySelector('[data-dsh-deepcraft-part~="session-row"]')
+        var foot = document.querySelector('[data-dsh-deepcraft-part~="foot-area"]')
         var style = function (el) { return el === null ? null : getComputedStyle(el) }
         var rowStyle = style(row)
         var footStyle = style(foot)
         return {
-          attr: document.body.getAttribute('data-dsh-claude-sidebar-layout'),
+          attr: document.body.getAttribute('data-dsh-deepcraft-sidebar-layout'),
           rowHeight: row === null ? null : Math.round(row.getBoundingClientRect().height),
           rowMin: rowStyle === null ? null : rowStyle.minHeight,
           footPadding: footStyle === null ? null : footStyle.paddingTop + ' ' + footStyle.paddingBottom,

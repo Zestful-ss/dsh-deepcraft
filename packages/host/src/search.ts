@@ -16,7 +16,7 @@
  * does — a literal, case-insensitive, whitespace-flexible scan.
  *
  * Caching. Each session's corpus is kept in memory and in
- * `$DSH_HOME/cache/dsh-claude-style/search/<sessionId>.json` beside a change
+ * `$DSH_HOME/cache/dsh-deepcraft/search/<sessionId>.json` beside a change
  * token: the persistence revision for a stored log, the log length for a session
  * the host holds open. A warm start reads those files and re-reads only the
  * sessions whose token moved; a session the host holds open contributes only the
@@ -110,10 +110,10 @@ interface CachedSession {
   messages: SearchMessage[]
 }
 
-import { PACKAGE_NAME } from '@dsh-claude-style/contracts/package'
-import type { DshContext } from '@dsh-claude-style/engine/node/dsh'
+import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
+import type { DshContext } from '@dsh-deepcraft/engine/node/dsh'
 import { cachePath, readJsonDocument, writeJsonDocument } from './cache-file.js'
-import { readEvents } from '@dsh-claude-style/engine/node/session-events'
+import { readEvents } from '@dsh-deepcraft/engine/node/session-events'
 
 /**
  * The query service's own text rule (dsh-session-query `compileSessionTextFilter`):

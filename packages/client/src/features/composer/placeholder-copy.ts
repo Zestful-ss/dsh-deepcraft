@@ -1,5 +1,5 @@
-import { findComposerInput, findComposerPlaceholder } from '@dsh-claude-style/engine/host'
-import type { MatchList } from '@dsh-claude-style/engine/bus'
+import { findComposerInput, findComposerPlaceholder } from '@dsh-deepcraft/engine/host'
+import type { MatchList } from '@dsh-deepcraft/engine/bus'
 
 /** The hero composer's own hint, which the skin's placeholder stands in for. */
 const HERO_HINT = 'How can I help you today?'
@@ -69,7 +69,7 @@ export function createPlaceholderCopy(cards: MatchList<HTMLElement>, placeholder
       const text = (input.textContent || '').replace(/[\u200B-\u200D\uFEFF]/g, '').trim()
       const isEmpty = text.length === 0
       let placeholder = findComposerPlaceholder(card)
-      const grow = input.closest ? input.closest('[data-dsh-claude-part~="input-grow"]') : input.parentElement
+      const grow = input.closest ? input.closest('[data-dsh-deepcraft-part~="input-grow"]') : input.parentElement
 
       if (isEmpty) {
         if (!placeholder && grow) {

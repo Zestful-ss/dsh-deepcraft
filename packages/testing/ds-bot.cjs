@@ -37,32 +37,32 @@ window.__surfaceLog = []
 new MutationObserver(() => {
   const body = document.body
   if (body === null) return
-  window.__surfaceLog.push({ theme: body.hasAttribute('data-dsh-claude-style'), bot: body.hasAttribute('data-bt-motion') })
-}).observe(document, { subtree: true, attributes: true, attributeFilter: ['data-dsh-claude-style', 'data-bt-motion'] })
+  window.__surfaceLog.push({ theme: body.hasAttribute('data-dsh-deepcraft'), bot: body.hasAttribute('data-bt-motion') })
+}).observe(document, { subtree: true, attributes: true, attributeFilter: ['data-dsh-deepcraft', 'data-bt-motion'] })
 `
 
 /** The page as the switch leaves it. */
 const read = (page) => page.evaluate(() => {
   const body = document.body
-  const root = document.querySelector('.dsh-claude-surface-switch')
+  const root = document.querySelector('.dsh-deepcraft-surface-switch')
   // The sidebar column's own box: both the band placement and the collapse are read against it.
-  const column = document.querySelector('[data-slot="sidebar"] > [data-dsh-claude-part~="sidebar-root"]')
+  const column = document.querySelector('[data-slot="sidebar"] > [data-dsh-deepcraft-part~="sidebar-root"]')
   const switchBox = root === null ? null : root.getBoundingClientRect()
   return {
-    theme: body.hasAttribute('data-dsh-claude-style'),
+    theme: body.hasAttribute('data-dsh-deepcraft'),
     bot: body.hasAttribute('data-bt-motion'),
     saved: localStorage.getItem('ds-bot:surface'),
-    mode: body.getAttribute('data-dsh-claude-surface'),
-    themeSheet: document.getElementById('dsh-claude-style-style') !== null,
-    surfaceSheet: document.getElementById('dsh-claude-style-surface') !== null,
-    themeMarks: [...body.attributes].map((attribute) => attribute.name).filter((name) => name.startsWith('data-dsh-claude') && name !== 'data-dsh-claude-surface'),
-    themeNodes: [...document.querySelectorAll(':is([class^="dsh-claude-"], [class*=" dsh-claude-"])')].filter((node) => root === null || !root.contains(node)).length,
-    checked: root === null ? [] : [...root.querySelectorAll('.dsh-claude-surface-option')].map((option) => option.getAttribute('aria-checked') === 'true'),
+    mode: body.getAttribute('data-dsh-deepcraft-surface'),
+    themeSheet: document.getElementById('dsh-deepcraft-style') !== null,
+    surfaceSheet: document.getElementById('dsh-deepcraft-surface') !== null,
+    themeMarks: [...body.attributes].map((attribute) => attribute.name).filter((name) => name.startsWith('data-dsh-deepcraft') && name !== 'data-dsh-deepcraft-surface'),
+    themeNodes: [...document.querySelectorAll(':is([class^="dsh-deepcraft-"], [class*=" dsh-deepcraft-"])')].filter((node) => root === null || !root.contains(node)).length,
+    checked: root === null ? [] : [...root.querySelectorAll('.dsh-deepcraft-surface-option')].map((option) => option.getAttribute('aria-checked') === 'true'),
     switchShown: root !== null && root.isConnected && switchBox.width > 0 && getComputedStyle(root).visibility !== 'hidden',
     menu: document.querySelector('.bt-account-menu') !== null,
-    switching: body.hasAttribute('data-dsh-claude-surface-switching'),
+    switching: body.hasAttribute('data-dsh-deepcraft-surface-switching'),
     box: switchBox === null ? null : {
-      place: root.getAttribute('data-dsh-claude-surface-place'),
+      place: root.getAttribute('data-dsh-deepcraft-surface-place'),
       inBody: root.parentElement === body,
       fixed: getComputedStyle(root).position === 'fixed',
       x: Math.round(switchBox.x),
@@ -77,12 +77,12 @@ const read = (page) => page.evaluate(() => {
 /** Wait for one side to hold the page: ds-bot's surface with the theme gone, or the reverse. */
 const settle = (page, side) => page.waitForFunction((chat) => {
   const body = document.body
-  return body.hasAttribute('data-bt-motion') === chat && body.hasAttribute('data-dsh-claude-style') === !chat &&
-    body.getAttribute('data-dsh-claude-surface') === (chat ? 'chat' : 'code') && document.querySelector('.dsh-claude-surface-switch') !== null
+  return body.hasAttribute('data-bt-motion') === chat && body.hasAttribute('data-dsh-deepcraft') === !chat &&
+    body.getAttribute('data-dsh-deepcraft-surface') === (chat ? 'chat' : 'code') && document.querySelector('.dsh-deepcraft-surface-switch') !== null
 }, side === 'chat', { timeout: 20000 })
 
 /** Press one side of the switch: its options are Chat, then Code. */
-const press = (page, side) => page.locator('.dsh-claude-surface-option').nth(side === 'chat' ? 0 : 1).click()
+const press = (page, side) => page.locator('.dsh-deepcraft-surface-option').nth(side === 'chat' ? 0 : 1).click()
 
 /** The host's own collapse toggle, in the sidebar's brand row (packages/contracts/src/dom.ts). */
 const SIDEBAR_TOGGLE = '[data-slot="sidebar"] [class*="_logoRow"] > [class*="_toggle"]'

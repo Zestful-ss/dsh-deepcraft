@@ -141,7 +141,7 @@
         await probe.settle()
       }
       r.chatFollow = {
-        marked: document.body.hasAttribute('data-dsh-claude-chat-follow'),
+        marked: document.body.hasAttribute('data-dsh-deepcraft-chat-follow'),
         overflowX: cappedBody === null ? null : getComputedStyle(cappedBody).overflowX,
         expandedOverflowX: expandedBody === null ? null : getComputedStyle(expandedBody).overflowX,
       }
@@ -211,9 +211,9 @@
       r.chatFollow.slide = await recordWalk(slideOffset, sliding)
       r.chatFollow.slideFrames = slideFrames
       r.chatFollow.slideDiag = {
-        motion: document.body.getAttribute('data-dsh-claude-motion'),
+        motion: document.body.getAttribute('data-dsh-deepcraft-motion'),
         streamMark: document.querySelector('[data-streaming]') !== null,
-        rolling: document.querySelector('[data-dsh-claude-rolling]') !== null,
+        rolling: document.querySelector('[data-dsh-deepcraft-rolling]') !== null,
         followAttr: document.querySelector('[data-chat-following-tail]') !== null,
       }
       // A burst: one growth past the longest stretch a slide carries is slid

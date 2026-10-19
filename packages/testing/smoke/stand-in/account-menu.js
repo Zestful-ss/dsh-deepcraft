@@ -27,7 +27,7 @@
     if (accountTrigger) accountTrigger.setAttribute('aria-expanded', 'false')
   }
   function openHostSettingsDialog() {
-    var area = document.querySelector('[data-dsh-claude-part~="settings-area"]')
+    var area = document.querySelector('[data-dsh-deepcraft-part~="settings-area"]')
     if (!area) return
     var dialog = document.createElement('div')
     dialog.setAttribute('role', 'dialog')

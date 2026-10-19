@@ -1,10 +1,10 @@
-import { BRAND_IMAGE_KINDS } from '@dsh-claude-style/contracts/brand'
-import type { BrandAnswer, BrandImageKind, BrandImageState } from '@dsh-claude-style/contracts/brand'
+import { BRAND_IMAGE_KINDS } from '@dsh-deepcraft/contracts/brand'
+import type { BrandAnswer, BrandImageKind, BrandImageState } from '@dsh-deepcraft/contracts/brand'
 import { BRAND_MARK_ROUTE, BRAND_ROUTE, BRAND_WORDMARK_ROUTE } from '../constants'
-import { notifyAll } from '@dsh-claude-style/engine/notify'
+import { notifyAll } from '@dsh-deepcraft/engine/notify'
 
 /**
- * The reader's own brand images as the page paints them (D30): which of the
+ * The reader's own brand images as the page paints them (D77): which of the
  * mark and the wordmark the host half holds, each with an address that changes
  * with its bytes and its width over its height. The brand feature paints them
  * (packages/client/src/features/brand/brand.ts) and the settings page replaces
@@ -86,7 +86,7 @@ function measure(kind: BrandImageKind, state: BrandImageState | null): Promise<B
   return new Promise(settle => {
     image.onload = () => settle({ url, ratio: image.naturalWidth > 0 && image.naturalHeight > 0 ? image.naturalWidth / image.naturalHeight : 1 })
     image.onerror = () => {
-      console.warn(`dsh-claude-style: the custom ${kind} image could not be loaded and is not shown: ${url}`)
+      console.warn(`dsh-deepcraft: the custom ${kind} image could not be loaded and is not shown: ${url}`)
       settle(null)
     }
     image.src = url

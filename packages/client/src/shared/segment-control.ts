@@ -5,7 +5,7 @@
  * sidebar's 进行中 / 已归档 switch wear the small one — a feature never keys on
  * another feature's classes.
  */
-export const SEGMENTS_CLASS = 'dsh-claude-segments'
-export const SEGMENT_CLASS = 'dsh-claude-segment'
+export const SEGMENTS_CLASS = 'dsh-deepcraft-segments'
+export const SEGMENT_CLASS = 'dsh-deepcraft-segment'
 /** The small variant's shell; its items are styled straight off it (`> *`), so host-built tabs need no class of their own. */
-export const VIEW_SWITCH_CLASS = 'dsh-claude-view-switch'
+export const VIEW_SWITCH_CLASS = 'dsh-deepcraft-view-switch'

@@ -124,15 +124,15 @@ export const CHAT_RUNNING_TEXT_SELECTOR = `:scope > span > [${SHIMMER_ATTRIBUTE}
  * stable part of its hashed class name is matched (D3), scoped to the running
  * row so no other row's icon can be hit.
  */
-export const CHAT_RUNNING_ICON_SELECTOR = '[data-dsh-claude-part~="running-icon"]'
+export const CHAT_RUNNING_ICON_SELECTOR = '[data-dsh-deepcraft-part~="running-icon"]'
 /**
  * The turn rail (ui-chat's TurnNavigator): a nav at the conversation's
  * right edge with one mark per turn, absent below two turns and hidden
  * when the conversation is narrow. It is the one nav in the chat frame.
  */
-export const TURN_RAIL_SELECTOR = `${CONVERSATION_SCROLL_SELECTOR} nav[data-dsh-claude-part~="rail-frame"]`
+export const TURN_RAIL_SELECTOR = `${CONVERSATION_SCROLL_SELECTOR} nav[data-dsh-deepcraft-part~="rail-frame"]`
 /** The rail's own scroller, its first child: the marks scroll inside it. */
-export const TURN_RAIL_SCROLLER_SELECTOR = ':scope > [data-dsh-claude-part~="rail-scroller"]'
+export const TURN_RAIL_SCROLLER_SELECTOR = ':scope > [data-dsh-deepcraft-part~="rail-scroller"]'
 /**
  * One mark: a button carrying its position in the rail's list, not its
  * turn number. The rail renders only the marks near its scroll position.
@@ -174,7 +174,7 @@ export const CONVERSATION_SESSION_ATTRIBUTE = 'data-conversation-session'
 /** The page's own phase: `hero` before a session is chosen, `active` once one is shown. */
 export const PHASE_ATTRIBUTE = 'data-phase'
 /** The composer card and the stack of cards above it. */
-export const COMPOSER_STACK_SELECTOR = '[data-dsh-claude-part~="composer-stack"]'
+export const COMPOSER_STACK_SELECTOR = '[data-dsh-deepcraft-part~="composer-stack"]'
 /** The placeholder the host's own editor draws inside the draft. */
 export const COMPOSER_PLACEHOLDER_SELECTOR = '[data-composer-placeholder]'
 /**
@@ -205,35 +205,35 @@ export const MOBILE_PORTRAIT_SELECTOR = 'body.dsh-remote-portrait'
  * (its track circle carries none). The skin paints it with the colour the
  * occupancy fell on
  */
-export const CONTEXT_METER_FILL_SELECTOR = '[data-dsh-claude-context-meter] circle[stroke-dasharray]'
+export const CONTEXT_METER_FILL_SELECTOR = '[data-dsh-deepcraft-context-meter] circle[stroke-dasharray]'
 /** The composer variant the host puts on the card (`hero` / `default`). */
 export const COMPOSER_VARIANT_ATTRIBUTE = 'data-composer-variant'
 /**
  * The host's own access-mode trigger inside its permission slot, skipping the
- * skin's own control: the skin's elements carry the `dsh-claude-` namespace as
+ * skin's own control: the skin's elements carry the `dsh-deepcraft-` namespace as
  * whole class tokens, so no substring match is involved (D3).
  */
-export const PERMISSION_TRIGGER_SELECTOR = '[data-slot="conversation.input.permission"] button:not([class^="dsh-claude-"], [class*=" dsh-claude-"])'
+export const PERMISSION_TRIGGER_SELECTOR = '[data-slot="conversation.input.permission"] button:not([class^="dsh-deepcraft-"], [class*=" dsh-deepcraft-"])'
 /** A host button that opens a dialog: the model and effort pickers in the composer stack. */
 export const DIALOG_TRIGGER_SELECTOR = 'button[aria-haspopup="dialog"]'
 /** The sidebar footer block; the skin's account entry lives inside it. */
-export const FOOT_AREA_SELECTOR = '[data-dsh-claude-part~="foot-area"]'
+export const FOOT_AREA_SELECTOR = '[data-dsh-deepcraft-part~="foot-area"]'
 /**
  * The host's own sidebar search: a button and an input in the workspace
  * section's header. The skin's box stands in for it, and the `icon` style
  * leaves the host's button in place with its click taken over, so both read
  * this slot.
  */
-export const SIDEBAR_SEARCH_SLOT_SELECTOR = '[data-slot="sidebar"] [data-dsh-claude-part~="search-slot"]'
+export const SIDEBAR_SEARCH_SLOT_SELECTOR = '[data-slot="sidebar"] [data-dsh-deepcraft-part~="search-slot"]'
 /** The sidebar's own column box, whose width follows the collapse and the reader's drag. */
-export const SIDEBAR_ROOT_SELECTOR = '[data-slot="sidebar"] > [data-dsh-claude-part~="sidebar-root"]'
+export const SIDEBAR_ROOT_SELECTOR = '[data-slot="sidebar"] > [data-dsh-deepcraft-part~="sidebar-root"]'
 /** The wide brand in the sidebar's top row; the collapsed rail has none. */
-export const SIDEBAR_BRAND_SELECTOR = '[data-slot="sidebar"] [data-dsh-claude-part~="logo-row"] > [data-dsh-claude-part~="brand-button"]'
+export const SIDEBAR_BRAND_SELECTOR = '[data-slot="sidebar"] [data-dsh-deepcraft-part~="logo-row"] > [data-dsh-deepcraft-part~="brand-button"]'
 /**
  * The sidebar's collapse toggle, inside the top row. The desktop shells fix it
  * into the caption strip; the web leaves it the row's last cell.
  */
-export const SIDEBAR_TOGGLE_SELECTOR = '[data-slot="sidebar"] [data-dsh-claude-part~="logo-row"] > [data-dsh-claude-part~="sidebar-toggle"]'
+export const SIDEBAR_TOGGLE_SELECTOR = '[data-slot="sidebar"] [data-dsh-deepcraft-part~="logo-row"] > [data-dsh-deepcraft-part~="sidebar-toggle"]'
 /** The host's own composer is replaced by a panel of its own choice; this is that panel's seat. */
 export const CHAIN_OVERLAY_FALLBACK_ATTRIBUTE = 'data-chain-overlay-fallback'
 /** The host's own open menus and modal dialogs: the foreground the skin must not walk over. */
@@ -249,9 +249,9 @@ export const ACCOUNT_TRIGGER_SELECTOR = '[aria-haspopup="menu"][data-signed-out]
  * (`aria-haspopup="dialog"`); the newer one puts the account menu's own trigger
  * (`aria-haspopup="menu"`), so the value is not part of the contract.
  */
-export const SETTINGS_BUTTON_SELECTOR = '[data-dsh-claude-part~="settings-area"] button[aria-haspopup]'
+export const SETTINGS_BUTTON_SELECTOR = '[data-dsh-deepcraft-part~="settings-area"] button[aria-haspopup]'
 /** The sidebar's action list, whose entries the skin mirrors into its drawer. */
-export const FOOTER_ACTIONS_SELECTOR = '[data-dsh-claude-part~="footer-actions"]'
+export const FOOTER_ACTIONS_SELECTOR = '[data-dsh-deepcraft-part~="footer-actions"]'
 /** A slot anchor; its children are the host's real entries. */
 export const SLOT_ANCHOR_SELECTOR = '[data-slot]'
 /**
@@ -283,25 +283,25 @@ export const RIGHTBAR_TOGGLE_SELECTOR = '[data-sidebar-right-open] [data-sidebar
  * sidebar's panels, so a reader takes the one carrying a title or the
  * utilities rather than the first match.
  */
-export const HEADER_TITLE_ROW_SELECTOR = '[data-dsh-claude-part~="title-row"]'
+export const HEADER_TITLE_ROW_SELECTOR = '[data-dsh-deepcraft-part~="title-row"]'
 /**
  * The session title's breadcrumb nav: the words themselves, not the flex
  * cluster that lays them out (the cluster stretches, so it says nothing about
  * where the title ends).
  */
-export const HEADER_TITLE_SELECTOR = '[data-dsh-claude-part~="header-title"]'
+export const HEADER_TITLE_SELECTOR = '[data-dsh-deepcraft-part~="header-title"]'
 /** The header's utilities cluster: the workspace opener, the overflow menu, the bottom-panel toggle. */
-export const HEADER_UTILITIES_SELECTOR = '[data-dsh-claude-part~="header-utilities"]'
+export const HEADER_UTILITIES_SELECTOR = '[data-dsh-deepcraft-part~="header-utilities"]'
 /** The corner seat beside the utilities, carrying the right-sidebar toggle. */
-export const HEADER_CORNER_SELECTOR = '[data-dsh-claude-part~="header-corner"]'
+export const HEADER_CORNER_SELECTOR = '[data-dsh-deepcraft-part~="header-corner"]'
 /**
  * The conversation header itself, resolved with `closest` from the title row:
  * the same substring names a dozen other bars (the sidebar's action row, the
  * background-task chip), so it is never queried document-wide.
  */
-export const CONVERSATION_HEADER_SELECTOR = '[data-dsh-claude-part~="conversation-header"]'
+export const CONVERSATION_HEADER_SELECTOR = '[data-dsh-deepcraft-part~="conversation-header"]'
 /** The view-tab strip inside the header, whose box the band placement keeps clear of. */
-export const VIEW_TABS_STRIP_SELECTOR = '[data-dsh-claude-part~="view-tabs"]'
+export const VIEW_TABS_STRIP_SELECTOR = '[data-dsh-deepcraft-part~="view-tabs"]'
 
 /* ---------- the document, the shell and the browser API ---------- */
 

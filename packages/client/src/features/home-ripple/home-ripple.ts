@@ -1,25 +1,25 @@
-import { DARK_THEME_ATTRIBUTE } from '@dsh-claude-style/contracts/dom'
-import { observeSize } from '@dsh-claude-style/engine/bus'
-import { buildElement } from '@dsh-claude-style/engine/dom'
-import { requestFrame } from '@dsh-claude-style/engine/frame'
-import { findHeroRoot } from '@dsh-claude-style/engine/host'
-import type { FrameTask } from '@dsh-claude-style/engine/frame'
+import { DARK_THEME_ATTRIBUTE } from '@dsh-deepcraft/contracts/dom'
+import { observeSize } from '@dsh-deepcraft/engine/bus'
+import { buildElement } from '@dsh-deepcraft/engine/dom'
+import { requestFrame } from '@dsh-deepcraft/engine/frame'
+import { findHeroRoot } from '@dsh-deepcraft/engine/host'
+import type { FrameTask } from '@dsh-deepcraft/engine/frame'
 import { motionReduced } from '../../core/prefs'
 import { createGlyphField } from './ripple-field'
 import type { FieldPalette, GlyphField, Rgb } from './ripple-field'
 import { RIPPLE } from './ripple-params'
 import { createWaveField } from './ripple-wave'
 import type { WaveField } from './ripple-wave'
-import type { HostContext } from '@dsh-claude-style/engine/host'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './home-ripple.manifest'
 
 /** The hero page's root while the field is mounted in it; the stylesheet gives the root a stacking context of its own. */
-const RIPPLE_ATTR = 'data-dsh-claude-ripple'
+const RIPPLE_ATTR = 'data-dsh-deepcraft-ripple'
 /** The theme tokens the canvas is drawn with (theme/tokens.json). */
-const INK_TOKEN = '--dsh-claude-ripple-ink'
-const WAVE_TOKEN = '--dsh-claude-ripple-wave'
-const FONT_TOKEN = '--dsh-claude-font-code'
+const INK_TOKEN = '--dsh-deepcraft-ripple-ink'
+const WAVE_TOKEN = '--dsh-deepcraft-ripple-wave'
+const FONT_TOKEN = '--dsh-deepcraft-font-code'
 
 /** The field on one hero root: the canvas, the grid it is sized for, and the two layers that fill it. */
 interface Mounted {
@@ -114,7 +114,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   }
 
   function mount(root: HTMLElement) {
-    const canvas = buildElement('canvas', 'dsh-claude-ripple-canvas')
+    const canvas = buildElement('canvas', 'dsh-deepcraft-ripple-canvas')
     root.appendChild(canvas)
     root.setAttribute(RIPPLE_ATTR, '')
     const waves = createWaveField(0, 0)

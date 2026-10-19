@@ -32,8 +32,8 @@
    conversation scroller the pin's whole context sits under, for "the reader is
    the one scrolling", which drops the pin even where the host still reports its
    follow. */
-body[data-dsh-claude-style][data-dsh-claude-chat-follow] [data-conversation-scroll]:not([data-dsh-claude-reader-hold]) [data-chat-following-tail] [data-chat-running],
-body[data-dsh-claude-style][data-dsh-claude-chat-follow] [data-conversation-scroll]:not([data-dsh-claude-reader-hold]) [data-dsh-claude-follow-hold] [data-chat-running] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-follow] [data-conversation-scroll]:not([data-dsh-deepcraft-reader-hold]) [data-chat-following-tail] [data-chat-running],
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-follow] [data-conversation-scroll]:not([data-dsh-deepcraft-reader-hold]) [data-dsh-deepcraft-follow-hold] [data-chat-running] {
   position: sticky;
   bottom: calc(var(--dsh-composer-height, 0px) + var(--dsh-composer-fade-h, 40px) + 16px + 1px);
   z-index: 1;
@@ -41,7 +41,7 @@ body[data-dsh-claude-style][data-dsh-claude-chat-follow] [data-conversation-scro
      would show through it. The canvas it already stands on paints the band, the
      way the composer seat paints its own: at rest the two are the same colour
      and nothing changes. */
-  background: var(--dsh-claude-canvas, var(--dsw-alias-bg-base, #FCFCFB));
+  background: var(--dsh-deepcraft-canvas, var(--dsw-alias-bg-base, #FCFCFB));
 }
 
 /* The host's running row keeps its whale and its live region; its words,
@@ -52,11 +52,11 @@ body[data-dsh-claude-style][data-dsh-claude-chat-follow] [data-conversation-scro
 /* The host's words step aside for the skin's line; the line itself is not
    touched, so the wording, the elapsed clock and the wait badge stay the row's
    readable text while the host's own live region keeps announcing the row. */
-body[data-dsh-claude-style] [data-chat-running][data-dsh-claude-wait] [data-dsh-claude-wait-words] {
+body[data-dsh-deepcraft] [data-chat-running][data-dsh-deepcraft-wait] [data-dsh-deepcraft-wait-words] {
   display: none;
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait {
   display: inline-flex;
   align-items: center;
   min-width: 0;
@@ -73,7 +73,7 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait {
    clips and its copies draw the ellipsis exactly where the room runs out
    (shared/swapping-text.css), with the loader, the clock and the badge keeping
    their places beside it. */
-body[data-dsh-claude-style] [data-chat-running][data-dsh-claude-wait] [data-dsh-claude-part~="running-content"] {
+body[data-dsh-deepcraft] [data-chat-running][data-dsh-deepcraft-wait] [data-dsh-deepcraft-part~="running-content"] {
   max-width: 100%;
 }
 
@@ -82,16 +82,16 @@ body[data-dsh-claude-style] [data-chat-running][data-dsh-claude-wait] [data-dsh-
    where it was: the line's first child, ahead of the wording, so the row reads
    loader, words, clock. The snippet the bouncing motion is ported from is
    recorded in THIRD_PARTY_NOTICES.md. */
-body[data-dsh-claude-style][data-dsh-claude-brand="claude"] [data-chat-running][data-dsh-claude-wait] [data-dsh-claude-part~="running-icon"] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] [data-chat-running][data-dsh-deepcraft-wait] [data-dsh-deepcraft-part~="running-icon"] {
   display: none;
 }
 
 /* Hidden under every other brand, where the host's own whale tail stands. */
-body[data-dsh-claude-style] .dsh-claude-chat-wait-loader {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-loader {
   display: none;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-brand="claude"] .dsh-claude-chat-wait-loader {
+body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] .dsh-deepcraft-chat-wait-loader {
   display: inline-flex;
   position: relative;
   flex: none;
@@ -107,12 +107,12 @@ body[data-dsh-claude-style][data-dsh-claude-brand="claude"] .dsh-claude-chat-wai
    the box never draws two motions at once (features/chat-wait/wait-loader.ts).
    A lane out of play is taken out of the page, which is what lets the lane
    coming back start its motion from the top. */
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane {
   position: absolute;
   inset: 0;
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-resting {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-resting {
   display: none;
 }
 
@@ -122,7 +122,7 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-resting {
    follows the palette the reader picked, and a dot is drawn only while its lane
    is in play — the hand-over brings each one in and takes it out on its own
    moment. */
-body[data-dsh-claude-style] .dsh-claude-chat-wait-dot {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-dot {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -136,18 +136,18 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-dot {
      direction of the line it walks, and where that line's far end falls — the
      last of the three is worked out here so the keyframes read it instead of
      writing the geometry out twice. */
-  --dsh-claude-dot-centre: 0px;
-  --dsh-claude-dot-line-x: 0;
-  --dsh-claude-dot-line-y: -1;
-  --dsh-claude-dot-end-x: calc(var(--dsh-claude-dot-centre) + var(--dsh-claude-dot-line-x) * var(--dsh-claude-distance-travel));
-  --dsh-claude-dot-end-y: calc((var(--dsh-claude-dot-line-y) - 1) * var(--dsh-claude-distance-travel));
+  --dsh-deepcraft-dot-centre: 0px;
+  --dsh-deepcraft-dot-line-x: 0;
+  --dsh-deepcraft-dot-line-y: -1;
+  --dsh-deepcraft-dot-end-x: calc(var(--dsh-deepcraft-dot-centre) + var(--dsh-deepcraft-dot-line-x) * var(--dsh-deepcraft-distance-travel));
+  --dsh-deepcraft-dot-end-y: calc((var(--dsh-deepcraft-dot-line-y) - 1) * var(--dsh-deepcraft-distance-travel));
 }
 
 /* The lane in play draws its dots, and the one on its way out keeps drawing them
    until its own fades have taken them; the hand-over's fades sit above these
    declarations and carry each dot between the two. */
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-active .dsh-claude-chat-wait-dot,
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-leaving .dsh-claude-chat-wait-dot {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-active .dsh-deepcraft-chat-wait-dot,
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-leaving .dsh-deepcraft-chat-wait-dot {
   opacity: 1;
 }
 
@@ -156,29 +156,29 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-leaving .dsh-claude-ch
    up, one down and to the left, one down and to the right, 120° apart — with the
    second of the three walked the other way, so its far end is the one up and to
    the left. */
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-bounce .dsh-claude-chat-wait-dot:nth-child(2),
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-line .dsh-claude-chat-wait-dot:nth-child(2) {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-bounce .dsh-deepcraft-chat-wait-dot:nth-child(2),
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-line .dsh-deepcraft-chat-wait-dot:nth-child(2) {
   left: 7px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-bounce .dsh-claude-chat-wait-dot:nth-child(3),
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-line .dsh-claude-chat-wait-dot:nth-child(3) {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-bounce .dsh-deepcraft-chat-wait-dot:nth-child(3),
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-line .dsh-deepcraft-chat-wait-dot:nth-child(3) {
   left: 14px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-line .dsh-claude-chat-wait-dot:nth-child(1) {
-  --dsh-claude-dot-centre: 7px;
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-line .dsh-deepcraft-chat-wait-dot:nth-child(1) {
+  --dsh-deepcraft-dot-centre: 7px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-line .dsh-claude-chat-wait-dot:nth-child(2) {
-  --dsh-claude-dot-line-x: -0.866;
-  --dsh-claude-dot-line-y: -0.5;
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-line .dsh-deepcraft-chat-wait-dot:nth-child(2) {
+  --dsh-deepcraft-dot-line-x: -0.866;
+  --dsh-deepcraft-dot-line-y: -0.5;
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-line .dsh-claude-chat-wait-dot:nth-child(3) {
-  --dsh-claude-dot-centre: -7px;
-  --dsh-claude-dot-line-x: -0.866;
-  --dsh-claude-dot-line-y: 0.5;
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-line .dsh-deepcraft-chat-wait-dot:nth-child(3) {
+  --dsh-deepcraft-dot-centre: -7px;
+  --dsh-deepcraft-dot-line-x: -0.866;
+  --dsh-deepcraft-dot-line-y: 0.5;
 }
 
 /* The third lane: four dots swapping corners. Their centres sit 9.5 × 11.6 apart
@@ -195,27 +195,27 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-line .dsh-claude-chat-
    steps, so the straight steps between them run as that curve. Nothing here
    fades: taking a lane in and out of play is the hand-over's own work
    (features/chat-wait/wait-loader.ts). */
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-orbit .dsh-claude-chat-wait-dot {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-orbit .dsh-deepcraft-chat-wait-dot {
   top: 50%;
   bottom: auto;
   left: 50%;
   margin: -2px 0 0 -2px;
-  animation: dsh-claude-wait-dot-orbit-1 var(--dsh-claude-period-dot-orbit) linear infinite;
+  animation: dsh-deepcraft-wait-dot-orbit-1 var(--dsh-deepcraft-period-dot-orbit) linear infinite;
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-orbit .dsh-claude-chat-wait-dot:nth-child(2) {
-  animation-name: dsh-claude-wait-dot-orbit-2;
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-orbit .dsh-deepcraft-chat-wait-dot:nth-child(2) {
+  animation-name: dsh-deepcraft-wait-dot-orbit-2;
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-orbit .dsh-claude-chat-wait-dot:nth-child(3) {
-  animation-name: dsh-claude-wait-dot-orbit-4;
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-orbit .dsh-deepcraft-chat-wait-dot:nth-child(3) {
+  animation-name: dsh-deepcraft-wait-dot-orbit-4;
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-orbit .dsh-claude-chat-wait-dot:nth-child(4) {
-  animation-name: dsh-claude-wait-dot-orbit-3;
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-orbit .dsh-deepcraft-chat-wait-dot:nth-child(4) {
+  animation-name: dsh-deepcraft-wait-dot-orbit-3;
 }
 
-@keyframes dsh-claude-wait-dot-orbit-1 {
+@keyframes dsh-deepcraft-wait-dot-orbit-1 {
   0% { translate: -4.75px -5.8px; }
   0.46% { translate: -4.57px -3.54px; }
   0.97% { translate: -4.03px -1.36px; }
@@ -235,7 +235,7 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-orbit .dsh-claude-chat
   66.67%, 75%, 100% { translate: -4.75px -5.8px; }
 }
 
-@keyframes dsh-claude-wait-dot-orbit-2 {
+@keyframes dsh-deepcraft-wait-dot-orbit-2 {
   0%, 25% { translate: 4.75px -5.8px; }
   25.46% { translate: 4.57px -3.54px; }
   25.97% { translate: 4.03px -1.36px; }
@@ -255,7 +255,7 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-orbit .dsh-claude-chat
   91.67%, 100% { translate: 4.75px -5.8px; }
 }
 
-@keyframes dsh-claude-wait-dot-orbit-4 {
+@keyframes dsh-deepcraft-wait-dot-orbit-4 {
   0% { translate: 4.75px 5.8px; }
   0.46% { translate: 4.57px 3.54px; }
   0.97% { translate: 4.03px 1.36px; }
@@ -275,7 +275,7 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-orbit .dsh-claude-chat
   66.67%, 75%, 100% { translate: 4.75px 5.8px; }
 }
 
-@keyframes dsh-claude-wait-dot-orbit-3 {
+@keyframes dsh-deepcraft-wait-dot-orbit-3 {
   0%, 25% { translate: -4.75px 5.8px; }
   25.46% { translate: -4.57px 3.54px; }
   25.97% { translate: -4.03px 1.36px; }
@@ -303,20 +303,20 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-orbit .dsh-claude-chat
    the frame the snippet starts from: the first dot is already on its way down
    from the top and the other two are climbing, which is also where the hand-over
    finds them. */
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-bounce .dsh-claude-chat-wait-dot {
-  animation: dsh-claude-wait-dot var(--dsh-claude-period-dot-bounce) var(--dsh-claude-ease-standard) infinite alternate;
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-bounce .dsh-deepcraft-chat-wait-dot {
+  animation: dsh-deepcraft-wait-dot var(--dsh-deepcraft-period-dot-bounce) var(--dsh-deepcraft-ease-standard) infinite alternate;
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-bounce .dsh-claude-chat-wait-dot:nth-child(1) {
-  animation-delay: calc(-1 * var(--dsh-claude-period-dot-bounce));
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-bounce .dsh-deepcraft-chat-wait-dot:nth-child(1) {
+  animation-delay: calc(-1 * var(--dsh-deepcraft-period-dot-bounce));
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-bounce .dsh-claude-chat-wait-dot:nth-child(2) {
-  animation-delay: calc(-3 * var(--dsh-claude-period-dot-bounce) / 5);
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-bounce .dsh-deepcraft-chat-wait-dot:nth-child(2) {
+  animation-delay: calc(-3 * var(--dsh-deepcraft-period-dot-bounce) / 5);
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-bounce .dsh-claude-chat-wait-dot:nth-child(3) {
-  animation-delay: calc(-2 * var(--dsh-claude-period-dot-bounce) / 5);
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-bounce .dsh-deepcraft-chat-wait-dot:nth-child(3) {
+  animation-delay: calc(-2 * var(--dsh-deepcraft-period-dot-bounce) / 5);
 }
 
 /* The walking lane: each dot walks its own line through one point, a simple
@@ -325,24 +325,24 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-bounce .dsh-claude-cha
    walking dot never draws larger than the bouncing one. The walk's keyframes
    stand at the two ends only and its size's at the ends and the middle, so every
    stretch between two of them runs end to end on the animation's own curve,
-   --dsh-claude-ease-harmonic; a curve written into a keyframe would be dropped
+   --dsh-deepcraft-ease-harmonic; a curve written into a keyframe would be dropped
    for linear. The three dots stand a third of the period apart, the first a
    quarter in, crossing the middle, and every delay is negative: each is already
    at its own place on its line instead of waiting at an end for its turn. A
    third apart is what keeps the two lines that are mirrors of each other from
    drawing the same motion twice — a half period would, and so would no offset
    at all. */
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-line .dsh-claude-chat-wait-dot {
-  animation: dsh-claude-wait-dot-line var(--dsh-claude-period-dot-line) var(--dsh-claude-ease-harmonic) infinite;
-  animation-delay: calc(-1 * var(--dsh-claude-period-dot-line) / 4);
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-line .dsh-deepcraft-chat-wait-dot {
+  animation: dsh-deepcraft-wait-dot-line var(--dsh-deepcraft-period-dot-line) var(--dsh-deepcraft-ease-harmonic) infinite;
+  animation-delay: calc(-1 * var(--dsh-deepcraft-period-dot-line) / 4);
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-line .dsh-claude-chat-wait-dot:nth-child(2) {
-  animation-delay: calc(-7 * var(--dsh-claude-period-dot-line) / 12);
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-line .dsh-deepcraft-chat-wait-dot:nth-child(2) {
+  animation-delay: calc(-7 * var(--dsh-deepcraft-period-dot-line) / 12);
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-line .dsh-claude-chat-wait-dot:nth-child(3) {
-  animation-delay: calc(-11 * var(--dsh-claude-period-dot-line) / 12);
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-line .dsh-deepcraft-chat-wait-dot:nth-child(3) {
+  animation-delay: calc(-11 * var(--dsh-deepcraft-period-dot-line) / 12);
 }
 
 /* What a hand-over needs to know about a lane's own motion, read by
@@ -353,16 +353,16 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-line .dsh-claude-chat-
    of its line, and leaves at the end it turns at — a share each, since it
    crosses the middle and turns at an end twice a turn. Which curve each fade
    runs on is the browser half's, read from the token sheet (D9). */
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-bounce {
-  --dsh-claude-dot-arrives: 1;
-  --dsh-claude-dot-leaves: 0 1;
-  --dsh-claude-dot-fade: 0.5;
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-bounce {
+  --dsh-deepcraft-dot-arrives: 1;
+  --dsh-deepcraft-dot-leaves: 0 1;
+  --dsh-deepcraft-dot-fade: 0.5;
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-line {
-  --dsh-claude-dot-arrives: 0.25 0.75;
-  --dsh-claude-dot-leaves: 0 0.5;
-  --dsh-claude-dot-fade: 0.25;
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-line {
+  --dsh-deepcraft-dot-arrives: 0.25 0.75;
+  --dsh-deepcraft-dot-leaves: 0 0.5;
+  --dsh-deepcraft-dot-fade: 0.25;
 }
 
 /* The swapping lane declares where it arrives — the top of its own turn, which is
@@ -370,9 +370,9 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-line {
    its dots in where they are, over an eighth of its turn, and one going out fades
    them where they stand: nothing inside the turn itself fades, the dots only swap
    corners. */
-body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-orbit {
-  --dsh-claude-dot-arrives: 0;
-  --dsh-claude-dot-fade: 0.125;
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-orbit {
+  --dsh-deepcraft-dot-arrives: 0;
+  --dsh-deepcraft-dot-fade: 0.125;
 }
 
 /* The reader's animation choice (D40): the dots hold the frame their motion
@@ -382,7 +382,7 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-lane.is-orbit {
    dot at its own phase: the bouncing wave frozen at three heights, the walk at
    its three places. wait-loader.ts lays a change down at once under that
    choice, so no fade of its own is ever on the dots. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-chat-wait-lane .dsh-claude-chat-wait-dot {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-chat-wait-lane .dsh-deepcraft-chat-wait-dot {
   animation-play-state: paused;
 }
 
@@ -396,7 +396,7 @@ body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-chat-w
    clamps to the same curve the dot already carries, so a radius among the
    keyframes would be no part of the motion and would keep the whole animation
    off the compositor, repainting the dot every frame. */
-@keyframes dsh-claude-wait-dot {
+@keyframes dsh-deepcraft-wait-dot {
   0% {
     translate: 0 0;
     scale: 1.7 0.25;
@@ -404,33 +404,33 @@ body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-chat-w
   }
 
   40% {
-    translate: 0 calc(-2 * var(--dsh-claude-distance-travel) / 5);
+    translate: 0 calc(-2 * var(--dsh-deepcraft-distance-travel) / 5);
     scale: 1;
     animation-timing-function: linear;
   }
 
   60% {
-    translate: 0 calc(-3 * var(--dsh-claude-distance-travel) / 5);
+    translate: 0 calc(-3 * var(--dsh-deepcraft-distance-travel) / 5);
   }
 
   100% {
-    translate: 0 calc(-1 * var(--dsh-claude-distance-travel));
+    translate: 0 calc(-1 * var(--dsh-deepcraft-distance-travel));
   }
 }
 
-@keyframes dsh-claude-wait-dot-line {
+@keyframes dsh-deepcraft-wait-dot-line {
   0%, 100% {
-    translate: calc(2 * var(--dsh-claude-dot-centre) - var(--dsh-claude-dot-end-x))
-      calc(-2 * var(--dsh-claude-distance-travel) - var(--dsh-claude-dot-end-y));
+    translate: calc(2 * var(--dsh-deepcraft-dot-centre) - var(--dsh-deepcraft-dot-end-x))
+      calc(-2 * var(--dsh-deepcraft-distance-travel) - var(--dsh-deepcraft-dot-end-y));
     scale: 1;
   }
 
   25%, 75% {
-    scale: var(--dsh-claude-scale-dot-mid);
+    scale: var(--dsh-deepcraft-scale-dot-mid);
   }
 
   50% {
-    translate: var(--dsh-claude-dot-end-x) var(--dsh-claude-dot-end-y);
+    translate: var(--dsh-deepcraft-dot-end-x) var(--dsh-deepcraft-dot-end-y);
     scale: 1;
   }
 }
@@ -457,7 +457,7 @@ body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-chat-w
    word, so it is the label that gives way when the row is narrow: the clock and
    the badge keep their places and the words are cut with an ellipsis inside the
    box (shared/swapping-text.css). */
-body[data-dsh-claude-style] .dsh-claude-chat-wait-label {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-label {
   min-width: 0;
   color: var(--dsw-alias-label-secondary);
 }
@@ -469,14 +469,14 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-label {
    sheet only says that the copy carrying the words is the box the line paints
    them onto. The reader's animation choice (D40) is the gate there as well. */
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-clock {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-clock {
   margin-left: 8px;
   font-size: 13px;
   font-variant-numeric: tabular-nums;
   color: var(--dsw-alias-label-caption);
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-badge {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-badge {
   margin-left: 8px;
   padding: 0 6px;
   border-radius: 5px;
@@ -496,35 +496,35 @@ body[data-dsh-claude-style] .dsh-claude-chat-wait-badge {
   opacity: 1;
   filter: blur(0);
   transition:
-    scale var(--dsh-claude-duration-pop) var(--dsh-claude-ease-spring),
-    opacity var(--dsh-claude-duration-pop) var(--dsh-claude-ease-spring),
-    filter var(--dsh-claude-duration-pop) var(--dsh-claude-ease-spring);
-  animation: dsh-claude-wait-badge-in var(--dsh-claude-duration-open) var(--dsh-claude-ease-settle);
+    scale var(--dsh-deepcraft-duration-pop) var(--dsh-deepcraft-ease-spring),
+    opacity var(--dsh-deepcraft-duration-pop) var(--dsh-deepcraft-ease-spring),
+    filter var(--dsh-deepcraft-duration-pop) var(--dsh-deepcraft-ease-spring);
+  animation: dsh-deepcraft-wait-badge-in var(--dsh-deepcraft-duration-open) var(--dsh-deepcraft-ease-settle);
 }
 
 @starting-style {
-  body[data-dsh-claude-style] .dsh-claude-chat-wait-badge {
+  body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-badge {
     scale: 0;
     opacity: 0;
-    filter: blur(var(--dsh-claude-blur-soft));
+    filter: blur(var(--dsh-deepcraft-blur-soft));
   }
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait-badge[data-dsh-claude-wait-badge-leaving] {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-badge[data-dsh-deepcraft-wait-badge-leaving] {
   scale: 0;
   opacity: 0;
-  filter: blur(var(--dsh-claude-blur-soft));
+  filter: blur(var(--dsh-deepcraft-blur-soft));
   transition:
-    scale var(--dsh-claude-duration-exit) var(--dsh-claude-ease-standard),
-    opacity var(--dsh-claude-duration-exit) var(--dsh-claude-ease-standard),
-    filter var(--dsh-claude-duration-exit) var(--dsh-claude-ease-standard);
+    scale var(--dsh-deepcraft-duration-exit) var(--dsh-deepcraft-ease-standard),
+    opacity var(--dsh-deepcraft-duration-exit) var(--dsh-deepcraft-ease-standard),
+    filter var(--dsh-deepcraft-duration-exit) var(--dsh-deepcraft-ease-standard);
 }
 
-@keyframes dsh-claude-wait-badge-in {
-  from { translate: calc(-1 * var(--dsh-claude-distance-travel)) var(--dsh-claude-distance-rise); }
+@keyframes dsh-deepcraft-wait-badge-in {
+  from { translate: calc(-1 * var(--dsh-deepcraft-distance-travel)) var(--dsh-deepcraft-distance-rise); }
   to { translate: 0 0; }
 }
 
-body[data-dsh-claude-style] .dsh-claude-chat-wait [hidden] {
+body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait [hidden] {
   display: none;
 }

@@ -1,17 +1,17 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom/client'
-import { PHASE_ATTRIBUTE } from '@dsh-claude-style/contracts/dom'
+import { PHASE_ATTRIBUTE } from '@dsh-deepcraft/contracts/dom'
 import { HOME_HERO_ATTR, HOME_LAYOUT_ATTR, HOME_LAYOUT_STUDIO, PREF_DEFAULTS } from '../../constants'
 import type { Prefs } from '../../constants'
-import { COMPOSER_STACK, cacheFirstMatch, hostSlots } from '@dsh-claude-style/engine/host'
+import { COMPOSER_STACK, cacheFirstMatch, hostSlots } from '@dsh-deepcraft/engine/host'
 import { readPrefs } from '../../core/prefs'
 import { motionMs } from '../../shared/motion'
 import { HOME_RANGES, createHomeUsage, homePanelData } from './data'
 import { createGreetingCopy } from './greeting-copy'
 import { createHomeModels } from './models'
 import { createHomeOverview } from './overview'
-import { buildElement } from '@dsh-claude-style/engine/dom'
-import type { HostContext, HostFiber } from '@dsh-claude-style/engine/host'
+import { buildElement } from '@dsh-deepcraft/engine/dom'
+import type { HostContext, HostFiber } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './home-layout.manifest'
 import { copy } from './copy'
@@ -47,15 +47,15 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   /** The host's list slot between the hero greeting and the composer card. */
   const DOCK_SLOT = 'conversation.input.dock'
   /** On the usage panel while its numbers take over from its placeholders. */
-  const HOME_REVEALING_ATTR = 'data-dsh-claude-revealing'
+  const HOME_REVEALING_ATTR = 'data-dsh-deepcraft-revealing'
   /** The hero composer's stack, kept while it stays the first match (D40). */
-  const heroStack = cacheFirstMatch<HTMLElement>(`${COMPOSER_STACK}[data-dsh-claude-part~="composer-hero"]`)
+  const heroStack = cacheFirstMatch<HTMLElement>(`${COMPOSER_STACK}[data-dsh-deepcraft-part~="composer-hero"]`)
   /**
    * The hero page's root, kept while it stays the first match. The `root` part
    * qualifies the host's phase marker because the draft editor and the
    * connection indicator carry a `data-phase` of their own (D3).
    */
-  const heroRoot = cacheFirstMatch<HTMLElement>(`[data-dsh-claude-part~="host-root"][${PHASE_ATTRIBUTE}="hero"]`)
+  const heroRoot = cacheFirstMatch<HTMLElement>(`[data-dsh-deepcraft-part~="host-root"][${PHASE_ATTRIBUTE}="hero"]`)
 
   let layout = PREF_DEFAULTS.homeLayout
   /** Whether the last pass saw the new-conversation hero, as of that reading. */
@@ -152,7 +152,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const setReveal = revealState[1]
     React.useEffect(() => {
       if (reveal !== 'revealing') return undefined
-      const timer = window.setTimeout(() => setReveal('settled'), motionMs('--dsh-claude-duration-fade'))
+      const timer = window.setTimeout(() => setReveal('settled'), motionMs('--dsh-deepcraft-duration-fade'))
       return () => window.clearTimeout(timer)
     }, [reveal])
     if (layout !== HOME_LAYOUT_STUDIO || !heroPhase()) return null
@@ -164,7 +164,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       return React.createElement('button', {
         key: id,
         type: 'button',
-        className: 'dsh-claude-home-tab',
+        className: 'dsh-deepcraft-home-tab',
         'data-active': tab === id ? '' : undefined,
         'aria-pressed': tab === id,
         onClick() { setTab(id) },
@@ -174,31 +174,31 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     return React.createElement(
       'section',
       {
-        className: 'dsh-claude-home-panel',
-        'data-dsh-claude-home-panel': '',
+        className: 'dsh-deepcraft-home-panel',
+        'data-dsh-deepcraft-home-panel': '',
         'data-computing': state.computing ? '' : undefined,
         [HOME_REVEALING_ATTR]: reveal === 'revealing' ? '' : undefined,
         'aria-busy': state.computing || !data.known ? 'true' : 'false',
       },
       React.createElement(
         'div',
-        { className: 'dsh-claude-home-panel-head' },
+        { className: 'dsh-deepcraft-home-panel-head' },
         React.createElement(
           'div',
-          { className: 'dsh-claude-home-tabs' },
+          { className: 'dsh-deepcraft-home-tabs' },
           tabButton('overview', copy('homeTabOverview')),
           tabButton('models', copy('homeTabModels')),
         ),
         React.createElement(
           'div',
-          { className: 'dsh-claude-home-panel-side' },
+          { className: 'dsh-deepcraft-home-panel-side' },
           React.createElement(
             'div',
-            { className: 'dsh-claude-home-ranges' },
+            { className: 'dsh-deepcraft-home-ranges' },
             HOME_RANGES.map(item => React.createElement('button', {
               key: item.id,
               type: 'button',
-              className: 'dsh-claude-home-range',
+              className: 'dsh-deepcraft-home-range',
               'data-active': range === item.id ? '' : undefined,
               'aria-pressed': range === item.id,
               onClick() { setRange(item.id) },
@@ -226,7 +226,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       scope.effect(() => slots.inject(DOCK_SLOT, () => // A list seat keys its entries by id; the dock also carries the
       // host's todo, queue and goal bars, so the id is what keeps this
       // panel's slot stable across their re-renders.
-      slots.register({ name: DOCK_SLOT, id: 'claude-style-usage', order: 40 }, HomeUsagePanel)), 'dsh-claude-style: home usage panel')
+      slots.register({ name: DOCK_SLOT, id: 'deepcraft-usage', order: 40 }, HomeUsagePanel)), 'dsh-deepcraft: home usage panel')
     })
   }
 
@@ -252,7 +252,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     }
     if (coldSeat !== null && coldSeat.stack === stack && coldSeat.element.parentElement === stack) return
     unmountColdSeat()
-    const element = buildElement('div', 'dsh-claude-home-seat')
+    const element = buildElement('div', 'dsh-deepcraft-home-seat')
     stack.appendChild(element)
     const root = ReactDOM.createRoot(element)
     root.render(React.createElement(HomeUsagePanel))

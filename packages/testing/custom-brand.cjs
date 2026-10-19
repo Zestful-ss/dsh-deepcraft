@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * custom-brand.cjs — the reader's own brand images on the real host (D30).
+ * custom-brand.cjs — the reader's own brand images on the real host (D77).
  *
  * Registered in the lane's scenario table (packages/testing/scenarios.cjs).
  *
  * The host half keeps the images under the scratch home's
- * `dsh-claude-style/brand/`. The scenario drives its routes from the page, the
+ * `dsh-deepcraft/brand/`. The scenario drives its routes from the page, the
  * way the settings page does — through the host's fence, with the page's own
  * cookie — and holds each refusal to its status: a type the route does not
  * take, bytes that do not open the way their type requires, a body over the
@@ -18,9 +18,9 @@
 
 /** The routes under test (packages/contracts/src/routes.ts). */
 const ROUTES = {
-  status: '/dsh-claude-style/brand',
-  mark: '/dsh-claude-style/brand/mark',
-  wordmark: '/dsh-claude-style/brand/wordmark',
+  status: '/dsh-deepcraft/brand',
+  mark: '/dsh-deepcraft/brand/mark',
+  wordmark: '/dsh-deepcraft/brand/wordmark',
 }
 
 /** One step past the host half's size limit (packages/contracts/src/brand.ts). */
@@ -55,7 +55,7 @@ const driveRoutes = (page) => page.evaluate(async ({ routes, oversized }) => {
 
 /** Where the shell paints the images, once the brand feature has adopted them. */
 async function readPainted(page) {
-  await page.waitForFunction(() => document.body.getAttribute('data-dsh-claude-custom-word') === 'image', null, { timeout: 15000 })
+  await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-custom-word') === 'image', null, { timeout: 15000 })
   return page.evaluate(() => {
     const art = (selector) => {
       const element = document.querySelector(selector)
@@ -64,9 +64,9 @@ async function readPainted(page) {
       return { image: before.backgroundImage, width: before.width, height: before.height }
     }
     return {
-      mark: art('[data-dsh-claude-part~="brand-mark"]'),
-      word: art('[data-dsh-claude-part~="brand-identity"] > [data-dsh-claude-part~="brand-name"]'),
-      hero: art('[data-dsh-claude-part~="hero-mark"]'),
+      mark: art('[data-dsh-deepcraft-part~="brand-mark"]'),
+      word: art('[data-dsh-deepcraft-part~="brand-identity"] > [data-dsh-deepcraft-part~="brand-name"]'),
+      hero: art('[data-dsh-deepcraft-part~="hero-mark"]'),
     }
   })
 }

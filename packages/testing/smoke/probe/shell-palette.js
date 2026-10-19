@@ -26,9 +26,9 @@
       var hostNodes = {
         sidebar: hostProbe('<div data-pane="sidebar">s</div>'),
         conversation: hostProbe('<div data-pane="conversation">c</div>'),
-        popover: hostProbe('<div class="dsh-claude-popover-card" data-open="true">p</div>'),
-        search: hostProbe('<div class="dsh-claude-search-dialog">q</div>'),
-        group: hostProbe('<span class="dsh-claude-model-group">g</span>'),
+        popover: hostProbe('<div class="dsh-deepcraft-popover-card" data-open="true">p</div>'),
+        search: hostProbe('<div class="dsh-deepcraft-search-dialog">q</div>'),
+        group: hostProbe('<span class="dsh-deepcraft-model-group">g</span>'),
         heading: hostProbe('<h1>h</h1>'),
         code: hostProbe('<pre><code>c</code></pre>'),
       }
@@ -54,7 +54,7 @@
           popover: getComputedStyle(hostNodes.popover).backgroundColor,
           popoverBlur: getComputedStyle(hostNodes.popover).backdropFilter,
           // The account drawer the footer feature built (it sweeps any other copy).
-          account: getComputedStyle(document.querySelector('.dsh-claude-account-popover')).backgroundColor,
+          account: getComputedStyle(document.querySelector('.dsh-deepcraft-account-popover')).backgroundColor,
           search: getComputedStyle(hostNodes.search).backgroundColor,
           group: getComputedStyle(hostNodes.group).backgroundColor,
           groupInk: getComputedStyle(hostNodes.group).color,
@@ -81,7 +81,7 @@
     // out while their parent is off. A tab is opened by standing the tab state
     // in for a click (the stand-in's `states`).
     await probe.onlyFor(['settings'], async function () {
-      var Section = (window.__slotComponents || {})['claude-style']
+      var Section = (window.__slotComponents || {})['deepcraft']
       var walk = function (node, visit) {
         if (node === null || node === undefined || typeof node !== 'object') return
         if (Array.isArray(node)) { node.forEach(function (child) { walk(child, visit) }); return }
@@ -102,18 +102,18 @@
             out.tabs.push(props.key)
             if (props['aria-selected'] === 'true') out.selected = props.key
           }
-          if (typeof props.className === 'string' && /(^| )dsh-claude-settings-row( |$)/.test(props.className)) {
+          if (typeof props.className === 'string' && /(^| )dsh-deepcraft-settings-row( |$)/.test(props.className)) {
             var rowKey = props.key
             out.rows.push(rowKey)
             if (props['data-disabled'] === '') out.disabled.push(rowKey)
             walk(props.children, function (child) {
-              if (((child.props || {}).className || '') === 'dsh-claude-settings-row-note' && out.notes.indexOf(rowKey) < 0) out.notes.push(rowKey)
+              if (((child.props || {}).className || '') === 'dsh-deepcraft-settings-row-note' && out.notes.indexOf(rowKey) < 0) out.notes.push(rowKey)
             })
           }
-          if (typeof props.className === 'string' && /(^| )dsh-claude-settings-tab-notice( |$)/.test(props.className)) {
+          if (typeof props.className === 'string' && /(^| )dsh-deepcraft-settings-tab-notice( |$)/.test(props.className)) {
             out.notice = [].concat(props.children).filter(function (child) { return typeof child === 'string' }).join('')
           }
-          if (props.className === 'dsh-claude-settings-repo') {
+          if (props.className === 'dsh-deepcraft-settings-repo') {
             out.link = { href: props.href, target: props.target, rel: props.rel, label: props['aria-label'] }
           }
         })
@@ -138,7 +138,7 @@
         // and the rule paints it as a mask over the link's own box, so the
         // address and the size are read off the rendered pseudo-element.
         var linkNode = document.createElement('a')
-        linkNode.className = 'dsh-claude-settings-repo'
+        linkNode.className = 'dsh-deepcraft-settings-repo'
         document.body.appendChild(linkNode)
         var markStyle = getComputedStyle(linkNode, '::before')
         r.settings.mark = {
@@ -157,7 +157,7 @@
           var tree = renderMotion()
           walk(tree, function (node) {
             var props = node.props || {}
-            if (typeof props.className === 'string' && /(^| )dsh-claude-motion-card( |$)/.test(props.className)) {
+            if (typeof props.className === 'string' && /(^| )dsh-deepcraft-motion-card( |$)/.test(props.className)) {
               var kids = [].concat(props.children || [])
               var sample = kids[0] || {}
               var sampleProps = sample.props || {}
@@ -170,7 +170,7 @@
               var bands = []
               walk(sampleProps.children, function (word) {
                 var wordProps = word.props || {}
-                if (!/(^| )dsh-claude-motion-word( |$)/.test(wordProps.className || '')) return
+                if (!/(^| )dsh-deepcraft-motion-word( |$)/.test(wordProps.className || '')) return
                 var parts = [].concat(wordProps.children || [])
                 words.push(parts.filter(function (part) { return typeof part === 'string' }).join(''))
                 var band = parts.filter(function (part) { return part !== null && typeof part === 'object' })[0]
@@ -184,7 +184,7 @@
                 pressed: props['aria-pressed'],
                 // The card's only content is its sample: the choice carries no
                 // text of its own, and the sample is the words taking turns.
-                sample: kids.length === 1 && /(^| )dsh-claude-motion-sample( |$)/.test(sampleProps.className || ''),
+                sample: kids.length === 1 && /(^| )dsh-deepcraft-motion-sample( |$)/.test(sampleProps.className || ''),
                 words: words,
                 bands: bands,
                 sampleHidden: sampleProps['aria-hidden'] === 'true',
@@ -197,12 +197,12 @@
             // Inside a card, where the sample is a flex item: its box then takes
             // the room the card gives it, as it does on the page.
             var card = document.createElement('button')
-            card.className = 'dsh-claude-motion-card'
+            card.className = 'dsh-deepcraft-motion-card'
             var box = document.createElement('span')
-            box.className = 'dsh-claude-motion-sample'
+            box.className = 'dsh-deepcraft-motion-sample'
             for (var wi = 0; wi < wordings.length; wi += 1) {
               var word = document.createElement('span')
-              word.className = 'dsh-claude-motion-word dsh-claude-' + kinds[ki]
+              word.className = 'dsh-deepcraft-motion-word dsh-deepcraft-' + kinds[ki]
               word.setAttribute('data-text', wordings[wi])
               word.textContent = wordings[wi]
               // The band stands up the way the card's own tree carries it.
@@ -223,7 +223,7 @@
             var nodes = [].slice.call(box.children)
             var style = nodes.length === 0 ? null : getComputedStyle(nodes[0])
             var paint = nodes.length === 0 ? null : getComputedStyle(nodes[0], '::before')
-            var bandOf = nodes.length === 0 ? null : nodes[0].querySelector('.dsh-claude-sweep-band')
+            var bandOf = nodes.length === 0 ? null : nodes[0].querySelector('.dsh-deepcraft-sweep-band')
             var round = function (value) { return Math.round(value) }
             var centreOf = function (node) {
               var rect = node.getBoundingClientRect()
@@ -262,23 +262,23 @@
         caretHost.style.cssText = 'position:absolute;left:-10000px;top:-10000px'
         var caretCard = function (kind, typing) {
           var card = document.createElement('span')
-          card.className = 'dsh-claude-caret-card'
+          card.className = 'dsh-deepcraft-caret-card'
           var sample = document.createElement('span')
-          sample.className = 'dsh-claude-caret-sample'
-          sample.style.setProperty('--dsh-claude-caret-x', '34px')
+          sample.className = 'dsh-deepcraft-caret-sample'
+          sample.style.setProperty('--dsh-deepcraft-caret-x', '34px')
           var text = document.createElement('span')
-          text.className = 'dsh-claude-caret-sample-text'
+          text.className = 'dsh-deepcraft-caret-sample-text'
           var typed = document.createElement('span')
-          typed.className = 'dsh-claude-caret-piece'
+          typed.className = 'dsh-deepcraft-caret-piece'
           typed.setAttribute('data-in', '')
           typed.textContent = 'H'
           var waiting = document.createElement('span')
-          waiting.className = 'dsh-claude-caret-piece'
+          waiting.className = 'dsh-deepcraft-caret-piece'
           waiting.textContent = 'i'
           text.appendChild(typed)
           text.appendChild(waiting)
           var bar = document.createElement('span')
-          bar.className = 'dsh-claude-caret-sample-bar dsh-claude-caret-' + kind
+          bar.className = 'dsh-deepcraft-caret-sample-bar dsh-deepcraft-caret-' + kind
           if (typing) bar.setAttribute('data-typing', '')
           sample.appendChild(text)
           sample.appendChild(bar)
@@ -317,11 +317,11 @@
         revealHost.style.cssText = 'position:absolute;left:-10000px;top:-10000px'
         var revealCard = function (fade) {
           var card = document.createElement('button')
-          card.className = 'dsh-claude-reveal-card'
+          card.className = 'dsh-deepcraft-reveal-card'
           if (fade) card.setAttribute('data-fade', '')
           var piece = function (inTurn) {
             var span = document.createElement('span')
-            span.className = 'dsh-claude-reveal-piece'
+            span.className = 'dsh-deepcraft-reveal-piece'
             if (inTurn) span.setAttribute('data-in', '')
             span.textContent = 'x'
             card.appendChild(span)
@@ -350,7 +350,7 @@
           var tree = renderMotion()
           walk(tree, function (node) {
             var props = node.props || {}
-            if (typeof props.className !== 'string' || !/(^| )dsh-claude-ongoing-card( |$)/.test(props.className)) return
+            if (typeof props.className !== 'string' || !/(^| )dsh-deepcraft-ongoing-card( |$)/.test(props.className)) return
             var sample = [].concat(props.children || [])[0] || {}
             var sampleProps = sample.props || {}
             var parts = [].concat(sampleProps.children || [])
@@ -360,7 +360,7 @@
               label: props['aria-label'],
               active: props['data-active'] === '',
               pressed: props['aria-pressed'],
-              sample: sampleProps['aria-hidden'] === 'true' && /(^| )dsh-claude-ongoing-sample( |$)/.test(sampleProps.className || ''),
+              sample: sampleProps['aria-hidden'] === 'true' && /(^| )dsh-deepcraft-ongoing-sample( |$)/.test(sampleProps.className || ''),
               look: (mark.props || {})['data-look'],
               title: [].concat((title.props || {}).children || []).join(''),
             })
@@ -371,7 +371,7 @@
         marksHost.style.cssText = 'position:absolute;left:-10000px;top:-10000px'
         var markOf = function (look) {
           var mark = document.createElement('span')
-          mark.className = 'dsh-claude-ongoing-mark'
+          mark.className = 'dsh-deepcraft-ongoing-mark'
           mark.setAttribute('data-look', look)
           marksHost.appendChild(mark)
           return mark
@@ -385,11 +385,11 @@
         }
         r.settings.ongoingMarks = { breathe: readMark(breatheMark), ring: readMark(ringMark) }
         marksHost.remove()
-        var runningMark = document.querySelector('[data-dsh-claude-part~="session-row"] svg[data-state="ongoing"]')
+        var runningMark = document.querySelector('[data-dsh-deepcraft-part~="session-row"] svg[data-state="ongoing"]')
         var readRunning = function () {
           var style = getComputedStyle(runningMark)
           return {
-            attribute: document.body.getAttribute('data-dsh-claude-ongoing-indicator'),
+            attribute: document.body.getAttribute('data-dsh-deepcraft-ongoing-indicator'),
             width: style.width,
             border: style.borderTopWidth,
             animation: style.animationName,
@@ -419,7 +419,7 @@
         // too, so the whole document is what stands on show.
         var readZoom = function () {
           return {
-            attr: document.body.getAttribute('data-dsh-claude-page-zoom'),
+            attr: document.body.getAttribute('data-dsh-deepcraft-page-zoom'),
             zoom: getComputedStyle(document.body).zoom,
           }
         }

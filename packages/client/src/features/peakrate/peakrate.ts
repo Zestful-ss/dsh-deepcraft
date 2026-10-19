@@ -2,11 +2,11 @@ import { buildRateBadge } from './badge'
 import { currentRate } from './schedule'
 import { loadPeakRate, peakProfiles, peakRateGeneration, stopPeakRate, subscribePeakRate } from './live'
 import { matchProfile } from './match'
-import type { HostContext } from '@dsh-claude-style/engine/host'
-import type { FeatureHandle } from '@dsh-claude-style/engine/scheduler'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
+import type { FeatureHandle } from '@dsh-deepcraft/engine/scheduler'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './peakrate.manifest'
-import type { RateState } from '@dsh-claude-style/contracts/peakrate'
+import type { RateState } from '@dsh-deepcraft/contracts/peakrate'
 
 /**
  * What the model picker reads off this feature: the rate for one row.

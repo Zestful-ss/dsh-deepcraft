@@ -17,15 +17,15 @@ module.exports = {
       JSON.stringify(palette))
     commonChecks(r)
   },
-  // The custom brand over the Claude brand (D30): both images painted where the
+  // The custom brand over the Claude brand (D77): both images painted where the
   // brand's art stood, the text-colour ink and the accent once the preferences
   // ask for them, and the brand's own accent back once it is cleared.
   'custom-brand'(r) {
     basicChecks(r)
     const brand = r.customBrand || {}
     const images = brand.images || {}
-    const markUrl = '/dsh-claude-style/brand/mark?v=1-1'
-    const wordUrl = '/dsh-claude-style/brand/wordmark?v=1-1'
+    const markUrl = '/dsh-deepcraft/brand/mark?v=1-1'
+    const wordUrl = '/dsh-deepcraft/brand/wordmark?v=1-1'
     check('the mark the host half holds replaces the brand\'s art in the sidebar, on the hero and as the account row\'s fallback picture',
       images.markAttr === '' && images.hostArt === 'none' &&
         images.mark.image.includes(markUrl) && images.mark.mask === 'none' && images.mark.width === '18px' &&

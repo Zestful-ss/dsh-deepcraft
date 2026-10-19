@@ -1,21 +1,21 @@
 import { QUIET_ATTR } from '../../constants'
-import { observeMatches } from '@dsh-claude-style/engine/bus'
-import { requestFrame } from '@dsh-claude-style/engine/frame'
-import { closestConversationSession, conversationSessionId, findChatTarget } from '@dsh-claude-style/engine/host'
+import { observeMatches } from '@dsh-deepcraft/engine/bus'
+import { requestFrame } from '@dsh-deepcraft/engine/frame'
+import { closestConversationSession, conversationSessionId, findChatTarget } from '@dsh-deepcraft/engine/host'
 import { hostChatCopy, hostChatSeat } from '../../core/i18n'
 import { readPrefs, subscribePrefs } from '../../core/prefs'
-import { buildElement, writeTextInPlace } from '@dsh-claude-style/engine/dom'
+import { buildElement, writeTextInPlace } from '@dsh-deepcraft/engine/dom'
 import { formatHostDuration } from '../../shared/format'
 import { motionMs } from '../../shared/motion'
 import { releaseSwappingText, setSwappingText } from '../../shared/swapping-text'
 import { activityWords, waitingWord, THINKING_KEY } from '../../shared/turn-activity'
 import { startWaitLoader, releaseWaitLoader } from './wait-loader'
-import { CHAT_RUNNING_SELECTOR, CHAT_RUNNING_TEXT_SELECTOR } from '@dsh-claude-style/contracts/dom'
+import { CHAT_RUNNING_SELECTOR, CHAT_RUNNING_TEXT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { WAIT_OVERTIME_MS, openTurn, waitStart, wordForPass } from './wait-state'
 import { foreignRunningLineOwns } from './running-owner'
 import type { RowWords } from './wait-state'
-import type { HostChatTarget } from '@dsh-claude-style/contracts/services'
-import type { HostContext, HostText } from '@dsh-claude-style/engine/host'
+import type { HostChatTarget } from '@dsh-deepcraft/contracts/services'
+import type { HostContext, HostText } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './chat-wait.manifest'
 import { copy, copyState } from './copy'
@@ -57,11 +57,11 @@ interface WaitLine {
  */
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   /** On the host's running row while the line stands in for its words. */
-  const WAIT_ATTR = 'data-dsh-claude-wait'
+  const WAIT_ATTR = 'data-dsh-deepcraft-wait'
   /** On the host's words alone, leaving sibling plugin lines visible. */
-  const WORDS_ATTR = 'data-dsh-claude-wait-words'
+  const WORDS_ATTR = 'data-dsh-deepcraft-wait-words'
   /** On the overtime badge while it plays its way out (syncBadge). */
-  const BADGE_LEAVING_ATTR = 'data-dsh-claude-wait-badge-leaving'
+  const BADGE_LEAVING_ATTR = 'data-dsh-deepcraft-wait-badge-leaving'
   /**
    * The clock's step: fast enough that a replacement which stops owning the
    * words hands the line back without a visible pause, and that the seconds
@@ -145,12 +145,12 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * and when it is swapped for another, is features/chat-wait/wait-loader.ts's.
    */
   function buildLoader() {
-    const loader = buildElement('span', 'dsh-claude-chat-wait-loader')
+    const loader = buildElement('span', 'dsh-deepcraft-chat-wait-loader')
     loader.setAttribute('aria-hidden', 'true')
     const laneDots: [string, number][] = [['is-bounce', 3], ['is-line', 3], ['is-orbit', 4]]
     for (const [lane, count] of laneDots) {
-      const dots = buildElement('span', `dsh-claude-chat-wait-lane ${lane}`)
-      for (let dot = 0; dot < count; dot += 1) dots.append(buildElement('span', 'dsh-claude-chat-wait-dot'))
+      const dots = buildElement('span', `dsh-deepcraft-chat-wait-lane ${lane}`)
+      for (let dot = 0; dot < count; dot += 1) dots.append(buildElement('span', 'dsh-deepcraft-chat-wait-dot'))
       loader.append(dots)
     }
     return loader
@@ -171,7 +171,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       standing.key = key
       return standing
     }
-    const line = buildElement('span', 'dsh-claude-chat-wait')
+    const line = buildElement('span', 'dsh-deepcraft-chat-wait')
     line.setAttribute(QUIET_ATTR, '')
     // The host's own words are hidden while this line stands in for them
     // (chat-wait.css), so the line carries what a reader gets: the wording, the
@@ -179,9 +179,9 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // still announces the row. The loader leads them, where the host's own icon
     // stands and stays under the other brands.
     // The badge starts hidden: it comes out only once a wait runs over (syncBadge).
-    const label = buildElement('span', 'dsh-claude-chat-wait-label')
-    const clock = buildElement('span', 'dsh-claude-chat-wait-clock')
-    const badge = buildElement('span', 'dsh-claude-chat-wait-badge')
+    const label = buildElement('span', 'dsh-deepcraft-chat-wait-label')
+    const clock = buildElement('span', 'dsh-deepcraft-chat-wait-clock')
+    const badge = buildElement('span', 'dsh-deepcraft-chat-wait-badge')
     badge.hidden = true
     const loader = buildLoader()
     line.append(loader, label, clock, badge)
@@ -286,7 +286,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       if (!badge.hasAttribute(BADGE_LEAVING_ATTR)) return
       badge.removeAttribute(BADGE_LEAVING_ATTR)
       badge.hidden = true
-    }, motionMs('--dsh-claude-duration-exit'))
+    }, motionMs('--dsh-deepcraft-duration-exit'))
   }
 
   /** Take one row's line down and give the host's words back. */

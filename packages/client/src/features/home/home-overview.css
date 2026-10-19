@@ -2,14 +2,14 @@
 /* The six stat cells, Claude Code's blue heat grid, and the yardstick line under
    it. The shell (the panel frame, its head and the tab pills) is home-panel.css. */
 
-body[data-dsh-claude-style] .dsh-claude-home-stats {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 4px;
 }
 
 /* A tile sits one tone deeper than the panel wash, not one tone lighter. */
-body[data-dsh-claude-style] .dsh-claude-home-stat {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-stat {
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -20,7 +20,7 @@ body[data-dsh-claude-style] .dsh-claude-home-stat {
   background: color-mix(in srgb, var(--dsw-alias-label-primary, #141413) 15%, var(--dsw-alias-bg-layer-2, #fbfbf9));
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-stat-label {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-stat-label {
   color: var(--dsw-alias-label-tertiary, #8f8a7e);
   font-size: 12px;
   line-height: 16px;
@@ -29,7 +29,7 @@ body[data-dsh-claude-style] .dsh-claude-home-stat-label {
   text-overflow: ellipsis;
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-stat-value {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-stat-value {
   color: var(--dsw-alias-label-primary, #141413);
   /* Claude's tile keeps the figure barely above its own label: 13px bold, which
      is also what lets a long model id such as deepseek-v4.1-flash sit on one
@@ -45,7 +45,7 @@ body[data-dsh-claude-style] .dsh-claude-home-stat-value {
 
 /* The favourite model is a name, not a figure: Claude Code sets it at the
    label's own weight. */
-body[data-dsh-claude-style] .dsh-claude-home-stat[data-stat="model"] .dsh-claude-home-stat-value {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-stat[data-stat="model"] .dsh-deepcraft-home-stat-value {
   font-weight: 400;
 }
 
@@ -55,7 +55,7 @@ body[data-dsh-claude-style] .dsh-claude-home-stat[data-stat="model"] .dsh-claude
 /* The grid fills the panel's inner width: one equal column per week, square
    cells, so the newest week never falls past the edge and the whole block
    scales with the card instead of with a fixed cell size. */
-body[data-dsh-claude-style] .dsh-claude-home-heat {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-heat {
   display: grid;
   grid-auto-flow: column;
   grid-template-rows: repeat(7, 1fr);
@@ -68,11 +68,11 @@ body[data-dsh-claude-style] .dsh-claude-home-heat {
    cell stays the neutral base tone, and each level mixes in the data blue by
    its share of the ramp (constants.ts's HOME_HEAT_RAMP; the build writes one
    rule per level, scripts/feature-sheets.mjs). */
-body[data-dsh-claude-style] .dsh-claude-home-heat {
-  --dsh-claude-heat-ink: #3b6ecf;
+body[data-dsh-deepcraft] .dsh-deepcraft-home-heat {
+  --dsh-deepcraft-heat-ink: #3b6ecf;
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-heat-cell {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-heat-cell {
   position: relative;
   aspect-ratio: 1;
   border-radius: 3px;
@@ -83,7 +83,7 @@ body[data-dsh-claude-style] .dsh-claude-home-heat-cell {
    and its messages in the canvas tone, so it inverts with the theme on its own.
    It appears the moment the pointer is on the cell, and never takes the
    pointer itself. */
-body[data-dsh-claude-style] .dsh-claude-home-heat-cell[data-tip]:hover::after {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-heat-cell[data-tip]:hover::after {
   content: attr(data-tip);
   position: absolute;
   bottom: calc(100% + 6px);
@@ -102,12 +102,12 @@ body[data-dsh-claude-style] .dsh-claude-home-heat-cell[data-tip]:hover::after {
   pointer-events: none;
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-heat-cell[data-tip][data-edge="start"]:hover::after {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-heat-cell[data-tip][data-edge="start"]:hover::after {
   left: 0;
   transform: none;
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-heat-cell[data-tip][data-edge="end"]:hover::after {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-heat-cell[data-tip][data-edge="end"]:hover::after {
   left: auto;
   right: 0;
   transform: none;
@@ -116,13 +116,13 @@ body[data-dsh-claude-style] .dsh-claude-home-heat-cell[data-tip][data-edge="end"
 /* A cell in the grid's upper rows holds more room below it than above, so its
    pill hangs under the cell instead of reaching over the grid's top edge and
    across the stat cells above (heat-tip.ts). */
-body[data-dsh-claude-style] .dsh-claude-home-heat-cell[data-tip][data-side="below"]:hover::after {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-heat-cell[data-tip][data-side="below"]:hover::after {
   top: calc(100% + 6px);
   bottom: auto;
 }
 
 /* The one-liner under the grid: a plain caption, no emphasis of its own. */
-body[data-dsh-claude-style] .dsh-claude-home-fun {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-fun {
   color: var(--dsw-alias-label-tertiary, #8f8a7e);
   font-size: 12px;
   line-height: 16px;
@@ -130,7 +130,7 @@ body[data-dsh-claude-style] .dsh-claude-home-fun {
 
 /* Skeleton: the label stays, the number is a placeholder of the value's own
    height, and the grid breathes instead of pretending to hold zeroes. */
-body[data-dsh-claude-style] .dsh-claude-home-stat[data-skeleton] .dsh-claude-home-stat-value {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-stat[data-skeleton] .dsh-deepcraft-home-stat-value {
   display: block;
   width: 42px;
   height: 13px;
@@ -139,14 +139,14 @@ body[data-dsh-claude-style] .dsh-claude-home-stat[data-skeleton] .dsh-claude-hom
   background: color-mix(in srgb, var(--dsw-alias-label-primary, #141413) 9%, transparent);
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-heat[data-skeleton] .dsh-claude-home-heat-cell {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-heat[data-skeleton] .dsh-deepcraft-home-heat-cell {
   background: color-mix(in srgb, var(--dsw-alias-label-primary, #141413) 5%, transparent);
 }
 
 /* A narrow window stacks the stat cells rather than squeezing three of them;
    the heat grid follows the panel on its own. */
 @media (max-width: 760px) {
-  body[data-dsh-claude-style] .dsh-claude-home-stats {
+  body[data-dsh-deepcraft] .dsh-deepcraft-home-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

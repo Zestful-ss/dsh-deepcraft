@@ -62,8 +62,8 @@ test('a reading at its top is one whole plate in the occupied colour', () => {
 
 test('an even split is two half discs of one radius, each cut from its own mask', () => {
   const image = imageOf(50)
-  expect(image).toContain(`mask="url(#dsh-claude-pie-grey)"`)
-  expect(image).toContain(`mask="url(#dsh-claude-pie-color)"`)
+  expect(image).toContain(`mask="url(#dsh-deepcraft-pie-grey)"`)
+  expect(image).toContain(`mask="url(#dsh-deepcraft-pie-color)"`)
   expect(radiusOf(50, TONE)).toBe(BOX_RADIUS)
   expect(radiusOf(50, REST)).toBe(BOX_RADIUS)
   expect(strokesOf(50)).toEqual([SEAM, SEAM])

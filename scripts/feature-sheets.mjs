@@ -21,7 +21,7 @@ export const FEATURE_SHEET_CONSTANTS = [
   'HOME_HEAT_RAMP',
 ]
 
-const SCOPE = 'body[data-dsh-claude-style]'
+const SCOPE = 'body[data-dsh-deepcraft]'
 
 /**
  * The reveal's fading rules, one per step: step 0 is the faintest a character
@@ -59,7 +59,7 @@ function revealSteps(constants) {
  * transparency.
  */
 function heatLevels(constants) {
-  return constants.HOME_HEAT_RAMP.map((share, index) => `${SCOPE} .dsh-claude-home-heat-cell[data-level="${index + 1}"] {\n  background: color-mix(in srgb, var(--dsh-claude-heat-ink) ${share}%, transparent);\n}\n`).join('\n')
+  return constants.HOME_HEAT_RAMP.map((share, index) => `${SCOPE} .dsh-deepcraft-home-heat-cell[data-level="${index + 1}"] {\n  background: color-mix(in srgb, var(--dsh-deepcraft-heat-ink) ${share}%, transparent);\n}\n`).join('\n')
 }
 
 const GENERATORS = { 'reveal-steps': revealSteps, 'heat-levels': heatLevels }

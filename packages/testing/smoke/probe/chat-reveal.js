@@ -19,13 +19,13 @@
         var steps = 0
         if (registry) {
           for (var step = 0; step < 24; step += 1) {
-            var found = registry.get('dsh-claude-tok-' + step)
+            var found = registry.get('dsh-deepcraft-tok-' + step)
             var size = found ? found.size : 0
             total += size
             if (size > 0) steps += 1
           }
         }
-        return { total: total, steps: steps, mark: document.body.hasAttribute('data-dsh-claude-chat-reveal') }
+        return { total: total, steps: steps, mark: document.body.hasAttribute('data-dsh-deepcraft-chat-reveal') }
       }
       // The fade ships off: a container streaming before the choice is turned on
       // gets nothing at all, which is the answer the row offers first.

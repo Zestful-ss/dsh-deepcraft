@@ -55,11 +55,11 @@ const evidenceKey = (item) => `${item.ruleKey}|${item.prop}`
 
 /** The skin's own triggers, each opening the surface its rules paint. */
 const SURFACES = [
-  ['model picker', '.dsh-claude-model-btn'],
-  ['effort picker', '.dsh-claude-effort-btn'],
-  ['permission picker', '.dsh-claude-perm-btn'],
-  ['account card', '.dsh-claude-account-btn'],
-  ['search panel', '.dsh-claude-search-trigger'],
+  ['model picker', '.dsh-deepcraft-model-btn'],
+  ['effort picker', '.dsh-deepcraft-effort-btn'],
+  ['permission picker', '.dsh-deepcraft-perm-btn'],
+  ['account card', '.dsh-deepcraft-account-btn'],
+  ['search panel', '.dsh-deepcraft-search-trigger'],
 ]
 
 /**
@@ -70,31 +70,31 @@ const SURFACES = [
  * surface the page does not render stays unmatched whatever the mark says.
  */
 const MARKS = [
-  ['motion reduced', 'data-dsh-claude-motion', 'reduced'],
-  ['motion full', 'data-dsh-claude-motion', 'full'],
-  ['status motion sweep', 'data-dsh-claude-status-motion', 'sweep'],
-  ['status motion wash', 'data-dsh-claude-status-motion', 'wash'],
-  ['search style icon', 'data-dsh-claude-search-style', 'icon'],
-  ['search style overlay', 'data-dsh-claude-search-style', 'overlay'],
-  ['search style standalone', 'data-dsh-claude-search-style', 'standalone'],
-  ['sidebar relaxed', 'data-dsh-claude-sidebar-layout', 'relaxed'],
-  ['sidebar compact', 'data-dsh-claude-sidebar-layout', 'compact'],
-  ['stats inline', 'data-dsh-claude-stats-position', 'inline'],
-  ['stats context', 'data-dsh-claude-stats-position', 'context'],
-  ['footer takeover', 'data-dsh-claude-footer-takeover', ''],
-  ['dock look card', 'data-dsh-claude-dock-look', 'card'],
-  ['dock look flush', 'data-dsh-claude-dock-look', 'flush'],
-  ['mascot crab', 'data-dsh-claude-mascot', 'crab'],
-  ['mascot deepy', 'data-dsh-claude-mascot', 'deepy'],
-  ['custom brand mark', 'data-dsh-claude-custom-mark', ''],
-  ['custom brand word', 'data-dsh-claude-custom-word', 'text'],
-  ['custom brand word image', 'data-dsh-claude-custom-word', 'image'],
-  ['custom brand tint', 'data-dsh-claude-custom-tint', ''],
-  ['custom brand accent', 'data-dsh-claude-accent', '#d97757'],
+  ['motion reduced', 'data-dsh-deepcraft-motion', 'reduced'],
+  ['motion full', 'data-dsh-deepcraft-motion', 'full'],
+  ['status motion sweep', 'data-dsh-deepcraft-status-motion', 'sweep'],
+  ['status motion wash', 'data-dsh-deepcraft-status-motion', 'wash'],
+  ['search style icon', 'data-dsh-deepcraft-search-style', 'icon'],
+  ['search style overlay', 'data-dsh-deepcraft-search-style', 'overlay'],
+  ['search style standalone', 'data-dsh-deepcraft-search-style', 'standalone'],
+  ['sidebar relaxed', 'data-dsh-deepcraft-sidebar-layout', 'relaxed'],
+  ['sidebar compact', 'data-dsh-deepcraft-sidebar-layout', 'compact'],
+  ['stats inline', 'data-dsh-deepcraft-stats-position', 'inline'],
+  ['stats context', 'data-dsh-deepcraft-stats-position', 'context'],
+  ['footer takeover', 'data-dsh-deepcraft-footer-takeover', ''],
+  ['dock look card', 'data-dsh-deepcraft-dock-look', 'card'],
+  ['dock look flush', 'data-dsh-deepcraft-dock-look', 'flush'],
+  ['mascot crab', 'data-dsh-deepcraft-mascot', 'crab'],
+  ['mascot deepy', 'data-dsh-deepcraft-mascot', 'deepy'],
+  ['custom brand mark', 'data-dsh-deepcraft-custom-mark', ''],
+  ['custom brand word', 'data-dsh-deepcraft-custom-word', 'text'],
+  ['custom brand word image', 'data-dsh-deepcraft-custom-word', 'image'],
+  ['custom brand tint', 'data-dsh-deepcraft-custom-tint', ''],
+  ['custom brand accent', 'data-dsh-deepcraft-accent', '#d97757'],
   // The window's focus state, which the skin mirrors onto the page for the
   // selection paints: a browser the lane drives keeps the focus, so the state
   // is set as the mirror writes it.
-  ['window blurred', 'data-dsh-window-blur', ''],
+  ['window blurred', 'data-dsh-deepcraft-window-blur', ''],
 ]
 
 /**
@@ -155,7 +155,7 @@ function importanceScenario(lane) {
     }
   }
   /** The host's own menus and dialogs: every visible trigger the page offers. */
-  const HOST_TRIGGERS = '[aria-haspopup="menu"]:not(:is([class^="dsh-claude"], [class*=" dsh-claude"])), button[aria-haspopup="dialog"]:not(:is([class^="dsh-claude"], [class*=" dsh-claude"]))'
+  const HOST_TRIGGERS = '[aria-haspopup="menu"]:not(:is([class^="dsh-deepcraft"], [class*=" dsh-deepcraft"])), button[aria-haspopup="dialog"]:not(:is([class^="dsh-deepcraft"], [class*=" dsh-deepcraft"]))'
   /**
    * Every control the open settings tab offers, one state each: a preference
    * that renders the skin's own markup (the studio home panel, the mascot, the
@@ -165,7 +165,7 @@ function importanceScenario(lane) {
    * rather than turn a preference on — and so are the fields that take typing.
    */
   const withControls = async (page, audit, tab) => {
-    const controls = page.locator('.dsh-claude-settings-rows button:not([disabled]):not(.dsh-claude-settings-button)')
+    const controls = page.locator('.dsh-deepcraft-settings-rows button:not([disabled]):not(.dsh-deepcraft-settings-button)')
     const many = await controls.count()
     for (let index = 0; index < many; index++) {
       const control = controls.nth(index)
@@ -187,7 +187,7 @@ function importanceScenario(lane) {
     await openSkinSettings(page)
     await page.waitForTimeout(600)
     await audit.state('settings')
-    const tabs = page.locator('.dsh-claude-settings-tabs [role="tab"]')
+    const tabs = page.locator('.dsh-deepcraft-settings-tabs [role="tab"]')
     const many = await tabs.count()
     for (let at = 1; at < many; at++) {
       await tabs.nth(at).click()
@@ -261,7 +261,7 @@ function importanceScenario(lane) {
       await audit.state('streaming')
       await second
       await lane.waitForTurn(page)
-      const rail = await page.evaluate(pointAtInPage, ['.dsh-claude-turn-rail'])
+      const rail = await page.evaluate(pointAtInPage, ['.dsh-deepcraft-turn-rail'])
       if (rail !== null) {
         await page.mouse.move(rail.x, rail.y)
         await page.waitForTimeout(400)
@@ -290,16 +290,16 @@ function importanceScenario(lane) {
       // palette and typefaces.
       await attribute(page, 'data-ds-dark-theme', '')
       await audit.state('dark')
-      await attribute(page, 'data-dsh-claude-brand', 'deepseek')
+      await attribute(page, 'data-dsh-deepcraft-brand', 'deepseek')
       await audit.state('deepseek dark')
       await attribute(page, 'data-ds-dark-theme', null)
       await audit.state('deepseek light')
-      await attribute(page, 'data-dsh-claude-brand', 'claude')
-      await attribute(page, 'data-dsh-claude-palette', 'host')
-      await attribute(page, 'data-dsh-claude-typeface', 'host')
+      await attribute(page, 'data-dsh-deepcraft-brand', 'claude')
+      await attribute(page, 'data-dsh-deepcraft-palette', 'host')
+      await attribute(page, 'data-dsh-deepcraft-typeface', 'host')
       await audit.state('host palette')
-      await attribute(page, 'data-dsh-claude-palette', 'claude')
-      await attribute(page, 'data-dsh-claude-typeface', 'claude')
+      await attribute(page, 'data-dsh-deepcraft-palette', 'claude')
+      await attribute(page, 'data-dsh-deepcraft-typeface', 'claude')
       // The preferences the skin marks the page with, one state each.
       for (const [name, key, value] of MARKS) {
         await attribute(page, key, value)
@@ -310,7 +310,7 @@ function importanceScenario(lane) {
       // The preferences the controls set render their own markup on the empty
       // page — the studio panel, the mascot, the hero menu — so the walk goes
       // back to it and audits what they put there.
-      const home = page.locator('button[data-dsh-claude-part~="new-session"]').first()
+      const home = page.locator('button[data-dsh-deepcraft-part~="new-session"]').first()
       if (await home.count() > 0 && await home.isVisible()) {
         await home.click({ force: true })
         await page.waitForTimeout(1500)

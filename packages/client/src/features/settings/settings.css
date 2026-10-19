@@ -1,36 +1,36 @@
 /* ---------- Settings dialog: modal panel background ---------- */
 /* In light mode, the host dialog defaults to var(--dsw-alias-bg-layer-2);
    align the dialog card with the main canvas (#fcfcfb). */
-body[data-dsh-claude-style]:not([data-ds-dark-theme]) :is([data-dsh-claude-part~="settings-area"] [data-dsh-claude-part~="panel"], [data-dsh-claude-part~="settings-area"] [role="dialog"], [data-dsh-claude-part~="overlay"] > [data-dsh-claude-part~="panel"]) {
+body[data-dsh-deepcraft]:not([data-ds-dark-theme]) :is([data-dsh-deepcraft-part~="settings-area"] [data-dsh-deepcraft-part~="panel"], [data-dsh-deepcraft-part~="settings-area"] [role="dialog"], [data-dsh-deepcraft-part~="overlay"] > [data-dsh-deepcraft-part~="panel"]) {
   background: var(--dsw-alias-bg-base);
 }
 
-/* ---------- Settings dialog: Claude Style tab icon ---------- */
-/* Replace the host's default settings gear icon on the Claude Style nav tab
+/* ---------- Settings dialog: DeepCraft tab icon ---------- */
+/* Replace the host's default settings gear icon on the DeepCraft nav tab
    with the monochrome Claude starburst icon (black in light mode). */
-body[data-dsh-claude-style] button[data-dsh-section="claude-style"] [data-dsh-claude-part~="nav-icon"] {
+body[data-dsh-deepcraft] button[data-dsh-section="deepcraft"] [data-dsh-deepcraft-part~="nav-icon"] {
   display: none;
 }
 
-body[data-dsh-claude-style] button[data-dsh-section="claude-style"]::before {
+body[data-dsh-deepcraft] button[data-dsh-section="deepcraft"]::before {
   content: "";
   display: block;
   flex: none;
   width: 16px;
   height: 16px;
   background-color: currentColor;
-  -webkit-mask: var(--dsh-claude-mask-claude-mark);
-  mask: var(--dsh-claude-mask-claude-mark);
+  -webkit-mask: var(--dsh-deepcraft-image-deepcraft-mark) center / contain no-repeat;
+  mask: var(--dsh-deepcraft-image-deepcraft-mark) center / contain no-repeat;
 }
 
-body[data-dsh-claude-style]:not([data-ds-dark-theme]) button[data-dsh-section="claude-style"]::before {
+body[data-dsh-deepcraft]:not([data-ds-dark-theme]) button[data-dsh-section="deepcraft"]::before {
   background-color: var(--dsw-alias-label-primary);
 }
 
 /* ---------- Claude Code layout: settings page ---------- */
 /* The skin's own page in the settings dialog and on the plugin page. Its
    segmented controls reuse the composer permission picker's classes
-   (`.dsh-claude-segments` / `.dsh-claude-segment`), so the two are literally one
+   (`.dsh-deepcraft-segments` / `.dsh-deepcraft-segment`), so the two are literally one
    control rather than two lookalikes; the switch and the brand cards are new
    here. The rows follow the host's own settings rows (ui-chat's PreferenceRow):
    full width, 16px above and below, a hairline between two rows.
@@ -38,7 +38,7 @@ body[data-dsh-claude-style]:not([data-ds-dark-theme]) button[data-dsh-section="c
    (`.options { padding: 0 24px 24px }`), and a second inset here set the skin's
    rows 24px inside every other page's. The 16px on top is the host's own row
    padding, so the page's heading lands where their first row's text does. */
-body[data-dsh-claude-style] .dsh-claude-settings {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings {
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -47,7 +47,7 @@ body[data-dsh-claude-style] .dsh-claude-settings {
   font-family: var(--dsw-font-family);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-title {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-title {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -61,7 +61,7 @@ body[data-dsh-claude-style] .dsh-claude-settings-title {
    The mark is a mask over the link's ::before box, which carries the ink; that
    ink is stated there rather than inherited, because the sheet paints every
    anchor in the link colour through a more specific selector. */
-body[data-dsh-claude-style] .dsh-claude-settings-repo {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-repo {
   flex: none;
   display: flex;
   align-items: center;
@@ -69,29 +69,29 @@ body[data-dsh-claude-style] .dsh-claude-settings-repo {
   width: 24px;
   height: 24px;
   border-radius: 6px;
-  transition: background-color var(--dsh-claude-timing-feedback);
+  transition: background-color var(--dsh-deepcraft-timing-feedback);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-repo::before {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-repo::before {
   content: "";
   width: 16px;
   height: 16px;
   background-color: var(--dsw-alias-label-secondary);
-  -webkit-mask: var(--dsh-claude-image-github-mark) center / contain no-repeat;
-  mask: var(--dsh-claude-image-github-mark) center / contain no-repeat;
-  transition: background-color var(--dsh-claude-timing-feedback);
+  -webkit-mask: var(--dsh-deepcraft-image-github-mark) center / contain no-repeat;
+  mask: var(--dsh-deepcraft-image-github-mark) center / contain no-repeat;
+  transition: background-color var(--dsh-deepcraft-timing-feedback);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-repo:hover {
-  background-color: var(--dsh-claude-hover-bg);
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-repo:hover {
+  background-color: var(--dsh-deepcraft-hover-bg);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-repo:hover::before,
-body[data-dsh-claude-style] .dsh-claude-settings-repo:focus-visible::before {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-repo:hover::before,
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-repo:focus-visible::before {
   background-color: var(--dsw-alias-label-primary);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-repo:focus-visible {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-repo:focus-visible {
   outline: 2px solid var(--dsw-alias-brand-primary, #d97757);
   outline-offset: 1px;
 }
@@ -102,13 +102,13 @@ body[data-dsh-claude-style] .dsh-claude-settings-repo:focus-visible {
    line: a tab never shrinks under its label's one-line width, so the strip
    wraps exactly when one line no longer holds every label, and the pill covers
    the active tab on the line it lands on (shared/sliding-pill.ts). */
-body[data-dsh-claude-style] .dsh-claude-settings-tabs {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-tabs {
   display: flex;
   align-self: stretch;
   flex-wrap: wrap;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-tabs > [role="tab"] {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-tabs > [role="tab"] {
   flex: 1 1 0;
   min-width: max-content;
 }
@@ -116,7 +116,7 @@ body[data-dsh-claude-style] .dsh-claude-settings-tabs > [role="tab"] {
 /* The rows sit in a fieldset so a read-only page disables every control at
    once (settings.ts); the fieldset's own frame and its min-content floor,
    which would widen a phone's page, are taken off. */
-body[data-dsh-claude-style] .dsh-claude-settings-rows {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-rows {
   display: flex;
   flex-direction: column;
   min-inline-size: 0;
@@ -130,11 +130,11 @@ body[data-dsh-claude-style] .dsh-claude-settings-rows {
    tab it replaced leaves to the other side, laid over it and out of the way of
    every press (transitions.dev's "Page side-by-side", MIT; settings.ts). The
    tab the page opens on arrives without motion. */
-body[data-dsh-claude-style] .dsh-claude-settings-pages {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pages {
   position: relative;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-leaving {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-leaving {
   position: absolute;
   top: 0;
   left: 0;
@@ -142,57 +142,57 @@ body[data-dsh-claude-style] .dsh-claude-settings-leaving {
   pointer-events: none;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-rows[data-dsh-claude-page-enter] {
-  animation: dsh-claude-page-in var(--dsh-claude-duration-open) var(--dsh-claude-ease-settle);
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-rows[data-dsh-deepcraft-page-enter] {
+  animation: dsh-deepcraft-page-in var(--dsh-deepcraft-duration-open) var(--dsh-deepcraft-ease-settle);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-rows[data-dsh-claude-page-enter="forward"],
-body[data-dsh-claude-style] .dsh-claude-settings-rows[data-dsh-claude-page-leave="back"] {
-  --dsh-claude-page-shift: var(--dsh-claude-distance-travel);
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-rows[data-dsh-deepcraft-page-enter="forward"],
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-rows[data-dsh-deepcraft-page-leave="back"] {
+  --dsh-deepcraft-page-shift: var(--dsh-deepcraft-distance-travel);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-rows[data-dsh-claude-page-enter="back"],
-body[data-dsh-claude-style] .dsh-claude-settings-rows[data-dsh-claude-page-leave="forward"] {
-  --dsh-claude-page-shift: calc(-1 * var(--dsh-claude-distance-travel));
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-rows[data-dsh-deepcraft-page-enter="back"],
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-rows[data-dsh-deepcraft-page-leave="forward"] {
+  --dsh-deepcraft-page-shift: calc(-1 * var(--dsh-deepcraft-distance-travel));
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-rows[data-dsh-claude-page-leave] {
-  animation: dsh-claude-page-out var(--dsh-claude-duration-open) var(--dsh-claude-ease-settle) forwards;
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-rows[data-dsh-deepcraft-page-leave] {
+  animation: dsh-deepcraft-page-out var(--dsh-deepcraft-duration-open) var(--dsh-deepcraft-ease-settle) forwards;
 }
 
-@keyframes dsh-claude-page-in {
-  from { opacity: 0; transform: translateX(var(--dsh-claude-page-shift)); filter: blur(var(--dsh-claude-blur-enter)); }
+@keyframes dsh-deepcraft-page-in {
+  from { opacity: 0; transform: translateX(var(--dsh-deepcraft-page-shift)); filter: blur(var(--dsh-deepcraft-blur-enter)); }
   to { opacity: 1; transform: none; filter: blur(0); }
 }
 
-@keyframes dsh-claude-page-out {
+@keyframes dsh-deepcraft-page-out {
   from { opacity: 1; transform: none; filter: blur(0); }
-  to { opacity: 0; transform: translateX(var(--dsh-claude-page-shift)); filter: blur(var(--dsh-claude-blur-enter)); }
+  to { opacity: 0; transform: translateX(var(--dsh-deepcraft-page-shift)); filter: blur(var(--dsh-deepcraft-blur-enter)); }
 }
 
 /* A tab's opening line, above its first row, which keeps no hairline under it. */
-body[data-dsh-claude-style] .dsh-claude-settings-notice {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-notice {
   font-size: 12px;
   line-height: 18px;
   color: var(--dsw-alias-label-secondary);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-rows > :first-child {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-rows > :first-child {
   border-top: none;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-tab-notice {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-tab-notice {
   padding-top: 16px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-tab-notice + .dsh-claude-settings-row {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-tab-notice + .dsh-deepcraft-settings-row {
   border-top: none;
 }
 
 /* A sub-row belongs to the row above it: no hairline between the two and no
    air above it, so they read as one group, and it greys out while its parent
    is off (its control is disabled as well, so the keyboard skips it). */
-body[data-dsh-claude-style] .dsh-claude-settings-row.dsh-claude-settings-row-sub {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row.dsh-deepcraft-settings-row-sub {
   border-top: none;
   padding-top: 0;
 }
@@ -201,15 +201,15 @@ body[data-dsh-claude-style] .dsh-claude-settings-row.dsh-claude-settings-row-sub
    the plugin page) always keeps the scrollbar's room: a tab short enough to
    need no scrollbar then lays out at the same width as one that does. The
    page marks its nearest scrolling ancestor while it is mounted (settings.ts). */
-body[data-dsh-claude-style] [data-dsh-claude-settings-scroller] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-settings-scroller] {
   scrollbar-gutter: stable;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-row-sub[data-disabled] {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-sub[data-disabled] {
   opacity: .5;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-row-sub[data-disabled] :is(button, input) {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-sub[data-disabled] :is(button, input) {
   cursor: not-allowed;
 }
 
@@ -220,7 +220,7 @@ body[data-dsh-claude-style] .dsh-claude-settings-row-sub[data-disabled] :is(butt
    under the text rather than crushing the description into a few characters a
    line. A segmented control is wider than a switch or a colour well, so its row
    wraps earlier (220px against 140px). */
-body[data-dsh-claude-style] .dsh-claude-settings-row {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -229,11 +229,11 @@ body[data-dsh-claude-style] .dsh-claude-settings-row {
   border-top: 0.5px solid var(--dsw-alias-border-l2);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-row-segment > .dsh-claude-settings-row-text {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-segment > .dsh-deepcraft-settings-row-text {
   flex: 1 1 220px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-row-text {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-text {
   flex: 1 1 140px;
   min-width: 0;
   display: flex;
@@ -248,14 +248,14 @@ body[data-dsh-claude-style] .dsh-claude-settings-row-text {
 /* A block row is a column, so it stands apart from the row's wrap rules: its
    children never wrap sideways, and its text keeps no width basis — in a
    column a flex basis reads as a height. */
-body[data-dsh-claude-style] .dsh-claude-settings-row-block {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-block {
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: flex-start;
   gap: 12px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-row-block > .dsh-claude-settings-row-text {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-block > .dsh-deepcraft-settings-row-text {
   flex: none;
   align-self: stretch;
   padding-right: 0;
@@ -263,7 +263,7 @@ body[data-dsh-claude-style] .dsh-claude-settings-row-block > .dsh-claude-setting
 
 /* The row title is UI text in the host's row metrics: the sans face, not the
    serif display face theme/typography.css gives every class naming a title. */
-body[data-dsh-claude-style] .dsh-claude-settings-row-title {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-title {
   font-family: var(--dsw-font-family);
   font-size: 14px;
   font-weight: 400;
@@ -272,7 +272,7 @@ body[data-dsh-claude-style] .dsh-claude-settings-row-title {
   color: var(--dsw-alias-label-primary);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-row-desc {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-desc {
   font-size: 12px;
   line-height: 18px;
   color: var(--dsw-alias-label-tertiary);
@@ -280,14 +280,14 @@ body[data-dsh-claude-style] .dsh-claude-settings-row-desc {
 
 /* A row marked experimental carries the host's tag beside its title, on the
    title's own line while that fits. */
-body[data-dsh-claude-style] .dsh-claude-settings-row-title[data-experimental] {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-title[data-experimental] {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 4px 8px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-row-tag {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-tag {
   flex: none;
 }
 
@@ -296,18 +296,18 @@ body[data-dsh-claude-style] .dsh-claude-settings-row-tag {
    stays readable and a line in the accent colour says who owns it or what it
    waits for. The reader's stored answer is what the control shows, so it already
    tells what will happen once that changes. */
-body[data-dsh-claude-style] .dsh-claude-settings-row button:disabled {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row button:disabled {
   cursor: not-allowed;
   opacity: .45;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-row-note {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-note {
   display: block;
   margin-top: 2px;
   color: var(--dsw-alias-state-business-primary);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-error {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-error {
   font-size: 12px;
   line-height: 1.5;
   color: var(--dsw-alias-state-error-primary, #c0392b);
@@ -315,7 +315,7 @@ body[data-dsh-claude-style] .dsh-claude-settings-error {
 
 /* The switch borrows the segment track's palette and radius so a page of rows
    reads as one control set rather than two. */
-body[data-dsh-claude-style] .dsh-claude-settings-switch {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-switch {
   flex: none;
   appearance: none;
   margin: 0;
@@ -330,18 +330,18 @@ body[data-dsh-claude-style] .dsh-claude-settings-switch {
      squarish the track's caps away from the knob's true circle. */
   corner-shape: round;
   background: var(--dsw-specific-selector);
-  transition: background-color var(--dsh-claude-timing-feedback);
+  transition: background-color var(--dsh-deepcraft-timing-feedback);
 }
 
-body[data-dsh-claude-style]:not([data-ds-dark-theme]) .dsh-claude-settings-switch {
-  background: var(--dsh-claude-chip);
+body[data-dsh-deepcraft]:not([data-ds-dark-theme]) .dsh-deepcraft-settings-switch {
+  background: var(--dsh-deepcraft-chip);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-switch[data-on] {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-switch[data-on] {
   background: var(--dsw-alias-brand-primary, #d97757);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-switch-knob {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-switch-knob {
   display: block;
   width: 16px;
   height: 16px;
@@ -350,13 +350,13 @@ body[data-dsh-claude-style] .dsh-claude-settings-switch-knob {
   corner-shape: round;
   background: var(--dsw-alias-bg-overlay, #ffffff);
   box-shadow: 0 1px 2px rgba(20, 20, 19, 0.18);
-  --dsh-claude-switch-travel: 16px;
-  --dsh-claude-switch-overshoot: 1px;
+  --dsh-deepcraft-switch-travel: 16px;
+  --dsh-deepcraft-switch-overshoot: 1px;
   translate: 0 0;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-switch[data-on] .dsh-claude-settings-switch-knob {
-  translate: var(--dsh-claude-switch-travel) 0;
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-switch[data-on] .dsh-deepcraft-settings-switch-knob {
+  translate: var(--dsh-deepcraft-switch-travel) 0;
 }
 
 /* Pressed, the knob travels across with a double bounce — past its end, back,
@@ -364,32 +364,32 @@ body[data-dsh-claude-style] .dsh-claude-settings-switch[data-on] .dsh-claude-set
    (transitions.dev's "Toggle", MIT). Only a switch the reader has pressed is
    armed (data-moved, settings-controls.ts): a knob drawn by a page opening
    stands where it is. */
-body[data-dsh-claude-style] .dsh-claude-settings-switch[data-moved][data-on] .dsh-claude-settings-switch-knob {
-  animation: dsh-claude-switch-on var(--dsh-claude-duration-bounce) var(--dsh-claude-ease-spring) both;
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-switch[data-moved][data-on] .dsh-deepcraft-settings-switch-knob {
+  animation: dsh-deepcraft-switch-on var(--dsh-deepcraft-duration-bounce) var(--dsh-deepcraft-ease-spring) both;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-switch[data-moved]:not([data-on]) .dsh-claude-settings-switch-knob {
-  animation: dsh-claude-switch-off var(--dsh-claude-duration-bounce) var(--dsh-claude-ease-spring) both;
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-switch[data-moved]:not([data-on]) .dsh-deepcraft-settings-switch-knob {
+  animation: dsh-deepcraft-switch-off var(--dsh-deepcraft-duration-bounce) var(--dsh-deepcraft-ease-spring) both;
 }
 
-@keyframes dsh-claude-switch-on {
+@keyframes dsh-deepcraft-switch-on {
   0% { translate: 0 0; }
-  55% { translate: calc(var(--dsh-claude-switch-travel) + var(--dsh-claude-switch-overshoot)) 0; }
-  80%, 100% { translate: var(--dsh-claude-switch-travel) 0; }
+  55% { translate: calc(var(--dsh-deepcraft-switch-travel) + var(--dsh-deepcraft-switch-overshoot)) 0; }
+  80%, 100% { translate: var(--dsh-deepcraft-switch-travel) 0; }
 }
 
-@keyframes dsh-claude-switch-off {
-  0% { translate: var(--dsh-claude-switch-travel) 0; }
-  55% { translate: calc(0px - var(--dsh-claude-switch-overshoot)) 0; }
+@keyframes dsh-deepcraft-switch-off {
+  0% { translate: var(--dsh-deepcraft-switch-travel) 0; }
+  55% { translate: calc(0px - var(--dsh-deepcraft-switch-overshoot)) 0; }
   80%, 100% { translate: 0 0; }
 }
 
 /* The row's three bordered controls — the username input, the quick-provider
    trigger and the custom brand rows' buttons — share one plate; each rule
    below adds only its own sizing and cursor. */
-body[data-dsh-claude-style] .dsh-claude-settings-input,
-body[data-dsh-claude-style] .dsh-claude-settings-picker,
-body[data-dsh-claude-style] .dsh-claude-settings-button {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-input,
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-picker,
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-button {
   box-sizing: border-box;
   border: 1px solid var(--dsw-alias-border-l1);
   border-radius: 8px;
@@ -403,53 +403,53 @@ body[data-dsh-claude-style] .dsh-claude-settings-button {
 
 /* Custom username input: same row rhythm as the switch/segments, but wide
    enough to read a name and narrow enough not to push the description. */
-body[data-dsh-claude-style] .dsh-claude-settings-input {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-input {
   flex: none;
   width: 180px;
   max-width: 45%;
   outline: none;
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-input:focus {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-input:focus {
   border-color: var(--dsw-alias-brand-primary, #d97757);
 }
 
-body[data-dsh-claude-style] .dsh-claude-settings-input::placeholder {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-input::placeholder {
   color: var(--dsw-alias-label-caption);
 }
 
 /* The quick-provider trigger belongs to the same control family as the username
    input: one bordered plate that opens a picker. Its card is the shared popover
    card (features/permissions/permissions.css), so only the trigger is styled here. */
-body[data-dsh-claude-style] .dsh-claude-settings-picker {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-picker {
   flex: none;
   min-width: 140px;
   max-width: 45%;
   text-align: left;
   cursor: pointer;
 }
-body[data-dsh-claude-style] .dsh-claude-settings-picker:hover {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-picker:hover {
   border-color: var(--dsw-alias-border-l2);
 }
-body[data-dsh-claude-style] .dsh-claude-settings-picker[aria-expanded="true"] {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-picker[aria-expanded="true"] {
   border-color: var(--dsw-alias-brand-primary, #d97757);
 }
 
 /* The custom brand rows' buttons (settings-brand.ts) are plates of the same
    family as the input and the picker trigger, sized to their label. */
-body[data-dsh-claude-style] .dsh-claude-settings-button {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-button {
   flex: none;
   white-space: nowrap;
   cursor: pointer;
 }
-body[data-dsh-claude-style] .dsh-claude-settings-button:hover:not(:disabled) {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-button:hover:not(:disabled) {
   border-color: var(--dsw-alias-border-l2);
 }
-body[data-dsh-claude-style] .dsh-claude-settings-button:focus-visible {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-button:focus-visible {
   outline: 2px solid var(--dsw-alias-brand-primary, #d97757);
   outline-offset: 1px;
 }
-body[data-dsh-claude-style] .dsh-claude-settings-button:disabled {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-button:disabled {
   opacity: 0.5;
   cursor: default;
 }
@@ -457,7 +457,7 @@ body[data-dsh-claude-style] .dsh-claude-settings-button:disabled {
 /* One brand image: a preview tile, whose transparent parts show the row's
    canvas, then its buttons; a refusal is written under them in the page's
    error colour. */
-body[data-dsh-claude-style] .dsh-claude-brand-image {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-image {
   flex: none;
   display: flex;
   flex-direction: column;
@@ -465,12 +465,12 @@ body[data-dsh-claude-style] .dsh-claude-brand-image {
   gap: 6px;
   max-width: 55%;
 }
-body[data-dsh-claude-style] .dsh-claude-brand-image-controls {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-image-controls {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-body[data-dsh-claude-style] .dsh-claude-brand-image-preview {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-image-preview {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -482,16 +482,16 @@ body[data-dsh-claude-style] .dsh-claude-brand-image-preview {
   border: 1px solid var(--dsw-alias-border-l1);
   border-radius: 8px;
 }
-body[data-dsh-claude-style] .dsh-claude-brand-image-preview[data-empty] {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-image-preview[data-empty] {
   border-style: dashed;
 }
-body[data-dsh-claude-style] .dsh-claude-brand-image-preview > img {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-image-preview > img {
   display: block;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
 }
-body[data-dsh-claude-style] .dsh-claude-brand-image-error {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-image-error {
   font-size: 12px;
   line-height: 18px;
   color: var(--dsw-alias-state-error-primary, #c0392b);
@@ -501,13 +501,13 @@ body[data-dsh-claude-style] .dsh-claude-brand-image-error {
 /* The accent colour: the native colour well, trimmed to a swatch with the
    inputs' corner, beside either the note that the brand's own accent stands
    or the button that hands it back. */
-body[data-dsh-claude-style] .dsh-claude-brand-accent {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-accent {
   flex: none;
   display: flex;
   align-items: center;
   gap: 8px;
 }
-body[data-dsh-claude-style] .dsh-claude-settings-color {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-color {
   width: 32px;
   height: 32px;
   box-sizing: border-box;
@@ -517,14 +517,14 @@ body[data-dsh-claude-style] .dsh-claude-settings-color {
   background: var(--dsw-alias-bg-layer-1);
   cursor: pointer;
 }
-body[data-dsh-claude-style] .dsh-claude-settings-color::-webkit-color-swatch-wrapper {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-color::-webkit-color-swatch-wrapper {
   padding: 0;
 }
-body[data-dsh-claude-style] .dsh-claude-settings-color::-webkit-color-swatch {
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-color::-webkit-color-swatch {
   border: none;
   border-radius: 5px;
 }
-body[data-dsh-claude-style] .dsh-claude-brand-accent-note {
+body[data-dsh-deepcraft] .dsh-deepcraft-brand-accent-note {
   font-size: 13px;
   line-height: 18px;
   color: var(--dsw-alias-label-tertiary);
@@ -534,7 +534,7 @@ body[data-dsh-claude-style] .dsh-claude-brand-accent-note {
    the shared popover card, anchored above the trigger and right-aligned with it
    (positionAnchoredPopover), so it grows from the corner nearest the trigger —
    the bottom right, as the model picker's card does. */
-body[data-dsh-claude-style] .dsh-claude-quick-popover {
+body[data-dsh-deepcraft] .dsh-deepcraft-quick-popover {
   position: fixed !important;
   min-width: 248px !important;
   display: flex !important;

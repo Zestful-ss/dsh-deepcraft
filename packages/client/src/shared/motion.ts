@@ -1,4 +1,4 @@
-import { MOTION } from 'virtual:dsh-claude-style/generated'
+import { MOTION } from 'virtual:dsh-deepcraft/generated'
 
 /**
  * The motion tokens as the browser half reads them (D9): the values come from

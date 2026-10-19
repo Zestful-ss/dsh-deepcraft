@@ -15,11 +15,11 @@
  * work on a machine that has never reached the source, and a copy newer than
  * the cache (a plugin upgrade) wins over a stale download.
  */
-import { PACKAGE_NAME } from '@dsh-claude-style/contracts/package'
+import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
 import { statSync } from 'node:fs'
 import { join } from 'node:path'
-import type { PeakCatalog, RateProfile } from '@dsh-claude-style/contracts/peakrate'
-import type { DshContext } from '@dsh-claude-style/engine/node/dsh'
+import type { PeakCatalog, RateProfile } from '@dsh-deepcraft/contracts/peakrate'
+import type { DshContext } from '@dsh-deepcraft/engine/node/dsh'
 import { cachePath, readJsonDocument, writeJsonDocument } from './cache-file.js'
 import { packageRoot } from './package-root.js'
 import { parseCatalog } from './peakrate-catalog.js'

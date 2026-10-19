@@ -1,8 +1,8 @@
-import { requestFrame } from '@dsh-claude-style/engine/frame'
-import { observeMatches } from '@dsh-claude-style/engine/bus'
+import { requestFrame } from '@dsh-deepcraft/engine/frame'
+import { observeMatches } from '@dsh-deepcraft/engine/bus'
 import { motionReduced } from '../../core/prefs'
 import { motionMs } from '../../shared/motion'
-import { EXPANDED_ATTRIBUTE, REASONING_TEXT_SELECTOR, ROW_PHASE_ATTRIBUTE, RUNNING_STATE, THINK_ROW_SELECTOR } from '@dsh-claude-style/contracts/dom'
+import { EXPANDED_ATTRIBUTE, REASONING_TEXT_SELECTOR, ROW_PHASE_ATTRIBUTE, RUNNING_STATE, THINK_ROW_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 
 /**
  * While the model reasons, its thinking row plays the reasoning back the way
@@ -36,18 +36,18 @@ import { EXPANDED_ATTRIBUTE, REASONING_TEXT_SELECTOR, ROW_PHASE_ATTRIBUTE, RUNNI
  */
 
 /** On the reasoning's window while it stands: the stylesheet clips it and hangs the step on the text. */
-export const REASON_WINDOW_ATTR = 'data-dsh-claude-reason-window'
+export const REASON_WINDOW_ATTR = 'data-dsh-deepcraft-reason-window'
 /** On the Markdown the window slides: the stylesheet hangs the step's transition on it. */
-export const REASON_TEXT_ATTR = 'data-dsh-claude-reason-text'
+export const REASON_TEXT_ATTR = 'data-dsh-deepcraft-reason-text'
 /** On the window once the text has filled the cap: the stylesheet masks its edges. */
-export const REASON_CAPPED_ATTR = 'data-dsh-claude-reason-capped'
+export const REASON_CAPPED_ATTR = 'data-dsh-deepcraft-reason-capped'
 /** The window's height in pixels: the text's own height, held under the cap. */
-export const REASON_WINDOW_HEIGHT_PROPERTY = '--dsh-claude-reason-window-height'
+export const REASON_WINDOW_HEIGHT_PROPERTY = '--dsh-deepcraft-reason-window-height'
 
 /**
  * What each of the snippet's lengths falls back to when the stylesheet's own
  * value cannot be read. `cap` mirrors the host's max-height on a process group's
- * body, which the stylesheet's --dsh-claude-reason-window-cap carries.
+ * body, which the stylesheet's --dsh-deepcraft-reason-window-cap carries.
  */
 const FALLBACKS = { lines: 2, cap: 400 }
 
@@ -56,7 +56,7 @@ const FALLBACKS = { lines: 2, cap: 400 }
  * stylesheet is minified and writes a time in seconds, so a computed value read
  * as a number of milliseconds turns the wait into a one-millisecond loop.
  */
-const HOLD_MS = motionMs('--dsh-claude-period-hold')
+const HOLD_MS = motionMs('--dsh-deepcraft-period-hold')
 
 /** A duration, a count or a length written in a CSS token. */
 function tokenNumber(value: string, fallback: number) {
@@ -167,7 +167,7 @@ export function createReasoningStream() {
   /** What a text measures now: its own height under the cap, and how far it can still rise there. */
   function measureOf(state: WindowState): Measure {
     const style = getComputedStyle(state.window)
-    const capPx = Math.round(tokenNumber(style.getPropertyValue('--dsh-claude-reason-window-cap'), FALLBACKS.cap))
+    const capPx = Math.round(tokenNumber(style.getPropertyValue('--dsh-deepcraft-reason-window-cap'), FALLBACKS.cap))
     const textHeight = state.text.offsetHeight
     const height = Math.min(textHeight, capPx)
     return {
@@ -189,7 +189,7 @@ export function createReasoningStream() {
     if (current === null || current !== state.text) return null
     const style = getComputedStyle(state.window)
     const lineHeight = lineHeightOf(state.text)
-    const stepPx = Math.round(lineHeight * tokenNumber(style.getPropertyValue('--dsh-claude-reason-lines'), FALLBACKS.lines))
+    const stepPx = Math.round(lineHeight * tokenNumber(style.getPropertyValue('--dsh-deepcraft-reason-lines'), FALLBACKS.lines))
     const measure = measureOf(state)
     if (!measure.capped) return { heightPx: measure.heightPx, capped: false, offset: 0 }
     const steps = Math.max(1, Math.floor((measure.reachable - state.offset) / Math.max(1, stepPx)))

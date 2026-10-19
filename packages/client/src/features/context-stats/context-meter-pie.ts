@@ -26,9 +26,9 @@
  */
 
 /** The mark on the meter while its ring has given way to the pie. */
-export const METER_PIE_ATTR = 'data-dsh-claude-meter-pie'
+export const METER_PIE_ATTR = 'data-dsh-deepcraft-meter-pie'
 /** The unoccupied plate's colour, declared with the tone band (features/composer/vars.css). */
-const REST_VAR = '--dsh-claude-pie-rest'
+const REST_VAR = '--dsh-deepcraft-pie-rest'
 /** The pie's box, and the icon cell it takes over. */
 const PIE_SIZE = 16
 const ICON_SIZE = 14
@@ -46,8 +46,8 @@ const FULL_TURN = Math.PI * 2
 /** Path coordinates keep two decimals: more is noise at this size. */
 const PATH_PRECISION = 100
 /** The two masks, named inside the one image document that uses them. */
-const GREY_MASK_ID = 'dsh-claude-pie-grey'
-const COLOR_MASK_ID = 'dsh-claude-pie-color'
+const GREY_MASK_ID = 'dsh-deepcraft-pie-grey'
+const COLOR_MASK_ID = 'dsh-deepcraft-pie-color'
 
 /** One reading's last painted state, per trigger, so an unchanged pass writes nothing. */
 const painted = new WeakMap<HTMLElement, { percent: number, tone: string, rest: string }>()

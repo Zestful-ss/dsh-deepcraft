@@ -1,12 +1,12 @@
 import { CARET_ATTR, CARET_HOST_ATTR, CARET_LAYER_ATTR, CARET_MOTION_OFF, CARET_VISIBLE_ATTR, QUIET_ATTR } from '../../constants'
-import { subscribeMutations } from '@dsh-claude-style/engine/bus'
-import { requestFrame } from '@dsh-claude-style/engine/frame'
+import { subscribeMutations } from '@dsh-deepcraft/engine/bus'
+import { requestFrame } from '@dsh-deepcraft/engine/frame'
 import { readPrefs, subscribePrefs } from '../../core/prefs'
 import { caretClipToField, caretMeasurePlain, caretMeasureRich, noteFacesLoaded } from './caret-measure'
 import type { CaretBox, CaretReading } from './caret-measure'
 import { inPagePixels } from '../../shared/page-zoom'
-import { COMPOSER_INPUT_SELECTOR, COMPOSER_TEXTAREA_SELECTOR } from '@dsh-claude-style/contracts/dom'
-import type { HostContext } from '@dsh-claude-style/engine/host'
+import { COMPOSER_INPUT_SELECTOR, COMPOSER_TEXTAREA_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './caret.manifest'
 
@@ -37,9 +37,9 @@ import type manifest from './caret.manifest'
  * the native caret back rather than leaving the surface with none.
  */
 /** The blink animation, by name; the stylesheet's keyframes carry the same name by hand. */
-export const CARET_BLINK_NAME = 'dsh-claude-caret-blink'
+export const CARET_BLINK_NAME = 'dsh-deepcraft-caret-blink'
 /** The drawn caret's colour, on the element itself: read off the native caret when taking over. */
-export const CARET_COLOR_PROPERTY = '--dsh-claude-caret-color'
+export const CARET_COLOR_PROPERTY = '--dsh-deepcraft-caret-color'
 /** How long after a focus change to look again: a session switch leaves a few frames between the focus and a selection that is ready. */
 export const CARET_FOCUS_SETTLE_MS = 120
 

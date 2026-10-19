@@ -24,8 +24,8 @@ function control() {
 /** The pill's written placement, and the box the item it should sit under has. */
 function written(bar: HTMLElement) {
   return {
-    x: parseFloat(bar.style.getPropertyValue('--dsh-claude-pill-x')),
-    w: parseFloat(bar.style.getPropertyValue('--dsh-claude-pill-w')),
+    x: parseFloat(bar.style.getPropertyValue('--dsh-deepcraft-pill-x')),
+    w: parseFloat(bar.style.getPropertyValue('--dsh-deepcraft-pill-w')),
   }
 }
 

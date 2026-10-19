@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { Tag } from '@deepseek-ai/dsh-client-ui-primitives'
-import { PREFS } from '@dsh-claude-style/contracts/prefs'
-import { ROW_CONTROLS } from 'virtual:dsh-claude-style/settings-controls'
+import { PREFS } from '@dsh-deepcraft/contracts/prefs'
+import { ROW_CONTROLS } from 'virtual:dsh-deepcraft/settings-controls'
 import { SEGMENTS_CLASS, SEGMENT_CLASS } from '../../shared/segment-control'
-import { windowsDesktop } from '@dsh-claude-style/engine/desktop-band'
+import { windowsDesktop } from '@dsh-deepcraft/engine/desktop-band'
 import { prefYielded, settingsRowsOf } from '../../core/feature'
 import { featureCopy } from '../../core/i18n'
 import { motionReduced } from '../../core/prefs'
@@ -19,8 +19,8 @@ import type { QuickProvidersHandle } from './quick-providers'
  * shell and the indented sub-row. Every tab builds its rows from these, so
  * the page reads as one control set whichever tab is open.
  *
- * The segmented controls reuse the shared `.dsh-claude-segments` /
- * `.dsh-claude-segment` classes and sliding highlight — the same control the
+ * The segmented controls reuse the shared `.dsh-deepcraft-segments` /
+ * `.dsh-deepcraft-segment` classes and sliding highlight — the same control the
  * composer's permission picker uses — so the two read as one design instead
  * of two lookalikes.
  */
@@ -79,7 +79,7 @@ export function tabRows(tab: SettingsTab, view: SettingsView) {
   const nodes = rows.sort((a, b) => a.rank - b.rank).map(row => row.node)
   const notice = tab.notice === undefined ? null : tab.notice()
   if (notice === null) return nodes
-  return [React.createElement('div', { key: 'notice', className: 'dsh-claude-settings-notice dsh-claude-settings-tab-notice', role: 'note' }, notice), ...nodes]
+  return [React.createElement('div', { key: 'notice', className: 'dsh-deepcraft-settings-notice dsh-deepcraft-settings-tab-notice', role: 'note' }, notice), ...nodes]
 }
 
 /**
@@ -195,7 +195,7 @@ export function managedDesc(text: string, managed: boolean): React.ReactNode {
  */
 export function noteDesc(text: string, note: string | null): React.ReactNode {
   if (note === null) return text
-  return [text, React.createElement('span', { key: 'note', className: 'dsh-claude-settings-row-note' }, note)]
+  return [text, React.createElement('span', { key: 'note', className: 'dsh-deepcraft-settings-row-note' }, note)]
 }
 /**
  * One segmented control on the page, carrying the shared sliding highlight
@@ -238,7 +238,7 @@ export function ClaudeStyleSwitch(props: { on: boolean, onPick(value: boolean): 
     'button',
     {
       type: 'button',
-      className: 'dsh-claude-settings-switch',
+      className: 'dsh-deepcraft-settings-switch',
       role: 'switch',
       disabled: props.disabled === true,
       'aria-checked': props.on ? 'true' : 'false',
@@ -250,7 +250,7 @@ export function ClaudeStyleSwitch(props: { on: boolean, onPick(value: boolean): 
         props.onPick(!props.on)
       },
     },
-    React.createElement('span', { className: 'dsh-claude-settings-switch-knob' }),
+    React.createElement('span', { className: 'dsh-deepcraft-settings-switch-knob' }),
   )
 }
 
@@ -295,15 +295,15 @@ export function createSettingsControls() {
   function rowText(title: string, description: React.ReactNode, experimental?: boolean) {
     return React.createElement(
       'div',
-      { className: 'dsh-claude-settings-row-text' },
+      { className: 'dsh-deepcraft-settings-row-text' },
       title === '' ? null : React.createElement(
         'div',
-        { className: 'dsh-claude-settings-row-title', 'data-experimental': experimental === true ? '' : undefined },
+        { className: 'dsh-deepcraft-settings-row-title', 'data-experimental': experimental === true ? '' : undefined },
         title,
         // The tag is the host's own control, the one its plugin page marks an experimental package with.
-        experimental === true ? React.createElement(Tag, { tone: 'info', className: 'dsh-claude-settings-row-tag' }, sharedLine('experimental')) : null,
+        experimental === true ? React.createElement(Tag, { tone: 'info', className: 'dsh-deepcraft-settings-row-tag' }, sharedLine('experimental')) : null,
       ),
-      description === null ? null : React.createElement('div', { className: 'dsh-claude-settings-row-desc' }, description),
+      description === null ? null : React.createElement('div', { className: 'dsh-deepcraft-settings-row-desc' }, description),
     )
   }
 
@@ -324,14 +324,14 @@ export function createSettingsControls() {
    * group keeps no hairline between its members.
    */
   function row(key: string, title: string | null, description: React.ReactNode, control: React.ReactNode, options?: { block?: boolean, disabled?: boolean, sub?: boolean, experimental?: boolean }) {
-    const classes = ['dsh-claude-settings-row']
-    if (options?.block) classes.push('dsh-claude-settings-row-block')
-    else if (React.isValidElement(control) && control.type === ClaudeStyleSegmentGroup) classes.push('dsh-claude-settings-row-segment')
+    const classes = ['dsh-deepcraft-settings-row']
+    if (options?.block) classes.push('dsh-deepcraft-settings-row-block')
+    else if (React.isValidElement(control) && control.type === ClaudeStyleSegmentGroup) classes.push('dsh-deepcraft-settings-row-segment')
     // A row with no title is the option that belongs to
     // the switch above it, and `sub` is the same belonging for a titled row
     // (the precise status line under that switch): the stylesheet keeps the
     // group's members together, with no hairline between them (settings.css).
-    if (options?.sub === true || title === null) classes.push('dsh-claude-settings-row-sub')
+    if (options?.sub === true || title === null) classes.push('dsh-deepcraft-settings-row-sub')
     // The switch has no text of its own; its name is this row's title.
     const named = React.isValidElement(control) && control.type === ClaudeStyleSwitch
       ? React.cloneElement(control as React.ReactElement<{ label?: string }>, { label: title ?? '' })
@@ -357,7 +357,7 @@ export function createSettingsControls() {
     return React.createElement(
       'div',
       {
-        className: 'dsh-claude-settings-row dsh-claude-settings-row-sub',
+        className: 'dsh-deepcraft-settings-row dsh-deepcraft-settings-row-sub',
         key,
         'aria-disabled': enabled ? undefined : 'true',
         'data-disabled': enabled ? undefined : '',

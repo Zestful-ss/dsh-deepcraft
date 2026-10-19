@@ -37,14 +37,14 @@
           // The permission control's own two marks. The context statistics took
           // the same switch over once; they answer to `statsPosition` now, and
           // their own case drives that choice.
-          permissionsControl: document.querySelectorAll('.dsh-claude-perm-container').length +
-            (document.body.hasAttribute('data-dsh-claude-permissions') ? 1 : 0),
-          workspaceView: document.querySelectorAll('.dsh-claude-ws-segments').length,
-          sidebarSearch: document.querySelectorAll('[data-dsh-claude-search-row], .dsh-claude-search-trigger').length,
+          permissionsControl: document.querySelectorAll('.dsh-deepcraft-perm-container').length +
+            (document.body.hasAttribute('data-dsh-deepcraft-permissions') ? 1 : 0),
+          workspaceView: document.querySelectorAll('.dsh-deepcraft-ws-segments').length,
+          sidebarSearch: document.querySelectorAll('[data-dsh-deepcraft-search-row], .dsh-deepcraft-search-trigger').length,
           viewTabs: document.querySelectorAll('[data-dsh-view-tabs]').length,
           // The composer restyle's gate: the feature writes it on <body> and
           // takes it off again when its scope choice is off.
-          composerScope: document.body.hasAttribute('data-dsh-claude-composer-active') ? 1 : 0,
+          composerScope: document.body.hasAttribute('data-dsh-deepcraft-composer-active') ? 1 : 0,
         }
       }
       var settleSwitch = async function (patch) {
@@ -95,8 +95,8 @@
       // leave with the heading and come back with it.
       var railMarks = function () {
         return {
-          segments: document.querySelectorAll('.dsh-claude-ws-segments').length,
-          list: document.querySelectorAll('.dsh-claude-archive-list').length,
+          segments: document.querySelectorAll('.dsh-deepcraft-ws-segments').length,
+          list: document.querySelectorAll('.dsh-deepcraft-archive-list').length,
         }
       }
       var sectionHeader = switchSidebar.querySelector('._sectionHeader_w1_1')

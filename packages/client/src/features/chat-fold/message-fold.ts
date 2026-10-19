@@ -1,8 +1,8 @@
-import { observeMatches, observeSize, subscribeMutations } from '@dsh-claude-style/engine/bus'
-import { CHAT_ROW_SELECTOR, conversationColumn, userBubble } from '@dsh-claude-style/engine/chat-dom'
-import { buildElement, setAttributeIfChanged } from '@dsh-claude-style/engine/dom'
+import { observeMatches, observeSize, subscribeMutations } from '@dsh-deepcraft/engine/bus'
+import { CHAT_ROW_SELECTOR, conversationColumn, userBubble } from '@dsh-deepcraft/engine/chat-dom'
+import { buildElement, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { MESSAGE_FOLD_ATTR } from '../../constants'
-import { SUBMISSION_ECHO_SELECTOR } from '@dsh-claude-style/contracts/dom'
+import { SUBMISSION_ECHO_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { copy } from './copy'
 
 /**
@@ -33,7 +33,7 @@ import { copy } from './copy'
  */
 
 /** The toggle the skin draws under a foldable message: the stylesheet and the press route both read it. */
-export const MESSAGE_FOLD_TOGGLE_CLASS = 'dsh-claude-message-fold-toggle'
+export const MESSAGE_FOLD_TOGGLE_CLASS = 'dsh-deepcraft-message-fold-toggle'
 /** What the cap and the fade fall back to when the stylesheet's own values cannot be read. */
 const FALLBACKS = { cap: 320, fade: 40 }
 
@@ -131,8 +131,8 @@ export function createMessageFold(requestPass: () => void) {
     watchSize(bubble)
     if (measuredWidth === -1) measuredWidth = columnWidth()
     const style = getComputedStyle(bubble)
-    const cap = Number.parseFloat(style.getPropertyValue('--dsh-claude-message-fold-cap')) || FALLBACKS.cap
-    const fade = Number.parseFloat(style.getPropertyValue('--dsh-claude-message-fold-fade')) || FALLBACKS.fade
+    const cap = Number.parseFloat(style.getPropertyValue('--dsh-deepcraft-message-fold-cap')) || FALLBACKS.cap
+    const fade = Number.parseFloat(style.getPropertyValue('--dsh-deepcraft-message-fold-fade')) || FALLBACKS.fade
     const tall = bubble.scrollHeight >= cap + fade
     decided.set(bubble, tall)
     return tall

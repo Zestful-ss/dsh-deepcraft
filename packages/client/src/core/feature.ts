@@ -1,9 +1,9 @@
 import type * as React from 'react'
 import type { Prefs } from '../constants'
 import { peerPresent } from '../shared/peer-plugin'
-import type { HostContext } from '@dsh-claude-style/engine/host'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { CopyEntries } from './i18n'
-import type { SchedulerCalls } from '@dsh-claude-style/engine/scheduler'
+import type { SchedulerCalls } from '@dsh-deepcraft/engine/scheduler'
 import type { HandleName, Handles, Ui } from './scheduler'
 
 /**
@@ -69,6 +69,12 @@ export interface FeatureFields {
   /** The smoke cases that cover the feature (`npm run smoke -- --feature <dir>`). */
   cases: string[]
   /**
+   * The themes this feature belongs to (D77). Absent, it belongs to every
+   * theme. A feature that names themes installs only while the current brand
+   * is one of them, and is torn down when the brand changes away.
+   */
+  brands?: readonly Prefs['brand'][]
+  /**
    * The host contract's entries this feature's own modules name
    * (packages/contracts/src/table.ts, D3): the answer to "what breaks if the host
    * changes this", and the build refuses an entry no manifest claims.
@@ -89,7 +95,7 @@ export interface FeatureStylesheetFile {
   /** The composer rules are gated (D9). */
   gate?: boolean
   /**
-   * `'surface'`: the sheet is scoped to `body[data-dsh-claude-surface]` and
+   * `'surface'`: the sheet is scoped to `body[data-dsh-deepcraft-surface]` and
    * ships apart from the theme's sheet, so it stays while ds-bot's surface has
    * the page (D74).
    */
@@ -202,7 +208,7 @@ export type RowControlNames<M> = M extends { settingsRows: readonly (infer R)[] 
 export type SettingsControlsOf<M> = Record<RowControlNames<M>, React.ComponentType<SettingsRowView>>
 
 /** The manifest fields the browser half reads. */
-export type FeatureRuntime = FeatureIdentity & Pick<FeatureFields, 'order' | 'yieldsTo' | 'settingsRows'> & {
+export type FeatureRuntime = FeatureIdentity & Pick<FeatureFields, 'order' | 'yieldsTo' | 'settingsRows' | 'brands'> & {
   pref?: keyof Prefs
   prefValues?: string[]
   ungated?: string

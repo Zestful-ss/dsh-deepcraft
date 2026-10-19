@@ -1,6 +1,6 @@
 import { formatCountdown } from './schedule'
-import { buildElement } from '@dsh-claude-style/engine/dom'
-import type { RatePeriod, RateState } from '@dsh-claude-style/contracts/peakrate'
+import { buildElement } from '@dsh-deepcraft/engine/dom'
+import type { RatePeriod, RateState } from '@dsh-deepcraft/contracts/peakrate'
 import { copy } from './copy'
 import type { CopyKey } from './copy'
 
@@ -64,18 +64,18 @@ export function rateDetail(state: RateState) {
  */
 export function buildRateBadge(state: RateState): HTMLElement {
   const detail = rateDetail(state)
-  const badge = buildElement('span', 'dsh-claude-peakrate')
+  const badge = buildElement('span', 'dsh-deepcraft-peakrate')
   badge.setAttribute('data-period', state.period)
   badge.setAttribute('role', 'img')
   badge.setAttribute('aria-label', detail)
   badge.setAttribute('title', detail)
-  const icon = buildElement('span', 'dsh-claude-peakrate-icon')
+  const icon = buildElement('span', 'dsh-deepcraft-peakrate-icon')
   icon.innerHTML = ICONS[state.period]
   badge.appendChild(icon)
-  badge.appendChild(buildElement('span', 'dsh-claude-peakrate-value', state.badge))
+  badge.appendChild(buildElement('span', 'dsh-deepcraft-peakrate-value', state.badge))
   const countdown = formatCountdown(state.minutesUntilSwitch)
   if (countdown !== '') {
-    badge.appendChild(buildElement('span', 'dsh-claude-peakrate-countdown', `· ${countdown}`))
+    badge.appendChild(buildElement('span', 'dsh-deepcraft-peakrate-countdown', `· ${countdown}`))
   }
   return badge
 }

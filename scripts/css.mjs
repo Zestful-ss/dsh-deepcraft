@@ -5,13 +5,13 @@
  * skin's CSS lives by are checked on the syntax tree, selectors through
  * postcss-selector-parser:
  *
- *   scope        every selector holds `body[data-dsh-claude-style]` (outside :not());
+ *   scope        every selector holds `body[data-dsh-deepcraft]` (outside :not());
  *                a sheet whose manifest entry says `scope: 'surface'` holds
- *                `body[data-dsh-claude-surface]` instead and ships apart (D74)
+ *                `body[data-dsh-deepcraft-surface]` instead and ships apart (D74)
  *   :has()       only in its selector's last compound, at every nesting level (D9)
  *   token gates  a rule writing a host token carries the Claude palette or
  *                typeface gate, and every private token the Claude choice
- *                defines has an alias under the host's (D30)
+ *                defines has an alias under the host's (D77)
  *   composer     the rules below a sheet's `@composer-gate` comment get the
  *                composer gate stamped onto their scope compound (D9)
  *   attributes   every `data-dsh-*` attribute a selector reads is one the
@@ -24,7 +24,7 @@
  *
  * The token stylesheet is generated from packages/client/src/theme/tokens.json, and so are the
  * token, motion and layer tables in docs/STYLE.md; it also declares the brand marks' addresses
- * as `--dsh-claude-image-<name>`, the one thing in the CSS only the build knows.
+ * as `--dsh-deepcraft-image-<name>`, the one thing in the CSS only the build knows.
  *
  * The joined sheet ships minified (scripts/shared/minify-css.cjs): comments and
  * formatting are for the source, and the checks above read the source.
@@ -43,14 +43,14 @@ import { ruleKey } from './shared/rule-key.cjs'
 const SCOPE_TAG = 'body'
 /** The element a rule painting the document has to be written on. */
 const DOCUMENT_TAG = 'html'
-const SCOPE_ATTRIBUTE = 'data-dsh-claude-style'
+const SCOPE_ATTRIBUTE = 'data-dsh-deepcraft'
 const SCOPE = `${SCOPE_TAG}[${SCOPE_ATTRIBUTE}]`
 /**
  * The scope of the sheets that stay on the page while ds-bot's surface has it
  * (D74): the theme's own scope is gone then, and these rules are the surface
  * switch's whole look.
  */
-const SURFACE_SCOPE_ATTRIBUTE = 'data-dsh-claude-surface'
+const SURFACE_SCOPE_ATTRIBUTE = 'data-dsh-deepcraft-surface'
 /** The comment in a gated sheet below which every rule follows the composer preference. */
 const COMPOSER_GATE_MARKER = '@composer-gate'
 /** The token stylesheet's place in the sheet list: generated, never read from disk. */
@@ -72,7 +72,7 @@ const LOCAL_LAYER = /^(?:auto|-1|[0-9])$/
 
 /**
  * A time and an easing curve as a declaration's value spells them (D9). A
- * name such as `--dsh-claude-ease-out` is no match, and neither is a digit
+ * name such as `--dsh-deepcraft-ease-out` is no match, and neither is a digit
  * inside an identifier: the character before must not continue an identifier or
  * a number. `linear` and the step functions are mechanical timing, not a style
  * choice, and stay.
@@ -83,9 +83,9 @@ const EASE_PATTERN = /(?<![\w-])(?:ease|ease-in|ease-out|ease-in-out)(?![\w-])|c
 /** The prefix of the attributes the skin writes; the host's own are read as contracts (D3). */
 const SKIN_ATTRIBUTE_PREFIX = 'data-dsh-'
 /** The attribute carrying the skin's own names for host elements; the one host anchor a rule reads (D3). */
-const PART_ATTRIBUTE = 'data-dsh-claude-part'
+const PART_ATTRIBUTE = 'data-dsh-deepcraft-part'
 /** The attribute carrying what an element's subtree holds; a relation the pass answers (D9). */
-const HOLDS_ATTRIBUTE = 'data-dsh-claude-holds'
+const HOLDS_ATTRIBUTE = 'data-dsh-deepcraft-holds'
 
 /* ---------- selectors ---------- */
 
@@ -109,7 +109,7 @@ function negated(node) {
 
 /**
  * The scope compounds of one selector: each scope attribute
- * (`[data-dsh-claude-style]` unless named) on a `body` compound outside
+ * (`[data-dsh-deepcraft]` unless named) on a `body` compound outside
  * :not(), with the compound around it. A rule that paints the document
  * element reaches the scope through `html:has(…)`.
  */
@@ -151,7 +151,7 @@ function checkHasPlacement(where, selector) {
 /**
  * Refuse a `:has()` that asks about a mark (D9). What the argument selects on is
  * what the skin already knows — a part, a host `data-*` mark, one of the skin's
- * own markers — so the pass answers it as `data-dsh-claude-holds`
+ * own markers — so the pass answers it as `data-dsh-deepcraft-holds`
  * (core/parts-table.ts) and the rule reads the answer. Two shapes stay: a
  * `:has()` over state the skin cannot mark (a pseudo-class, a class name), and
  * the document element's own entry into scope, where the whole gate compound
@@ -168,7 +168,7 @@ function checkHasMarks(where, selector) {
 }
 
 /**
- * Hold every write of a host token to its gate (D30), and record the private
+ * Hold every write of a host token to its gate (D77), and record the private
  * tokens the Claude choice defines and the host choice aliases.
  *
  * A `--dsw-font-*` declaration must sit in a rule whose every selector carries
@@ -187,8 +187,8 @@ function checkTokenGates(label, rule, selectors, gates, names) {
     } else if (name.startsWith('--dsw-')) {
       if (!every(gates.palette, gates.palette.claude)) throw new Error(`build: ${where} writes ${name} outside the Claude palette gate`)
     }
-    if (!name.startsWith('--dsh-claude-')) continue
-    const gate = name.startsWith('--dsh-claude-font-') ? gates.typeface : gates.palette
+    if (!name.startsWith('--dsh-deepcraft-')) continue
+    const gate = name.startsWith('--dsh-deepcraft-font-') ? gates.typeface : gates.palette
     if (every(gate, gate.claude)) names.claude.add(name)
     if (every(gate, gate.host)) names.host.add(name)
   }
@@ -201,7 +201,7 @@ function motionProperty(prop) {
 
 /**
  * Hold every time and easing curve in a stylesheet to the token table (D9):
- * outside the token sheet itself, motion values are read as `var(--dsh-claude-…)`
+ * outside the token sheet itself, motion values are read as `var(--dsh-deepcraft-…)`
  * and never written as literals, so one look at the token table answers what the
  * skin's motion is made of. `linear` and the step functions are timing rather
  * than a style choice, and a zero delay or duration is no motion at all, so both
@@ -222,7 +222,7 @@ function checkMotionLiterals(sheet, label, rule) {
 /**
  * Hold every z-index in a stylesheet to the layer tokens (D9): a sheet orders
  * siblings inside its own box with a literal from -1 to 9, and anything that has
- * to clear what the host draws reads `var(--dsh-claude-layer-…)`, so the
+ * to clear what the host draws reads `var(--dsh-deepcraft-layer-…)`, so the
  * levels the skin stacks on are one table.
  */
 function checkLayerLiterals(sheet, label, rule) {
@@ -230,7 +230,7 @@ function checkLayerLiterals(sheet, label, rule) {
   for (const node of rule.nodes) {
     if (node.type !== 'decl' || node.prop !== 'z-index') continue
     const value = node.value.trim()
-    if (LOCAL_LAYER.test(value) || /^var\(--dsh-claude-layer-[a-z0-9-]+\)$/.test(value)) continue
+    if (LOCAL_LAYER.test(value) || /^var\(--dsh-deepcraft-layer-[a-z0-9-]+\)$/.test(value)) continue
     throw new Error(`build: ${label}:${node.source.start.line} writes z-index: ${value}; above the local orders -1 to 9, read a layer from packages/client/src/${TOKEN_SHEET} (D9)`)
   }
 }
@@ -360,9 +360,9 @@ function declarationsOf(items, pick) {
  * The token stylesheet, in cascade order.
  *
  * Every block that writes a host token carries the Claude gate, so under
- * "follow the host" the host's own tokens stand (D30). The palette blocks name
+ * "follow the host" the host's own tokens stand (D77). The palette blocks name
  * `[data-ds-dark-theme]` for dark on purpose: the host's own dark block weighs
- * the same (0,1,1) as a bare `body[data-dsh-claude-style]`, so whichever sheet
+ * the same (0,1,1) as a bare `body[data-dsh-deepcraft]`, so whichever sheet
  * the loader appended last would win; naming the attribute lifts these to
  * (0,2,1). The DeepSeek blocks add the brand attribute on top and only state
  * what differs from Claude's. The brand marks' addresses come first: every
@@ -380,7 +380,7 @@ function tokenSheet(doc, gates, images) {
   const deepseek = `${claude}${gate(gates.brand, gates.brand.deepseek)}`
   return [
     `/* Generated from packages/client/src/${TOKEN_SHEET} by scripts/css.mjs; edit the JSON. */\n`,
-    tokenBlock(SCOPE, Object.entries(images).map(([name, url]) => [`--dsh-claude-image-${name}`, `url("${url}")`])),
+    tokenBlock(SCOPE, Object.entries(images).map(([name, url]) => [`--dsh-deepcraft-image-${name}`, `url("${url}")`])),
     tokenBlock(SCOPE, declarationsOf(doc.motion, (item) => item.value)),
     tokenBlock(SCOPE, declarationsOf(doc.layer, (item) => item.value)),
     tokenBlock(`${SCOPE}${gate(gates.typeface, gates.typeface.claude)}`, declarationsOf(doc.typeface, (item) => item.claude)),
@@ -526,7 +526,7 @@ function checkAttributes(read, sources) {
 /**
  * Hold every part name a selector reads to the table that defines it (D3).
  *
- * `[data-dsh-claude-part~="x"]` is the whole of a host anchor now, so a
+ * `[data-dsh-deepcraft-part~="x"]` is the whole of a host anchor now, so a
  * misspelt or retired name leaves a rule that matches nothing — the failure the
  * substring selectors hid, made loud. The table is data
  * (packages/client/src/core/parts-table.ts), so the build reads the same list the
@@ -585,7 +585,7 @@ function checkHolds(relations) {
     declared.add(relation.name)
     for (const side of [relation.holder, relation.held, relation.scope]) {
       if (typeof side !== 'string') continue
-      for (const match of side.matchAll(/\[data-dsh-claude-part~="([^"]+)"\]/g)) {
+      for (const match of side.matchAll(/\[data-dsh-deepcraft-part~="([^"]+)"\]/g)) {
         if (!known.has(match[1])) {
           throw new Error(`build: the hold relation "${relation.name}" names the part "${match[1]}", which packages/engine/src/parts-table.ts does not define`)
         }

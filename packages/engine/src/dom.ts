@@ -102,7 +102,7 @@ export function hasLocalClass(element: Element, local: string): boolean {
 
 /**
  * Whether `element` is one of the skin's own nodes (D3). The skin spells its
- * classes with the `dsh-claude-` prefix as whole tokens, so compared whole and
+ * classes with the `dsh-deepcraft-` prefix as whole tokens, so compared whole and
  * never as a substring: no host class and no other plugin's class can be
  * mistaken for one.
  *
@@ -110,7 +110,7 @@ export function hasLocalClass(element: Element, local: string): boolean {
  */
 export function hasSkinClass(element: Element): boolean {
   for (const token of element.classList) {
-    if (token.startsWith('dsh-claude-')) return true
+    if (token.startsWith('dsh-deepcraft-')) return true
   }
   return false
 }

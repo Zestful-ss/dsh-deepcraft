@@ -25,7 +25,7 @@ import { inPageBox } from '../../shared/page-zoom'
  */
 
 /** The cell the heat grid is built from; the pill hangs off it. */
-export const HEAT_CELL_SELECTOR = '.dsh-claude-home-heat-cell'
+export const HEAT_CELL_SELECTOR = '.dsh-deepcraft-home-heat-cell'
 /** The alignment the stylesheet reads off the hovered cell. */
 export const HEAT_TIP_EDGE_ATTR = 'data-edge'
 /** The side the stylesheet reads off the hovered cell; absent means above. */

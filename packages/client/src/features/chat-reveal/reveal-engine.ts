@@ -1,6 +1,6 @@
-import { subscribeMutations } from '@dsh-claude-style/engine/bus'
+import { subscribeMutations } from '@dsh-deepcraft/engine/bus'
 import { isChatFoldToggle } from '../chat-fold/fold-toggle'
-import { STREAMING_ATTRIBUTE, STREAMING_SELECTOR } from '@dsh-claude-style/contracts/dom'
+import { STREAMING_ATTRIBUTE, STREAMING_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { createRevealScanner } from './reveal-diff'
 import { createRevealHighlights, createRunColorPublisher } from './reveal-highlights'
 import { createRevealPainter } from './reveal-paint'

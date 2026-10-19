@@ -1,15 +1,15 @@
-import { COMPOSER_CARD_SELECTOR } from '@dsh-claude-style/contracts/dom'
+import { COMPOSER_CARD_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { AUTO_POPOVER_ALL, PERMISSIONS_ATTR } from '../../constants'
 import { PERMISSION_ACCESS_NAMESPACE, PERMISSION_CHINESE_LABELS, PERMISSION_CURRENT_LABELS, PERMISSION_HOST_LABEL_KEYS, PERMISSION_HOST_LABEL_LOCALE, PERMISSION_ORDER, PERMISSION_PRESETS, PERMISSION_SEGMENTS, PERMISSION_SHIPPED_PRESETS } from './permission-copy'
-import { currentPreset, currentSession, findAccessTrigger, hostLocale, hostRemote, hostRemotePermissionPresets } from '@dsh-claude-style/engine/host'
+import { currentPreset, currentSession, findAccessTrigger, hostLocale, hostRemote, hostRemotePermissionPresets } from '@dsh-deepcraft/engine/host'
 import { activeLocale } from '../../core/i18n'
 import { readPrefs } from '../../core/prefs'
-import { buildElement, closestFrom, setAttributeIfChanged } from '@dsh-claude-style/engine/dom'
+import { buildElement, closestFrom, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { SEGMENTS_CLASS, SEGMENT_CLASS } from '../../shared/segment-control'
 import { POPOVER_CLOSE_DELAY, POPOVER_OPEN_DELAY, buildPopoverItem, closeOtherPopovers, createHoverIntent, positionAnchoredPopover, pressKeepsPopoverOpen, registerPopover, removeStrayNodes, setMenuPopoverOpen, unregisterPopover } from '../../shared/popover'
 import { createSlidingPill } from '../../shared/sliding-pill'
-import type { HostContext, HostFiber } from '@dsh-claude-style/engine/host'
-import type { HostPermissionCatalogAnswer, HostPermissionOption } from '@dsh-claude-style/contracts/services'
+import type { HostContext, HostFiber } from '@dsh-deepcraft/engine/host'
+import type { HostPermissionCatalogAnswer, HostPermissionOption } from '@dsh-deepcraft/contracts/services'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './permissions.manifest'
 import { copy } from './copy'
@@ -247,7 +247,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
         scope.effect(() => {
           probeAutoPreset()
           return () => {}
-        }, 'dsh-claude-style: permission catalog')
+        }, 'dsh-deepcraft: permission catalog')
       })
     } else {
       probeAutoPreset()
@@ -373,19 +373,19 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
 
   function buildPermTriggerAndPopover(onPick: (preset: string) => void) {
     permPick = onPick
-    const container = buildElement('div', 'dsh-claude-perm-container')
+    const container = buildElement('div', 'dsh-deepcraft-perm-container')
 
     const btn = document.createElement('button')
     btn.type = 'button'
-    btn.className = 'dsh-claude-perm-btn'
+    btn.className = 'dsh-deepcraft-perm-btn'
     btn.setAttribute('aria-haspopup', 'menu')
     btn.setAttribute('aria-expanded', 'false')
 
-    const label = buildElement('span', 'dsh-claude-perm-label', restingLabel())
+    const label = buildElement('span', 'dsh-deepcraft-perm-label', restingLabel())
 
     btn.appendChild(label)
 
-    const popover = buildElement('div', 'dsh-claude-popover-card dsh-claude-perm-popover')
+    const popover = buildElement('div', 'dsh-deepcraft-popover-card dsh-deepcraft-perm-popover')
     setMenuPopoverOpen(popover, false)
 
     function openPerm() {
@@ -455,7 +455,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // One popover per generation: a rebuild whose container a host
     // re-render dropped strands the previous popover in the document, so
     // installing this one sweeps every popover already there.
-    removeStrayNodes(document, '.dsh-claude-perm-popover', [])
+    removeStrayNodes(document, '.dsh-deepcraft-perm-popover', [])
     document.body.appendChild(popover)
 
     return {
@@ -492,7 +492,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     for (let j = 0; j < items.length; j++) {
       const it = items[j]
       const isCurrent = it.getAttribute('data-preset') === preset
-      const check = it.querySelector<HTMLElement>('.dsh-claude-popover-check')
+      const check = it.querySelector<HTMLElement>('.dsh-deepcraft-popover-check')
       if (check) check.toggleAttribute('hidden', !isCurrent)
       it.toggleAttribute('data-active', isCurrent)
       // One preset out of the list is current: the row says so itself, so the
@@ -588,7 +588,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // every other control on it.
     const coldStart = trigger === null && isHero && session === null
     const host = coldStart
-      ? document.querySelector(`${COMPOSER_CARD_SELECTOR}[data-dsh-claude-part~="card-workspace-trigger"] [data-dsh-claude-part~="modes"]`)
+      ? document.querySelector(`${COMPOSER_CARD_SELECTOR}[data-dsh-deepcraft-part~="card-workspace-trigger"] [data-dsh-deepcraft-part~="modes"]`)
       : trigger === null ? null : trigger.parentElement
     // The default can change in Settings without a catalog event, so each
     // return to the cold start screen reads it again.
@@ -660,8 +660,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
         if (adopted.parentElement !== host) {
           host.insertBefore(adopted, host.firstChild)
         }
-        permBtn = adopted.querySelector<HTMLButtonElement>('.dsh-claude-perm-btn')
-        permLabel = adopted.querySelector<HTMLElement>('.dsh-claude-perm-label')
+        permBtn = adopted.querySelector<HTMLButtonElement>('.dsh-deepcraft-perm-btn')
+        permLabel = adopted.querySelector<HTMLElement>('.dsh-deepcraft-perm-label')
         // The container can be adopted from a generation whose disposals a
         // client reload dropped; its popover is still in the document, and
         // without it updatePermState would early-return forever.
@@ -738,7 +738,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       permResizeListener = null
     }
     segmentPill.release()
-    removeStrayNodes(document, `.${SEGMENTS_CLASS}[data-composer-segments], .dsh-claude-perm-container, .dsh-claude-perm-popover`, [])
+    removeStrayNodes(document, `.${SEGMENTS_CLASS}[data-composer-segments], .dsh-deepcraft-perm-container, .dsh-deepcraft-perm-popover`, [])
     segments = null
     permPopover = null
     permBtn = null

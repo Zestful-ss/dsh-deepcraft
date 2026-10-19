@@ -1,4 +1,4 @@
-import { conversationSessionId, findConversationSession, hostSessions } from '@dsh-claude-style/engine/host'
+import { conversationSessionId, findConversationSession, hostSessions } from '@dsh-deepcraft/engine/host'
 import { hostChatSeat } from '../../core/i18n'
 import { readPrefs } from '../../core/prefs'
 import { peerPresent } from '../../shared/peer-plugin'
@@ -10,8 +10,8 @@ import { createStreamEstimate } from './stream-estimate'
 import { paintContextPie, readPieColours, releaseContextPie } from './context-meter-pie'
 import { CONTEXT_STATS_ATTR, CONTEXT_PANEL_ATTR, clearStrayContextNodes, contextPanel, findContextMeter, meterOccupancy, releaseDialogWatch } from './stats-panel'
 import { CONTEXT_STOPS, rampPosition, writeRamp } from './stats-ramp'
-import type { HostContext, HostText } from '@dsh-claude-style/engine/host'
-import type { HostSnapshotSource, HostTokenUsageProjection } from '@dsh-claude-style/contracts/services'
+import type { HostContext, HostText } from '@dsh-deepcraft/engine/host'
+import type { HostSnapshotSource, HostTokenUsageProjection } from '@dsh-deepcraft/contracts/services'
 import type { PieColours } from './context-meter-pie'
 
 /**

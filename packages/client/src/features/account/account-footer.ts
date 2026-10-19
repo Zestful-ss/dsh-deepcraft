@@ -1,5 +1,5 @@
 import { ACCOUNT_ARMED_ATTR, AUTO_POPOVER_OFF } from '../../constants'
-import { findFootArea, findSidebarRoot } from '@dsh-claude-style/engine/host'
+import { findFootArea, findSidebarRoot } from '@dsh-deepcraft/engine/host'
 import { getUsername } from '../../shared/identity'
 import { readPrefs } from '../../core/prefs'
 import { createFooterMirror } from './footer-mirror'
@@ -10,8 +10,8 @@ import { createAccountSurface } from './surface'
 import type { AccountSurfaceMode } from './surface'
 import { POPOVER_CLOSE_DELAY, POPOVER_OPEN_DELAY, closeOtherPopovers, createHoverIntent, positionAnchoredPopover, pressKeepsPopoverOpen, registerPopover, removeStrayNodes, unregisterPopover } from '../../shared/popover'
 import { inPageBox } from '../../shared/page-zoom'
-import type { HostContext } from '@dsh-claude-style/engine/host'
-import type { CloseReason, FeatureHandle } from '@dsh-claude-style/engine/scheduler'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
+import type { CloseReason, FeatureHandle } from '@dsh-deepcraft/engine/scheduler'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './account-footer.manifest'
 
@@ -42,7 +42,7 @@ export interface FooterHandle extends FeatureHandle {
  */
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   /** The marker the stylesheet hangs the host account row's Claude shape on. */
-  const HOST_ROW_ATTR = 'data-dsh-claude-account-host-row'
+  const HOST_ROW_ATTR = 'data-dsh-deepcraft-account-host-row'
   const profile = createAccountProfile(ctx, () => {
     if (typeof ui.schedule === 'function') ui.schedule()
   })
@@ -139,7 +139,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    */
   function positionAccountPopover() {
     if (!accountPopover || !accountBtn) return
-    if (accountBtn.closest('[data-dsh-claude-part~="sidebar-collapsed"]') === null) {
+    if (accountBtn.closest('[data-dsh-deepcraft-part~="sidebar-collapsed"]') === null) {
       accountPopover.style.removeProperty('left')
       accountPopover.style.removeProperty('top')
       return
@@ -216,27 +216,27 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    */
   function ensureSynthetic(footArea: Element) {
     const username = getUsername()
-    removeStrayNodes(footArea, '.dsh-claude-account-btn', [accountBtn])
+    removeStrayNodes(footArea, '.dsh-deepcraft-account-btn', [accountBtn])
     // The popover is the skin's own card and lives in the footer's own subtree
     // (below, on the self-built path), so the sweep for a copy a client reload
     // stranded is scoped to the sidebar: it runs every pass, and a
     // whole-document query walks the conversation's rows too.
-    removeStrayNodes(findSidebarRoot() ?? document, '.dsh-claude-account-popover', [accountPopover])
+    removeStrayNodes(findSidebarRoot() ?? document, '.dsh-deepcraft-account-popover', [accountPopover])
 
     if (accountBtn === null || !footArea.contains(accountBtn)) {
       if (accountBtn && accountBtn.parentElement) accountBtn.parentElement.removeChild(accountBtn)
       accountBtn = document.createElement('div')
-      accountBtn.className = 'dsh-claude-account-btn'
+      accountBtn.className = 'dsh-deepcraft-account-btn'
       accountBtn.setAttribute('role', 'button')
       accountBtn.setAttribute('tabindex', '0')
       accountBtn.setAttribute('aria-haspopup', 'menu')
       accountBtn.setAttribute('aria-expanded', 'false')
       accountBtn.innerHTML =
-        '<span class="dsh-claude-account-avatar"></span>' +
-        '<span class="dsh-claude-account-label">' +
-          '<span class="dsh-claude-account-user"></span>' +
+        '<span class="dsh-deepcraft-account-avatar"></span>' +
+        '<span class="dsh-deepcraft-account-label">' +
+          '<span class="dsh-deepcraft-account-user"></span>' +
         '</span>' +
-        '<span class="dsh-claude-account-chevron"></span>'
+        '<span class="dsh-deepcraft-account-chevron"></span>'
 
       // Hover is the default way in; the "Open popovers on hover"
       // preference turns it off, leaving the click handler below as the only
@@ -260,15 +260,15 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // OS user, the account profile), so they are written as text and as an
     // image source, never spliced into markup — and synced on every pass, so a
     // profile that lands after the row was built still shows up.
-    const userEl = accountBtn.querySelector('.dsh-claude-account-user')
+    const userEl = accountBtn.querySelector('.dsh-deepcraft-account-user')
     if (userEl && userEl.textContent !== username) userEl.textContent = username
-    rows.syncAvatar(accountBtn.querySelector('.dsh-claude-account-avatar'))
+    rows.syncAvatar(accountBtn.querySelector('.dsh-deepcraft-account-avatar'))
 
     if (accountPopover === null || !footArea.contains(accountPopover)) {
       if (accountPopover && accountPopover.parentElement) accountPopover.parentElement.removeChild(accountPopover)
       accountPopover = document.createElement('div')
-      accountPopover.id = 'dsh-claude-account-popover'
-      accountPopover.className = 'dsh-claude-popover-card dsh-claude-account-popover'
+      accountPopover.id = 'dsh-deepcraft-account-popover'
+      accountPopover.className = 'dsh-deepcraft-popover-card dsh-deepcraft-account-popover'
       accountPopover.setAttribute('data-open', 'false')
 
       accountPopover.addEventListener('mouseenter', () => {
@@ -285,7 +285,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       accountPopover.appendChild(rows.buildHeader(username))
 
       popoverBody = document.createElement('div')
-      popoverBody.className = 'dsh-claude-account-popover-body'
+      popoverBody.className = 'dsh-deepcraft-account-popover-body'
       accountPopover.appendChild(popoverBody)
 
       settingsItem = null
@@ -305,7 +305,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   /** Remove the self-built trigger and popover (the host path's shape). */
   function dropSynthetic() {
     cancelClosePopover()
-    removeStrayNodes(document, '.dsh-claude-account-btn, .dsh-claude-account-popover', [])
+    removeStrayNodes(document, '.dsh-deepcraft-account-btn, .dsh-deepcraft-account-popover', [])
     accountBtn = null
     accountPopover = null
     popoverBody = null
@@ -517,19 +517,19 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     disarmAccountMenu()
     if (accountWidth !== 0) {
       accountWidth = 0
-      document.body.style.removeProperty('--dsh-claude-account-width')
+      document.body.style.removeProperty('--dsh-deepcraft-account-width')
     }
     if (accountInsetLeft !== -1 || accountInsetRight !== -1) {
       accountInsetLeft = -1
       accountInsetRight = -1
-      document.body.style.removeProperty('--dsh-claude-account-inset-left')
-      document.body.style.removeProperty('--dsh-claude-account-inset-right')
+      document.body.style.removeProperty('--dsh-deepcraft-account-inset-left')
+      document.body.style.removeProperty('--dsh-deepcraft-account-inset-right')
     }
     dropSynthetic()
     // The menu marker goes with the takeover: an open host menu must not
     // keep the skin's card styling after the footer is handed back.
     surface.clearMenu()
-    const injected = document.querySelectorAll('.dsh-claude-account-inject')
+    const injected = document.querySelectorAll('.dsh-deepcraft-account-inject')
     for (let i = 0; i < injected.length; i++) injected[i].remove()
     const marked = document.querySelectorAll(`[${HOST_ROW_ATTR}]`)
     for (let m = 0; m < marked.length; m++) marked[m].removeAttribute(HOST_ROW_ATTR)
@@ -566,7 +566,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    *
    * The host's account menu is portalled outside the sidebar, so it cannot
    * inherit the row's width: the card reads the measured width from
-   * --dsh-claude-account-width. The self-built drawer is a child of the
+   * --dsh-deepcraft-account-width. The self-built drawer is a child of the
    * footer instead, but the footer's padding box is wider than the row, so
    * its left and right are the measured distances from the footer's edges.
    * Every value is written only on a change.
@@ -581,7 +581,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const rowWidth = Math.round(rowRect.width)
     if (rowWidth > 0 && rowWidth !== accountWidth) {
       accountWidth = rowWidth
-      document.body.style.setProperty('--dsh-claude-account-width', `${rowWidth}px`)
+      document.body.style.setProperty('--dsh-deepcraft-account-width', `${rowWidth}px`)
     }
     if (!synthetic || measured.footRect === null) return
     const footRect = measured.footRect
@@ -589,11 +589,11 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const right = Math.round(footRect.right - rowRect.right)
     if (left !== accountInsetLeft) {
       accountInsetLeft = left
-      document.body.style.setProperty('--dsh-claude-account-inset-left', `${left}px`)
+      document.body.style.setProperty('--dsh-deepcraft-account-inset-left', `${left}px`)
     }
     if (right !== accountInsetRight) {
       accountInsetRight = right
-      document.body.style.setProperty('--dsh-claude-account-inset-right', `${right}px`)
+      document.body.style.setProperty('--dsh-deepcraft-account-inset-right', `${right}px`)
     }
   }
 

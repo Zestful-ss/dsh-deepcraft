@@ -2,17 +2,17 @@
 /* The hero's own markup is the host's either way; this file only rearranges it and
    draws the panel the dock slot carries. Both are keyed on the attributes
    packages/client/src/features/home/home-layout.ts writes — the layout on <body>, and
-   `data-dsh-claude-home-hero` on the hero root while the studio layout owns the
+   `data-dsh-deepcraft-home-hero` on the hero root while the studio layout owns the
    new-conversation page — so the classic layout is untouched.
    The two tab bodies live in home-overview.css and home-models.css. */
 
 /* The scroll body centres the hero stack; the studio form starts at the top and
    lets the seat take the rest of the column, so the card lands on the bottom edge. */
-body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="scroll-body"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-home-hero] [data-dsh-deepcraft-part~="scroll-body"] {
   justify-content: flex-start;
 }
 
-body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="composer-seat"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-home-hero] [data-dsh-deepcraft-part~="composer-seat"] {
   flex: 1 1 auto;
   min-height: 0;
 }
@@ -22,7 +22,7 @@ body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="
    and fills the seat, so the context row and the card rest on the bottom edge.
    The composer keeps the 720px column, while the greeting and the dashboard
    card read as a 480px block against its left edge. */
-body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="composer-stack"][data-dsh-claude-part~="composer-hero"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-home-hero] [data-dsh-deepcraft-part~="composer-stack"][data-dsh-deepcraft-part~="composer-hero"] {
   /* The conversation form's own rule pins this stack to its content height; the
      studio column has to fill the seat for the card to reach the bottom edge.
      Naming the stack by both its classes matches that gated rule's weight, and
@@ -40,7 +40,7 @@ body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="
 
 /* Order is written on the boxes the host's `display: contents` slot anchors
    expose, because an anchor with `display: contents` generates no box to sort. */
-body[data-dsh-claude-style][data-dsh-claude-home-layout="studio"] [data-dsh-claude-part~="composer-hero"] > [data-dsh-claude-holds~="hero-headline"] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-home-layout="studio"] [data-dsh-deepcraft-part~="composer-hero"] > [data-dsh-deepcraft-holds~="hero-headline"] {
   order: 0;
   height: auto;
   justify-content: flex-start;
@@ -50,11 +50,11 @@ body[data-dsh-claude-style][data-dsh-claude-home-layout="studio"] [data-dsh-clau
 
 /* The skin's own seat on the cold start screen, where the host renders no dock
    (packages/client/src/features/home/home-layout.ts); like the host's anchor it generates no box. */
-body[data-dsh-claude-style] .dsh-claude-home-seat {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-seat {
   display: contents;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-home-layout="studio"] [data-dsh-claude-part~="composer-hero"] > :is([data-slot="conversation.input.dock"], .dsh-claude-home-seat) > * {
+body[data-dsh-deepcraft][data-dsh-deepcraft-home-layout="studio"] [data-dsh-deepcraft-part~="composer-hero"] > :is([data-slot="conversation.input.dock"], .dsh-deepcraft-home-seat) > * {
   order: 1;
   /* A window too short for the whole panel shrinks the panel instead of the
      page: the greeting stays on the top edge, the context row and the card on
@@ -70,7 +70,7 @@ body[data-dsh-claude-style][data-dsh-claude-home-layout="studio"] [data-dsh-clau
   margin-right: auto;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-home-layout="studio"] [data-dsh-claude-part~="composer-hero"] > [data-dsh-claude-part~="hero-workspace-row"] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-home-layout="studio"] [data-dsh-deepcraft-part~="composer-hero"] > [data-dsh-deepcraft-part~="hero-workspace-row"] {
   order: 2;
   /* Everything below the panel drops to the bottom edge: the auto margin eats
      the free column and carries the context row and the card down with it. */
@@ -81,7 +81,7 @@ body[data-dsh-claude-style][data-dsh-claude-home-layout="studio"] [data-dsh-clau
 /* The context row's triggers wear Claude's chip: a hairline box on the canvas
    rather than a bare label. The target list is the composer card's own for these
    triggers, so the chip carries the same weight and, coming later, wins. */
-body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="hero-workspace-row"] :is(button, [role="button"]) {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-home-hero] [data-dsh-deepcraft-part~="hero-workspace-row"] :is(button, [role="button"]) {
   box-sizing: border-box;
   height: 28px;
   padding: 0 10px;
@@ -90,11 +90,11 @@ body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="
   background: transparent;
 }
 
-body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="hero-workspace-row"] :is(button, [role="button"]):hover:not(:disabled) {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-home-hero] [data-dsh-deepcraft-part~="hero-workspace-row"] :is(button, [role="button"]):hover:not(:disabled) {
   background: color-mix(in srgb, var(--dsw-alias-label-primary, #141413) 5%, transparent);
 }
 
-body[data-dsh-claude-style][data-dsh-claude-home-layout="studio"] [data-dsh-claude-part~="composer-hero"] > [data-slot="conversation.composer.bar"] > * {
+body[data-dsh-deepcraft][data-dsh-deepcraft-home-layout="studio"] [data-dsh-deepcraft-part~="composer-hero"] > [data-slot="conversation.composer.bar"] > * {
   order: 3;
 }
 
@@ -103,9 +103,9 @@ body[data-dsh-claude-style][data-dsh-claude-home-layout="studio"] [data-dsh-clau
    titleGroup inside it — the class name contains "title" — so both elements
    have to leave it behind, and the extra attribute on the root plus the root
    qualifier carry past the hero's own 44.2px size as well. */
-body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="hero-headline"],
-body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="hero-headline"] [data-dsh-claude-part~="hero-title-group"],
-body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="hero-headline"] [data-dsh-claude-part~="hero-title-group"] > span {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-home-hero] [data-dsh-deepcraft-part~="hero-headline"],
+body[data-dsh-deepcraft] [data-dsh-deepcraft-home-hero] [data-dsh-deepcraft-part~="hero-headline"] [data-dsh-deepcraft-part~="hero-title-group"],
+body[data-dsh-deepcraft] [data-dsh-deepcraft-home-hero] [data-dsh-deepcraft-part~="hero-headline"] [data-dsh-deepcraft-part~="hero-title-group"] > span {
   justify-content: flex-start;
   font-family: var(--dsw-font-family);
   font-size: 20px;
@@ -114,13 +114,13 @@ body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="
   color: var(--dsw-alias-label-primary, #141413);
 }
 
-body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="hero-headline"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-home-hero] [data-dsh-deepcraft-part~="hero-headline"] {
   gap: 8px;
 }
 
 /* The mark shrinks with the line: Claude's home asterisk stands a hair taller
    than the greeting's own cap height, not twice it. */
-body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="hero-mark"]::before {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-home-hero] [data-dsh-deepcraft-part~="hero-mark"]::before {
   width: 21px;
   height: 21px;
 }
@@ -131,15 +131,15 @@ body[data-dsh-claude-style] [data-dsh-claude-home-hero] [data-dsh-claude-part~="
    the component steps away only on the skin's next pass; keyed here, the panel
    leaves in the same frame, instead of spending that gap at the conversation's
    full width with its square heat cells blown up to fill the window. */
-body[data-dsh-claude-style] .dsh-claude-home-panel {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-panel {
   display: none;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-home-layout="studio"] [data-dsh-claude-part~="composer-hero"] > :is([data-slot="conversation.input.dock"], .dsh-claude-home-seat) > .dsh-claude-home-panel {
+body[data-dsh-deepcraft][data-dsh-deepcraft-home-layout="studio"] [data-dsh-deepcraft-part~="composer-hero"] > :is([data-slot="conversation.input.dock"], .dsh-deepcraft-home-seat) > .dsh-deepcraft-home-panel {
   display: flex;
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-panel {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-panel {
   flex-direction: column;
   gap: 12px;
   box-sizing: border-box;
@@ -165,25 +165,25 @@ body[data-dsh-claude-style] .dsh-claude-home-panel {
   mask-repeat: no-repeat;
   -webkit-mask-size: 100% calc(100% + 32px);
   mask-size: 100% calc(100% + 32px);
-  animation: dsh-claude-home-panel-fade linear both;
+  animation: dsh-deepcraft-home-panel-fade linear both;
   animation-timeline: scroll(self);
   animation-range: calc(100% - 32px) 100%;
 }
 
-@keyframes dsh-claude-home-panel-fade {
+@keyframes dsh-deepcraft-home-panel-fade {
   from { -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }
   to { -webkit-mask-size: 100% calc(100% + 32px); mask-size: 100% calc(100% + 32px); }
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-panel-head {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-panel-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-tabs,
-body[data-dsh-claude-style] .dsh-claude-home-ranges {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-tabs,
+body[data-dsh-deepcraft] .dsh-deepcraft-home-ranges {
   display: flex;
   align-items: center;
   gap: 2px;
@@ -191,9 +191,9 @@ body[data-dsh-claude-style] .dsh-claude-home-ranges {
 
 /* The ghost button: the panel's tab and range pills and the models list's
    "show more" row (home-models.css adds that row's own alignment). */
-body[data-dsh-claude-style] .dsh-claude-home-tab,
-body[data-dsh-claude-style] .dsh-claude-home-range,
-body[data-dsh-claude-style] .dsh-claude-home-models-more {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-tab,
+body[data-dsh-deepcraft] .dsh-deepcraft-home-range,
+body[data-dsh-deepcraft] .dsh-deepcraft-home-models-more {
   appearance: none;
   margin: 0;
   border: 0;
@@ -205,29 +205,29 @@ body[data-dsh-claude-style] .dsh-claude-home-models-more {
   cursor: pointer;
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-tab,
-body[data-dsh-claude-style] .dsh-claude-home-range {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-tab,
+body[data-dsh-deepcraft] .dsh-deepcraft-home-range {
   padding: 1px 8px;
   /* Half of the full pill the 20px control would round to, matching Claude's
      Overview chip. */
   border-radius: 5px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-tab:hover:not([data-active]),
-body[data-dsh-claude-style] .dsh-claude-home-range:hover:not([data-active]) {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-tab:hover:not([data-active]),
+body[data-dsh-deepcraft] .dsh-deepcraft-home-range:hover:not([data-active]) {
   background: color-mix(in srgb, var(--dsw-alias-label-primary, #141413) 5%, transparent);
   color: var(--dsw-alias-label-primary, #141413);
 }
 
 /* The active pill is a gray chip one step below the panel's own wash — Claude's
    Overview reads as gray ground under black text, not a lifted white card. */
-body[data-dsh-claude-style] .dsh-claude-home-tab[data-active],
-body[data-dsh-claude-style] .dsh-claude-home-range[data-active] {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-tab[data-active],
+body[data-dsh-deepcraft] .dsh-deepcraft-home-range[data-active] {
   background: color-mix(in srgb, var(--dsw-alias-label-primary, #141413) 10%, var(--dsw-alias-bg-layer-2, #fbfbf9));
   color: var(--dsw-alias-label-primary, #141413);
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-panel-side {
+body[data-dsh-deepcraft] .dsh-deepcraft-home-panel-side {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -236,10 +236,10 @@ body[data-dsh-claude-style] .dsh-claude-home-panel-side {
 
 /* While the host half is still folding, every skeleton surface breathes together:
    the tiles' stand-in figures, the heat grid, and the models tab's stand-in rows. */
-body[data-dsh-claude-style] .dsh-claude-home-panel[data-computing] .dsh-claude-home-stat[data-skeleton] .dsh-claude-home-stat-value,
-body[data-dsh-claude-style] .dsh-claude-home-panel[data-computing] .dsh-claude-home-models[data-skeleton] .dsh-claude-home-model-swatch,
-body[data-dsh-claude-style] .dsh-claude-home-heat[data-skeleton] .dsh-claude-home-heat-cell {
-  animation: dsh-claude-pulse var(--dsh-claude-period-pulse) var(--dsh-claude-ease-in-out) infinite;
+body[data-dsh-deepcraft] .dsh-deepcraft-home-panel[data-computing] .dsh-deepcraft-home-stat[data-skeleton] .dsh-deepcraft-home-stat-value,
+body[data-dsh-deepcraft] .dsh-deepcraft-home-panel[data-computing] .dsh-deepcraft-home-models[data-skeleton] .dsh-deepcraft-home-model-swatch,
+body[data-dsh-deepcraft] .dsh-deepcraft-home-heat[data-skeleton] .dsh-deepcraft-home-heat-cell {
+  animation: dsh-deepcraft-pulse var(--dsh-deepcraft-period-pulse) var(--dsh-deepcraft-ease-in-out) infinite;
 }
 
 /* The numbers landing take over from the placeholders in one motion: each
@@ -248,27 +248,27 @@ body[data-dsh-claude-style] .dsh-claude-home-heat[data-skeleton] .dsh-claude-hom
    tiles and the grid keep their elements across the hand-over, so their fills
    change under a transition; the models list and chart come in whole. Only a
    panel that drew placeholders plays it, once (home-layout.ts). */
-body[data-dsh-claude-style] .dsh-claude-home-panel[data-dsh-claude-revealing] .dsh-claude-home-stat-value,
-body[data-dsh-claude-style] .dsh-claude-home-panel[data-dsh-claude-revealing] .dsh-claude-home-heat-cell {
-  transition: background-color var(--dsh-claude-duration-fade) var(--dsh-claude-ease-in-out);
+body[data-dsh-deepcraft] .dsh-deepcraft-home-panel[data-dsh-deepcraft-revealing] .dsh-deepcraft-home-stat-value,
+body[data-dsh-deepcraft] .dsh-deepcraft-home-panel[data-dsh-deepcraft-revealing] .dsh-deepcraft-home-heat-cell {
+  transition: background-color var(--dsh-deepcraft-duration-fade) var(--dsh-deepcraft-ease-in-out);
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-panel[data-dsh-claude-revealing] .dsh-claude-home-stat-value {
-  animation: dsh-claude-home-reveal-words var(--dsh-claude-duration-fade) var(--dsh-claude-ease-in-out);
+body[data-dsh-deepcraft] .dsh-deepcraft-home-panel[data-dsh-deepcraft-revealing] .dsh-deepcraft-home-stat-value {
+  animation: dsh-deepcraft-home-reveal-words var(--dsh-deepcraft-duration-fade) var(--dsh-deepcraft-ease-in-out);
 }
 
-body[data-dsh-claude-style] .dsh-claude-home-panel[data-dsh-claude-revealing] .dsh-claude-home-models:not([data-skeleton]),
-body[data-dsh-claude-style] .dsh-claude-home-panel[data-dsh-claude-revealing] .dsh-claude-home-chart:not([data-skeleton]) {
-  animation: dsh-claude-home-reveal var(--dsh-claude-duration-fade) var(--dsh-claude-ease-in-out);
+body[data-dsh-deepcraft] .dsh-deepcraft-home-panel[data-dsh-deepcraft-revealing] .dsh-deepcraft-home-models:not([data-skeleton]),
+body[data-dsh-deepcraft] .dsh-deepcraft-home-panel[data-dsh-deepcraft-revealing] .dsh-deepcraft-home-chart:not([data-skeleton]) {
+  animation: dsh-deepcraft-home-reveal var(--dsh-deepcraft-duration-fade) var(--dsh-deepcraft-ease-in-out);
 }
 
-@keyframes dsh-claude-home-reveal-words {
-  from { color: transparent; filter: blur(var(--dsh-claude-blur-soft)); }
+@keyframes dsh-deepcraft-home-reveal-words {
+  from { color: transparent; filter: blur(var(--dsh-deepcraft-blur-soft)); }
   to { filter: blur(0); }
 }
 
-@keyframes dsh-claude-home-reveal {
-  from { opacity: 0; filter: blur(var(--dsh-claude-blur-soft)); }
+@keyframes dsh-deepcraft-home-reveal {
+  from { opacity: 0; filter: blur(var(--dsh-deepcraft-blur-soft)); }
   to { opacity: 1; filter: blur(0); }
 }
 

@@ -1,4 +1,4 @@
-import type { HostText } from '@dsh-claude-style/contracts/services'
+import type { HostText } from '@dsh-deepcraft/contracts/services'
 
 /**
  * A two-digit number for a clock or a date part: "09", "23". Every caller

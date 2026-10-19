@@ -34,7 +34,7 @@ export function createSettingsComposerTab(): SettingsTab {
           React.createElement('button', {
             type: 'button',
             ref: quickTrigger,
-            className: 'dsh-claude-settings-picker',
+            className: 'dsh-deepcraft-settings-picker',
             disabled: !pickerOn,
             'aria-haspopup': 'menu',
             'aria-expanded': 'false',

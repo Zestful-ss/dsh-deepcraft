@@ -1,10 +1,10 @@
-import { subscribeMutations } from '@dsh-claude-style/engine/bus'
+import { subscribeMutations } from '@dsh-deepcraft/engine/bus'
 import { motionReduced } from '../../core/prefs'
 import { FOLD_DISCLOSURE_SELECTOR, FOLD_INTENT_TTL_MS, FOLD_POPUP_SELECTOR, FOLD_ROLL_MS, FOLD_SKIPPED_CONTROL_SELECTOR, FOLD_TOGGLE_SELECTOR, FOLD_VISIBLE_SHARE, foldBeginHeightClip, foldConfirmCollapsed, foldControlAtBottom, foldExpandedBody, foldHoldThroughStalls, foldProcessBody, foldSettleAfter, foldVisibleReach, foldWatchReader, markChatFoldBusy } from './fold-glide-parts'
 import type { FoldWatch } from './fold-glide-parts'
 import { beginChatFoldToggle, endChatFoldToggle, isChatFoldToggle } from './fold-toggle'
-import { CHAT_FLOW_SELECTOR, PROCESS_GROUP_SELECTOR, THINK_ROW_SELECTOR } from '@dsh-claude-style/contracts/dom'
-import { joinScrollOwner } from '@dsh-claude-style/engine/scroll-owner'
+import { CHAT_FLOW_SELECTOR, PROCESS_GROUP_SELECTOR, THINK_ROW_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { joinScrollOwner } from '@dsh-deepcraft/engine/scroll-owner'
 import { motionEase } from '../../shared/motion'
 import { inPageBox, inPagePixels } from '../../shared/page-zoom'
 
@@ -156,11 +156,11 @@ export function installChatFoldGlide() {
       travel >= height
         ? [{ height: String(from) + 'px' }, { height: String(height) + 'px' }]
         : [
-            { height: String(from) + 'px', offset: 0, easing: motionEase('--dsh-claude-ease-out') },
+            { height: String(from) + 'px', offset: 0, easing: motionEase('--dsh-deepcraft-ease-out') },
             { height: String(travel) + 'px', offset: FOLD_VISIBLE_SHARE, easing: 'linear' },
             { height: String(height) + 'px', offset: 1 },
           ],
-      { duration: FOLD_ROLL_MS, easing: motionEase('--dsh-claude-ease-out') },
+      { duration: FOLD_ROLL_MS, easing: motionEase('--dsh-deepcraft-ease-out') },
     )
     stopStallWatch = replaceWait(stopStallWatch, foldHoldThroughStalls(growing))
     growing.onfinish = () => {
@@ -207,10 +207,10 @@ export function installChatFoldGlide() {
         ? [{ height: String(height) + 'px' }, { height: String(fold.floor) + 'px' }]
         : [
             { height: String(height) + 'px', offset: 0, easing: 'linear' },
-            { height: String(travel) + 'px', offset: 1 - FOLD_VISIBLE_SHARE, easing: motionEase('--dsh-claude-ease-out') },
+            { height: String(travel) + 'px', offset: 1 - FOLD_VISIBLE_SHARE, easing: motionEase('--dsh-deepcraft-ease-out') },
             { height: String(fold.floor) + 'px', offset: 1 },
           ],
-      { duration: FOLD_ROLL_MS, easing: motionEase('--dsh-claude-ease-out'), fill: 'forwards' },
+      { duration: FOLD_ROLL_MS, easing: motionEase('--dsh-deepcraft-ease-out'), fill: 'forwards' },
     )
     stopStallWatch = replaceWait(stopStallWatch, foldHoldThroughStalls(shrinking))
     shrinking.onfinish = () => {

@@ -1,11 +1,11 @@
-import { readTurnActivity } from '@dsh-claude-style/engine/host'
+import { readTurnActivity } from '@dsh-deepcraft/engine/host'
 import { BRAND_DEEPSEEK } from '../constants'
 import { activityPhrase } from './activity-phrase'
 import { callDescription } from './call-description'
 import { fileToolCall } from './file-tool'
 import type { CopyParams } from '../core/i18n'
 import type { FileToolOperation } from './file-tool'
-import type { HostAssistantStep, HostChatSnapshot, HostRunningCall, HostTurn } from '@dsh-claude-style/contracts/services'
+import type { HostAssistantStep, HostChatSnapshot, HostRunningCall, HostTurn } from '@dsh-deepcraft/contracts/services'
 
 /**
  * What an open turn is doing now, in words (D74): the states the waiting line

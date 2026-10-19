@@ -29,7 +29,7 @@ function row(layer: Element, path: string, hunks: FileHunk[], state: FileRowStat
   const carrier = document.createElement('div')
   carrier.setAttribute('data-chat-call-id', callId)
   const element = document.createElement('div')
-  element.className = 'dsh-claude-file-root'
+  element.className = 'dsh-deepcraft-file-root'
   carrier.appendChild(element)
   layer.appendChild(carrier)
   return { element, callId, path, operation, hunks, state, read }
@@ -226,7 +226,7 @@ test('one row element the host moves on to the file\'s next call keeps the calls
   const carrier = document.createElement('div')
   carrier.setAttribute('data-chat-call-id', 'direct')
   const element = document.createElement('div')
-  element.className = 'dsh-claude-file-root'
+  element.className = 'dsh-deepcraft-file-root'
   carrier.appendChild(element)
   layer.appendChild(carrier)
   const merge = createFileMerge()

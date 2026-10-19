@@ -10,36 +10,36 @@
    ground. The canvas rules in `tokens.css`, `typography.css` and `chrome.css`
    carry the same `:not([data-we-wallpaper])` gate. `--dsw-alias-bg-base` keeps
    the canvas colour against the plugin's clearing, so host dialogs and cards
-   stay opaque. "Follow the host" lays no mask (D30). Theme layering from the
+   stay opaque. "Follow the host" lays no mask (D77). Theme layering from the
    host would let the shell stand aside by layer. */
 
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"][data-we-wallpaper] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-we-wallpaper] {
   background-color: transparent;
 }
 
 /* The plugin's wallpaper, scrim and effect layers are the body's own children at
    z-index -2 and -1; the body's last pseudo-element at -1 comes after all of
    them in document order, so the mask lies over them and under the shell. */
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"][data-we-wallpaper]::after {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-we-wallpaper]::after {
   content: "";
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: color-mix(in srgb, var(--dsh-claude-canvas) 86%, transparent);
+  background: color-mix(in srgb, var(--dsh-deepcraft-canvas) 86%, transparent);
 }
 
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"][data-ds-dark-theme][data-we-wallpaper]::after {
-  background: color-mix(in srgb, var(--dsh-claude-canvas) 82%, transparent);
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-ds-dark-theme][data-we-wallpaper]::after {
+  background: color-mix(in srgb, var(--dsh-deepcraft-canvas) 82%, transparent);
 }
 
 /* ---------- the shell stands down ---------- */
 /* Each of these paints the canvas over the whole window or a whole column. */
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"][data-we-wallpaper] :is([data-dsh-claude-part~="layout-frame"][data-dsh-claude-holds~="sidebar-column"], [data-dsh-claude-part~="center-column"], [data-dsh-claude-part~="rightbar-column"], [data-dsh-claude-holds~="conversation-scroll"]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-we-wallpaper] :is([data-dsh-deepcraft-part~="layout-frame"][data-dsh-deepcraft-holds~="sidebar-column"], [data-dsh-deepcraft-part~="center-column"], [data-dsh-deepcraft-part~="rightbar-column"], [data-dsh-deepcraft-holds~="conversation-scroll"]) {
   background: transparent;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"][data-we-wallpaper] :is([data-pane="sidebar"], [data-dsh-claude-part~="sidebar-column"]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-we-wallpaper] :is([data-pane="sidebar"], [data-dsh-deepcraft-part~="sidebar-column"]) {
   --dsw-specific-sidebar-fill: transparent;
   background: transparent;
 }
@@ -50,16 +50,16 @@ body[data-dsh-claude-style][data-dsh-claude-palette="claude"][data-we-wallpaper]
    tray in the canvas colour: the composer card's own width, from under the
    card's top edge to the window's bottom, so the dock row and the figures under
    the card sit on the card's ground. The seat is sticky, so the tray goes with it. */
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"][data-we-wallpaper] :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-we-wallpaper] :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat] {
   background: transparent;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"][data-we-wallpaper] :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat]::before,
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"][data-we-wallpaper] [data-dsh-claude-part~="conversation-header"][data-dsh-claude-holds~="view-tabs"]::after {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-we-wallpaper] :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat]::before,
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-we-wallpaper] [data-dsh-deepcraft-part~="conversation-header"][data-dsh-deepcraft-holds~="view-tabs"]::after {
   display: none;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"][data-we-wallpaper] :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat]::after {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-we-wallpaper] :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat]::after {
   content: "";
   position: absolute;
   top: 16px;
@@ -68,5 +68,5 @@ body[data-dsh-claude-style][data-dsh-claude-palette="claude"][data-we-wallpaper]
   right: calc(50% - var(--dsh-composer-card-max-width, 100%) / 2);
   z-index: -1;
   pointer-events: none;
-  background: var(--dsh-claude-canvas);
+  background: var(--dsh-deepcraft-canvas);
 }

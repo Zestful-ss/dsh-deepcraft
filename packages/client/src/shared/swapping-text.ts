@@ -1,5 +1,5 @@
-import { observeSize } from '@dsh-claude-style/engine/bus'
-import { requestFrame } from '@dsh-claude-style/engine/frame'
+import { observeSize } from '@dsh-deepcraft/engine/bus'
+import { requestFrame } from '@dsh-deepcraft/engine/frame'
 import { motionReduced } from '../core/prefs'
 import { motionMs } from './motion'
 import { buildSweepBand } from './sweep-band'
@@ -42,11 +42,11 @@ import { buildSweepBand } from './sweep-band'
  */
 
 /** The class on the hidden sizer the box takes its width from. */
-const SIZER_CLASS = 'dsh-claude-swap-sizer'
+const SIZER_CLASS = 'dsh-deepcraft-swap-sizer'
 /** The class on one wording inside the sizer; they share one grid cell (shared/swapping-text.css). */
-const SIZER_WORD_CLASS = 'dsh-claude-swap-sizer-word'
+const SIZER_WORD_CLASS = 'dsh-deepcraft-swap-sizer-word'
 /** The class on one copy of the words (shared/swapping-text.css). */
-const COPY_CLASS = 'dsh-claude-swap-copy'
+const COPY_CLASS = 'dsh-deepcraft-swap-copy'
 
 interface SwapState {
   /**
@@ -116,7 +116,7 @@ function fillCopy(copy: HTMLElement, text: string, withShimmer: boolean) {
 
 function buildCopy(text: string, withShimmer: boolean, extraClass = '') {
   const copy = document.createElement('span')
-  copy.className = COPY_CLASS + extraClass + (withShimmer ? ' dsh-claude-swap-shimmer' : '')
+  copy.className = COPY_CLASS + extraClass + (withShimmer ? ' dsh-deepcraft-swap-shimmer' : '')
   fillCopy(copy, text, withShimmer)
   return copy
 }
@@ -230,7 +230,7 @@ function advance(element: HTMLElement, state: SwapState) {
       state.travel = null
       // Words written since decide the box's next width from this pin.
       if (state.frame === null) letGo(element, state)
-    }, motionMs('--dsh-claude-duration-slide'))
+    }, motionMs('--dsh-deepcraft-duration-slide'))
   }
 }
 
@@ -239,7 +239,7 @@ function advance(element: HTMLElement, state: SwapState) {
  * once the arriving one has settled: the sizer holds the box through the whole
  * swap, so nothing depends on it any more. The words left standing take the box
  * over there, which is what brings the clock back to sit right after them. The
- * box's own width travels at its own duration (--dsh-claude-duration-slide),
+ * box's own width travels at its own duration (--dsh-deepcraft-duration-slide),
  * which is longer than the two halves: letting the pin go before that move has
  * landed drops the rest of it in one step, and the clock jumps instead of
  * sliding.
@@ -247,7 +247,7 @@ function advance(element: HTMLElement, state: SwapState) {
 function startSwap(element: HTMLElement, state: SwapState, swap: NonNullable<SwapState['swap']>) {
   swap.moving = true
   swap.leaving.classList.add('is-exit')
-  const gap = motionMs('--dsh-claude-duration-swap-gap')
+  const gap = motionMs('--dsh-deepcraft-duration-swap-gap')
   if (gap > 0) window.setTimeout(() => swap.entering.classList.remove('is-enter-start'), gap)
   else swap.entering.classList.remove('is-enter-start')
   state.settle = window.setTimeout(() => {
@@ -256,7 +256,7 @@ function startSwap(element: HTMLElement, state: SwapState, swap: NonNullable<Swa
     if (!element.isConnected) return
     swap.leaving.remove()
     holdWords(element, state)
-  }, Math.max(motionMs('--dsh-claude-duration-swap') + gap, motionMs('--dsh-claude-duration-slide')))
+  }, Math.max(motionMs('--dsh-deepcraft-duration-swap') + gap, motionMs('--dsh-deepcraft-duration-slide')))
 }
 
 /** Drop every swap, frame and timer the label has in flight, and let its box go. */
@@ -287,7 +287,7 @@ export function setSwappingText(element: HTMLElement, text: string, withShimmer 
   const first = !state.written
   // The copies read their geometry off the box they sit in: the class that
   // carries it belongs to the label (shared/swapping-text.css).
-  if (!element.classList.contains('dsh-claude-swap-label')) element.classList.add('dsh-claude-swap-label')
+  if (!element.classList.contains('dsh-deepcraft-swap-label')) element.classList.add('dsh-deepcraft-swap-label')
   state.written = true
 
   if (first || motionReduced()) {

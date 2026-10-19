@@ -179,14 +179,14 @@ module.exports = {
     check('the usage panel registers into the dock list seat with an id',
       Array.isArray(r.slotRegistrations) && r.slotRegistrations.length === 1 &&
         r.slotRegistrations[0].key === 'conversation.input.dock' &&
-        r.slotRegistrations[0].id === 'claude-style-usage' &&
+        r.slotRegistrations[0].id === 'deepcraft-usage' &&
         r.slotRegistrations[0].component === 'function',
       JSON.stringify(r.slotRegistrations))
     const renders = r.panelRenders || {}
     const drew = (tab, className) => renders[tab] !== undefined && renders[tab].error === null &&
       renders[tab].classes.includes(className)
     check('the usage panel renders its Overview tab: stat cells and heat grid',
-      drew('overview', 'dsh-claude-home-stat') && drew('overview', 'dsh-claude-home-heat'),
+      drew('overview', 'dsh-deepcraft-home-stat') && drew('overview', 'dsh-deepcraft-home-heat'),
       JSON.stringify(renders.overview))
     // The heat grid's cells: 26 weeks of days, every one of them naming its
     // own day's tokens, whichever source the panel drew from.
@@ -202,10 +202,10 @@ module.exports = {
       said('overview-7d', /^3 PM$/) && said('overview-7d', /^You've used ~1× the tokens in Dracula\.$/),
       JSON.stringify(renders['overview-7d'] && renders['overview-7d'].texts))
     check('the usage panel renders its Models tab: stacked chart and ranked list',
-      drew('models', 'dsh-claude-home-chart-seg') && drew('models', 'dsh-claude-home-model'),
+      drew('models', 'dsh-deepcraft-home-chart-seg') && drew('models', 'dsh-deepcraft-home-model'),
       JSON.stringify(renders.models))
     const rows = (tab) => (renders[tab] === undefined ? 0
-      : renders[tab].classes.filter((name) => name === 'dsh-claude-home-model').length)
+      : renders[tab].classes.filter((name) => name === 'dsh-deepcraft-home-model').length)
     check('the folded model list shows six rows and a "Show 2 more" row',
       rows('models') === 6 && said('models', /^Show 2 more$/),
       JSON.stringify({ rows: rows('models'), texts: renders.models && renders.models.texts.slice(-3) }))

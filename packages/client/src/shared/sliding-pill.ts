@@ -1,4 +1,4 @@
-import { observeSize } from '@dsh-claude-style/engine/bus'
+import { observeSize } from '@dsh-deepcraft/engine/bus'
 import { inPageBox } from './page-zoom'
 
 /**
@@ -24,7 +24,7 @@ import { inPageBox } from './page-zoom'
  *   `release` takes it off and stops watching.
  */
 export function createSlidingPill(activeSelector: string) {
-  const PILL_ATTR = 'data-dsh-claude-pill'
+  const PILL_ATTR = 'data-dsh-deepcraft-pill'
   let control: HTMLElement | null = null
   /** The last written box, so an unchanged placement writes nothing. */
   let lastX: number | null = null
@@ -42,10 +42,10 @@ export function createSlidingPill(activeSelector: string) {
 
   function clear(el: HTMLElement) {
     el.removeAttribute(PILL_ATTR)
-    el.style.removeProperty('--dsh-claude-pill-x')
-    el.style.removeProperty('--dsh-claude-pill-y')
-    el.style.removeProperty('--dsh-claude-pill-w')
-    el.style.removeProperty('--dsh-claude-pill-h')
+    el.style.removeProperty('--dsh-deepcraft-pill-x')
+    el.style.removeProperty('--dsh-deepcraft-pill-y')
+    el.style.removeProperty('--dsh-deepcraft-pill-w')
+    el.style.removeProperty('--dsh-deepcraft-pill-h')
     lastX = null
     lastY = null
     lastW = null
@@ -105,10 +105,10 @@ export function createSlidingPill(activeSelector: string) {
     lastY = y
     lastW = w
     lastH = h
-    next.style.setProperty('--dsh-claude-pill-x', `${x}px`)
-    next.style.setProperty('--dsh-claude-pill-y', `${y}px`)
-    next.style.setProperty('--dsh-claude-pill-w', `${w}px`)
-    next.style.setProperty('--dsh-claude-pill-h', `${h}px`)
+    next.style.setProperty('--dsh-deepcraft-pill-x', `${x}px`)
+    next.style.setProperty('--dsh-deepcraft-pill-y', `${y}px`)
+    next.style.setProperty('--dsh-deepcraft-pill-w', `${w}px`)
+    next.style.setProperty('--dsh-deepcraft-pill-h', `${h}px`)
     if (!next.hasAttribute(PILL_ATTR)) next.setAttribute(PILL_ATTR, '')
   }
 

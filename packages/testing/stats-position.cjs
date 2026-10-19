@@ -23,27 +23,27 @@ const readPosition = (page) => page.evaluate(() => {
   const card = document.querySelector('[data-composer-card]')
   const dock = card?.nextElementSibling ?? null
   const row = document.querySelector('[data-composer-stats], [data-composer-stat]')
-  const meter = document.querySelector('[data-dsh-claude-context-meter]')
-  const line = document.querySelector('[data-dsh-claude-inline-stats]')
-  const cache = line?.querySelector('[data-dsh-claude-ramp="cache"]') ?? null
-  const cacheFigure = cache?.querySelector('.dsh-claude-digit-group') ?? null
-  const cacheTail = cache?.querySelector('.dsh-claude-inline-tail') ?? null
-  const cacheWords = cache?.querySelector('.dsh-claude-inline-label') ?? null
+  const meter = document.querySelector('[data-dsh-deepcraft-context-meter]')
+  const line = document.querySelector('[data-dsh-deepcraft-inline-stats]')
+  const cache = line?.querySelector('[data-dsh-deepcraft-ramp="cache"]') ?? null
+  const cacheFigure = cache?.querySelector('.dsh-deepcraft-digit-group') ?? null
+  const cacheTail = cache?.querySelector('.dsh-deepcraft-inline-tail') ?? null
+  const cacheWords = cache?.querySelector('.dsh-deepcraft-inline-label') ?? null
   const trigger = meter?.querySelector('button') ?? null
   const ring = trigger?.querySelector('svg') ?? null
   const reading = trigger?.querySelector('span') ?? null
   const shown = (element) => element !== null && element !== undefined && getComputedStyle(element).display !== 'none'
   return {
-    attribute: document.body.getAttribute('data-dsh-claude-stats-position'),
+    attribute: document.body.getAttribute('data-dsh-deepcraft-stats-position'),
     text: (line?.textContent ?? '').replace(/\s+/g, ' ').trim(),
     // A figure the ladder has taken away stays in the document (it comes back
     // the same way), so this counts the ones the reader sees.
-    figures: [...(line?.querySelectorAll('.dsh-claude-inline-seg:not([hidden]) .dsh-claude-digit-group') ?? [])]
+    figures: [...(line?.querySelectorAll('.dsh-deepcraft-inline-seg:not([hidden]) .dsh-deepcraft-digit-group') ?? [])]
       .map((group) => (group.textContent ?? '').trim()),
     glyphs: line?.querySelectorAll('svg, img').length ?? 0,
     // The figures are plain text the count rewrites: no character carries a
     // span or an entrance of its own (features/context-stats/stats-count.ts).
-    digits: line?.querySelectorAll('.dsh-claude-digit').length ?? 0,
+    digits: line?.querySelectorAll('.dsh-deepcraft-digit').length ?? 0,
     rowDisplay: row === null ? null : getComputedStyle(row).display,
     lineShown: shown(line),
     cacheColor: cacheFigure === null ? null : getComputedStyle(cacheFigure).color,
@@ -51,15 +51,15 @@ const readPosition = (page) => page.evaluate(() => {
     cacheWordsColor: cacheWords === null ? null : getComputedStyle(cacheWords).color,
     // The meter's reading is a pie: the host's ring keeps its cell, hidden
     // while the trigger's own background carries the image the feature drew.
-    pie: meter !== null && meter.hasAttribute('data-dsh-claude-meter-pie'),
+    pie: meter !== null && meter.hasAttribute('data-dsh-deepcraft-meter-pie'),
     ringVisibility: ring === null ? null : getComputedStyle(ring).visibility,
     pieImage: trigger === null ? null : getComputedStyle(trigger).backgroundImage,
-    pieRest: trigger === null ? null : getComputedStyle(trigger).getPropertyValue('--dsh-claude-pie-rest').trim(),
+    pieRest: trigger === null ? null : getComputedStyle(trigger).getPropertyValue('--dsh-deepcraft-pie-rest').trim(),
     reading: reading === null ? null : (reading.textContent ?? '').trim(),
     readingColor: reading === null ? null : getComputedStyle(reading).color,
     dockPosition: dock === null ? null : getComputedStyle(dock).position,
     meterPosition: meter === null ? null : getComputedStyle(meter).position,
-    blocks: document.querySelectorAll('.dsh-claude-context-stats').length,
+    blocks: document.querySelectorAll('.dsh-deepcraft-context-stats').length,
   }
 })
 
@@ -80,15 +80,15 @@ const readFit = (page) => Promise.race([
     let heldFrames = 0
     const tick = () => {
       const card = document.querySelector('[data-composer-card]')
-      const line = document.querySelector('[data-dsh-claude-inline-stats]')
-      const meter = document.querySelector('[data-dsh-claude-context-meter]')
-      const groups = [...(line?.querySelectorAll('.dsh-claude-digit-group') ?? [])]
+      const line = document.querySelector('[data-dsh-deepcraft-inline-stats]')
+      const meter = document.querySelector('[data-dsh-deepcraft-context-meter]')
+      const groups = [...(line?.querySelectorAll('.dsh-deepcraft-digit-group') ?? [])]
       const width = card === null ? null : Math.round(card.getBoundingClientRect().width * 100) / 100
       const reading = {
         card: width,
         line: line === null ? null : Math.round(line.getBoundingClientRect().width * 100) / 100,
         figures: groups.filter((group) => group.getClientRects().length > 0).length,
-        tight: meter !== null && meter.hasAttribute('data-dsh-claude-meter-tight'),
+        tight: meter !== null && meter.hasAttribute('data-dsh-deepcraft-meter-tight'),
       }
       if (width !== heldWidth) {
         heldWidth = width
@@ -117,14 +117,14 @@ const readFit = (page) => Promise.race([
 const readMeterStep = (page) => page.evaluate(() => {
   const card = document.querySelector('[data-composer-card]')
   const dock = card?.nextElementSibling ?? null
-  const meter = document.querySelector('[data-dsh-claude-context-meter]')
+  const meter = document.querySelector('[data-dsh-deepcraft-context-meter]')
   if (dock === null || meter === null) return null
   const height = () => Math.round(dock.getBoundingClientRect().height * 100) / 100
-  const wasTight = meter.hasAttribute('data-dsh-claude-meter-tight')
+  const wasTight = meter.hasAttribute('data-dsh-deepcraft-meter-tight')
   const withReading = height()
-  meter.setAttribute('data-dsh-claude-meter-tight', '')
+  meter.setAttribute('data-dsh-deepcraft-meter-tight', '')
   const withoutReading = height()
-  if (!wasTight) meter.removeAttribute('data-dsh-claude-meter-tight')
+  if (!wasTight) meter.removeAttribute('data-dsh-deepcraft-meter-tight')
   return { wasTight, withReading, withoutReading }
 })
 
@@ -134,10 +134,10 @@ const readMeterStep = (page) => page.evaluate(() => {
  * session's rows, says so on its own `aria-expanded`, and closes it again.
  */
 const readLinePanel = (page) => page.evaluate(async () => {
-  const line = document.querySelector('[data-dsh-claude-inline-stats]')
+  const line = document.querySelector('[data-dsh-deepcraft-inline-stats]')
   if (line === null) return null
-  const panel = () => document.querySelector('[data-dsh-claude-context-panel]')
-  const block = () => document.querySelector('.dsh-claude-context-stats')
+  const panel = () => document.querySelector('[data-dsh-deepcraft-context-panel]')
+  const block = () => document.querySelector('.dsh-deepcraft-context-stats')
   const wait = (open) => new Promise((resolve) => {
     const deadline = performance.now() + 1200
     const tick = () => {
@@ -160,7 +160,7 @@ const readLinePanel = (page) => page.evaluate(async () => {
   const opened = panel() !== null
   const rows = block() === null
     ? []
-    : [...block().querySelectorAll('.dsh-claude-context-stats-item')]
+    : [...block().querySelectorAll('.dsh-deepcraft-context-stats-item')]
       .map((item) => (item.textContent ?? '').replace(/\s+/g, ' ').trim())
   // The line says on itself what the host's trigger says, one pass behind the press.
   await new Promise((resolve) => setTimeout(resolve, 250))
@@ -188,14 +188,14 @@ function statsPositionScenario({ check }) {
     script: 'greeting',
     prompt: 'hello there',
     patch: [
-      '- id: ui-skin-claude-style',
+      '- id: ui-skin-deepcraft',
       '  config:',
       '    statsPosition: inline',
     ],
     async assert({ page, session }) {
       // The projections answer while the turn runs; the line appears with them.
       await page.waitForFunction(
-        () => document.querySelector('[data-dsh-claude-inline-stats]') !== null,
+        () => document.querySelector('[data-dsh-deepcraft-inline-stats]') !== null,
         undefined, { timeout: 20000 },
       ).catch(() => {})
       const state = await readPosition(page)

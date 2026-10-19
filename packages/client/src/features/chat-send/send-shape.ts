@@ -49,14 +49,14 @@ export interface TextWindow {
  * width is laid out once and the breaks are grouped into steps.
  */
 /** The whole flight's duration, from the token table. Not a preference: this effect keeps one switch, and a second knob is not worth it. */
-export const CHAT_FLIGHT_MS = motionMs('--dsh-claude-duration-flight')
+export const CHAT_FLIGHT_MS = motionMs('--dsh-deepcraft-duration-flight')
 
 /**
  * How long the stand-in fades out over the real bubble once it has landed.
  * Long enough for the words to read as sharpening rather than switching,
  * short enough that two copies of the same bubble are never noticed.
  */
-export const CHAT_LANDING_MS = motionMs('--dsh-claude-duration-surface')
+export const CHAT_LANDING_MS = motionMs('--dsh-deepcraft-duration-surface')
 
 /**
  * The angular frequency the displacement and the shape share. One progress

@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from 'vitest'
 import { MOTION_ATTR, MOTION_FULL } from '../../constants'
 import { createInlineStats } from './inline-stats'
-import type { HostSessionStatsProjection, HostText, HostTokenUsageProjection } from '@dsh-claude-style/contracts/services'
+import type { HostSessionStatsProjection, HostText, HostTokenUsageProjection } from '@dsh-deepcraft/contracts/services'
 
 /**
  * The line of figures under the composer gives way one step at a time on a
@@ -49,7 +49,7 @@ function mount(width: number) {
 }
 
 function lineWidth() {
-  return document.querySelector('[data-dsh-claude-inline-stats]')!.getBoundingClientRect().width
+  return document.querySelector('[data-dsh-deepcraft-inline-stats]')!.getBoundingClientRect().width
 }
 
 afterEach(() => {
@@ -61,7 +61,7 @@ test('a card narrower than every step leaves the line on the last one', () => {
   const inline = createInlineStats(read, () => chat, () => null)
   inline.render()
   expect(inline.fit()).toBe(5)
-  expect(document.querySelector('[data-dsh-claude-inline-stats]')!.textContent).not.toContain('8,888,888')
+  expect(document.querySelector('[data-dsh-deepcraft-inline-stats]')!.textContent).not.toContain('8,888,888')
 })
 
 test('a card just narrower than the whole line takes it down until it fits', () => {
@@ -82,7 +82,7 @@ test('room coming back gives every step back', () => {
   expect(inline.fit()).toBe(5)
   card.style.width = '4000px'
   expect(inline.fit()).toBe(0)
-  expect(document.querySelector('[data-dsh-claude-inline-stats]')!.textContent).toContain('8,888,888')
+  expect(document.querySelector('[data-dsh-deepcraft-inline-stats]')!.textContent).toContain('8,888,888')
 })
 
 test('a step comes back only with room to spare', () => {
@@ -102,7 +102,7 @@ test('a fit that keeps its step leaves the shown line untouched, on every step',
   const card = mount(4000)
   const inline = createInlineStats(read, () => chat, () => null)
   inline.render()
-  const root = document.querySelector('[data-dsh-claude-inline-stats]')!
+  const root = document.querySelector('[data-dsh-deepcraft-inline-stats]')!
   const steps = new Set<number>()
   for (let width = Math.ceil(lineWidth()); width >= 40; width -= 8) {
     card.style.width = `${width}px`
@@ -123,11 +123,11 @@ test('the cache share\'s colour band reaches its figure and percent sign, never 
   mount(4000)
   const inline = createInlineStats(read, () => chat, () => null)
   inline.render()
-  const segment = document.querySelector('[data-dsh-claude-ramp="cache"]')!
-  expect(segment.getAttribute('data-dsh-claude-ramp-span')).toBe('low')
-  expect(segment.querySelector('.dsh-claude-inline-label')!.textContent!.trim()).toBe('cache hit')
-  expect(segment.querySelector('.dsh-claude-digit-group')!.textContent).toBe('86')
-  expect(segment.querySelector('.dsh-claude-inline-tail')!.textContent).toBe('%')
+  const segment = document.querySelector('[data-dsh-deepcraft-ramp="cache"]')!
+  expect(segment.getAttribute('data-dsh-deepcraft-ramp-span')).toBe('low')
+  expect(segment.querySelector('.dsh-deepcraft-inline-label')!.textContent!.trim()).toBe('cache hit')
+  expect(segment.querySelector('.dsh-deepcraft-digit-group')!.textContent).toBe('86')
+  expect(segment.querySelector('.dsh-deepcraft-inline-tail')!.textContent).toBe('%')
   expect(segment.textContent).toBe('cache hit 86%')
 })
 
@@ -139,7 +139,7 @@ test('another session\'s numbers are counted to from the ones the line shows', a
     (key === 'sessionStats' ? current : key === 'tokenUsage' ? usage : undefined) as Value | undefined
   const inline = createInlineStats(sessionRead, () => chat, () => null)
   inline.render()
-  const first = document.querySelector('[data-dsh-claude-inline-stats] .dsh-claude-digit-group')!
+  const first = document.querySelector('[data-dsh-deepcraft-inline-stats] .dsh-deepcraft-digit-group')!
   expect(first.textContent).toBe('2')
   // A different session, read through the same seat.
   current = { turns: 22, steps: 220, llmMs: 0, toolMs: 0, ttftMs: 0, ttftSteps: 0, decodeMs: 10_000, decodeTokens: 1_000 }

@@ -7,7 +7,7 @@ import { motionEase, motionMs } from '../../shared/motion'
  * their motions, and what each motion's own moments are).
  *
  * The loader opens on the snippet's bouncing dots and then, every
- * `--dsh-claude-period-dot-rotate`, hands the row over to another of the three
+ * `--dsh-deepcraft-period-dot-rotate`, hands the row over to another of the three
  * — a motion never follows itself, so the turn is always a visible change: the
  * hopping dots, the dots walking three lines through one point, and the four
  * dots swapping the corners of a 45 : 55 rectangle.
@@ -42,9 +42,9 @@ const LEAVING = 'is-leaving'
 const RESTING = 'is-resting'
 
 /** What the hand-over's own fades are called, so a stale one can be let go. */
-const FADE = 'dsh-claude-wait-fade'
+const FADE = 'dsh-deepcraft-wait-fade'
 
-const DOT = 'dsh-claude-chat-wait-dot'
+const DOT = 'dsh-deepcraft-chat-wait-dot'
 
 /**
  * A lane's own account of its motion: the shares of its keyframes at which one
@@ -110,11 +110,11 @@ function sharesOf(style: CSSStyleDeclaration, name: string): number[] {
 
 function timingOf(lane: Element): LaneTiming {
   const style = getComputedStyle(lane)
-  const fade = Number(style.getPropertyValue('--dsh-claude-dot-fade'))
+  const fade = Number(style.getPropertyValue('--dsh-deepcraft-dot-fade'))
   if (!Number.isFinite(fade) || fade <= 0) throw new Error('chat-wait: a loader lane declares no fade length (chat-wait.css)')
   return {
-    arrives: sharesOf(style, '--dsh-claude-dot-arrives'),
-    leaves: sharesOf(style, '--dsh-claude-dot-leaves'),
+    arrives: sharesOf(style, '--dsh-deepcraft-dot-arrives'),
+    leaves: sharesOf(style, '--dsh-deepcraft-dot-leaves'),
     fade,
   }
 }
@@ -157,7 +157,7 @@ function waitFor(turn: number, alternate: boolean, from: number, shares: number[
  * @param leaving - whether this dot is on its way out.
  * @returns the fade, so a caller can wait for it or let it go.
  */
-function fadeDot(dot: Element, ease: '--dsh-claude-ease-damped-in' | '--dsh-claude-ease-damped-out', lane: LaneTiming, leaving: boolean): Animation {
+function fadeDot(dot: Element, ease: '--dsh-deepcraft-ease-damped-in' | '--dsh-deepcraft-ease-damped-out', lane: LaneTiming, leaving: boolean): Animation {
   const motion = dot.getAnimations().find((one) => one instanceof CSSAnimation)
   const effect = motion === undefined ? null : motion.effect
   const time = motion === undefined ? null : motion.currentTime
@@ -192,9 +192,9 @@ function dropFades(loader: HTMLElement) {
 }
 
 /** The curve each lane's fades run on, read from the token sheet (D9). */
-function easesOf(motion: WaitLoaderMotion, leaving: boolean): '--dsh-claude-ease-damped-in' | '--dsh-claude-ease-damped-out' {
-  if (motion === 'bounce') return leaving ? '--dsh-claude-ease-damped-out' : '--dsh-claude-ease-damped-in'
-  return leaving ? '--dsh-claude-ease-damped-in' : '--dsh-claude-ease-damped-out'
+function easesOf(motion: WaitLoaderMotion, leaving: boolean): '--dsh-deepcraft-ease-damped-in' | '--dsh-deepcraft-ease-damped-out' {
+  if (motion === 'bounce') return leaving ? '--dsh-deepcraft-ease-damped-out' : '--dsh-deepcraft-ease-damped-in'
+  return leaving ? '--dsh-deepcraft-ease-damped-in' : '--dsh-deepcraft-ease-damped-out'
 }
 
 /**
@@ -245,7 +245,7 @@ function nextMotion(motion: WaitLoaderMotion): WaitLoaderMotion {
 /** Arm the rotation: when it runs out, one of the other motions takes over. */
 function rotate(loader: HTMLElement, state: LoaderState) {
   if (state.timer !== null) window.clearTimeout(state.timer)
-  const period = motionMs('--dsh-claude-period-dot-rotate')
+  const period = motionMs('--dsh-deepcraft-period-dot-rotate')
   state.timer = window.setTimeout(() => {
     state.timer = null
     if (!loader.isConnected) return
@@ -256,7 +256,7 @@ function rotate(loader: HTMLElement, state: LoaderState) {
 
 /**
  * Set one loader going: one of its motions at random at once, then a new one
- * every `--dsh-claude-period-dot-rotate`, never the one already standing.
+ * every `--dsh-deepcraft-period-dot-rotate`, never the one already standing.
  *
  * @param loader - the loader leading the line.
  */

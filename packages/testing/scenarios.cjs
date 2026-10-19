@@ -33,6 +33,7 @@ const { statsScenarios } = require('./stats-position.cjs')
 const { sidebarRailScenario } = require('./sidebar-rail.cjs')
 const { remoteSettingsScenario } = require('./remote-settings.cjs')
 const { customBrandScenario } = require('./custom-brand.cjs')
+const { deepcraftScenario } = require('./deepcraft.cjs')
 const { dsBotScenario } = require('./ds-bot.cjs')
 const { CANVAS } = require('./shoot.cjs')
 const { sanitizePage } = require('../../scripts/shared/privacy.cjs')
@@ -52,7 +53,7 @@ const MAX_FOLLOW_GAP_PX = bound('laneFollowMaxGapPx')
  */
 async function captureBothSchemes(context) {
   const { page, out } = context
-  const brand = await page.evaluate(() => document.body.getAttribute('data-dsh-claude-brand'))
+  const brand = await page.evaluate(() => document.body.getAttribute('data-dsh-deepcraft-brand'))
   const canvas = CANVAS[brand]
   if (canvas === undefined) throw new Error(`the page carries brand "${brand}", which has no recorded palette`)
   const files = []
@@ -195,13 +196,13 @@ const SCENARIOS = {
         }
         const shown = (el) => el !== null && getComputedStyle(el).display !== 'none'
         const cap = (el) => (el === null ? null : getComputedStyle(el).maxWidth)
-        const perm = read('.dsh-claude-perm-btn')
-        const permLabel = read('.dsh-claude-perm-label')
-        const model = read('.dsh-claude-model-btn')
-        const modelLabel = read('.dsh-claude-model-btn-label')
-        const meter = read('[data-dsh-claude-context-meter]')
+        const perm = read('.dsh-deepcraft-perm-btn')
+        const permLabel = read('.dsh-deepcraft-perm-label')
+        const model = read('.dsh-deepcraft-model-btn')
+        const modelLabel = read('.dsh-deepcraft-model-btn-label')
+        const meter = read('[data-dsh-deepcraft-context-meter]')
         const card = read('[data-composer-card]')
-        const row = read('[data-dsh-claude-part~="row"]')
+        const row = read('[data-dsh-deepcraft-part~="row"]')
         return {
           width: window.innerWidth,
           card: box(card),
@@ -210,11 +211,11 @@ const SCENARIOS = {
           perm: box(perm),
           permMax: cap(perm),
           permEllipsis: permLabel === null ? null : getComputedStyle(permLabel).textOverflow,
-          chevron: shown(read('.dsh-claude-perm-chevron')),
+          chevron: shown(read('.dsh-deepcraft-perm-chevron')),
           model: box(model),
           modelMax: cap(model),
           modelEllipsis: modelLabel === null ? null : getComputedStyle(modelLabel).textOverflow,
-          effort: box(read('.dsh-claude-effort-btn')),
+          effort: box(read('.dsh-deepcraft-effort-btn')),
           meter: box(meter),
           ring: shown(meter === null ? null : meter.querySelector('svg')),
           number: shown(meter === null ? null : meter.querySelector('button > span')),
@@ -258,7 +259,7 @@ const SCENARIOS = {
     prompt: 'hello there',
     async assert({ page, session }) {
       const read = () => page.evaluate(() => {
-        const mine = [...document.querySelectorAll('.dsh-claude-rightbar-close')]
+        const mine = [...document.querySelectorAll('.dsh-deepcraft-rightbar-close')]
         const shown = mine.filter((el) => getComputedStyle(el).display !== 'none')
         const host = document.querySelector('[data-sidebar-right-open] [data-sidebar-right-toggle]')
         const expand = document.querySelector('[data-sidebar-right-expand]')
@@ -281,7 +282,7 @@ const SCENARIOS = {
       await page.waitForFunction(() => document.querySelector('[data-sidebar-right-open]') !== null, undefined, { timeout: 15000 })
       await page.waitForTimeout(500)
       const open = await read()
-      await page.locator('.dsh-claude-rightbar-close').first().click()
+      await page.locator('.dsh-deepcraft-rightbar-close').first().click()
       await page.waitForFunction(() => document.querySelector('[data-sidebar-right-open]') === null, undefined, { timeout: 15000 })
       await page.waitForTimeout(500)
       const closed = await read()
@@ -498,7 +499,7 @@ const SCENARIOS = {
       await recordProbes(context, 'conversation')
       // Any host menu does: the account menu the skin keys on is not mounted by
       // this build, and every menu shares the role, the list and the foreground.
-      const trigger = context.page.locator('[aria-haspopup="menu"]:not(:is([class^="dsh-claude"], [class*=" dsh-claude"])):visible').first()
+      const trigger = context.page.locator('[aria-haspopup="menu"]:not(:is([class^="dsh-deepcraft"], [class*=" dsh-deepcraft"])):visible').first()
       if (await trigger.count() > 0) {
         await trigger.click()
         await recordProbes(context, 'menu', 3000)
@@ -544,8 +545,10 @@ const SCENARIOS = {
   importance: importanceScenario({ check, observe, sendPrompt, waitForTurn, host: HOST }),
   /** A page under a non-loopback name reads and writes the host's settings beside the loopback one (packages/testing/remote-settings.cjs, D75). */
   remoteSettings: remoteSettingsScenario({ check }),
-  /** The reader's own brand images through the host half's routes and on the real shell (packages/testing/custom-brand.cjs, D30). */
+  /** The reader's own brand images through the host half's routes and on the real shell (packages/testing/custom-brand.cjs, D77). */
   customBrand: customBrandScenario({ check }),
+  /** DeepCraft's own walk: the themes, the whale girl's gestures and states, and the account-hold page's theme (packages/testing/deepcraft.cjs, D77). */
+  deepcraft: deepcraftScenario({ check }),
   /** The Chat / Code switch beside ds-bot's published browser half (packages/testing/ds-bot.cjs, D74). */
   dsBot: dsBotScenario({ check }),
   /** Both palettes captured to the run's out directory and swept for personal data. */

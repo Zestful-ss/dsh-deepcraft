@@ -7,14 +7,14 @@ import {
   HEADER_TITLE_SELECTOR,
   HEADER_UTILITIES_SELECTOR,
   VIEW_TABS_STRIP_SELECTOR,
-} from '@dsh-claude-style/contracts/dom'
-import { observeMatches, observeSize } from '@dsh-claude-style/engine/bus'
-import { desktopBand } from '@dsh-claude-style/engine/desktop-band'
-import { findRightbarToggle, findWindowsMenu, hostSlots } from '@dsh-claude-style/engine/host'
-import { createStamp, setAttributeIfChanged } from '@dsh-claude-style/engine/dom'
+} from '@dsh-deepcraft/contracts/dom'
+import { observeMatches, observeSize } from '@dsh-deepcraft/engine/bus'
+import { desktopBand } from '@dsh-deepcraft/engine/desktop-band'
+import { findRightbarToggle, findWindowsMenu, hostSlots } from '@dsh-deepcraft/engine/host'
+import { createStamp, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { inPageBox, inPagePixels } from '../../shared/page-zoom'
 import type { FeatureUi } from '../../core/feature'
-import type { HostContext } from '@dsh-claude-style/engine/host'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type manifest from './header-band.manifest'
 import { copy } from './copy'
 
@@ -93,7 +93,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   /** The host's seat in the header's own row that the header utilities land in. */
   const UTILITIES_SLOT = 'conversation.session.header.utilities'
   /** The skin's own control there, which the stylesheet paints and the pass shows. */
-  const CLOSE_CLASS = 'dsh-claude-rightbar-close'
+  const CLOSE_CLASS = 'dsh-deepcraft-rightbar-close'
 
   const rowStamp = createStamp<HTMLElement>(ROW_ATTR)
   const titleStamp = createStamp<HTMLElement>(TITLE_ATTR)
@@ -166,9 +166,9 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       const slots = hostSlots(scope)
       if (slots === undefined || slots === null || typeof slots.inject !== 'function') return
       scope.effect(() => slots.inject(UTILITIES_SLOT, () => slots.register(
-        { name: UTILITIES_SLOT, id: 'claude-style-rightbar-close', order: 90 },
+        { name: UTILITIES_SLOT, id: 'deepcraft-rightbar-close', order: 90 },
         RightbarClose,
-      )), 'dsh-claude-style: right panel control')
+      )), 'dsh-deepcraft: right panel control')
     })
   }
 

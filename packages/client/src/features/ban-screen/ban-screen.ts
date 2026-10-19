@@ -1,21 +1,21 @@
 import { BAN_LOCALE_ZH } from '../../constants'
-import { desktopBand } from '@dsh-claude-style/engine/desktop-band'
+import { desktopBand } from '@dsh-deepcraft/engine/desktop-band'
 import { getUsername } from '../../shared/identity'
 import { readPrefs } from '../../core/prefs'
-import type { HostContext } from '@dsh-claude-style/engine/host'
-import type { CloseReason, FeatureHandle } from '@dsh-claude-style/engine/scheduler'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
+import type { CloseReason, FeatureHandle } from '@dsh-deepcraft/engine/scheduler'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './ban-screen.manifest'
-import { buildElement } from '@dsh-claude-style/engine/dom'
+import { buildElement } from '@dsh-deepcraft/engine/dom'
 import { motionMs } from '../../shared/motion'
 import { inPagePixels } from '../../shared/page-zoom'
 import { removeStrayNodes } from '../../shared/popover'
 import { copy } from './copy'
 
 /** On the page while it plays its way out after a dismissal: the stylesheet runs the exit. */
-const BAN_LEAVING_ATTR = 'data-dsh-ban-leaving'
+const BAN_LEAVING_ATTR = 'data-dsh-deepcraft-ban-leaving'
 /** On a page rebuilt over one already up: it stands where it is instead of growing in again. */
-const BAN_SETTLED_ATTR = 'data-dsh-ban-settled'
+const BAN_SETTLED_ATTR = 'data-dsh-deepcraft-ban-settled'
 
 /** The easter egg's handle (ui.ban): the account row opens it. */
 export interface BanHandle extends FeatureHandle {
@@ -69,7 +69,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   // it lent the Desktop's band — behind. Both belong to this feature alone
   // (no other rule writes that token inline), so the new generation sweeps
   // them before it can open its own.
-  removeStrayNodes(document, '.dsh-claude-ban', [])
+  removeStrayNodes(document, '.dsh-deepcraft-ban', [])
   document.body.style.removeProperty('--dsw-specific-sidebar-fill')
 
   /** Take the dismissed overlay off the page now, whatever is left of its exit. */
@@ -113,7 +113,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       leavingTimer = null
       removeLeaving()
       releaseCaptionFill()
-    }, motionMs('--dsh-claude-duration-exit'))
+    }, motionMs('--dsh-deepcraft-duration-exit'))
   }
 
   /**
@@ -131,7 +131,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    */
   function holdCaptionFill() {
     if (banRoot === null) return
-    const canvas = getComputedStyle(banRoot).getPropertyValue('--dsh-ban-canvas').trim()
+    const canvas = getComputedStyle(banRoot).getPropertyValue('--dsh-deepcraft-ban-canvas').trim()
     if (canvas === '') return
     document.body.style.setProperty('--dsw-specific-sidebar-fill', canvas)
     captionFillHeld = true
@@ -148,7 +148,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   function isBanDismissTarget(node: EventTarget | null) {
     let el = node instanceof Node ? node : null
     while (el && el !== banRoot) {
-      if (el instanceof Element && el.hasAttribute('data-dsh-ban-dismiss')) return true
+      if (el instanceof Element && el.hasAttribute('data-dsh-deepcraft-ban-dismiss')) return true
       el = el.parentElement
     }
     return false
@@ -289,10 +289,10 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     closeBanScreen()
     if (typeof document === 'undefined' || document.body === null) return
 
-    const root = buildElement('div', 'dsh-claude-ban')
+    const root = buildElement('div', 'dsh-deepcraft-ban')
     root.setAttribute('role', 'dialog')
     root.setAttribute('aria-modal', 'true')
-    root.setAttribute('data-dsh-ban', '')
+    root.setAttribute('data-dsh-deepcraft-ban', '')
     if (rebuilt) root.setAttribute(BAN_SETTLED_ATTR, '')
 
     banOpenedAt = bannedAt instanceof Date ? bannedAt : new Date()
@@ -303,14 +303,14 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // page reproduces a Claude screen, so it draws the Claude lockup (the
     // starburst and the wordmark) in every brand.
     root.innerHTML =
-      `<div class="dsh-claude-ban-bar"><div class="dsh-claude-ban-brand"><span class="dsh-claude-ban-mark dsh-claude-masked-mark"></span><span class="dsh-claude-ban-word dsh-claude-masked-word"></span></div><div class="dsh-claude-ban-bar-actions"><button type="button" class="dsh-claude-ban-signout" data-dsh-ban-dismiss>${copy('signOut')}</button><div class="dsh-claude-ban-window" aria-hidden="true"><button type="button" class="dsh-claude-ban-win" tabindex="-1" data-dsh-ban-dismiss>${BAN_ICONS.minimize}</button><button type="button" class="dsh-claude-ban-win" tabindex="-1" data-dsh-ban-dismiss>${BAN_ICONS.restore}</button><button type="button" class="dsh-claude-ban-win" tabindex="-1" data-dsh-ban-dismiss>${BAN_ICONS.close}</button></div></div></div><div class="dsh-claude-ban-toast" data-dsh-ban-dismiss role="status"><span class="dsh-claude-ban-toast-icon">${BAN_ICONS.warning}</span><span class="dsh-claude-ban-toast-text"></span><span class="dsh-claude-ban-toast-close">${BAN_ICONS.close}</span></div><div class="dsh-claude-ban-scroll"><div class="dsh-claude-ban-column"><span class="dsh-claude-ban-lock">${BAN_ICONS.lock}</span><h1 class="dsh-claude-ban-title">${copy('title')}</h1><p class="dsh-claude-ban-lead">${copy('lead', { time: stamp })}</p><p class="dsh-claude-ban-lead">${copy('leadError')}</p><p class="dsh-claude-ban-next">${copy('nextLabel')}</p><div class="dsh-claude-ban-card"><div class="dsh-claude-ban-step"><span class="dsh-claude-ban-step-num">1</span><span class="dsh-claude-ban-step-body"><span class="dsh-claude-ban-step-title">${copy('step1Title')}</span><span class="dsh-claude-ban-step-desc">${copy('step1Desc')}</span></span></div><div class="dsh-claude-ban-step"><span class="dsh-claude-ban-step-num">2</span><span class="dsh-claude-ban-step-body"><span class="dsh-claude-ban-step-title">${copy('step2Title')}</span><span class="dsh-claude-ban-step-desc">${copy('step2Desc')}</span></span></div><div class="dsh-claude-ban-step"><span class="dsh-claude-ban-step-num">3</span><span class="dsh-claude-ban-step-body"><span class="dsh-claude-ban-step-title">${copy('step3Title')}</span><span class="dsh-claude-ban-step-desc">${copy('step3Desc')}</span></span></div></div><button type="button" class="dsh-claude-ban-primary" data-dsh-ban-dismiss>${copy('review')}</button><h2 class="dsh-claude-ban-subtitle">${copy('whatYouCanDo')}</h2><div class="dsh-claude-ban-card dsh-claude-ban-actions"><button type="button" class="dsh-claude-ban-action" data-dsh-ban-dismiss><span class="dsh-claude-ban-action-icon">${BAN_ICONS.download}</span><span class="dsh-claude-ban-action-text"><span class="dsh-claude-ban-action-title">${copy('exportTitle')}</span><span class="dsh-claude-ban-action-desc">${copy('exportDesc')}</span></span><span class="dsh-claude-ban-action-chevron">${BAN_ICONS.chevron}</span></button><button type="button" class="dsh-claude-ban-action" data-dsh-ban-dismiss><span class="dsh-claude-ban-action-icon">${BAN_ICONS.trash}</span><span class="dsh-claude-ban-action-text"><span class="dsh-claude-ban-action-title dsh-claude-ban-action-title-danger">${copy('deleteTitle')}</span><span class="dsh-claude-ban-action-desc">${copy('deleteDesc')}</span></span><span class="dsh-claude-ban-action-chevron">${BAN_ICONS.chevron}</span></button></div></div></div>`
+      `<div class="dsh-deepcraft-ban-bar"><div class="dsh-deepcraft-ban-brand"><span class="dsh-deepcraft-ban-mark dsh-deepcraft-masked-mark"></span><span class="dsh-deepcraft-ban-word dsh-deepcraft-masked-word"></span></div><div class="dsh-deepcraft-ban-bar-actions"><button type="button" class="dsh-deepcraft-ban-signout" data-dsh-deepcraft-ban-dismiss>${copy('signOut')}</button><div class="dsh-deepcraft-ban-window" aria-hidden="true"><button type="button" class="dsh-deepcraft-ban-win" tabindex="-1" data-dsh-deepcraft-ban-dismiss>${BAN_ICONS.minimize}</button><button type="button" class="dsh-deepcraft-ban-win" tabindex="-1" data-dsh-deepcraft-ban-dismiss>${BAN_ICONS.restore}</button><button type="button" class="dsh-deepcraft-ban-win" tabindex="-1" data-dsh-deepcraft-ban-dismiss>${BAN_ICONS.close}</button></div></div></div><div class="dsh-deepcraft-ban-toast" data-dsh-deepcraft-ban-dismiss role="status"><span class="dsh-deepcraft-ban-toast-icon">${BAN_ICONS.warning}</span><span class="dsh-deepcraft-ban-toast-text"></span><span class="dsh-deepcraft-ban-toast-close">${BAN_ICONS.close}</span></div><div class="dsh-deepcraft-ban-scroll"><div class="dsh-deepcraft-ban-column"><span class="dsh-deepcraft-ban-lock">${BAN_ICONS.lock}</span><h1 class="dsh-deepcraft-ban-title">${copy('title')}</h1><p class="dsh-deepcraft-ban-lead">${copy('lead', { time: stamp })}</p><p class="dsh-deepcraft-ban-lead">${copy('leadError')}</p><p class="dsh-deepcraft-ban-next">${copy('nextLabel')}</p><div class="dsh-deepcraft-ban-card"><div class="dsh-deepcraft-ban-step"><span class="dsh-deepcraft-ban-step-num">1</span><span class="dsh-deepcraft-ban-step-body"><span class="dsh-deepcraft-ban-step-title">${copy('step1Title')}</span><span class="dsh-deepcraft-ban-step-desc">${copy('step1Desc')}</span></span></div><div class="dsh-deepcraft-ban-step"><span class="dsh-deepcraft-ban-step-num">2</span><span class="dsh-deepcraft-ban-step-body"><span class="dsh-deepcraft-ban-step-title">${copy('step2Title')}</span><span class="dsh-deepcraft-ban-step-desc">${copy('step2Desc')}</span></span></div><div class="dsh-deepcraft-ban-step"><span class="dsh-deepcraft-ban-step-num">3</span><span class="dsh-deepcraft-ban-step-body"><span class="dsh-deepcraft-ban-step-title">${copy('step3Title')}</span><span class="dsh-deepcraft-ban-step-desc">${copy('step3Desc')}</span></span></div></div><button type="button" class="dsh-deepcraft-ban-primary" data-dsh-deepcraft-ban-dismiss>${copy('review')}</button><h2 class="dsh-deepcraft-ban-subtitle">${copy('whatYouCanDo')}</h2><div class="dsh-deepcraft-ban-card dsh-deepcraft-ban-actions"><button type="button" class="dsh-deepcraft-ban-action" data-dsh-deepcraft-ban-dismiss><span class="dsh-deepcraft-ban-action-icon">${BAN_ICONS.download}</span><span class="dsh-deepcraft-ban-action-text"><span class="dsh-deepcraft-ban-action-title">${copy('exportTitle')}</span><span class="dsh-deepcraft-ban-action-desc">${copy('exportDesc')}</span></span><span class="dsh-deepcraft-ban-action-chevron">${BAN_ICONS.chevron}</span></button><button type="button" class="dsh-deepcraft-ban-action" data-dsh-deepcraft-ban-dismiss><span class="dsh-deepcraft-ban-action-icon">${BAN_ICONS.trash}</span><span class="dsh-deepcraft-ban-action-text"><span class="dsh-deepcraft-ban-action-title dsh-deepcraft-ban-action-title-danger">${copy('deleteTitle')}</span><span class="dsh-deepcraft-ban-action-desc">${copy('deleteDesc')}</span></span><span class="dsh-deepcraft-ban-action-chevron">${BAN_ICONS.chevron}</span></button></div></div></div>`
     // The username is user- and host-supplied text (a preference, the OS user,
     // the account nickname), so it is written as text, never spliced into the
     // markup above.
-    root.querySelector('.dsh-claude-ban-toast-text')!.textContent = `${username}: account_banned`
+    root.querySelector('.dsh-deepcraft-ban-toast-text')!.textContent = `${username}: account_banned`
 
     // One listener for every way out that is a click: the markup marks each
-    // control with `data-dsh-ban-dismiss`, and a click that lands on the
+    // control with `data-dsh-deepcraft-ban-dismiss`, and a click that lands on the
     // page's empty canvas stays put (so the page can still be read). The
     // keyboard way out is Esc, handled with the other overlays in
     // scheduler.ts — deliberately not a window `blur`, which would close
@@ -338,13 +338,13 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // cannot appear or vanish while the page is up.
     const band = desktopBand()
     if (band !== null) {
-      root.setAttribute('data-dsh-ban-titlebar', '')
-      root.setAttribute('data-dsh-ban-controls', band.controls.side)
+      root.setAttribute('data-dsh-deepcraft-ban-titlebar', '')
+      root.setAttribute('data-dsh-deepcraft-ban-controls', band.controls.side)
       // The strip is measured in the viewport's pixels; the two properties are
       // read in the page's own, which the reader's page zoom scales
       // (shared/page-zoom.ts).
-      root.style.setProperty('--dsh-ban-caption-height', `${inPagePixels(band.height)}px`)
-      root.style.setProperty('--dsh-ban-caption-controls', `${inPagePixels(band.controls.size)}px`)
+      root.style.setProperty('--dsh-deepcraft-ban-caption-height', `${inPagePixels(band.height)}px`)
+      root.style.setProperty('--dsh-deepcraft-ban-caption-controls', `${inPagePixels(band.controls.size)}px`)
       if (band.platform === 'win32') holdCaptionFill()
     }
   }

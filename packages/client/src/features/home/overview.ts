@@ -21,9 +21,9 @@ export function createHomeOverview() {
   function statCell(key: string, label: string, text: string, skeleton: boolean) {
     return React.createElement(
       'div',
-      { key, className: 'dsh-claude-home-stat', 'data-stat': key, 'data-skeleton': skeleton ? '' : undefined },
-      React.createElement('span', { className: 'dsh-claude-home-stat-label' }, label),
-      React.createElement('span', { className: 'dsh-claude-home-stat-value', title: skeleton ? undefined : text }, skeleton ? '' : text),
+      { key, className: 'dsh-deepcraft-home-stat', 'data-stat': key, 'data-skeleton': skeleton ? '' : undefined },
+      React.createElement('span', { className: 'dsh-deepcraft-home-stat-label' }, label),
+      React.createElement('span', { className: 'dsh-deepcraft-home-stat-value', title: skeleton ? undefined : text }, skeleton ? '' : text),
     )
   }
 
@@ -47,7 +47,7 @@ export function createHomeOverview() {
       null,
       React.createElement(
         'div',
-        { className: 'dsh-claude-home-stats' },
+        { className: 'dsh-deepcraft-home-stats' },
         statCell('sessions', copy('homeSessions'), data.sessions === null ? '—' : formatHomeCount(data.sessions), skeleton),
         statCell('calls', copy('homeCalls'), data.calls === null ? '—' : formatHomeCount(data.calls), skeleton),
         statCell('tokens', copy('homeTokens'), formatCompactTokens(data.tokens), skeleton),
@@ -58,7 +58,7 @@ export function createHomeOverview() {
       React.createElement(
         'div',
         {
-          className: 'dsh-claude-home-heat',
+          className: 'dsh-deepcraft-home-heat',
           'data-skeleton': data.known ? undefined : '',
           // The pill a cell carries is wider than the cell, so where it may
           // stand is decided from the width it takes on the cell the pointer
@@ -72,14 +72,14 @@ export function createHomeOverview() {
           const tip = skeleton ? undefined : heatTip(format, cell)
           return React.createElement('span', {
             key: cell.date,
-            className: 'dsh-claude-home-heat-cell',
+            className: 'dsh-deepcraft-home-heat-cell',
             'data-level': cell.level,
             'data-tip': tip,
             'aria-label': tip,
           })
         }),
       ),
-      data.fun === null ? null : React.createElement('span', { className: 'dsh-claude-home-fun' }, data.fun),
+      data.fun === null ? null : React.createElement('span', { className: 'dsh-deepcraft-home-fun' }, data.fun),
     )
   }
 

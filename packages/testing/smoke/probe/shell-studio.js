@@ -33,12 +33,12 @@
       // The studio hero draws its composer in the conversation's form, so the
       // permission control there is the conversation's trigger and card: the
       // segment group belongs to the classic hero alone.
-      var heroModes = document.querySelector('[data-composer-card] [data-dsh-claude-part~="modes"]')
-      var heroTrigger = heroModes === null ? null : heroModes.querySelector('.dsh-claude-perm-btn')
-      var heroLabel = heroTrigger === null ? null : heroTrigger.querySelector('.dsh-claude-perm-label')
+      var heroModes = document.querySelector('[data-composer-card] [data-dsh-deepcraft-part~="modes"]')
+      var heroTrigger = heroModes === null ? null : heroModes.querySelector('.dsh-deepcraft-perm-btn')
+      var heroLabel = heroTrigger === null ? null : heroTrigger.querySelector('.dsh-deepcraft-perm-label')
       r.heroPerm = {
         trigger: heroTrigger !== null,
-        segments: heroModes === null ? -1 : heroModes.querySelectorAll('.dsh-claude-segments').length,
+        segments: heroModes === null ? -1 : heroModes.querySelectorAll('.dsh-deepcraft-segments').length,
         label: heroLabel === null ? null : heroLabel.textContent,
         disabled: heroTrigger === null ? null : heroTrigger.disabled,
       }
@@ -67,7 +67,7 @@
             if (node.props && typeof node.props.className === 'string') classes.push(node.props.className)
             if (node.props && typeof node.props['data-tip'] === 'string') tips.push(node.props['data-tip'])
             if (node.props) collect(node.props.children)
-          })(window.__slotComponents['claude-style-usage']({}))
+          })(window.__slotComponents['deepcraft-usage']({}))
           r.panelRenders[tab] = { error: null, classes: classes, texts: texts, tips: tips }
         } catch (e) {
           r.panelRenders[tab] = { error: String((e && e.stack) || e), classes: [], texts: [], tips: [] }
@@ -81,11 +81,11 @@
       // back to idle on the browser's animation engine, so no frame wakes a
       // pass. With the animation choice on "reduced" it holds the idle
       // sheet's still frame; a click still plays the poke.
-      var crab = document.querySelector('[data-composer-card] > .dsh-claude-crab')
+      var crab = document.querySelector('[data-composer-card] > .dsh-deepcraft-crab')
       r.mascot = { mounted: crab !== null }
       if (crab !== null) {
-        var crabStrip = crab.querySelector('.dsh-claude-crab-strip')
-        var crabHit = crab.querySelector('.dsh-claude-crab-hit')
+        var crabStrip = crab.querySelector('.dsh-deepcraft-crab-strip')
+        var crabHit = crab.querySelector('.dsh-deepcraft-crab-hit')
         r.mascot.ready = crab.hasAttribute('data-ready')
         r.mascot.animation = crab.getAttribute('data-animation')
         r.mascot.body = getComputedStyle(crabStrip).backgroundImage.indexOf('data:image/png') !== -1
@@ -114,7 +114,7 @@
         // settings row does.
         window.__pushForm({ motion: 'reduced' })
         await sleep(150)
-        r.mascot.reducedAttr = document.body.getAttribute('data-dsh-claude-motion')
+        r.mascot.reducedAttr = document.body.getAttribute('data-dsh-deepcraft-motion')
         r.mascot.stillFrame = crabStrip.style.transform
         r.mascot.stillAnimations = crabStrip.getAnimations().length
         pokeCrab()
@@ -137,16 +137,16 @@
         '<div class="_row_x_1"><div class="_tools_x_1"><div class="_modes_x_1"></div></div></div></div>'
       heroScroll.appendChild(coldStack)
       await sleep(200)
-      var coldSeat = coldStack.querySelector(':scope > .dsh-claude-home-seat')
+      var coldSeat = coldStack.querySelector(':scope > .dsh-deepcraft-home-seat')
       var coldRoot = window.__roots.filter(function (root) { return root.element === coldSeat })[0]
-      var coldTrigger = coldStack.querySelector('._modes_x_1 > .dsh-claude-perm-container > .dsh-claude-perm-btn')
-      var coldLabel = coldTrigger === null ? null : coldTrigger.querySelector('.dsh-claude-perm-label')
+      var coldTrigger = coldStack.querySelector('._modes_x_1 > .dsh-deepcraft-perm-container > .dsh-deepcraft-perm-btn')
+      var coldLabel = coldTrigger === null ? null : coldTrigger.querySelector('.dsh-deepcraft-perm-label')
       r.coldStart = {
         seat: coldSeat !== null,
         rendered: coldRoot !== undefined && coldRoot.renders > 0,
-        segments: coldStack.querySelectorAll('._modes_x_1 > .dsh-claude-segments').length,
+        segments: coldStack.querySelectorAll('._modes_x_1 > .dsh-deepcraft-segments').length,
         trigger: coldTrigger === null ? null : { label: coldLabel === null ? null : coldLabel.textContent, disabled: coldTrigger.disabled },
-        openCard: document.querySelectorAll('.dsh-claude-perm-popover[data-open="true"]').length,
+        openCard: document.querySelectorAll('.dsh-deepcraft-perm-popover[data-open="true"]').length,
       }
       // The session arrives: the host renders its dock, and the skin's seat
       // gives the panel back.
@@ -154,25 +154,25 @@
       coldDock.setAttribute('data-slot', 'conversation.input.dock')
       coldStack.insertBefore(coldDock, coldStack.firstChild)
       await sleep(200)
-      r.coldStart.seatAfterDock = coldStack.querySelector('.dsh-claude-home-seat') !== null
+      r.coldStart.seatAfterDock = coldStack.querySelector('.dsh-deepcraft-home-seat') !== null
       r.coldStart.unmountedAfterDock = coldRoot !== undefined && coldRoot.unmounted
       coldStack.remove()
       accessParent.appendChild(access)
       await sleep(200)
-      r.homeHero = { onHero: heroRoot.hasAttribute('data-dsh-claude-home-hero') }
+      r.homeHero = { onHero: heroRoot.hasAttribute('data-dsh-deepcraft-home-hero') }
       // The studio rules reach the hero stack through that mark: the stack
       // takes the studio column's 720px cap.
       var studioStack = document.createElement('div')
       studioStack.className = '_composerStack_x_1 _composerHero_x_1'
       heroScroll.appendChild(studioStack)
       // The stack's parts land on the pass after it arrives (D3).
-      for (var studioWait = 0; studioWait < 40 && !studioStack.hasAttribute('data-dsh-claude-part'); studioWait++) await sleep(50)
+      for (var studioWait = 0; studioWait < 40 && !studioStack.hasAttribute('data-dsh-deepcraft-part'); studioWait++) await sleep(50)
       r.homeHero.stackMaxWidth = getComputedStyle(studioStack).maxWidth
       studioStack.remove()
       heroRoot.remove()
       await sleep(200)
-      r.homeHero.offHero = document.querySelector('[data-dsh-claude-home-hero]') !== null
-      r.mascot.afterHero = document.querySelector('.dsh-claude-crab') !== null
+      r.homeHero.offHero = document.querySelector('[data-dsh-deepcraft-home-hero]') !== null
+      r.mascot.afterHero = document.querySelector('.dsh-deepcraft-crab') !== null
       // The stylesheet alone decides where a panel may draw: under the hero
       // stack's dock it shows, and the moment the host drops the stack's hero
       // class (the first message sent) it is gone, before any pass runs. The
@@ -184,15 +184,15 @@
         var stack = document.createElement('div')
         stack.className = stackClass
         var dock = document.createElement('div')
-        if (coldStart) dock.className = 'dsh-claude-home-seat'
+        if (coldStart) dock.className = 'dsh-deepcraft-home-seat'
         else dock.setAttribute('data-slot', 'conversation.input.dock')
         var panel = document.createElement('section')
-        panel.className = 'dsh-claude-home-panel'
+        panel.className = 'dsh-deepcraft-home-panel'
         dock.appendChild(panel)
         stack.appendChild(dock)
         holder.appendChild(stack)
         document.body.appendChild(holder)
-        for (var wait = 0; wait < 40 && !stack.hasAttribute('data-dsh-claude-part'); wait++) await sleep(50)
+        for (var wait = 0; wait < 40 && !stack.hasAttribute('data-dsh-deepcraft-part'); wait++) await sleep(50)
         var display = getComputedStyle(panel).display
         holder.remove()
         return display

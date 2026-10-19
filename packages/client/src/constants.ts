@@ -12,13 +12,13 @@
  * skin's own — the document attribute each value resolves onto, the feature
  * gates, and the identity constants.
  */
-export * from '@dsh-claude-style/contracts/prefs'
-import { PACKAGE_NAME } from '@dsh-claude-style/contracts/package'
+export * from '@dsh-deepcraft/contracts/prefs'
+import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
 export { PACKAGE_NAME }
 
-export const STYLE_ID = 'dsh-claude-style-style'
+export const STYLE_ID = 'dsh-deepcraft-style'
 /** The surface sheets' own element, which stays while ds-bot's surface has the page (D74). */
-export const SURFACE_STYLE_ID = 'dsh-claude-style-surface'
+export const SURFACE_STYLE_ID = 'dsh-deepcraft-surface'
 
 /**
  * Settings identity.
@@ -32,7 +32,7 @@ export const SURFACE_STYLE_ID = 'dsh-claude-style-surface'
  * configuration is a `plugins.bundle.config` entry keyed by the bundle's
  * package name, which is what makes it render on this plugin's page.
  */
-export const SETTINGS_ENTRY_FALLBACK = 'ui-skin-claude-style'
+export const SETTINGS_ENTRY_FALLBACK = 'ui-skin-deepcraft'
 /**
  * The skin stylesheet's own key in the client module system's bookkeeping:
  * the sheet is mounted tagged `data-plugin="<PACKAGE_NAME>"` and
@@ -55,55 +55,55 @@ export const SETTINGS_SECTION_SLOT = 'settings.section'
  * The plugin's own repository. The settings page's heading links to it, and
  * the address is read from here rather than written into the component.
  */
-export const REPOSITORY_URL = 'https://github.com/Nwflower/dsh-claude-style'
+export const REPOSITORY_URL = 'https://github.com/Zestful-ss/dsh-claude-style'
 
 /** The document attribute the stylesheet switches on. */
-export const BRAND_ATTR = 'data-dsh-claude-brand'
+export const BRAND_ATTR = 'data-dsh-deepcraft-brand'
 
 /**
- * The custom brand layer over either brand (D30, packages/client/src/features/brand/brand.ts). Each part stands only while
+ * The custom brand layer over either brand (D77, packages/client/src/features/brand/brand.ts). Each part stands only while
  * the reader has supplied it: CUSTOM_MARK_ATTR while a mark image is in place,
  * CUSTOM_WORD_ATTR as `image` while a wordmark image is and as `text` while
  * only a brand name is, CUSTOM_TINT_ATTR while the images take the text colour
  * (`brandInk` set to `text`), and ACCENT_ATTR while a custom accent colour is
  * set. The images, the name and the colour ride <body> as custom properties.
  */
-export const CUSTOM_MARK_ATTR = 'data-dsh-claude-custom-mark'
-export const CUSTOM_WORD_ATTR = 'data-dsh-claude-custom-word'
+export const CUSTOM_MARK_ATTR = 'data-dsh-deepcraft-custom-mark'
+export const CUSTOM_WORD_ATTR = 'data-dsh-deepcraft-custom-word'
 export const CUSTOM_WORD_IMAGE = 'image'
 export const CUSTOM_WORD_TEXT = 'text'
-export const CUSTOM_TINT_ATTR = 'data-dsh-claude-custom-tint'
-export const ACCENT_ATTR = 'data-dsh-claude-accent'
+export const CUSTOM_TINT_ATTR = 'data-dsh-deepcraft-custom-tint'
+export const ACCENT_ATTR = 'data-dsh-deepcraft-accent'
 
 /** The document attribute the resolved animation answer rides. */
-export const MOTION_ATTR = 'data-dsh-claude-motion'
+export const MOTION_ATTR = 'data-dsh-deepcraft-motion'
 
 /**
  * The waiting line's paint rides this attribute, and the stylesheets decide it
  * (features/chat-wait/chat-wait.css): the wording, the swap and the clock are
  * untouched by the choice.
  */
-export const STATUS_MOTION_ATTR = 'data-dsh-claude-status-motion'
+export const STATUS_MOTION_ATTR = 'data-dsh-deepcraft-status-motion'
 
 /** The document attributes the choices below resolve onto; the values themselves are in the table (contracts/prefs.ts). */
-export const PALETTE_ATTR = 'data-dsh-claude-palette'
-export const TYPEFACE_ATTR = 'data-dsh-claude-typeface'
-export const MASCOT_ATTR = 'data-dsh-claude-mascot'
-export const SEARCH_STYLE_ATTR = 'data-dsh-claude-search-style'
-export const SIDEBAR_LAYOUT_ATTR = 'data-dsh-claude-sidebar-layout'
+export const PALETTE_ATTR = 'data-dsh-deepcraft-palette'
+export const TYPEFACE_ATTR = 'data-dsh-deepcraft-typeface'
+export const MASCOT_ATTR = 'data-dsh-deepcraft-mascot'
+export const SEARCH_STYLE_ATTR = 'data-dsh-deepcraft-search-style'
+export const SIDEBAR_LAYOUT_ATTR = 'data-dsh-deepcraft-sidebar-layout'
 /**
  * The mark a running conversation carries in the sidebar (theme/sidebar.css):
  * its presence and value pick the breathing light or the turning ring.
  */
-export const ONGOING_INDICATOR_ATTR = 'data-dsh-claude-ongoing-indicator'
-export const STATS_POSITION_ATTR = 'data-dsh-claude-stats-position'
+export const ONGOING_INDICATOR_ATTR = 'data-dsh-deepcraft-ongoing-indicator'
+export const STATS_POSITION_ATTR = 'data-dsh-deepcraft-stats-position'
 /**
  * The page zoom in force, as the factor the stylesheet scales the page by
  * (theme/chrome.css). Absent while the page follows the system; the scale every
  * geometry that converts a measured box into the page's own pixels divides by
  * reads it back (shared/page-zoom.ts).
  */
-export const PAGE_ZOOM_ATTR = 'data-dsh-claude-page-zoom'
+export const PAGE_ZOOM_ATTR = 'data-dsh-deepcraft-page-zoom'
 
 
 /**
@@ -115,7 +115,7 @@ export const PAGE_ZOOM_ATTR = 'data-dsh-claude-page-zoom'
  * pinned above it (packages/client/src/features/chat-wait/chat-wait.css).
  * Switched off, the chat area is handed back untouched.
  */
-export const CHAT_FOLLOW_ATTR = 'data-dsh-claude-chat-follow'
+export const CHAT_FOLLOW_ATTR = 'data-dsh-deepcraft-chat-follow'
 /**
  * On the flow column while a door rolls
  * (packages/client/src/features/chat-follow/chat-follow.ts). A door's height
@@ -124,7 +124,7 @@ export const CHAT_FOLLOW_ATTR = 'data-dsh-claude-chat-follow'
  * for (packages/client/src/features/chat-wait/chat-wait.css). This mark stands
  * for that gate until the fold hands the follow back.
  */
-export const FOLLOW_HOLD_ATTR = 'data-dsh-claude-follow-hold'
+export const FOLLOW_HOLD_ATTR = 'data-dsh-deepcraft-follow-hold'
 /**
  * On a container the reader has taken over with his own scrolling
  * (packages/client/src/shared/scroll-owner.ts), until he comes back to its end. The
@@ -132,13 +132,13 @@ export const FOLLOW_HOLD_ATTR = 'data-dsh-claude-follow-hold'
  * pin stands only while the skin's own follow is the one moving the position,
  * never over content the reader scrolled back to.
  */
-export const READER_HOLD_ATTR = 'data-dsh-claude-reader-hold'
+export const READER_HOLD_ATTR = 'data-dsh-deepcraft-reader-hold'
 /**
  * Present while the ported token reveal is installed
  * (packages/client/src/features/chat-reveal/): its step rules hang off it,
  * and switching the feature off leaves the page with no trace of it.
  */
-export const CHAT_REVEAL_ATTR = 'data-dsh-claude-chat-reveal'
+export const CHAT_REVEAL_ATTR = 'data-dsh-deepcraft-chat-reveal'
 /**
  * The reveal's fade: how many alpha steps a character walks through, the
  * faintest of them, the prefix of each step's highlight name and the custom
@@ -149,35 +149,35 @@ export const CHAT_REVEAL_ATTR = 'data-dsh-claude-chat-reveal'
 export const CHAT_REVEAL_STEPS = 24
 /** The faintest step: a fifth faint, which still reads as text arriving in both themes. */
 export const CHAT_REVEAL_MIN_OPACITY = 0.2
-export const CHAT_REVEAL_HIGHLIGHT_PREFIX = 'dsh-claude-tok-'
-export const CHAT_REVEAL_COLOR_VAR = '--dsh-claude-run-color'
+export const CHAT_REVEAL_HIGHLIGHT_PREFIX = 'dsh-deepcraft-tok-'
+export const CHAT_REVEAL_COLOR_VAR = '--dsh-deepcraft-run-color'
 /**
  * On the real message row while the send bubble's stand-in is flying
  * (packages/client/src/features/chat-send/): the stylesheet hides that row, keeping its layout
  * box so the stand-in can measure the destination from it every frame.
  */
-export const CHAT_FLYING_ATTR = 'data-dsh-claude-send-flight'
+export const CHAT_FLYING_ATTR = 'data-dsh-deepcraft-send-flight'
 /**
  * On the row of a message just sent while it grows in place
  * (packages/client/src/features/chat-send/): the stylesheet hangs the entrance
  * animation off it, so that row animates once — a row rendered by a restored
  * session never carries the mark and never animates.
  */
-export const MESSAGE_ENTER_ATTR = 'data-dsh-claude-message-enter'
+export const MESSAGE_ENTER_ATTR = 'data-dsh-deepcraft-message-enter'
 /**
  * On a user message the skin holds folded
  * (packages/client/src/features/chat-fold/message-fold.ts): the stylesheet
  * clamps the bubble to the fold's own cap and softens its bottom edge. The send
  * flight reads it too: a message the fold holds is not one to carry up whole.
  */
-export const MESSAGE_FOLD_ATTR = 'data-dsh-claude-message-fold'
+export const MESSAGE_FOLD_ATTR = 'data-dsh-deepcraft-message-fold'
 /**
  * On a node the skin owns purely for its own bookkeeping — the caret
  * motion's probe container and the caret it draws. The shared scheduler
  * ignores mutations against such a node (D40), so measuring or redrawing
  * never wakes a pass that no feature needs.
  */
-export const QUIET_ATTR = 'data-dsh-claude-quiet'
+export const QUIET_ATTR = 'data-dsh-deepcraft-quiet'
 /**
  * On a host element the stylesheet keys on, carrying the name of the part it
  * plays (packages/client/src/core/parts.ts). Every rule that used to match a
@@ -186,7 +186,7 @@ export const QUIET_ATTR = 'data-dsh-claude-quiet'
  * rather than silently matching something else, and no other skin's class name
  * can collide with these rules (D3).
  */
-export const PART_ATTR = 'data-dsh-claude-part'
+export const PART_ATTR = 'data-dsh-deepcraft-part'
 /**
  * On a host element, naming the parts its own subtree holds
  * (packages/client/src/core/parts.ts, core/parts-table.ts). A rule that used to ask
@@ -195,35 +195,35 @@ export const PART_ATTR = 'data-dsh-claude-part'
  * costs one attribute read rather than a style pass over every candidate
  * (D9). The values are the relation names declared in the parts table.
  */
-export const HOLDS_ATTR = 'data-dsh-claude-holds'
+export const HOLDS_ATTR = 'data-dsh-deepcraft-holds'
 /**
  * On the element the fold glide is pressing right now (packages/client/src/features/chat-fold/
  * fold-glide.ts): while it stands, the elements inside lay out at their
  * natural height instead of being squeezed by flex (fold-motion.css).
  */
-export const CHAT_ROLLING_ATTR = 'data-dsh-claude-rolling'
+export const CHAT_ROLLING_ATTR = 'data-dsh-deepcraft-rolling'
 /** On an editable surface once the caret motion has taken it over (packages/client/src/features/caret/). */
-export const CARET_ATTR = 'data-dsh-claude-caret'
-export const CARET_LAYER_ATTR = 'data-dsh-claude-caret-layer'
-export const CARET_VISIBLE_ATTR = 'data-dsh-claude-caret-visible'
+export const CARET_ATTR = 'data-dsh-deepcraft-caret'
+export const CARET_LAYER_ATTR = 'data-dsh-deepcraft-caret-layer'
+export const CARET_VISIBLE_ATTR = 'data-dsh-deepcraft-caret-visible'
 /** On a parent lent the positioning context the drawn caret is placed against. */
-export const CARET_HOST_ATTR = 'data-dsh-claude-caret-host'
+export const CARET_HOST_ATTR = 'data-dsh-deepcraft-caret-host'
 /**
  * Present while the ported automatic folding is installed
  * (packages/client/src/features/chat-fold/): the stylesheet's header-summary rules hang off it,
  * and switching the feature off hands the chat area back whole.
  */
-export const CHAT_FOLD_ATTR = 'data-dsh-claude-chat-fold'
+export const CHAT_FOLD_ATTR = 'data-dsh-deepcraft-chat-fold'
 /** Present while the skin takes over the sidebar footer (settings area + account row). */
-export const FOOTER_ATTR = 'data-dsh-claude-footer-takeover'
+export const FOOTER_ATTR = 'data-dsh-deepcraft-footer-takeover'
 /** Present while the composer restyle applies to the page currently shown. */
-export const COMPOSER_ATTR = 'data-dsh-claude-composer-active'
+export const COMPOSER_ATTR = 'data-dsh-deepcraft-composer-active'
 /**
  * Present while the composer restyle applies and a conversation tab other
  * than the chat is up: the composer is chat-view-only, so the stylesheet
  * drops the whole bottom area (packages/client/src/features/composer/composer.ts).
  */
-export const COMPOSER_HIDDEN_ATTR = 'data-dsh-claude-composer-hidden'
+export const COMPOSER_HIDDEN_ATTR = 'data-dsh-deepcraft-composer-hidden'
 /**
  * Present while a mobile remote plugin's portrait layer owns the page
  * (packages/contracts/src/dom.ts, MOBILE_PORTRAIT_SELECTOR). That layer floats the
@@ -231,7 +231,7 @@ export const COMPOSER_HIDDEN_ATTR = 'data-dsh-claude-composer-hidden'
  * the send and stop buttons stands aside from them under this mark
  * (packages/client/src/features/composer/inline.css).
  */
-export const MOBILE_PORTRAIT_ATTR = 'data-dsh-claude-mobile-portrait'
+export const MOBILE_PORTRAIT_ATTR = 'data-dsh-deepcraft-mobile-portrait'
 /**
  * Present while the permission control is installed. The composer restyle
  * hides the host's access-mode button because this feature replaces it,
@@ -239,14 +239,14 @@ export const MOBILE_PORTRAIT_ATTR = 'data-dsh-claude-mobile-portrait'
  * switched off hands the button back while the rest of the composer
  * restyle keeps running.
  */
-export const PERMISSIONS_ATTR = 'data-dsh-claude-permissions'
+export const PERMISSIONS_ATTR = 'data-dsh-deepcraft-permissions'
 /**
  * Present while the context statistics are installed
  * (packages/client/src/features/context-stats/context-stats.ts). The host's two stat
  * dialogs are hidden only under it: their numbers are read into the
  * context popover instead, and switched off the feature hands them back.
  */
-export const SESSION_STATS_ATTR = 'data-dsh-claude-session-stats'
+export const SESSION_STATS_ATTR = 'data-dsh-deepcraft-session-stats'
 /**
  * Stamped on the host's own account menu card while it is open (Desktop
  * 0.1.7+). That card is the host's shared Menu portal and its class names
@@ -254,7 +254,7 @@ export const SESSION_STATS_ATTR = 'data-dsh-claude-session-stats'
  * features/account/account-footer.css repaints the card, its rows and its
  * separators with the skin's popover language.
  */
-export const ACCOUNT_MENU_ATTR = 'data-dsh-claude-account-menu'
+export const ACCOUNT_MENU_ATTR = 'data-dsh-deepcraft-account-menu'
 /**
  * Set on <body> from the moment the account row is hovered or pressed until
  * its menu closes. The card's own marker needs the menu's rows to identify
@@ -264,7 +264,7 @@ export const ACCOUNT_MENU_ATTR = 'data-dsh-claude-account-menu'
  * before the host mounts the card, so the animation runs from its first
  * frame.
  */
-export const ACCOUNT_ARMED_ATTR = 'data-dsh-claude-account-armed'
+export const ACCOUNT_ARMED_ATTR = 'data-dsh-deepcraft-account-armed'
 /**
  * Stamped on the host's account card by packages/client/src/features/account/surface.ts once
  * the card carries the skin's rows and the host has finished placing it.
@@ -277,7 +277,7 @@ export const ACCOUNT_ARMED_ATTR = 'data-dsh-claude-account-armed'
  * inside the armed window until this marker lands, and the entry animation
  * hangs on this marker.
  */
-export const ACCOUNT_READY_ATTR = 'data-dsh-claude-account-ready'
+export const ACCOUNT_READY_ATTR = 'data-dsh-deepcraft-account-ready'
 /**
  * Stamped on the host's shared menu card while it is the hero row's picker
  * (the workspace chip or the agent-preset seat opened it). The host portals
@@ -285,7 +285,7 @@ export const ACCOUNT_READY_ATTR = 'data-dsh-claude-account-ready'
  * tell it from the host's other menus; packages/client/src/features/hero-menu/hero-menu.ts stamps it
  * and features/hero-menu/hero-menu.css switches on this attribute.
  */
-export const HERO_MENU_ATTR = 'data-dsh-claude-hero-menu'
+export const HERO_MENU_ATTR = 'data-dsh-deepcraft-hero-menu'
 /**
  * Present while the browser window does NOT hold focus.
  *
@@ -294,7 +294,7 @@ export const HERO_MENU_ATTR = 'data-dsh-claude-hero-menu'
  * selector can read it — so packages/client/src/features/composer/selection-mirror.ts mirrors it onto the
  * document and the stylesheet switches on this attribute.
  */
-export const WINDOW_BLUR_ATTR = 'data-dsh-window-blur'
+export const WINDOW_BLUR_ATTR = 'data-dsh-deepcraft-window-blur'
 /**
  * The handoff marker: stamped on `body` while this build is live AND able
  * to give the page back (D74). Its presence is a capability another
@@ -302,7 +302,7 @@ export const WINDOW_BLUR_ATTR = 'data-dsh-window-blur'
  * as one of its looks has to know the page can come back, and a build from
  * before D74 does not stamp it.
  */
-export const HANDOFF_ATTR = 'data-dsh-claude-style-handoff'
+export const HANDOFF_ATTR = 'data-dsh-deepcraft-handoff'
 /**
  * The document attribute the skin center stamps while a skin is painting
  * (D74). It is read at boot and watched afterwards: the value is the skin
@@ -314,20 +314,20 @@ export const SKIN_STAMP_ATTR = 'data-dsh-skin'
  * mounted (packages/client/src/features/settings/settings.ts): the stylesheet keeps the
  * scrollbar's room there, so switching tabs never shifts the layout.
  */
-export const SETTINGS_SCROLLER_ATTR = 'data-dsh-claude-settings-scroller'
+export const SETTINGS_SCROLLER_ATTR = 'data-dsh-deepcraft-settings-scroller'
 /**
  * Which home layout is in force. The stylesheet branches on it, and the two
  * layouts differ only in arrangement — the hero's own markup is the host's
  * either way, so the switch is one attribute plus the panel registration.
  */
-export const HOME_LAYOUT_ATTR = 'data-dsh-claude-home-layout'
+export const HOME_LAYOUT_ATTR = 'data-dsh-deepcraft-home-layout'
 /**
  * Present while the studio layout owns the page shown: the studio layout is
  * in force and the page is the new-conversation hero. Every studio rule keys
  * on it, so the host's hero-phase marker is read once per pass in JS rather
  * than repeated across the stylesheet.
  */
-export const HOME_HERO_ATTR = 'data-dsh-claude-home-hero'
+export const HOME_HERO_ATTR = 'data-dsh-deepcraft-home-hero'
 /**
  * The heat grid's ramp: how much of the heat ink each level paints, in
  * percent, faintest first. Its length is the number of levels a day's tokens
@@ -346,7 +346,7 @@ export const HOME_HEAT_RAMP = [20, 40, 65, 100] as const
  */
 export const DOCK_LOOK_CARD = 'card'
 export const DOCK_LOOK_FLUSH = 'flush'
-export const DOCK_LOOK_ATTR = 'data-dsh-claude-dock-look'
+export const DOCK_LOOK_ATTR = 'data-dsh-deepcraft-dock-look'
 
 /**
  * The host half's private routes, under this half's own names. The paths are
@@ -364,4 +364,4 @@ export {
   SESSION_SEARCH_PATH as SESSION_SEARCH_ROUTE,
   USAGE_PATH as USAGE_ROUTE,
   USERNAME_PATH as USERNAME_ROUTE,
-} from '@dsh-claude-style/contracts/routes'
+} from '@dsh-deepcraft/contracts/routes'

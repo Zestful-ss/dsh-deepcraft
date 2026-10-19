@@ -14,7 +14,7 @@
     // the host rendered it (D12).
     r.hostRowPresent = document.getElementById('host-account') !== null
     var hostRowAtRest = document.getElementById('host-account')
-    r.hostRowMarked = !!(hostRowAtRest && hostRowAtRest.hasAttribute('data-dsh-claude-account-host-row'))
+    r.hostRowMarked = !!(hostRowAtRest && hostRowAtRest.hasAttribute('data-dsh-deepcraft-account-host-row'))
     // The two host controls the skin's own colour rules must leave readable: the
     // chat's solid hover chip, and a filled anchor button whose ink comes from
     // the host's foreground token rather than from the link colour.
@@ -26,17 +26,17 @@
     var topUpCS = topUp ? getComputedStyle(topUp) : null
     r.topUpInk = topUpCS ? topUpCS.color : null
     r.topUpFill = topUpCS ? topUpCS.backgroundColor : null
-    var banRow = document.querySelector('[data-dsh-claude-ban-row]')
+    var banRow = document.querySelector('[data-dsh-deepcraft-ban-row]')
     if (banRow) banRow.click()
-    var toast = document.querySelector('.dsh-claude-ban-toast-text')
+    var toast = document.querySelector('.dsh-deepcraft-ban-toast-text')
     r.banToast = toast ? toast.textContent : null
-    var dismiss = document.querySelector('.dsh-claude-ban [data-dsh-ban-dismiss]')
+    var dismiss = document.querySelector('.dsh-deepcraft-ban [data-dsh-deepcraft-ban-dismiss]')
     if (dismiss) dismiss.click()
     // A closed popover card must not answer the host's menu role: the host's
     // keyboard arbitration queries every [role=menu] in the document as a menu
     // that owns the foreground, so a hidden card silently disarms the shortcuts
     // behind it (the Esc-Esc stop, the close-page and dialog commands).
-    r.closedMenuCards = document.querySelectorAll('.dsh-claude-popover-card[role="menu"]:not([data-open="true"])').length
+    r.closedMenuCards = document.querySelectorAll('.dsh-deepcraft-popover-card[role="menu"]:not([data-open="true"])').length
     var editor = document.getElementById('editor')
     editor.focus()
     editor.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }))
@@ -56,19 +56,19 @@
       document.body.appendChild(document.createElement('i'))
       await sleep(200)
       r.passesAfterTeardown = window.__passes - before
-      r.leftNodes = document.querySelectorAll(':is([class^="dsh-claude-"], [class*=" dsh-claude-"])').length
-      r.leftMarkers = document.querySelectorAll('[data-dsh-claude-footer-entry], [data-dsh-claude-footer-hidden], [data-dsh-claude-footer-overlay], [data-dsh-claude-model-host], [data-dsh-claude-account-host-row], [data-dsh-claude-context-stats], [data-dsh-claude-motion], [data-dsh-claude-wait], [data-dsh-claude-deepy-anchor], [data-dsh-claude-crab-anchor]').length
+      r.leftNodes = document.querySelectorAll(':is([class^="dsh-deepcraft-"], [class*=" dsh-deepcraft-"])').length
+      r.leftMarkers = document.querySelectorAll('[data-dsh-deepcraft-footer-entry], [data-dsh-deepcraft-footer-hidden], [data-dsh-deepcraft-footer-overlay], [data-dsh-deepcraft-model-host], [data-dsh-deepcraft-account-host-row], [data-dsh-deepcraft-context-stats], [data-dsh-deepcraft-motion], [data-dsh-deepcraft-wait], [data-dsh-deepcraft-deepy-anchor], [data-dsh-deepcraft-crab-anchor]').length
       r.leftAttrs = Array.prototype.filter.call(document.body.attributes, function (a) { return /^data-dsh-(claude|window)/.test(a.name) }).map(function (a) { return a.name })
       // The custom brand's values ride <body>'s own style (features/brand/brand.ts).
-      r.leftBrandProperties = Array.prototype.filter.call(document.body.style, function (name) { return name.indexOf('--dsh-claude-custom-') === 0 })
-      r.leftStylesheet = !!document.getElementById('dsh-claude-style-style')
-      if (probe.viewStrip) r.viewPill.left = probe.viewStrip.hasAttribute('data-dsh-claude-pill') || probe.viewStrip.hasAttribute('data-dsh-view-tabs') || probe.viewStrip.style.length > 0
+      r.leftBrandProperties = Array.prototype.filter.call(document.body.style, function (name) { return name.indexOf('--dsh-deepcraft-custom-') === 0 })
+      r.leftStylesheet = !!document.getElementById('dsh-deepcraft-style')
+      if (probe.viewStrip) r.viewPill.left = probe.viewStrip.hasAttribute('data-dsh-deepcraft-pill') || probe.viewStrip.hasAttribute('data-dsh-view-tabs') || probe.viewStrip.style.length > 0
       if (r.search) {
-        r.search.left = document.querySelectorAll('[data-dsh-claude-search-row], .dsh-claude-search-trigger, .dsh-claude-search-bar').length
+        r.search.left = document.querySelectorAll('[data-dsh-deepcraft-search-row], .dsh-deepcraft-search-trigger, .dsh-deepcraft-search-bar').length
         r.search.rootUnmounted = !!probe.searchRoot && probe.searchRoot.unmounted
       }
-      r.leftDraftMarks = document.querySelectorAll('[data-dsh-claude-draft-empty]').length
-      r.leftControlMarks = document.querySelectorAll('[data-dsh-claude-control]').length
+      r.leftDraftMarks = document.querySelectorAll('[data-dsh-deepcraft-draft-empty]').length
+      r.leftControlMarks = document.querySelectorAll('[data-dsh-deepcraft-control]').length
       var hostRowEnd = document.getElementById('host-account')
       r.hostRowEnd = hostRowEnd === null ? null : {
         visibility: getComputedStyle(hostRowEnd).visibility,
@@ -81,7 +81,7 @@
       // not be among them, whether that step runs before or after the teardown.
       var tagsOwned = document.querySelectorAll('style[data-plugin]')
       for (var to = 0; to < tagsOwned.length; to++) {
-        if (tagsOwned[to].getAttribute('data-plugin') === 'dsh-claude-style') tagsOwned[to].remove()
+        if (tagsOwned[to].getAttribute('data-plugin') === 'dsh-deepcraft') tagsOwned[to].remove()
       }
       r.siblingSheetSurvives = !!probe.siblingSheet && probe.siblingSheet.isConnected
       if (probe.siblingSheet) probe.siblingSheet.remove()

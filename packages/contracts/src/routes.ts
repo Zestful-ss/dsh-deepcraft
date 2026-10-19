@@ -5,7 +5,7 @@
  */
 
 /** Route prefix this plugin owns. */
-export const ROUTE_PREFIX = '/dsh-claude-style'
+export const ROUTE_PREFIX = '/dsh-deepcraft'
 
 /** One-shot host OS user route; the browser half caches the response and never polls. */
 export const USERNAME_PATH = `${ROUTE_PREFIX}/username`
@@ -43,7 +43,7 @@ export const USAGE_PATH = `${ROUTE_PREFIX}/usage`
 export const SESSION_SEARCH_PATH = `${ROUTE_PREFIX}/session-search`
 
 /**
- * The reader's own brand images (D30): `GET` answers which of them are in
+ * The reader's own brand images (D77): `GET` answers which of them are in
  * place, each with a version that changes with its bytes.
  */
 export const BRAND_PATH = `${ROUTE_PREFIX}/brand`

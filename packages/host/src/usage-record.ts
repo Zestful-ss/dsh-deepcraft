@@ -1,6 +1,6 @@
 /**
  * The usage record: this plugin's own account of usage, kept at
- * `$DSH_HOME/dsh-claude-style/usage.json`.
+ * `$DSH_HOME/dsh-deepcraft/usage.json`.
  *
  * One entry per session: the fingerprint of the log it was folded from, while
  * that log exists, and the days it settled on. An entry whose log is gone stays
@@ -20,13 +20,13 @@
  * name before the pass rebuilds it, so the days only it held stay recoverable.
  * Every instance under one harness home writes the whole document, so a write
  * first lays the pass over what the file holds by then. The one document before
- * this one — the fold cache at `cache/dsh-claude-style/usage.json` — is merged
+ * this one — the fold cache at `cache/dsh-deepcraft/usage.json` — is merged
  * in while it exists and removed once a record holding it is written, so the
  * days of sessions deleted before the record are carried across.
  */
-import { PACKAGE_NAME } from '@dsh-claude-style/contracts/package'
+import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
 import { existsSync, renameSync, unlinkSync } from 'node:fs'
-import type { DshContext } from '@dsh-claude-style/engine/node/dsh'
+import type { DshContext } from '@dsh-deepcraft/engine/node/dsh'
 import { cachePath, readJsonDocument, writeJsonDocument } from './cache-file.js'
 import { pluginPath } from './harness-home.js'
 import { BUCKET_KEYS, addBuckets, emptyBuckets } from './usage-ledger.js'

@@ -46,7 +46,7 @@
    the row where the row is its own header, and the innermost element of the
    box the wrapper holds where the row sits inside a header. */
 @starting-style {
-  body[data-dsh-claude-style][data-dsh-claude-chat-fold] [data-chat-flow] :is([data-disclosure-row], [data-disclosure-header]) ~ *:not([data-turn-process-member] *, [data-turn-trigger] *):is([data-disclosure-row] ~ *, [data-disclosure-header] ~ * *) {
+  body[data-dsh-deepcraft][data-dsh-deepcraft-chat-fold] [data-chat-flow] :is([data-disclosure-row], [data-disclosure-header]) ~ *:not([data-turn-process-member] *, [data-turn-trigger] *):is([data-disclosure-row] ~ *, [data-disclosure-header] ~ * *) {
     opacity: 0;
     translate: 0 -2px;
   }
@@ -56,14 +56,14 @@
    (MessageItem and the TurnNavigator preview match it), which is the reveal
    token (D9). It rides the folding switch with the rest of the feature: off
    leaves the host's own insertion. */
-body[data-dsh-claude-style][data-dsh-claude-chat-fold] [data-chat-flow] :is([data-disclosure-row], [data-disclosure-header]) ~ *:not([data-turn-process-member] *, [data-turn-trigger] *):is([data-disclosure-row] ~ *, [data-disclosure-header] ~ * *) {
-  transition: opacity var(--dsh-claude-duration-reveal) var(--dsh-claude-ease-out), translate var(--dsh-claude-duration-reveal) var(--dsh-claude-ease-out);
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-fold] [data-chat-flow] :is([data-disclosure-row], [data-disclosure-header]) ~ *:not([data-turn-process-member] *, [data-turn-trigger] *):is([data-disclosure-row] ~ *, [data-disclosure-header] ~ * *) {
+  transition: opacity var(--dsh-deepcraft-duration-reveal) var(--dsh-deepcraft-ease-out), translate var(--dsh-deepcraft-duration-reveal) var(--dsh-deepcraft-ease-out);
 }
 
 /* The reader's animation choice, resolved onto <body> (packages/client/src/core/prefs.ts, D40):
    the system setting is folded into that attribute by "follow the system", so
    this one rule covers both it and the explicit "reduced". */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] [data-chat-flow] :is([data-disclosure-row], [data-disclosure-header]) ~ *:not([data-turn-process-member] *, [data-turn-trigger] *):is([data-disclosure-row] ~ *, [data-disclosure-header] ~ * *) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] [data-chat-flow] :is([data-disclosure-row], [data-disclosure-header]) ~ *:not([data-turn-process-member] *, [data-turn-trigger] *):is([data-disclosure-row] ~ *, [data-disclosure-header] ~ * *) {
   transition: none;
 }
 
@@ -76,7 +76,7 @@ body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] [data-chat-flow] :
    the layout returns to the host's own — at the end point the two arrangements
    agree to the pixel. !important because nothing may change it during those
    200 ms. */
-body[data-dsh-claude-style] [data-dsh-claude-rolling] > * {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-rolling] > * {
   flex: none !important;
 }
 
@@ -91,31 +91,31 @@ body[data-dsh-claude-style] [data-dsh-claude-rolling] > * {
 
    The tokens are the snippet's, under this skin's names; the window's own height
    arrives as a pixel measure the module writes, since it is the text's height
-   held under the cap. --dsh-claude-reason-window-cap is the height reasoning is
+   held under the cap. --dsh-deepcraft-reason-window-cap is the height reasoning is
    allowed to reach — the host's own max-height on a process group's body, which
    is the tallest the open row gets once the window comes off — and the mask
    belongs to the capped state alone: while the text still fits under the cap the
    window is exactly as tall as the text and nothing is faded. */
 
-body[data-dsh-claude-style] [data-dsh-claude-reason-window] {
-  --dsh-claude-reason-lines: 2;
-  --dsh-claude-reason-window-lines: 4;
-  --dsh-claude-reason-window-cap: 400px;
-  --dsh-claude-reason-fade: 28px;
-  --dsh-claude-reason-ease: var(--dsh-claude-ease-glide);
-  --dsh-claude-reason-step: var(--dsh-claude-duration-step);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-reason-window] {
+  --dsh-deepcraft-reason-lines: 2;
+  --dsh-deepcraft-reason-window-lines: 4;
+  --dsh-deepcraft-reason-window-cap: 400px;
+  --dsh-deepcraft-reason-fade: 28px;
+  --dsh-deepcraft-reason-ease: var(--dsh-deepcraft-ease-glide);
+  --dsh-deepcraft-reason-step: var(--dsh-deepcraft-duration-step);
   overflow: hidden;
-  height: var(--dsh-claude-reason-window-height, auto);
+  height: var(--dsh-deepcraft-reason-window-height, auto);
 }
 
-body[data-dsh-claude-style] [data-dsh-claude-reason-window][data-dsh-claude-reason-capped] {
-  -webkit-mask-image: linear-gradient(transparent 0, black var(--dsh-claude-reason-fade), black calc(100% - var(--dsh-claude-reason-fade)), transparent 100%);
-  mask-image: linear-gradient(transparent 0, black var(--dsh-claude-reason-fade), black calc(100% - var(--dsh-claude-reason-fade)), transparent 100%);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-reason-window][data-dsh-deepcraft-reason-capped] {
+  -webkit-mask-image: linear-gradient(transparent 0, black var(--dsh-deepcraft-reason-fade), black calc(100% - var(--dsh-deepcraft-reason-fade)), transparent 100%);
+  mask-image: linear-gradient(transparent 0, black var(--dsh-deepcraft-reason-fade), black calc(100% - var(--dsh-deepcraft-reason-fade)), transparent 100%);
 }
 
-body[data-dsh-claude-style] [data-dsh-claude-reason-window] [data-dsh-claude-reason-text] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-reason-window] [data-dsh-deepcraft-reason-text] {
   transform: translateY(0);
-  transition: transform var(--dsh-claude-reason-step) var(--dsh-claude-reason-ease);
+  transition: transform var(--dsh-deepcraft-reason-step) var(--dsh-deepcraft-reason-ease);
   will-change: transform;
 }
 
@@ -124,12 +124,12 @@ body[data-dsh-claude-style] [data-dsh-claude-reason-window] [data-dsh-claude-rea
    before it starts one, so no half state is left behind. The mask is named here
    as well, since a window the module left standing carries it on the capped
    attribute. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] [data-dsh-claude-reason-window] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] [data-dsh-deepcraft-reason-window] {
   -webkit-mask-image: none;
   mask-image: none;
 }
 
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] [data-dsh-claude-reason-window] [data-dsh-claude-reason-text] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] [data-dsh-deepcraft-reason-window] [data-dsh-deepcraft-reason-text] {
   transform: none !important;
   transition: none;
 }

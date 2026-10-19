@@ -2,10 +2,10 @@
  * The module scripts/build.mjs generates while bundling (D36): build output
  * the source imports by name instead of reading it from text placeholders.
  */
-declare module 'virtual:dsh-claude-style/generated' {
+declare module 'virtual:dsh-deepcraft/generated' {
   /** The skin's stylesheet: the generated token sheet and the src/ stylesheets in order, the composer gate stamped (D9). */
   export const STYLESHEET: string
-  /** The surface sheets (`scope: 'surface'`), scoped to `body[data-dsh-claude-surface]` and mounted by the surface feature (D74). */
+  /** The surface sheets (`scope: 'surface'`), scoped to `body[data-dsh-deepcraft-surface]` and mounted by the surface feature (D74). */
   export const SURFACE_STYLESHEET: string
   /** Vendor lockup markup by brand id (packages/assets/src/icons/combine/). */
   export const COMBINE_SVGS: Record<string, string>
@@ -27,12 +27,12 @@ declare module 'virtual:dsh-claude-style/generated' {
  * The modules the feature chunks share with the bundle (D72), by the id each
  * chunk asks for: a source module's repository path, or a host package's name.
  */
-declare module 'virtual:dsh-claude-style/chunk-modules' {
+declare module 'virtual:dsh-deepcraft/chunk-modules' {
   export const CHUNK_MODULES: Record<string, unknown>
 }
 
 /** The feature registry scripts/build.mjs generates from the manifests (D72), in install order. */
-declare module 'virtual:dsh-claude-style/features' {
+declare module 'virtual:dsh-deepcraft/features' {
   export const FEATURES: import('./core/feature').Feature[]
 }
 
@@ -40,6 +40,6 @@ declare module 'virtual:dsh-claude-style/features' {
  * The row controls scripts/build.mjs collects from the features' own settings
  * modules (D72), by feature id and the name the manifest's row gives them.
  */
-declare module 'virtual:dsh-claude-style/settings-controls' {
+declare module 'virtual:dsh-deepcraft/settings-controls' {
   export const ROW_CONTROLS: Record<string, import('./core/feature').SettingsRowControls>
 }

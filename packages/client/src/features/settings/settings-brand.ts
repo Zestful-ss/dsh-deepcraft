@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { BRAND_IMAGE_MAX_BYTES, BRAND_IMAGE_TYPES } from '@dsh-claude-style/contracts/brand'
-import type { BrandImageKind } from '@dsh-claude-style/contracts/brand'
+import { BRAND_IMAGE_MAX_BYTES, BRAND_IMAGE_TYPES } from '@dsh-deepcraft/contracts/brand'
+import type { BrandImageKind } from '@dsh-deepcraft/contracts/brand'
 import { BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, PALETTE_HOST } from '../../constants'
 import { loadBrandImages, readBrandImages, removeBrandImage, subscribeBrandImages, uploadBrandImage } from '../../shared/custom-brand'
 import type { SegmentOption, SettingsRow, SettingsView } from './settings-controls'
@@ -8,7 +8,7 @@ import type { Prefs } from '../../constants'
 import { copy } from './copy'
 
 /**
- * The Appearance tab's custom brand rows (D30), after the mascot: the brand
+ * The Appearance tab's custom brand rows (D77), after the mascot: the brand
  * name, the two images and how the images are inked. The name is a
  * preference written through the page's own write path; the images live in
  * the host half's brand directory and go through the shared image state
@@ -63,7 +63,7 @@ function BrandNameInput(props: { stored: string, write: SettingsView['write'] })
   const { draft, change, flush, revert } = useDraft(props.stored, value => props.write({ brandName: value.trim().slice(0, BRAND_NAME_MAX) }))
   return React.createElement('input', {
     type: 'text',
-    className: 'dsh-claude-settings-input',
+    className: 'dsh-deepcraft-settings-input',
     value: draft,
     maxLength: BRAND_NAME_MAX,
     placeholder: copy('brandNamePlaceholder'),
@@ -132,11 +132,11 @@ function BrandImageControl(props: { kind: BrandImageKind }) {
   }
   return React.createElement(
     'div',
-    { className: 'dsh-claude-brand-image', 'data-kind': props.kind },
+    { className: 'dsh-deepcraft-brand-image', 'data-kind': props.kind },
     React.createElement(
       'div',
-      { className: 'dsh-claude-brand-image-controls' },
-      React.createElement('span', { className: 'dsh-claude-brand-image-preview', 'data-empty': image === null ? '' : undefined },
+      { className: 'dsh-deepcraft-brand-image-controls' },
+      React.createElement('span', { className: 'dsh-deepcraft-brand-image-preview', 'data-empty': image === null ? '' : undefined },
         image === null ? null : React.createElement('img', { src: image.url, alt: '' })),
       React.createElement('input', {
         ref: picker,
@@ -147,18 +147,18 @@ function BrandImageControl(props: { kind: BrandImageKind }) {
       }),
       React.createElement('button', {
         type: 'button',
-        className: 'dsh-claude-settings-button',
+        className: 'dsh-deepcraft-settings-button',
         disabled: busy,
         onClick: () => picker.current!.click(),
       }, image === null ? copy('brandImageUpload') : copy('brandImageReplace')),
       image === null ? null : React.createElement('button', {
         type: 'button',
-        className: 'dsh-claude-settings-button',
+        className: 'dsh-deepcraft-settings-button',
         disabled: busy,
         onClick: () => run(removeBrandImage(props.kind)),
       }, copy('brandImageRemove')),
     ),
-    error === null ? null : React.createElement('div', { className: 'dsh-claude-brand-image-error', role: 'alert' }, error),
+    error === null ? null : React.createElement('div', { className: 'dsh-deepcraft-brand-image-error', role: 'alert' }, error),
   )
 }
 
@@ -173,10 +173,10 @@ function BrandAccentControl(props: { stored: string, write: SettingsView['write'
   const shown = draft !== '' ? draft : /^#[0-9a-f]{6}$/.test(live) ? live : ACCENT_FALLBACK
   return React.createElement(
     'div',
-    { className: 'dsh-claude-brand-accent' },
+    { className: 'dsh-deepcraft-brand-accent' },
     React.createElement('input', {
       type: 'color',
-      className: 'dsh-claude-settings-color',
+      className: 'dsh-deepcraft-settings-color',
       value: shown,
       disabled: props.disabled === true,
       'aria-label': copy('brandAccentTitle'),
@@ -184,10 +184,10 @@ function BrandAccentControl(props: { stored: string, write: SettingsView['write'
       onBlur: () => flush(draft),
     }),
     draft === ''
-      ? React.createElement('span', { className: 'dsh-claude-brand-accent-note' }, copy('brandAccentUnset'))
+      ? React.createElement('span', { className: 'dsh-deepcraft-brand-accent-note' }, copy('brandAccentUnset'))
       : React.createElement('button', {
         type: 'button',
-        className: 'dsh-claude-settings-button',
+        className: 'dsh-deepcraft-settings-button',
         disabled: props.disabled === true,
         onClick: () => flush(''),
       }, copy('brandAccentReset')),
@@ -196,7 +196,7 @@ function BrandAccentControl(props: { stored: string, write: SettingsView['write'
 
 /**
  * The accent colour as Colours' sub-row (D72): the accent paints only over
- * the skin's own palette (D30), so the row greys out while Colours follows
+ * the skin's own palette (D77), so the row greys out while Colours follows
  * the host, still showing the stored colour.
  */
 export function accentRow(view: SettingsView): SettingsRow {

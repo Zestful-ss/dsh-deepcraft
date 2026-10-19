@@ -72,7 +72,7 @@ module.exports = {
     const link = settings.link || {}
     const mark = settings.mark || {}
     check('the heading carries the plugin\'s repository link, opening in a new tab with an accessible name',
-      link.href === 'https://github.com/Nwflower/dsh-claude-style' && link.target === '_blank' &&
+      link.href === 'https://github.com/Zestful-ss/dsh-claude-style' && link.target === '_blank' &&
         (link.rel || '').includes('noopener') && typeof link.label === 'string' && link.label.length > 0,
       JSON.stringify(link))
     check('the link\'s mark is the inlined asset, painted as a mask in the quiet ink',
@@ -88,7 +88,7 @@ module.exports = {
       JSON.stringify(cards))
     check('each card previews its own paint: the host\'s band crosses a copy of the words, the wash fills them with seven orbiting washes over the ramp',
       previews.sweep?.band?.animation === BAND_ANIMATION && previews.sweep?.band?.matches === true && previews.sweep?.washes === 0 &&
-        previews.wash?.band === null && previews.wash?.animation === 'dsh-claude-wash-hue, dsh-claude-wash-drift' && previews.wash?.washes === 7 &&
+        previews.wash?.band === null && previews.wash?.animation === 'dsh-deepcraft-wash-hue, dsh-deepcraft-wash-drift' && previews.wash?.washes === 7 &&
         previews.sweep?.words?.join() === previews.wash?.words?.join(),
       JSON.stringify(previews))
     const delayOf = (value) => Number.parseFloat(value || '0')
@@ -97,7 +97,7 @@ module.exports = {
         const preview = previews[kind] || {}
         const delays = preview.wordDelays || []
         const centres = preview.wordCentres || []
-        return preview.wordAnimations?.join() === 'dsh-claude-motion-word,dsh-claude-motion-word' &&
+        return preview.wordAnimations?.join() === 'dsh-deepcraft-motion-word,dsh-deepcraft-motion-word' &&
           delays.length === 2 && delayOf(delays[0]) === 0 && delayOf(delays[1]) < 0 &&
           Math.abs(delayOf(delays[1])) === 2 && centres[0] === centres[1] &&
           preview.width === Math.max(...(preview.wordWidths || [0]))
@@ -109,17 +109,17 @@ module.exports = {
     const offCaret = caretPreview.off || {}
     check('the caret row previews its two answers on one typed line: a character waiting for its turn is unseen while the typed ones stand, the caret stands where the last typed character ends, and it is lit for the whole time the line is being typed and blinks on the native cycle once the line stands whole',
       typingCaret.typed === 'visible' && typingCaret.waiting === 'hidden' && typingCaret.x === 34 &&
-        typingCaret.animation === 'none' && standingCaret.animation === 'dsh-claude-caret-blink',
+        typingCaret.animation === 'none' && standingCaret.animation === 'dsh-deepcraft-caret-blink',
       JSON.stringify(caretPreview))
     check('the on card\'s caret glides to each new place the line hands it and the off card\'s arrives there at once',
-      typingCaret.transition === '0.08s' && offCaret.animation === 'dsh-claude-caret-blink' && offCaret.transition === '0s',
+      typingCaret.transition === '0.08s' && offCaret.animation === 'dsh-deepcraft-caret-blink' && offCaret.transition === '0s',
       JSON.stringify(caretPreview))
     const revealPreview = settings.revealPreview || {}
     const fade = revealPreview.fade || {}
     const waiting = revealPreview.waiting || {}
     const plain = revealPreview.plain || {}
     check('the new-text fade row previews its two answers: the fade card\'s character lands faint and settles over the reveal\'s own duration, the other stands solid as it arrives, and a character waiting for its turn is unseen',
-      fade.animation === 'dsh-claude-reveal-piece' && Number.parseFloat(fade.duration) === 0.12 && fade.fill === 'both' &&
+      fade.animation === 'dsh-deepcraft-reveal-piece' && Number.parseFloat(fade.duration) === 0.12 && fade.fill === 'both' &&
         waiting.opacity === '0' && plain.animation === 'none' && plain.opacity === '1',
       JSON.stringify(revealPreview))
     const ongoing = settings.ongoingCards || {}
@@ -135,14 +135,14 @@ module.exports = {
     const marks = settings.ongoingMarks || {}
     check('each card wears its own mark: the breathing dot is the idle seat\'s filled 6px circle pulsing on the shared breath, the ring a wider ring with a drawn track whose lit head turns on its own period',
       marks.breathe?.width === '6px' && marks.breathe?.border === '0px' &&
-        marks.breathe?.animation === 'dsh-claude-pulse' && Number.parseFloat(marks.breathe?.duration) === 2.4 &&
+        marks.breathe?.animation === 'dsh-deepcraft-pulse' && Number.parseFloat(marks.breathe?.duration) === 2.4 &&
         marks.ring?.width === '10px' && parseFloat(marks.ring?.border) >= 1 &&
-        marks.ring?.animation === 'dsh-claude-ongoing-spin' && Number.parseFloat(marks.ring?.duration) === 0.85,
+        marks.ring?.animation === 'dsh-deepcraft-ongoing-spin' && Number.parseFloat(marks.ring?.duration) === 0.85,
       JSON.stringify(marks))
     const stored = settings.ongoingStored || {}
     check('the reader\'s stored mark reaches the page and repaints the running row\'s own mark, live',
-      stored.ring?.attribute === 'ring' && stored.ring?.width === '10px' && stored.ring?.animation === 'dsh-claude-ongoing-spin' &&
-        stored.breathe?.attribute === 'breathe' && stored.breathe?.width === '6px' && stored.breathe?.animation === 'dsh-claude-pulse',
+      stored.ring?.attribute === 'ring' && stored.ring?.width === '10px' && stored.ring?.animation === 'dsh-deepcraft-ongoing-spin' &&
+        stored.breathe?.attribute === 'breathe' && stored.breathe?.width === '6px' && stored.breathe?.animation === 'dsh-deepcraft-pulse',
       JSON.stringify(stored))
     commonChecks(r)
   },

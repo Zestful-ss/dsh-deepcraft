@@ -13,7 +13,7 @@
 const { bound } = require('./bounds.cjs')
 
 /** The skin's settings root: what both routes end on. */
-const SETTINGS_PAGE = '.dsh-claude-settings'
+const SETTINGS_PAGE = '.dsh-deepcraft-settings'
 
 /** How long the host may take to answer the shortcut with its account menu. */
 const MENU_WAIT_MS = bound('settingsRouteMenuWaitMs')
@@ -34,7 +34,7 @@ async function openSkinSettings(page) {
     await entry.click({ force: true })
     await page.waitForTimeout(800)
   }
-  await page.getByText('Claude Style', { exact: true }).first().click({ force: true })
+  await page.getByText('DeepCraft', { exact: true }).first().click({ force: true })
   await page.locator(SETTINGS_PAGE).first().waitFor({ timeout: SETTINGS_WAIT_MS })
 }
 

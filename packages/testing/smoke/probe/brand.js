@@ -1,5 +1,5 @@
 /**
- * The custom-brand case (D30): the host half's status names a mark and a 4:1
+ * The custom-brand case (D77): the host half's status names a mark and a 4:1
  * wordmark, and the page paints them over the brand's own art — the sidebar's
  * mark and wordmark, the hero's mark and the account row's fallback picture —
  * then inks them in the text colour and takes a custom accent once the
@@ -30,21 +30,21 @@
       var mark = null
       for (var look = 0; look < 40 && mark === null; look++) {
         await sleep(50)
-        mark = sidebar.querySelector('[data-dsh-claude-part~="brand-mark"]')
+        mark = sidebar.querySelector('[data-dsh-deepcraft-part~="brand-mark"]')
       }
-      var name = sidebar.querySelector('[data-dsh-claude-part~="brand-name"]')
-      var hero = heroHolder.querySelector('[data-dsh-claude-part~="hero-mark"]')
-      for (var wait = 0; wait < 40 && !document.body.hasAttribute('data-dsh-claude-custom-mark'); wait++) await sleep(50)
+      var name = sidebar.querySelector('[data-dsh-deepcraft-part~="brand-name"]')
+      var hero = heroHolder.querySelector('[data-dsh-deepcraft-part~="hero-mark"]')
+      for (var wait = 0; wait < 40 && !document.body.hasAttribute('data-dsh-deepcraft-custom-mark'); wait++) await sleep(50)
       var read = function () {
         var body = getComputedStyle(document.body)
         var markArt = getComputedStyle(mark, '::before')
         var wordArt = getComputedStyle(name, '::before')
         var heroArt = getComputedStyle(hero, '::before')
-        var avatar = document.querySelector('.dsh-claude-account-avatar')
+        var avatar = document.querySelector('.dsh-deepcraft-account-avatar')
         return {
-          markAttr: document.body.getAttribute('data-dsh-claude-custom-mark'),
-          wordAttr: document.body.getAttribute('data-dsh-claude-custom-word'),
-          tintAttr: document.body.getAttribute('data-dsh-claude-custom-tint'),
+          markAttr: document.body.getAttribute('data-dsh-deepcraft-custom-mark'),
+          wordAttr: document.body.getAttribute('data-dsh-deepcraft-custom-word'),
+          tintAttr: document.body.getAttribute('data-dsh-deepcraft-custom-tint'),
           hostArt: getComputedStyle(mark.firstChild).display,
           hostWord: getComputedStyle(name.firstChild).display,
           mark: { image: markArt.backgroundImage, mask: markArt.maskImage, width: markArt.width, fill: markArt.backgroundColor },

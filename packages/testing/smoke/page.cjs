@@ -351,7 +351,7 @@ function page(name, tier, cases) {
   // names every client entry before any of them runs, which is the signal
   // packages/client/src/shared/peer-plugin.ts reads first (the style element is the other one).
   var boot = name === 'peer-chat-ux'
-    ? '<script>window.__DSH_BOOT__ = { entries: [{ id: "ui-skin-claude-style", rev: "smoke" }, { id: "@alm-allen/dsh-chat-ux", rev: "smoke" }] }</script>'
+    ? '<script>window.__DSH_BOOT__ = { entries: [{ id: "ui-skin-deepcraft", rev: "smoke" }, { id: "@alm-allen/dsh-chat-ux", rev: "smoke" }] }</script>'
     : ''
   // A skin owns the page from the first frame: the skin center injects this
   // attribute into the served document, before any bundle is evaluated, which
@@ -385,7 +385,7 @@ function page(name, tier, cases) {
       '})();</script>'
     : ''
   return `<!doctype html>
-<html><head><meta charset="utf-8"><title>dsh-claude-style smoke: ${name}</title></head>
+<html><head><meta charset="utf-8"><title>dsh-deepcraft smoke: ${name}</title></head>
 <body>
 ${boot}
 ${skinOwner}

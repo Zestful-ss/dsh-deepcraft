@@ -1,6 +1,6 @@
 import { sessionStatsCacheHit, sessionStatsDuration, sessionStatsSpeed, sessionStatsTokens } from './stats-format'
-import type { HostText } from '@dsh-claude-style/engine/host'
-import type { HostSessionStatsProjection, HostTokenUsageProjection } from '@dsh-claude-style/contracts/services'
+import type { HostText } from '@dsh-deepcraft/engine/host'
+import type { HostSessionStatsProjection, HostTokenUsageProjection } from '@dsh-deepcraft/contracts/services'
 import { copy } from './copy'
 
 /**

@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import type { HostChatSnapshot, HostTurn } from '@dsh-claude-style/contracts/services'
+import type { HostChatSnapshot, HostTurn } from '@dsh-deepcraft/contracts/services'
 import { ACTIVITY_THINKING, activityWords } from '../../shared/turn-activity'
 import { WORD_LOCK_MS, openTurn, waitStart, wordForPass } from './wait-state'
 

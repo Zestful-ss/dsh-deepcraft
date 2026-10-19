@@ -1,6 +1,6 @@
-import { SETTINGS_BUTTON_SELECTOR } from '@dsh-claude-style/contracts/dom'
-import { findFootArea, findHostMenu } from '@dsh-claude-style/engine/host'
-import { hasSkinClass } from '@dsh-claude-style/engine/dom'
+import { SETTINGS_BUTTON_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { findFootArea, findHostMenu } from '@dsh-deepcraft/engine/host'
+import { hasSkinClass } from '@dsh-deepcraft/engine/dom'
 
 /** Rhythm and give-up point of the poll for the host's account menu after the trigger's own click. */
 const MENU_LOOK_INTERVAL_MS = 40
@@ -79,7 +79,7 @@ export function createHostAccountMenu(options: { close(): void }) {
    *
    * Identified through the trigger, never through the menu's text: the
    * account trigger reports `aria-expanded` while its menu is up, so the
-   * open host menu (the skin's own cards carry `dsh-claude-` classes) is
+   * open host menu (the skin's own cards carry `dsh-deepcraft-` classes) is
    * the account menu. Opening a menu folds the shell's other menus, so at
    * most one host menu is ever open.
    */

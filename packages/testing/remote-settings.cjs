@@ -23,12 +23,12 @@ const REMOTE_NAME = 'remote.test'
 
 /** The skin's marks this scenario reads (packages/client/src/constants.ts and the settings page). */
 const SKIN = {
-  brand: 'data-dsh-claude-brand', // BRAND_ATTR
+  brand: 'data-dsh-deepcraft-brand', // BRAND_ATTR
   page: SETTINGS_PAGE,
-  rows: 'fieldset.dsh-claude-settings-rows',
-  error: '.dsh-claude-settings-error',
+  rows: 'fieldset.dsh-deepcraft-settings-rows',
+  error: '.dsh-deepcraft-settings-error',
   // The theme style's choices carry the brand they pick on their card.
-  brandCard: (brand) => `.dsh-claude-brand-card[data-brand="${brand}"]`,
+  brandCard: (brand) => `.dsh-deepcraft-brand-card[data-brand="${brand}"]`,
 }
 
 /** How long a written value may take to reach the other page. */

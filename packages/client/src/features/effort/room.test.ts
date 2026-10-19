@@ -25,7 +25,7 @@ function mount(rowWidth: number) {
   style.textContent = STYLE
   const row = document.createElement('div')
   row.className = 'effort-row'
-  row.setAttribute('data-dsh-claude-part', 'row')
+  row.setAttribute('data-dsh-deepcraft-part', 'row')
   row.style.width = `${rowWidth}px`
   const model = document.createElement('button')
   model.className = 'effort-model'

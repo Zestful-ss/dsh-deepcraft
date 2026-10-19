@@ -23,12 +23,12 @@ const STEP_MIN_GAP_MS = bound('reasonStepMinGapMs')
 /** The thinking row, the window the module puts on it and the text it slides. */
 const HOST = {
   row: '[data-variant="think"]',
-  windowed: '[data-variant="think"] [data-dsh-claude-reason-window]',
+  windowed: '[data-variant="think"] [data-dsh-deepcraft-reason-window]',
   text: '[data-markdown-variant]',
 }
 
 /** The mark the fold glide hangs on the body a door is rolling (packages/client/src/constants.ts). */
-const ROLLING = '[data-dsh-claude-rolling]'
+const ROLLING = '[data-dsh-deepcraft-rolling]'
 
 /**
  * Watch for the door the skin's own fold of a thinking row rolls.
@@ -77,7 +77,7 @@ function watchDoor(page) {
 function readInPage(host) {
   const row = document.querySelector(host.row)
   if (row === null) return { row: false, windowed: false }
-  const window = row.querySelector('[data-dsh-claude-reason-window]')
+  const window = row.querySelector('[data-dsh-deepcraft-reason-window]')
   const scope = window ?? row
   const text = scope.querySelector(host.text)
   if (text === null) return { row: true, windowed: window !== null }
@@ -89,7 +89,7 @@ function readInPage(host) {
     phase: row.getAttribute('data-state'),
     expanded: row.hasAttribute('data-expanded'),
     windowed: window !== null,
-    capped: window !== null && window.hasAttribute('data-dsh-claude-reason-capped'),
+    capped: window !== null && window.hasAttribute('data-dsh-deepcraft-reason-capped'),
     slotHeight: Math.round(scope.getBoundingClientRect().height),
     masked: mask.startsWith('linear-gradient'),
     textHeight: Math.round(text.getBoundingClientRect().height),

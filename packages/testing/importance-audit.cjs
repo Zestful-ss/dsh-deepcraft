@@ -3,7 +3,7 @@
  *
  * The host's own styles carry a handful of `!important` and sit in no cascade
  * layer, so the skin's selectors — every one starting at
- * `body[data-dsh-claude-style]` — already outweigh the host's single-class rules
+ * `body[data-dsh-deepcraft]` — already outweigh the host's single-class rules
  * on specificity. A skin `!important` is needed where it beats a host
  * `!important`, an inline style, or another skin rule; everywhere else it only
  * adds weight. Which is which is decided on the real page, never by reading:
@@ -56,7 +56,7 @@ const ROOT = path.resolve(__dirname, '..', '..')
 /** The marker declaration carrying each rule's index into the page's CSSOM. */
 const MARK = '--dsh-audit-rule'
 /** The skin's stylesheet, by the tag it wears (D9). */
-const SHEET = 'style[data-plugin-css="dsh-claude-style/client.css"]'
+const SHEET = 'style[data-plugin-css="dsh-deepcraft/client.css"]'
 /** Pseudo-elements the page can read a computed style for. */
 const READABLE_PSEUDO = new Set(['::before', '::after', '::marker', '::placeholder'])
 /**
@@ -74,15 +74,15 @@ const READABLE_PSEUDO = new Set(['::before', '::after', '::marker', '::placehold
  * still covers the rules whose own trigger it can point at.
  */
 const TRANSIENT_SELECTORS = [
-  '[data-dsh-claude-rolling]', '[data-dsh-claude-composer-active]',
-  '[data-dsh-claude-revealing]', '[data-dsh-claude-page-enter]', '[data-dsh-claude-page-leave]',
-  '[data-dsh-claude-search-closing]', '[data-dsh-claude-turn-nav-landed]',
-  '[data-dsh-claude-send-ghost]', '[data-dsh-claude-send-flight]', '[data-dsh-claude-send-link]',
-  '[data-dsh-claude-follow-tail]', '[data-dsh-claude-follow-hold]',
-  '[data-dsh-claude-reader-hold]', '[data-dsh-claude-summary-running]', '[data-dsh-claude-wait-badge-leaving]',
-  '[data-dsh-claude-file-merge]', '[data-dsh-claude-chat-reveal]', '[data-dsh-claude-roll]',
-  '[data-dsh-claude-dragging]', '[data-dsh-claude-swapping]',
-  '[data-dsh-claude-reason-window]',
+  '[data-dsh-deepcraft-rolling]', '[data-dsh-deepcraft-composer-active]',
+  '[data-dsh-deepcraft-revealing]', '[data-dsh-deepcraft-page-enter]', '[data-dsh-deepcraft-page-leave]',
+  '[data-dsh-deepcraft-search-closing]', '[data-dsh-deepcraft-turn-nav-landed]',
+  '[data-dsh-deepcraft-send-ghost]', '[data-dsh-deepcraft-send-flight]', '[data-dsh-deepcraft-send-link]',
+  '[data-dsh-deepcraft-follow-tail]', '[data-dsh-deepcraft-follow-hold]',
+  '[data-dsh-deepcraft-reader-hold]', '[data-dsh-deepcraft-summary-running]', '[data-dsh-deepcraft-wait-badge-leaving]',
+  '[data-dsh-deepcraft-file-merge]', '[data-dsh-deepcraft-chat-reveal]', '[data-dsh-deepcraft-roll]',
+  '[data-dsh-deepcraft-dragging]', '[data-dsh-deepcraft-swapping]',
+  '[data-dsh-deepcraft-reason-window]',
   '[data-dsh-theme-transitioning]',
 ]
 

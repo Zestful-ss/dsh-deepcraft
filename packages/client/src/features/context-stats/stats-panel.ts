@@ -1,8 +1,8 @@
-import { COMPOSER_STAT_SELECTOR, DIALOG_TRIGGER_SELECTOR } from '@dsh-claude-style/contracts/dom'
-import { observeMatches } from '@dsh-claude-style/engine/bus'
-import { cacheFirstMatch, findComposerCard, findDockedContextMeter } from '@dsh-claude-style/engine/host'
+import { COMPOSER_STAT_SELECTOR, DIALOG_TRIGGER_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { observeMatches } from '@dsh-deepcraft/engine/bus'
+import { cacheFirstMatch, findComposerCard, findDockedContextMeter } from '@dsh-deepcraft/engine/host'
 import { removeStrayNodes } from '../../shared/popover'
-import type { MatchList } from '@dsh-claude-style/engine/bus'
+import type { MatchList } from '@dsh-deepcraft/engine/bus'
 
 /**
  * The host's context panel and the marks this feature puts on the host's
@@ -12,11 +12,11 @@ import type { MatchList } from '@dsh-claude-style/engine/bus'
  */
 
 /** The mark on the block this feature appends to the host's panel. */
-export const CONTEXT_STATS_ATTR = 'data-dsh-claude-context-stats'
+export const CONTEXT_STATS_ATTR = 'data-dsh-deepcraft-context-stats'
 /** The mark on the host's panel itself, which is what takes the entrance. */
-export const CONTEXT_PANEL_ATTR = 'data-dsh-claude-context-panel'
+export const CONTEXT_PANEL_ATTR = 'data-dsh-deepcraft-context-panel'
 /** The mark that turns that reading on; written with the property, never without it. */
-export const CONTEXT_PANEL_ALIGNED_ATTR = 'data-dsh-claude-context-aligned'
+export const CONTEXT_PANEL_ALIGNED_ATTR = 'data-dsh-deepcraft-context-aligned'
 
 /**
  * The host's own marks on its three statistics dialogs — the two session
@@ -34,7 +34,7 @@ let dialogs: MatchList<HTMLElement> | null = null
  * pass is gone while the composer's scope preference is off, and the numbers
  * this feature writes into the panel are read either way.
  */
-const markedMeter = cacheFirstMatch<HTMLElement>('[data-dsh-claude-context-meter]')
+const markedMeter = cacheFirstMatch<HTMLElement>('[data-dsh-deepcraft-context-meter]')
 
 export function findContextMeter() {
   return markedMeter() ?? findDockedContextMeter(findComposerCard())

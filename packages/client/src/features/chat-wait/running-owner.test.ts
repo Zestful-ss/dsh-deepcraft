@@ -1,7 +1,7 @@
 import { afterEach, expect, test } from 'vitest'
 import { foreignRunningLineOwns } from './running-owner'
 
-const WORDS_ATTRIBUTE = 'data-dsh-claude-wait-words'
+const WORDS_ATTRIBUTE = 'data-dsh-deepcraft-wait-words'
 const cleanups: (() => void)[] = []
 afterEach(() => {
   while (cleanups.length > 0) cleanups.pop()!()

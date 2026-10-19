@@ -14,7 +14,7 @@
    so its fragments read `_itemWrap_` / `_itemLabel_`. Both are the longest
    stable piece of the class — never the bare local name. */
 
-body[data-dsh-claude-style] [data-dsh-claude-hero-menu] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-hero-menu] {
   min-width: 248px;
   max-width: min(360px, calc(100vw - 16px));
   max-height: min(440px, calc(100vh - 96px));
@@ -24,15 +24,15 @@ body[data-dsh-claude-style] [data-dsh-claude-hero-menu] {
      two custom properties instead — the host's style writes never touch them —
      and these `!important` declarations outrank its inline value, so the card
      holds the position the stamping pass gave it. */
-  left: var(--dsh-claude-hero-menu-x, 0px) !important;
-  top: var(--dsh-claude-hero-menu-y, 0px) !important;
+  left: var(--dsh-deepcraft-hero-menu-x, 0px) !important;
+  top: var(--dsh-deepcraft-hero-menu-y, 0px) !important;
   padding: 6px;
   gap: 6px;
   border: 1px solid var(--dsw-alias-border-l1, #e8e6dc);
   border-radius: 12px;
   background: var(--dsw-alias-bg-overlay, #ffffff);
   box-shadow: 0 8px 24px rgba(20, 20, 19, 0.12), 0 2px 6px rgba(20, 20, 19, 0.08);
-  z-index: var(--dsh-claude-layer-float);
+  z-index: var(--dsh-deepcraft-layer-float);
   font-family: var(--dsw-font-family);
   /* The host mounts the card instead of toggling a `data-open` attribute, so
      the skin's open transition becomes the shared menu entrance with the same
@@ -40,24 +40,24 @@ body[data-dsh-claude-style] [data-dsh-claude-hero-menu] {
      trigger: the card opens above the trigger's right edge, as the skin's
      composer pickers do. */
   transform-origin: bottom right;
-  animation: dsh-claude-dropdown-in var(--dsh-claude-duration-open) var(--dsh-claude-ease-settle);
+  animation: dsh-deepcraft-dropdown-in var(--dsh-deepcraft-duration-open) var(--dsh-deepcraft-ease-settle);
 }
 
 /* One row height, one radius and one hover plate carry both host menus the skin
    repaints; the account area (features/account/account-footer.css) states them
    for the two markers together. What follows is what only this menu has. */
-body[data-dsh-claude-style] [data-dsh-claude-hero-menu] [data-dsh-claude-part~="menu-item"] > [role="menuitem"]:disabled {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-hero-menu] [data-dsh-deepcraft-part~="menu-item"] > [role="menuitem"]:disabled {
   opacity: 0.4 !important;
   cursor: not-allowed !important;
 }
 /* The current row is marked by the accent, as in the model picker. */
-body[data-dsh-claude-style] [data-dsh-claude-hero-menu] [data-dsh-claude-part~="menu-check"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-hero-menu] [data-dsh-deepcraft-part~="menu-check"] {
   flex: none;
   color: var(--dsw-alias-brand-primary, #d97757);
 }
 
 /* Heading and separator rows: the line is the shared one (shared/popover.css). */
-body[data-dsh-claude-style] [data-dsh-claude-hero-menu] > [data-dsh-claude-part~="menu-viewport"] > [role="presentation"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-hero-menu] > [data-dsh-deepcraft-part~="menu-viewport"] > [role="presentation"] {
   padding: 6px 7px 2px !important;
   font-size: 11px !important;
   font-weight: 600 !important;
@@ -66,13 +66,13 @@ body[data-dsh-claude-style] [data-dsh-claude-hero-menu] > [data-dsh-claude-part~
   text-transform: uppercase !important;
   color: var(--dsw-alias-label-tertiary, #8f8d84) !important;
 }
-body[data-dsh-claude-style] [data-dsh-claude-hero-menu] [role="separator"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-hero-menu] [role="separator"] {
   margin: 2px 4px !important;
 }
 
 /* The pinned footer ("添加工作区…") keeps the host's spacing with the skin's
    hairline. */
-body[data-dsh-claude-style] [data-dsh-claude-hero-menu] > [data-dsh-claude-part~="menu-footer"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-hero-menu] > [data-dsh-deepcraft-part~="menu-footer"] {
   margin-top: 4px;
   padding-top: 4px;
   border-top: 0.5px solid var(--dsw-alias-border-l2, #dedcd2);
@@ -83,35 +83,35 @@ body[data-dsh-claude-style] [data-dsh-claude-hero-menu] > [data-dsh-claude-part~
    one repeats what the list already says and is dropped, the add row's `＋`
    with it; the rows sit closer together than the preset card's two-line rows
    need to. The current folder keeps the accent check. */
-body[data-dsh-claude-style] [data-dsh-claude-hero-menu="workspace"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-hero-menu="workspace"] {
   min-width: 180px;
   max-width: min(280px, calc(100vw - 16px));
   padding: 4px;
   gap: 4px;
 }
-body[data-dsh-claude-style] [data-dsh-claude-hero-menu="workspace"] [data-dsh-claude-part~="menu-item"] > [role="menuitem"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-hero-menu="workspace"] [data-dsh-deepcraft-part~="menu-item"] > [role="menuitem"] {
   min-height: 26px;
   padding: 3px 10px;
 }
-body[data-dsh-claude-style] [data-dsh-claude-hero-menu="workspace"] [data-dsh-claude-part~="menu-item-icon"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-hero-menu="workspace"] [data-dsh-deepcraft-part~="menu-item-icon"] {
   display: none;
 }
-body[data-dsh-claude-style] [data-dsh-claude-hero-menu="workspace"] [data-dsh-claude-part~="menu-check"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-hero-menu="workspace"] [data-dsh-deepcraft-part~="menu-check"] {
   width: 14px;
   height: 14px;
 }
-body[data-dsh-claude-style] [data-dsh-claude-hero-menu="workspace"] > [data-dsh-claude-part~="menu-footer"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-hero-menu="workspace"] > [data-dsh-deepcraft-part~="menu-footer"] {
   margin-top: 0;
   padding-top: 4px;
 }
 
 /* The card's padding is the skin's 6px rather than the host's 4px, so a side
    card moves with it: 6px pad + 6px gap. */
-body[data-dsh-claude-style] [data-dsh-claude-hero-menu] [data-dsh-claude-part~="menu-submenu"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-hero-menu] [data-dsh-deepcraft-part~="menu-submenu"] {
   bottom: -6px !important;
   left: calc(100% + 12px) !important;
 }
-body[data-dsh-claude-style] [data-dsh-claude-hero-menu] [data-dsh-claude-part~="menu-submenu"]::before {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-hero-menu] [data-dsh-deepcraft-part~="menu-submenu"]::before {
   left: -12px !important;
   width: 12px !important;
 }

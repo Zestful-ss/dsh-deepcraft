@@ -1,6 +1,6 @@
 /* ---------- Claude Code layout: account row & floating popover ---------- */
 /* footArea positioning with crisp hairline border spanning entire sidebar */
-body[data-dsh-claude-style] [data-dsh-claude-part~="foot-area"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="foot-area"] {
   position: relative;
   overflow: visible;
   margin: 0 calc(-1 * var(--dsh-sidebar-inline-padding, 12px)) -6px;
@@ -9,12 +9,12 @@ body[data-dsh-claude-style] [data-dsh-claude-part~="foot-area"] {
   background: transparent;
   box-sizing: border-box;
 }
-body[data-dsh-claude-style][data-ds-dark-theme] [data-dsh-claude-part~="foot-area"] {
+body[data-dsh-deepcraft][data-ds-dark-theme] [data-dsh-deepcraft-part~="foot-area"] {
   border-top-color: var(--dsw-alias-border-l2);
 }
 
 /* Account trigger button in sidebar */
-body[data-dsh-claude-style] .dsh-claude-account-btn {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-btn {
   display: flex;
   align-items: center;
   width: 100%;
@@ -26,16 +26,16 @@ body[data-dsh-claude-style] .dsh-claude-account-btn {
   cursor: pointer;
   user-select: none;
   background: transparent;
-  transition: background-color var(--dsh-claude-timing-feedback);
+  transition: background-color var(--dsh-deepcraft-timing-feedback);
 }
-body[data-dsh-claude-style] .dsh-claude-account-btn:hover,
-body[data-dsh-claude-style] .dsh-claude-account-btn[data-open="true"] {
-  background: var(--dsh-claude-hover-bg, rgba(0, 0, 0, 0.08));
+body[data-dsh-deepcraft] .dsh-deepcraft-account-btn:hover,
+body[data-dsh-deepcraft] .dsh-deepcraft-account-btn[data-open="true"] {
+  background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
 }
-body[data-dsh-claude-style] .dsh-claude-account-avatar {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-avatar {
   width: 18px;
   height: 18px;
-  background: var(--dsh-claude-image-anthropic-mark) center / contain no-repeat;
+  background: var(--dsh-deepcraft-image-anthropic-mark) center / contain no-repeat;
   flex: none;
   margin-right: 8px;
   /* The host's own avatar is a circle (32px with a 16px radius). Ours is 18px to
@@ -47,30 +47,30 @@ body[data-dsh-claude-style] .dsh-claude-account-avatar {
 }
 /* Under the DeepSeek brand the picture with no account behind it is DeepSeek's
    whale, in its brand blue. */
-body[data-dsh-claude-style][data-dsh-claude-brand="deepseek"] .dsh-claude-account-avatar {
-  background-image: var(--dsh-claude-image-deepseek-mark);
+body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] .dsh-deepcraft-account-avatar {
+  background-image: var(--dsh-deepcraft-image-deepseek-mark);
 }
-/* The reader's own mark takes that place under either brand (D30). Tinted, it
+/* The reader's own mark takes that place under either brand (D77). Tinted, it
    is a shape in the label colour on a layer of its own: a mask on the avatar
    itself would cut the account photo layered over it to the mark's outline,
    and the photo and skin rules below hide that layer whenever a picture
    stands. */
-body[data-dsh-claude-style][data-dsh-claude-custom-mark] .dsh-claude-account-avatar {
-  background-image: var(--dsh-claude-custom-mark);
+body[data-dsh-deepcraft][data-dsh-deepcraft-custom-mark] .dsh-deepcraft-account-avatar {
+  background-image: var(--dsh-deepcraft-custom-mark);
 }
-body[data-dsh-claude-style][data-dsh-claude-custom-mark][data-dsh-claude-custom-tint] .dsh-claude-account-avatar {
+body[data-dsh-deepcraft][data-dsh-deepcraft-custom-mark][data-dsh-deepcraft-custom-tint] .dsh-deepcraft-account-avatar {
   position: relative;
   background-image: none;
 }
-body[data-dsh-claude-style][data-dsh-claude-custom-mark][data-dsh-claude-custom-tint] .dsh-claude-account-avatar::before {
+body[data-dsh-deepcraft][data-dsh-deepcraft-custom-mark][data-dsh-deepcraft-custom-tint] .dsh-deepcraft-account-avatar::before {
   content: "";
   position: absolute;
   inset: 0;
   background: currentColor;
-  -webkit-mask: var(--dsh-claude-custom-mark) center / contain no-repeat;
-  mask: var(--dsh-claude-custom-mark) center / contain no-repeat;
+  -webkit-mask: var(--dsh-deepcraft-custom-mark) center / contain no-repeat;
+  mask: var(--dsh-deepcraft-custom-mark) center / contain no-repeat;
 }
-body[data-dsh-claude-style] .dsh-claude-account-label {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-label {
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -80,11 +80,11 @@ body[data-dsh-claude-style] .dsh-claude-account-label {
   line-height: 18px;
   font-family: var(--dsw-font-family);
 }
-body[data-dsh-claude-style] .dsh-claude-account-user {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-user {
   font-weight: 500;
   color: var(--dsw-alias-label-primary);
 }
-body[data-dsh-claude-style] .dsh-claude-account-chevron {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-chevron {
   width: 14px;
   height: 14px;
   flex: none;
@@ -94,7 +94,7 @@ body[data-dsh-claude-style] .dsh-claude-account-chevron {
   justify-content: center;
   margin-left: auto;
 }
-body[data-dsh-claude-style] .dsh-claude-account-chevron::after {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-chevron::after {
   content: "";
   display: inline-block;
   width: 12px;
@@ -102,26 +102,26 @@ body[data-dsh-claude-style] .dsh-claude-account-chevron::after {
   background: currentColor;
   -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E") center / contain no-repeat;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E") center / contain no-repeat;
-  transition: transform var(--dsh-claude-timing-feedback);
+  transition: transform var(--dsh-deepcraft-timing-feedback);
 }
-body[data-dsh-claude-style] .dsh-claude-account-btn[data-open="true"] .dsh-claude-account-chevron::after {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-btn[data-open="true"] .dsh-deepcraft-account-chevron::after {
   transform: rotate(180deg);
 }
 
 /* Floating Popover Container: Adaptive Width */
-body[data-dsh-claude-style] .dsh-claude-account-popover {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-popover {
   position: absolute;
   bottom: calc(100% + 4px);
   /* The drawer's inline edges are the account row's own, measured by
      features/account/account-footer.ts: the footer's padding box is wider than the row,
      so a flat 0 would make the card overhang the row it hangs from. */
-  left: var(--dsh-claude-account-inset-left, 0px);
-  right: var(--dsh-claude-account-inset-right, 0px);
+  left: var(--dsh-deepcraft-account-inset-left, 0px);
+  right: var(--dsh-deepcraft-account-inset-right, 0px);
   width: auto;
   max-width: none;
   min-width: 0;
   /* The shared popover card (shared/popover.css), on the card fill. */
-  background: var(--dsh-claude-card);
+  background: var(--dsh-deepcraft-card);
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -132,7 +132,7 @@ body[data-dsh-claude-style] .dsh-claude-account-popover {
   transform-origin: bottom left;
 }
 /* Hover bridge between trigger and popover */
-body[data-dsh-claude-style] .dsh-claude-account-popover::after {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-popover::after {
   content: "";
   position: absolute;
   top: 100%;
@@ -151,21 +151,21 @@ body[data-dsh-claude-style] .dsh-claude-account-popover::after {
    centring box, and its box model matches the shared popover item — `border-box`
    with the height as a minimum — so the hover plate is the whole row and the
    name sits in the middle of it rather than against its top edge. */
-body[data-dsh-claude-style] .dsh-claude-account-popover-row {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-row {
   box-sizing: border-box;
   display: flex;
   align-items: center;
   min-height: 32px;
   padding: 2px 7px;
   border-radius: 6px;
-  transition: background-color var(--dsh-claude-timing-feedback);
+  transition: background-color var(--dsh-deepcraft-timing-feedback);
 }
-body[data-dsh-claude-style] .dsh-claude-account-popover-row[role="button"] {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-row[role="button"] {
   cursor: pointer;
 }
-body[data-dsh-claude-style] .dsh-claude-account-popover-row[role="button"]:hover,
-body[data-dsh-claude-style] .dsh-claude-account-popover-row[role="button"]:focus-visible {
-  background: var(--dsh-claude-hover-bg, rgba(0, 0, 0, 0.08));
+body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-row[role="button"]:hover,
+body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-row[role="button"]:focus-visible {
+  background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
   outline: none;
 }
 
@@ -173,7 +173,7 @@ body[data-dsh-claude-style] .dsh-claude-account-popover-row[role="button"]:focus
    spans the panel's full width and sits outside the hover plate above. Its
    margins are the header's own inline padding plus the popover's 6px inset —
    the two boxes the full bleed has to cancel. */
-body[data-dsh-claude-style] .dsh-claude-account-popover-header .dsh-claude-account-popover-divider {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-header .dsh-deepcraft-account-popover-divider {
   margin: 0 -12px;
 }
 
@@ -184,13 +184,13 @@ body[data-dsh-claude-style] .dsh-claude-account-popover-header .dsh-claude-accou
    host expects the request without a referrer, the way the host's own avatar
    <img> sends it, and only an element can say so. A picture that fails to load
    hides itself, and the mark underneath shows instead of an empty circle. */
-body[data-dsh-claude-style] .dsh-claude-account-avatar[data-dsh-claude-photo] {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-avatar[data-dsh-deepcraft-photo] {
   position: relative;
 }
-body[data-dsh-claude-style] .dsh-claude-account-avatar[data-dsh-claude-photo]::before {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-avatar[data-dsh-deepcraft-photo]::before {
   display: none;
 }
-body[data-dsh-claude-style] .dsh-claude-account-photo {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-photo {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -199,7 +199,7 @@ body[data-dsh-claude-style] .dsh-claude-account-photo {
   border-radius: inherit;
   pointer-events: none;
 }
-body[data-dsh-claude-style] .dsh-claude-account-photo[hidden] {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-photo[hidden] {
   display: none;
 }
 
@@ -214,15 +214,15 @@ body[data-dsh-claude-style] .dsh-claude-account-photo[hidden] {
    rounding at all shaves the head's own pixels — the circle cut the four
    corners off. The launcher's own account list shows the head square for the
    same reason. */
-body[data-dsh-claude-style] .dsh-claude-account-avatar[data-dsh-claude-skin] {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-avatar[data-dsh-deepcraft-skin] {
   position: relative;
   background-image: none;
   border-radius: 0;
 }
-body[data-dsh-claude-style] .dsh-claude-account-avatar[data-dsh-claude-skin]::before {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-avatar[data-dsh-deepcraft-skin]::before {
   display: none;
 }
-body[data-dsh-claude-style] .dsh-claude-account-skin {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-skin {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -233,15 +233,15 @@ body[data-dsh-claude-style] .dsh-claude-account-skin {
 }
 
 /* The drawer's rows had no hover feedback at all: the only
-   `.dsh-claude-popover-item:hover` rule in the stylesheet is scoped to the model
+   `.dsh-deepcraft-popover-item:hover` rule in the stylesheet is scoped to the model
    picker. Give the account drawer the same affordance as the rest of the skin. */
-body[data-dsh-claude-style] .dsh-claude-account-popover .dsh-claude-popover-item:hover {
-  background: var(--dsh-claude-hover-bg, rgba(0, 0, 0, 0.08));
+body[data-dsh-deepcraft] .dsh-deepcraft-account-popover .dsh-deepcraft-popover-item:hover {
+  background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
 }
-body[data-dsh-claude-style][data-ds-dark-theme] .dsh-claude-account-popover .dsh-claude-popover-item:hover {
+body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-account-popover .dsh-deepcraft-popover-item:hover {
   background: rgba(255, 255, 255, 0.10);
 }
-body[data-dsh-claude-style] .dsh-claude-account-popover .dsh-claude-popover-item[aria-disabled="true"] {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-popover .dsh-deepcraft-popover-item[aria-disabled="true"] {
   opacity: 0.5;
   cursor: default;
 }
@@ -250,8 +250,8 @@ body[data-dsh-claude-style] .dsh-claude-account-popover .dsh-claude-popover-item
 /* The host's own account row is the entry on a host that has one (Desktop
    0.1.7+): it stays in the host's DOM and flow and is repainted here as a
    Claude row. features/account/account-footer.ts marks it with
-   [data-dsh-claude-account-host-row]. */
-body[data-dsh-claude-style] [data-dsh-claude-account-host-row] {
+   [data-dsh-deepcraft-account-host-row]. */
+body[data-dsh-deepcraft] [data-dsh-deepcraft-account-host-row] {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -270,14 +270,14 @@ body[data-dsh-claude-style] [data-dsh-claude-account-host-row] {
   font-family: var(--dsw-font-family);
   text-align: left;
   cursor: pointer;
-  transition: background-color var(--dsh-claude-timing-feedback);
+  transition: background-color var(--dsh-deepcraft-timing-feedback);
 }
-body[data-dsh-claude-style] [data-dsh-claude-account-host-row]:hover {
-  background: var(--dsh-claude-hover-bg, rgba(0, 0, 0, 0.08));
+body[data-dsh-deepcraft] [data-dsh-deepcraft-account-host-row]:hover {
+  background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
 }
 /* The host's own avatar keeps its picture; only its box is normalised to this
    row's 18px circle. */
-body[data-dsh-claude-style] [data-dsh-claude-account-host-row] img {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-account-host-row] img {
   width: 18px;
   height: 18px;
   flex: none;
@@ -285,7 +285,7 @@ body[data-dsh-claude-style] [data-dsh-claude-account-host-row] img {
   object-fit: cover;
 }
 /* The chevron is the skin's own: the host row does not draw one. */
-body[data-dsh-claude-style] [data-dsh-claude-account-host-row]::after {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-account-host-row]::after {
   content: "";
   display: inline-block;
   width: 12px;
@@ -300,12 +300,12 @@ body[data-dsh-claude-style] [data-dsh-claude-account-host-row]::after {
 /* The host wraps its row in its own slot markup. Every branch on the way to the
    marked row becomes a full-width flex box, so the row can fill the footer
    whatever the host's hashed wrapper classes are. */
-body[data-dsh-claude-style] [data-dsh-claude-part~="foot-area"] [data-dsh-claude-part~="settings-trigger"][data-dsh-claude-holds~="account-row"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="foot-area"] [data-dsh-deepcraft-part~="settings-trigger"][data-dsh-deepcraft-holds~="account-row"] {
   display: flex;
   align-items: center;
   width: 100%;
 }
-body[data-dsh-claude-style] [data-dsh-claude-part~="foot-area"] [data-dsh-claude-part~="settings-trigger"] [data-dsh-claude-holds~="account-row"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="foot-area"] [data-dsh-deepcraft-part~="settings-trigger"] [data-dsh-deepcraft-holds~="account-row"] {
   display: flex;
   align-items: center;
   flex: 1 1 auto;
@@ -315,7 +315,7 @@ body[data-dsh-claude-style] [data-dsh-claude-part~="foot-area"] [data-dsh-claude
 /* Our container injected at the head of the host's account menu. Its rows use
    the shared popover-item rules; the container only stacks them and carries the
    account header above the host's own rows. */
-body[data-dsh-claude-style] .dsh-claude-account-inject {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-inject {
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -331,15 +331,15 @@ body[data-dsh-claude-style] .dsh-claude-account-inject {
    Only appearance is touched: the host keeps its row order, copy and click
    behaviour. The marker sits on the card itself, so every selector is scoped to
    it and no other host menu is reached. */
-body[data-dsh-claude-style] [data-dsh-claude-account-menu] {
-  width: var(--dsh-claude-account-width, 260px);
+body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] {
+  width: var(--dsh-deepcraft-account-width, 260px);
   min-width: 0;
   max-width: none;
   box-sizing: border-box;
   padding: 6px;
   border: 1px solid var(--dsw-alias-border-l1, #e8e6dc);
   border-radius: 12px;
-  background: var(--dsh-claude-card);
+  background: var(--dsh-deepcraft-card);
   box-shadow: 0 8px 24px rgba(20, 20, 19, 0.12), 0 2px 6px rgba(20, 20, 19, 0.08);
   font-family: var(--dsw-font-family);
 }
@@ -347,8 +347,8 @@ body[data-dsh-claude-style] [data-dsh-claude-account-menu] {
    under the Claude palette the surface token is rebound so that layer paints
    the same card fill, and its backdrop blur is dropped for the flat skin card.
    Under the host's colours the host's material stands. */
-body[data-dsh-claude-style][data-dsh-claude-palette="claude"] [data-dsh-claude-account-menu] {
-  --dsw-menu-surface-fill: var(--dsh-claude-card);
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"] [data-dsh-deepcraft-account-menu] {
+  --dsw-menu-surface-fill: var(--dsh-deepcraft-card);
   --dsw-menu-backdrop-filter: none;
 }
 /* The entry animation is keyed on the armed marker rather than on the card
@@ -363,13 +363,13 @@ body[data-dsh-claude-style][data-dsh-claude-palette="claude"] [data-dsh-claude-a
    that. A card revealed on the mount frame fades in low and jumps up mid-fade,
    so inside the armed window it stays unpainted until surface.ts has seen our
    rows inside it and the host's placement stand still. */
-body[data-dsh-claude-style][data-dsh-claude-account-armed] div[role="menu"][data-menu-material]:not([data-dsh-claude-account-ready]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-account-armed] div[role="menu"][data-menu-material]:not([data-dsh-deepcraft-account-ready]) {
   visibility: hidden;
   animation: none;
 }
-body[data-dsh-claude-style][data-dsh-claude-account-armed] div[role="menu"][data-menu-material][data-dsh-claude-account-ready] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-account-armed] div[role="menu"][data-menu-material][data-dsh-deepcraft-account-ready] {
   transform-origin: bottom left;
-  animation: dsh-claude-dropdown-in var(--dsh-claude-duration-open) var(--dsh-claude-ease-settle);
+  animation: dsh-deepcraft-dropdown-in var(--dsh-deepcraft-duration-open) var(--dsh-deepcraft-ease-settle);
 }
 
 /* The host's rows. itemWrap is the shared Menu's row wrapper; the bare item
@@ -378,7 +378,7 @@ body[data-dsh-claude-style][data-dsh-claude-account-armed] div[role="menu"][data
    One row height, one radius and one hover plate carry both host menus the skin
    repaints — the account area's and the home hero's, features/hero-menu — so the
    two never drift apart. The account row's own weight is stated below. */
-body[data-dsh-claude-style] :is([data-dsh-claude-account-menu], [data-dsh-claude-hero-menu]) [data-dsh-claude-part~="menu-item"] > [role="menuitem"] {
+body[data-dsh-deepcraft] :is([data-dsh-deepcraft-account-menu], [data-dsh-deepcraft-hero-menu]) [data-dsh-deepcraft-part~="menu-item"] > [role="menuitem"] {
   min-height: 32px;
   padding: 2px 7px;
   gap: 8px;
@@ -386,59 +386,59 @@ body[data-dsh-claude-style] :is([data-dsh-claude-account-menu], [data-dsh-claude
   font-size: 13px;
   line-height: 20px;
   color: var(--dsw-alias-label-primary, #141413);
-  transition: background-color var(--dsh-claude-timing-feedback);
+  transition: background-color var(--dsh-deepcraft-timing-feedback);
 }
-body[data-dsh-claude-style] :is([data-dsh-claude-account-menu], [data-dsh-claude-hero-menu]) [data-dsh-claude-part~="menu-item"] > [role="menuitem"]:hover:not(:disabled),
-body[data-dsh-claude-style] :is([data-dsh-claude-account-menu], [data-dsh-claude-hero-menu]) [data-dsh-claude-part~="menu-item"] > [role="menuitem"]:focus-visible:not(:disabled) {
-  background: var(--dsh-claude-hover-bg, rgba(0, 0, 0, 0.08));
+body[data-dsh-deepcraft] :is([data-dsh-deepcraft-account-menu], [data-dsh-deepcraft-hero-menu]) [data-dsh-deepcraft-part~="menu-item"] > [role="menuitem"]:hover:not(:disabled),
+body[data-dsh-deepcraft] :is([data-dsh-deepcraft-account-menu], [data-dsh-deepcraft-hero-menu]) [data-dsh-deepcraft-part~="menu-item"] > [role="menuitem"]:focus-visible:not(:disabled) {
+  background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
 }
-body[data-dsh-claude-style] [data-dsh-claude-account-menu] [data-dsh-claude-part~="menu-item"] > [role="menuitem"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] [data-dsh-deepcraft-part~="menu-item"] > [role="menuitem"] {
   font-weight: 400;
 }
 /* The rows the host hands a description or a name of their own keep their own
    line, in the account area as on the home page. */
-body[data-dsh-claude-style] :is([data-dsh-claude-account-menu], [data-dsh-claude-hero-menu]) [data-dsh-claude-part~="menu-item-name"] {
+body[data-dsh-deepcraft] :is([data-dsh-deepcraft-account-menu], [data-dsh-deepcraft-hero-menu]) [data-dsh-deepcraft-part~="menu-item-name"] {
   font-size: 13px;
   font-weight: 500;
   line-height: 16px;
 }
-body[data-dsh-claude-style] :is([data-dsh-claude-account-menu], [data-dsh-claude-hero-menu]) [data-dsh-claude-part~="menu-item-desc"] {
+body[data-dsh-deepcraft] :is([data-dsh-deepcraft-account-menu], [data-dsh-deepcraft-hero-menu]) [data-dsh-deepcraft-part~="menu-item-desc"] {
   font-size: 11px;
   line-height: 14px;
   color: var(--dsw-alias-label-tertiary, #8f8d84);
 }
-body[data-dsh-claude-style] :is([data-dsh-claude-account-menu], [data-dsh-claude-hero-menu]) [data-dsh-claude-part~="menu-item-icon"] {
+body[data-dsh-deepcraft] :is([data-dsh-deepcraft-account-menu], [data-dsh-deepcraft-hero-menu]) [data-dsh-deepcraft-part~="menu-item-icon"] {
   width: 16px;
   height: 16px;
   color: var(--dsw-alias-label-secondary, #787672);
 }
-body[data-dsh-claude-style] :is([data-dsh-claude-account-menu], [data-dsh-claude-hero-menu]) [data-dsh-claude-part~="menu-item-icon"] svg {
+body[data-dsh-deepcraft] :is([data-dsh-deepcraft-account-menu], [data-dsh-deepcraft-hero-menu]) [data-dsh-deepcraft-part~="menu-item-icon"] svg {
   width: 16px;
   height: 16px;
 }
-body[data-dsh-claude-style] :is([data-dsh-claude-account-menu], [data-dsh-claude-hero-menu]) [data-dsh-claude-part~="menu-item-label"] {
+body[data-dsh-deepcraft] :is([data-dsh-deepcraft-account-menu], [data-dsh-deepcraft-hero-menu]) [data-dsh-deepcraft-part~="menu-item-label"] {
   font-size: 13px;
   line-height: 20px;
 }
 /* The selected row keeps the skin's fill rather than the host's stronger
    accent: the account menu's rows are actions, not a persistent choice. */
-body[data-dsh-claude-style] [data-dsh-claude-account-menu] [data-dsh-claude-part~="menu-item-selected"] {
-  background: var(--dsh-claude-hover-bg, rgba(0, 0, 0, 0.08));
+body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] [data-dsh-deepcraft-part~="menu-item-selected"] {
+  background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
 }
 
 /* Separators bleed across the card's padding the way the drawer's own divider
    does; the line itself is the shared one (shared/popover.css). */
-body[data-dsh-claude-style] [data-dsh-claude-account-menu] [role="separator"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] [role="separator"] {
   margin: 2px -6px;
 }
 
 /* The list and its pinned footer sit inside the card's 6px padding; the footer
    keeps a hairline but takes the skin's spacing. */
-body[data-dsh-claude-style] [data-dsh-claude-account-menu] [data-dsh-claude-part~="menu-viewport"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] [data-dsh-deepcraft-part~="menu-viewport"] {
   padding: 0;
   overflow-x: hidden;
 }
-body[data-dsh-claude-style] [data-dsh-claude-account-menu] [data-dsh-claude-part~="menu-footer"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] [data-dsh-deepcraft-part~="menu-footer"] {
   margin-top: 2px;
   padding-top: 2px;
   border-top: 0.5px solid var(--dsw-alias-border-l2, #dedcd2);
@@ -446,7 +446,7 @@ body[data-dsh-claude-style] [data-dsh-claude-account-menu] [data-dsh-claude-part
 
 /* Our injected container and header already use the shared popover rules; the
    host's viewport is a flex column, so the container only needs to fill it. */
-body[data-dsh-claude-style] [data-dsh-claude-account-menu] .dsh-claude-account-inject {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] .dsh-deepcraft-account-inject {
   width: 100%;
 }
 
@@ -460,14 +460,14 @@ body[data-dsh-claude-style] [data-dsh-claude-account-menu] .dsh-claude-account-i
    first row's label sits from the divider, and the divider's margin leaves the
    hairline of air the rows below carry. The rule itself stays full-bleed: its
    margins are the distance the row carries the plate plus the card's inset. */
-body[data-dsh-claude-style] .dsh-claude-account-popover-header {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-header {
   padding: 4px 6px;
   margin: 0 -6px;
   display: flex;
   flex-direction: column;
   gap: 1px;
 }
-body[data-dsh-claude-style] .dsh-claude-account-popover-name {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-name {
   font-size: 14px;
   font-weight: 600;
   color: var(--dsw-alias-label-primary, #141413);
@@ -476,13 +476,13 @@ body[data-dsh-claude-style] .dsh-claude-account-popover-name {
 }
 /* The drawer's own divider carries the separator role, so its line comes from
    shared/popover.css with every other one; what stays here is its margin. */
-body[data-dsh-claude-style] .dsh-claude-account-popover-divider {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-divider {
   margin: 2px 0;
   flex: none;
 }
 
 /* Popover Body & Items */
-body[data-dsh-claude-style] .dsh-claude-account-popover-body {
+body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-body {
   display: flex;
   flex-direction: column;
   gap: 2px;

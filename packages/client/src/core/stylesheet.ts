@@ -1,6 +1,6 @@
-import { UNTAGGED_SHEET_SELECTOR } from '@dsh-claude-style/contracts/dom'
-import { mountStylesheet as mountSheet, parkForeignSheets as parkSheets } from '@dsh-claude-style/engine/stylesheet'
-import { STYLESHEET } from 'virtual:dsh-claude-style/generated'
+import { UNTAGGED_SHEET_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { mountStylesheet as mountSheet, parkForeignSheets as parkSheets } from '@dsh-deepcraft/engine/stylesheet'
+import { STYLESHEET } from 'virtual:dsh-deepcraft/generated'
 import { FOREIGN_SHEET_TAG, PACKAGE_NAME, STYLE_ID, STYLE_PLUGIN_CSS } from '../constants'
 
 /**

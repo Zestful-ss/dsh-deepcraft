@@ -1,10 +1,10 @@
-import { windowsDesktop } from '@dsh-claude-style/engine/desktop-band'
-import { cacheFirstMatch } from '@dsh-claude-style/engine/host'
-import { createStamp } from '@dsh-claude-style/engine/dom'
+import { windowsDesktop } from '@dsh-deepcraft/engine/desktop-band'
+import { cacheFirstMatch } from '@dsh-deepcraft/engine/host'
+import { createStamp } from '@dsh-deepcraft/engine/dom'
 import { VIEW_SWITCH_CLASS } from '../../shared/segment-control'
 import { createSlidingPill } from '../../shared/sliding-pill'
 import { inPageBox } from '../../shared/page-zoom'
-import type { HostContext } from '@dsh-claude-style/engine/host'
+import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './view-tabs.manifest'
 
@@ -46,8 +46,8 @@ import type manifest from './view-tabs.manifest'
  * The strip's active pill slides between tabs (packages/client/src/shared/sliding-pill.ts).
  */
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
-  const STRIP = '[data-dsh-claude-part~="view-tabs"]'
-  const HEADER = `[data-dsh-claude-part~="conversation-header"]:has(${STRIP})`
+  const STRIP = '[data-dsh-deepcraft-part~="view-tabs"]'
+  const HEADER = `[data-dsh-deepcraft-part~="conversation-header"]:has(${STRIP})`
   /**
    * The title's TEXT, not its row or cluster: the title row is a flex row and
    * the cluster takes up the slack, so testing against them reported a clash on
@@ -55,8 +55,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * element that actually draws the words; the cluster is the fallback for a
    * header whose crumb the host does not render.
    */
-  const TITLE = '[data-dsh-claude-part~="header-crumb"], [data-dsh-claude-part~="title-cluster"]'
-  const ACTIONS = '[data-dsh-claude-part~="header-actions"], [data-dsh-claude-part~="header-utilities"]'
+  const TITLE = '[data-dsh-deepcraft-part~="header-crumb"], [data-dsh-deepcraft-part~="title-cluster"]'
+  const ACTIONS = '[data-dsh-deepcraft-part~="header-actions"], [data-dsh-deepcraft-part~="header-utilities"]'
   /** The stylesheet's fallback: the strip's own row, 10px up from y=50. */
   const FALLBACK = -10
   /** The header's own top inset; the lifted strip may not enter it. */
@@ -135,7 +135,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   /**
    * The header holding the strip, and the strip with it.
    *
-   * The header is the FIRST `[data-dsh-claude-part~="conversation-header"]` carrying a strip in document
+   * The header is the FIRST `[data-dsh-deepcraft-part~="conversation-header"]` carrying a strip in document
    * order, so a header mounted before the one found last time takes that answer
    * while leaving the old header connected, and a kept one would go on stamping
    * and placing a strip the page no longer reads as the conversation's. The pair

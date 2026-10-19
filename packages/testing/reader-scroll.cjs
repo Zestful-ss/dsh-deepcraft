@@ -23,7 +23,7 @@ const HOST = {
 }
 
 /** The skin's own mark for the reader's takeover (READER_HOLD_ATTR, packages/client/src/constants.ts). */
-const READER_HOLD = '[data-dsh-claude-reader-hold]'
+const READER_HOLD = '[data-dsh-deepcraft-reader-hold]'
 
 /** How much of the pinned row's own height a frame may sit within and still count as floating at the pin. */
 const PIN_SLACK_PX = bound('readerScrollPinSlackPx')

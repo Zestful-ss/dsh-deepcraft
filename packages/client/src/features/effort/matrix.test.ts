@@ -27,7 +27,7 @@ function mount() {
   return { track, matrix }
 }
 
-const particles = (matrix: HTMLElement) => [...matrix.querySelectorAll<HTMLElement>('.dsh-claude-effort-matrix-sq')]
+const particles = (matrix: HTMLElement) => [...matrix.querySelectorAll<HTMLElement>('.dsh-deepcraft-effort-matrix-sq')]
 
 test('a playing reader gets every particle\'s cycle and phase', () => {
   document.body.setAttribute(MOTION_ATTR, MOTION_FULL)

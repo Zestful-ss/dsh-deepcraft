@@ -19,7 +19,7 @@ import type manifest from './caret.manifest'
  *
  * Both cards carry the same line in the same box, so the first card's measure of
  * the last typed character's edge places both carets; the bar's rule reads it as
- * `--dsh-claude-caret-x` (features/settings/settings-cards.css).
+ * `--dsh-deepcraft-caret-x` (features/settings/settings-cards.css).
  */
 export const controls: SettingsControlsOf<typeof manifest> = {
   'caret-preview': CaretPicker,
@@ -40,7 +40,7 @@ function CaretPicker(props: SettingsRowView) {
   const pickerRef = React.useRef<HTMLDivElement | null>(null)
   const lineRef = React.useRef<HTMLSpanElement | null>(null)
   React.useEffect(() => {
-    const period = motionMs('--dsh-claude-period-preview-caret')
+    const period = motionMs('--dsh-deepcraft-period-preview-caret')
     const typing = Math.round(period * CARET_PREVIEW_TYPING_SHARE)
     const gap = Math.max(1, Math.round(typing / pieces.length))
     // The ticks the line stands whole before it clears: the rest of the
@@ -66,7 +66,7 @@ function CaretPicker(props: SettingsRowView) {
     const edge = last === null || last === undefined
       ? lineLeft
       : last.getBoundingClientRect().right
-    picker.style.setProperty('--dsh-claude-caret-x', `${inPagePixels(edge - lineLeft)}px`)
+    picker.style.setProperty('--dsh-deepcraft-caret-x', `${inPagePixels(edge - lineLeft)}px`)
   }, [at, sample])
   const options: { value: Prefs['caretMotion'], label: string }[] = [
     { value: CARET_MOTION_TYPING, label: copy('caretOn') },
@@ -74,13 +74,13 @@ function CaretPicker(props: SettingsRowView) {
   ]
   return React.createElement(
     'div',
-    { className: 'dsh-claude-caret-picker', role: 'group', ref: pickerRef },
+    { className: 'dsh-deepcraft-caret-picker', role: 'group', ref: pickerRef },
     options.map(option => React.createElement(
       'button',
       {
         key: option.value,
         type: 'button',
-        className: 'dsh-claude-caret-card',
+        className: 'dsh-deepcraft-caret-card',
         disabled: props.disabled,
         'data-active': option.value === props.prefs.caretMotion ? '' : undefined,
         'aria-pressed': option.value === props.prefs.caretMotion ? 'true' : 'false',
@@ -89,23 +89,23 @@ function CaretPicker(props: SettingsRowView) {
       },
       React.createElement(
         'span',
-        { className: 'dsh-claude-caret-sample', 'aria-hidden': 'true' },
+        { className: 'dsh-deepcraft-caret-sample', 'aria-hidden': 'true' },
         React.createElement(
           'span',
           {
-            className: 'dsh-claude-caret-sample-text',
+            className: 'dsh-deepcraft-caret-sample-text',
             ref: option.value === CARET_MOTION_TYPING ? lineRef : undefined,
           },
           pieces.map((piece, index) => React.createElement(
             'span',
             // A character that has not been typed yet holds its place in the
             // line, so the line does not reflow as it is typed.
-            { key: `${index}-${piece}`, className: 'dsh-claude-caret-piece', 'data-in': index < at ? '' : undefined },
+            { key: `${index}-${piece}`, className: 'dsh-deepcraft-caret-piece', 'data-in': index < at ? '' : undefined },
             piece,
           )),
         ),
         React.createElement('span', {
-          className: `dsh-claude-caret-sample-bar dsh-claude-caret-${option.value}`,
+          className: `dsh-deepcraft-caret-sample-bar dsh-deepcraft-caret-${option.value}`,
           // The blink is switched off for the whole time the line is being
           // typed, so the caret is lit while it moves.
           'data-typing': at < pieces.length ? '' : undefined,

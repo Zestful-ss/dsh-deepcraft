@@ -47,14 +47,14 @@ const APP = 'const first = 1\n'
  * The loader's motions, each with the lane it plays in, how many dots it draws,
  * the animation its first dot runs and that animation's own turn
  * (features/chat-wait/chat-wait.css). `wait-loader.ts` hands the row over from
- * one to the next every `--dsh-claude-period-dot-rotate`, so any of the three may
+ * one to the next every `--dsh-deepcraft-period-dot-rotate`, so any of the three may
  * be the one standing when the head is read; the smoke case reads the same three
  * (cases/chat.cjs).
  */
 const MOTIONS = [
-  { lane: 'is-bounce', dots: 3, animation: 'dsh-claude-wait-dot', duration: '0.5s' },
-  { lane: 'is-line', dots: 3, animation: 'dsh-claude-wait-dot-line', duration: '1.25s' },
-  { lane: 'is-orbit', dots: 4, animation: 'dsh-claude-wait-dot-orbit-1', duration: '2.4s' },
+  { lane: 'is-bounce', dots: 3, animation: 'dsh-deepcraft-wait-dot', duration: '0.5s' },
+  { lane: 'is-line', dots: 3, animation: 'dsh-deepcraft-wait-dot-line', duration: '1.25s' },
+  { lane: 'is-orbit', dots: 4, animation: 'dsh-deepcraft-wait-dot-orbit-1', duration: '2.4s' },
 ]
 
 /**
@@ -66,20 +66,20 @@ const MOTIONS = [
 const readHead = (page) => page.evaluate(() => {
   const row = document.querySelector('[data-chat-running]')
   if (row === null) return null
-  const loader = row.querySelector('.dsh-claude-chat-wait-loader')
+  const loader = row.querySelector('.dsh-deepcraft-chat-wait-loader')
   // The loader carries one lane of dots per motion, of which the lane in play is
   // the one drawn and the one whose animation is running
   // (features/chat-wait/wait-loader.ts).
-  const lane = loader === null ? null : loader.querySelector('.dsh-claude-chat-wait-lane.is-active')
+  const lane = loader === null ? null : loader.querySelector('.dsh-deepcraft-chat-wait-lane.is-active')
   const dot = lane === null ? null : lane.firstElementChild
-  const icon = row.querySelector('[data-dsh-claude-part~="running-icon"]')
-  const label = row.querySelector('.dsh-claude-chat-wait-label')
+  const icon = row.querySelector('[data-dsh-deepcraft-part~="running-icon"]')
+  const label = row.querySelector('.dsh-deepcraft-chat-wait-label')
   const dotStyle = dot === null ? null : getComputedStyle(dot)
   const box = (r) => ({ top: +r.top.toFixed(1), bottom: +r.bottom.toFixed(1), height: +r.height.toFixed(1) })
   const seat = (element) => box(element.getBoundingClientRect())
   // The line's own text: while a wording swaps the label holds two copies, so
   // the one standing is the last of them.
-  const copies = label === null ? [] : label.querySelectorAll('.dsh-claude-swap-copy')
+  const copies = label === null ? [] : label.querySelectorAll('.dsh-deepcraft-swap-copy')
   const standing = copies.length === 0 ? label : copies[copies.length - 1]
   let text = null
   if (standing !== null) {
@@ -139,7 +139,7 @@ function waitLineScenario({ check }) {
         // than the lock held, so the record is taken here and stamped with the
         // page's clock.
         const recordWord = () => {
-          const label = document.querySelector('[data-chat-running] .dsh-claude-chat-wait-label')
+          const label = document.querySelector('[data-chat-running] .dsh-deepcraft-chat-wait-label')
           const word = label === null ? null : (label.dataset.text ?? null)
           const last = window.__waitWords[window.__waitWords.length - 1]
           if (word === null || last?.word === word) return

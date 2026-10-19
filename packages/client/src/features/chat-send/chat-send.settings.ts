@@ -41,7 +41,7 @@ function MessageEnterPicker(props: SettingsRowView) {
       const id = nextId.current
       nextId.current += 1
       setShown(previous => previous.length >= 3 ? [...previous.slice(1), id] : [...previous, id])
-    }, motionMs('--dsh-claude-period-preview-enter'))
+    }, motionMs('--dsh-deepcraft-period-preview-enter'))
     return () => window.clearInterval(timer)
   }, [])
   // The lift: appending a message has already moved the column up a row, so
@@ -56,8 +56,8 @@ function MessageEnterPicker(props: SettingsRowView) {
       first.current = false
       return
     }
-    for (const stack of picker.querySelectorAll<HTMLElement>('.dsh-claude-enter-stack')) {
-      const row = Number.parseFloat(getComputedStyle(stack).getPropertyValue('--dsh-claude-enter-row')) || 28
+    for (const stack of picker.querySelectorAll<HTMLElement>('.dsh-deepcraft-enter-stack')) {
+      const row = Number.parseFloat(getComputedStyle(stack).getPropertyValue('--dsh-deepcraft-enter-row')) || 28
       stack.style.transition = 'none'
       stack.style.transform = `translateY(${row}px)`
       void stack.offsetWidth
@@ -71,13 +71,13 @@ function MessageEnterPicker(props: SettingsRowView) {
   ]
   return React.createElement(
     'div',
-    { className: 'dsh-claude-enter-picker', role: 'group', ref: pickerRef },
+    { className: 'dsh-deepcraft-enter-picker', role: 'group', ref: pickerRef },
     options.map(option => React.createElement(
       'button',
       {
         key: option.value,
         type: 'button',
-        className: 'dsh-claude-enter-card',
+        className: 'dsh-deepcraft-enter-card',
         // The effect this card shows, which is also the value it writes
         // (settings-cards.css).
         'data-enter': option.value,
@@ -89,15 +89,15 @@ function MessageEnterPicker(props: SettingsRowView) {
       },
       React.createElement(
         'span',
-        { className: 'dsh-claude-enter-sample', 'aria-hidden': 'true' },
+        { className: 'dsh-deepcraft-enter-sample', 'aria-hidden': 'true' },
         React.createElement(
           'span',
-          { className: 'dsh-claude-enter-stack' },
+          { className: 'dsh-deepcraft-enter-stack' },
           ...shown.map((id, at) => React.createElement(
             'span',
             {
               key: id,
-              className: 'dsh-claude-enter-bubble',
+              className: 'dsh-deepcraft-enter-bubble',
               // The messages already standing arrived in earlier turns and
               // stay as they are; the last one is the one arriving now.
               'data-standing': at < shown.length - 1 ? '' : undefined,

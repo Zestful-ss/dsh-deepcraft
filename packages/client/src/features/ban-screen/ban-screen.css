@@ -11,34 +11,34 @@
    measurements and the dark theme re-maps the same slots onto the skin's warm
    black. Every colour is a custom property, which is what lets one set of rules
    serve both canvases. */
-body[data-dsh-claude-style] .dsh-claude-ban {
-  --dsh-ban-canvas: #faf9f5;
-  --dsh-ban-text: #141413;
-  --dsh-ban-muted: #6e6a60;
-  --dsh-ban-card: #ffffff;
-  --dsh-ban-hairline: #e4e2d8;
-  --dsh-ban-hover: rgba(20, 20, 19, 0.05);
-  --dsh-ban-primary-fill: #141413;
-  --dsh-ban-primary-text: #faf9f5;
-  --dsh-ban-primary-hover: #2e2c29;
-  --dsh-ban-danger: #a8412b;
-  --dsh-ban-danger-hover: #8f3623;
-  --dsh-ban-toast-bg: #f6e3c0;
-  --dsh-ban-toast-border: #e6cfa1;
-  --dsh-ban-toast-text: #7a4f12;
-  --dsh-ban-toast-icon: #9a5a15;
-  --dsh-ban-toast-hover: rgba(20, 20, 19, 0.09);
+body[data-dsh-deepcraft] .dsh-deepcraft-ban {
+  --dsh-deepcraft-ban-canvas: #faf9f5;
+  --dsh-deepcraft-ban-text: #141413;
+  --dsh-deepcraft-ban-muted: #6e6a60;
+  --dsh-deepcraft-ban-card: #ffffff;
+  --dsh-deepcraft-ban-hairline: #e4e2d8;
+  --dsh-deepcraft-ban-hover: rgba(20, 20, 19, 0.05);
+  --dsh-deepcraft-ban-primary-fill: #141413;
+  --dsh-deepcraft-ban-primary-text: #faf9f5;
+  --dsh-deepcraft-ban-primary-hover: #2e2c29;
+  --dsh-deepcraft-ban-danger: #a8412b;
+  --dsh-deepcraft-ban-danger-hover: #8f3623;
+  --dsh-deepcraft-ban-toast-bg: #f6e3c0;
+  --dsh-deepcraft-ban-toast-border: #e6cfa1;
+  --dsh-deepcraft-ban-toast-text: #7a4f12;
+  --dsh-deepcraft-ban-toast-icon: #9a5a15;
+  --dsh-deepcraft-ban-toast-hover: rgba(20, 20, 19, 0.09);
   /* The two brand marks are alpha masks over these slots, so the starburst
      keeps the clay accent while the wordmark stays in the page's ink. */
-  --dsh-ban-mark: #d97757;
-  --dsh-ban-word: #141413;
+  --dsh-deepcraft-ban-mark: #d97757;
+  --dsh-deepcraft-ban-word: #141413;
   position: fixed !important;
   inset: 0 !important;
-  z-index: var(--dsh-claude-layer-takeover) !important;
+  z-index: var(--dsh-deepcraft-layer-takeover) !important;
   margin: 0 !important;
   padding: 0 !important;
-  background: var(--dsh-ban-canvas) !important;
-  color: var(--dsh-ban-text);
+  background: var(--dsh-deepcraft-ban-canvas) !important;
+  color: var(--dsh-deepcraft-ban-text);
   font-family: var(--dsw-font-family);
   font-size: 15px;
   line-height: 1.6;
@@ -49,55 +49,55 @@ body[data-dsh-claude-style] .dsh-claude-ban {
      A page rebuilt over one already up stands where it is; one on its way out
      takes no more presses (ban-screen.ts). */
   transform-origin: center;
-  animation: dsh-claude-ban-in var(--dsh-claude-duration-open) var(--dsh-claude-ease-settle);
+  animation: dsh-deepcraft-ban-in var(--dsh-deepcraft-duration-open) var(--dsh-deepcraft-ease-settle);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban[data-dsh-ban-settled] {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-settled] {
   animation: none;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban[data-dsh-ban-leaving] {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-leaving] {
   pointer-events: none;
-  animation: dsh-claude-ban-out var(--dsh-claude-duration-exit) var(--dsh-claude-ease-settle) forwards;
+  animation: dsh-deepcraft-ban-out var(--dsh-deepcraft-duration-exit) var(--dsh-deepcraft-ease-settle) forwards;
 }
 
-@keyframes dsh-claude-ban-in {
-  from { opacity: 0; transform: scale(var(--dsh-claude-scale-dialog)); }
+@keyframes dsh-deepcraft-ban-in {
+  from { opacity: 0; transform: scale(var(--dsh-deepcraft-scale-dialog)); }
   to { opacity: 1; transform: none; }
 }
 
-@keyframes dsh-claude-ban-out {
+@keyframes dsh-deepcraft-ban-out {
   from { opacity: 1; transform: none; }
-  to { opacity: 0; transform: scale(var(--dsh-claude-scale-dialog)); }
+  to { opacity: 0; transform: scale(var(--dsh-deepcraft-scale-dialog)); }
 }
 
-body[data-dsh-claude-style][data-ds-dark-theme] .dsh-claude-ban {
-  --dsh-ban-canvas: #141413;
-  --dsh-ban-text: #faf9f5;
-  --dsh-ban-muted: #b0aea5;
-  --dsh-ban-card: #1c1b1a;
-  --dsh-ban-hairline: #2e2c29;
-  --dsh-ban-hover: rgba(255, 255, 255, 0.07);
-  --dsh-ban-primary-fill: #faf9f5;
-  --dsh-ban-primary-text: #141413;
-  --dsh-ban-primary-hover: #e8e6dc;
-  --dsh-ban-danger: #e08a6d;
-  --dsh-ban-danger-hover: #eb9f84;
-  --dsh-ban-toast-bg: #3a2a22;
-  --dsh-ban-toast-border: #55402f;
-  --dsh-ban-toast-text: #f0d8b8;
-  --dsh-ban-toast-icon: #e0a86a;
-  --dsh-ban-toast-hover: rgba(255, 255, 255, 0.08);
-  --dsh-ban-word: #faf9f5;
+body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-ban {
+  --dsh-deepcraft-ban-canvas: #141413;
+  --dsh-deepcraft-ban-text: #faf9f5;
+  --dsh-deepcraft-ban-muted: #b0aea5;
+  --dsh-deepcraft-ban-card: #1c1b1a;
+  --dsh-deepcraft-ban-hairline: #2e2c29;
+  --dsh-deepcraft-ban-hover: rgba(255, 255, 255, 0.07);
+  --dsh-deepcraft-ban-primary-fill: #faf9f5;
+  --dsh-deepcraft-ban-primary-text: #141413;
+  --dsh-deepcraft-ban-primary-hover: #e8e6dc;
+  --dsh-deepcraft-ban-danger: #e08a6d;
+  --dsh-deepcraft-ban-danger-hover: #eb9f84;
+  --dsh-deepcraft-ban-toast-bg: #3a2a22;
+  --dsh-deepcraft-ban-toast-border: #55402f;
+  --dsh-deepcraft-ban-toast-text: #f0d8b8;
+  --dsh-deepcraft-ban-toast-icon: #e0a86a;
+  --dsh-deepcraft-ban-toast-hover: rgba(255, 255, 255, 0.08);
+  --dsh-deepcraft-ban-word: #faf9f5;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban *,
-body[data-dsh-claude-style] .dsh-claude-ban *::before,
-body[data-dsh-claude-style] .dsh-claude-ban *::after {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban *,
+body[data-dsh-deepcraft] .dsh-deepcraft-ban *::before,
+body[data-dsh-deepcraft] .dsh-deepcraft-ban *::after {
   box-sizing: border-box;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban svg {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban svg {
   display: block;
   width: 100%;
   height: 100%;
@@ -106,7 +106,7 @@ body[data-dsh-claude-style] .dsh-claude-ban svg {
 /* ---------- top bar: brand lockup, sign out, window controls ---------- */
 /* The bar sits 30px down from the window edge: it reproduces the shipped app's
    own titlebar row, which the real Claude page keeps clear of. */
-body[data-dsh-claude-style] .dsh-claude-ban-bar {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -114,88 +114,88 @@ body[data-dsh-claude-style] .dsh-claude-ban-bar {
   padding: 40px 8px 10px 44px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-brand {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-brand {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--dsh-ban-word);
+  color: var(--dsh-deepcraft-ban-word);
 }
 
 /* The page is Claude's own, so its lockup is the Claude one in every brand: the
    ember starburst beside the wordmark, both masked over the page's ink. The
    artwork comes from the shared masked classes (shared/masked.css); the ink
    and the box are the page's own. */
-body[data-dsh-claude-style] .dsh-claude-ban-mark {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-mark {
   flex: none;
   width: 21px;
   height: 21px;
-  background-color: var(--dsh-ban-mark);
+  background-color: var(--dsh-deepcraft-ban-mark);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-word {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-word {
   flex: none;
   width: 89px;
   height: 21px;
-  background-color: var(--dsh-ban-word);
+  background-color: var(--dsh-deepcraft-ban-word);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-bar-actions {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-bar-actions {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-signout {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-signout {
   appearance: none;
   margin: 0;
-  border: 1px solid var(--dsh-ban-hairline);
+  border: 1px solid var(--dsh-deepcraft-ban-hairline);
   border-radius: 8px;
-  background: var(--dsh-ban-card);
-  color: var(--dsh-ban-text);
+  background: var(--dsh-deepcraft-ban-card);
+  color: var(--dsh-deepcraft-ban-text);
   padding: 6px 14px;
   font: inherit;
   font-size: 13px;
   line-height: 18px;
   cursor: pointer;
   box-shadow: 0 1px 2px rgba(20, 20, 19, 0.05);
-  transition: background-color var(--dsh-claude-timing-feedback);
+  transition: background-color var(--dsh-deepcraft-timing-feedback);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-signout:hover {
-  background: var(--dsh-ban-hover);
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-signout:hover {
+  background: var(--dsh-deepcraft-ban-hover);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-window {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-window {
   display: flex;
   align-items: center;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-win {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-win {
   appearance: none;
   margin: 0;
   border: 0;
   background: transparent;
-  color: var(--dsh-ban-muted);
+  color: var(--dsh-deepcraft-ban-muted);
   width: 34px;
   height: 28px;
   padding: 6px;
   cursor: pointer;
   border-radius: 4px;
-  transition: background-color var(--dsh-claude-timing-feedback);
+  transition: background-color var(--dsh-deepcraft-timing-feedback);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-win:hover {
-  background: var(--dsh-ban-hover);
-  color: var(--dsh-ban-text);
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-win:hover {
+  background: var(--dsh-deepcraft-ban-hover);
+  color: var(--dsh-deepcraft-ban-text);
 }
 
 /* ---------- Desktop caption strip: the bar rides the native titlebar row ---------- */
 /* Both desktop platforms hand the top of the window to a NATIVE layer, and
-   ban-screen.ts stamps data-dsh-ban-titlebar on the overlay once per open
+   ban-screen.ts stamps data-dsh-deepcraft-ban-titlebar on the overlay once per open
    whenever the shared desktopBand() reports a strip, together with the strip's
-   height (--dsh-ban-caption-height) and the width its window controls occupy
-   (--dsh-ban-caption-controls) and the end those controls take
-   (data-dsh-ban-controls). So the bar stops drawing its own three window buttons
+   height (--dsh-deepcraft-ban-caption-height) and the width its window controls occupy
+   (--dsh-deepcraft-ban-caption-controls) and the end those controls take
+   (data-dsh-deepcraft-ban-controls). So the bar stops drawing its own three window buttons
    — the strip already shows a cluster — and moves its content up onto the strip,
    clear of that cluster: Windows draws its caption buttons at the RIGHT end and
    macOS draws its traffic lights at the LEFT, which is the one thing the two
@@ -210,45 +210,45 @@ body[data-dsh-claude-style] .dsh-claude-ban-win:hover {
    host's own drag regions (the Windows frame's `.frame::before` strip, and on
    macOS the elements the host marks `data-window-drag`), and a drag region the
    pointer cannot reach is no region at all. */
-body[data-dsh-claude-style] .dsh-claude-ban[data-dsh-ban-titlebar] .dsh-claude-ban-bar {
-  height: var(--dsh-ban-caption-height, 40px) !important;
-  padding: 0 calc(var(--dsh-ban-caption-controls, 140px) + 10px) 0 44px !important;
+body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar] .dsh-deepcraft-ban-bar {
+  height: var(--dsh-deepcraft-ban-caption-height, 40px) !important;
+  padding: 0 calc(var(--dsh-deepcraft-ban-caption-controls, 140px) + 10px) 0 44px !important;
   -webkit-app-region: drag;
 }
 
 /* macOS: the traffic lights sit at the LEFT end of the strip, so the bar keeps
    its own leading inset clear of them and gives the trailing end back to the
    row. */
-body[data-dsh-claude-style] .dsh-claude-ban[data-dsh-ban-titlebar][data-dsh-ban-controls="left"] .dsh-claude-ban-bar {
-  padding: 0 10px 0 calc(var(--dsh-ban-caption-controls, 88px) + 10px) !important;
+body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar][data-dsh-deepcraft-ban-controls="left"] .dsh-deepcraft-ban-bar {
+  padding: 0 10px 0 calc(var(--dsh-deepcraft-ban-caption-controls, 88px) + 10px) !important;
 }
 
 /* The lockup sits a touch below the row's midline: the wordmark's ink fills its
    whole 21px box, so centring it beside the platform's 10px-tall caption glyphs
    leaves it reading high. */
-body[data-dsh-claude-style] .dsh-claude-ban[data-dsh-ban-titlebar] .dsh-claude-ban-brand {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar] .dsh-deepcraft-ban-brand {
   position: relative;
   top: 4px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban[data-dsh-ban-titlebar] .dsh-claude-ban-signout {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar] .dsh-deepcraft-ban-signout {
   -webkit-app-region: no-drag;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban[data-dsh-ban-titlebar] .dsh-claude-ban-window {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar] .dsh-deepcraft-ban-window {
   display: none !important;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban[data-dsh-ban-titlebar] .dsh-claude-ban-scroll {
-  inset: calc(var(--dsh-ban-caption-height, 40px) + 6px) 0 0 0;
+body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar] .dsh-deepcraft-ban-scroll {
+  inset: calc(var(--dsh-deepcraft-ban-caption-height, 40px) + 6px) 0 0 0;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban[data-dsh-ban-titlebar] .dsh-claude-ban-toast {
-  top: calc(var(--dsh-ban-caption-height, 40px) + 16px);
+body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar] .dsh-deepcraft-ban-toast {
+  top: calc(var(--dsh-deepcraft-ban-caption-height, 40px) + 16px);
 }
 
 /* ---------- account_banned toast ---------- */
-body[data-dsh-claude-style] .dsh-claude-ban-toast {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-toast {
   position: absolute;
   top: 94px;
   right: 40px;
@@ -257,28 +257,28 @@ body[data-dsh-claude-style] .dsh-claude-ban-toast {
   gap: 10px;
   max-width: 340px;
   padding: 10px 12px;
-  border: 1px solid var(--dsh-ban-toast-border);
+  border: 1px solid var(--dsh-deepcraft-ban-toast-border);
   border-radius: 12px;
-  background: var(--dsh-ban-toast-bg);
-  color: var(--dsh-ban-toast-text);
+  background: var(--dsh-deepcraft-ban-toast-bg);
+  color: var(--dsh-deepcraft-ban-toast-text);
   font-size: 13px;
   line-height: 18px;
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(20, 20, 19, 0.08);
   /* The toast drops in from above, so the shared entrance travels the other way
      round (shared/motion.css, D9). */
-  --dsh-claude-surface-from: calc(-1 * var(--dsh-claude-distance-nudge));
-  animation: dsh-claude-surface-in var(--dsh-claude-timing-surface) both;
+  --dsh-deepcraft-surface-from: calc(-1 * var(--dsh-deepcraft-distance-nudge));
+  animation: dsh-deepcraft-surface-in var(--dsh-deepcraft-timing-surface) both;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-toast-icon {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-toast-icon {
   flex: none;
   width: 16px;
   height: 16px;
-  color: var(--dsh-ban-toast-icon);
+  color: var(--dsh-deepcraft-ban-toast-icon);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-toast-text {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-toast-text {
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -286,29 +286,29 @@ body[data-dsh-claude-style] .dsh-claude-ban-toast-text {
   white-space: nowrap;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-toast-close {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-toast-close {
   flex: none;
   width: 14px;
   height: 14px;
   opacity: 0.7;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-toast:hover {
-  border-color: var(--dsh-ban-toast-icon);
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-toast:hover {
+  border-color: var(--dsh-deepcraft-ban-toast-icon);
 }
 
 /* ---------- content column ---------- */
 /* The page is one centred column: the card stack is the page's measure, so it
    is centred in the window rather than pinned to a left inset, and capped so it
    never stretches into a measure no one wants to read. */
-body[data-dsh-claude-style] .dsh-claude-ban-scroll {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-scroll {
   position: absolute;
   inset: 86px 0 0 0;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-column {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-column {
   width: 63%;
   max-width: 1150px;
   margin: 0 auto;
@@ -318,130 +318,130 @@ body[data-dsh-claude-style] .dsh-claude-ban-column {
 /* The icon box is the lock's size lever: the traced ink is 20 of the SVG's 24
    units, so 75px here paints a ~61px lock — the reference page's lock, which
    reads about a third larger than the 58px box did next to the same title. */
-body[data-dsh-claude-style] .dsh-claude-ban-lock {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-lock {
   display: block;
   width: 75px;
   height: 75px;
-  color: var(--dsh-ban-text);
+  color: var(--dsh-deepcraft-ban-text);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-title {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-title {
   margin: 26px 0 0;
-  font-family: var(--dsh-claude-font-serif);
+  font-family: var(--dsh-deepcraft-font-serif);
   font-size: 31px;
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: -0.015em;
-  color: var(--dsh-ban-text);
+  color: var(--dsh-deepcraft-ban-text);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-lead {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-lead {
   margin: 22px 0 0;
   font-size: 15px;
   line-height: 1.6;
-  color: var(--dsh-ban-text);
+  color: var(--dsh-deepcraft-ban-text);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-lead strong {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-lead strong {
   font-weight: 700;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-next {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-next {
   margin: 32px 0 0;
   font-size: 15px;
   line-height: 1.6;
-  color: var(--dsh-ban-text);
+  color: var(--dsh-deepcraft-ban-text);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-subtitle {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-subtitle {
   margin: 44px 0 0;
   font-family: var(--dsw-font-family);
   font-size: 17px;
   font-weight: 600;
   line-height: 1.4;
   letter-spacing: 0;
-  color: var(--dsh-ban-text);
+  color: var(--dsh-deepcraft-ban-text);
 }
 
 /* ---------- cards: the numbered steps and the two account actions ---------- */
-body[data-dsh-claude-style] .dsh-claude-ban-card {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-card {
   margin-top: 18px;
-  border: 1px solid var(--dsh-ban-hairline);
+  border: 1px solid var(--dsh-deepcraft-ban-hairline);
   border-radius: 12px;
-  background: var(--dsh-ban-card);
+  background: var(--dsh-deepcraft-ban-card);
   overflow: hidden;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-step {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-step {
   display: flex;
   align-items: flex-start;
   gap: 14px;
   padding: 16px 24px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-step-num {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-step-num {
   flex: none;
   width: 24px;
   height: 24px;
   margin-top: 1px;
   border-radius: 50%;
   corner-shape: round;
-  background: var(--dsh-ban-hover);
-  color: var(--dsh-ban-text);
+  background: var(--dsh-deepcraft-ban-hover);
+  color: var(--dsh-deepcraft-ban-text);
   font-size: 12px;
   line-height: 24px;
   text-align: center;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-step-body {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-step-body {
   display: block;
   min-width: 0;
 }
 
 /* One title style for the numbered steps and the two account actions. */
-body[data-dsh-claude-style] .dsh-claude-ban-step-title,
-body[data-dsh-claude-style] .dsh-claude-ban-action-title {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-step-title,
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-action-title {
   display: block;
   font-size: 15px;
   font-weight: 500;
   line-height: 1.5;
-  color: var(--dsh-ban-text);
+  color: var(--dsh-deepcraft-ban-text);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-step-desc {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-step-desc {
   display: block;
   margin-top: 2px;
   font-size: 13.5px;
   line-height: 1.5;
-  color: var(--dsh-ban-muted);
+  color: var(--dsh-deepcraft-ban-muted);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-primary {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-primary {
   appearance: none;
   display: inline-block;
   margin: 26px 0 0;
   border: 0;
   border-radius: 8px;
-  background: var(--dsh-ban-primary-fill);
-  color: var(--dsh-ban-primary-text);
+  background: var(--dsh-deepcraft-ban-primary-fill);
+  color: var(--dsh-deepcraft-ban-primary-text);
   padding: 9px 18px;
   font: inherit;
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
   cursor: pointer;
-  transition: background-color var(--dsh-claude-timing-feedback);
+  transition: background-color var(--dsh-deepcraft-timing-feedback);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-primary:hover {
-  background: var(--dsh-ban-primary-hover);
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-primary:hover {
+  background: var(--dsh-deepcraft-ban-primary-hover);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-actions {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-actions {
   margin-top: 18px;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-action {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-action {
   appearance: none;
   display: flex;
   align-items: flex-start;
@@ -455,64 +455,64 @@ body[data-dsh-claude-style] .dsh-claude-ban-action {
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: background-color var(--dsh-claude-timing-feedback);
+  transition: background-color var(--dsh-deepcraft-timing-feedback);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-action + .dsh-claude-ban-action {
-  border-top: 1px solid var(--dsh-ban-hairline);
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-action + .dsh-deepcraft-ban-action {
+  border-top: 1px solid var(--dsh-deepcraft-ban-hairline);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-action:hover {
-  background: var(--dsh-ban-hover);
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-action:hover {
+  background: var(--dsh-deepcraft-ban-hover);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-action-icon {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-action-icon {
   flex: none;
   width: 18px;
   height: 18px;
   margin-top: 2px;
-  color: var(--dsh-ban-muted);
+  color: var(--dsh-deepcraft-ban-muted);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-action-text {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-action-text {
   display: block;
   flex: 1;
   min-width: 0;
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-action-title-danger {
-  color: var(--dsh-ban-danger);
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-action-title-danger {
+  color: var(--dsh-deepcraft-ban-danger);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-action:hover .dsh-claude-ban-action-title-danger {
-  color: var(--dsh-ban-danger-hover);
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-action:hover .dsh-deepcraft-ban-action-title-danger {
+  color: var(--dsh-deepcraft-ban-danger-hover);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-action-desc {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-action-desc {
   display: block;
   margin-top: 3px;
   font-size: 13.5px;
   line-height: 1.5;
-  color: var(--dsh-ban-muted);
+  color: var(--dsh-deepcraft-ban-muted);
 }
 
-body[data-dsh-claude-style] .dsh-claude-ban-action-chevron {
+body[data-dsh-deepcraft] .dsh-deepcraft-ban-action-chevron {
   flex: none;
   width: 18px;
   height: 18px;
   margin-top: 3px;
-  color: var(--dsh-ban-muted);
+  color: var(--dsh-deepcraft-ban-muted);
 }
 
 /* Narrow windows: drop the fixed left inset so the column keeps its measure
    instead of being squeezed against the right edge. */
 @media (max-width: 1000px) {
-  body[data-dsh-claude-style] .dsh-claude-ban-column {
+  body[data-dsh-deepcraft] .dsh-deepcraft-ban-column {
     width: auto;
     padding: 72px 32px 80px;
   }
 
-  body[data-dsh-claude-style] .dsh-claude-ban-toast {
+  body[data-dsh-deepcraft] .dsh-deepcraft-ban-toast {
     right: 24px;
     max-width: calc(100% - 48px);
   }

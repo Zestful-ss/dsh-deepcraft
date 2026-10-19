@@ -2,7 +2,7 @@
 const { MARKUP, SKIN_FACE, SKIN_HAT, same, check } = require('../shared.cjs')
 
 /** The host's highlight band, read as its window's animation and then its copy's (shared/motion.css). */
-const BAND_ANIMATION = 'dsh-claude-sweep-window, dsh-claude-sweep-glyphs'
+const BAND_ANIMATION = 'dsh-deepcraft-sweep-window, dsh-deepcraft-sweep-glyphs'
 
 /** WCAG contrast ratio between two `rgb(r, g, b)` readings. */
 function contrast(a, b) {
@@ -60,13 +60,13 @@ function commonChecks(r) {
     r.titlebarTabs === false, JSON.stringify(r.titlebarTabs))
   check('teardown registered with the host', r.teardownRegistered)
   check("the sheet carries this package's own module-system tags, so no sibling's bookkeeping can take it away",
-    r.sheetPlugin === 'dsh-claude-style' && r.sheetPluginCss === 'dsh-claude-style/client.css' && r.sheetClaimable === false,
+    r.sheetPlugin === 'dsh-deepcraft' && r.sheetPluginCss === 'dsh-deepcraft/client.css' && r.sheetClaimable === false,
     JSON.stringify({ plugin: r.sheetPlugin, css: r.sheetPluginCss, claimable: r.sheetClaimable }))
   check("a sibling's untagged sheet stays out of this package's bookkeeping, so no reload of this package removes it",
-    r.siblingSheetTag === 'dsh-claude-style/foreign-sheet' && r.siblingSheetClaimable === false && r.siblingSheetSurvives === true,
+    r.siblingSheetTag === 'dsh-deepcraft/foreign-sheet' && r.siblingSheetClaimable === false && r.siblingSheetSurvives === true,
     JSON.stringify({ tag: r.siblingSheetTag, claimable: r.siblingSheetClaimable, survives: r.siblingSheetSurvives }))
   check("a sibling's sheet arriving after this bundle is parked before any package can claim it",
-    r.lateSheetTag === 'dsh-claude-style/foreign-sheet' && r.lateSheetClaimable === false,
+    r.lateSheetTag === 'dsh-deepcraft/foreign-sheet' && r.lateSheetClaimable === false,
     JSON.stringify({ tag: r.lateSheetTag, claimable: r.lateSheetClaimable }))
   if (!r.teardownRegistered) return
   check('teardown leaves no skin node, marker, body attribute or stylesheet',

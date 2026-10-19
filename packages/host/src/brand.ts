@@ -1,6 +1,6 @@
 /**
- * The reader's own brand images (D30), kept under the harness home's
- * `dsh-claude-style/brand/` as `mark.<ext>` and `wordmark.<ext>`.
+ * The reader's own brand images (D77), kept under the harness home's
+ * `dsh-deepcraft/brand/` as `mark.<ext>` and `wordmark.<ext>`.
  *
  * The status route answers which images are in place; each image's route
  * serves, replaces or removes its bytes. Every request runs the fence: the
@@ -8,14 +8,14 @@
  * paints. The directory is read per request, so a file the reader drops in by
  * hand shows up on the next status read.
  */
-import { BRAND_IMAGE_KINDS, BRAND_IMAGE_MAX_BYTES, BRAND_IMAGE_TYPES } from '@dsh-claude-style/contracts/brand'
-import type { BrandAnswer, BrandImageKind, BrandImageState } from '@dsh-claude-style/contracts/brand'
-import { BRAND_MARK_PATH, BRAND_PATH, BRAND_WORDMARK_PATH } from '@dsh-claude-style/contracts/routes'
+import { BRAND_IMAGE_KINDS, BRAND_IMAGE_MAX_BYTES, BRAND_IMAGE_TYPES } from '@dsh-deepcraft/contracts/brand'
+import type { BrandAnswer, BrandImageKind, BrandImageState } from '@dsh-deepcraft/contracts/brand'
+import { BRAND_MARK_PATH, BRAND_PATH, BRAND_WORDMARK_PATH } from '@dsh-deepcraft/contracts/routes'
 import { mkdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import type { DshContext, DshRequest, DshResponse, DshRoute } from '@dsh-claude-style/engine/node/dsh'
+import type { DshContext, DshRequest, DshResponse, DshRoute } from '@dsh-deepcraft/engine/node/dsh'
 import { pluginPath } from './harness-home.js'
-import { fenceRefused, methodRefused, readRequestBody, sendJson } from '@dsh-claude-style/engine/node/http'
+import { fenceRefused, methodRefused, readRequestBody, sendJson } from '@dsh-deepcraft/engine/node/http'
 
 /** Each image's route. */
 const IMAGE_PATHS: Record<BrandImageKind, string> = { mark: BRAND_MARK_PATH, wordmark: BRAND_WORDMARK_PATH }

@@ -14,56 +14,56 @@
    while the marker pair is split for exactly that — light rgb(1,162,65) /
    rgb(186,39,35), dark rgb(65,201,119) / rgb(250,66,62). Retuning means these two
    lines, one per theme. */
-body[data-dsh-claude-style] {
-  --dsh-claude-diff-added: var(--dsw-alias-file-diff-added-marker);
-  --dsh-claude-diff-deleted: var(--dsw-alias-file-diff-deleted-marker);
+body[data-dsh-deepcraft] {
+  --dsh-deepcraft-diff-added: var(--dsw-alias-file-diff-added-marker);
+  --dsh-deepcraft-diff-deleted: var(--dsw-alias-file-diff-deleted-marker);
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-root {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-root {
   display: flex;
   flex-direction: column;
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-leading {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-leading {
   flex-shrink: 0;
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-chevron {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-chevron {
   color: var(--dsw-alias-label-secondary);
 }
 
 /* The operation's label carries the host's own title metrics (its CSS Modules
    `.title`): the head of the row is drawn here, so its type, its colour and its
    rhythm are restated beside the host module they used to come from. */
-body[data-dsh-claude-style] .dsh-claude-file-title {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-title {
   flex: none;
   font-size: var(--dsh-content-font-size-secondary, 13px);
   line-height: calc(24px + var(--dsh-content-font-delta, 0px));
   color: var(--dsw-alias-label-secondary);
   font-weight: 400;
-  transition: color var(--dsh-claude-timing-feedback);
+  transition: color var(--dsh-deepcraft-timing-feedback);
 }
 
 /* The host's own title slot stays empty: the operation's label stands in the
    collapsed content instead, where it can hold both states of a swap. */
-body[data-dsh-claude-style] .dsh-claude-file-title-slot {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-title-slot {
   display: none;
 }
 
 /* The operation block, the file's icon and title: both states of a swap live in
    one grid cell, so the block is as wide as the wider of the two and the path
    beside it does not move sideways while they swap. */
-body[data-dsh-claude-style] .dsh-claude-file-op {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-op {
   /* The block is one grid cell with two states in it, and its title sits on its
      own line, so the swap travels the short distance (shared/motion.css, D9). */
-  --dsh-claude-swap-distance: var(--dsh-claude-distance-nudge);
+  --dsh-deepcraft-swap-distance: var(--dsh-deepcraft-distance-nudge);
   display: inline-grid;
   grid-template-areas: 'op';
   align-items: center;
   justify-items: start;
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-op > * {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-op > * {
   grid-area: op;
 }
 
@@ -71,24 +71,24 @@ body[data-dsh-claude-style] .dsh-claude-file-op > * {
    snippet the running line swaps its words with, as one shared preset
    (shared/motion.css, D9). The state leaving rises with a blur while the one
    taking its place rises in from below. */
-body[data-dsh-claude-style] .dsh-claude-file-op-swapping .dsh-claude-file-op-out {
-  animation: dsh-claude-swap-out var(--dsh-claude-swap-duration) var(--dsh-claude-swap-ease) forwards;
+body[data-dsh-deepcraft] .dsh-deepcraft-file-op-swapping .dsh-deepcraft-file-op-out {
+  animation: dsh-deepcraft-swap-out var(--dsh-deepcraft-swap-duration) var(--dsh-deepcraft-swap-ease) forwards;
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-op-swapping .dsh-claude-file-op-in {
-  animation: dsh-claude-swap-in var(--dsh-claude-swap-duration) var(--dsh-claude-swap-ease);
+body[data-dsh-deepcraft] .dsh-deepcraft-file-op-swapping .dsh-deepcraft-file-op-in {
+  animation: dsh-deepcraft-swap-in var(--dsh-deepcraft-swap-duration) var(--dsh-deepcraft-swap-ease);
 }
 
 /* The animation choice reaches this swap through <body> (D40): reduced draws no
    travel at all, and the new operation is written in place. The moving state's
    rules are classed on the block, so these restate that class to stay ahead. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-file-op .dsh-claude-file-op-out,
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-file-op .dsh-claude-file-op-in {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-file-op .dsh-deepcraft-file-op-out,
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-file-op .dsh-deepcraft-file-op-in {
   animation: none;
 }
 
 /* A 2 by 2 dot: the light separator between the title and the summary. */
-body[data-dsh-claude-style] .dsh-claude-file-sep {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-sep {
   flex: none;
   width: 2px;
   height: 2px;
@@ -97,7 +97,7 @@ body[data-dsh-claude-style] .dsh-claude-file-sep {
   background: var(--dsw-alias-label-caption);
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-summary {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-summary {
   flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
@@ -106,13 +106,13 @@ body[data-dsh-claude-style] .dsh-claude-file-summary {
   font-size: var(--dsh-content-font-size-secondary, 13px);
   line-height: calc(24px + var(--dsh-content-font-delta, 0px));
   color: var(--dsw-alias-label-tertiary);
-  transition: color var(--dsh-claude-timing-feedback);
+  transition: color var(--dsh-deepcraft-timing-feedback);
 }
 
 /* The tail: it sits outside the summary's ellipsis, so it carries the same type
    size of its own. A fixed gap sits between the two numbers — wider than a space,
    so "+12" and "-3" do not read as one number. */
-body[data-dsh-claude-style] .dsh-claude-file-suffix {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-suffix {
   flex: none;
   display: inline-flex;
   align-items: baseline;
@@ -123,26 +123,26 @@ body[data-dsh-claude-style] .dsh-claude-file-suffix {
 
 /* The numbers: the code face, two steps below the path, with half a pixel pushing
    the baseline back to the middle of the line box. */
-body[data-dsh-claude-style] .dsh-claude-file-stat {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-stat {
   font-family: var(--ds-font-family-code);
   font-size: calc(var(--dsh-content-font-size-secondary, 13px) - 2px);
   line-height: calc(24px + var(--dsh-content-font-delta, 0px));
   transform: translateY(0.5px);
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-add {
-  color: var(--dsh-claude-diff-added);
+body[data-dsh-deepcraft] .dsh-deepcraft-file-add {
+  color: var(--dsh-deepcraft-diff-added);
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-del {
-  color: var(--dsh-claude-diff-deleted);
+body[data-dsh-deepcraft] .dsh-deepcraft-file-del {
+  color: var(--dsh-deepcraft-diff-deleted);
 }
 
 /* A row another row stands for comes off the page whole: the carrier is the
    box the host gave that call in its list (rowCarrier, file-row-merge.ts), so
    the host's spacing around it goes with it and the file's calls leave one line
    behind (chat-files.ts). */
-body[data-dsh-claude-style] [data-dsh-claude-file-merge="gone"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-file-merge="gone"] {
   display: none;
 }
 
@@ -157,11 +157,11 @@ body[data-dsh-claude-style] [data-dsh-claude-file-merge="gone"] {
    a box one em tall then draws its glyph away from the row's own text baseline.
    Tabular figures keep every digit the same width, so nothing shifts sideways
    while it turns. */
-body[data-dsh-claude-style] .dsh-claude-file-roll {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-roll {
   font-variant-numeric: tabular-nums;
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-roll-digit {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-roll-digit {
   position: relative;
   display: inline-block;
   clip-path: inset(0);
@@ -171,28 +171,28 @@ body[data-dsh-claude-style] .dsh-claude-file-roll-digit {
   perspective: 8em;
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-roll-out {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-roll-out {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: dsh-claude-file-roll-out var(--dsh-claude-duration-roll) var(--dsh-claude-ease-roll) forwards;
+  animation: dsh-deepcraft-file-roll-out var(--dsh-deepcraft-duration-roll) var(--dsh-deepcraft-ease-roll) forwards;
 }
 
 /* The turn is classed on the character whose own digit changed: the characters
    of the row's first number stand still where they appeared, and only what a
    change really moved turns after it. */
-body[data-dsh-claude-style] .dsh-claude-file-roll-moving .dsh-claude-file-roll-in {
-  animation: dsh-claude-file-roll-in var(--dsh-claude-duration-roll) var(--dsh-claude-ease-roll);
+body[data-dsh-deepcraft] .dsh-deepcraft-file-roll-moving .dsh-deepcraft-file-roll-in {
+  animation: dsh-deepcraft-file-roll-in var(--dsh-deepcraft-duration-roll) var(--dsh-deepcraft-ease-roll);
 }
 
-@keyframes dsh-claude-file-roll-out {
+@keyframes dsh-deepcraft-file-roll-out {
   from { transform: translateY(0) rotateX(0deg); opacity: 1; }
   to { transform: translateY(.45em) rotateX(90deg); opacity: 0; }
 }
 
-@keyframes dsh-claude-file-roll-in {
+@keyframes dsh-deepcraft-file-roll-in {
   from { transform: translateY(-.45em) rotateX(-90deg); opacity: 0; }
   to { transform: translateY(0) rotateX(0deg); opacity: 1; }
 }
@@ -201,23 +201,23 @@ body[data-dsh-claude-style] .dsh-claude-file-roll-moving .dsh-claude-file-roll-i
    draws no travel at all, and the number is written in place. The moving
    character's rule is classed below the figure, so this one restates that class
    to stay ahead of it. */
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-file-roll-out,
-body[data-dsh-claude-style][data-dsh-claude-motion="reduced"] .dsh-claude-file-roll .dsh-claude-file-roll-in {
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-file-roll-out,
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] .dsh-deepcraft-file-roll .dsh-deepcraft-file-roll-in {
   animation: none;
 }
 
 /* Hovering the row lifts it, but the two numbers do not follow: they are this
    row's conclusion, their colour is the information, and turning them into body
    colour would rub the conclusion out. */
-body[data-dsh-claude-style] .dsh-claude-file-row:hover .dsh-claude-file-title,
-body[data-dsh-claude-style] .dsh-claude-file-row:hover .dsh-claude-file-summary:not(.dsh-claude-file-error):not(.dsh-claude-file-stopped) {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-row:hover .dsh-deepcraft-file-title,
+body[data-dsh-deepcraft] .dsh-deepcraft-file-row:hover .dsh-deepcraft-file-summary:not(.dsh-deepcraft-file-error):not(.dsh-deepcraft-file-stopped) {
   color: var(--dsw-alias-label-primary);
 }
 
 /* The file path: same type size, a dotted underline saying it can be pressed. It
    shrinks to the width of its text, so the blank space left in the row still
    belongs to the open and close target. */
-body[data-dsh-claude-style] .dsh-claude-file-link {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-link {
   flex: 0 1 auto;
   min-width: 0;
   overflow: hidden;
@@ -237,39 +237,39 @@ body[data-dsh-claude-style] .dsh-claude-file-link {
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
   cursor: pointer;
-  transition: color var(--dsh-claude-timing-feedback);
+  transition: color var(--dsh-deepcraft-timing-feedback);
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-row:hover .dsh-claude-file-link,
-body[data-dsh-claude-style] .dsh-claude-file-link:hover {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-row:hover .dsh-deepcraft-file-link,
+body[data-dsh-deepcraft] .dsh-deepcraft-file-link:hover {
   color: var(--dsw-alias-label-primary);
   text-decoration-color: currentColor;
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-error {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-error {
   color: var(--dsw-alias-state-error-primary);
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-stopped {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-stopped {
   color: var(--dsw-alias-state-warn-label);
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-body {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-body {
   display: flex;
   flex-direction: column;
 }
 
 /* The expanded body: the diff card, the read card and the IN/OUT card share one
    left indent and one rhythm between rows. */
-body[data-dsh-claude-style] .dsh-claude-file-diff,
-body[data-dsh-claude-style] .dsh-claude-file-read,
-body[data-dsh-claude-style] .dsh-claude-file-io {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-diff,
+body[data-dsh-deepcraft] .dsh-deepcraft-file-read,
+body[data-dsh-deepcraft] .dsh-deepcraft-file-io {
   margin: 4px 0 4px 4px;
 }
 
 /* The IN/OUT card: the code block's surface and corner, each section scrolling on
    its own with a hairline between them. */
-body[data-dsh-claude-style] .dsh-claude-file-io {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-io {
   display: flex;
   flex-direction: column;
   border: 0.5px solid var(--dsw-alias-border-l1);
@@ -278,7 +278,7 @@ body[data-dsh-claude-style] .dsh-claude-file-io {
   font: var(--dsw-font-markdown-code-block-small);
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-io-section {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-io-section {
   display: grid;
   grid-template-columns: max-content 1fr;
   column-gap: 14px;
@@ -288,33 +288,33 @@ body[data-dsh-claude-style] .dsh-claude-file-io-section {
   overflow-y: auto;
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-io-divider {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-io-divider {
   flex: none;
   height: 0.5px;
   background: var(--dsw-alias-border-l2);
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-io-label {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-io-label {
   position: sticky;
   top: 0;
   align-self: start;
   color: var(--dsw-alias-label-caption);
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-io-text {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-io-text {
   min-width: 0;
   white-space: pre-wrap;
   word-break: break-word;
   color: var(--dsw-alias-label-secondary);
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-io-text[data-error] {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-io-text[data-error] {
   color: var(--dsw-alias-state-error-primary);
 }
 
 /* The trajectory entrance: it appears when the row (its title line included) is
    hovered or when it takes keyboard focus, and takes no room otherwise. */
-body[data-dsh-claude-style] .dsh-claude-file-inspect {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-inspect {
   display: inline-flex;
   align-self: flex-start;
   align-items: center;
@@ -330,22 +330,22 @@ body[data-dsh-claude-style] .dsh-claude-file-inspect {
   line-height: 16px;
   cursor: pointer;
   opacity: 0;
-  transition: opacity var(--dsh-claude-timing-feedback);
+  transition: opacity var(--dsh-deepcraft-timing-feedback);
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-root:hover .dsh-claude-file-inspect,
-body[data-dsh-claude-style] .dsh-claude-file-inspect:focus-visible {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-root:hover .dsh-deepcraft-file-inspect,
+body[data-dsh-deepcraft] .dsh-deepcraft-file-inspect:focus-visible {
   opacity: 1;
 }
 
-body[data-dsh-claude-style] .dsh-claude-file-inspect:hover {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-inspect:hover {
   background: var(--dsw-alias-interactive-bg-hover-solid);
   color: var(--dsw-alias-label-primary);
 }
 
 /* The running state is carried by the icon and its sweep alone, so the state
    itself needs a sentence for a screen reader. */
-body[data-dsh-claude-style] .dsh-claude-file-hidden {
+body[data-dsh-deepcraft] .dsh-deepcraft-file-hidden {
   position: absolute;
   width: 1px;
   height: 1px;
