@@ -1,17 +1,14 @@
 <div align="center">
 
-# DSH Claude Style
+# DeepCraft
 
-**为 DeepSeek Harness 复刻 Claude Code Desktop 风格与交互体验的主题插件。**
+**为 DeepSeek Harness 提供 Claude 与 DeepSeek 双主题的外观与交互插件。**
 
-> **你的下一个 Claude Code Desktop ，何必是Claude Code。**
+> **同一套界面，在 Claude Code Desktop 与 DeepSeek 两种气质之间切换。**
 
 [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red.svg)](README.md) [![English](https://img.shields.io/badge/lang-English-blue.svg)](README.en.md)
 
-[![version](https://img.shields.io/npm/v/dsh-claude-style?style=flat&label=version&color=D97757)](https://www.npmjs.com/package/dsh-claude-style)
-[![downloads](https://img.shields.io/npm/dm/dsh-claude-style?style=flat&label=downloads&color=D97757)](https://www.npmjs.com/package/dsh-claude-style)
-[![GitHub stars](https://img.shields.io/github/stars/Nwflower/dsh-claude-style?style=flat&label=%E2%98%85&color=08C)](https://github.com/Nwflower/dsh-claude-style)
-[![dsh.so install](https://www.dsh.so/badge/install/dsh-claude-style.svg)](https://www.dsh.so/artifact/dsh-claude-style/)
+[![GitHub stars](https://img.shields.io/github/stars/Zestful-ss/dsh-deepcraft?style=flat&label=%E2%98%85&color=08C)](https://github.com/Zestful-ss/dsh-deepcraft)
 [![license](https://img.shields.io/badge/license-MIT-2EA44F?style=flat)](LICENSE)
 
 </div>
@@ -67,25 +64,24 @@
 
 ## 安装
 
-官方插件页添加这个包名，或从终端安装：
-
-```
-dsh-claude-style
-```
+`lib/` 是构建产物，不随 `master` 提交；先构建一次，再把本地目录加进 DSH：
 
 ```bash
-dsh plugin --profile web add dsh-claude-style                    # npm 包（推荐）
-dsh plugin --profile web add Nwflower/dsh-claude-style           # GitHub 源码
+git clone https://github.com/Zestful-ss/dsh-deepcraft.git
+cd dsh-deepcraft
+npm install
+npm run build
+dsh plugin --profile desktop add <本地目录>
 ```
 
-也可从[插件市场](https://github.com/dsh-market/dsh-market)或 dsh-web-all 的皮肤中心安装。同一时刻只启用一个主题，装好后重启 DeepSeek Harness。
+同一时刻只启用一个主题，装好后重启 DeepSeek Harness。原版 `dsh-claude-style` 仍在时，在插件管理里停用它。
 
 ## 字体
 
-> Anthropic 没有公开发行这三款字体；本仓库只提供下载与研究的[副本](https://github.com/Nwflower/dsh-claude-style/tree/master/packages/assets/src/fonts/anthropic)。
+> Anthropic 没有公开发行这三款字体；本仓库只提供下载与研究的[副本](https://github.com/Zestful-ss/dsh-deepcraft/tree/master/packages/assets/src/fonts/anthropic)。
 
 
-启用时二选一：装进系统，或把 `.ttf` 复制到 `$DSH_HOME/dsh-claude-style/fonts/`。
+启用时二选一：装进系统，或把 `.ttf` 复制到 `$DSH_HOME/dsh-deepcraft/fonts/`。
 
 ## 文档
 
@@ -109,4 +105,4 @@ dsh plugin --profile web add Nwflower/dsh-claude-style           # GitHub 源码
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Nwflower/dsh-claude-style&type=Date)](https://star-history.com/#Nwflower/dsh-claude-style&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Zestful-ss/dsh-deepcraft&type=Date)](https://star-history.com/#Zestful-ss/dsh-deepcraft&Date)

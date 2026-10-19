@@ -55,7 +55,7 @@ export const SETTINGS_SECTION_SLOT = 'settings.section'
  * The plugin's own repository. The settings page's heading links to it, and
  * the address is read from here rather than written into the component.
  */
-export const REPOSITORY_URL = 'https://github.com/Zestful-ss/dsh-claude-style'
+export const REPOSITORY_URL = 'https://github.com/Zestful-ss/dsh-deepcraft'
 
 /** The document attribute the stylesheet switches on. */
 export const BRAND_ATTR = 'data-dsh-deepcraft-brand'

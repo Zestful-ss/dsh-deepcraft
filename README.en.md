@@ -1,17 +1,14 @@
 <div align="center">
 
-# DSH Claude Style
+# DeepCraft
 
-**A theme plugin that brings the look and feel of Claude Code Desktop to the DeepSeek Harness Web GUI.**
+**A Claude and DeepSeek dual-theme plugin for the DeepSeek Harness Web GUI.**
 
-> **Why settle for another Claude Code when your next Claude Code Desktop is here.**
+> **One interface, two temperaments: Claude Code Desktop and DeepSeek.**
 
 [![English](https://img.shields.io/badge/lang-English-blue.svg)](README.en.md) [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red.svg)](README.md)
 
-[![version](https://img.shields.io/npm/v/dsh-claude-style?style=flat&label=version&color=D97757)](https://www.npmjs.com/package/dsh-claude-style)
-[![downloads](https://img.shields.io/npm/dm/dsh-claude-style?style=flat&label=downloads&color=D97757)](https://www.npmjs.com/package/dsh-claude-style)
-[![GitHub stars](https://img.shields.io/github/stars/Nwflower/dsh-claude-style?style=flat&label=%E2%98%85&color=08C)](https://github.com/Nwflower/dsh-claude-style)
-[![dsh.so install](https://www.dsh.so/badge/install/dsh-claude-style.svg)](https://www.dsh.so/artifact/dsh-claude-style/)
+[![GitHub stars](https://img.shields.io/github/stars/Zestful-ss/dsh-deepcraft?style=flat&label=%E2%98%85&color=08C)](https://github.com/Zestful-ss/dsh-deepcraft)
 [![license](https://img.shields.io/badge/license-MIT-2EA44F?style=flat)](LICENSE)
 
 </div>
@@ -69,24 +66,23 @@ The settings page switches between the two palettes; light and dark follow the s
 
 ## Installation
 
-From the official plugin page add the package below, or from a terminal:
-
-```
-dsh-claude-style
-```
+`lib/` is build output and does not travel on `master`; build once, then add the local directory:
 
 ```bash
-dsh plugin --profile web add dsh-claude-style                    # npm package (recommended)
-dsh plugin --profile web add Nwflower/dsh-claude-style           # GitHub source
+git clone https://github.com/Zestful-ss/dsh-deepcraft.git
+cd dsh-deepcraft
+npm install
+npm run build
+dsh plugin --profile desktop add <local path>
 ```
 
-Also from the [plugin market](https://github.com/dsh-market/dsh-market) or the Skin Center of the dsh-web-all plugin. Keep one theme enabled at a time; dsh ≥ 0.1.7 is required, and a restart of DeepSeek Harness brings the full feature set.
+Keep one theme enabled at a time, and restart DeepSeek Harness afterwards. When the original `dsh-claude-style` is still installed, disable it in the plugin manager.
 
 ## Fonts
 
-> The Anthropic fonts have no public release; this repository only offers [copies](https://github.com/Nwflower/dsh-claude-style/tree/master/packages/assets/src/fonts/anthropic) for download and study.
+> The Anthropic fonts have no public release; this repository only offers [copies](https://github.com/Zestful-ss/dsh-deepcraft/tree/master/packages/assets/src/fonts/anthropic) for download and study.
 
-To enable them, install the `.ttf` files on your system, or copy them into `$DSH_HOME/dsh-claude-style/fonts/`.
+To enable them, install the `.ttf` files on your system, or copy them into `$DSH_HOME/dsh-deepcraft/fonts/`.
 
 ## Documentation
 
@@ -112,4 +108,4 @@ To enable them, install the `.ttf` files on your system, or copy them into `$DSH
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Nwflower/dsh-claude-style&type=Date)](https://star-history.com/#Nwflower/dsh-claude-style&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=Zestful-ss/dsh-deepcraft&type=Date)](https://star-history.com/#Zestful-ss/dsh-deepcraft&Date)
