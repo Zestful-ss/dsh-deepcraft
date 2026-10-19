@@ -66,14 +66,11 @@ The settings page switches between the two palettes; light and dark follow the s
 
 ## Installation
 
-`lib/` is build output and does not travel on `master`; build once, then add the local directory:
+`lib/` is build output and does not travel on `master`; install from the `dist` branch, or build the source checkout first:
 
 ```bash
-git clone https://github.com/Zestful-ss/dsh-deepcraft.git
-cd dsh-deepcraft
-npm install
-npm run build
-dsh plugin --profile desktop add <local path>
+dsh plugin --profile desktop add Zestful-ss/dsh-deepcraft#dist  # built GitHub branch
+dsh plugin --profile desktop add <local path>                    # source checkout, after npm install && npm run build
 ```
 
 Keep one theme enabled at a time, and restart DeepSeek Harness afterwards. When the original `dsh-claude-style` is still installed, disable it in the plugin manager.

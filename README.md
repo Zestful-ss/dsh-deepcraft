@@ -64,14 +64,11 @@
 
 ## 安装
 
-`lib/` 是构建产物，不随 `master` 提交；先构建一次，再把本地目录加进 DSH：
+`lib/` 是构建产物，不随 `master` 提交；从 `dist` 分支直接安装，或构建本地源码后再加入：
 
 ```bash
-git clone https://github.com/Zestful-ss/dsh-deepcraft.git
-cd dsh-deepcraft
-npm install
-npm run build
-dsh plugin --profile desktop add <本地目录>
+dsh plugin --profile desktop add Zestful-ss/dsh-deepcraft#dist  # 已构建的 GitHub 分支
+dsh plugin --profile desktop add <本地目录>                      # 本地源码，先 npm install && npm run build
 ```
 
 同一时刻只启用一个主题，装好后重启 DeepSeek Harness。原版 `dsh-claude-style` 仍在时，在插件管理里停用它。
