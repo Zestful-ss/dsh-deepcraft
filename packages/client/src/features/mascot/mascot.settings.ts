@@ -213,7 +213,7 @@ function DesktopPetControl(view: SettingsRowView) {
     React.createElement(PetSelect, {
       pets: library.pets,
       value: selected,
-      disabled: view.disabled || !enabled,
+      disabled: view.disabled,
       onPick(value) {
         if (fields.desktop === 'desktopPetDeepseek') view.write({ desktopPetDeepseek: value })
         else view.write({ desktopPetClaude: value })

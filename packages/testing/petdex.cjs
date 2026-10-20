@@ -23,6 +23,7 @@ const path = require('node:path')
 const { PNG } = require('pngjs')
 const { zipSync } = require('fflate')
 const { openSkinSettings } = require('./settings-route.cjs')
+const { waitForSkin } = require('./dsh-web.cjs')
 
 const ROUTES = {
   library: '/dsh-deepcraft/pets',
@@ -87,9 +88,10 @@ async function openSettings(page) {
   await openAppearance(page)
 }
 
-/** The home page, where the composer guest stands. */
-function openHome(page, url) {
-  return page.goto(new URL('/', url).href)
+/** The home page, where the composer guest stands, with the skin installed. */
+async function openHome(page, url) {
+  await page.goto(new URL('/', url).href)
+  await waitForSkin(page)
 }
 
 const mascotRow = (page) => page.locator(ROW).filter({ has: page.locator(ROW_TITLE).filter({ hasText: /^(聊天框宠物|Chat pet)$/ }) }).first()
@@ -189,6 +191,9 @@ function petdexScenario({ check }) {
   return {
     script: 'greeting',
     prompt: 'hello there',
+    // The official player is downloaded and restarted a few times on a Windows
+    // runner; the walk needs more than the lane's default.
+    deadlineMs: 360000,
     async beforeSend({ page, home, url }) {
       read.packages = []
       await openSettings(page)
@@ -248,13 +253,13 @@ function petdexScenario({ check }) {
       // judge a process whose pid the port reports itself.
       await openSettings(page)
       const desktopRow = rowOf(page, TITLE.desktop)
+      // The package is chosen before the switch: the first process already
+      // draws this run's own pet.
+      await desktopRow.locator('.dsh-deepcraft-settings-pet-select').selectOption(claudeId)
       await desktopRow.locator('.dsh-deepcraft-settings-pet-toggle').check()
-      read.desktop = await waitDesktopEnabled(page)
+      read.desktop = await waitForDesktop(page, { phase: 'running', petId: claudeId })
+      read.desktopOwned = read.desktop
       if (read.desktop.phase === 'running') {
-        // The theme's desktop pet is this run's own package, so the process it
-        // starts has a package to draw.
-        await desktopRow.locator('.dsh-deepcraft-settings-pet-select').selectOption(claudeId)
-        read.desktopOwned = await waitForDesktop(page, { phase: 'running', petId: claudeId })
         read.whoami = await hook('/whoami')
         read.desktopToken = fs.existsSync(path.join(home, 'user', '.petdex', 'runtime', 'update-token'))
         // A theme switch restarts the process this plugin owns, and only that one.
