@@ -1,8 +1,0 @@
-{
-  "at": "2026-10-20",
-  "group": "new",
-  "order": 1,
-  "external": false,
-  "zh": "新增桌面宠物：在 Windows x64 上复用官方 Petdex 程序打开置顶窗口，跟随 DSH 启动与退出，主题或宠物变化时只重启 DSH 自己启动的实例；已有独立实例时明确报告而不接管。",
-  "en": "Add a desktop pet: on Windows x64 the official Petdex player opens an always-on-top window that follows DSH's lifecycle, restarting only the instance DSH started when the theme or pet changes, and reporting an independent instance instead of adopting it."
-}
