@@ -602,7 +602,11 @@ async function hostHalf() {
   const petProfile = path.join(ROOT, '.debug', 'smoke-pet-home')
   fs.rmSync(petProfile, { recursive: true, force: true })
   const savedProfile = process.env.USERPROFILE
+  const savedHome = process.env.HOME
+  // os.homedir() reads USERPROFILE on Windows and HOME elsewhere; both point
+  // at the scratch directory so no run touches the machine's own ~/.petdex.
   process.env.USERPROFILE = petProfile
+  process.env.HOME = petProfile
   const petHost = fakeHost(mod, { fenced: true, home: path.join(petProfile, 'harness') })
   const atlas = (() => {
     const png = new PNG({ width: 768, height: 936 })
@@ -684,6 +688,8 @@ async function hostHalf() {
     status.status === 200 && JSON.parse(status.body).status.phase === 'off', status.body)
   if (savedProfile === undefined) delete process.env.USERPROFILE
   else process.env.USERPROFILE = savedProfile
+  if (savedHome === undefined) delete process.env.HOME
+  else process.env.HOME = savedHome
   fs.rmSync(petProfile, { recursive: true, force: true })
 }
 
