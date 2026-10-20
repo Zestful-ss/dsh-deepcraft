@@ -3,10 +3,9 @@
  *
  * One process at a time, its stdout returned, run through a shell so a bare
  * `npm` resolves to `npm.cmd` on Windows; the arguments are quoted here rather
- * than left to the shell. Everything runs in the directory the caller names,
- * which is the repository for `scripts/release-pack.mjs` and
- * `scripts/release-state.mjs`, and the repository with the scratch tree
- * overriding it for the git calls in `scripts/dist-branch.mjs`.
+ * than left to the shell. Everything runs in the directory the caller names:
+ * the repository itself, or the repository with the scratch tree overriding it
+ * for the git calls in `scripts/dist-branch.mjs`.
  */
 import { execFileSync } from 'node:child_process'
 

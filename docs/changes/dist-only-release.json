@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-20",
+  "group": "chores",
+  "order": 0,
+  "external": false,
+  "zh": "发布改为只写本仓库的 dist 分支，不再向 npm 发布。",
+  "en": "Publish releases to this repository's dist branch only, without publishing to npm."
+}
