@@ -1,0 +1,165 @@
+{
+  "version": 1,
+  "assets": {
+    "a860cf5f3d76.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24096
+    },
+    "8447935e9993.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 25737
+    },
+    "da80b3786757.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 25911
+    },
+    "e0f16e1a26d9.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 26511
+    },
+    "820934c5e490.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24979
+    },
+    "be9f0e92d0c8.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24765
+    },
+    "fe3412538850.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24016
+    },
+    "480ac517bfef.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 25083
+    },
+    "0b8ff9a259ff.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24983
+    },
+    "11089c6618c4.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24024
+    },
+    "d30472be85b2.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24686
+    },
+    "35abf74350e6.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24271
+    },
+    "b1f78cf9c05f.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 25777
+    },
+    "851607e11a3b.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24975
+    },
+    "227fbb949a8e.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 22985
+    },
+    "e31662a367ce.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 23665
+    },
+    "ddd45a75849b.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 23876
+    },
+    "c175e1124c31.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 23846
+    },
+    "ddf8378088fe.js": {
+      "type": "text/javascript; charset=utf-8",
+      "encoding": "br",
+      "bytes": 15619
+    },
+    "b21e6a87b84f.js.map": {
+      "type": "application/json; charset=utf-8",
+      "encoding": "br",
+      "bytes": 76241
+    },
+    "f1631f5da6ed.js": {
+      "type": "text/javascript; charset=utf-8",
+      "encoding": "br",
+      "bytes": 27886
+    },
+    "a6963264444e.js.map": {
+      "type": "application/json; charset=utf-8",
+      "encoding": "br",
+      "bytes": 157333
+    },
+    "8f7cd6c89c26.js": {
+      "type": "text/javascript; charset=utf-8",
+      "encoding": "br",
+      "bytes": 9820
+    },
+    "1675ecb85cb6.js.map": {
+      "type": "application/json; charset=utf-8",
+      "encoding": "br",
+      "bytes": 28909
+    },
+    "08395e107391.js": {
+      "type": "text/javascript; charset=utf-8",
+      "encoding": "br",
+      "bytes": 20136
+    },
+    "47e6954a40b7.js.map": {
+      "type": "application/json; charset=utf-8",
+      "encoding": "br",
+      "bytes": 74848
+    },
+    "2fba55193eed.js": {
+      "type": "text/javascript; charset=utf-8",
+      "encoding": "br",
+      "bytes": 8358
+    },
+    "73f701d2f4fa.js.map": {
+      "type": "application/json; charset=utf-8",
+      "encoding": "br",
+      "bytes": 34801
+    },
+    "9b11fe97055c.js": {
+      "type": "text/javascript; charset=utf-8",
+      "encoding": "br",
+      "bytes": 21121
+    },
+    "aaf81c13cc33.js.map": {
+      "type": "application/json; charset=utf-8",
+      "encoding": "br",
+      "bytes": 134533
+    },
+    "86e111b5ecbf.js": {
+      "type": "text/javascript; charset=utf-8",
+      "encoding": "br",
+      "bytes": 32100
+    },
+    "63bdbfee74f5.js.map": {
+      "type": "application/json; charset=utf-8",
+      "encoding": "br",
+      "bytes": 127824
+    }
+  }
+}
