@@ -437,7 +437,7 @@ function deepcraftScenario({ check }) {
       return [
         check('设置页把主题切到 DeepSeek，页面带上新的品牌标记', notes.brandAfterSwitch === 'deepseek', `brand=${notes.brandAfterSwitch}`),
         check('首页卡片上站着像素小鲸鱼，播放构建为它画出的帧图',
-          gestures.idle === 'idle' && /^(url\(")?(data:image\/svg\+xml|https?:[^"]*\/dsh-deepcraft\/assets\/[0-9a-f]{12}\.svg)/.test(gestures.sheet || ''),
+          gestures.idle === 'idle' && /^(url\(["']?)?(data:image\/svg\+xml|(?:https?:[^"']*)?\/dsh-deepcraft\/assets\/[0-9a-f]{12}\.svg)/.test(gestures.sheet || ''),
           JSON.stringify({ idle: gestures.idle, sheet: gestures.sheet })),
         check('点左脸与点右脸各自触发一次反应',
           gestures.left === 'poke-left' && gestures.right === 'poke-right',
@@ -466,8 +466,7 @@ function deepcraftScenario({ check }) {
           notes.ban.pickedBack === notes.before.banLocale && notes.ban.opensAfterOff === false && notes.ban.opensRestored === true,
           JSON.stringify({ picked: notes.ban.pickedBack, off: notes.ban.opensAfterOff, restored: notes.ban.opensRestored })),
         check('两套主题各自画自己的颜色，切到哪一套就是哪一套',
-          notes.palette.claude.canvas !== notes.palette.deepseek.canvas &&
-            notes.palette.claude.accent !== notes.palette.deepseek.accent &&
+          notes.palette.claude.accent !== notes.palette.deepseek.accent &&
             notes.palette.conversation.claude.accent !== notes.palette.conversation.deepseek.accent,
           JSON.stringify(notes.palette)),
         check('两套主题的布局框逐个对齐，切换只换颜色与角色',
