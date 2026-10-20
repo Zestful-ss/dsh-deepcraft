@@ -15,9 +15,6 @@ const { bound } = require('./bounds.cjs')
 /** The skin's settings root: what both routes end on. */
 const SETTINGS_PAGE = '.dsh-deepcraft-settings'
 
-/** How long the host may take to answer the shortcut with its account menu. */
-const MENU_WAIT_MS = bound('settingsRouteMenuWaitMs')
-
 /** How long the settings dialog may take after its entry is pressed. */
 const SETTINGS_WAIT_MS = bound('settingsRouteDialogWaitMs')
 
@@ -28,14 +25,21 @@ const SETTINGS_WAIT_MS = bound('settingsRouteDialogWaitMs')
  */
 async function openSkinSettings(page) {
   await page.keyboard.press('Control+Alt+Comma')
-  await page.waitForTimeout(MENU_WAIT_MS)
+  // The host answers the shortcut either with its account menu or with the
+  // settings dialog itself, and under a loaded runner neither lands inside a
+  // fixed pause: wait for whichever arrives first.
   const entry = page.locator('[role="menu"] [role="menuitem"]').first()
-  if (await entry.count() > 0) {
+  const settings = page.locator(SETTINGS_PAGE).first()
+  const first = await Promise.race([
+    entry.waitFor({ state: 'visible', timeout: SETTINGS_WAIT_MS }).then(() => 'menu', () => null),
+    settings.waitFor({ state: 'attached', timeout: SETTINGS_WAIT_MS }).then(() => 'settings', () => null),
+  ])
+  if (first === 'menu') {
     await entry.click({ force: true })
     await page.waitForTimeout(800)
   }
   await page.getByText('DeepCraft', { exact: true }).first().click({ force: true })
-  await page.locator(SETTINGS_PAGE).first().waitFor({ timeout: SETTINGS_WAIT_MS })
+  await settings.waitFor({ timeout: SETTINGS_WAIT_MS })
 }
 
 module.exports = { openSkinSettings, SETTINGS_PAGE }

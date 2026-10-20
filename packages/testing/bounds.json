@@ -122,11 +122,6 @@
       "reason": "How long a setting written on one page may take to reach the other page."
     },
     {
-      "name": "settingsRouteMenuWaitMs",
-      "value": 1500,
-      "reason": "How long the host may take to answer the settings shortcut with its account menu."
-    },
-    {
       "name": "settingsRouteDialogWaitMs",
       "value": 20000,
       "reason": "How long the settings dialog may take to appear after its entry is pressed."
