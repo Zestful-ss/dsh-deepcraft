@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.17.1] - 2026-10-20
 
-<h3 id="cn-unreleased">问题修复</h3>
+[中文](#cn-0.17.1) | [English](#en-0.17.1)
+
+<h3 id="cn-0.17.1">问题修复</h3>
 
 - 修复 DeepSeek 主题吉祥物与设计稿不一致的问题：圆身、背顶板、心形环尾与右下白腹按原图重绘，全部状态、侧栏标志与默认头像共用同一形象。
 
@@ -14,7 +16,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - 发布改为只写本仓库的 dist 分支，不再向 npm 发布。
 
-<h3 id="en-unreleased">Bug Fixes</h3>
+<h3 id="en-0.17.1">Bug Fixes</h3>
 
 - Fix the DeepSeek mascot diverging from its design: the round body, back plate, heart-loop tail and pale belly follow the original art again, across every state, the sidebar mark and the default avatar.
 

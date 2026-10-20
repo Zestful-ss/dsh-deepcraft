@@ -1,8 +1,0 @@
-{
-  "at": "2026-10-20",
-  "group": "fixes",
-  "order": 0,
-  "external": false,
-  "zh": "修复 DeepSeek 主题吉祥物与设计稿不一致的问题：圆身、背顶板、心形环尾与右下白腹按原图重绘，全部状态、侧栏标志与默认头像共用同一形象。",
-  "en": "Fix the DeepSeek mascot diverging from its design: the round body, back plate, heart-loop tail and pale belly follow the original art again, across every state, the sidebar mark and the default avatar."
-}
