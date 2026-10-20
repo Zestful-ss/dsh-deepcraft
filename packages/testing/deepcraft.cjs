@@ -39,7 +39,7 @@ const SKIN = {
 
 /** The preferences this walk writes, each by its own row title in either language. */
 const ROWS = {
-  mascot: /吉祥物|Mascot/,
+  mascot: /^(聊天框宠物|Chat pet)$/,
   scope: /出现位置|Where it appears/,
   motion: /动画效果|Animation/,
   banLocale: /封号彩蛋|Account-hold easter egg/,
@@ -52,7 +52,7 @@ const TABS = {
 }
 const BRANDS = { claude: 'claude', deepseek: 'deepseek' }
 const MOTIONS = { system: /^(随系统|Follow the system)$/, reduced: /^(减弱|Reduced)$/, full: /^(总是|Always)$/ }
-const MASCOTS = { brand: /^(自动|Follow the brand)$/, off: /^(关闭|Off)$/, deepy: /^Deepy$/ }
+const MASCOTS = { crab: /^(原有像素螃蟹|Original pixel crab)$/, off: /^(关闭|Off)$/, deepy: /^(原有像素鲸鱼|Original pixel whale)$/ }
 const SCOPES = { home: /^(首页|Home)$/, all: /^(首页与对话|Home and conversation)$/ }
 const BAN_CHOICE = { off: /^(关闭|Off)$/ }
 
@@ -124,6 +124,9 @@ async function switchToClaude(page) {
   await openTab(page, TABS.general)
   await page.locator(SKIN.brandCard(BRANDS.claude)).first().click()
   await page.waitForTimeout(400)
+  // The walk tests the original crab, not the theme's Petdex guest.
+  await openTab(page, TABS.appearance)
+  await pickIn(page, ROWS.mascot, MASCOTS.crab)
   await closeSettings(page)
   await page.waitForSelector(SKIN.crab, { state: 'attached', timeout: WHALE_WAIT_MS })
 }
@@ -270,7 +273,7 @@ function deepcraftScenario({ check }) {
       notes.before.mascotPick = await pickedIn(page, ROWS.mascot)
       notes.before.scope = await pickedIn(page, ROWS.scope)
       await pickIn(page, ROWS.scope, SCOPES.all)
-      await pickIn(page, ROWS.mascot, MASCOTS.brand)
+      await pickIn(page, ROWS.mascot, MASCOTS.crab)
       await openTab(page, TABS.motion)
       notes.before.motionPick = await pickedIn(page, ROWS.motion)
       await openTab(page, TABS.sidebar)
@@ -287,6 +290,8 @@ function deepcraftScenario({ check }) {
       await openTab(page, TABS.general)
       await page.locator(SKIN.brandCard(BRANDS.deepseek)).first().click()
       await page.waitForTimeout(400)
+      await openTab(page, TABS.appearance)
+      await pickIn(page, ROWS.mascot, MASCOTS.deepy)
       await openTab(page, TABS.motion)
       await pickIn(page, ROWS.motion, MOTIONS.full)
       await closeSettings(page)
