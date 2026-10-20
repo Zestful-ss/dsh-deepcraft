@@ -37,7 +37,11 @@
  * The routes live in routes.ts, the HDSL account contract in hdsl.ts, and the
  * settings surface in settings.ts; this file only mounts them.
  */
+import { BRAND_DEEPSEEK } from '@dsh-deepcraft/contracts/prefs'
+import { clampPrefs } from '@dsh-deepcraft/contracts/prefs'
 import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
+import { configureDesktopPets } from './pets/desktop.js'
+import { installSessionBridge } from './pets/session.js'
 import { registerRoutes } from './routes.js'
 import type { DshContext, DshScope } from '@dsh-deepcraft/engine/node/dsh'
 import { registerSettings } from './settings.js'
@@ -49,7 +53,18 @@ export { Config } from './settings.js'
  * Register the plugin's host surfaces.
  * @param ctx - host plugin context.
  */
-export function apply(ctx: DshContext) {
+export function apply(ctx: DshContext, config?: unknown) {
+  // The stored preferences answer the desktop player before any page opens:
+  // it follows the theme's own pet while off, and starts with DSH when on.
+  const prefs = clampPrefs(config)
+  const releaseDesktop = configureDesktopPets(ctx, {
+    enabled: prefs.desktopPetEnabled,
+    petId: prefs.brand === BRAND_DEEPSEEK ? prefs.desktopPetDeepseek : prefs.desktopPetClaude,
+  })
+  if (typeof ctx.effect === 'function') ctx.effect(() => () => releaseDesktop())
+  // The bridge lives with the controller, so it survives a hot reload of this
+  // generation and its snapshots are what a restarted player replays.
+  installSessionBridge(ctx)
   // Always register through inject, never on the bare ctx. `ctx.get()` reads a
   // service leniently (no inject declaration needed), but the PROPERTY access
   // inside registerRoutes (`scope.webServer`) is gated by the fiber's inject

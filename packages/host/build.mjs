@@ -29,6 +29,20 @@ const INLINED = [
 ]
 
 /**
+ * The parser libraries the pets codecs use are bundled into the one module
+ * that reads them: the published package installs no runtime dependency, so a
+ * bare specifier left in the output would not resolve at the user's host.
+ */
+const BUNDLED = new Set(['fflate', 'image-size'])
+
+/** Whether a specifier belongs to one of those libraries, including their own relative imports. */
+function bundled(path, importer) {
+  if (BUNDLED.has(path.split('/')[0])) return true
+  const from = importer.replaceAll('\\', '/')
+  return [...BUNDLED].some((name) => from.includes(`/node_modules/${name}/`))
+}
+
+/**
  * Keep every import but the shared packages' external: marking a specifier
  * external leaves it in the output verbatim, so the published file imports the
  * same relative modules and host packages it did before. A shared module that
@@ -39,6 +53,7 @@ const externalButShared = {
   name: 'external-but-shared',
   setup(build) {
     const inlined = (args) => args.kind === 'entry-point'
+      || bundled(args.path, args.importer)
       || INLINED.some(({ prefix }) => args.path.startsWith(prefix))
       || (args.path.startsWith('.') && INLINED.some(({ dir }) => args.importer.startsWith(dir)))
     build.onResolve({ filter: /.*/ }, (args) => (inlined(args) ? undefined : { path: args.path, external: true }))

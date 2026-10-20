@@ -11,6 +11,29 @@
   var LAUNCHER = host.LAUNCHER
 
   var realFetch = window.fetch
+  // The two Petdex cases hold one installed package each; every other case has
+  // no library, so the new theme default downloads nothing and the chat guest
+  // stays away where the case expects the original characters or none.
+  var PETDEX = CASE === 'petdex-claude' || CASE === 'petdex-deepseek'
+  function petDescriptor(id) {
+    return {
+      id: id,
+      sourceId: id,
+      displayName: id === 'whaledou' ? 'Whaledou' : 'Crab Buddy',
+      spriteVersionNumber: 1,
+      frameWidth: 192,
+      frameHeight: 208,
+      atlasRows: 9,
+      version: id + '-v1',
+      imageUrl: '/dsh-deepcraft/pets/image/' + id + '?v=' + id + '-v1',
+    }
+  }
+  function petdexPet() {
+    return petDescriptor(CASE === 'petdex-deepseek' ? 'whaledou' : 'crab-buddy')
+  }
+  function offlineStatus() {
+    return { phase: 'off', petId: null, pid: null, error: null }
+  }
   var PNG_1PX = Uint8Array.from(
     atob(window.SMOKE_PNG),
     function (c) { return c.charCodeAt(0) })
@@ -20,6 +43,21 @@
   window.fetch = function (input, init) {
     var url = typeof input === 'string' ? input : (input && input.url) || ''
     if (url === '/dsh-deepcraft/username') return Promise.resolve(jsonResponse({ ok: true, username: 'Tester' }))
+    if (url === '/dsh-deepcraft/pets') {
+      return Promise.resolve(jsonResponse(PETDEX ? { ok: true, pets: [petdexPet()], invalid: [] } : { ok: true, pets: [], invalid: [] }))
+    }
+    if (url === '/dsh-deepcraft/pets/ensure') {
+      if (!PETDEX) return Promise.resolve(jsonResponse({ ok: false, error: 'no such preset' }))
+      var asked = 'crab-buddy'
+      try { asked = JSON.parse((init && init.body) || '{}').id || asked } catch (error) { /* the page sent the default */ }
+      return Promise.resolve(jsonResponse({ ok: true, pet: petDescriptor(asked) }))
+    }
+    if (url === '/dsh-deepcraft/pets/desktop') {
+      return Promise.resolve(jsonResponse({ ok: true, status: offlineStatus() }))
+    }
+    if (url === '/dsh-deepcraft/pets/desktop/sync') {
+      return Promise.resolve(jsonResponse({ ok: true, status: offlineStatus() }))
+    }
     if (url === '/dsh-deepcraft/brand') {
       // The custom-brand case holds both images; the bytes are the runner's to
       // serve (packages/testing/smoke.cjs), since the page loads them as images.

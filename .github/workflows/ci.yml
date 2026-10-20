@@ -183,6 +183,16 @@ jobs:
         timeout-minutes: 15
       - run: npm run smoke
         timeout-minutes: 30
+      # The desktop player is native: this runner is the only one where the
+      # official Windows build can be owned and its pid matched (D78). The
+      # browser cases ran with the smoke above; this walks the real host.
+      - name: Install the newest harness
+        shell: pwsh
+        run: |
+          $version = node packages/testing/host-version.cjs
+          npm install --global "@deepseek-ai/dsh@$version" pnpm@11
+      - run: node packages/testing/e2e.cjs --scenario petdex
+        timeout-minutes: 15
 
   # The assembled host: a scratch `dsh web` with this checkout's plugin and the
   # scripted model service, driven through a real conversation (D66).

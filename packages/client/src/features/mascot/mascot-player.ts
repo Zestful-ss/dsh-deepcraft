@@ -1,6 +1,7 @@
 import { COMPOSER_STACK, conversationSessionId, findComposerCard, findComposerSeat, findConversationSession, findHeroRoot } from '@dsh-deepcraft/engine/host'
 import { motionReduced } from '../../core/prefs'
 import { createMascotSignals } from './mascot-signals'
+import type { PetdexState } from '@dsh-deepcraft/contracts/pets'
 import type { MascotMoment } from './mascot-signals'
 import { decideStage, finishStage, freshStage, nextDecisionAt, switchSettles, takeMoment } from './mascot-stage'
 import type { MascotPick, PlayMode } from './mascot-stage'
@@ -9,11 +10,19 @@ import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './mascot.manifest'
 
-/** One animation's sheet: its frame count, its crop box `[x, y, width, height]` in logical pixels, and its still frame. */
+/** One animation's sheet: its frame count, its crop box `[x, y, width, height]` in atlas pixels, and its still frame. */
 export interface MascotSheet {
   frames: number
   box: number[]
   still: number
+  /** The atlas row the frames start on, when frames flow by a row of their own (a Petdex action). */
+  row?: number
+  /** Rows the whole atlas carries; an original character's strip is its own frames alone. */
+  atlasRows?: number
+  /** Per-frame durations; absent on the original characters, which use one frame time. */
+  frameDurationsMs?: readonly number[]
+  /** The native action this animation plays, as the desktop player names it. */
+  nativeState?: PetdexState
 }
 
 /** A character's sheet pipeline: whether a sheet plays, whether it never will, how it is painted. */
@@ -29,14 +38,20 @@ export interface MascotSheets {
  * built from the name, and the build reads the marks the stylesheets key on
  * off this type (scripts/source-tree.mjs).
  */
-export type MascotName = 'crab' | 'deepy'
+export type MascotName = 'crab' | 'deepy' | 'petdex'
 
 /** What one character hands the player (see createMascotPlayer). */
 export interface MascotCharacter {
   name: MascotName
   sheets: Record<string, MascotSheet>
-  frameMs: number
+  /** One frame's time for a table without per-frame durations. */
+  frameMs?: number
+  /** The transparent margin each atlas cell carries, in atlas pixels. */
   gutter?: number
+  /** CSS pixels per atlas pixel; absent means the original characters' 2×. */
+  scale?: number
+  /** The installed package this character draws, when it is a Petdex pet. */
+  petId?: string
   extras: string[]
   createSheets(onReady: () => void): MascotSheets
 }
@@ -83,6 +98,8 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   const anchorStamp = createStamp(ANCHOR_ATTR)
   const SHEETS = character.sheets
   const FRAME_MS = character.frameMs
+  /** CSS pixels per atlas pixel: the original characters draw at 2×, a Petdex atlas to the composer's own size. */
+  const UNIT = character.scale ?? 2
 
   /** The nodes the mascot is drawn with, built once per generation. */
   let root: HTMLElement | null = null
@@ -103,8 +120,13 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   /** What the stage's decisions read off the page: an idle extra starts only in motion, on a visible page. */
   const surroundings = () => ({ extras: character.extras, extrasAllowed: !motionReduced() && !document.hidden, random: Math.random })
 
-  /** How long one round of an animation lasts. */
-  const playMs = (key: string) => SHEETS[key].frames * FRAME_MS
+  /** How long one round of an animation lasts: per-frame durations when the sheet carries them. */
+  function playMs(key: string) {
+    const sheet = SHEETS[key]
+    if (sheet.frameDurationsMs !== undefined) return sheet.frameDurationsMs.reduce((sum, ms) => sum + ms, 0)
+    if (FRAME_MS === undefined) throw new Error(`${PREFIX}: "${key}" carries neither frame durations nor a frame time`)
+    return sheet.frames * FRAME_MS
+  }
 
   /** The character's sheet pipeline. */
   const sheets = character.createSheets(onSheetReady)
@@ -220,10 +242,17 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     return [sheet.box[2] + GUTTER * 2, sheet.box[3] + GUTTER * 2]
   }
 
+  /** One frame's time, from the sheet's own durations or the character's uniform frame time. */
+  function frameDuration(key: string, sheet: MascotSheet, frame: number) {
+    if (sheet.frameDurationsMs !== undefined) return sheet.frameDurationsMs[frame]
+    if (FRAME_MS === undefined) throw new Error(`${PREFIX}: "${key}" carries neither frame durations nor a frame time`)
+    return FRAME_MS
+  }
+
   /** The strip translation that puts one frame of a sheet in the window. */
   function frameOffset(sheet: MascotSheet, frame: number) {
     const [cellWidth, cellHeight] = cellSize(sheet)
-    return `translate(${-((frame % 8) * cellWidth + GUTTER) * 2}px, ${-(Math.floor(frame / 8) * cellHeight + GUTTER) * 2}px)`
+    return `translate(${-((frame % 8) * cellWidth + GUTTER) * UNIT}px, ${-(((sheet.row ?? 0) + Math.floor(frame / 8)) * cellHeight + GUTTER) * UNIT}px)`
   }
 
   /**
@@ -247,12 +276,15 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     }
     strip.style.transform = ''
     const keyframes: Keyframe[] = []
+    const total = playMs(key)
+    let at = 0
     for (let frame = 0; frame < sheet.frames; frame++) {
-      keyframes.push({ offset: frame / sheet.frames, transform: frameOffset(sheet, frame), easing: 'steps(1)' })
+      keyframes.push({ offset: at / total, transform: frameOffset(sheet, frame), easing: 'steps(1)' })
+      at += frameDuration(key, sheet, frame)
     }
     keyframes.push({ offset: 1, transform: frameOffset(sheet, mode === 'loop' ? 0 : sheet.frames - 1) })
     const playing = strip.animate(keyframes, {
-      duration: sheet.frames * FRAME_MS,
+      duration: total,
       iterations: mode === 'loop' ? Infinity : 1,
       fill: 'forwards',
     })
@@ -325,8 +357,14 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     // crab.css reads it in the merged sprite rule.
     style.setProperty('--dsh-deepcraft-mascot-h', String(sheet.box[3]))
     style.setProperty(`--${PREFIX}-cell-w`, String(cellWidth))
+    style.setProperty(`--${PREFIX}-cell-h`, String(cellHeight))
+    style.setProperty(`--${PREFIX}-unit`, String(UNIT))
+    style.setProperty(`--${PREFIX}-sheet-w`, String(cellWidth * 8))
+    style.setProperty(`--${PREFIX}-sheet-h`, String(cellHeight * (sheet.atlasRows ?? Math.ceil(sheet.frames / 8))))
     style.setProperty(`--${PREFIX}-strip-h`, String(cellHeight * Math.ceil(sheet.frames / 8)))
     setAttributeIfChanged(root, 'data-animation', next.key)
+    if (character.petId !== undefined) setAttributeIfChanged(root, 'data-dsh-deepcraft-pet-id', character.petId)
+    if (sheet.nativeState !== undefined) setAttributeIfChanged(root, 'data-dsh-deepcraft-pet-action', sheet.nativeState)
     play(strip, next.key, next.mode)
     if (!root.hasAttribute('data-ready')) root.setAttribute('data-ready', '')
   }

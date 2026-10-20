@@ -41,6 +41,15 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run smoke
+      # The desktop player is native: this runner is the only one where the
+      # official Windows build can be owned and its pid matched (D78).
+      - name: Install the newest harness
+        shell: pwsh
+        run: |
+          $version = node packages/testing/host-version.cjs
+          npm install --global "@deepseek-ai/dsh@$version" pnpm@11
+      - run: node packages/testing/e2e.cjs --scenario petdex
+        timeout-minutes: 15
 
   release:
     needs: smoke-windows

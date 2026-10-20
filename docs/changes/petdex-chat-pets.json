@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-20",
+  "group": "new",
+  "order": 0,
+  "external": false,
+  "zh": "新增聊天框宠物：Claude 主题默认使用 Crab Buddy，DeepSeek 主题默认使用 Whaledou，按原始 Petdex 图集与逐帧时序播放；原有的像素螃蟹与像素鲸鱼仍可手动选择。",
+  "en": "Add chat pets: Crab Buddy under Claude and Whaledou under DeepSeek, drawn from their untouched Petdex atlases at the authors' frame times, with the original pixel crab and whale still selectable by hand."
+}

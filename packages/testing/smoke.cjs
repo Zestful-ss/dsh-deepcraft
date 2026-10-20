@@ -72,6 +72,7 @@ const { findChrome, openBrowser } = require('./browser.cjs')
 const { ROOT, CLIENT, PNG_1PX, SKIN_FIXTURE, SKIN_CASES, check, failures, skips, setTier, tierName, TIMING_CASES, FEATURE_CASES, pagesFor } = require('./smoke/shared.cjs')
 const { hostHalf } = require('./smoke/host-half.cjs')
 const { page } = require('./smoke/page.cjs')
+const { petdexAtlas } = require('./smoke/petdex-fixture.cjs')
 const { CASES } = require('./smoke/cases.cjs')
 const { withLock } = require('../../scripts/shared/verify-lock.cjs')
 
@@ -283,6 +284,12 @@ async function browserHalf(planned, jobs) {
       }
       res.writeHead(200, { 'content-type': 'image/svg+xml' })
       res.end('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100"><rect width="400" height="100"/></svg>')
+    } else if (name.startsWith('dsh-deepcraft/pets/image/')) {
+      // The package's atlas, loaded outside `fetch` like every other image the
+      // page draws. The smoke's fixture carries the real 1536×1872 geometry,
+      // one colour per action row.
+      res.writeHead(200, { 'content-type': 'image/png', 'cache-control': 'private, max-age=31536000, immutable' })
+      res.end(petdexAtlas())
     } else if (name.startsWith('dsh-deepcraft/assets/')) {
       // The routed assets, from the build output the host half serves them from
       // The manifest is the same gate here: a name the build did not

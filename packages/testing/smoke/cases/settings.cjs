@@ -17,7 +17,7 @@ module.exports = {
     check('the settings section registers with the settings dialog', settings.registered === true, JSON.stringify(settings.registered))
     const expected = {
       general: ['brand', 'username', 'pageZoom', 'autoPopover'],
-      appearance: ['palette', 'brandAccent', 'typeface', 'homeLayout', 'homeRipple', 'mascot', 'mascotScope', 'brandName', 'brandMark', 'brandWordmark', 'brandInk'],
+      appearance: ['palette', 'brandAccent', 'typeface', 'homeLayout', 'homeRipple', 'mascot', 'chatPet', 'mascotScope', 'desktopPet', 'brandName', 'brandMark', 'brandWordmark', 'brandInk', 'petImport'],
       composer: ['composerScope', 'modelPicker', 'modelDescriptions', 'quickProviders', 'peakrate', 'permissionsControl'],
       sidebar: ['collapseFooter', 'banLocale', 'sidebarSearch', 'searchStyle', 'workspaceView', 'dockCards', 'sidebarLayout'],
       conversation: ['turnNav', 'statsPosition', 'viewTabs', 'headerBand'],
@@ -43,7 +43,7 @@ module.exports = {
       JSON.stringify(onWindows))
     const off = settings.parentsOff || {}
     check('a sub-row greys out while its parent is off: the accent colour with the colours following the host, the mascot\'s place with the mascot off, the model descriptions, the quick providers and the peak rate meter with the model picker off, the search box\'s style with the sidebar search off',
-      !!off.appearance && JSON.stringify(off.appearance.disabled) === '["brandAccent","mascotScope"]' &&
+      !!off.appearance && JSON.stringify(off.appearance.disabled) === '["brandAccent","chatPet","mascotScope"]' &&
         !!off.composer && JSON.stringify(off.composer.disabled) === '["modelDescriptions","quickProviders","peakrate"]' &&
         !!off.sidebar && JSON.stringify(off.sidebar.disabled) === '["searchStyle"]',
       JSON.stringify(off))

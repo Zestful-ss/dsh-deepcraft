@@ -16,6 +16,13 @@ export interface DshContext {
   get(name: string): any
   /** Wait for services and hand back a scope that declares them. */
   inject?(deps: string[], run: (scope: DshScope) => void): void
+  /**
+   * Subscribe one host event; the well-known sessions events are global, so a
+   * session started by another page is heard here too.
+   *
+   * @returns the unsubscribe, where the host answers one.
+   */
+  on?(name: string, listener: (...args: unknown[]) => void, options?: { global?: boolean }): unknown
   /** The host's logger, when it has one. */
   logger?: { warn?(message: string): void, info?(message: string): void, error?(message: string): void }
   /** Run a function and drop its disposals with this generation. */
@@ -24,10 +31,16 @@ export interface DshContext {
   fiber?: { entry?: { id?: unknown, options?: unknown } }
 }
 
+/** The sessions service, as the half reads it. */
+export interface DshSessions {
+  list(): unknown[]
+}
+
 /** The scope `inject` hands back: the base context plus the declared services. */
 export interface DshScope extends DshContext {
   webServer?: DshWebServer
   settings?: DshSettings
+  sessions?: DshSessions
   /** Run a function and drop it with this generation, naming it in the host's log. */
   effect(run: () => void, name?: string): void
 }

@@ -25,7 +25,9 @@
   var formListeners = []
   var formValue = { username: username, collapseFooter: true, homeLayout: CASE === 'studio' ? 'studio' : 'classic', brand: CASE === 'deepy' ? 'off' : undefined }
   // The crab-states case picks the crab, whose states it walks through.
-  if (CASE === 'crab-states') formValue.mascot = 'crab'
+  if (CASE === 'crab-states' || CASE === 'shell' || CASE === 'studio') formValue.mascot = 'crab'
+  if (CASE === 'deepy') formValue.mascot = 'deepy'
+  if (CASE === 'petdex-deepseek') formValue.brand = 'off'
   // The stats-inline case drives the line of their own, which is the shipped
   // default; the two popover cases ask the numbers back into the panel.
   if (CASE === 'stats-inline') formValue.statsPosition = 'inline'

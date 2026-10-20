@@ -45,7 +45,7 @@
   </tr>
 </table>
 
-> 输入框上沿站着宠物小鲸鱼 Deepy，八个状态：
+> 输入框上沿站着 Whaledou；原版像素小鲸鱼 Deepy 仍可手动选择，八个状态：
 
 <table>
   <tr>
@@ -61,6 +61,12 @@
     <td align="center" width="25%"><img src="./docs/gifs/sleeping.gif" width="120" alt="睡着" /><br />睡着</td>
   </tr>
 </table>
+
+### 宠物
+
+- 聊天框右上角的宠物按主题分别选择：Claude 默认 Crab Buddy，DeepSeek 默认 Whaledou；原有的像素螃蟹与像素鲸鱼仍在同一行里可选。
+- 桌面宠物在 Windows x64 上由官方 Petdex 程序绘制，置顶显示并随 DSH 启停；它默认关闭，首次启用时下载并校验官方程序。
+- 设置页的「导入宠物包」接受包含 `pet.json` 与图集的文件夹、ZIP 或 Petdex 链接，原文件字节不改动。宠物原画由 Petdex 与各包作者提供，不随本插件发布。
 
 ## 安装
 

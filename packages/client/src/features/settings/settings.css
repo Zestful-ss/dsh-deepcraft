@@ -542,3 +542,100 @@ body[data-dsh-deepcraft] .dsh-deepcraft-quick-popover {
   gap: 6px !important;
   transform-origin: bottom right !important;
 }
+
+/* ── Pets (D78) ──────────────────────────────────────────────────────────────
+   The chat pet's package picker and its action preview, the desktop player's
+   switch and status, and the importer's three ways in. The preview shows the
+   atlas cell itself, at the same cell geometry the composer uses. */
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  max-width: 100%;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-select,
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-url {
+  min-width: 160px;
+  max-width: 240px;
+  box-sizing: border-box;
+  padding: 6px 10px;
+  border: 0.5px solid var(--dsw-alias-border-l2);
+  border-radius: 8px;
+  background: var(--dsw-specific-selector);
+  color: var(--dsw-alias-label-primary);
+  font-family: var(--dsw-font-family);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-select:disabled,
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-url:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-toggle {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--dsw-alias-label-primary);
+  cursor: pointer;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-status {
+  flex: 1 1 100%;
+  margin: 0;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--dsw-alias-label-tertiary);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-preview-window {
+  background-repeat: no-repeat;
+  image-rendering: auto;
+  border: 0.5px solid var(--dsw-alias-border-l2);
+  border-radius: 8px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 300px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-action {
+  appearance: none;
+  margin: 0;
+  padding: 2px 6px;
+  border: 0.5px solid var(--dsw-alias-border-l2);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+  font-family: var(--dsw-font-family);
+  font-size: 11px;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-action[data-active] {
+  border-color: var(--dsw-alias-label-primary);
+  color: var(--dsw-alias-label-primary);
+}

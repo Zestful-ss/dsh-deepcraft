@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
-import { BRAND_CLAUDE, BRAND_DEEPSEEK, BRAND_DEEPSEEK_LEGACY, BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, CHAT_ANIMATIONS_OFF, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, ONGOING_INDICATOR_RING, PREF_DEFAULTS, PROVIDER_ID_MAX, QUICK_PROVIDERS_MAX, STATUS_MOTION_WASH, USERNAME_MAX } from '../constants'
+import { BRAND_CLAUDE, BRAND_DEEPSEEK, BRAND_DEEPSEEK_LEGACY, BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, CHAT_ANIMATIONS_OFF, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, MASCOT_PETDEX, ONGOING_INDICATOR_RING, PREF_DEFAULTS, PROVIDER_ID_MAX, QUICK_PROVIDERS_MAX, STATUS_MOTION_WASH, USERNAME_MAX } from '../constants'
 import { MODEL_OFFICIAL_GROUP } from '../features/model/copy-fallbacks'
-import { resolveMascot } from './prefs'
+import { resolveMascot, resolveThemePet } from './prefs'
 import { clampPrefs as normalizePrefs } from '@dsh-deepcraft/contracts/prefs'
 
 test('an empty or unreadable value reads as the defaults', () => {
@@ -90,9 +90,24 @@ test('the custom images keep their own colours unless the text colour is chosen'
   expect(normalizePrefs({ brandInk: 'mono' }).brandInk).toBe(BRAND_INK_ORIGINAL)
 })
 
-test('"follow the brand" puts the crab under Claude and Deepy under DeepSeek; a fixed choice stands', () => {
-  expect(resolveMascot(normalizePrefs({ brand: BRAND_CLAUDE }))).toBe(MASCOT_CRAB)
-  expect(resolveMascot(normalizePrefs({ brand: BRAND_DEEPSEEK }))).toBe(MASCOT_DEEPY)
+test('each place reads its own field of the theme in front', () => {
+  const claude = normalizePrefs({ brand: BRAND_CLAUDE })
+  expect(resolveThemePet(claude, 'chat')).toBe('crab-buddy')
+  expect(resolveThemePet(claude, 'desktop')).toBe('claude-opus-scholar')
+  const deepseek = normalizePrefs({ brand: BRAND_DEEPSEEK })
+  expect(resolveThemePet(deepseek, 'chat')).toBe('whaledou')
+  expect(resolveThemePet(deepseek, 'desktop')).toBe('deepseek')
+  const picked = normalizePrefs({ chatPetDeepseek: 'my-custom', desktopPetClaude: 'other-custom' })
+  expect(resolveThemePet(picked, 'chat')).toBe('crab-buddy')
+  expect(resolveThemePet(picked, 'desktop')).toBe('other-custom')
+  expect(resolveThemePet({ ...picked, brand: BRAND_DEEPSEEK }, 'chat')).toBe('my-custom')
+  expect(resolveThemePet({ ...picked, brand: BRAND_CLAUDE }, 'desktop')).toBe('other-custom')
+})
+
+test('"follow the theme" resolves to the Petdex guest; a manual character stands, and off only leaves the chat place', () => {
+  expect(resolveMascot(normalizePrefs({ brand: BRAND_CLAUDE }))).toBe(MASCOT_PETDEX)
+  expect(resolveMascot(normalizePrefs({ brand: BRAND_DEEPSEEK }))).toBe(MASCOT_PETDEX)
   expect(resolveMascot(normalizePrefs({ brand: BRAND_DEEPSEEK, mascot: MASCOT_CRAB }))).toBe(MASCOT_CRAB)
+  expect(resolveMascot(normalizePrefs({ mascot: MASCOT_DEEPY }))).toBe(MASCOT_DEEPY)
   expect(resolveMascot(normalizePrefs({ mascot: MASCOT_OFF }))).toBe(MASCOT_OFF)
 })

@@ -34,6 +34,7 @@ const { sidebarRailScenario } = require('./sidebar-rail.cjs')
 const { remoteSettingsScenario } = require('./remote-settings.cjs')
 const { customBrandScenario } = require('./custom-brand.cjs')
 const { deepcraftScenario } = require('./deepcraft.cjs')
+const { petdexScenario } = require('./petdex.cjs')
 const { dsBotScenario } = require('./ds-bot.cjs')
 const { CANVAS } = require('./shoot.cjs')
 const { sanitizePage } = require('../../scripts/shared/privacy.cjs')
@@ -549,6 +550,8 @@ const SCENARIOS = {
   customBrand: customBrandScenario({ check }),
   /** DeepCraft's own walk: the themes, the whale girl's gestures and states, and the account-hold page's theme (packages/testing/deepcraft.cjs, D77). */
   deepcraft: deepcraftScenario({ check }),
+  /** Complete Petdex packages imported into the real host, drawn per theme, and the owned desktop player (packages/testing/petdex.cjs, D78). */
+  petdex: petdexScenario({ check }),
   /** The Chat / Code switch beside ds-bot's published browser half (packages/testing/ds-bot.cjs, D74). */
   dsBot: dsBotScenario({ check }),
   /** Both palettes captured to the run's out directory and swept for personal data. */

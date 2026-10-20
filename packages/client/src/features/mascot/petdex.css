@@ -1,0 +1,77 @@
+/* ── The composer's Petdex pet ──────────────────────────────────────────────
+   One installed package's untouched atlas, drawn frame for frame: the cells
+   are 8 columns of the author's own size, and the player picks the row of the
+   action it is playing and the column of its frame. The window is 72 CSS
+   pixels wide — the size the composer's upper-right corner leaves — and the
+   height follows the cell's own proportions. Nothing is recoloured, outlined
+   or pixelated: the art keeps its own edges and colours. Only the image frame
+   takes the pointer. */
+
+body[data-dsh-deepcraft] .dsh-deepcraft-petdex {
+  position: absolute;
+  right: 8px;
+  /* Feet on the top edge of the card it stands on. */
+  bottom: 100%;
+  z-index: 1;
+  width: 72px;
+  height: 78px;
+  pointer-events: none;
+  /* Held back until the atlas has decoded, so a host half with no library
+     leaves no empty box to click on. */
+  visibility: hidden;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-petdex[data-ready] {
+  visibility: visible;
+}
+
+/* A conversation's input area and the panels that take its card's place span
+   the whole column, so the pet is set in from the edge of the card they
+   centre, as the original characters are (crab.css, whale.css). The anchor
+   publishes the edge its own layout leaves, and the child adds the 8px the
+   image frame keeps inside it. */
+body[data-dsh-deepcraft] [data-dsh-deepcraft-petdex-anchor="stack"] {
+  position: relative;
+  --dsh-deepcraft-petdex-edge: max(var(--dsh-composer-side-clearance, 16px), (100% - var(--dsh-composer-card-max-width, 100%)) / 2);
+}
+
+body[data-dsh-deepcraft] [data-dsh-deepcraft-petdex-anchor="panel"] {
+  position: relative;
+  --dsh-deepcraft-petdex-edge: max(var(--dsh-composer-side-clearance, 16px) + 16px, (100% - var(--dsh-chat-content-width, 100%)) / 2);
+}
+
+body[data-dsh-deepcraft] :is([data-dsh-deepcraft-petdex-anchor="stack"], [data-dsh-deepcraft-petdex-anchor="panel"]) > .dsh-deepcraft-petdex {
+  right: calc(var(--dsh-deepcraft-petdex-edge, 0px) + 8px);
+}
+
+body[data-dsh-deepcraft] [data-dsh-deepcraft-petdex-anchor="panel"] > .dsh-deepcraft-petdex {
+  bottom: calc(100% - 11px);
+}
+
+/* The window holds one cell; the strip carries the whole atlas and is
+   translated frame to frame. The player writes the atlas's own geometry as
+   custom properties, so a scaled package keeps whole cells. */
+body[data-dsh-deepcraft] .dsh-deepcraft-petdex-sprite {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-petdex-strip {
+  display: block;
+  width: calc(var(--dsh-deepcraft-petdex-sheet-w, 0) * var(--dsh-deepcraft-petdex-unit, 1) * 1px);
+  height: calc(var(--dsh-deepcraft-petdex-sheet-h, 0) * var(--dsh-deepcraft-petdex-unit, 1) * 1px);
+  background-image: var(--dsh-deepcraft-petdex-sheet, none);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  image-rendering: auto;
+}
+
+/* The image frame is the whole hit box: the input controls beside it stay
+   reachable. */
+body[data-dsh-deepcraft] .dsh-deepcraft-petdex-hit {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+  touch-action: none;
+}

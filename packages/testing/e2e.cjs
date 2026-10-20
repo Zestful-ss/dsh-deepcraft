@@ -317,7 +317,19 @@ async function runScenario(name, options) {
     )
   }
   const patch = ['- id: llm-deepseek', '  config:', `    baseURL: ${mock.url}`, '    apiKeyEnv: DSH_E2E_MOCK_KEY', ...accountPatch, ...scenario.patch ?? []].join('\n')
-  const host = await start({ patch, args: scenario.hostArgs, env: { DSH_E2E_MOCK_KEY: 'mock' }, home, plugins: scenario.plugins, resetState: true })
+  // The host and everything it starts see a scratch user home: the pets
+  // library, the official desktop player's own directory and any cache a
+  // child keeps resolve under the run's home, never the machine's (D78).
+  const userHome = path.join(home, 'user')
+  fs.mkdirSync(userHome, { recursive: true })
+  const host = await start({
+    patch,
+    args: scenario.hostArgs,
+    env: { DSH_E2E_MOCK_KEY: 'mock', HOME: userHome, USERPROFILE: userHome },
+    home,
+    plugins: scenario.plugins,
+    resetState: true,
+  })
   say(`\n== ${name} ==  mock ${mock.url}  host ${host.url}\n`)
   /** Where the scenario is, so a hang in the log says which step it never left. */
   const step = (label) => say(`  · ${label}\n`)

@@ -592,6 +592,99 @@ async function hostHalf() {
     overridden.status === 200 && overridden.raw !== null && overridden.raw.toString('utf8') === 'dropped-mono',
     `HTTP ${overridden.status} ${JSON.stringify(overridden.headers)}`)
   fs.rmSync(fontHome, { recursive: true, force: true })
+
+  // The pets library and its import boundaries (D78). Every file lands under a
+  // scratch user profile, never the machine's own ~/.petdex; the atlas is a
+  // generated 768×936 PNG with the v1 geometry (eight columns, nine rows).
+  console.log('\nhost half — the pets library')
+  const { zipSync } = require('fflate')
+  const { PNG } = require('pngjs')
+  const petProfile = path.join(ROOT, '.debug', 'smoke-pet-home')
+  fs.rmSync(petProfile, { recursive: true, force: true })
+  const savedProfile = process.env.USERPROFILE
+  process.env.USERPROFILE = petProfile
+  const petHost = fakeHost(mod, { fenced: true, home: path.join(petProfile, 'harness') })
+  const atlas = (() => {
+    const png = new PNG({ width: 768, height: 936 })
+    for (let y = 0; y < 936; y++) for (let x = 0; x < 768; x++) {
+      const at = (y * 768 + x) * 4
+      png.data[at] = (x + y) % 256
+      png.data[at + 1] = Math.floor(y / 104) * 24
+      png.data[at + 2] = Math.floor(x / 96) * 24
+      png.data[at + 3] = 255
+    }
+    return PNG.sync.write(png)
+  })()
+  const petManifest = Buffer.from(JSON.stringify({
+    id: 'smoke-pet', displayName: 'Smoke Pet', description: 'a package', spritesheetPath: 'atlas.png',
+  }, null, 2))
+  const zip = (files) => zipSync(files, { level: 0 })
+  const importAnswer = async (archive) => request(petHost, '/dsh-deepcraft/pets/import', 'POST', archive, {
+    ...browser, 'content-type': 'application/zip',
+  })
+  const imported = await importAnswer(zip({ 'pet.json': petManifest, 'atlas.png': atlas }))
+  const importedBody = JSON.parse(imported.body)
+  check('a complete ZIP installs and answers its descriptor',
+    imported.status === 200 && importedBody.ok === true && importedBody.pet.id === 'smoke-pet' &&
+      importedBody.pet.sourceId === 'smoke-pet' && importedBody.pet.spriteVersionNumber === 1 &&
+      importedBody.pet.frameWidth === 96 && importedBody.pet.frameHeight === 104 && importedBody.pet.atlasRows === 9,
+    `HTTP ${imported.status} ${imported.body.slice(0, 200)}`)
+  const storedManifest = path.join(petProfile, '.petdex', 'pets', 'smoke-pet', 'pet.json')
+  const storedAtlas = path.join(petProfile, '.petdex', 'pets', 'smoke-pet', 'atlas.png')
+  check('the manifest and atlas are stored byte for byte',
+    fs.existsSync(storedManifest) && Buffer.compare(fs.readFileSync(storedManifest), petManifest) === 0 &&
+      Buffer.compare(fs.readFileSync(storedAtlas), atlas) === 0)
+  const again = await importAnswer(zip({ 'pet.json': petManifest, 'atlas.png': atlas }))
+  check('identical content reuses its directory', JSON.parse(again.body).pet.id === 'smoke-pet')
+  const changed = Buffer.from(JSON.stringify({
+    id: 'smoke-pet', displayName: 'Smoke Pet v2', spritesheetPath: 'atlas.png',
+  }, null, 2))
+  const other = await importAnswer(zip({ 'pet.json': changed, 'atlas.png': atlas }))
+  const otherBody = JSON.parse(other.body)
+  check('different content under the same manifest id installs beside it under a hash name',
+    other.status === 200 && otherBody.pet.id !== 'smoke-pet' && otherBody.pet.id.indexOf('dsh-') === 0 &&
+      otherBody.pet.sourceId === 'smoke-pet', other.body.slice(0, 200))
+  check('the original package stays untouched',
+    Buffer.compare(fs.readFileSync(storedManifest), petManifest) === 0)
+  const image = await new Promise((resolve) => {
+    const req = Readable.from([])
+    Object.assign(req, { method: 'GET', url: '/dsh-deepcraft/pets/image/smoke-pet?v=one', headers: browser, socket: { remoteAddress: '127.0.0.1' } })
+    const res = {
+      status: 0, headers: {}, writeHead(status, headers) { this.status = status; this.headers = headers || {} },
+      end(chunk) { resolve({ status: this.status, headers: this.headers, raw: chunk ?? null }) },
+    }
+    petHost.routes['/dsh-deepcraft/pets/image'].handler(req, res)
+  })
+  check('the image route answers the stored bytes as a versioned private image',
+    image.status === 200 && image.headers['content-type'] === 'image/png' &&
+      image.headers['x-content-type-options'] === 'nosniff' &&
+      /private/.test(image.headers['cache-control'] || '') && Buffer.compare(image.raw, atlas) === 0,
+    `HTTP ${image.status} ${JSON.stringify(image.headers)}`)
+  const traversal = await importAnswer(zip({ '../evil.png': atlas }))
+  check('an archive entry that escapes the package root is refused', traversal.status === 400, `HTTP ${traversal.status}`)
+  const pathManifest = Buffer.from(JSON.stringify({ id: 'smoke-pet', spritesheetPath: '../atlas.png' }))
+  const escaping = await importAnswer(zip({ 'pet.json': pathManifest, 'atlas.png': atlas }))
+  check('a spritesheetPath that names a path is refused', escaping.status === 400, `HTTP ${escaping.status}`)
+  const versionManifest = Buffer.from(JSON.stringify({ id: 'smoke-pet', spritesheetPath: 'atlas.png', spriteVersionNumber: 2 }))
+  const wrongVersion = await importAnswer(zip({ 'pet.json': versionManifest, 'atlas.png': atlas }))
+  check('a declared version that disagrees with the atlas is refused', wrongVersion.status === 400, `HTTP ${wrongVersion.status}`)
+  const unknown = await request(petHost, '/dsh-deepcraft/pets/ensure', 'POST', JSON.stringify({ id: 'missing' }), {
+    ...browser, 'content-type': 'application/json',
+  })
+  check('an id the library does not hold is a 404', unknown.status === 404, `HTTP ${unknown.status}`)
+  fs.mkdirSync(path.join(petProfile, '.petdex', 'pets', 'broken'), { recursive: true })
+  const listed = await request(petHost, '/dsh-deepcraft/pets', 'GET', '', browser)
+  const listedBody = JSON.parse(listed.body)
+  check('a broken package is reported beside the readable ones, never in place of them',
+    listed.status === 200 && listedBody.invalid.some((entry) => entry.id === 'broken') &&
+      listedBody.pets.some((pet) => pet.id === 'smoke-pet'),
+    listed.body.slice(0, 300))
+  const status = await request(petHost, '/dsh-deepcraft/pets/desktop', 'GET', '', browser)
+  check('the desktop player reports its own state, off until enabled',
+    status.status === 200 && JSON.parse(status.body).status.phase === 'off', status.body)
+  if (savedProfile === undefined) delete process.env.USERPROFILE
+  else process.env.USERPROFILE = savedProfile
+  fs.rmSync(petProfile, { recursive: true, force: true })
 }
 
 /**

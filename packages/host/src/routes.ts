@@ -27,6 +27,7 @@ import type { HdslReading } from './hdsl.js'
 import { packageRoot } from './package-root.js'
 import { createPeakRate } from './peakrate.js'
 import { QUERY_MAX, createSessionSearch } from './search.js'
+import { petRoutes } from './pets/routes.js'
 import { createUsage } from './usage.js'
 
 /** The copy document, built from `packages/client/data/model-descriptions.json` by scripts/build.mjs. */
@@ -473,6 +474,7 @@ export function registerRoutes(ctx: DshContext, scope: DshScope) {
     })
 
     for (const { label, route } of brandRoutes(ctx)) register(label, route)
+    for (const { label, route } of petRoutes(ctx)) register(label, route)
 
     return () => {
       usage.dispose()

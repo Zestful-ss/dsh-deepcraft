@@ -89,6 +89,8 @@ export const STATUS_MOTION_ATTR = 'data-dsh-deepcraft-status-motion'
 export const PALETTE_ATTR = 'data-dsh-deepcraft-palette'
 export const TYPEFACE_ATTR = 'data-dsh-deepcraft-typeface'
 export const MASCOT_ATTR = 'data-dsh-deepcraft-mascot'
+/** The mascot the brand resolves to: a Petdex package, chosen per theme and shared by both places. */
+export const MASCOT_PETDEX = 'petdex'
 export const SEARCH_STYLE_ATTR = 'data-dsh-deepcraft-search-style'
 export const SIDEBAR_LAYOUT_ATTR = 'data-dsh-deepcraft-sidebar-layout'
 /**
@@ -360,6 +362,13 @@ export {
   HDSL_PATH as HDSL_ROUTE,
   HDSL_SKIN_PATH as HDSL_SKIN_ROUTE,
   PEAKRATE_PATH as PEAKRATE_ROUTE,
+  PETS_DESKTOP_PATH as PETS_DESKTOP_ROUTE,
+  PETS_DESKTOP_SYNC_PATH as PETS_DESKTOP_SYNC_ROUTE,
+  PETS_ENSURE_PATH as PETS_ENSURE_ROUTE,
+  PETS_IMAGE_PATH as PETS_IMAGE_ROUTE,
+  PETS_IMPORT_PATH as PETS_IMPORT_ROUTE,
+  PETS_IMPORT_URL_PATH as PETS_IMPORT_URL_ROUTE,
+  PETS_PATH as PETS_ROUTE,
   SESSION_DELETE_PATH as SESSION_DELETE_ROUTE,
   SESSION_SEARCH_PATH as SESSION_SEARCH_ROUTE,
   USAGE_PATH as USAGE_ROUTE,

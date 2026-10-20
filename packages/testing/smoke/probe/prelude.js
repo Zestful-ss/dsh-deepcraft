@@ -95,8 +95,70 @@
     }
   }
 
+  /**
+   * One mascot node's live reading: the semantic animation, the native action a
+   * Petdex package is playing, the frame the strip is translated to, the image
+   * it draws and the anchor it stands on.
+   */
+  function readMascot(name) {
+    var node = document.querySelector('.dsh-deepcraft-' + name)
+    if (node === null) return null
+    var strip = node.querySelector('.dsh-deepcraft-' + name + '-strip')
+    var matrix = getComputedStyle(strip).transform
+    var offsets = matrix === 'none' ? null : matrix.match(/matrix\([^,]+,[^,]+,[^,]+,[^,]+,\s*(-?[\d.]+),\s*(-?[\d.]+)\)/)
+    return {
+      animation: node.getAttribute('data-animation'),
+      action: node.getAttribute('data-dsh-deepcraft-pet-action'),
+      petId: node.getAttribute('data-dsh-deepcraft-pet-id'),
+      ready: node.hasAttribute('data-ready'),
+      place: node.parentElement === null ? null : node.parentElement.getAttribute('data-dsh-deepcraft-' + name + '-anchor'),
+      frame: offsets === null ? '0px 0px' : offsets[1] + 'px ' + offsets[2] + 'px',
+      sheet: getComputedStyle(strip).backgroundImage,
+    }
+  }
+
+  /**
+   * The host's conversation page as the mascot reads it: the scroll anchor,
+   * its session, the composer seat, the chain wrapper and the composer stack.
+   */
+  function placeConversation(sessionId) {
+    var root = document.createElement('div')
+    root.setAttribute('data-phase', 'active')
+    root.setAttribute('data-conversation-scroll', '')
+    root.innerHTML = '<div data-conversation-content data-conversation-session="' + sessionId + '"><div data-composer-seat>' +
+      '<div data-slot="conversation.composer" style="display:contents">' +
+      '<div data-chain-overlay-fallback="conversation.composer" style="display:contents">' +
+      '<div class="_composerStack_x_1"><div class="_inputBar_x_1">input</div></div></div></div></div></div>'
+    document.body.appendChild(root)
+    return {
+      root: root,
+      fallback: root.querySelector('[data-chain-overlay-fallback]'),
+      stack: root.querySelector('._composerStack_x_1'),
+    }
+  }
+
+  /** One press-and-release on a mascot's hit box, at `fraction` across it. */
+  function pressPart(node, fraction) {
+    var box = node.getBoundingClientRect()
+    var point = { clientX: box.left + box.width * fraction, clientY: box.top + box.height / 2 }
+    var press = Object.assign({ pointerId: 1, pointerType: 'mouse', isPrimary: true, button: 0, bubbles: true }, point)
+    node.dispatchEvent(new PointerEvent('pointerdown', Object.assign({ buttons: 1 }, press)))
+    node.dispatchEvent(new PointerEvent('pointerup', Object.assign({ buttons: 0 }, press)))
+  }
+
+  /** A DOM write that asks the skin for one more pass, for a state that waits only on its own timer. */
+  function wakePass() {
+    var node = document.createElement('span')
+    document.body.appendChild(node)
+    document.body.removeChild(node)
+  }
+
   var probe = {
     sleep: sleep,
+    readMascot: readMascot,
+    placeConversation: placeConversation,
+    pressPart: pressPart,
+    wakePass: wakePass,
     frame: frame,
     watch: watch,
     settle: settle,

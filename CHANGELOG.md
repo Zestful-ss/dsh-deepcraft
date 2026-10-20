@@ -4,6 +4,20 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">新增功能</h3>
+
+- 新增聊天框宠物：Claude 主题默认使用 Crab Buddy，DeepSeek 主题默认使用 Whaledou，按原始 Petdex 图集与逐帧时序播放；原有的像素螃蟹与像素鲸鱼仍可手动选择。
+- 新增桌面宠物：在 Windows x64 上复用官方 Petdex 程序打开置顶窗口，跟随 DSH 启动与退出，主题或宠物变化时只重启 DSH 自己启动的实例；已有独立实例时明确报告而不接管。
+- 新增完整宠物包导入：文件夹、ZIP 与 Petdex 链接共用一个校验与落盘流程，清单与图集按原字节保存，内容相同复用目录、内容不同另存，现有宠物包不被覆盖。
+
+<h3 id="en-unreleased">New Features</h3>
+
+- Add chat pets: Crab Buddy under Claude and Whaledou under DeepSeek, drawn from their untouched Petdex atlases at the authors' frame times, with the original pixel crab and whale still selectable by hand.
+- Add a desktop pet: on Windows x64 the official Petdex player opens an always-on-top window that follows DSH's lifecycle, restarting only the instance DSH started when the theme or pet changes, and reporting an independent instance instead of adopting it.
+- Add complete pet package import: folders, ZIPs and Petdex links share one validation and install path, manifests and atlases are stored byte for byte, identical content reuses its directory, different content installs beside it, and existing packages are never overwritten.
+
 ## [0.17.1] - 2026-10-20
 
 [中文](#cn-0.17.1) | [English](#en-0.17.1)

@@ -1,4 +1,3 @@
-import { MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY } from '../../constants'
 import type { FeatureManifest } from '../../core/feature'
 
 export default {
@@ -7,11 +6,13 @@ export default {
   load: 'deferred',
   reads: ['composer'],
   contracts: ['chat.think-running', 'composer.fallback-panel', 'composer.seat', 'composer.stack', 'conversation.session', 'conversation.session-attribute'],
-  pref: 'mascot',
-  prefValues: [MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY],
+  // The feature stays installed while the chat guest is off: the desktop pet
+  // is chosen independently and still has to follow its own switch.
+  ungated: 'The chat pet can be off while the desktop pet stays on, so this feature is always installed and reads its own switches.',
   stylesheets: [
     { file: 'crab.css', rank: 350 },
     { file: 'whale.css', rank: 360 },
+    { file: 'petdex.css', rank: 365 },
   ],
   settingsRows: [{
     tab: 'appearance',
@@ -21,6 +22,16 @@ export default {
     desc: 'mascotDesc',
     choiceLabels: { brand: 'mascotBrand', crab: 'mascotCrab', deepy: 'mascotDeepy', off: 'mascotOff' },
   }, {
+    // The chat pet follows the theme; the field written is the one in front.
+    tab: 'appearance',
+    rank: 35,
+    pref: 'chatPetClaude',
+    key: 'chatPet',
+    parent: 'mascot',
+    control: 'chatPet',
+    title: 'petChatTitle',
+    desc: 'petChatDesc',
+  }, {
     // It belongs to the mascot switch above it.
     tab: 'appearance',
     rank: 40,
@@ -28,6 +39,24 @@ export default {
     parent: 'mascot',
     title: 'mascotScopeTitle',
     choiceLabels: { home: 'mascotScopeHome', all: 'mascotScopeAll' },
+  }, {
+    // A place of its own: the desktop player's switch, pet and status.
+    tab: 'appearance',
+    rank: 45,
+    pref: 'desktopPetEnabled',
+    key: 'desktopPet',
+    control: 'desktopPet',
+    title: 'petDesktopTitle',
+    desc: 'petDesktopDesc',
+  }, {
+    // Imported packages are selected by the chat row above; this row only adds them.
+    tab: 'appearance',
+    rank: 55,
+    pref: 'desktopPetClaude',
+    key: 'petImport',
+    control: 'petImport',
+    title: 'petImportTitle',
+    desc: 'petImportDesc',
   }],
-  cases: ['crab-states', 'deepy', 'hero', 'studio']
+  cases: ['crab-states', 'deepy', 'petdex-claude', 'petdex-deepseek', 'hero', 'studio']
 } satisfies FeatureManifest

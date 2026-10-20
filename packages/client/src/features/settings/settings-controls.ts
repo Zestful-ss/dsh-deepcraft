@@ -171,15 +171,16 @@ function featureRows(tab: SettingsTabId, view: SettingsView): SettingsRow[] {
     const description = yielded
       ? managedDesc(desc, true)
       : (row.desc === undefined && note === null ? null : noteDesc(desc, note))
+    const key = row.key ?? pref
     const node = row.parent === undefined
-      ? controls.row(pref, title, description, control, {
+      ? controls.row(key, title, description, control, {
         disabled: off,
         // A feature's own control is a grid of preview cards: it takes the
         // line under the row's text (or the whole row when it has none).
         block: own !== undefined,
         experimental: row.experimental === true,
       })
-      : controls.subRow(pref, title ?? '', description, control, !off, row.experimental === true)
+      : controls.subRow(key, title ?? '', description, control, !off, row.experimental === true)
     return { rank: row.rank, node }
   })
 }

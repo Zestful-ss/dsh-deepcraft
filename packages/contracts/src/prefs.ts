@@ -163,6 +163,8 @@ export const USERNAME_MAX = 64
 /** Most quick-provider ids kept, and the longest id accepted. */
 export const QUICK_PROVIDERS_MAX = 64
 export const PROVIDER_ID_MAX = 128
+/** Longest accepted pet id: a package directory name the official player can open. */
+export const PET_ID_MAX = 63
 
 /* ---------- the table ---------- */
 
@@ -223,6 +225,13 @@ export const PREFS = {
   /** The mascot on the composer; the resolved one rides the document. */
   mascot: { type: 'choice', values: MASCOTS, default: MASCOT_BRAND },
   mascotScope: { type: 'choice', values: MASCOT_SCOPES, default: MASCOT_SCOPE_ALL },
+  /** Each theme's chat pet and desktop pet, by package directory id; one choice per place. */
+  chatPetClaude: { type: 'text', default: 'crab-buddy', max: PET_ID_MAX },
+  chatPetDeepseek: { type: 'text', default: 'whaledou', max: PET_ID_MAX },
+  desktopPetClaude: { type: 'text', default: 'claude-opus-scholar', max: PET_ID_MAX },
+  desktopPetDeepseek: { type: 'text', default: 'deepseek', max: PET_ID_MAX },
+  /** The native desktop player is off until the reader asks for it; the chat pet is independent. */
+  desktopPetEnabled: { type: 'boolean', default: false },
   permissionsControl: { type: 'boolean', default: true },
   statsPosition: { type: 'choice', values: STATS_POSITIONS, default: STATS_POSITION_CONTEXT },
   workspaceView: { type: 'boolean', default: true },
@@ -268,6 +277,7 @@ export const LIVE_PREFS = [
   'peakrate',
   'caretMotion',
   'mascot',
+  'desktopPetEnabled',
   'modelPicker',
   'collapseFooter',
   'composerScope',

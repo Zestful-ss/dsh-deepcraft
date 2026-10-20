@@ -18,27 +18,10 @@
     await probe.onlyFor(['deepy', 'crab-states'], async function () {
       var mascotName = window.SMOKE_CASE === 'deepy' ? 'deepy' : 'crab'
       var driver = window.__deepy
-      var whaleNow = function () {
-        var node = document.querySelector('.dsh-deepcraft-' + mascotName)
-        if (node === null) return null
-        // The frame is the strip's translation: read the computed matrix (a
-        // running WAAPI animation has no inline style) as "Xpx Ypx".
-        var strip = node.querySelector('.dsh-deepcraft-' + mascotName + '-strip')
-        var matrix = getComputedStyle(strip).transform
-        var offsets = matrix === 'none' ? null : matrix.match(/matrix\([^,]+,[^,]+,[^,]+,[^,]+,\s*(-?[\d.]+),\s*(-?[\d.]+)\)/)
-        return {
-          animation: node.getAttribute('data-animation'),
-          ready: node.hasAttribute('data-ready'),
-          place: node.parentElement === null ? null : node.parentElement.getAttribute('data-dsh-deepcraft-' + mascotName + '-anchor'),
-          frame: offsets === null ? '0px 0px' : offsets[1] + 'px ' + offsets[2] + 'px',
-          sheet: getComputedStyle(strip).backgroundImage,
-        }
-      }
-      var wakeDeepyPass = function () {
-        var node = document.createElement('span')
-        document.body.appendChild(node)
-        document.body.removeChild(node)
-      }
+      // The frame is the strip's translation: read the computed matrix (a
+      // running WAAPI animation has no inline style) as "Xpx Ypx".
+      var whaleNow = function () { return probe.readMascot(mascotName) }
+      var wakeDeepyPass = probe.wakePass
       var bodyStyle = getComputedStyle(document.body)
       r.states = {
         brand: document.body.getAttribute('data-dsh-deepcraft-brand'),
@@ -79,10 +62,7 @@
       r.states.idle = { before: r.states.home && r.states.home.frame, after: nowFrame(), passes: window.__passes - deepyPasses }
       // A click on its face pokes it.
       var hit = document.querySelector('.dsh-deepcraft-' + mascotName + '-hit')
-      var hitBox = hit.getBoundingClientRect()
-      var press = { pointerId: 1, pointerType: 'mouse', isPrimary: true, button: 0, clientX: hitBox.left + 6, clientY: hitBox.top + hitBox.height / 2, bubbles: true }
-      hit.dispatchEvent(new PointerEvent('pointerdown', Object.assign({ buttons: 1 }, press)))
-      hit.dispatchEvent(new PointerEvent('pointerup', Object.assign({ buttons: 0 }, press)))
+      probe.pressPart(hit, 0.1)
       await sleep(250)
       r.states.poke = whaleNow()
       // Both characters play every state on the conversation page, and stand
@@ -92,16 +72,8 @@
       deepyHero.remove()
       // The conversation page: the host's composer seat, its chain wrapper and
       // the composer stack inside it.
-      var deepyConversation = document.createElement('div')
-      deepyConversation.setAttribute('data-phase', 'active')
-      // The host's conversation anchor: the seat and the stack inside it are
-      // read by their parts, which are written inside this subtree (D3).
-      deepyConversation.setAttribute('data-conversation-scroll', '')
-      deepyConversation.innerHTML = '<div data-conversation-content data-conversation-session="smoke-deepy"><div data-composer-seat>' +
-        '<div data-slot="conversation.composer" style="display:contents">' +
-        '<div data-chain-overlay-fallback="conversation.composer" style="display:contents">' +
-        '<div class="_composerStack_x_1"><div class="_inputBar_x_1">input</div></div></div></div></div></div>'
-      document.body.appendChild(deepyConversation)
+      var placed = probe.placeConversation('smoke-deepy')
+      var deepyConversation = placed.root
       // A pass moves the whale onto the conversation first: the home page reads
       // the whole workspace, where a running session is work.
       await sleep(200)
@@ -139,7 +111,7 @@
       await sleep(1300)
       r.states.building = whaleNow()
       // An approval: the host hides the composer and mounts its panel after it.
-      var fallback = deepyConversation.querySelector('[data-chain-overlay-fallback]')
+      var fallback = placed.fallback
       var panel = document.createElement('div')
       panel.setAttribute('data-approval-key', 'smoke')
       panel.textContent = 'approve?'

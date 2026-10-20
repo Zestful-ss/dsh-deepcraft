@@ -60,3 +60,24 @@ export const BRAND_WORDMARK_PATH = `${ROUTE_PREFIX}/brand/wordmark`
  * half can ask for a fresh copy without knowing the source's address.
  */
 export const PEAKRATE_PATH = `${ROUTE_PREFIX}/peakrate`
+
+/** The installed pets, as descriptors; the host half owns the directories. */
+export const PETS_PATH = `${ROUTE_PREFIX}/pets`
+
+/** `POST { id }`: the descriptor of an installed preset, downloaded on first use. */
+export const PETS_ENSURE_PATH = `${PETS_PATH}/ensure`
+
+/** `POST` one ZIP archive: a complete package installed byte for byte. */
+export const PETS_IMPORT_PATH = `${PETS_PATH}/import`
+
+/** `POST { url }`: a Petdex pet page, resolved through the official public catalog. */
+export const PETS_IMPORT_URL_PATH = `${PETS_PATH}/import-url`
+
+/** `GET <id>?v=<version>`: one pet's untouched atlas. */
+export const PETS_IMAGE_PATH = `${PETS_PATH}/image`
+
+/** `GET`: the host half's desktop player status. */
+export const PETS_DESKTOP_PATH = `${PETS_PATH}/desktop`
+
+/** `POST` one `DesktopPetSelection`: bring the owned desktop player in line with it, for this run only. */
+export const PETS_DESKTOP_SYNC_PATH = `${PETS_PATH}/desktop/sync`

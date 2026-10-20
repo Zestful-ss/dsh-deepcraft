@@ -34,6 +34,36 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+## Petdex
+
+The desktop player's session-event projection and delivery queue (`packages/host/src/pets/normalize.ts`, `packages/host/src/pets/bridge.ts`) are ported from Petdex's DSH integration, and the Windows player this plugin starts is the official Petdex release, downloaded at runtime and verified against its published digest. Pet packages are downloaded at runtime or imported by the reader; their art belongs to each package's author and is not shipped by this package.
+
+Source: <https://github.com/crafter-station/petdex>
+
+```
+MIT License
+
+Copyright (c) 2026 Crafter Station
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
 ## Lobe Icons
 
 The vendor lockups the model picker draws (`packages/assets/src/icons/combine/`, inlined into `lib/client.js`) are composed by `scripts/fetch-lobe-combines.py`: most from Lobe Icons (`@lobehub/icons-static-svg` ships each vendor's mono mark, colour mark and wordmark, and `@lobehub/icons` carries each vendor's brand colour and which artwork variants exist), the rest — OpenAI's and Reflection's — from artwork the repository carries under `packages/assets/src/icons/`. Brand names and logos remain trademarks of their respective owners.

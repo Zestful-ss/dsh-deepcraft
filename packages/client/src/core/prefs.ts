@@ -1,4 +1,4 @@
-import { BRAND_ATTR, BRAND_DEEPSEEK, COMPOSER_ATTR, DOCK_LOOK_ATTR, DOCK_LOOK_CARD, DOCK_LOOK_FLUSH, FOOTER_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, ONGOING_INDICATOR_ATTR, PAGE_ZOOM_ATTR, PAGE_ZOOM_SYSTEM, PACKAGE_NAME, PALETTE_ATTR, SEARCH_STYLE_ATTR, SETTINGS_ENTRY_FALLBACK, SIDEBAR_LAYOUT_ATTR, STATS_POSITION_ATTR, STATUS_MOTION_ATTR, TYPEFACE_ATTR } from '../constants'
+import { BRAND_ATTR, BRAND_DEEPSEEK, COMPOSER_ATTR, MASCOT_PETDEX, DOCK_LOOK_ATTR, DOCK_LOOK_CARD, DOCK_LOOK_FLUSH, FOOTER_ATTR, MASCOT_ATTR, MASCOT_BRAND, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, ONGOING_INDICATOR_ATTR, PAGE_ZOOM_ATTR, PAGE_ZOOM_SYSTEM, PACKAGE_NAME, PALETTE_ATTR, SEARCH_STYLE_ATTR, SETTINGS_ENTRY_FALLBACK, SIDEBAR_LAYOUT_ATTR, STATS_POSITION_ATTR, STATUS_MOTION_ATTR, TYPEFACE_ATTR } from '../constants'
 import type { PrefKey, Prefs } from '../constants'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import { clampPrefs } from '@dsh-deepcraft/contracts/prefs'
@@ -180,10 +180,21 @@ export function motionReduced() {
   return systemPrefersReducedMotion()
 }
 
-/** The mascot actually on the page: `brand` resolves through the brand. */
+/** The mascot actually on the page: `brand` resolves to the theme's own Petdex pet. */
 export function resolveMascot(current: Prefs) {
   if (current.mascot !== MASCOT_BRAND) return current.mascot
-  return current.brand === BRAND_DEEPSEEK ? MASCOT_DEEPY : MASCOT_CRAB
+  return MASCOT_PETDEX
+}
+
+/**
+ * The package the current theme uses in one place. Both places read the same
+ * brand rule here, so the chat pet and the desktop pet never disagree about
+ * which theme is in front.
+ */
+export function resolveThemePet(current: Prefs, place: 'chat' | 'desktop') {
+  const deepseek = current.brand === BRAND_DEEPSEEK
+  if (place === 'chat') return deepseek ? current.chatPetDeepseek : current.chatPetClaude
+  return deepseek ? current.desktopPetDeepseek : current.desktopPetClaude
 }
 
 /**

@@ -131,6 +131,12 @@ export interface FeatureSettingsRow {
   rank: number
   /** The preference the row writes. */
   pref: keyof Prefs
+  /**
+   * The row's identity where two rows cannot be keyed by the same preference
+   * (a control reading one of two theme fields, or a picker that writes no
+   * preference of its own).
+   */
+  key?: string
   /** The row's title, by key in the feature's own copy; a row whose own control is the whole row carries none. */
   title?: string
   /** The line under the title; a row whose own control is the explanation carries none. */

@@ -1,46 +1,121 @@
-import { MASCOT_CRAB, MASCOT_DEEPY, MASCOT_SCOPE_ALL } from '../../constants'
-import { readPrefs, resolveMascot } from '../../core/prefs'
+import { MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, MASCOT_PETDEX, MASCOT_SCOPE_ALL } from '../../constants'
+import { readPrefs, resolveMascot, resolveThemePet } from '../../core/prefs'
 import { createMascotCrab } from './crab'
 import { createMascotWhale } from './whale'
+import { createPetdexMascot } from './petdex'
+import { decodePet, ensurePet, syncDesktop } from '../../shared/petdex'
+import type { PetDescriptor } from '@dsh-deepcraft/contracts/pets'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './mascot.manifest'
 
 /**
- * The mascot on the composer: Claude Code's pixel crab
- * (packages/client/src/features/mascot/crab.ts) or Deepy, the DeepSeek brand's pixel whale
- * (packages/client/src/features/mascot/whale.ts), both played by the agent's state
- * (packages/client/src/features/mascot/mascot-player.ts).
+ * The companion on the composer, and the desktop player beside it: each is
+ * chosen per theme and each follows its own switch (D78).
  *
- * Which one is out is the mascot preference, resolved onto <body> as
- * MASCOT_ATTR: "follow the brand" puts the crab under Claude and Deepy
- * under DeepSeek, and the reader may pick either, or none. Where it stands
- * is the "where it appears" preference: the home page alone, or the home
- * page and the conversation. The other character is released, so only one
- * mascot is ever on the page.
+ * `brand` now means the theme's Petdex package (crab-buddy under Claude,
+ * whaledou under DeepSeek), drawn from its own atlas. The two original
+ * characters stay selectable by hand, and `off` retires the composer guest
+ * alone — a running desktop pet is a separate choice and keeps running.
+ * `mascotScope` still decides whether the composer guest also stands in the
+ * conversation.
+ *
+ * One chat instance is on the page at a time. A package that cannot be
+ * fetched or decoded leaves the previous instance in place instead of
+ * blanking the corner.
  */
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   const crab = createMascotCrab(ctx, ui)
   const whale = createMascotWhale(ctx, ui)
+  let petdex: { id: string, player: ReturnType<typeof createPetdexMascot> } | null = null
+  /** The package the current request is for, so a pass does not start it twice. */
+  let requested: string | null = null
+  /** Bumped by every request and teardown; a late answer for an older one is dropped. */
+  let generation = 0
+  /** The package that failed last, and when: a broken package is retried after a pause, not every pass. */
+  let failedId: string | null = null
+  let failedAt = 0
+
+  function releaseChat() {
+    crab.release()
+    whale.release()
+    if (petdex !== null) {
+      petdex.player.dispose()
+      petdex = null
+    }
+    requested = null
+    generation += 1
+  }
+
+  async function openPetdex(id: string, conversation: boolean) {
+    if (requested === id) return
+    if (failedId === id && Date.now() - failedAt < 10000) return
+    requested = id
+    const token = ++generation
+    let pet: PetDescriptor
+    try {
+      pet = await ensurePet(id)
+      await decodePet(pet)
+    } catch (error) {
+      // The previous guest keeps playing; the settings page names the reason
+      // for an import it performed itself. A broken package is not fetched
+      // again on the next pass.
+      console.warn(`[dsh-deepcraft] the chat pet "${id}" could not be loaded:`, error)
+      failedId = id
+      failedAt = Date.now()
+      if (token === generation) requested = null
+      return
+    }
+    if (token !== generation) return
+    const prefs = readPrefs()
+    if (resolveMascot(prefs) !== MASCOT_PETDEX || resolveThemePet(prefs, 'chat') !== id) return
+    failedId = null
+    if (petdex !== null) petdex.player.dispose()
+    petdex = { id, player: createPetdexMascot(ctx, ui, pet) }
+    petdex.player.sync(conversation)
+  }
 
   function sync() {
     const prefs = readPrefs()
     const mascot = resolveMascot(prefs)
     const conversation = prefs.mascotScope === MASCOT_SCOPE_ALL
-    if (mascot === MASCOT_CRAB) crab.sync(conversation)
-    else crab.release()
-    if (mascot === MASCOT_DEEPY) whale.sync(conversation)
-    else whale.release()
+    if (mascot === MASCOT_CRAB) {
+      crab.sync(conversation)
+      whale.release()
+      if (petdex !== null) { petdex.player.release(); petdex.player.dispose(); petdex = null }
+      requested = null
+      generation += 1
+    } else if (mascot === MASCOT_DEEPY) {
+      whale.sync(conversation)
+      crab.release()
+      if (petdex !== null) { petdex.player.release(); petdex.player.dispose(); petdex = null }
+      requested = null
+      generation += 1
+    } else if (mascot === MASCOT_PETDEX) {
+      crab.release()
+      whale.release()
+      if (petdex !== null) petdex.player.sync(conversation)
+      void openPetdex(resolveThemePet(prefs, 'chat'), conversation)
+    } else if (mascot === MASCOT_OFF) {
+      releaseChat()
+    }
+    // The desktop player follows its own switch and its own per-theme choice;
+    // the chat switch and where the chat guest stands do not touch it.
+    void syncDesktop({ enabled: prefs.desktopPetEnabled, petId: resolveThemePet(prefs, 'desktop') })?.catch((error: unknown) => {
+      console.warn('[dsh-deepcraft] the desktop pet could not be synced:', error)
+    })
   }
 
   function onActivity() {
     crab.onActivity()
     whale.onActivity()
+    petdex?.player.onActivity()
   }
 
   ui.mascot = { sync, onActivity }
 
   return () => {
+    releaseChat()
     crab.dispose()
     whale.dispose()
     delete ui.mascot

@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-20",
+  "group": "new",
+  "order": 2,
+  "external": false,
+  "zh": "新增完整宠物包导入：文件夹、ZIP 与 Petdex 链接共用一个校验与落盘流程，清单与图集按原字节保存，内容相同复用目录、内容不同另存，现有宠物包不被覆盖。",
+  "en": "Add complete pet package import: folders, ZIPs and Petdex links share one validation and install path, manifests and atlases are stored byte for byte, identical content reuses its directory, different content installs beside it, and existing packages are never overwritten."
+}

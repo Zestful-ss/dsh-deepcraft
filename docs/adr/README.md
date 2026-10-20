@@ -23,6 +23,7 @@
 | [D75](D75-private-routes.md) | 私有通道与安全边界 | D11 |
 | [D76](D76-manifest-holds-facts.md) | 清单登记界面与构建要用的事实 | D42、D13、D29、D39、D72 |
 | [D77](D77-theme-ownership.md) | 品牌与主题归属 | D30、D50、D64 |
+| [D78](D78-petdex-pets.md) | 复用 Petdex 宠物：原始宠物包与两个位置 |  |
 
 ## 作废的编号
 
