@@ -67,14 +67,15 @@ body[data-dsh-deepcraft] .dsh-deepcraft-deepy-strip {
 }
 
 /* The resting whale's body from nose to fluke: rows 29–50 of the grid, the
-   columns the body covers. Only this box takes the pointer, so the cards and
-   the composer above it stay reachable. */
+   columns the body covers, plus the one logical pixel the sleeping pose drops
+   (row 51). Only this box takes the pointer, so the cards and the composer
+   above it stay reachable. */
 body[data-dsh-deepcraft] .dsh-deepcraft-deepy-hit {
   position: absolute;
   left: 20px;
   top: 64px;
   width: 64px;
-  height: 36px;
+  height: 38px;
   pointer-events: auto;
   touch-action: none;
 }

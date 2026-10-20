@@ -43,53 +43,81 @@ const ACTIONS = new Set([
 ])
 
 /**
- * The body, row by row: `y: [first column, last column]`. Rounded at the top,
- * fullest at the shoulders, tapering to the jaw and the belly.
+ * The measured master grid: the reference art at 32×24, one character a cell,
+ * `o` body and `.` belly. The silhouette is traced from the reference itself
+ * (the 32×32 detail drawing), so the back's plate, the heart tail's cleft and
+ * the flipper's step land where the art puts them.
  */
-const BODY = {
-  3: [18, 20],
-  4: [16, 22],
-  5: [14, 24],
-  6: [13, 26],
-  7: [12, 27],
-  8: [11, 28],
-  9: [10, 29],
-  10: [9, 30],
-  11: [9, 31],
-  12: [8, 31],
-  13: [8, 31],
-  14: [8, 31],
-  15: [9, 30],
-  16: [10, 29],
-  17: [12, 27],
-  18: [15, 24],
-  19: [18, 21],
+const MASTER = [
+  '                 ooooooooooo    ',
+  '              ooooooooooooooo   ',
+  '             oooooooooooooooo   ',
+  '             ooooooooooooo.ooo  ',
+  ' oooooo    ooooooooooooooooooo  ',
+  'oooooooo  ooooooooooooooooooooo ',
+  'ooooooooo oooooooooooooooooooooo',
+  'oooooooooooooooooooooooooooooooo',
+  'oooooooooooooooooooooooooooooooo',
+  'oooooooooooooooooooooooooooooooo',
+  '  oooooooooooooooooooooooooooooo',
+  '   ooooooooooooooooooooooooooooo',
+  '   ooooooooooooooooooooooooooooo',
+  '  oooooooooooooooooooooooooooooo',
+  '   ooooooooooooooooooooooooooooo',
+  '   ooooooooooooooooo...ooo..oooo',
+  '    oooooooooooooo.....ooo.oooo ',
+  '    oooooooooooooo.........ooo  ',
+  '      oooo.ooooo.oooo.....ooo   ',
+  '       oooooooooo.ooo..ooooo    ',
+  '       ooooooooo.ooooooooooo    ',
+  '         oooooooooooooooooo     ',
+]
+
+/**
+ * The pale belly: a large plate low on the right flank, one cell inside the
+ * contour, following the animal's own curve rather than a flat bottom band.
+ */
+const BELLY = {
+  10: [28, 30],
+  11: [24, 30],
+  12: [21, 30],
+  13: [18, 30],
+  14: [16, 29],
+  15: [15, 28],
+  16: [14, 27],
+  17: [14, 25],
+  18: [15, 23],
+  19: [17, 21],
 }
 
-/** The fluke, row by row: two prongs meeting the body at column 9. */
-const FLUKE = {
-  4: [3, 6],
-  5: [4, 7],
-  6: [5, 8],
-  7: [6, 9],
-  8: [7, 9],
-  9: [8, 9],
-  10: [8, 9],
-  11: [7, 9],
-  12: [6, 8],
-  13: [5, 7],
-  14: [4, 6],
-  15: [3, 5],
-}
+/**
+ * The curl inside the tail, in the outline colour: the heart's inner loop,
+ * drawn as a ring so the body colour shows through its middle.
+ */
+const CURL = [
+  [3, 5], [4, 5], [5, 5],
+  [2, 6], [6, 6],
+  [2, 7], [6, 7],
+  [3, 8], [4, 8], [5, 8],
+]
 
-/** The eye by expression: `[x, y, w, h]` in body cells. */
+/**
+ * The tail's outer tip, the cells the swing moves. The rest of the tail stays
+ * fixed, so a whole-pixel swing can never tear the tail off the flank.
+ */
+const TAIL_TIP = { rows: [4, 9], cols: [0, 2] }
+
+/**
+ * The eyes by expression: pairs of `[x, y, w, h]` in body cells. The animal
+ * looks out from the front, so both eyes always move and change together.
+ */
 const EYES = {
-  open: [25, 10, 2, 2],
-  blink: [25, 11, 2, 1],
-  wide: [24, 9, 3, 3],
-  closed: [25, 11, 2, 1],
-  happy: [25, 11, 2, 1],
-  worried: [25, 11, 2, 1],
+  open: [[19, 10, 2, 2], [27, 10, 2, 2]],
+  blink: [[19, 11, 2, 1], [27, 11, 2, 1]],
+  wide: [[18, 9, 3, 3], [26, 9, 3, 3]],
+  closed: [[19, 11, 2, 1], [27, 11, 2, 1]],
+  happy: [[19, 10, 2, 1], [27, 10, 2, 1]],
+  worried: [[19, 11, 2, 1], [27, 11, 2, 1]],
 }
 
 /** A neutral pose: where every action starts. */
@@ -106,15 +134,13 @@ function spans(table, dx, dy) {
   return cells
 }
 
-/** Whether all eight neighbours of a cell are part of the same shape. */
+/**
+ * Whether all four orthogonal neighbours of a cell are part of the same shape.
+ * Only the orthogonal reach keeps a diagonal step from reading as a hole, so
+ * the contour stays exactly one logical pixel wide.
+ */
 function interior(cells, x, y) {
-  for (let dy = -1; dy <= 1; dy++) {
-    for (let dx = -1; dx <= 1; dx++) {
-      if (dx === 0 && dy === 0) continue
-      if (!cells.has(`${x + dx},${y + dy}`)) return false
-    }
-  }
-  return true
+  return cells.has(`${x - 1},${y}`) && cells.has(`${x + 1},${y}`) && cells.has(`${x},${y - 1}`) && cells.has(`${x},${y + 1}`)
 }
 
 /** Horizontal runs of one cell set, merged per row: `[x, y, width]`. */
@@ -150,44 +176,60 @@ const paint = (list, fill) => list.map(([x, y, w]) => `<rect x="${x}" y="${y}" w
 /** A solid block, for props. */
 const rect = (x, y, w, h, fill) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}"/>`
 
+/** Every body cell the master grid draws, as `x,y` keys. */
+function masterCells() {
+  const cells = new Set()
+  MASTER.forEach((line, y) => {
+    [...line].forEach((ch, x) => {
+      if (ch !== ' ') cells.add(`${x},${y}`)
+    })
+  })
+  return cells
+}
+
 /**
- * The whale at one pose: fluke, silhouette, belly, back light, pectoral fin,
- * eye, mouth, then the action's own props in front of the animal.
+ * The whale at one pose: silhouette, pale belly, tail curl, both eyes, then the
+ * action's own props in front. The tail's outer tip is the only part the swing
+ * moves; the rest of the tail stays planted on the flank.
  * @param pose - the pose (neutral()).
  */
 function bodyMarkup(pose) {
-  const fluke = spans(FLUKE, 0, pose.tail)
-  const body = spans(BODY, 0, 0)
-  const all = new Set([...fluke, ...body])
+  const all = masterCells()
+  const tip = new Set()
+  for (const cell of all) {
+    const [x, y] = cell.split(',').map(Number)
+    if (y >= TAIL_TIP.rows[0] && y <= TAIL_TIP.rows[1] && x >= TAIL_TIP.cols[0] && x <= TAIL_TIP.cols[1]) {
+      tip.add(cell)
+      all.delete(cell)
+    }
+  }
+  for (const cell of tip) {
+    const [x, y] = cell.split(',').map(Number)
+    all.add(`${x},${y + pose.tail}`)
+  }
   const edge = new Set([...all].filter((cell) => {
     const [x, y] = cell.split(',').map(Number)
     return !interior(all, x, y)
   }))
   const fill = new Set([...all].filter((cell) => !edge.has(cell)))
 
-  // The belly is the bottom of the body, one pixel in from the contour; the back
-  // light sits along the shoulders; the pectoral fin crosses the lower flank.
-  const row = (cell) => Number(cell.split(',')[1])
-  const col = (cell) => Number(cell.split(',')[0])
-  const belly = new Set([...fill].filter((cell) => row(cell) >= 16))
-  const fin = new Set([...fill].filter((cell) => (row(cell) === 14 || row(cell) === 15) && col(cell) >= 12 && col(cell) <= 16))
-  const light = new Set([...fill].filter((cell) => row(cell) >= 5 && row(cell) <= 6 && col(cell) >= 18 && col(cell) <= 21))
+  // The belly follows its table, clipped to the body's interior.
+  const belly = new Set([...spans(BELLY, 0, 0)].filter((cell) => fill.has(cell)))
+  const curl = new Set(CURL.map(([x, y]) => `${x},${y}`))
 
-  const [eyeX, eyeY, eyeW, eyeH] = EYES[pose.eye]
   const eye = []
-  for (let y = eyeY; y < eyeY + eyeH; y++) {
-    for (let x = eyeX + pose.eyeX; x < eyeX + pose.eyeX + eyeW; x++) eye.push([x, y, 1])
+  for (const [eyeX, eyeY, eyeW, eyeH] of EYES[pose.eye]) {
+    for (let y = eyeY; y < eyeY + eyeH; y++) {
+      for (let x = eyeX + pose.eyeX; x < eyeX + pose.eyeX + eyeW; x++) eye.push([x, y, 1])
+    }
   }
-  const mouth = [[25, 15, 2]]
 
   return `<g transform="translate(${pose.dx} ${pose.dy})">
 ${paint(runs(edge), INK.outline)}
 ${paint(runs(fill), INK.body)}
 ${paint(runs(belly), INK.belly)}
-${paint(runs(light), INK.belly)}
-${paint(runs(fin), INK.shade)}
+${paint(runs(curl), INK.outline)}
 ${paint(eye, INK.eye)}
-${paint(mouth, INK.outline)}
 ${pose.props}
 </g>`
 }
@@ -260,10 +302,10 @@ function poses(name) {
       break
     case 'error':
       p.push(
-        { dx: -1, props: rect(26, 1, 5, 1, INK.error) + rect(26, 5, 5, 1, INK.error) + rect(27, 2, 1, 1, INK.error) + rect(29, 2, 1, 1, INK.error) + rect(28, 3, 1, 2, INK.error) },
-        { props: rect(27, 0, 5, 1, INK.error) + rect(27, 4, 5, 1, INK.error) + rect(28, 1, 1, 1, INK.error) + rect(30, 1, 1, 1, INK.error) + rect(29, 2, 1, 2, INK.error) },
-        { dx: 1 },
-        {},
+        { dx: -1, eye: 'worried', props: rect(26, 1, 5, 1, INK.error) + rect(26, 5, 5, 1, INK.error) + rect(27, 2, 1, 1, INK.error) + rect(29, 2, 1, 1, INK.error) + rect(28, 3, 1, 2, INK.error) },
+        { eye: 'worried', props: rect(27, 0, 5, 1, INK.error) + rect(27, 4, 5, 1, INK.error) + rect(28, 1, 1, 1, INK.error) + rect(30, 1, 1, 1, INK.error) + rect(29, 2, 1, 2, INK.error) },
+        { dx: 1, eye: 'worried' },
+        { eye: 'worried' },
       )
       break
     case 'happy':
@@ -297,7 +339,7 @@ function poses(name) {
         { eye: 'closed', dy: 1, props: rect(28, 3, 2, 1, INK.hint) + rect(29, 4, 1, 1, INK.hint) + rect(28, 5, 2, 1, INK.hint) },
         { eye: 'closed', dy: 1, props: rect(29, 1, 2, 1, INK.hint) + rect(30, 2, 1, 1, INK.hint) + rect(29, 3, 2, 1, INK.hint) },
         { eye: 'closed', dy: 1, props: rect(27, 4, 1, 1, INK.hint) + rect(30, 0, 1, 1, INK.hint) },
-        {},
+        { eye: 'closed', dy: 1 },
       )
       break
     case 'waking':
