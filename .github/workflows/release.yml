@@ -10,8 +10,12 @@ name: Release
 # package is not published to npm.
 
 on:
+  # A release starts from a tag the maintainer pushes (the version's CHANGELOG
+  # section and the bumped package.json are already in that commit), or from a
+  # manual dispatch that reads the version package.json names.
   push:
     tags: ['v*']
+  workflow_dispatch:
 
 # contents: the dist branch, the moved tag and the GitHub Release (D47).
 permissions:
@@ -50,11 +54,11 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - name: Check the tag names the package version
+      - name: Read the version package.json names
         id: version
         run: |
           version="$(node -p "require('./package.json').version")"
-          if [ "v${version}" != "${GITHUB_REF_NAME}" ]; then
+          if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "v${version}" != "${GITHUB_REF_NAME}" ]; then
             echo "::error title=Release::tag ${GITHUB_REF_NAME} does not name package.json's version ${version}"
             exit 1
           fi
