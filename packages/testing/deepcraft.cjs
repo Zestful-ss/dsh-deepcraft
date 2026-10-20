@@ -18,6 +18,7 @@ const path = require('node:path')
 const { bound } = require('./bounds.cjs')
 const { waitForSkin, dismissOverlays } = require('./dsh-web.cjs')
 const { openSkinSettings, SETTINGS_PAGE } = require('./settings-route.cjs')
+const { CANVAS } = require('./shoot.cjs')
 const { sanitizePage } = require('../../scripts/shared/privacy.cjs')
 
 const SKIN = {
@@ -27,6 +28,7 @@ const SKIN = {
   rowTitle: '.dsh-deepcraft-settings-row-title',
   brandCard: (brand) => `.dsh-deepcraft-brand-card[data-brand="${brand}"]`,
   whale: '.dsh-deepcraft-deepy',
+  crab: '.dsh-deepcraft-crab',
   whaleHit: '.dsh-deepcraft-deepy-hit',
   whaleStrip: '.dsh-deepcraft-deepy-strip',
   accountBtn: '.dsh-deepcraft-account-btn',
@@ -117,6 +119,15 @@ async function banOpensFromRow(page) {
   return opened
 }
 
+/** Switch to the Claude brand in the settings dialog and wait for the crab to mount. */
+async function switchToClaude(page) {
+  await openTab(page, TABS.general)
+  await page.locator(SKIN.brandCard(BRANDS.claude)).first().click()
+  await page.waitForTimeout(400)
+  await closeSettings(page)
+  await page.waitForSelector(SKIN.crab, { state: 'attached', timeout: WHALE_WAIT_MS })
+}
+
 /** Wait for the whale to be on the page, or to be gone. */
 async function waitWhale(page, present) {
   await page.waitForFunction(
@@ -146,16 +157,45 @@ async function pressAt(page, at, fromRight = false) {
 /** The sheet of the animation on screen, for the "another sheet" check. */
 const sheetOf = (page) => page.evaluate((selector) => getComputedStyle(document.querySelector(selector)).getPropertyValue('--dsh-deepcraft-deepy-sheet'), SKIN.whale)
 
-/** The DeepSeek canvas this theme paints, from its own token sheet (`#fafbff` light, `#13161d` dark). */
-const DEEPSEEK_CANVAS = { light: 'rgb(250, 251, 255)', dark: 'rgb(19, 22, 29)' }
+/**
+ * The layout both brands share, in CSS pixels: the composer card, the
+ * conversation column, the sidebar and the composer's own stack. The two brands
+ * paint different colours and different characters; these boxes have to match.
+ */
+async function measureLayout(page) {
+  return page.evaluate(() => {
+    const box = (selector) => {
+      const element = document.querySelector(selector)
+      if (element === null) return null
+      const rect = element.getBoundingClientRect()
+      return [rect.x, rect.y, rect.width, rect.height].map((value) => Math.round(value * 10) / 10)
+    }
+    return {
+      card: box('[data-composer-card]'),
+      scroll: box('[data-conversation-scroll]'),
+      sidebar: box('[data-slot="sidebar"]'),
+      stack: box('[data-dsh-deepcraft-part~="composer-stack"]'),
+    }
+  })
+}
+
+/** The colours a brand paints: the canvas and the accent, read off the page. */
+async function readPalette(page) {
+  return page.evaluate(() => {
+    const style = getComputedStyle(document.body)
+    return { canvas: style.backgroundColor, accent: style.getPropertyValue('--dsw-alias-brand-primary').trim() }
+  })
+}
 
 /** Capture the page in both palettes, swept for personal data. */
-async function capture(page, out, name) {
+async function capture(page, out, name, brand) {
+  const expected = CANVAS[brand]
+  if (expected === undefined) throw new Error(`deepcraft: no recorded palette for "${brand}"`)
   const files = []
   for (const scheme of ['light', 'dark']) {
     if (scheme === 'dark') await page.evaluate(() => document.body.setAttribute('data-ds-dark-theme', ''))
     const background = await page.evaluate(() => getComputedStyle(document.body).backgroundColor)
-    if (background !== DEEPSEEK_CANVAS[scheme]) throw new Error(`deepcraft: ${scheme} palette did not take effect (${background}, expected ${DEEPSEEK_CANVAS[scheme]})`)
+    if (background !== expected[scheme]) throw new Error(`deepcraft: ${scheme} palette did not take effect (${background}, expected ${expected[scheme]})`)
     const { visibleText } = await sanitizePage((expression) => page.evaluate(expression))
     const file = path.join(out, `${name}-${scheme}.png`)
     await page.screenshot({ path: file })
@@ -166,9 +206,24 @@ async function capture(page, out, name) {
   return files
 }
 
+/** How far two readings of one box may differ: a browser's own rounding. */
+const LAYOUT_GIVE = 1
+
+/** Whether every box both brands measured agrees within the give. */
+function layoutsAgree(pair) {
+  const [left, right] = [pair && pair.claude, pair && pair.deepseek]
+  if (left === undefined || right === undefined) return false
+  return Object.keys(left).every((key) => {
+    const a = left[key]
+    const b = right[key]
+    if (a === null || b === null) return a === b
+    return a.every((value, at) => Math.abs(value - b[at]) <= LAYOUT_GIVE)
+  })
+}
+
 /**
- * Export the eighteen sheets the build drew, in one SVG: each animation on its
- * own row beside its name. The renderer that made them is what this reads, so
+ * Export every sheet the build drew, in one SVG: each animation on its own row
+ * beside its name, on the light canvas and on the dark one. The renderer that made them is what this reads, so
  * the export cannot drift from the shipped art.
  */
 async function exportSheets(out) {
@@ -177,14 +232,18 @@ async function exportSheets(out) {
   const { DEEPY_SHEETS, DEEPY_GUTTER } = loadModule('packages/client/src/features/mascot/sheets.ts')
   const rows = Object.entries(DEEPY_SHEETS)
   const scale = 0.5
-  const rowHeight = 54 * 0.5 * Math.ceil(Math.max(...rows.map(([, sheet]) => sheet.frames)) / 8) + 8
-  const parts = [`<svg xmlns="http://www.w3.org/2000/svg" width="${(432 + 140) * scale}" height="${rows.length * rowHeight + 20}"><rect width="100%" height="100%" fill="#ffffff"/>`]
+  const imageWidth = 432 * scale
+  const rowHeight = 54 * scale * Math.ceil(Math.max(...rows.map(([, sheet]) => sheet.frames)) / 8) + 8
+  const width = 110 + imageWidth * 2 + 12
+  const height = rows.length * rowHeight + 20
+  const parts = [`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="100%" height="100%" fill="#ffffff"/><rect x="${110 + imageWidth + 6}" y="0" width="${imageWidth + 6}" height="${height}" fill="#202427"/>`]
   rows.forEach(([name, sheet], at) => {
     const svg = renderWhaleSheet(name, sheet, DEEPY_GUTTER)
     const uri = `data:image/svg+xml;base64,${Buffer.from(svg, 'utf8').toString('base64')}`
     const y = 16 + at * rowHeight
     parts.push(`<text x="8" y="${y + 14}" font-family="sans-serif" font-size="11" fill="#141413">${name}</text>`)
-    parts.push(`<image x="110" y="${y}" width="${432 * scale}" height="${(54 * Math.ceil(sheet.frames / 8)) * scale}" href="${uri}"/>`)
+    parts.push(`<image x="110" y="${y}" width="${imageWidth}" height="${(54 * Math.ceil(sheet.frames / 8)) * scale}" href="${uri}"/>`)
+    parts.push(`<image x="${110 + imageWidth + 6}" y="${y}" width="${imageWidth}" height="${(54 * Math.ceil(sheet.frames / 8)) * scale}" href="${uri}"/>`)
   })
   parts.push('</svg>')
   const file = path.join(out, 'deepcraft-whale-sheets.svg')
@@ -216,6 +275,15 @@ function deepcraftScenario({ check }) {
       notes.before.motionPick = await pickedIn(page, ROWS.motion)
       await openTab(page, TABS.sidebar)
       notes.before.banLocale = await pickedIn(page, ROWS.banLocale)
+      // The Claude theme first: its own colours and its own character, on the
+      // same layout the DeepSeek theme paints next.
+      await switchToClaude(page)
+      notes.layout = { home: { claude: await measureLayout(page) } }
+      notes.palette = { claude: await readPalette(page) }
+      notes.files.push(...await capture(page, out, 'deepcraft-home-claude', 'claude'))
+
+      // Then DeepSeek: the settings page's own card switches it.
+      await openSkinSettings(page)
       await openTab(page, TABS.general)
       await page.locator(SKIN.brandCard(BRANDS.deepseek)).first().click()
       await page.waitForTimeout(400)
@@ -224,6 +292,8 @@ function deepcraftScenario({ check }) {
       await closeSettings(page)
       notes.brandAfterSwitch = await bodyAttr(page, 'data-dsh-deepcraft-brand')
       await waitWhale(page, true)
+      notes.palette.deepseek = await readPalette(page)
+      notes.layout.home.deepseek = await measureLayout(page)
       notes.gestures.idle = await animationOf(page)
       notes.gestures.sheet = await sheetOf(page)
 
@@ -248,7 +318,7 @@ function deepcraftScenario({ check }) {
       await page.waitForTimeout(400)
       notes.gestures.afterDrag = await animationOf(page)
 
-      notes.files.push(...await capture(page, out, 'deepcraft-home'))
+      notes.files.push(...await capture(page, out, 'deepcraft-home-deepseek', 'deepseek'))
     },
     async duringTurn(context) {
       const { page } = context
@@ -268,7 +338,9 @@ function deepcraftScenario({ check }) {
       const { page, session, out } = context
       const notes = context.notes.deepcraft
       notes.states.afterTurn = await animationOf(page)
-      notes.files.push(...await capture(page, out, 'deepcraft-conversation'))
+      notes.palette.conversation = { deepseek: await readPalette(page) }
+      notes.layout.conversation = { deepseek: await measureLayout(page) }
+      notes.files.push(...await capture(page, out, 'deepcraft-conversation-deepseek', 'deepseek'))
 
       // Scope: keeping her on the home card leaves the conversation without her.
       await openSkinSettings(page)
@@ -300,10 +372,12 @@ function deepcraftScenario({ check }) {
       // the moment another page puts the theme on DeepSeek, and its row refuses
       // input while DeepSeek is in force.
       await openSkinSettings(page)
-      await openTab(page, TABS.general)
-      await page.locator(SKIN.brandCard(BRANDS.claude)).first().click()
-      await page.waitForTimeout(400)
-      await closeSettings(page)
+      await switchToClaude(page)
+      // The same conversation under Claude: its own palette and its own crab,
+      // where DeepSeek had the whale.
+      notes.palette.conversation.claude = await readPalette(page)
+      notes.layout.conversation.claude = await measureLayout(page)
+      notes.files.push(...await capture(page, out, 'deepcraft-conversation-claude', 'claude'))
       await openAccountMenu(page)
       await page.waitForSelector(SKIN.banRow, { timeout: WHALE_WAIT_MS })
       notes.ban = { rowIsButton: await page.locator(SKIN.banRow).first().getAttribute('role') }
@@ -362,21 +436,21 @@ function deepcraftScenario({ check }) {
       const states = notes.states
       return [
         check('设置页把主题切到 DeepSeek，页面带上新的品牌标记', notes.brandAfterSwitch === 'deepseek', `brand=${notes.brandAfterSwitch}`),
-        check('首页卡片上站着鲸鱼娘，浏览器播放构建画出的矢量帧图',
-          gestures.idle === 'idle' && /\/dsh-deepcraft\/assets\/[0-9a-f]{12}\.svg/.test(gestures.sheet || ''),
+        check('首页卡片上站着像素小鲸鱼，播放构建为它画出的帧图',
+          gestures.idle === 'idle' && /^(url\(")?(data:image\/svg\+xml|https?:[^"]*\/dsh-deepcraft\/assets\/[0-9a-f]{12}\.svg)/.test(gestures.sheet || ''),
           JSON.stringify({ idle: gestures.idle, sheet: gestures.sheet })),
         check('点左脸与点右脸各自触发一次反应',
           gestures.left === 'poke-left' && gestures.right === 'poke-right',
           JSON.stringify({ left: gestures.left, right: gestures.right })),
         check('连点四下挠痒，随后回到空闲', gestures.tickle === 'tickle', `tickle=${gestures.tickle}`),
-        check('按住移动把她提起来，松开后回到当时的动画',
+        check('按住移动把它提起来，松开后回到当时的动画',
           gestures.drag === 'drag' && gestures.afterDrag !== null && gestures.afterDrag !== 'drag',
           JSON.stringify({ drag: gestures.drag, after: gestures.afterDrag })),
-        check('真实的一轮里，流式状态让鲸鱼娘换成思考与写作的帧图',
+        check('真实的一轮里，流式状态让鲸鱼换成思考与写作的帧图',
           states.streamed.includes('thinking') && (states.streamed.includes('typing') || states.streamed.includes('building')),
           JSON.stringify(states.streamed)),
-        check('把出现位置限制在首页之后，对话页上没有她', states.homeOnlyAbsent === true, `afterTurn=${states.afterTurn}`),
-        check('动画设为减弱时鲸鱼娘停在静帧，点一下仍有反应',
+        check('把出现位置限制在首页之后，对话页上没有它', states.homeOnlyAbsent === true, `afterTurn=${states.afterTurn}`),
+        check('动画设为减弱时鲸鱼停在静帧，点一下仍有反应',
           states.reducedAnimated === 0 && states.reducedPoke === 'poke-left',
           JSON.stringify({ animations: states.reducedAnimated, poke: states.reducedPoke })),
         check('Claude 主题下账号行是彩蛋入口，点开出现整页',
@@ -391,8 +465,14 @@ function deepcraftScenario({ check }) {
         check('切回 Claude 时保存的语言仍在，关闭后入口不再打开彩蛋，把语言放回后入口恢复',
           notes.ban.pickedBack === notes.before.banLocale && notes.ban.opensAfterOff === false && notes.ban.opensRestored === true,
           JSON.stringify({ picked: notes.ban.pickedBack, off: notes.ban.opensAfterOff, restored: notes.ban.opensRestored })),
-        check('DeepSeek 主题的首页与对话页截图都写出来了', notes.files.length === 4, notes.files.join(' | ')),
-        check('十八个动作的帧图导出到一张总览里', notes.sheets !== null && fs.existsSync(notes.sheets), String(notes.sheets)),
+        check('两套主题各自画自己的颜色，切到哪一套就是哪一套',
+          notes.palette.claude.canvas !== notes.palette.deepseek.canvas &&
+            notes.palette.claude.accent !== notes.palette.deepseek.accent &&
+            notes.palette.conversation.claude.accent !== notes.palette.conversation.deepseek.accent,
+          JSON.stringify(notes.palette)),
+        check('两套主题的布局框逐个对齐，切换只换颜色与角色',
+          layoutsAgree(notes.layout.home) && layoutsAgree(notes.layout.conversation),
+          JSON.stringify(notes.layout)),
         check('控制台没有异常', context.session.problems.length === 0, context.session.problems.slice(0, 3).join(' | ')),
       ]
     },

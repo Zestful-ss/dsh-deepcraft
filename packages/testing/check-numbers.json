@@ -18,11 +18,8 @@
       ]
     },
     "packages/testing/deepcraft.cjs": {
-      "动画设为减弱时鲸鱼娘停在静帧，点一下仍有反应": [
+      "动画设为减弱时鲸鱼停在静帧，点一下仍有反应": [
         0
-      ],
-      "DeepSeek 主题的首页与对话页截图都写出来了": [
-        4
       ],
       "控制台没有异常": [
         0
@@ -769,14 +766,6 @@
       "the row that takes the echo's place grows about its own bottom-right corner, and can be seen from the first frame": [
         2,
         4
-      ]
-    },
-    "packages/testing/smoke/cases/mascot.cjs": {
-      "its frames change on its own node without waking a pass": [
-        0
-      ],
-      "its frames change on its own node without waking a pass (line 64)": [
-        0
       ]
     },
     "packages/testing/smoke/cases/model.cjs": {

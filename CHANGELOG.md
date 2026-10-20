@@ -9,6 +9,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 <h3 id="cn-unreleased">体验优化</h3>
 
 - 窗口变窄时底部工具栏先压缩模型外显名，档位选择器与上下文显示器保持原位，三者不再互相覆盖。
+- 重构 DeepSeek 主题的视觉设计：采用低饱和蓝紫与近白／炭灰新色板，吉祥物 Deepy 改为像素小鲸鱼并补全空闲笔记本动作，侧栏、首页与账户头像同步绑定新形象。
 - 面板打开时，右侧栏的收起按钮出现在顶栏右端，按下即收起面板，宿主的打开按钮回到原处。
 - 设置页的说明收成一句话，只说这一项给读者什么。
 
@@ -33,6 +34,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 <h3 id="en-unreleased">Improvements</h3>
 
 - On a narrow window the composer's bottom row compresses the model name first, so the effort trigger and the context meter keep their places instead of overlapping it.
+- Overhaul the DeepSeek theme's visual design: introduce a low-saturation periwinkle palette on near-white and charcoal canvases, redraw the Deepy mascot as a pixel whale with an idle laptop routine, and bind the new pixel mark to the sidebar, hero, and account avatar.
 - While the panel is open, the right panel's collapse button appears at the top bar's right end; pressing it closes the panel and the host's open button returns.
 - A setting's line says one clause: what the setting gives the reader.
 

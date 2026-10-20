@@ -43,7 +43,9 @@
       r.states = {
         brand: document.body.getAttribute('data-dsh-deepcraft-brand'),
         canvas: bodyStyle.backgroundColor,
+        ink: bodyStyle.color,
         accent: bodyStyle.getPropertyValue('--dsw-alias-brand-primary').trim(),
+        accentInk: bodyStyle.getPropertyValue('--dsw-alias-brand-text').trim(),
         link: bodyStyle.getPropertyValue('--dsw-alias-link').trim(),
       }
       // The dark palette, read with the host's dark marker set for a moment.
@@ -51,7 +53,10 @@
       var darkStyle = getComputedStyle(document.body)
       r.states.dark = {
         canvas: darkStyle.backgroundColor,
+        ink: darkStyle.color,
         accent: darkStyle.getPropertyValue('--dsw-alias-brand-primary').trim(),
+        accentInk: darkStyle.getPropertyValue('--dsw-alias-brand-text').trim(),
+        link: darkStyle.getPropertyValue('--dsw-alias-link').trim(),
         raised: darkStyle.getPropertyValue('--dsh-deepcraft-raised').trim(),
       }
       document.body.removeAttribute('data-ds-dark-theme')
@@ -72,19 +77,6 @@
       await sleep(600)
       var nowFrame = function () { var state = whaleNow(); return state === null ? null : state.frame }
       r.states.idle = { before: r.states.home && r.states.home.frame, after: nowFrame(), passes: window.__passes - deepyPasses }
-      if (mascotName === 'deepy') {
-        // The motion choice holds the playing sheet's still frame: a looping
-        // animation stops advancing, while a one-shot (the poke below) plays out.
-        window.__pushForm({ motion: 'reduced' })
-        await sleep(150)
-        r.states.stillAttr = document.body.getAttribute('data-dsh-deepcraft-motion')
-        var whaleStill = nowFrame()
-        await sleep(400)
-        r.states.still = { before: whaleStill, after: nowFrame() }
-        window.__pushForm({ motion: 'full' })
-        await sleep(150)
-        r.states.alwaysAttr = document.body.getAttribute('data-dsh-deepcraft-motion')
-      }
       // A click on its face pokes it.
       var hit = document.querySelector('.dsh-deepcraft-' + mascotName + '-hit')
       var hitBox = hit.getBoundingClientRect()
@@ -93,16 +85,8 @@
       hit.dispatchEvent(new PointerEvent('pointerup', Object.assign({ buttons: 0 }, press)))
       await sleep(250)
       r.states.poke = whaleNow()
-      if (mascotName === 'deepy') {
-        // Two sheets are all this case asks for: the one it plays above, and the
-        // one this state change switches to. It leaves with the page.
-        deepyHero.remove()
-        await sleep(200)
-        r.states.gone = whaleNow() === null && document.querySelectorAll('[data-dsh-deepcraft-deepy-anchor]').length === 0
-        return
-      }
-      // The crab plays every state on the conversation page, and stands where
-      // its scope puts it: the walk below is the crab case's alone.
+      // Both characters play every state on the conversation page, and stand
+      // where their scope puts them: the walk below serves either case.
       // The poke plays out (2s) before the page moves on.
       await sleep(1900)
       deepyHero.remove()
@@ -131,9 +115,25 @@
       wakeDeepyPass()
       await sleep(250)
       r.states.typing = whaleNow()
-      // Two more sessions at work: the hard hat, once the typing whale has
+      // A second session at work: the music tier.
+      driver.addSessions(['smoke-two'])
+      driver.setStatus('smoke-two', { running: true })
+      await sleep(1300)
+      r.states.music = whaleNow()
+      // A parent with two running subagents conducts; clearing them returns to
+      // the workspace's own work.
+      driver.setSubagents(['sub-a', 'sub-b'])
+      driver.setStatus('sub-a', { running: true })
+      driver.setStatus('sub-b', { running: true })
+      await sleep(1300)
+      r.states.conducting = whaleNow()
+      driver.setSubagents([])
+      driver.setStatus('sub-a', { running: false })
+      driver.setStatus('sub-b', { running: false })
+      await sleep(1300)
+      // A third session at work: the hard hat, once the conducting whale has
       // held the stage for its second.
-      driver.addSessions(['smoke-two', 'smoke-three'])
+      driver.addSessions(['smoke-three'])
       driver.setStatus('smoke-two', { running: true })
       driver.setStatus('smoke-three', { running: true })
       await sleep(1300)
@@ -204,6 +204,17 @@
       driver.setStatus('smoke-deepy', { running: false })
       await sleep(1200)
       r.states.afterWork = whaleNow()
+      // The idle extras: the dice pinned, the wait for one advanced past, and
+      // the last of the character's extras takes the stage and gives it back.
+      var deepyRandom = Math.random
+      Math.random = function () { return 0.99 }
+      deepyAhead += 41000
+      wakeDeepyPass()
+      for (var extraWait = 0; extraWait < 90 && (whaleNow() || {}).animation !== 'idle-laptop'; extraWait++) await sleep(50)
+      r.states.extra = whaleNow()
+      for (var extraDone = 0; extraDone < 140 && (whaleNow() || {}).animation !== 'idle'; extraDone++) await sleep(50)
+      r.states.afterExtra = whaleNow()
+      Math.random = deepyRandom
       deepyAhead += 61000
       // The probe's clock is fake while setTimeout runs on the real one: wake a
       // pass to stand in for the sleep deadline the whale's timer would fire.
@@ -220,31 +231,31 @@
       deepyConversation.remove()
       await sleep(200)
       r.states.gone = whaleNow() === null && document.querySelectorAll('[data-dsh-deepcraft-' + mascotName + '-anchor]').length === 0
-      if (mascotName === 'crab') {
-        // Where it appears: kept to the home page, the crab stays off the
-        // conversation; with the mascot off it leaves the home card as well.
-        document.body.appendChild(deepyConversation)
-        await sleep(300)
-        r.states.backInConversation = whaleNow() !== null
-        window.__pushForm({ mascotScope: 'home' })
-        await sleep(300)
-        r.states.homeOnly = whaleNow()
-        deepyConversation.remove()
-        var scopeHero = document.createElement('div')
-        scopeHero.setAttribute('data-phase', 'hero')
-        document.body.appendChild(scopeHero)
-        await sleep(300)
-        r.states.homeOnlyHero = whaleNow()
-        window.__pushForm({ mascot: 'off' })
-        await sleep(300)
-        r.states.off = whaleNow()
-        window.__pushForm({ mascot: 'deepy' })
-        await sleep(300)
-        r.states.deepyPicked = document.querySelector('.dsh-deepcraft-deepy') !== null && document.querySelector('.dsh-deepcraft-crab') === null
-        window.__pushForm({ mascot: 'crab', mascotScope: 'all' })
-        scopeHero.remove()
-        await sleep(200)
-      }
+      // Where it appears: kept to the home page, the character stays off the
+      // conversation, and with the mascot off it leaves the home card as well.
+      // Picking the other character swaps which one is out.
+      document.body.appendChild(deepyConversation)
+      await sleep(300)
+      r.states.backInConversation = whaleNow() !== null
+      window.__pushForm({ mascotScope: 'home' })
+      await sleep(300)
+      r.states.homeOnly = whaleNow()
+      deepyConversation.remove()
+      var scopeHero = document.createElement('div')
+      scopeHero.setAttribute('data-phase', 'hero')
+      document.body.appendChild(scopeHero)
+      await sleep(300)
+      r.states.homeOnlyHero = whaleNow()
+      window.__pushForm({ mascot: 'off' })
+      await sleep(300)
+      r.states.off = whaleNow()
+      var otherName = mascotName === 'crab' ? 'deepy' : 'crab'
+      window.__pushForm({ mascot: otherName })
+      await sleep(400)
+      r.states.otherPicked = document.querySelector('.dsh-deepcraft-' + otherName) !== null && document.querySelector('.dsh-deepcraft-' + mascotName) === null
+      window.__pushForm({ mascot: mascotName, mascotScope: 'all' })
+      scopeHero.remove()
+      await sleep(200)
     })
   })
 })()

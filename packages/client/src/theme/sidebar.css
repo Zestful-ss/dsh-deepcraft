@@ -5,11 +5,11 @@
    Sizing: an 18px cap height to match the shipped brandName box, the wordmark's
    width read from that height through the artwork's aspect ratio (its viewBox,
    512.22 × 121.54, packages/assets/src/brand/claude-word.svg). */
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] :is([data-dsh-deepcraft-part~="brand-mark"], [data-dsh-deepcraft-part~="rail-mark"]) > * {
+body[data-dsh-deepcraft]:is([data-dsh-deepcraft-brand="claude"], [data-dsh-deepcraft-brand="deepseek"]) :is([data-dsh-deepcraft-part~="brand-mark"], [data-dsh-deepcraft-part~="rail-mark"]) > * {
   display: none !important;
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] :is([data-dsh-deepcraft-part~="brand-mark"], [data-dsh-deepcraft-part~="rail-mark"])::before {
+body[data-dsh-deepcraft]:is([data-dsh-deepcraft-brand="claude"], [data-dsh-deepcraft-brand="deepseek"]) :is([data-dsh-deepcraft-part~="brand-mark"], [data-dsh-deepcraft-part~="rail-mark"])::before {
   content: "";
   display: block;
   flex: none;
@@ -47,11 +47,19 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] [data-dsh-deepcraft-
   mask: var(--dsh-deepcraft-mask-claude-word);
 }
 
-/* DeepSeek: the host's own whale and wordmark in DeepSeek's brand blue. The
-   expanded brand is a button on most platforms and a plain row on macOS, and the
-   collapsed rail's whale sits in the sidebar toggle, so the art is inked where it
-   sits. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] :is([data-dsh-deepcraft-part~="brand-identity"], [data-dsh-deepcraft-part~="rail-mark"]) {
+/* DeepSeek: the same pixel whale the mascot draws, in its own blues, in the box
+   the Claude mark takes. The host's own fish gives way; the wordmark the host
+   sets as text keeps the label ink. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] :is([data-dsh-deepcraft-part~="brand-mark"], [data-dsh-deepcraft-part~="rail-mark"])::before {
+  content: "";
+  display: block;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  background: var(--dsh-deepcraft-image-deepcraft-mark) center / 16px 16px no-repeat;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] [data-dsh-deepcraft-part~="brand-identity"] {
   color: var(--dsh-deepcraft-logo-ink);
 }
 

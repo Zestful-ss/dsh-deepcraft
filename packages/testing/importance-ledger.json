@@ -394,7 +394,7 @@
       "prop": "padding-bottom",
       "verdict": "unmatched"
     },
-    "body[data-dsh-deepcraft][data-dsh-deepcraft-brand=claude] [data-dsh-deepcraft-part~=hero-mark]>*{display:none!}|display": {
+    "body[data-dsh-deepcraft]:is([data-dsh-deepcraft-brand=claude],[data-dsh-deepcraft-brand=deepseek]) [data-dsh-deepcraft-part~=hero-mark]>*{display:none!}|display": {
       "selector": "body[data-dsh-deepcraft][data-dsh-deepcraft-brand=claude] [data-dsh-deepcraft-part~=hero-mark]>*",
       "prop": "display",
       "verdict": "needed",
@@ -836,7 +836,7 @@
       "prop": "height",
       "verdict": "transient state"
     },
-    "body[data-dsh-deepcraft][data-dsh-deepcraft-brand=claude] :is([data-dsh-deepcraft-part~=brand-mark],[data-dsh-deepcraft-part~=rail-mark])>*{display:none!}|display": {
+    "body[data-dsh-deepcraft]:is([data-dsh-deepcraft-brand=claude],[data-dsh-deepcraft-brand=deepseek]) :is([data-dsh-deepcraft-part~=brand-mark],[data-dsh-deepcraft-part~=rail-mark])>*{display:none!}|display": {
       "selector": "body[data-dsh-deepcraft][data-dsh-deepcraft-brand=claude] :is([data-dsh-deepcraft-part~=brand-mark],[data-dsh-deepcraft-part~=rail-mark])>*",
       "prop": "display",
       "verdict": "needed",

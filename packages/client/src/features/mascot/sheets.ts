@@ -31,6 +31,7 @@ export const DEEPY_SHEETS: Record<string, { frames: number, box: number[], still
   'idle': { frames: 48, box: DEEPY_BOX, still: 0 },
   'idle-look': { frames: 68, box: DEEPY_BOX, still: 0 },
   'idle-spout': { frames: 64, box: DEEPY_BOX, still: 0 },
+  'idle-laptop': { frames: 68, box: DEEPY_BOX, still: 0 },
   'thinking': { frames: 48, box: DEEPY_BOX, still: 20 },
   'typing': { frames: 48, box: DEEPY_BOX, still: 16 },
   'music': { frames: 32, box: DEEPY_BOX, still: 0 },

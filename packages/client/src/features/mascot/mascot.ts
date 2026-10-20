@@ -8,7 +8,7 @@ import type manifest from './mascot.manifest'
 
 /**
  * The mascot on the composer: Claude Code's pixel crab
- * (packages/client/src/features/mascot/crab.ts) or Deepy, the DeepSeek brand's whale girl
+ * (packages/client/src/features/mascot/crab.ts) or Deepy, the DeepSeek brand's pixel whale
  * (packages/client/src/features/mascot/whale.ts), both played by the agent's state
  * (packages/client/src/features/mascot/mascot-player.ts).
  *

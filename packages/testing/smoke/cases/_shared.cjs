@@ -4,11 +4,13 @@ const { MARKUP, SKIN_FACE, SKIN_HAT, same, check } = require('../shared.cjs')
 /** The host's highlight band, read as its window's animation and then its copy's (shared/motion.css). */
 const BAND_ANIMATION = 'dsh-deepcraft-sweep-window, dsh-deepcraft-sweep-glyphs'
 
-/** WCAG contrast ratio between two `rgb(r, g, b)` readings. */
+/** WCAG contrast ratio between two colour readings: `rgb(r, g, b)` or `#rrggbb`. */
 function contrast(a, b) {
   const luminance = (css) => {
-    const channels = css.match(/[\d.]+/g).slice(0, 3).map((raw) => {
-      const c = Number(raw) / 255
+    const hex = /^#([0-9a-f]{6})$/i.exec(String(css).trim())
+    const raw = hex === null ? String(css).match(/[\d.]+/g).slice(0, 3) : [0, 2, 4].map((at) => String(parseInt(hex[1].slice(at, at + 2), 16)))
+    const channels = raw.map((value) => {
+      const c = Number(value) / 255
       return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
     })
     return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]

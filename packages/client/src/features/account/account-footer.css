@@ -45,10 +45,10 @@ body[data-dsh-deepcraft] .dsh-deepcraft-account-avatar {
   corner-shape: round;
   overflow: hidden;
 }
-/* Under the DeepSeek brand the picture with no account behind it is DeepSeek's
-   whale, in its brand blue. */
+/* Under the DeepSeek brand the picture with no account behind it is the pixel
+   whale the mascot draws. A real account photo still covers it. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] .dsh-deepcraft-account-avatar {
-  background-image: var(--dsh-deepcraft-image-deepseek-mark);
+  background-image: var(--dsh-deepcraft-image-deepcraft-mark);
 }
 /* The reader's own mark takes that place under either brand (D77). Tinted, it
    is a shape in the label colour on a layer of its own: a mask on the avatar

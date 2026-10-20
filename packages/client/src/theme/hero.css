@@ -2,17 +2,17 @@
 /* The new-conversation hero ships the DeepSeek fish; swap it for the selected
    brand mark. Every child of the hitbox is hidden — the mark can sit behind a
    slot wrapper, not always a bare svg — and the mark is painted on the hitbox,
-   so React keeps owning its own node. The hero keeps the clay fill in both
-   brands, matching the shipped accent treatment. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] [data-dsh-deepcraft-part~="hero-mark"] > * {
+   so React keeps owning its own node. Each brand paints its own art in the one
+   box. */
+body[data-dsh-deepcraft]:is([data-dsh-deepcraft-brand="claude"], [data-dsh-deepcraft-brand="deepseek"]) [data-dsh-deepcraft-part~="hero-mark"] > * {
   display: none !important;
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] [data-dsh-deepcraft-part~="hero-mark"] svg {
+body[data-dsh-deepcraft]:is([data-dsh-deepcraft-brand="claude"], [data-dsh-deepcraft-brand="deepseek"]) [data-dsh-deepcraft-part~="hero-mark"] svg {
   display: none;
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] [data-dsh-deepcraft-part~="hero-mark"]::before {
+body[data-dsh-deepcraft]:is([data-dsh-deepcraft-brand="claude"], [data-dsh-deepcraft-brand="deepseek"]) [data-dsh-deepcraft-part~="hero-mark"]::before {
   content: "";
   flex: none;
   width: 42.5px;
@@ -23,10 +23,11 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] [data-dsh-deepcraft-
   background-image: var(--dsh-deepcraft-image-claude-mark-clay);
 }
 
-/* The DeepSeek brand keeps the host's own fish, and paints it in DeepSeek's
-   brand blue (the host inks it with the headline's primary label). */
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] [data-dsh-deepcraft-part~="hero-mark"] svg {
-  color: var(--dsh-deepcraft-logo-ink);
+/* The DeepSeek brand takes the same pixel whale the mascot draws, at its own
+   colours: the host's fish gives way and the mark sits in the box the Claude
+   mark takes. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] [data-dsh-deepcraft-part~="hero-mark"]::before {
+  background: var(--dsh-deepcraft-image-deepcraft-mark) center / 32px 32px no-repeat;
 }
 
 /* The preview badge has no Claude Code counterpart. */

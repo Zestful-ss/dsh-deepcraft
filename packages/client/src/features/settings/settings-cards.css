@@ -73,7 +73,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-brand-card-logo[data-brand="claude"] {
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-brand-card-logo[data-brand="deepseek"] {
-  background-image: var(--dsh-deepcraft-image-deepseek-mark);
+  background-image: var(--dsh-deepcraft-image-deepcraft-mark);
 }
 
 /* The theme style's card reads left to right: the mark, then the brand's word.

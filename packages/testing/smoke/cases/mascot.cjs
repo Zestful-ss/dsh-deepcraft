@@ -1,77 +1,101 @@
 'use strict'
 const { MARKUP, SKIN_FACE, SKIN_HAT, same, check, contrast, basicChecks, commonChecks } = require('./_shared.cjs')
 
+/** One reading of the mascot probe: where it stands, what it plays and from which sheet. */
+const is = (state, animation, place) => !!state && state.animation === animation && state.place === place && state.ready === true
+const sheetOf = (state) => (state && state.sheet) || ''
+
+/**
+ * The walk both characters take: the same place on the home card, the same
+ * conversation states, the same hand gestures, the same idle extras and the
+ * same exit. Deepy and the crab answer the same inputs, so one list of checks
+ * is read twice.
+ */
+function stateChecks(r, label) {
+  const s = r.states || {}
+  check(`${label}: the home card carries it, idling from its own sheet`,
+    is(s.home, 'idle', 'card') && sheetOf(s.home) !== '' && sheetOf(s.home) !== 'none', JSON.stringify(s.home))
+  check(`${label}: its frames change on its own node without waking a pass`,
+    !!s.idle && s.idle.before !== s.idle.after && s.idle.passes === 0, JSON.stringify(s.idle))
+  check(`${label}: a click on its left half pokes it, on its own sheet`,
+    is(s.poke, 'poke-left', 'card') && sheetOf(s.poke) !== sheetOf(s.home),
+    JSON.stringify({ home: sheetOf(s.home), poke: sheetOf(s.poke) }))
+  check(`${label}: on the conversation it stands on the input area through thinking and typing`,
+    is(s.thinking, 'thinking', 'stack') && is(s.typing, 'typing', 'stack'),
+    JSON.stringify({ thinking: s.thinking, typing: s.typing }))
+  check(`${label}: two sessions at work play the music tier`,
+    is(s.music, 'music', 'stack'), JSON.stringify(s.music))
+  check(`${label}: two running subagents conduct`,
+    is(s.conducting, 'conducting', 'stack'), JSON.stringify(s.conducting))
+  check(`${label}: three sessions at work wear the hard hat`,
+    is(s.building, 'building', 'stack'), JSON.stringify(s.building))
+  check(`${label}: an approval puts it on the approval panel with the notification`,
+    is(s.notification, 'notification', 'panel'), JSON.stringify(s.notification))
+  check(`${label}: compaction, the celebration when it ends, and the error shake over it`,
+    is(s.compacting, 'compacting', 'stack') && is(s.celebrating, 'happy', 'stack') && is(s.failed, 'error', 'stack'),
+    JSON.stringify({ compacting: s.compacting, celebrating: s.celebrating, failed: s.failed }))
+  check(`${label}: an idle extra takes the stage and hands it back to the idle`,
+    is(s.extra, 'idle-laptop', 'stack') && is(s.afterExtra, 'idle', 'stack'),
+    JSON.stringify({ extra: s.extra, after: s.afterExtra }))
+  check(`${label}: it idles after work, sleeps after a quiet minute, and a pointer move wakes it`,
+    is(s.afterWork, 'idle', 'stack') && is(s.asleep, 'sleeping', 'stack') && is(s.woken, 'waking', 'stack'),
+    JSON.stringify({ afterWork: s.afterWork, asleep: s.asleep, woken: s.woken }))
+  check(`${label}: reduced motion holds the still frame, and a click still plays`,
+    s.stillAttr === 'reduced' && s.alwaysAttr === 'full' && !!s.still && s.still.before === s.still.after,
+    JSON.stringify({ stillAttr: s.stillAttr, alwaysAttr: s.alwaysAttr, frames: s.still }))
+  check(`${label}: a compaction whose end comes back with the whole feed after a reconnect stops, uncelebrated`,
+    is(s.resendBefore, 'compacting', 'stack') && is(s.resent, 'idle', 'stack'),
+    JSON.stringify({ before: s.resendBefore, after: s.resent }))
+  check(`${label}: it leaves with the conversation, and takes its anchor mark along`, s.gone === true, JSON.stringify(s.gone))
+  check(`${label}: kept to the home page it stays off the conversation and stands on the home card`,
+    s.backInConversation === true && s.homeOnly === null && is(s.homeOnlyHero, 'idle', 'card'),
+    JSON.stringify({ back: s.backInConversation, homeOnly: s.homeOnly, hero: s.homeOnlyHero }))
+  check(`${label}: with the mascot off it leaves, and picking the other character puts that one out`,
+    s.off === null && s.otherPicked === true, JSON.stringify({ off: s.off, other: s.otherPicked }))
+  check(`${label}: it subscribes to the session's chat target, which the host builds only for a subscriber`,
+    s.chatFollowed === true, JSON.stringify(s.chatFollowed))
+}
+
+/**
+ * What a reader reads on the brand's palettes: the body ink and a link on the
+ * canvas, and — where the brand promises it — a filled accent against the ink
+ * it carries. Read as contrast, not as hex, so a palette change that keeps the
+ * page legible does not fail an old value.
+ */
+function paletteChecks(r, label, { accent = false } = {}) {
+  const s = r.states || {}
+  check(`${label}: the body ink reads on the canvas in both palettes`,
+    contrast(s.ink, s.canvas) >= 4.5 && !!s.dark && contrast(s.dark.ink, s.dark.canvas) >= 4.5,
+    JSON.stringify({ light: [s.ink, s.canvas], dark: s.dark && [s.dark.ink, s.dark.canvas] }))
+  check(`${label}: a link reads on the canvas in both palettes`,
+    contrast(s.link, s.canvas) >= 3 && !!s.dark && contrast(s.dark.link, s.dark.canvas) >= 3,
+    JSON.stringify({ light: [s.link, s.canvas], dark: s.dark && [s.dark.link, s.dark.canvas] }))
+  if (accent) {
+    check(`${label}: a filled accent carries its own ink in both palettes`,
+      contrast(s.accentInk, s.accent) >= 4.5 && !!s.dark && contrast(s.dark.accentInk, s.dark.accent) >= 4.5,
+      JSON.stringify({ light: [s.accentInk, s.accent], dark: s.dark && [s.dark.accentInk, s.dark.accent] }))
+  }
+}
+
 module.exports = {
   'crab-states'(r) {
     basicChecks(r)
-    const crab = r.states || {}
-    const is = (state, animation, place) => !!state && state.animation === animation && state.place === place && state.ready === true
-    check('picked under the Claude brand, the crab stands on the home card idling, from its inlined sheet',
-      is(crab.home, 'idle', 'card') && /^url\("data:image\/png/.test(crab.home.sheet), JSON.stringify(crab.home))
-    check('its frames change on its own node without waking a pass',
-      !!crab.idle && crab.idle.before !== crab.idle.after && crab.idle.passes === 0, JSON.stringify(crab.idle))
-    check('a click on its left half pokes it', is(crab.poke, 'poke-left', 'card'), JSON.stringify(crab.poke))
-    check('on the conversation page it stands on the input area: thinking, typing, the hard hat with three sessions at work',
-      is(crab.thinking, 'thinking', 'stack') && is(crab.typing, 'typing', 'stack') && is(crab.building, 'building', 'stack'),
-      JSON.stringify({ thinking: crab.thinking, typing: crab.typing, building: crab.building }))
-    check('an approval puts it on the approval panel with the notification',
-      is(crab.notification, 'notification', 'panel'), JSON.stringify(crab.notification))
-    check('compaction, the celebration when it ends, and the error shake over it',
-      is(crab.compacting, 'compacting', 'stack') && is(crab.celebrating, 'happy', 'stack') && is(crab.failed, 'error', 'stack'),
-      JSON.stringify({ compacting: crab.compacting, celebrating: crab.celebrating, failed: crab.failed }))
-    // The error sheet's still frame is its fifth: column 4 of 26-cell-wide frames at 2px a cell.
-    check('reduced motion holds the error sheet\'s still frame',
-      crab.stillAttr === 'reduced' && !!crab.still && crab.still.before === '-208px 0px' && crab.still.after === '-208px 0px',
-      JSON.stringify(crab.still))
-    check('it idles after work, sleeps after a quiet minute, and a pointer move wakes it',
-      is(crab.afterWork, 'idle', 'stack') && is(crab.asleep, 'sleeping', 'stack') && is(crab.woken, 'waking', 'stack'),
-      JSON.stringify({ afterWork: crab.afterWork, asleep: crab.asleep, woken: crab.woken }))
-    // The walk this case drives is the only one that reaches these two: the
-    // whale's case reads two sheets and leaves.
-    check('it subscribes to the session\'s chat target, which the host builds only for a subscriber',
-      crab.chatFollowed === true, JSON.stringify(crab.chatFollowed))
-    check('a compaction whose end comes back with the whole feed after a reconnect stops playing, uncelebrated',
-      is(crab.resendBefore, 'compacting', 'stack') && is(crab.resent, 'idle', 'stack'),
-      JSON.stringify({ before: crab.resendBefore, after: crab.resent }))
-    check('it leaves with the conversation, and takes its anchor mark along', crab.gone === true, JSON.stringify(crab.gone))
-    check('kept to the home page it stays off the conversation and stands on the home card',
-      crab.backInConversation === true && crab.homeOnly === null && is(crab.homeOnlyHero, 'idle', 'card'),
-      JSON.stringify({ back: crab.backInConversation, homeOnly: crab.homeOnly, hero: crab.homeOnlyHero }))
-    check('with the mascot off it leaves; picking Deepy puts the whale out instead',
-      crab.off === null && crab.deepyPicked === true, JSON.stringify({ off: crab.off, deepy: crab.deepyPicked }))
+    const s = r.states || {}
+    check('the crab case runs under the Claude brand, with the crab out',
+      s.brand === 'claude' && s.crab === true, JSON.stringify({ brand: s.brand, crab: s.crab }))
+    paletteChecks(r, 'Claude')
+    stateChecks(r, 'the crab')
     commonChecks(r)
   },
-  // The DeepSeek brand's whale: its palette, the sheet it plays on the home
-  // card, the sheet a state change switches to, and the motion choice holding a
-  // sheet's still frame. The states it plays on the conversation page are the
-  // crab case's, which walks the mascot feature whole.
+  // The DeepSeek brand's whale: the same walk as the crab's, with its own
+  // palettes and its own art.
   deepy(r) {
     basicChecks(r)
-    const deepy = r.states || {}
-    const is = (state, animation, place) => !!state && state.animation === animation && state.place === place && state.ready === true
-    check('the brand stored as "off" reads as DeepSeek, and the light canvas turns sky white',
-      deepy.brand === 'deepseek' && deepy.canvas === 'rgb(250, 251, 255)', JSON.stringify({ brand: deepy.brand, canvas: deepy.canvas }))
-    check('the DeepSeek brand turns blue: DeepSeek\'s brand blue for the accent, a blue link, a blue-black dark canvas',
-      deepy.accent === '#4d6bfe' && deepy.link === '#3b56d9' && !!deepy.dark && deepy.dark.canvas === 'rgb(19, 22, 29)' &&
-        deepy.dark.accent === '#4d6bfe' && deepy.dark.raised === '#1b1f28',
-      JSON.stringify({ accent: deepy.accent, link: deepy.link, dark: deepy.dark }))
-    // The sheet is the vector the build produced, served from the assets route
-    // under the name its own content gives it
-    const served = (value) => /^url\("https?:\/\/[^"]*\/dsh-deepcraft\/assets\/[0-9a-f]{12}\.svg"\)$/.test(value || '')
-    check('the whale takes the crab\'s place on the home card, idling, playing the vector the build draws',
-      is(deepy.home, 'idle', 'card') && deepy.crab === false && served(deepy.home.sheet),
-      JSON.stringify({ home: deepy.home, crab: deepy.crab }))
-    check('its frames change on its own node without waking a pass',
-      !!deepy.idle && deepy.idle.before !== deepy.idle.after && deepy.idle.passes === 0, JSON.stringify(deepy.idle))
-    check('a click on its face pokes it', is(deepy.poke, 'poke-left', 'card'), JSON.stringify(deepy.poke))
-    check('the state change switches the node to another served sheet',
-      !!deepy.home && !!deepy.poke && deepy.poke.sheet !== deepy.home.sheet && served(deepy.poke.sheet),
-      JSON.stringify({ home: deepy.home.sheet, poke: deepy.poke.sheet }))
-    check('the animation choice resolves onto the document: reduced holds the still frame, always plays',
-      deepy.stillAttr === 'reduced' && deepy.alwaysAttr === 'full' &&
-        !!deepy.still && deepy.still.before === deepy.still.after,
-      JSON.stringify({ stillAttr: deepy.stillAttr, alwaysAttr: deepy.alwaysAttr, frames: deepy.still }))
-    check('it leaves with the page, and takes its anchor mark along', deepy.gone === true, JSON.stringify(deepy.gone))
+    const s = r.states || {}
+    check('the brand stored as "off" reads as DeepSeek, and the crab gives way to the whale',
+      s.brand === 'deepseek' && s.crab === false, JSON.stringify({ brand: s.brand, crab: s.crab }))
+    paletteChecks(r, 'DeepSeek', { accent: true })
+    stateChecks(r, 'the whale')
     commonChecks(r)
   },
 }

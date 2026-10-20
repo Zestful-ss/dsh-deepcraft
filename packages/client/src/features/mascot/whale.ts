@@ -6,14 +6,15 @@ import type { FeatureUi } from '../../core/feature'
 import type manifest from './mascot.manifest'
 
 /**
- * Deepy, the DeepSeek brand's whale girl, as a mascot character
+ * Deepy, the DeepSeek brand's pixel whale, as a mascot character
  * (packages/client/src/features/mascot/mascot-player.ts plays it; packages/client/src/features/mascot/
  * mascot.ts decides which mascot is out).
  *
  * Its animations (DEEPY_SHEETS) are drawn at build time by
- * packages/assets/whale.mjs: between jobs she looks around or spouts now and
- * then. The sheets are too large to ride the bundle, so each is fetched from
- * the host half the first time its animation is wanted (whale-sheets.ts).
+ * packages/assets/whale.mjs: between jobs it looks around, spouts, or pulls out
+ * a little laptop now and then. The sheets are too large to ride the bundle, so
+ * each is fetched from the host half the first time its animation is wanted
+ * (whale-sheets.ts).
  *
  * @param ui - shared handle table (`ui.composer`).
  * @returns `{ sync, release, onActivity, dispose }`.
@@ -24,7 +25,7 @@ export function createMascotWhale(ctx: HostContext, ui: FeatureUi<typeof manifes
     sheets: DEEPY_SHEETS,
     frameMs: DEEPY_FRAME_MS,
     gutter: DEEPY_GUTTER,
-    extras: ['idle-look', 'idle-spout'],
+    extras: ['idle-look', 'idle-spout', 'idle-laptop'],
     createSheets(onReady) {
       const sheets = createMascotWhaleSheets(onReady)
       return {

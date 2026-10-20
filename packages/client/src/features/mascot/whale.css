@@ -1,20 +1,20 @@
-/* ── Deepy, the DeepSeek brand's whale girl ──────────────────────────────────
+/* ── Deepy, the DeepSeek brand's pixel whale ────────────────────────────────
    The character is drawn by packages/assets/whale.mjs on a 52×52 grid of
-   logical pixels at 2px a pixel (104px square), her shadow's ground line — row
-   48.5 — on the top edge of what she stands on. Every frame covers the whole
-   grid; the build adds one logical pixel of transparent margin around each
-   cell, so the browser draws the vector smoothly at every pixel density
-   (`image-rendering` stays at its default).
+   logical pixels at 2px a pixel (104px square), the whale's feet — row 50 —
+   on the top edge of what it stands on. Every frame covers the whole grid; the
+   build adds one logical pixel of transparent margin around each cell. The art
+   is whole pixels, so the strip is drawn with `image-rendering: pixelated`:
+   a downscale would otherwise feather the stepped contour into a blur.
    The sprite writes the sheet and the crop box as custom properties when an
    animation starts; each frame is a translation of the strip inside the
    sprite's window, played by the browser's animation engine
    (packages/client/src/features/mascot/whale.ts); the sheet holds eight frames to a row.
-   Only the character's body takes the pointer. */
+   Only the whale's body takes the pointer. */
 
-/* Feet on the top edge of what she stands on. Every sheet's crop box covers
+/* Feet on the top edge of what it stands on. Every sheet's crop box covers
    the whole grid, and the character paints over the host's cards — the composer
    card, and the todo, goal and queue cards stacked above it in a conversation —
-   so the shadow's overhang would darken the top of the card being stood on. */
+   so the body stops at the card's edge rather than crossing it. */
 body[data-dsh-deepcraft] .dsh-deepcraft-deepy {
   position: absolute;
   right: 8px;
@@ -63,16 +63,18 @@ body[data-dsh-deepcraft] .dsh-deepcraft-deepy-strip {
   background-image: var(--dsh-deepcraft-deepy-sheet, none);
   background-repeat: no-repeat;
   background-size: calc(var(--dsh-deepcraft-deepy-cell-w, 0) * 16px) auto;
+  image-rendering: pixelated;
 }
 
-/* The resting character's body, head to tail: her face, shoulders and the base
-   of the tail. */
+/* The resting whale's body from nose to fluke: rows 29–50 of the grid, the
+   columns the body covers. Only this box takes the pointer, so the cards and
+   the composer above it stay reachable. */
 body[data-dsh-deepcraft] .dsh-deepcraft-deepy-hit {
   position: absolute;
-  left: 16px;
-  top: 44px;
+  left: 20px;
+  top: 64px;
   width: 64px;
-  height: 52px;
+  height: 36px;
   pointer-events: auto;
   touch-action: none;
 }
