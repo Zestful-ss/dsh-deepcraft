@@ -1,8 +1,0 @@
-{
-  "group": "improvements",
-  "order": 0,
-  "at": "2026-10-20",
-  "external": false,
-  "zh": "重构 DeepSeek 主题的视觉设计：采用低饱和蓝紫与近白／炭灰新色板，吉祥物 Deepy 改为像素小鲸鱼并补全空闲笔记本动作，侧栏、首页与账户头像同步绑定新形象。",
-  "en": "Overhaul the DeepSeek theme's visual design: introduce a low-saturation periwinkle palette on near-white and charcoal canvases, redraw the Deepy mascot as a pixel whale with an idle laptop routine, and bind the new pixel mark to the sidebar, hero, and account avatar."
-}

@@ -1,8 +1,0 @@
-{
-  "group": "chores",
-  "order": 1,
-  "at": "2026-10-20",
-  "external": true,
-  "zh": "安装命令不再需要在仓库地址后附加分支名：默认分支改为只放发版打包产物的 `dist`，本文档与 README 的安装命令随之简化。",
-  "en": "The installation command no longer appends a branch name to the repository address: the default branch is now `dist`, which carries only the packaged release, and the README's install commands say so."
-}

@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.17.0] - 2026-10-20
 
-<h3 id="cn-unreleased">体验优化</h3>
+[中文](#cn-0.17.0) | [English](#en-0.17.0)
+
+<h3 id="cn-0.17.0">体验优化</h3>
 
 - 窗口变窄时底部工具栏先压缩模型外显名，档位选择器与上下文显示器保持原位，三者不再互相覆盖。
 - 重构 DeepSeek 主题的视觉设计：采用低饱和蓝紫与近白／炭灰新色板，吉祥物 Deepy 改为像素小鲸鱼并补全空闲笔记本动作，侧栏、首页与账户头像同步绑定新形象。
@@ -31,7 +33,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 - README 改成展示文案：截图与动画帧在前，预览各一行说明，安装两个命令块，鸣谢四条。
 - 安装命令不再需要在仓库地址后附加分支名：默认分支改为只放发版打包产物的 `dist`，本文档与 README 的安装命令随之简化。
 
-<h3 id="en-unreleased">Improvements</h3>
+<h3 id="en-0.17.0">Improvements</h3>
 
 - On a narrow window the composer's bottom row compresses the model name first, so the effort trigger and the context meter keep their places instead of overlapping it.
 - Overhaul the DeepSeek theme's visual design: introduce a low-saturation periwinkle palette on near-white and charcoal canvases, redraw the Deepy mascot as a pixel whale with an idle laptop routine, and bind the new pixel mark to the sidebar, hero, and account avatar.
