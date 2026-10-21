@@ -201,8 +201,8 @@ function createRenderer(canvas: HTMLCanvasElement, columns: number, rows: number
 /**
  * The field's characters, drawn on the GPU in one pass. The characters change
  * at a fixed rate and never move; the cloud over them drifts a whole cell at a
- * time, and a wave lets the characters it passes show — blue at its front, grey
- * in its wake, fading as the glow decays.
+ * time, and a wave lets the characters it passes show — the brand's wave colour
+ * at its front, grey in its wake, fading as the glow decays.
  *
  * The CPU keeps one small table of a character, an opacity and a colour mix
  * per cell and uploads it each draw; the characters themselves come from an

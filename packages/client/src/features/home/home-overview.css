@@ -1,6 +1,6 @@
 /* ---------- the usage panel's Overview tab ---------- */
-/* The six stat cells, Claude Code's blue heat grid, and the yardstick line under
-   it. The shell (the panel frame, its head and the tab pills) is home-panel.css. */
+/* The six stat cells, the heat grid and the yardstick line under it. The shell
+   (the panel frame, its head and the tab pills) is home-panel.css. */
 
 body[data-dsh-deepcraft] .dsh-deepcraft-home-stats {
   display: grid;
@@ -64,12 +64,14 @@ body[data-dsh-deepcraft] .dsh-deepcraft-home-heat {
   align-content: start;
 }
 
-/* Claude Code's heat grid is a blue data ramp, not the brand ember: the empty
-   cell stays the neutral base tone, and each level mixes in the data blue by
-   its share of the ramp (constants.ts's HOME_HEAT_RAMP; the build writes one
-   rule per level, scripts/feature-sheets.mjs). */
+/* The heat grid is a data ramp in the brand's data ink — Claude's orange,
+   DeepSeek's blue (D77, docs/STYLE.md "Home layouts"): the empty cell stays the
+   neutral base tone, and each level mixes that ink in by its share of the ramp
+   (constants.ts's HOME_HEAT_RAMP; the build writes one rule per level,
+   scripts/feature-sheets.mjs). The local name is what those generated rules
+   read. */
 body[data-dsh-deepcraft] .dsh-deepcraft-home-heat {
-  --dsh-deepcraft-heat-ink: #3b6ecf;
+  --dsh-deepcraft-heat-ink: var(--dsh-deepcraft-data-ink);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-home-heat-cell {

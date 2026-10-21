@@ -19,8 +19,9 @@ body[data-dsh-deepcraft] {
   --dsh-deepcraft-tone-green-light: #a2dda4;
   --dsh-deepcraft-tone-green: #6faf73;
   /* The plate the meter's pie has not taken (features/context-stats/
-     context-meter-pie.ts): the quiet end of the same band. */
-  --dsh-deepcraft-pie-rest: rgba(250, 249, 245, 0.18);
+     context-meter-pie.ts): the quiet end of the same band, in the label ink so
+     it follows whoever paints the host's neutrals. */
+  --dsh-deepcraft-pie-rest: color-mix(in srgb, var(--dsw-alias-label-primary) 18%, transparent);
 }
 
 body[data-dsh-deepcraft]:not([data-ds-dark-theme]) {
@@ -31,5 +32,5 @@ body[data-dsh-deepcraft]:not([data-ds-dark-theme]) {
   --dsh-deepcraft-tone-lime: #779756;
   --dsh-deepcraft-tone-green-light: #6da173;
   --dsh-deepcraft-tone-green: #46784e;
-  --dsh-deepcraft-pie-rest: rgba(20, 20, 19, 0.14);
+  --dsh-deepcraft-pie-rest: color-mix(in srgb, var(--dsw-alias-label-primary) 14%, transparent);
 }

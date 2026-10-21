@@ -313,8 +313,10 @@ body[data-dsh-deepcraft] .dsh-deepcraft-search-filter:hover {
 body[data-dsh-deepcraft] .dsh-deepcraft-search-filter[aria-checked="true"] {
   color: var(--dsw-alias-label-primary, #141413);
 }
+/* The checked chip is the most specific background rule for it, so it carries no
+   weight (D9): no inline style and no host `!important` stands under this rule. */
 body[data-dsh-deepcraft] .dsh-deepcraft-search-filters:not([data-dsh-deepcraft-pill]) .dsh-deepcraft-search-filter[aria-checked="true"] {
-  background: rgba(20, 20, 19, 0.06) !important;
+  background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.06));
 }
 
 /* Results: section captions over rows; the highlighted row carries the fill

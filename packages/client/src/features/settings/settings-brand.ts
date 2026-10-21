@@ -22,6 +22,16 @@ const DRAFT_SAVE_DEBOUNCE_MS = 600
 const ACCENT_FALLBACK = '#d97757'
 
 /**
+ * The accent the page paints right now. Sampled after a commit, not while
+ * rendering: the palette attribute is mirrored outside React, so a sample
+ * taken during render can still describe the previous brand (D77).
+ */
+function paintedAccent() {
+  const live = getComputedStyle(document.body).getPropertyValue('--dsw-alias-brand-primary').trim().toLowerCase()
+  return /^#[0-9a-f]{6}$/.test(live) ? live : ACCENT_FALLBACK
+}
+
+/**
  * A preference edited as a draft: the control follows every keystroke or drag
  * at once, the store gets the value after a pause or when the control lets go,
  * and a stored value that changes elsewhere replaces the draft while the
@@ -165,12 +175,15 @@ function BrandImageControl(props: { kind: BrandImageKind }) {
 /**
  * The accent colour: a colour well and, while a custom colour is set, the
  * button that hands the accent back to the brand. Unset, the well shows the
- * accent the page paints right now.
+ * accent the page paints right now — the selected brand's, which a brand or
+ * palette switch changes under it.
  */
 function BrandAccentControl(props: { stored: string, write: SettingsView['write'], disabled?: boolean }) {
   const { draft, change, flush } = useDraft(props.stored, value => props.write({ brandAccent: value }))
-  const live = getComputedStyle(document.body).getPropertyValue('--dsw-alias-brand-primary').trim().toLowerCase()
-  const shown = draft !== '' ? draft : /^#[0-9a-f]{6}$/.test(live) ? live : ACCENT_FALLBACK
+  const [live, setLive] = React.useState(paintedAccent)
+  // No dependency list: a brand or palette switch lands on the document, not in this control's props.
+  React.useLayoutEffect(() => { setLive(paintedAccent()) })
+  const shown = draft !== '' ? draft : live
   return React.createElement(
     'div',
     { className: 'dsh-deepcraft-brand-accent' },

@@ -12,7 +12,7 @@ Design tokens for `dsh-deepcraft`, recreating the Claude Code Desktop aesthetic 
 | ivory border | `#E8E6DC` | border l1 |
 | slate dark | `#141413` | text (light mode), canvas (dark mode) |
 | warm gray | `#B0AEA5` | metadata |
-| clay | `#D97757` | single accent — CTA / links |
+| clay | `#D97757` | single accent — CTA / interface links |
 | accent deep | `#C6613F` | accent hover |
 | hairline | `#1414131a` | 1px warm border |
 
@@ -36,6 +36,22 @@ sidebar in dark. User bubbles take the accent's own light tint, and inline code
 keeps the body ink as the host draws it. The skin's Claude marks (the account
 row's picture without an avatar) become the same pixel whale the mascot draws
 (`brand/deepcraft-mark.svg`); the violet top rung of the reasoning slider stays.
+
+**Links and the data palette.** Prose links keep an auxiliary hue of their own
+rather than the accent: the Claude brand's a warm-compatible slate, the DeepSeek
+brand's the periwinkle of its blue family. The underline derives from the link
+in force; a prose link keeps that hue under the pointer while an interface
+link's hover follows the accent. The usage panel's heat grid mixes one data ink
+into its cells — the Claude brand's ember, the DeepSeek brand's periwinkle — so
+each palette gets a continuous ramp in its own primary colour. The models
+chart's ranks are categories rather than steps of that ink: rank 0 takes the
+accent in force, `--dsh-deepcraft-data-1` … `-6` carry each brand's own six hues
+(the Claude brand's ochre, sage, slate, lavender, rose and teal; the DeepSeek
+brand's teal, violet, gold, rose, green and clay), and `-7` is the neutral every
+model past the list shares. Under the host palette the ink is the host's accent
+and the ranks are that accent mixed toward the host's canvas, since another
+theme's hues are not the skin's to name. A custom accent retunes the accent, the
+prose link and the heat ink together; the categorical hues stay the brand's own.
 
 The table below is generated from `packages/client/src/theme/tokens.json` by `npm run build`;
 edit the JSON, not the table. A DeepSeek cell shows the Claude value the brand
@@ -65,8 +81,8 @@ keeps where it states none of its own; `—` is a token that theme leaves unset.
 | `--dsh-deepcraft-hover-bg` | `rgba(0, 0, 0, 0.08)` | `rgba(32, 33, 36, 0.06)` | `rgba(255, 255, 255, 0.08)` | `rgba(238, 240, 243, 0.08)` | `var(--dsw-alias-interactive-bg-hover)` | hover wash |
 | `--dsh-deepcraft-inline-code-bg` | `rgba(0, 0, 0, 0.05)` | `rgba(32, 33, 36, 0.045)` | `rgba(255, 255, 255, 0.05)` | `rgba(238, 240, 243, 0.06)` | `var(--dsw-alias-markdown-inline-code)` | inline code fill |
 | `--dsh-deepcraft-inline-code-fg` | `#943333` | `var(--dsw-alias-label-primary)` | `#e8a08a` | `var(--dsw-alias-label-primary)` | `var(--dsw-alias-label-primary)` | inline code ink |
-| `--dsh-deepcraft-link` | `#184f95` | `#3e5bd6` | `#8ab4f8` | `#8ea2f2` | `var(--dsw-alias-link)` | markdown links |
-| `--dsh-deepcraft-link-underline` | `rgba(24, 79, 149, 0.6)` | `rgba(62, 91, 214, 0.6)` | `rgba(138, 180, 248, 0.6)` | `rgba(142, 162, 242, 0.6)` | `color-mix(in srgb, var(--dsw-alias-link) 60%, transparent)` | markdown link underline |
+| `--dsh-deepcraft-link` | `#3d5f86` | `#3e5bd6` | `#a9c2df` | `#8ea2f2` | `var(--dsw-alias-link)` | markdown links |
+| `--dsh-deepcraft-link-underline` | `color-mix(in srgb, var(--dsh-deepcraft-link) 60%, transparent)` | `color-mix(in srgb, var(--dsh-deepcraft-link) 60%, transparent)` | `color-mix(in srgb, var(--dsh-deepcraft-link) 60%, transparent)` | `color-mix(in srgb, var(--dsh-deepcraft-link) 60%, transparent)` | `color-mix(in srgb, var(--dsw-alias-link) 60%, transparent)` | markdown link underline |
 | `--dsw-alias-markdown-code-block` | `#ffffff` | `#f7f7f5` | `#1c1b1a` | `#252a30` | host's own |  |
 | `--dsw-alias-markdown-code-block-banner` | `#ffffff` | `#f2f2ef` | `#242320` | `#2b3038` | host's own |  |
 | `--dsw-alias-interactive-bg-hover` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | host's own |  |
@@ -96,10 +112,18 @@ keeps where it states none of its own; `—` is a token that theme leaves unset.
 | `--dsh-deepcraft-session-ink` | — | `#61646b` | `#8c8983` | `#adb2bb` | `var(--dsw-alias-label-secondary)` | session title at rest |
 | `--dsh-deepcraft-table-head` | `#f0f0ef` | `#f2f2ef` | `#242320` | `#2b3038` | `var(--dsw-alias-bg-layer-2)` | table header row |
 | `--dsh-deepcraft-ripple-ink` | `#8a8a85` | `#8b8f97` | `#8c8a82` | `#8b9099` | `var(--dsw-alias-label-secondary, #8a8a85)` | the new-conversation page's glyph field, and the wake a ripple leaves in it |
-| `--dsh-deepcraft-ripple-wave` | `#3b6ef0` | `#5f73d9` | `#7fa6ff` | `#8ea2f2` | `var(--dsw-alias-link, #3b6ef0)` | the front of a ripple in the new-conversation page's glyph field |
+| `--dsh-deepcraft-ripple-wave` | `#c6613f` | `#5f73d9` | `#e08a6d` | `#8ea2f2` | `var(--dsw-alias-link, #3b6ef0)` | the front of a ripple in the new-conversation page's glyph field |
 | `--dsh-deepcraft-scrollbar` | `rgba(208, 205, 193, 0.9)` | `rgba(185, 189, 197, 0.8)` | `rgba(58, 56, 51, 0.9)` | `rgba(80, 88, 99, 0.9)` | `var(--dsw-alias-border-l2)` | scrollbar thumb |
 | `--dsh-deepcraft-scrollbar-hover` | `rgba(143, 138, 126, 0.8)` | `rgba(139, 143, 151, 0.9)` | `rgba(107, 106, 101, 0.9)` | `rgba(107, 116, 130, 0.9)` | `var(--dsw-alias-label-caption)` | scrollbar thumb under the pointer |
-| `--dsh-deepcraft-link-hover` | `#a94f2f` | `#304ab8` | `#f0a488` | `#b9c7ff` | `var(--dsw-alias-link)` | text link under the pointer |
+| `--dsh-deepcraft-link-hover` | `color-mix(in oklab, var(--dsw-alias-link) 84%, var(--dsw-alias-label-primary))` | `color-mix(in oklab, var(--dsw-alias-link) 84%, var(--dsw-alias-label-primary))` | `color-mix(in oklab, var(--dsw-alias-link) 84%, var(--dsw-alias-label-primary))` | `color-mix(in oklab, var(--dsw-alias-link) 84%, var(--dsw-alias-label-primary))` | `color-mix(in oklab, var(--dsw-alias-link) 84%, var(--dsw-alias-label-primary))` | text link under the pointer |
+| `--dsh-deepcraft-data-ink` | `#b9542f` | `#4a5fc4` | `#e8967a` | `#8ea2f2` | `var(--dsw-alias-brand-primary)` | the usage heat grid's ink: the strongest step of its continuous ramp |
+| `--dsh-deepcraft-data-1` | `#b8863f` | `#3b8f8f` | `#d6a45c` | `#6fc0bd` | `color-mix(in oklab, var(--dsw-alias-brand-primary) 78%, var(--dsw-alias-bg-base))` | the models chart's rank 1: the first auxiliary hue after the brand accent |
+| `--dsh-deepcraft-data-2` | `#79906f` | `#7b6fc0` | `#9db98d` | `#a99ee0` | `color-mix(in oklab, var(--dsw-alias-brand-primary) 64%, var(--dsw-alias-bg-base))` | the models chart's rank 2 |
+| `--dsh-deepcraft-data-3` | `#6b879f` | `#b08a45` | `#93aec8` | `#d2ab63` | `color-mix(in oklab, var(--dsw-alias-brand-primary) 52%, var(--dsw-alias-bg-base))` | the models chart's rank 3 |
+| `--dsh-deepcraft-data-4` | `#a292c2` | `#b57a8a` | `#bcaedd` | `#d09aa8` | `color-mix(in oklab, var(--dsw-alias-brand-primary) 42%, var(--dsw-alias-bg-base))` | the models chart's rank 4 |
+| `--dsh-deepcraft-data-5` | `#b17986` | `#5f9e6a` | `#d09aa5` | `#8fc296` | `color-mix(in oklab, var(--dsw-alias-brand-primary) 30%, var(--dsw-alias-bg-base))` | the models chart's rank 5 |
+| `--dsh-deepcraft-data-6` | `#5f9488` | `#b36b5f` | `#85b8ac` | `#d08a7c` | `color-mix(in oklab, var(--dsw-alias-brand-primary) 20%, var(--dsw-alias-bg-base))` | the models chart's rank 6 |
+| `--dsh-deepcraft-data-7` | `#b9b5ac` | `#b9bdc5` | `#a8a49b` | `#8b9099` | `color-mix(in oklab, var(--dsw-alias-label-secondary) 55%, var(--dsw-alias-bg-base))` | the models chart's last rank: every model past the list |
 | `--dsh-deepcraft-logo-ink` | `#141413` | `#202124` | `#faf9f5` | `#eef0f3` | `var(--dsw-alias-label-primary)` | sidebar brand art: the whale and the wordmark |
 | `--dsw-specific-menu` | `#ffffff` | `#fcfcfb` | — | `#2b3038` | host's own |  |
 | `--dsw-specific-bubble` | `#f0f0ef` | `#ebedfa` | `rgba(255, 255, 255, 0.06)` | `#303a46` | host's own | user message bubble |
@@ -148,9 +172,10 @@ carries no serif), `--dsh-claude-font-code` to `--ds-font-family-code`.
 
 Two colours stay whoever paints: the reasoning slider's violet top rung
 (`--dsh-claude-apex*`) and the account-hold page, which reproduces a Claude
-screen. Translucent neutral hover tints and the usage panel's data colours stay
-literal; they read on any canvas. Every other colour that paints a surface, a
-text, a border or an accent reads a token.
+screen. Translucent neutral hover tints stay literal; they read on any canvas.
+The usage panel's data colours read tokens of their own (the data palette
+above). Every other colour that paints a surface, a text, a border or an
+accent reads a token.
 
 ## Windows titlebar · 桌面顶栏
 
@@ -385,22 +410,23 @@ selection itself survives the blur.
 
 A quote is a **container**, not a link: it keeps the prose face on a neutral bar
 and wash (text `#B0AEA5`, light `#6E6A60`), and whatever sits inside it keeps its
-own material — links stay blue, inline-code chips stay warm red, file mentions
-stay link-blue. Never paint the quote itself with the link colour: the colour
-inherits into the block's inline code and mentions, which is exactly the leak
-that made every path inside a quote read as a link.
+own material — links keep the brand's link hue, inline-code chips stay warm
+red, file mentions stay in the link hue. Never paint the quote itself with the
+link colour: the colour inherits into the block's inline code and mentions,
+which is exactly the leak that made every path inside a quote read as a link.
 
 **Inline file mentions are links, not code.** The host resolves a file path
 inside an inline code span to a button (`.fileMention`, hashed — match it with
 `[class*="_fileMention"]`) and paints it with its link alias. The generic
 inline-code chip rule is more specific than that class, so a mention inherits
-the chip's warm red unless a rule names it. A mention takes the link blue, weight
+the chip's warm red unless a rule names it. A mention takes the link's hue, weight
 500, and the link's underline (solid in the link tone at rest, solid and fully
 opaque on hover, same thickness and offset — the same treatment the skin gives an
 anchor); the chip itself is left alone — the same fill, hairline, radius and
 padding as any other inline code. Plain inline code keeps its warm text. Note the
-hover rule must set only `text-decoration-color`: the `text-decoration` shorthand
-resets `text-decoration-thickness` to `auto` and thins the line mid-hover.
+hover rule names `color` and `text-decoration-color` rather than the
+`text-decoration` shorthand: the shorthand resets `text-decoration-thickness` to
+`auto` and thins the line mid-hover.
 
 ## Inline code
 
@@ -786,10 +812,12 @@ The book is drawn afresh each time the page comes back to the new-conversation
 hero, and a range that has not reached it steps down to the longest book it has
 passed, so the range pills keep the same book whenever the totals allow. The heat
 grid takes one
-equal column per week (twenty-six weeks), square cells from a 3px gutter, in
-Claude Code's blue data ramp (`#3b6ecf` mixed in at the shares `HOME_HEAT_RAMP`
-in `packages/client/src/constants.ts` lists, over the neutral empty cell); because the columns are fractions of the panel's own width, the newest
-week can never fall past the edge. Hovering a cell shows Claude Code's day tip at
+equal column per week (twenty-six weeks), square cells from a 3px gutter, in a
+continuous ramp of the brand's data ink (`--dsh-deepcraft-data-ink`: the Claude
+brand's ember, the DeepSeek brand's periwinkle) mixed in at the shares
+`HOME_HEAT_RAMP` in `packages/client/src/constants.ts` lists, over the neutral
+empty cell; because the columns are fractions of the panel's own width, the
+newest week can never fall past the edge. Hovering a cell shows Claude Code's day tip at
 once: a solid pill in the label ink with the canvas tone for text (so it inverts
 with the theme), 13px medium, reading the day in the shell's language and the
 tokens that day spent ("Sep 9 — 15.9k tokens"), the same figure the cell's heat
@@ -802,8 +830,10 @@ width and height are read off the cell the
 pointer is on (`packages/client/src/features/home/heat-tip.ts`).
 Models is Claude Code's own shape: one column
 per day of the chart's thirty-day window, stacked from the axis up with each
-model's slice in its rank's colour (ranks past the ramp share its last, grey
-step), four gridlines with their token labels in a 34px left gutter and every
+model's slice in its rank's colour — rank 0 the accent in force, the six after
+it the brand's categorical data hues, and `--dsh-deepcraft-data-7` the neutral
+every model past the list shares — four gridlines with their token labels in a
+34px left gutter and every
 third column's date under it in the shell's language ("Aug 26"), and beneath it
 the ranked list — swatch, model name, the input/output split, and the share of
 the models shown — folding past six rows behind one "show more" row, which turns

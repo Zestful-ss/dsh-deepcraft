@@ -277,15 +277,17 @@ body[data-dsh-deepcraft] :is(button, input, textarea, select, [role="button"], [
   outline: none;
 }
 
-/* Keyboard focus ring: espresso ink on light, bright ivory on dark — a
-   near-black canvas gets a light ring. */
+/* Keyboard focus ring: the label ink at 45% on light and 60% on dark, so the
+   ring is neutral on both canvases and follows whoever paints them — a
+   near-black canvas gets a light ring (docs/STYLE.md "Focus": focus strokes are
+   never the accent). */
 body[data-dsh-deepcraft] :is(button, input, textarea, select, [role="button"], [role="tab"], [role="treeitem"]):focus-visible {
-  outline: 2px solid rgba(20, 20, 19, 0.45);
+  outline: 2px solid color-mix(in srgb, var(--dsw-alias-label-primary) 45%, transparent);
   outline-offset: 1px;
 }
 
 body[data-dsh-deepcraft][data-ds-dark-theme] :is(button, input, textarea, select, [role="button"], [role="tab"], [role="treeitem"]):focus-visible {
-  outline-color: rgba(250, 249, 245, 0.60);
+  outline-color: color-mix(in srgb, var(--dsw-alias-label-primary) 60%, transparent);
 }
 
 /* ---------- the transcript pane's own axes ---------- */

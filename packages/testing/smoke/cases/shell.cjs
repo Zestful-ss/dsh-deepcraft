@@ -6,15 +6,44 @@ const CLAUDE_SHELL = ['body', 'sidebar', 'conversation']
 const CLAUDE_FILLS = [['body', 'rgb(252, 252, 251)'], ['sidebar', 'rgb(251, 251, 249)'], ['conversation', 'rgb(252, 252, 251)']]
 
 module.exports = {
-  // The skin's own Claude palette: the ivory and warm-black canvases, the clay
-  // accent and the raised card fill, read from the live custom properties.
+  // The skin's own Claude and DeepSeek palettes: the canvases, accents, computed
+  // primary button fills, prose links, inline file mentions, data ink, and
+  // categorical multi-color data-1..6 palette separation.
   brand(r) {
     basicChecks(r)
     const palette = r.claudePalette || {}
+    const claudeDark = palette.dark || {}
     check('the Claude brand keeps its ivory and warm-black canvases and the clay accent',
       palette.canvas === 'rgb(252, 252, 251)' && palette.accent === '#d97757' && !!palette.dark &&
-        palette.dark.canvas === 'rgb(20, 20, 19)' && palette.dark.accent === '#d97757' && palette.dark.raised === '#1e1e1d',
+        claudeDark.canvas === 'rgb(20, 20, 19)' && claudeDark.accent === '#d97757' && claudeDark.raised === '#1e1e1d',
       JSON.stringify(palette))
+    check('Claude primary button fill, prose links, and file mentions compute to their brand palette steps in light and dark',
+      palette.buttonFill === 'rgb(217, 119, 87)' && palette.proseLink === 'rgb(61, 95, 134)' &&
+        palette.mention === palette.proseLink && palette.mention !== palette.codeFg &&
+        claudeDark.buttonFill === 'rgb(217, 119, 87)' && claudeDark.proseLink === 'rgb(169, 194, 223)' &&
+        claudeDark.mention === claudeDark.proseLink,
+      JSON.stringify({ light: { button: palette.buttonFill, prose: palette.proseLink, mention: palette.mention }, dark: { button: claudeDark.buttonFill, prose: claudeDark.proseLink, mention: claudeDark.mention } }))
+    const validRanks = (tier) =>
+      !!tier && Array.isArray(tier.ranks) && tier.ranks.length === 7 &&
+      tier.ranks.every((v) => typeof v === 'string' && v.trim().length > 0) &&
+      new Set(tier.ranks.slice(0, 6)).size === 6 && !tier.ranks.slice(0, 6).includes(tier.accent)
+    check('Claude categorical chart ranks 1..6 maintain distinct hues and differ from rank 0 accent in light and dark',
+      [palette, claudeDark].every(validRanks) &&
+        palette.dataInk === '#b9542f' && palette.wave === '#c6613f' &&
+        claudeDark.dataInk === '#e8967a' && claudeDark.wave === '#e08a6d',
+      JSON.stringify({ light: { ranks: palette.ranks, dataInk: palette.dataInk, wave: palette.wave }, dark: { ranks: claudeDark.ranks, dataInk: claudeDark.dataInk, wave: claudeDark.wave } }))
+    const ds = r.deepseekPalette || {}
+    const dsDark = ds.dark || {}
+    check('the DeepSeek brand switches to cool canvas, periwinkle accent, and matching button fill in light and dark',
+      ds.accent === '#5368c9' && ds.buttonFill === 'rgb(83, 104, 201)' && !!ds.dark &&
+        dsDark.canvas === 'rgb(32, 36, 39)' && dsDark.accent === '#5368c9' && dsDark.buttonFill === 'rgb(83, 104, 201)',
+      JSON.stringify(ds))
+    check('DeepSeek prose links and data ink follow the blue brand family while ranks 1..6 preserve multi-color categories',
+      ds.proseLink === 'rgb(62, 91, 214)' && ds.mention === ds.proseLink && ds.dataInk === '#4a5fc4' && ds.wave === '#5f73d9' &&
+        dsDark.proseLink === 'rgb(142, 162, 242)' && dsDark.mention === dsDark.proseLink &&
+        dsDark.dataInk === '#8ea2f2' && dsDark.wave === '#8ea2f2' &&
+        [ds, dsDark].every(validRanks),
+      JSON.stringify({ light: { prose: ds.proseLink, dataInk: ds.dataInk, wave: ds.wave, ranks: ds.ranks }, dark: { prose: dsDark.proseLink, dataInk: dsDark.dataInk, wave: dsDark.wave, ranks: dsDark.ranks } }))
     commonChecks(r)
   },
   // The custom brand over the Claude brand (D77): both images painted where the
@@ -42,10 +71,18 @@ module.exports = {
         tinted.mark.fill !== 'rgba(0, 0, 0, 0)' && tinted.wordAttr === 'image',
       JSON.stringify(tinted))
     check('a custom accent takes the accent tokens, with the light ink on a dark fill',
-      tinted.accent === '#1a7f5a' && tinted.accentInk === '#faf9f5', JSON.stringify({ accent: tinted.accent, ink: tinted.accentInk }))
+      tinted.accent === '#1a7f5a' && tinted.accentInk === '#faf9f5' &&
+        tinted.dataInk === '#1a7f5a' && tinted.wave === '#1a7f5a',
+      JSON.stringify({ accent: tinted.accent, ink: tinted.accentInk, dataInk: tinted.dataInk, wave: tinted.wave }))
+    const dsTinted = brand.deepseekTinted || {}
+    check('a custom accent remains in force when switching to the DeepSeek brand',
+      dsTinted.accent === '#1a7f5a' && dsTinted.dataInk === '#1a7f5a' &&
+        dsTinted.wave === '#1a7f5a' && dsTinted.buttonFill === 'rgb(26, 127, 90)',
+      JSON.stringify(dsTinted))
     const cleared = brand.cleared || {}
     check('clearing the accent hands the brand\'s own accent back, and the images return to their own colours',
-      cleared.accent === '#d97757' && cleared.tintAttr === null && cleared.mark.image.includes(markUrl),
+      cleared.accent === '#d97757' && cleared.tintAttr === null && cleared.mark.image.includes(markUrl) &&
+        cleared.dataInk === '#b9542f' && cleared.wave === '#c6613f',
       JSON.stringify(cleared))
     check('teardown takes the custom brand\'s values off <body>',
       Array.isArray(r.leftBrandProperties) && r.leftBrandProperties.length === 0, JSON.stringify(r.leftBrandProperties))

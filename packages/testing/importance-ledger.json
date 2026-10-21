@@ -1305,11 +1305,6 @@
       "prop": "color",
       "verdict": "unmatched"
     },
-    "body[data-dsh-deepcraft] .dsh-deepcraft-search-filters:not([data-dsh-deepcraft-pill]) .dsh-deepcraft-search-filter[aria-checked=true]{background:#1414130f!}|background": {
-      "selector": "body[data-dsh-deepcraft] .dsh-deepcraft-search-filters:not([data-dsh-deepcraft-pill]) .dsh-deepcraft-search-filter[aria-checked=true]",
-      "prop": "background",
-      "verdict": "unmatched"
-    },
     "body[data-dsh-deepcraft] .dsh-deepcraft-search-status{padding:18px 12px!;color:var(--dsw-alias-label-tertiary, #8f8d84)!;font-size:14px!}|padding": {
       "selector": "body[data-dsh-deepcraft] .dsh-deepcraft-search-status",
       "prop": "padding",

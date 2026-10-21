@@ -15,7 +15,7 @@
 
 ## Preview
 
-The settings page switches between the two palettes; light and dark follow the system.
+The settings page switches between the two palettes; light and dark follow the system. Both themes share layouts with dedicated accent, auxiliary and neutral palettes: Claude pairs warm gray grounds with slate-blue prose links and ember orange accents, while DeepSeek pairs cool gray grounds with ultramarine links and periwinkle accents; categorical charts preserve multiple easily distinguishable auxiliary colors.
 
 ### Claude
 

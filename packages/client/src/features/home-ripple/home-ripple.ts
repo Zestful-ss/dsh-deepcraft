@@ -61,8 +61,8 @@ function colour(context: CanvasRenderingContext2D, style: CSSStyleDeclaration, t
  * The new-conversation page's background: a field of digits and letters, set
  * in the code face, that redraws a couple of times a second under a drifting
  * cloud and shows only where the cloud is thin. A press on the page starts
- * waves from it that reveal the characters they pass, blue at the front and
- * grey behind.
+ * waves from it that reveal the characters they pass, in the brand's wave
+ * colour at the front and the field's grey behind.
  *
  * The canvas is a child of the hero root, under the page's own content, and
  * never takes a press. It is mounted while the hero root exists and handed back

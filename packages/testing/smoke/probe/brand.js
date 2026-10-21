@@ -41,6 +41,7 @@
         var wordArt = getComputedStyle(name, '::before')
         var heroArt = getComputedStyle(hero, '::before')
         var avatar = document.querySelector('.dsh-deepcraft-account-avatar')
+        var primaryBtn = document.querySelector('._primary_h_1')
         return {
           markAttr: document.body.getAttribute('data-dsh-deepcraft-custom-mark'),
           wordAttr: document.body.getAttribute('data-dsh-deepcraft-custom-word'),
@@ -53,13 +54,19 @@
           avatar: avatar === null ? null : getComputedStyle(avatar).backgroundImage,
           accent: body.getPropertyValue('--dsw-alias-brand-primary').trim(),
           accentInk: body.getPropertyValue('--dsw-alias-label-primary-foreground').trim(),
+          dataInk: body.getPropertyValue('--dsh-deepcraft-data-ink').trim(),
+          wave: body.getPropertyValue('--dsh-deepcraft-ripple-wave').trim(),
+          buttonFill: primaryBtn === null ? '' : getComputedStyle(primaryBtn).backgroundColor,
         }
       }
       r.customBrand = { images: read() }
       window.__pushForm({ brandInk: 'text', brandAccent: '#1a7f5a', brandName: 'Acme' })
       await sleep(150)
       r.customBrand.tinted = read()
-      window.__pushForm({ brandInk: 'original', brandAccent: '' })
+      window.__pushForm({ brand: 'deepseek' })
+      await sleep(150)
+      r.customBrand.deepseekTinted = read()
+      window.__pushForm({ brand: 'claude', brandInk: 'original', brandAccent: '' })
       await sleep(150)
       r.customBrand.cleared = read()
       sidebar.remove()

@@ -12,21 +12,69 @@
 
   probe.step(async function () {
     await probe.onlyFor(['brand'], async function () {
-      // The Claude palette, light and dark: the ivory and warm-black canvases,
-      // the clay accent, the raised card fill.
-      var claudeLight = getComputedStyle(document.body)
-      r.claudePalette = {
-        canvas: claudeLight.backgroundColor,
-        accent: claudeLight.getPropertyValue('--dsw-alias-brand-primary').trim(),
+      // Minimal CSS contract fixture to verify CSS inheritance and color rules
+      // for prose links and inline file mentions in code. Real host UI mapping
+      // is covered by e2e scenarios.
+      var linkHolder = document.createElement('div')
+      linkHolder.innerHTML =
+        '<div class="_markdown_x_1" data-dsh-deepcraft-part="markdown"><a id="smokeProseLink" href="#doc">prose link</a></div>' +
+        '<code><span class="_fileMention_x_1" data-dsh-deepcraft-part="file-mention" id="smokeMention">src/app.ts</span></code>' +
+        '<code id="smokeCode">plainCode()</code>'
+      document.body.appendChild(linkHolder)
+
+      var readTheme = function () {
+        var body = getComputedStyle(document.body)
+        var primaryBtn = document.querySelector('._primary_h_1')
+        var proseLink = document.getElementById('smokeProseLink')
+        var mention = document.getElementById('smokeMention')
+        var code = document.getElementById('smokeCode')
+        return {
+          canvas: body.backgroundColor,
+          accent: body.getPropertyValue('--dsw-alias-brand-primary').trim(),
+          buttonFill: primaryBtn === null ? '' : getComputedStyle(primaryBtn).backgroundColor,
+          buttonInk: primaryBtn === null ? '' : getComputedStyle(primaryBtn).color,
+          proseLink: proseLink === null ? '' : getComputedStyle(proseLink).color,
+          mention: mention === null ? '' : getComputedStyle(mention).color,
+          codeFg: code === null ? '' : getComputedStyle(code).color,
+          dataInk: body.getPropertyValue('--dsh-deepcraft-data-ink').trim(),
+          wave: body.getPropertyValue('--dsh-deepcraft-ripple-wave').trim(),
+          ranks: [
+            body.getPropertyValue('--dsh-deepcraft-data-1').trim(),
+            body.getPropertyValue('--dsh-deepcraft-data-2').trim(),
+            body.getPropertyValue('--dsh-deepcraft-data-3').trim(),
+            body.getPropertyValue('--dsh-deepcraft-data-4').trim(),
+            body.getPropertyValue('--dsh-deepcraft-data-5').trim(),
+            body.getPropertyValue('--dsh-deepcraft-data-6').trim(),
+            body.getPropertyValue('--dsh-deepcraft-data-7').trim(),
+          ],
+        }
       }
+
+      var claudeLight = readTheme()
       document.body.setAttribute('data-ds-dark-theme', '')
-      var claudeDark = getComputedStyle(document.body)
-      r.claudePalette.dark = {
-        canvas: claudeDark.backgroundColor,
-        accent: claudeDark.getPropertyValue('--dsw-alias-brand-primary').trim(),
-        raised: claudeDark.getPropertyValue('--dsh-deepcraft-raised').trim(),
-      }
+      var claudeDark = readTheme()
+      var claudeRaised = getComputedStyle(document.body).getPropertyValue('--dsh-deepcraft-raised').trim()
       document.body.removeAttribute('data-ds-dark-theme')
+
+      r.claudePalette = Object.assign(claudeLight, {
+        dark: Object.assign(claudeDark, { raised: claudeRaised }),
+      })
+
+      window.__pushForm({ brand: 'deepseek' })
+      await sleep(150)
+      var dsLight = readTheme()
+      document.body.setAttribute('data-ds-dark-theme', '')
+      var dsDark = readTheme()
+      var dsRaised = getComputedStyle(document.body).getPropertyValue('--dsh-deepcraft-raised').trim()
+      document.body.removeAttribute('data-ds-dark-theme')
+
+      r.deepseekPalette = Object.assign(dsLight, {
+        dark: Object.assign(dsDark, { raised: dsRaised }),
+      })
+
+      window.__pushForm({ brand: 'claude' })
+      await sleep(150)
+      linkHolder.remove()
     })
     await probe.onlyFor(['hero'], async function () {
       // The classic hero's welcome is drawn on arrival and holds between

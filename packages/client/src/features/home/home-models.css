@@ -69,46 +69,47 @@ body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-label {
   font-variant-numeric: tabular-nums;
 }
 
-/* The ramp: the biggest spender is the deepest data blue, and the walk down ends
-   in the warm grey that stands for every model past the list. */
+/* The ramp: the biggest spender takes the accent in force, the walk down the
+   brand's own data steps, and the last step the neutral every model past the
+   list wears (D77, docs/STYLE.md "Home layouts"). */
 body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank="0"],
 body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank="0"] {
-  background: #2f5fc4;
+  background: var(--dsw-alias-brand-primary);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank="1"],
 body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank="1"] {
-  background: #3b6ecf;
+  background: var(--dsh-deepcraft-data-1);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank="2"],
 body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank="2"] {
-  background: #5b88da;
+  background: var(--dsh-deepcraft-data-2);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank="3"],
 body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank="3"] {
-  background: #7ea3e4;
+  background: var(--dsh-deepcraft-data-3);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank="4"],
 body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank="4"] {
-  background: #a3bfec;
+  background: var(--dsh-deepcraft-data-4);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank="5"],
 body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank="5"] {
-  background: #c3d5f3;
+  background: var(--dsh-deepcraft-data-5);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank="6"],
 body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank="6"] {
-  background: #dbe5f8;
+  background: var(--dsh-deepcraft-data-6);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank="7"],
 body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank="7"] {
-  background: #b9b5ac;
+  background: var(--dsh-deepcraft-data-7);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-home-models {
