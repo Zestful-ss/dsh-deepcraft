@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.18.1] - 2026-10-21
 
-<h3 id="cn-unreleased">体验优化</h3>
+[中文](#cn-0.18.1) | [English](#en-0.18.1)
+
+<h3 id="cn-0.18.1">体验优化</h3>
 
 - 完善 Claude 与 DeepSeek 双主题配色系统，引入协调的多色图表辅助色板并调整热图配色，统一正文链接与行内代码文件引用色彩表现。
 
@@ -14,7 +16,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - 修复 DeepSeek 主题下自定义强调色被默认配色覆盖、以及切换主题后强调色预览未及时更新的问题。
 
-<h3 id="en-unreleased">Improvements</h3>
+<h3 id="en-0.18.1">Improvements</h3>
 
 - Refine the Claude and DeepSeek palettes with coordinated multi-color categorical chart hues, theme-tuned heatmap colors, and consistent prose and inline file-mention link styling.
 

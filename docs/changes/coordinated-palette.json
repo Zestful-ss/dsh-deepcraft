@@ -1,8 +1,0 @@
-{
-  "group": "improvements",
-  "order": 10,
-  "external": false,
-  "at": "2026-10-21",
-  "zh": "完善 Claude 与 DeepSeek 双主题配色系统，引入协调的多色图表辅助色板并调整热图配色，统一正文链接与行内代码文件引用色彩表现。",
-  "en": "Refine the Claude and DeepSeek palettes with coordinated multi-color categorical chart hues, theme-tuned heatmap colors, and consistent prose and inline file-mention link styling."
-}

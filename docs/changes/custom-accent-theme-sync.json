@@ -1,8 +1,0 @@
-{
-  "group": "fixes",
-  "order": 10,
-  "external": false,
-  "at": "2026-10-21",
-  "zh": "修复 DeepSeek 主题下自定义强调色被默认配色覆盖、以及切换主题后强调色预览未及时更新的问题。",
-  "en": "Fix an issue where custom accent colors were overridden by default palettes under the DeepSeek theme, and keep the accent color preview in sync across theme switches."
-}
