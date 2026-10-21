@@ -1,8 +1,0 @@
-{
-  "at": "2026-10-21",
-  "group": "removals",
-  "order": 0,
-  "external": false,
-  "zh": "移除桌面宠物，以及随宿主启动的第三方播放器；聊天框宠物与宠物包导入流程保持不变。",
-  "en": "Remove the desktop pet and the third-party player it started with the host, keeping the chat pet and the pet package import flow unchanged."
-}
