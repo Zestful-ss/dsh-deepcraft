@@ -36,7 +36,7 @@ SOFTWARE.
 
 ## Petdex
 
-The desktop player's session-event projection and delivery queue (`packages/host/src/pets/normalize.ts`, `packages/host/src/pets/bridge.ts`) are ported from Petdex's DSH integration, and the Windows player this plugin starts is the official Petdex release, downloaded at runtime and verified against its published digest. Pet packages are downloaded at runtime or imported by the reader; their art belongs to each package's author and is not shipped by this package.
+Pet packages are downloaded at runtime or imported by the reader; their art belongs to Petdex and each package's author and is not shipped by this package.
 
 Source: <https://github.com/crafter-station/petdex>
 

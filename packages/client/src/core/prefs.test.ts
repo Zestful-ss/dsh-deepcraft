@@ -90,18 +90,12 @@ test('the custom images keep their own colours unless the text colour is chosen'
   expect(normalizePrefs({ brandInk: 'mono' }).brandInk).toBe(BRAND_INK_ORIGINAL)
 })
 
-test('each place reads its own field of the theme in front', () => {
-  const claude = normalizePrefs({ brand: BRAND_CLAUDE })
-  expect(resolveThemePet(claude, 'chat')).toBe('crab-buddy')
-  expect(resolveThemePet(claude, 'desktop')).toBe('claude-opus-scholar')
-  const deepseek = normalizePrefs({ brand: BRAND_DEEPSEEK })
-  expect(resolveThemePet(deepseek, 'chat')).toBe('whaledou')
-  expect(resolveThemePet(deepseek, 'desktop')).toBe('deepseek')
-  const picked = normalizePrefs({ chatPetDeepseek: 'my-custom', desktopPetClaude: 'other-custom' })
-  expect(resolveThemePet(picked, 'chat')).toBe('crab-buddy')
-  expect(resolveThemePet(picked, 'desktop')).toBe('other-custom')
-  expect(resolveThemePet({ ...picked, brand: BRAND_DEEPSEEK }, 'chat')).toBe('my-custom')
-  expect(resolveThemePet({ ...picked, brand: BRAND_CLAUDE }, 'desktop')).toBe('other-custom')
+test('the chat position reads its own field of the theme in front', () => {
+  expect(resolveThemePet(normalizePrefs({ brand: BRAND_CLAUDE }))).toBe('crab-buddy')
+  expect(resolveThemePet(normalizePrefs({ brand: BRAND_DEEPSEEK }))).toBe('whaledou')
+  const picked = normalizePrefs({ chatPetClaude: 'other-custom', chatPetDeepseek: 'my-custom' })
+  expect(resolveThemePet(picked)).toBe('other-custom')
+  expect(resolveThemePet({ ...picked, brand: BRAND_DEEPSEEK })).toBe('my-custom')
 })
 
 test('"follow the theme" resolves to the Petdex guest; a manual character stands, and off only leaves the chat place', () => {

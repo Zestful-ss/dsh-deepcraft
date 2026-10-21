@@ -75,9 +75,3 @@ export const PETS_IMPORT_URL_PATH = `${PETS_PATH}/import-url`
 
 /** `GET <id>?v=<version>`: one pet's untouched atlas. */
 export const PETS_IMAGE_PATH = `${PETS_PATH}/image`
-
-/** `GET`: the host half's desktop player status. */
-export const PETS_DESKTOP_PATH = `${PETS_PATH}/desktop`
-
-/** `POST` one `DesktopPetSelection`: bring the owned desktop player in line with it, for this run only. */
-export const PETS_DESKTOP_SYNC_PATH = `${PETS_PATH}/desktop/sync`

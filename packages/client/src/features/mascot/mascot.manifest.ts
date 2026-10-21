@@ -1,3 +1,4 @@
+import { MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY } from '../../constants'
 import type { FeatureManifest } from '../../core/feature'
 
 export default {
@@ -6,9 +7,8 @@ export default {
   load: 'deferred',
   reads: ['composer'],
   contracts: ['chat.think-running', 'composer.fallback-panel', 'composer.seat', 'composer.stack', 'conversation.session', 'conversation.session-attribute'],
-  // The feature stays installed while the chat guest is off: the desktop pet
-  // is chosen independently and still has to follow its own switch.
-  ungated: 'The chat pet can be off while the desktop pet stays on, so this feature is always installed and reads its own switches.',
+  pref: 'mascot',
+  prefValues: [MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY],
   stylesheets: [
     { file: 'crab.css', rank: 350 },
     { file: 'whale.css', rank: 360 },
@@ -40,19 +40,11 @@ export default {
     title: 'mascotScopeTitle',
     choiceLabels: { home: 'mascotScopeHome', all: 'mascotScopeAll' },
   }, {
-    // A place of its own: the desktop player's switch, pet and status.
-    tab: 'appearance',
-    rank: 45,
-    pref: 'desktopPetEnabled',
-    key: 'desktopPet',
-    control: 'desktopPet',
-    title: 'petDesktopTitle',
-    desc: 'petDesktopDesc',
-  }, {
-    // Imported packages are selected by the chat row above; this row only adds them.
+    // Imported packages are selected by the chat row above; this row only adds
+    // them, so it takes the other theme field as its own identity.
     tab: 'appearance',
     rank: 55,
-    pref: 'desktopPetClaude',
+    pref: 'chatPetDeepseek',
     key: 'petImport',
     control: 'petImport',
     title: 'petImportTitle',

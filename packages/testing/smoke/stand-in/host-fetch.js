@@ -31,9 +31,6 @@
   function petdexPet() {
     return petDescriptor(CASE === 'petdex-deepseek' ? 'whaledou' : 'crab-buddy')
   }
-  function offlineStatus() {
-    return { phase: 'off', petId: null, pid: null, error: null }
-  }
   var PNG_1PX = Uint8Array.from(
     atob(window.SMOKE_PNG),
     function (c) { return c.charCodeAt(0) })
@@ -51,12 +48,6 @@
       var asked = 'crab-buddy'
       try { asked = JSON.parse((init && init.body) || '{}').id || asked } catch (error) { /* the page sent the default */ }
       return Promise.resolve(jsonResponse({ ok: true, pet: petDescriptor(asked) }))
-    }
-    if (url === '/dsh-deepcraft/pets/desktop') {
-      return Promise.resolve(jsonResponse({ ok: true, status: offlineStatus() }))
-    }
-    if (url === '/dsh-deepcraft/pets/desktop/sync') {
-      return Promise.resolve(jsonResponse({ ok: true, status: offlineStatus() }))
     }
     if (url === '/dsh-deepcraft/brand') {
       // The custom-brand case holds both images; the bytes are the runner's to

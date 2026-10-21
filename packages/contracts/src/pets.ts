@@ -1,16 +1,15 @@
 /**
- * The Petdex contract: the animation vocabulary the official desktop player
- * publishes, the atlas geometry both halves read, the pet a package describes
- * and the four presets this plugin offers (D78).
+ * The Petdex contract: the animation vocabulary a package's atlas carries, the
+ * atlas geometry both halves read, the pet a package describes and the presets
+ * this plugin offers (D78).
  *
  * A package is its own `pet.json` and one PNG/WebP atlas, byte for byte: the
  * bytes are stored as they arrived and the descriptor below is derived from
- * them, so the browser draws the author's frames and the official desktop
- * player opens the same directory. Nothing here redraws, recolours or
- * re-times a pet.
+ * them, so the browser draws the author's frames. Nothing here redraws,
+ * recolours or re-times a pet.
  */
 
-/** The nine actions the official desktop player accepts on its state route, in atlas row order. */
+/** The nine actions the Petdex atlas rows name, in row order. */
 export const PETDEX_STATES = [
   'idle',
   'running-right',
@@ -32,9 +31,9 @@ export interface PetdexAction {
 }
 
 /**
- * The official player's own timing at desktop-v0.9.2. Idle's irregular beats
- * are the blink, and every action carries its own pace: a global frame time
- * would stretch all of them.
+ * The frame timing the Petdex sprite specification publishes for version 1.
+ * Idle's irregular beats are the blink, and every action carries its own pace:
+ * a global frame time would stretch all of them.
  */
 export const PETDEX_ACTIONS: Readonly<Record<PetdexState, PetdexAction>> = {
   'idle': { row: 0, frameDurationsMs: [280, 110, 110, 140, 140, 320] },
@@ -64,18 +63,14 @@ export const PET_IMAGE_MAX_BYTES = 16 * 1024 * 1024
 export const PET_ARCHIVE_MAX_BYTES = 20 * 1024 * 1024
 export const PET_EXTRACTED_MAX_BYTES = 20 * 1024 * 1024
 export const PET_ARCHIVE_MAX_ENTRIES = 16
-/** A package directory name: what the official player scans the pets directory for. */
+/** A package directory name: what the pets root is listed by. */
 export const PET_ID_RE = /^[a-z0-9][a-z0-9-]{0,62}$/
 /** The name of the manifest file inside a package; the official download serves it as `petjson.json`. */
 export const PET_MANIFEST_FILE = 'pet.json'
-/** How long a finished turn stays worth replaying after a desktop player restart. */
-export const PET_REPLAY_TERMINAL_MS = 5000
-/** The most per-session snapshots the bridge replays after a restart. */
-export const PET_REPLAY_MAX_SNAPSHOTS = 64
 
 /** One installed pet, as the browser half reads it. Paths and tokens never cross this boundary. */
 export interface PetDescriptor {
-  /** The directory under the pets root, which is also the `PETDEX_PET` value. */
+  /** The directory under the pets root. */
   id: string
   /** The id the untouched manifest carries; it differs from `id` only on a hash-named install. */
   sourceId: string
@@ -98,22 +93,6 @@ export interface PetLibraryError {
   error: string
 }
 
-/** What the desktop player should show, as the page resolves it for the current theme. */
-export interface DesktopPetSelection {
-  enabled: boolean
-  petId: string
-}
-
-export type DesktopPetPhase = 'off' | 'starting' | 'running' | 'external' | 'error' | 'unsupported'
-
-/** The desktop player's state, as the host half owns it. */
-export interface DesktopPetStatus {
-  phase: DesktopPetPhase
-  petId: string | null
-  pid: number | null
-  error: string | null
-}
-
 /** One preset this plugin offers; the art is downloaded on first use, never shipped. */
 export interface PetdexPreset {
   id: string
@@ -125,7 +104,7 @@ export interface PetdexPreset {
 
 const PETDEX_ASSETS = 'https://assets.petdex.dev/pets/'
 
-/** The four presets: each theme's chat pet and desktop pet. */
+/** The published packages this plugin can install by id. */
 export const PETDEX_PRESETS: readonly PetdexPreset[] = [
   { id: 'crab-buddy', pageUrl: 'https://petdex.dev/pets/crab-buddy', assetBase: `${PETDEX_ASSETS}crab-buddy-cc20d1c90732/` },
   { id: 'claude-opus-scholar', pageUrl: 'https://petdex.dev/pets/claude-opus-scholar', assetBase: `${PETDEX_ASSETS}claude-opus-scholar-88dade9b63fd/` },
@@ -153,7 +132,7 @@ export function petAtlasRows(version: 1 | 2) {
   return version === 2 ? PET_ATLAS_ROWS_V2 : PET_ATLAS_ROWS_V1
 }
 
-/** Whether a name is a package directory the official player can select by `PETDEX_PET`. */
+/** Whether a name is a package directory the pets root can hold. */
 export function isPetId(value: string) {
   return PET_ID_RE.test(value)
 }

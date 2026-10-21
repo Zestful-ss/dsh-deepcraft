@@ -21,7 +21,7 @@ export interface MascotSheet {
   atlasRows?: number
   /** Per-frame durations; absent on the original characters, which use one frame time. */
   frameDurationsMs?: readonly number[]
-  /** The native action this animation plays, as the desktop player names it. */
+  /** The native action this animation plays, as the Petdex packages name it. */
   nativeState?: PetdexState
 }
 

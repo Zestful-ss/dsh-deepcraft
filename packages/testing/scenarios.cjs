@@ -550,7 +550,7 @@ const SCENARIOS = {
   customBrand: customBrandScenario({ check }),
   /** DeepCraft's own walk: the themes, the whale girl's gestures and states, and the account-hold page's theme (packages/testing/deepcraft.cjs, D77). */
   deepcraft: deepcraftScenario({ check }),
-  /** Complete Petdex packages imported into the real host, drawn per theme, and the owned desktop player (packages/testing/petdex.cjs, D78). */
+  /** Complete Petdex packages imported into the real host and drawn per theme (packages/testing/petdex.cjs, D78). */
   petdex: petdexScenario({ check }),
   /** The Chat / Code switch beside ds-bot's published browser half (packages/testing/ds-bot.cjs, D74). */
   dsBot: dsBotScenario({ check }),

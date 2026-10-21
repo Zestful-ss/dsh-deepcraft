@@ -67,7 +67,6 @@ The settings page switches between the two palettes; light and dark follow the s
 ### Pets
 
 - The composer pet is chosen per theme: Crab Buddy under Claude and Whaledou under DeepSeek, with the original pixel crab and whale still selectable in the same row.
-- The desktop pet is drawn by the official Petdex player on Windows x64, stays above other windows and follows DSH's lifecycle; it is off by default and downloads and verifies the official release when first enabled.
 - "Import a pet package" in the settings page takes a folder, a ZIP or a Petdex link holding `pet.json` and an atlas, keeping the original bytes. The pet art belongs to Petdex and each package's author and is not shipped with this plugin.
 
 ## Installation

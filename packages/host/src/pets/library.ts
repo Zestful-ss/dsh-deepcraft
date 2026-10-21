@@ -1,11 +1,9 @@
 /**
- * The pets library: the directories the official desktop player scans and the
- * imports that fill them (D78).
+ * The pets library and the imports that fill it (D78).
  *
- * Every package lives at `~/.petdex/pets/<id>/` with its manifest and atlas
- * exactly as they arrived; the official player selects one by that directory
- * name through `PETDEX_PET`, so no path and no global setting of its own is
- * touched. Content is identified by
+ * Every package lives at `~/.petdex/pets/<id>/` in the layout a Petdex package
+ * keeps, with its manifest and atlas exactly as they arrived. Content is
+ * identified by
  * `SHA256(manifest bytes || 0x00 || atlas bytes)`: the same content reuses its
  * directory, different content under the same manifest id installs beside it
  * under a hash name, and an existing package is never overwritten.
@@ -30,7 +28,7 @@ import { PetRefusal } from './errors.js'
 import { MANIFEST_NAME, parsePet, usableDirectoryName } from './manifest.js'
 import type { ParsedPet } from './manifest.js'
 
-/** The directory the official desktop player scans. */
+/** The Petdex package root the library holds: `~/.petdex/pets/<id>/`. */
 function petsRoot() {
   return join(homedir(), '.petdex', 'pets')
 }
@@ -94,7 +92,7 @@ async function stampOf(dir: string, atlasName: string) {
 /**
  * Read one installed package.
  *
- * @param name - its directory name, already the id the player selects.
+ * @param name - its directory name, which is also its descriptor id.
  * @param fresh - read even when the cache holds it (an import just replaced it).
  */
 async function readPetAt(name: string, fresh = false): Promise<PetDescriptor> {

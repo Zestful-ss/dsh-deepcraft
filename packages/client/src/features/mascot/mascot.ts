@@ -3,22 +3,20 @@ import { readPrefs, resolveMascot, resolveThemePet } from '../../core/prefs'
 import { createMascotCrab } from './crab'
 import { createMascotWhale } from './whale'
 import { createPetdexMascot } from './petdex'
-import { decodePet, ensurePet, syncDesktop } from '../../shared/petdex'
+import { decodePet, ensurePet } from '../../shared/petdex'
 import type { PetDescriptor } from '@dsh-deepcraft/contracts/pets'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './mascot.manifest'
 
 /**
- * The companion on the composer, and the desktop player beside it: each is
- * chosen per theme and each follows its own switch (D78).
+ * The companion on the composer: chosen per theme and following its own switch
+ * (D78).
  *
- * `brand` now means the theme's Petdex package (crab-buddy under Claude,
- * whaledou under DeepSeek), drawn from its own atlas. The two original
- * characters stay selectable by hand, and `off` retires the composer guest
- * alone — a running desktop pet is a separate choice and keeps running.
- * `mascotScope` still decides whether the composer guest also stands in the
- * conversation.
+ * `brand` means the theme's Petdex package (crab-buddy under Claude, whaledou
+ * under DeepSeek), drawn from its own atlas. The two original characters stay
+ * selectable by hand, and `off` retires the composer guest. `mascotScope` still
+ * decides whether the composer guest also stands in the conversation.
  *
  * One chat instance is on the page at a time. A package that cannot be
  * fetched or decoded leaves the previous instance in place instead of
@@ -68,7 +66,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     }
     if (token !== generation) return
     const prefs = readPrefs()
-    if (resolveMascot(prefs) !== MASCOT_PETDEX || resolveThemePet(prefs, 'chat') !== id) return
+    if (resolveMascot(prefs) !== MASCOT_PETDEX || resolveThemePet(prefs) !== id) return
     failedId = null
     if (petdex !== null) petdex.player.dispose()
     petdex = { id, player: createPetdexMascot(ctx, ui, pet) }
@@ -95,15 +93,10 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       crab.release()
       whale.release()
       if (petdex !== null) petdex.player.sync(conversation)
-      void openPetdex(resolveThemePet(prefs, 'chat'), conversation)
+      void openPetdex(resolveThemePet(prefs), conversation)
     } else if (mascot === MASCOT_OFF) {
       releaseChat()
     }
-    // The desktop player follows its own switch and its own per-theme choice;
-    // the chat switch and where the chat guest stands do not touch it.
-    void syncDesktop({ enabled: prefs.desktopPetEnabled, petId: resolveThemePet(prefs, 'desktop') })?.catch((error: unknown) => {
-      console.warn('[dsh-deepcraft] the desktop pet could not be synced:', error)
-    })
   }
 
   function onActivity() {

@@ -9,13 +9,8 @@
  * and the home card must draw that package's atlas at 72×78 with its own
  * action names. The run does not download a preset and does not touch the
  * machine's own `~/.petdex`: the host boots with a scratch user home
- * (packages/testing/e2e.cjs), so the library and the official player both
- * resolve under the run's directory.
- *
- * The desktop player is exercised only where the official Windows build can
- * run: the switch is pressed on the real page, the host's status is followed,
- * and an owned process has its `/whoami` pid matched against the status. A
- * player the machine started itself is reported, never adopted or ended.
+ * (packages/testing/e2e.cjs), so the library resolves under the run's own
+ * directory.
  */
 'use strict'
 const fs = require('node:fs')
@@ -29,12 +24,10 @@ const ROUTES = {
   library: '/dsh-deepcraft/pets',
   import: '/dsh-deepcraft/pets/import',
   image: '/dsh-deepcraft/pets/image',
-  desktop: '/dsh-deepcraft/pets/desktop',
 }
-const HOOK = 'http://127.0.0.1:7777'
 const ROW = '.dsh-deepcraft-settings-row'
 const ROW_TITLE = '.dsh-deepcraft-settings-row-title'
-const TITLE = { chat: /聊天框宠物包|Chat pet package/, import: /导入宠物包|Import a pet package/, desktop: /桌面宠物|Desktop pet/ }
+const TITLE = { chat: /聊天框宠物包|Chat pet package/, import: /导入宠物包|Import a pet package/ }
 
 /** The rows on the Appearance tab, in rank order. */
 const TAB = /^(外观|Appearance)$/
@@ -137,46 +130,6 @@ async function waitForGuest(page, id) {
   return readGuest(page)
 }
 
-const statusOf = (page) => page.evaluate(async (route) => {
-  const answer = await fetch(route).then((response) => response.json())
-  return answer.status
-}, ROUTES.desktop)
-
-/** Wait until the switch has settled: running, or the reason it cannot be. */
-async function waitDesktopEnabled(page, timeoutMs = 40000) {
-  const started = Date.now()
-  let status = null
-  while (Date.now() - started < timeoutMs) {
-    status = await statusOf(page)
-    if (status.phase === 'running' || status.phase === 'external' || status.phase === 'unsupported' || status.phase === 'error') return status
-    await page.waitForTimeout(250)
-  }
-  return status
-}
-
-/** Wait for one exact state: the phase and the pet the host is on, so a restart is not read as its predecessor. */
-async function waitForDesktop(page, wanted, timeoutMs = 40000) {
-  const started = Date.now()
-  let status = null
-  while (Date.now() - started < timeoutMs) {
-    status = await statusOf(page)
-    if (status.phase === wanted.phase && (wanted.petId === undefined || status.petId === wanted.petId) &&
-      (wanted.notPid === undefined || status.pid !== wanted.notPid)) return status
-    await page.waitForTimeout(250)
-  }
-  return status
-}
-
-/** The official player's own answer, read from Node: no page origin, no CORS. */
-async function hook(pathName) {
-  try {
-    const response = await fetch(`${HOOK}${pathName}`, { signal: AbortSignal.timeout(500) })
-    return response.ok ? await response.json() : null
-  } catch {
-    return null
-  }
-}
-
 async function pickBrand(page, brand) {
   // The two brand cards live on the General tab.
   await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: /^(通用|General)$/ }).first().click()
@@ -191,9 +144,6 @@ function petdexScenario({ check }) {
   return {
     script: 'greeting',
     prompt: 'hello there',
-    // The official player is downloaded and restarted a few times on a Windows
-    // runner; the walk needs more than the lane's default.
-    deadlineMs: 360000,
     async beforeSend({ page, home, url }) {
       read.packages = []
       await openSettings(page)
@@ -249,72 +199,16 @@ function petdexScenario({ check }) {
       await openHome(page, url)
       read.chatBack = await waitForGuest(page, claudeId)
 
-      // The desktop player: switch on, follow the host's status, and only ever
-      // judge a process whose pid the port reports itself.
-      await openSettings(page)
-      const desktopRow = rowOf(page, TITLE.desktop)
-      // The package is chosen before the switch: the first process already
-      // draws this run's own pet.
-      await desktopRow.locator('.dsh-deepcraft-settings-pet-select').selectOption(claudeId)
-      await desktopRow.locator('.dsh-deepcraft-settings-pet-toggle').check()
-      read.desktop = await waitForDesktop(page, { phase: 'running', petId: claudeId })
-      read.desktopOwned = read.desktop
-      if (read.desktop.phase === 'running') {
-        read.whoami = await hook('/whoami')
-        read.desktopToken = fs.existsSync(path.join(home, 'user', '.petdex', 'runtime', 'update-token'))
-        // A theme switch restarts the process this plugin owns, and only that one.
-        await pickBrand(page, 'deepseek')
-        await rowOf(page, TITLE.desktop).locator('.dsh-deepcraft-settings-pet-select').selectOption(deepseekId)
-        read.desktopSwitched = await waitForDesktop(page, { phase: 'running', petId: deepseekId, notPid: read.desktopOwned?.pid })
-        read.whoamiSwitched = await hook('/whoami')
-        await pickBrand(page, 'claude')
-        await rowOf(page, TITLE.desktop).locator('.dsh-deepcraft-settings-pet-select').selectOption(claudeId)
-        read.desktopBack = await waitForDesktop(page, { phase: 'running', petId: claudeId, notPid: read.desktopSwitched?.pid })
-      }
-      // The chat guest follows its own switch and leaves alone.
-      await openHome(page, url)
-      await page.waitForTimeout(300)
       // The library reports what was installed, with the original ids intact.
       read.library = await page.evaluate(async (route) => (await fetch(route)).json(), ROUTES.library)
       read.userHome = path.join(home, 'user', '.petdex', 'pets')
       read.stored = fs.existsSync(path.join(read.userHome, claudeId, 'pet.json')) &&
         fs.existsSync(path.join(read.userHome, deepseekId, 'pet.json'))
     },
-    async duringTurn({ page, home }) {
-      // The window goes away while the host keeps working: the projection runs
-      // in the host process, and the player's own state must follow it.
-      if (read.desktop?.phase !== 'running') return
-      const cdp = await page.context().newCDPSession(page)
-      const { windowId } = await cdp.send('Browser.getWindowForTarget')
-      await cdp.send('Browser.setWindowBounds', { windowId, bounds: { windowState: 'minimized' } })
-      const tokenPath = path.join(home, 'user', '.petdex', 'runtime', 'update-token')
-      const states = new Set()
-      const until = Date.now() + 6000
-      while (Date.now() < until) {
-        const token = fs.existsSync(tokenPath) ? fs.readFileSync(tokenPath, 'utf8').trim() : ''
-        if (token !== '') {
-          const answer = await fetch(`${HOOK}/state`, { headers: { 'x-petdex-update-token': token }, signal: AbortSignal.timeout(400) })
-            .then((response) => response.ok ? response.json() : null).catch(() => null)
-          if (typeof answer?.state === 'string') states.add(answer.state)
-        }
-        await new Promise((settle) => setTimeout(settle, 50))
-      }
-      const { bounds } = await cdp.send('Browser.getWindowBounds', { windowId })
-      read.minimized = { states: [...states], windowState: bounds.windowState }
-      await cdp.send('Browser.setWindowBounds', { windowId, bounds: { windowState: 'normal' } })
-    },
-    async afterTurn({ page }) {
-      if (read.desktop?.phase !== 'running') return
-      await openSettings(page)
-      await rowOf(page, TITLE.desktop).locator('.dsh-deepcraft-settings-pet-toggle').uncheck()
-      read.desktopOff = await waitForDesktop(page, { phase: 'off' }, 20000)
-      read.afterOff = await hook('/health')
-    },
     async assert() {
       const claude = read.claude
       const deepseek = read.deepseek
       const imported = read.imported ?? []
-      const desktop = read.desktop ?? null
       return [
         check('两个完整包经宿主半边的导入路由原样落盘',
           imported.length === 2 && imported.every((entry) => entry.status === 200 && entry.pet?.id === entry.id) && read.stored === true,
@@ -327,7 +221,7 @@ function petdexScenario({ check }) {
             claude.spriteWidth === 72 && claude.spriteHeight === 78 &&
             typeof claude.sheet === 'string' && claude.sheet.includes(`${ROUTES.image}/e2e-crab`) && claude.action === 'idle',
           JSON.stringify(claude)),
-        check('DeepSeek 主题画自己选中的人：两个位置的主题字段互不影响',
+        check('DeepSeek 主题画自己选中的人：两个主题各自的聊天框字段互不影响',
           !!deepseek && deepseek.id === 'e2e-whale' && deepseek.ready && deepseek.sheet.includes(`${ROUTES.image}/e2e-whale`),
           JSON.stringify(deepseek)),
         check('切回 Claude 后仍是 Claude 原先选中的包',
@@ -335,24 +229,7 @@ function petdexScenario({ check }) {
         check('导入后库里两个包都在，清单 id 未被改写',
           read.library?.ok === true && ['e2e-crab', 'e2e-whale'].every((id) => read.library.pets.some((pet) => pet.id === id && pet.sourceId === id)),
           JSON.stringify(read.library?.pets?.map((pet) => pet.id))),
-        check('桌宠开关交给宿主；Windows 上自有进程的 pid 必须就是端口报告的那一个',
-          desktop !== null && (
-            (desktop.phase === 'running' && read.desktopOwned?.phase === 'running' && read.desktopOwned.petId === 'e2e-crab' &&
-              read.whoami?.pid === read.desktopOwned.pid && read.desktopToken === true &&
-              read.desktopSwitched?.phase === 'running' && read.desktopSwitched.petId === 'e2e-whale' &&
-              read.whoamiSwitched?.pid === read.desktopSwitched.pid && read.whoamiSwitched?.pid !== read.desktopOwned.pid &&
-              read.desktopBack?.phase === 'running' && read.desktopBack.petId === 'e2e-crab') ||
-            desktop.phase === 'external' || desktop.phase === 'unsupported'),
-          JSON.stringify({ desktop, owned: read.desktopOwned, switched: read.desktopSwitched, back: read.desktopBack, whoami: read.whoami, token: read.desktopToken })),
-        check('关闭后自有桌宠退出，端口不再有人应答',
-          read.desktop?.phase !== 'running' || (read.desktopOff?.phase === 'off' && read.afterOff === null),
-          JSON.stringify({ off: read.desktopOff, health: read.afterOff })),
-        check('窗口最小化时，DSH 的工作仍传到桌宠（跳起、工作、挥手、等待之一）',
-          read.desktop?.phase !== 'running' ||
-            (read.minimized?.windowState === 'minimized' &&
-              read.minimized.states.some((state) => ['jumping', 'running', 'waiting', 'waving'].includes(state))),
-          JSON.stringify(read.minimized)),
-        check('聊天位置的开关只收起聊天宠物，随后重新出现',
+        check('聊天位置的开关收起聊天宠物，随后重新出现',
           read.chatOff === null && read.chatBack?.id === 'e2e-crab',
           JSON.stringify({ off: read.chatOff, back: read.chatBack })),
       ]

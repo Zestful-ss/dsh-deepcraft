@@ -683,9 +683,6 @@ async function hostHalf() {
     listed.status === 200 && listedBody.invalid.some((entry) => entry.id === 'broken') &&
       listedBody.pets.some((pet) => pet.id === 'smoke-pet'),
     listed.body.slice(0, 300))
-  const status = await request(petHost, '/dsh-deepcraft/pets/desktop', 'GET', '', browser)
-  check('the desktop player reports its own state, off until enabled',
-    status.status === 200 && JSON.parse(status.body).status.phase === 'off', status.body)
   if (savedProfile === undefined) delete process.env.USERPROFILE
   else process.env.USERPROFILE = savedProfile
   if (savedHome === undefined) delete process.env.HOME

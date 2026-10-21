@@ -318,8 +318,8 @@ async function runScenario(name, options) {
   }
   const patch = ['- id: llm-deepseek', '  config:', `    baseURL: ${mock.url}`, '    apiKeyEnv: DSH_E2E_MOCK_KEY', ...accountPatch, ...scenario.patch ?? []].join('\n')
   // The host and everything it starts see a scratch user home: the pets
-  // library, the official desktop player's own directory and any cache a
-  // child keeps resolve under the run's home, never the machine's (D78).
+  // library and any cache a child keeps resolve under the run's home, never
+  // the machine's (D78).
   const userHome = path.join(home, 'user')
   fs.mkdirSync(userHome, { recursive: true })
   const host = await start({
@@ -335,8 +335,7 @@ async function runScenario(name, options) {
   const step = (label) => say(`  · ${label}\n`)
   let session
   let expired = false
-  // A walk that owns a native program or downloads one may name its own
-  // deadline; the rest keep the lane's.
+  // A walk may name its own deadline; the rest keep the lane's.
   const deadlineMs = scenario.deadlineMs ?? SCENARIO_DEADLINE_MS
   const timer = setTimeout(() => { expired = true }, deadlineMs)
   try {

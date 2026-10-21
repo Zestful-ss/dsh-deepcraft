@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { BRAND_DEEPSEEK } from '../../constants'
 import { PETDEX_ACTIONS, PETDEX_STATES } from '@dsh-deepcraft/contracts/pets'
-import type { DesktopPetStatus, PetDescriptor, PetdexState } from '@dsh-deepcraft/contracts/pets'
+import type { PetDescriptor, PetdexState } from '@dsh-deepcraft/contracts/pets'
 import {
   decodePet,
   ensurePet,
@@ -9,7 +9,6 @@ import {
   importPetFolder,
   importPetLink,
   loadPetLibrary,
-  readDesktopStatus,
   readPetLibrary,
   subscribePetLibrary,
 } from '../../shared/petdex'
@@ -18,9 +17,9 @@ import { copy } from '../settings/copy'
 import type { SettingsRowView } from '../../core/feature'
 
 /**
- * The Appearance tab's pets (D78): the chat guest and the desktop player are
- * two independent choices, each read from the current theme's own field, and
- * one import that adds complete Petdex packages to the shared library.
+ * The Appearance tab's pets (D78): the chat guest's package is read from the
+ * current theme's own field, and one import adds complete Petdex packages to
+ * the shared library.
  *
  * The preview plays the package's own nine actions, from the untouched atlas.
  * Importing downloads nothing on its own: a folder, a ZIP or a Petdex link is
@@ -42,13 +41,9 @@ function usePetLibrary(): PetLibrary {
   return library
 }
 
-/** The chat field and the desktop field of the theme in front. */
-function themeFields(brand: string) {
-  const deepseek = brand === BRAND_DEEPSEEK
-  return {
-    chat: deepseek ? 'chatPetDeepseek' as const : 'chatPetClaude' as const,
-    desktop: deepseek ? 'desktopPetDeepseek' as const : 'desktopPetClaude' as const,
-  }
+/** The chat field of the theme in front. */
+function chatField(brand: string) {
+  return brand === BRAND_DEEPSEEK ? 'chatPetDeepseek' as const : 'chatPetClaude' as const
 }
 
 /** One package's nine native actions, played at the author's own frame times. */
@@ -129,8 +124,8 @@ function PetSelect(props: {
 /** The current theme's chat guest, with the selected package's actions previewed. */
 function ChatPetControl(view: SettingsRowView) {
   const library = usePetLibrary()
-  const fields = themeFields(view.prefs.brand)
-  const selected = view.prefs[fields.chat]
+  const field = chatField(view.prefs.brand)
+  const selected = view.prefs[field]
   const pet = library.pets.find(item => item.id === selected)
   React.useEffect(() => {
     // A preset the reader has never displayed yet is downloaded on first
@@ -145,85 +140,11 @@ function ChatPetControl(view: SettingsRowView) {
       value: selected,
       disabled: view.disabled,
       onPick(value) {
-        if (fields.chat === 'chatPetDeepseek') view.write({ chatPetDeepseek: value })
+        if (field === 'chatPetDeepseek') view.write({ chatPetDeepseek: value })
         else view.write({ chatPetClaude: value })
       },
     }),
     pet === undefined ? null : React.createElement(PetPreview, { pet }),
-  )
-}
-
-/** The phase, in the page's own words. */
-function statusLine(status: DesktopPetStatus | null, enabled: boolean) {
-  if (!enabled) return copy('petDesktopOff')
-  if (status === null) return copy('petDesktopStarting')
-  const detail = status.error === null ? '' : status.error
-  switch (status.phase) {
-    case 'running': return copy('petDesktopRunning', { pid: String(status.pid ?? '') })
-    case 'external': return copy('petDesktopExternal')
-    case 'error': return copy('petDesktopError', { detail })
-    case 'unsupported': return copy('petDesktopUnsupported')
-    case 'starting': return copy('petDesktopStarting')
-    case 'off': return copy('petDesktopOff')
-  }
-}
-
-/**
- * The desktop player's switch, its package and the host's own status. The
- * status is polled while the row is open; the switch writes the preference the
- * mascot feature follows and every other part of the state belongs to the host.
- */
-function DesktopPetControl(view: SettingsRowView) {
-  const library = usePetLibrary()
-  const fields = themeFields(view.prefs.brand)
-  const enabled = view.prefs.desktopPetEnabled
-  const selected = view.prefs[fields.desktop]
-  const [status, setStatus] = React.useState<DesktopPetStatus | null>(null)
-  React.useEffect(() => {
-    let alive = true
-    const read = () => {
-      void readDesktopStatus().then((next) => {
-        if (alive) setStatus(next)
-      }, () => undefined)
-    }
-    read()
-    const timer = window.setInterval(read, 1500)
-    return () => {
-      alive = false
-      window.clearInterval(timer)
-    }
-  }, [])
-  React.useEffect(() => {
-    if (enabled) void ensurePet(selected).catch(() => undefined)
-  }, [enabled, selected])
-  return React.createElement(
-    'div',
-    { className: 'dsh-deepcraft-settings-pet-control' },
-    React.createElement('input', {
-      type: 'checkbox',
-      role: 'switch',
-      className: 'dsh-deepcraft-settings-pet-toggle',
-      checked: enabled,
-      disabled: view.disabled,
-      'aria-label': copy('petDesktopSwitchLabel'),
-      onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        view.write({ desktopPetEnabled: event.currentTarget.checked })
-      },
-    }),
-    React.createElement(PetSelect, {
-      pets: library.pets,
-      value: selected,
-      disabled: view.disabled,
-      onPick(value) {
-        if (fields.desktop === 'desktopPetDeepseek') view.write({ desktopPetDeepseek: value })
-        else view.write({ desktopPetClaude: value })
-      },
-    }),
-    React.createElement(
-      'p',
-      { className: 'dsh-deepcraft-settings-pet-status', role: 'status' },
-      statusLine(status, enabled),
-    ),
   )
 }
 
@@ -253,7 +174,7 @@ function pickFiles(input: HTMLInputElement): Promise<FileList | null> {
 /** Import a complete package from a ZIP, a folder or a Petdex page. */
 function ImportPetControl(view: SettingsRowView) {
   const library = usePetLibrary()
-  const fields = themeFields(view.prefs.brand)
+  const field = chatField(view.prefs.brand)
   const [busy, setBusy] = React.useState(false)
   const [message, setMessage] = React.useState<string | null>(null)
   const [url, setUrl] = React.useState('')
@@ -265,7 +186,7 @@ function ImportPetControl(view: SettingsRowView) {
     try {
       const pet = await work
       await decodePet(pet)
-      if (fields.chat === 'chatPetDeepseek') view.write({ chatPetDeepseek: pet.id })
+      if (field === 'chatPetDeepseek') view.write({ chatPetDeepseek: pet.id })
       else view.write({ chatPetClaude: pet.id })
       await loadPetLibrary(true)
       setMessage(copy('petImportDone', { name: pet.displayName }))
@@ -339,9 +260,8 @@ function ImportPetControl(view: SettingsRowView) {
   )
 }
 
-/** The three rows the mascot manifest places in the Appearance tab. */
+/** The two rows the mascot manifest places in the Appearance tab. */
 export const controls = {
   chatPet: ChatPetControl,
-  desktopPet: DesktopPetControl,
   petImport: ImportPetControl,
 }

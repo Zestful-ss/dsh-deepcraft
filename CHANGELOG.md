@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">移除</h3>
+
+- 移除桌面宠物，以及随宿主启动的第三方播放器；聊天框宠物与宠物包导入流程保持不变。
+
+<h3 id="en-unreleased">Removals</h3>
+
+- Remove the desktop pet and the third-party player it started with the host, keeping the chat pet and the pet package import flow unchanged.
+
 ## [0.18.1] - 2026-10-21
 
 [中文](#cn-0.18.1) | [English](#en-0.18.1)

@@ -7,15 +7,11 @@
  */
 import { zipSync } from 'fflate'
 import type {
-  DesktopPetSelection,
-  DesktopPetStatus,
   PetDescriptor,
   PetLibraryError,
 } from '@dsh-deepcraft/contracts/pets'
 import { PET_MANIFEST_FILE } from '@dsh-deepcraft/contracts/pets'
 import {
-  PETS_DESKTOP_ROUTE,
-  PETS_DESKTOP_SYNC_ROUTE,
   PETS_ENSURE_ROUTE,
   PETS_IMPORT_ROUTE,
   PETS_IMPORT_URL_ROUTE,
@@ -166,47 +162,4 @@ export async function decodePet(pet: PetDescriptor) {
   const image = new Image()
   image.src = pet.imageUrl
   await image.decode()
-}
-
-/** The native player's state. */
-export async function readDesktopStatus(): Promise<DesktopPetStatus> {
-  const response = await fetch(PETS_DESKTOP_ROUTE, { headers: { accept: 'application/json' } })
-  if (!response.ok) throw await refusal(response)
-  const body = await response.json() as { status: DesktopPetStatus }
-  return body.status
-}
-
-/** The last selection the host was told about, and when it was told. */
-let syncedSelection = ''
-let syncFailedAt = 0
-let syncing: Promise<DesktopPetStatus> | null = null
-
-/**
- * Tell the host half which pet the desktop player should show now. The same
- * selection is sent once; a failed send is retried after a pause rather than
- * on every pass. This is runtime state only — preferences are saved by the
- * official form.
- */
-export function syncDesktop(selection: DesktopPetSelection): Promise<DesktopPetStatus> | null {
-  const key = `${selection.enabled ? 'on' : 'off'}:${selection.petId}`
-  if (key === syncedSelection) return null
-  if (syncFailedAt !== 0 && Date.now() - syncFailedAt < 5000) return null
-  if (syncing !== null) return syncing
-  syncing = fetch(PETS_DESKTOP_SYNC_ROUTE, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(selection),
-  }).then(async (response) => {
-    if (!response.ok) throw await refusal(response)
-    const body = await response.json() as { status: DesktopPetStatus }
-    syncedSelection = key
-    syncFailedAt = 0
-    return body.status
-  }).catch((error: unknown) => {
-    syncFailedAt = Date.now()
-    throw error
-  }).finally(() => {
-    syncing = null
-  })
-  return syncing
 }

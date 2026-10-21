@@ -544,9 +544,9 @@ body[data-dsh-deepcraft] .dsh-deepcraft-quick-popover {
 }
 
 /* ── Pets (D78) ──────────────────────────────────────────────────────────────
-   The chat pet's package picker and its action preview, the desktop player's
-   switch and status, and the importer's three ways in. The preview shows the
-   atlas cell itself, at the same cell geometry the composer uses. */
+   The chat pet's package picker and its action preview, and the importer's
+   three ways in. The preview shows the atlas cell itself, at the same cell
+   geometry the composer uses. */
 
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-control {
   display: flex;
@@ -575,15 +575,6 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-select:disabled,
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-url:disabled {
   opacity: .5;
   cursor: not-allowed;
-}
-
-body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-toggle {
-  flex: none;
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  accent-color: var(--dsw-alias-label-primary);
-  cursor: pointer;
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-buttons {

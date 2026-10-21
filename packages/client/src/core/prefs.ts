@@ -186,15 +186,9 @@ export function resolveMascot(current: Prefs) {
   return MASCOT_PETDEX
 }
 
-/**
- * The package the current theme uses in one place. Both places read the same
- * brand rule here, so the chat pet and the desktop pet never disagree about
- * which theme is in front.
- */
-export function resolveThemePet(current: Prefs, place: 'chat' | 'desktop') {
-  const deepseek = current.brand === BRAND_DEEPSEEK
-  if (place === 'chat') return deepseek ? current.chatPetDeepseek : current.chatPetClaude
-  return deepseek ? current.desktopPetDeepseek : current.desktopPetClaude
+/** The package the current theme uses in the chat position (D78). */
+export function resolveThemePet(current: Prefs) {
+  return current.brand === BRAND_DEEPSEEK ? current.chatPetDeepseek : current.chatPetClaude
 }
 
 /**

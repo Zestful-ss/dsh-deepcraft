@@ -225,13 +225,9 @@ export const PREFS = {
   /** The mascot on the composer; the resolved one rides the document. */
   mascot: { type: 'choice', values: MASCOTS, default: MASCOT_BRAND },
   mascotScope: { type: 'choice', values: MASCOT_SCOPES, default: MASCOT_SCOPE_ALL },
-  /** Each theme's chat pet and desktop pet, by package directory id; one choice per place. */
+  /** Each theme's chat pet, by package directory id. */
   chatPetClaude: { type: 'text', default: 'crab-buddy', max: PET_ID_MAX },
   chatPetDeepseek: { type: 'text', default: 'whaledou', max: PET_ID_MAX },
-  desktopPetClaude: { type: 'text', default: 'claude-opus-scholar', max: PET_ID_MAX },
-  desktopPetDeepseek: { type: 'text', default: 'deepseek', max: PET_ID_MAX },
-  /** The native desktop player is off until the reader asks for it; the chat pet is independent. */
-  desktopPetEnabled: { type: 'boolean', default: false },
   permissionsControl: { type: 'boolean', default: true },
   statsPosition: { type: 'choice', values: STATS_POSITIONS, default: STATS_POSITION_CONTEXT },
   workspaceView: { type: 'boolean', default: true },
@@ -277,7 +273,6 @@ export const LIVE_PREFS = [
   'peakrate',
   'caretMotion',
   'mascot',
-  'desktopPetEnabled',
   'modelPicker',
   'collapseFooter',
   'composerScope',

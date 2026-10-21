@@ -1,16 +1,13 @@
 /**
- * The pets routes (D78): the library the official desktop player can see, the
- * three ways a complete package arrives, and the desktop player's status.
+ * The pets routes (D78): the library the chat pet reads and the three ways a
+ * complete package arrives.
  *
  * Every route runs the same request fence as the rest of the plugin's private
  * routes, answers with the refusal's own status and never with a filesystem
  * path. An import either installs a complete package or changes nothing.
  */
 import { PET_ARCHIVE_MAX_BYTES, isPetId } from '@dsh-deepcraft/contracts/pets'
-import type { DesktopPetSelection } from '@dsh-deepcraft/contracts/pets'
 import {
-  PETS_DESKTOP_PATH,
-  PETS_DESKTOP_SYNC_PATH,
   PETS_ENSURE_PATH,
   PETS_IMAGE_PATH,
   PETS_IMPORT_PATH,
@@ -19,7 +16,6 @@ import {
 } from '@dsh-deepcraft/contracts/routes'
 import type { DshContext, DshRequest, DshResponse, DshRoute } from '@dsh-deepcraft/engine/node/dsh'
 import { fenceRefused, methodRefused, readRequestBody, sendJson } from '@dsh-deepcraft/engine/node/http'
-import { desktopPetStatus, syncDesktopPets } from './desktop.js'
 import { PetRefusal } from './errors.js'
 import { ensurePreset, importFromPetdex, importZip, listPets, readPetImage } from './library.js'
 
@@ -159,33 +155,6 @@ export function petRoutes(ctx: DshContext): { label: string, route: DshRoute }[]
           res.end(req.method === 'HEAD' ? undefined : Buffer.from(bytes))
         }, (error: unknown) => {
           sendFailure(res, error, 'the image could not be read')
-        })
-      },
-    },
-  }, {
-    label: 'desktop pet status',
-    route: {
-      kind: 'exact',
-      path: PETS_DESKTOP_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
-        if (guarded(ctx, req, res, ['GET', 'HEAD'])) return
-        sendJson(res, 200, { ok: true, status: desktopPetStatus() })
-      },
-    },
-  }, {
-    label: 'desktop pet sync',
-    route: {
-      kind: 'exact',
-      path: PETS_DESKTOP_SYNC_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
-        if (guarded(ctx, req, res, ['POST'])) return
-        void jsonBody(req).then((body) => {
-          if (typeof body.enabled !== 'boolean') throw new PetRefusal('the request carries no enabled flag', 400)
-          if (typeof body.petId !== 'string' || !isPetId(body.petId)) throw new PetRefusal('the request names no pet id', 400)
-          const selection: DesktopPetSelection = { enabled: body.enabled, petId: body.petId }
-          sendJson(res, 200, { ok: true, status: syncDesktopPets(ctx, selection) })
-        }, (error: unknown) => {
-          sendFailure(res, error, 'the request could not be read')
         })
       },
     },
