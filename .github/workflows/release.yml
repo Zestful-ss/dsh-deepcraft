@@ -83,9 +83,10 @@ jobs:
       - run: npm run smoke
       # The assembled host on the newest published version, walked over the scenario
       # table's own default walk: what a pull request runs is what the promotion
-      # waits on (D66).
+      # waits on (D66). One scenario at a time, as the shards already run it: the
+      # lane's frame readings are what a second page on the same runner disturbs.
       - run: npm install --global pnpm@11 @deepseek-ai/dsh@$(node packages/testing/host-version.cjs)
-      - run: node packages/testing/e2e.cjs
+      - run: node packages/testing/e2e.cjs --jobs 1
       - uses: actions/upload-artifact@v7
         if: always()
         with:
