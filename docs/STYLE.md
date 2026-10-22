@@ -29,13 +29,16 @@ Rules:
 blue. The single accent is a low-saturation periwinkle `#5368C9` for fills,
 with the lighter `#5F73D9` reserved for the selected plate and the ripple's
 front, a deeper step for text links on the light canvas and a lighter one on
-the dark; the sidebar's wordmark takes the label colour as its ink. The
-neutrals are a warm-free grey ladder: a near-white canvas `#FCFCFB` under a
-light-grey sidebar in light, and a charcoal canvas `#202427` under a blue-black
-sidebar in dark. User bubbles take the accent's own light tint, and inline code
-keeps the body ink as the host draws it. The skin's Claude marks (the account
-row's picture without an avatar) become the same pixel whale the mascot draws
-(`brand/deepcraft-mark.svg`); the violet top rung of the reasoning slider stays.
+the dark. The neutrals are a warm-free grey ladder: a near-white canvas
+`#FCFCFB` under a light-grey sidebar in light, and a charcoal canvas `#202427`
+under a blue-black sidebar in dark. User bubbles take the accent's own light
+tint, and inline code keeps the body ink as the host draws it. The brand area
+paints the host's own whale and its wordmark as masks in the label ink, the
+wordmark without the HARNESS chip its artwork carries
+(`brand/deepseek-mark.svg`, `brand/deepseek-word.svg`), and the
+new-conversation hero takes the same whale in the accent; the account row's
+picture, with no avatar behind it, stays the pixel whale the mascot draws
+(`brand/deepcraft-mark.svg`). The violet top rung of the reasoning slider stays.
 
 **Links and the data palette.** Prose links keep an auxiliary hue of their own
 rather than the accent: the Claude brand's a warm-compatible slate, the DeepSeek

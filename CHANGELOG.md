@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">体验优化</h3>
+
+- 改善 DeepSeek 品牌标识的清晰度：侧栏与首页改用矢量鲸鱼与不带徽标的字标，分别按墨色与强调色绘制。
+
+<h3 id="en-unreleased">Improvements</h3>
+
+- Improve the DeepSeek brand marks: the sidebar and the home page draw the vector whale and the wordmark without its chip, in the label ink and the accent.
+
 ## [0.19.0] - 2026-10-21
 
 [中文](#cn-0.19.0) | [English](#en-0.19.0)

@@ -70,6 +70,9 @@ The vendor lockups the model picker draws (`packages/assets/src/icons/combine/`,
 
 Source: <https://github.com/lobehub/lobe-icons>
 
+The DeepSeek whale and wordmark in `packages/assets/src/brand/` are the host product's own
+marks, carried here so the skin can paint its brand area; they remain DeepSeek's trademarks.
+
 ```
 MIT License
 

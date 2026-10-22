@@ -8,6 +8,8 @@
 body[data-dsh-deepcraft] {
   --dsh-deepcraft-mask-claude-mark: var(--dsh-deepcraft-image-claude-mark) center / contain no-repeat;
   --dsh-deepcraft-mask-claude-word: var(--dsh-deepcraft-image-claude-word) center / contain no-repeat;
+  --dsh-deepcraft-mask-deepseek-mark: var(--dsh-deepcraft-image-deepseek-mark) center / contain no-repeat;
+  --dsh-deepcraft-mask-deepseek-word: var(--dsh-deepcraft-image-deepseek-word) center / contain no-repeat;
 }
 body[data-dsh-deepcraft] .dsh-deepcraft-masked-mark {
   -webkit-mask: var(--dsh-deepcraft-mask-claude-mark);

@@ -47,20 +47,39 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] [data-dsh-deepcraft-
   mask: var(--dsh-deepcraft-mask-claude-word);
 }
 
-/* DeepSeek: the same pixel whale the mascot draws, in its own blues, in the box
-   the Claude mark takes. The host's own fish gives way; the wordmark the host
-   sets as text keeps the label ink. */
+/* DeepSeek: the host's own whale and wordmark, drawn as alpha masks over the
+   brand ink so both stay crisp at 18px. The host's name artwork carries the
+   HARNESS chip; the skin's wordmark is the same letters without it, at the cap
+   height the Claude wordmark takes. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] :is([data-dsh-deepcraft-part~="brand-mark"], [data-dsh-deepcraft-part~="rail-mark"])::before {
   content: "";
   display: block;
   flex: none;
-  width: 18px;
+  width: 22px;
   height: 18px;
-  background: var(--dsh-deepcraft-image-deepcraft-mark) center / 16px 16px no-repeat;
+  background-color: currentColor;
+  -webkit-mask: var(--dsh-deepcraft-mask-deepseek-mark);
+  mask: var(--dsh-deepcraft-mask-deepseek-mark);
 }
 
 body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] [data-dsh-deepcraft-part~="brand-identity"] {
   color: var(--dsh-deepcraft-logo-ink);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] [data-dsh-deepcraft-part~="brand-identity"] > [data-dsh-deepcraft-part~="brand-name"] svg {
+  display: none;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] [data-dsh-deepcraft-part~="brand-identity"] > [data-dsh-deepcraft-part~="brand-name"]::before {
+  content: "";
+  display: block;
+  flex: none;
+  width: calc(18px * 103 / 24);
+  max-width: 100%;
+  height: 18px;
+  background-color: currentColor;
+  -webkit-mask: var(--dsh-deepcraft-mask-deepseek-word);
+  mask: var(--dsh-deepcraft-mask-deepseek-word);
 }
 
 /* ---------- Claude Code layout: new session button ---------- */

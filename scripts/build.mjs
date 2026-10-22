@@ -250,6 +250,9 @@ const BRAND_MARKS = [
   // The host's own whale mark (ui-primitives FishLogo, FISH_LOGO_PATH), in
   // DeepSeek's brand blue: a picture where it is painted, a shape where it masks.
   'deepseek-mark.svg',
+  // The same wordmark the host's brand slot sets, without the HARNESS chip its
+  // artwork carries, so the skin can paint the letters in the brand ink.
+  'deepseek-word.svg',
   // GitHub's own mark, for the settings page's link to the repository.
   'github-mark.svg',
 ]

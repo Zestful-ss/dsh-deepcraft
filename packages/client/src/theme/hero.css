@@ -23,11 +23,13 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] [data-dsh-deepcraft-
   background-image: var(--dsh-deepcraft-image-claude-mark-clay);
 }
 
-/* The DeepSeek brand takes the same pixel whale the mascot draws, at its own
-   colours: the host's fish gives way and the mark sits in the box the Claude
-   mark takes. */
+/* The DeepSeek brand takes the host's own whale as a mask over the accent, so
+   the mark stays crisp at the 21px the home line leaves it and at the larger
+   box the conversation hero gives it. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] [data-dsh-deepcraft-part~="hero-mark"]::before {
-  background: var(--dsh-deepcraft-image-deepcraft-mark) center / 32px 32px no-repeat;
+  background-color: var(--dsw-alias-brand-primary);
+  -webkit-mask: var(--dsh-deepcraft-mask-deepseek-mark);
+  mask: var(--dsh-deepcraft-mask-deepseek-mark);
 }
 
 /* The preview badge has no Claude Code counterpart. */
