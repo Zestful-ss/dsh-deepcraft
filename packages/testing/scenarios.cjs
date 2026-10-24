@@ -225,9 +225,14 @@ const SCENARIOS = {
       const inside = (inner, outer) => inner === null || outer === null || (inner.left >= outer.left && inner.right <= outer.right)
       const fits = (state) => inside(state.perm, state.card) && inside(state.model, state.card) && inside(state.meter, state.card) &&
         inside(state.effort, state.card) && (state.effort === null || state.meter.left >= state.effort.right)
+      // The row is measured with the faces the reader sees: a cold runner's CJK
+      // face can land after the resize, and a read against the fallback's wider
+      // metrics pins the capped perm control for that one instant.
+      await page.evaluate(() => document.fonts.ready.then(() => undefined))
       const narrow = await read()
       await page.setViewportSize({ width: 330, height: 844 })
       await new Promise(resolve => setTimeout(resolve, 500))
+      await page.evaluate(() => document.fonts.ready.then(() => undefined))
       const tight = await read()
       await page.setViewportSize({ width: 390, height: 844 })
       return [
