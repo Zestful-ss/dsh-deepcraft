@@ -240,8 +240,8 @@
       "prop": "display",
       "verdict": "unmatched"
     },
-    "body[data-dsh-deepcraft] .dsh-deepcraft-view-switch>*{appearance:none;border:none!;background:transparent;color:var(--dsw-alias-label-tertiary, #8f8d84);font-family:var(--dsw-font-family);font-size:12px;font-weight:500;line-height:18px;border-radius:5px;cursor:pointer;user-select:none;-webkit-user-select:none;transition:color var(--dsh-deepcraft-timing-feedback)}|border": {
-      "selector": "body[data-dsh-deepcraft] .dsh-deepcraft-view-switch>*",
+    "body[data-dsh-deepcraft] .dsh-deepcraft-view-switch button{appearance:none;border:none!;background:transparent;color:var(--dsw-alias-label-tertiary, #8f8d84);font-family:var(--dsw-font-family);font-size:12px;font-weight:500;line-height:18px;border-radius:5px;cursor:pointer;user-select:none;-webkit-user-select:none;transition:color var(--dsh-deepcraft-timing-feedback)}|border": {
+      "selector": "body[data-dsh-deepcraft] .dsh-deepcraft-view-switch button",
       "prop": "border",
       "verdict": "needed",
       "state": "hero",

@@ -7,5 +7,5 @@
  */
 export const SEGMENTS_CLASS = 'dsh-deepcraft-segments'
 export const SEGMENT_CLASS = 'dsh-deepcraft-segment'
-/** The small variant's shell; its items are styled straight off it (`> *`), so host-built tabs need no class of their own. */
+/** The small variant's shell; its items are styled as the buttons inside it, so host-built tabs need no class of their own and survive a host wrapper. */
 export const VIEW_SWITCH_CLASS = 'dsh-deepcraft-view-switch'

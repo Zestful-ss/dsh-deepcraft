@@ -39,12 +39,12 @@ body[data-dsh-deepcraft] [data-dsh-view-tabs] {
 body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="center-column"]:hover [data-dsh-view-tabs] {
   opacity: 1;
 }
-body[data-dsh-deepcraft] [data-dsh-view-tabs] > [data-dsh-deepcraft-part~="view-tab"] {
+body[data-dsh-deepcraft] [data-dsh-view-tabs] [data-dsh-deepcraft-part~="view-tab"] {
   height: 22px;
   padding: 0 10px;
 }
 /* The shipped active-tab underline has no place in a pill. */
-body[data-dsh-deepcraft] [data-dsh-view-tabs] > [data-dsh-deepcraft-part~="view-tab"]::after {
+body[data-dsh-deepcraft] [data-dsh-view-tabs] [data-dsh-deepcraft-part~="view-tab"]::after {
   display: none;
 }
 

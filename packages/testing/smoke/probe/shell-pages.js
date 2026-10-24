@@ -140,21 +140,24 @@
     await probe.onlyFor(['view-tabs'], async function () {
       // The conversation view tabs (ConversationSession's strip): the pill is
       // drawn under the active tab without sliding in, then slides to the tab a
-      // switch selects. The strip stays until the teardown, which must take the
-      // pill back off it.
+      // switch selects. The host wraps the buttons in its own tablist inside the
+      // strip (0.2.1-rc.3), so the strip and the buttons are not direct
+      // siblings. The strip stays until the teardown, which must take the pill
+      // back off it.
       var viewHeader = document.createElement('div')
       viewHeader.className = '_header_c_1'
       // The host's own header anchor: the skin reads the tab strip's parts
       // inside it (D3).
       viewHeader.setAttribute('data-slot', 'conversation.header')
-      viewHeader.innerHTML = '<div class="_tabs_c_1" role="tablist" data-conversation-tabs="">' +
+      viewHeader.innerHTML = '<div class="_tabs_c_1">' +
+        '<div class="_viewTabs_c_1" role="tablist" data-conversation-tabs="">' +
         '<button type="button" role="tab" aria-selected="true" class="_tab_c_1 _tabActive_c_1">Chat</button>' +
         '<button type="button" role="tab" aria-selected="false" class="_tab_c_1">Trajectory</button>' +
-        '<button type="button" role="tab" aria-selected="false" class="_tab_c_1">Context</button></div>'
+        '<button type="button" role="tab" aria-selected="false" class="_tab_c_1">Context</button></div></div>'
       document.body.appendChild(viewHeader)
       await sleep(150)
       probe.viewStrip = viewHeader.firstChild
-      var viewTabs = probe.viewStrip.children
+      var viewTabs = probe.viewStrip.querySelectorAll('[role="tab"]')
       r.viewPill = { stamped: probe.viewStrip.hasAttribute('data-dsh-view-tabs'), first: pillState(probe.viewStrip, viewTabs[0]) }
       viewTabs[0].setAttribute('aria-selected', 'false')
       viewTabs[0].className = '_tab_c_1'
