@@ -1,8 +1,0 @@
-{
-  "at": "2026-10-25",
-  "group": "fixes",
-  "order": 0,
-  "external": false,
-  "zh": "适配宿主 0.2.1-rc.3 的会话标签条结构，视图切换恢复分段控件外观，不再露出宿主自带的下划线与边框。",
-  "en": "Adapt to the host 0.2.1-rc.3 conversation tab strip: the view switch wears the segmented control again, without the host's own underline and border."
-}
