@@ -1,8 +1,0 @@
-{
-  "at": "2026-10-26",
-  "group": "fixes",
-  "order": 0,
-  "external": false,
-  "zh": "修复会话标签条把第二个视图挤进「更多」菜单的问题：标签行保留宿主的整行宽度，分段控件改画在宿主的标签列表上。",
-  "en": "Fix the conversation view strip pushing the second view into the more menu: the row keeps the host's full width, and the segmented shell is drawn on the host's own tablist."
-}
