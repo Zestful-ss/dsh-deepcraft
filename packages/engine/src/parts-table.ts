@@ -105,6 +105,9 @@ export const HEADER_PARTS: PartTable = {
   headerUtilities: 'header-utilities',
   headerCorner: 'header-corner',
   tabs: 'view-tabs',
+  // The tablist the host wraps the buttons in (0.2.1-rc.3): the strip's shell
+  // hugs this list, while the row above it keeps the host's full width.
+  viewTabs: 'view-tabs-list',
   tab: 'view-tab',
   tabActive: 'view-tab-active',
   label: 'header-label',

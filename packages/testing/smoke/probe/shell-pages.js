@@ -156,7 +156,10 @@
         '<button type="button" role="tab" aria-selected="false" class="_tab_c_1">Context</button></div></div>'
       document.body.appendChild(viewHeader)
       await sleep(150)
-      probe.viewStrip = viewHeader.firstChild
+      // The shell the skin draws is the host's tablist inside the row, so the
+      // stamp and the pill live there while the row keeps the host's width.
+      var stripRow = viewHeader.firstChild
+      probe.viewStrip = stripRow.querySelector('[role="tablist"]') || stripRow
       var viewTabs = probe.viewStrip.querySelectorAll('[role="tab"]')
       r.viewPill = { stamped: probe.viewStrip.hasAttribute('data-dsh-view-tabs'), first: pillState(probe.viewStrip, viewTabs[0]) }
       viewTabs[0].setAttribute('aria-selected', 'false')

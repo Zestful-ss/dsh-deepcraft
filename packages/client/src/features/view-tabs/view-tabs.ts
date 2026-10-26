@@ -47,6 +47,8 @@ import type manifest from './view-tabs.manifest'
  */
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   const STRIP = '[data-dsh-deepcraft-part~="view-tabs"]'
+  /** The tablist the host wraps the buttons in; the shell that hugs the tabs. */
+  const LIST = '[data-dsh-deepcraft-part~="view-tabs-list"]'
   const HEADER = `[data-dsh-deepcraft-part~="conversation-header"]:has(${STRIP})`
   /**
    * The title's TEXT, not its row or cluster: the title row is a flex row and
@@ -147,8 +149,12 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   function findStrip() {
     const header = firstHeader()
     if (header === null) return null
-    const strip = header.querySelector<HTMLElement>(STRIP)
-    return strip === null ? null : { header, strip }
+    const row = header.querySelector<HTMLElement>(STRIP)
+    if (row === null) return null
+    // The host keeps its own tablist inside the row (0.2.1-rc.3) and counts the
+    // tabs that fit from the row's width: the shell the skin draws is that list,
+    // so the row keeps the width the host's count is read from.
+    return { header, strip: row.querySelector<HTMLElement>(LIST) ?? row }
   }
 
   /**

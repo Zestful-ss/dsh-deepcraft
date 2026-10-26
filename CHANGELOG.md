@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修复会话标签条把第二个视图挤进「更多」菜单的问题：标签行保留宿主的整行宽度，分段控件改画在宿主的标签列表上。
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Fix the conversation view strip pushing the second view into the more menu: the row keeps the host's full width, and the segmented shell is drawn on the host's own tablist.
+
 ## [0.19.2] - 2026-10-25
 
 [中文](#cn-0.19.2) | [English](#en-0.19.2)

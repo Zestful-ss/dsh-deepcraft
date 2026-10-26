@@ -9,19 +9,23 @@
    re-match the whole document. This sheet keeps the strip's placement and
    reveal; the control's look is the shared sheet's. */
 body[data-dsh-deepcraft] [data-dsh-view-tabs] {
-  /* Hug the tabs. The host's strip is a full-width flex row, so without this the
-     pill shell stretches across the whole header: the "groove" reads as one long
+  /* Hug the tabs. Since 0.2.1-rc.3 the host's row is a full-width flex row that
+     counts the tabs it can show from its own width, so the shell is the host's
+     tablist inside it and the row keeps that width. Without hugging, the pill
+     shell stretches across the whole header: the "groove" reads as one long
      empty bar and clicks to the right of the last tab land on nothing — which is
      what made switching feel unresponsive. */
   width: fit-content;
   max-width: 100%;
   align-self: flex-start;
-  /* Horizontally centred in the header (the strip already spans grid-column 1/-1,
-     so justify-self alone does it). The vertical shift is MEASURED, not fixed: the
-     title's row also carries the header actions, so whether the strip can rise onto
-     it depends on the window — packages/client/src/features/view-tabs/view-tabs.ts writes
+  /* Centred in the host's row: auto margins take the free space on a flex item,
+     while a grid item (a row the host has not wrapped a list in) centres through
+     justify-self. The vertical shift is MEASURED, not fixed: the title's row also
+     carries the header actions, so whether the strip can rise onto it depends on
+     the window — packages/client/src/features/view-tabs/view-tabs.ts writes
      --dsh-view-tabs-shift when the room is there, and this fallback (its own row,
      10px up from y=50) holds the rest of the time. */
+  margin-inline: auto;
   justify-self: center;
   transform: translateY(var(--dsh-view-tabs-shift, -10px));
   /* The sliding pill (shared/sliding-pill.css) is absolutely placed against the strip. */
