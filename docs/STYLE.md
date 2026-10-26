@@ -942,7 +942,7 @@ plays its reaction.
 
 ## Implementation notes
 
-- Every rule is scoped under `body[data-dsh-claude-style]`.
+- Every rule is scoped under `body[data-dsh-deepcraft]`.
 - Dark tokens are the base; light overrides use `:not([data-ds-dark-theme])`.
 - A surface's stylesheet sits beside its feature under `packages/client/src/features/<feature>/`;
   the look no single feature owns is in `packages/client/src/theme/`, and the parts several
