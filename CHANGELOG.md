@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">体验优化</h3>
+
+- 加深 DeepSeek 主题的选中与悬停表面：会话选中行、悬停面、分段控件底板、用户气泡与实心悬停块都带一层品牌蓝，强调色本身保持不变。
+
+<h3 id="en-unreleased">Improvements</h3>
+
+- Deepen the DeepSeek theme's selected and hover surfaces: the conversation's selected row, hover plates, segmented-control beds, user bubbles and the solid hover chip carry the brand blue, with the accent colour itself unchanged.
+
 ## [0.19.3] - 2026-10-26
 
 [中文](#cn-0.19.3) | [English](#en-0.19.3)

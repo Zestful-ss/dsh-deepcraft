@@ -32,7 +32,10 @@ front, a deeper step for text links on the light canvas and a lighter one on
 the dark. The neutrals are a warm-free grey ladder: a near-white canvas
 `#FCFCFB` under a light-grey sidebar in light, and a charcoal canvas `#202427`
 under a blue-black sidebar in dark. User bubbles take the accent's own light
-tint, and inline code keeps the body ink as the host draws it. The brand area
+tint, and inline code keeps the body ink as the host draws it. Selected rows,
+hover plates, the segmented controls' beds and the solid hover chip carry the
+accent at low alpha — a blue wash rather than another grey step — so selection
+reads as the theme's own. The brand area
 paints the host's own whale and its wordmark as masks in the label ink, the
 wordmark without the HARNESS chip its artwork carries
 (`brand/deepseek-mark.svg`, `brand/deepseek-word.svg`), and the
@@ -80,8 +83,8 @@ keeps where it states none of its own; `—` is a token that theme leaves unset.
 | `--dsw-alias-button-floating-hover` | `#ffffff` | `#ededea` | `#2e2c29` | `#343b45` | host's own |  |
 | `--dsw-alias-button-info-fill` | `#d97757` | `#5368c9` | `#d97757` | `#5368c9` | host's own |  |
 | `--dsw-alias-button-info-hover` | `#c6613f` | `#3e5bd6` | `#e08a6d` | `#596dce` | host's own |  |
-| `--dsw-alias-interactive-bg-active` | `rgba(217, 119, 87, 0.30)` | `rgba(95, 115, 217, 0.15)` | `rgba(217, 119, 87, 0.30)` | `rgba(95, 115, 217, 0.28)` | host's own |  |
-| `--dsh-deepcraft-hover-bg` | `rgba(0, 0, 0, 0.08)` | `rgba(32, 33, 36, 0.06)` | `rgba(255, 255, 255, 0.08)` | `rgba(238, 240, 243, 0.08)` | `var(--dsw-alias-interactive-bg-hover)` | hover wash |
+| `--dsw-alias-interactive-bg-active` | `rgba(217, 119, 87, 0.30)` | `rgba(83, 104, 201, 0.26)` | `rgba(217, 119, 87, 0.30)` | `rgba(142, 162, 242, 0.32)` | host's own |  |
+| `--dsh-deepcraft-hover-bg` | `rgba(0, 0, 0, 0.08)` | `rgba(83, 104, 201, 0.14)` | `rgba(255, 255, 255, 0.08)` | `rgba(142, 162, 242, 0.16)` | `var(--dsw-alias-interactive-bg-hover)` | hover wash |
 | `--dsh-deepcraft-inline-code-bg` | `rgba(0, 0, 0, 0.05)` | `rgba(32, 33, 36, 0.045)` | `rgba(255, 255, 255, 0.05)` | `rgba(238, 240, 243, 0.06)` | `var(--dsw-alias-markdown-inline-code)` | inline code fill |
 | `--dsh-deepcraft-inline-code-fg` | `#943333` | `var(--dsw-alias-label-primary)` | `#e8a08a` | `var(--dsw-alias-label-primary)` | `var(--dsw-alias-label-primary)` | inline code ink |
 | `--dsh-deepcraft-link` | `#3d5f86` | `#3e5bd6` | `#a9c2df` | `#8ea2f2` | `var(--dsw-alias-link)` | markdown links |
@@ -89,7 +92,7 @@ keeps where it states none of its own; `—` is a token that theme leaves unset.
 | `--dsw-alias-markdown-code-block` | `#ffffff` | `#f7f7f5` | `#1c1b1a` | `#252a30` | host's own |  |
 | `--dsw-alias-markdown-code-block-banner` | `#ffffff` | `#f2f2ef` | `#242320` | `#2b3038` | host's own |  |
 | `--dsw-alias-interactive-bg-hover` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | host's own |  |
-| `--dsw-alias-interactive-bg-hover-solid` | `#f0efe9` | `#ededea` | `#2e2c29` | `#343b45` | host's own | the host's solid hover chip |
+| `--dsw-alias-interactive-bg-hover-solid` | `#f0efe9` | `#e4e8f8` | `#2e2c29` | `#38415a` | host's own | the host's solid hover chip |
 | `--dsw-alias-label-primary` | `#141413` | `#202124` | `#faf9f5` | `#eef0f3` | host's own |  |
 | `--dsw-alias-label-primary-bluish` | `#141413` | `#202124` | `#faf9f5` | `#eef0f3` | host's own |  |
 | `--dsw-alias-label-secondary` | `#6e6a60` | `#61646b` | `#b0aea5` | `#adb2bb` | host's own |  |
@@ -98,11 +101,11 @@ keeps where it states none of its own; `—` is a token that theme leaves unset.
 | `--dsw-alias-label-shimmer` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #202124 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | `color-mix(in srgb, #eef0f3 45%, transparent)` | host's own | the highlight band's tint over running words: the host's own rows and the skin's band (shared/sweep-band.ts) alike |
 | `--dsw-alias-label-deep-diving-shimmer` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #202124 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | `color-mix(in srgb, #eef0f3 45%, transparent)` | host's own | the band's tint inside the running row, which the host points --dsw-alias-label-shimmer at; under Claude it is the same warm band as everywhere else |
 | `--dsw-alias-state-business-primary` | `#d97757` | `#5368c9` | `#d97757` | `#8ea2f2` | host's own |  |
-| `--dsw-alias-state-business-tertiary` | `#e9dfd2` | `#ebedfa` | `#3a2a22` | `#303a59` | host's own |  |
+| `--dsw-alias-state-business-tertiary` | `#e9dfd2` | `#e2e7fc` | `#3a2a22` | `#313f6b` | host's own |  |
 | `--dsw-alias-link` | `#c6613f` | `#3e5bd6` | `#e08a6d` | `#8ea2f2` | host's own | text link at rest |
 | `--dsw-shadow-lv2` | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | host's own |  |
 | `--dsw-specific-input-major` | `#ffffff` | `#f7f7f5` | `#0f0e0d` | `#252a30` | host's own |  |
-| `--dsw-specific-selector` | `#fbfbf9` | `#f2f2ef` | `#2e2c29` | `#343b45` | host's own |  |
+| `--dsw-specific-selector` | `#fbfbf9` | `#eef0fa` | `#2e2c29` | `#333a4a` | host's own |  |
 | `--dsw-specific-sidebar-fill` | `#fbfbf9` | `#f2f2ef` | `#141413` | `#1d2124` | host's own |  |
 | `--dsw-alias-brand-primary-new-colorprimary-new-color` | `#d97757` | `#5368c9` | `#d97757` | `#5368c9` | host's own |  |
 | `--dsh-deepcraft-canvas` | `#fcfcfb` | `#fcfcfb` | `#141413` | `#202427` | `var(--dsw-alias-bg-base)` | the page canvas, the search box |
@@ -129,8 +132,8 @@ keeps where it states none of its own; `—` is a token that theme leaves unset.
 | `--dsh-deepcraft-data-7` | `#b9b5ac` | `#b9bdc5` | `#a8a49b` | `#8b9099` | `color-mix(in oklab, var(--dsw-alias-label-secondary) 55%, var(--dsw-alias-bg-base))` | the models chart's last rank: every model past the list |
 | `--dsh-deepcraft-logo-ink` | `#141413` | `#202124` | `#faf9f5` | `#eef0f3` | `var(--dsw-alias-label-primary)` | sidebar brand art: the whale and the wordmark |
 | `--dsw-specific-menu` | `#ffffff` | `#fcfcfb` | — | `#2b3038` | host's own |  |
-| `--dsw-specific-bubble` | `#f0f0ef` | `#ebedfa` | `rgba(255, 255, 255, 0.06)` | `#303a46` | host's own | user message bubble |
-| `--dsh-deepcraft-chip` | `#f6f6f4` | `#f2f2ef` | — | `#343b45` | `var(--dsw-specific-selector)` | segmented control and switch at rest |
+| `--dsw-specific-bubble` | `#f0f0ef` | `#e3e8fc` | `rgba(255, 255, 255, 0.06)` | `#303c55` | host's own | user message bubble |
+| `--dsh-deepcraft-chip` | `#f6f6f4` | `#eef0fa` | — | `#333a4a` | `var(--dsw-specific-selector)` | segmented control and switch at rest |
 | `--dsh-deepcraft-meter-peak` | `#a4621d` | `#9a5a1a` | `#e2a45f` | `#e5ae67` | `var(--dsw-alias-state-warn-label)` | the peak rate badge: the expensive end of a provider's own billing clock |
 | `--dsh-deepcraft-meter-valley` | `#3d7550` | `#2e7554` | `#8cbf96` | `#7cc2a0` | `var(--dsw-alias-state-success-primary)` | the off-peak rate badge, and the dated promotions priced below it |
 | `--dsw-alias-label-primary-foreground` | — | `#fcfcfb` | — | `#fcfcfb` | host's own | the ink on a filled primary button: light on the accent in both palettes |
