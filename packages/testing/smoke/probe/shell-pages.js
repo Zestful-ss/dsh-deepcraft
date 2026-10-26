@@ -153,7 +153,8 @@
         '<div class="_viewTabs_c_1" role="tablist" data-conversation-tabs="">' +
         '<button type="button" role="tab" aria-selected="true" class="_tab_c_1 _tabActive_c_1">Chat</button>' +
         '<button type="button" role="tab" aria-selected="false" class="_tab_c_1">Trajectory</button>' +
-        '<button type="button" role="tab" aria-selected="false" class="_tab_c_1">Context</button></div></div>'
+        '<button type="button" role="tab" aria-selected="false" class="_tab_c_1">Context</button>' +
+        '<button type="button" role="tab" aria-selected="false" class="_tab_c_1">Formation</button></div></div>'
       document.body.appendChild(viewHeader)
       await sleep(150)
       // The shell the skin draws is the host's tablist inside the row, so the
@@ -161,7 +162,16 @@
       var stripRow = viewHeader.firstChild
       probe.viewStrip = stripRow.querySelector('[role="tablist"]') || stripRow
       var viewTabs = probe.viewStrip.querySelectorAll('[role="tab"]')
-      r.viewPill = { stamped: probe.viewStrip.hasAttribute('data-dsh-view-tabs'), first: pillState(probe.viewStrip, viewTabs[0]) }
+      // The host shows `floor((row - 48) / 120)` tabs, at least one, and moves
+      // the rest into More; the row's own width is the input to that count.
+      r.viewPill = {
+        stamped: probe.viewStrip.hasAttribute('data-dsh-view-tabs'),
+        first: pillState(probe.viewStrip, viewTabs[0]),
+        row: stripRow.clientWidth,
+        host: stripRow.parentElement === null ? 0 : stripRow.parentElement.clientWidth,
+        tabs: viewTabs.length,
+        capacity: Math.max(1, Math.floor((stripRow.clientWidth - 48) / 120)),
+      }
       viewTabs[0].setAttribute('aria-selected', 'false')
       viewTabs[0].className = '_tab_c_1'
       viewTabs[2].setAttribute('aria-selected', 'true')

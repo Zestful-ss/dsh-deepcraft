@@ -119,6 +119,12 @@ module.exports = {
     const under = (s) => !!s && s.attr && s.content !== 'none' && Math.abs(s.x - s.itemX) < 0.5 &&
       Math.abs(s.w - s.itemW) < 0.5 && s.itemFill === 'rgba(0, 0, 0, 0)'
     check('the conversation header\'s tab strip is stamped for the stylesheet', pill.stamped === true, JSON.stringify(pill.stamped))
+    // The host decides which views sit in the row from the row's own width
+    // (0.2.1-rc.3): a strip that hugs its tabs narrows that input and pushes
+    // every view but the first into More.
+    check('the tab row keeps the host\'s width, so every view fits in the row the host counts from',
+      pill.tabs >= 4 && pill.row >= pill.host * 0.9 && pill.capacity >= pill.tabs,
+      JSON.stringify({ row: pill.row, host: pill.host, tabs: pill.tabs, capacity: pill.capacity }))
     check('the view tabs draw their pill under the active tab without sliding in',
       under(pill.first) && pill.first.slides.length === 0, JSON.stringify(pill.first))
     check('a view switch slides the pill to the newly active tab',

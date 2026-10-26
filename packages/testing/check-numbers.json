@@ -877,6 +877,10 @@
       "teardown takes the custom brand's values off <body>": [
         0
       ],
+      "the tab row keeps the host's width, so every view fits in the row the host counts from": [
+        0.9,
+        4
+      ],
       "the view tabs draw their pill under the active tab without sliding in": [
         0
       ],

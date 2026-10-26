@@ -239,6 +239,11 @@ and scrolls to its end.
   composer card's 18px (the host's 22px less 4), the inline composer's 14px and
   11px, the permission and workspace segments' 7px, the view tabs' 5px, the
   peak-rate and file pills' 999px.
+- A host control whose layout the host itself measures keeps that measurement's
+  input: the conversation's view tabs are counted from the tab row's own width
+  (120px a view), so the row keeps the width the host gives it and only the
+  tablist inside it hugs the tabs. A row narrowed to its content reads as one
+  view and pushes the rest into More.
 - Borders: 1px, and in dark not a colour but a highlight. The three border
   tokens are one translucent white at `.09` / `.18` / `.30`, so a card, a panel,
   a code block or a keycap reads as a chamfer catching the top light over

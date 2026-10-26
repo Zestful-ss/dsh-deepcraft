@@ -11,10 +11,11 @@
 body[data-dsh-deepcraft] [data-dsh-view-tabs] {
   /* Hug the tabs. Since 0.2.1-rc.3 the host's row is a full-width flex row that
      counts the tabs it can show from its own width, so the shell is the host's
-     tablist inside it and the row keeps that width. Without hugging, the pill
-     shell stretches across the whole header: the "groove" reads as one long
-     empty bar and clicks to the right of the last tab land on nothing — which is
-     what made switching feel unresponsive. */
+     tablist inside it and the row keeps that width: a row narrowed to its
+     content makes the host's count fall to one and pushes every other view into
+     More. Without hugging, the pill shell stretches across the whole header:
+     the "groove" reads as one long empty bar and clicks to the right of the last
+     tab land on nothing — which is what made switching feel unresponsive. */
   width: fit-content;
   max-width: 100%;
   align-self: flex-start;
