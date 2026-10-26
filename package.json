@@ -1,7 +1,7 @@
 {
   "name": "dsh-deepcraft",
   "description": "DeepCraft — Claude and DeepSeek themes for the DeepSeek Harness (dsh) web GUI: visual and interaction overhaul",
-  "version": "0.19.3",
+  "version": "0.19.4",
   "type": "module",
   "main": "lib/host/index.js",
   "icon": "lib/deepcraft-mark.svg",
