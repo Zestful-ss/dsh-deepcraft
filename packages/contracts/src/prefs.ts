@@ -207,6 +207,8 @@ export const PREFS = {
   composerScope: { type: 'choice', values: COMPOSER_SCOPES, default: COMPOSER_SCOPE_ALL },
   modelPicker: { type: 'boolean', default: true },
   modelDescriptions: { type: 'boolean', default: true },
+  /** The session must name a subagent model rather than inherit the parent route. */
+  subagentModelChoice: { type: 'boolean', default: false },
   peakrate: { type: 'boolean', default: true },
   /**
    * The provider ids the picker's first level carries: ids rather than names,

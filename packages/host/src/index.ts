@@ -27,6 +27,9 @@
  *      more sprite sheets than are worth inlining into the bundle, so they ship
  *      as files beside it and the browser fetches each one the first time its
  *      animation plays.
+ *   5. Deny a `subagent` call that omits its model pair while the
+ *      `subagentModelChoice` preference is on; the rule is in
+ *      subagent-choice.ts.
  *
  * The registrations are defensive. A host without a web server, or with the
  * route prefix already taken, or with the settings service absent, must still
@@ -34,13 +37,15 @@
  * the module graph and the whole skin with it. The browser half falls back to
  * its defaults when either surface is missing.
  *
- * The routes live in routes.ts, the HDSL account contract in hdsl.ts, and the
- * settings surface in settings.ts; this file only mounts them.
+ * The routes live in routes.ts, the HDSL account contract in hdsl.ts, the
+ * settings surface in settings.ts, and the subagent rule in subagent-choice.ts;
+ * this file only mounts them.
  */
 import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
 import { registerRoutes } from './routes.js'
 import type { DshContext, DshScope } from '@dsh-deepcraft/engine/node/dsh'
 import { registerSettings } from './settings.js'
+import { registerSubagentChoice } from './subagent-choice.js'
 
 export const name = PACKAGE_NAME
 export { Config } from './settings.js'
@@ -62,4 +67,5 @@ export function apply(ctx: DshContext, config?: unknown) {
   else registerRoutes(ctx, ctx as DshScope)
 
   registerSettings(ctx)
+  registerSubagentChoice(ctx, config)
 }

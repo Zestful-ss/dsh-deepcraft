@@ -6,5 +6,7 @@
   "moreLabel": { "zh": "更多模型", "en": "More models" },
   "pickerTitle": { "zh": "重绘模型选择器", "en": "Redraw the model picker" },
   "modelDescriptionsTitle": { "zh": "模型描述", "en": "Model descriptions" },
-  "modelDescriptionsDesc": { "zh": "一级列表里每个模型名下面写一行说明。", "en": "A line under each model in the picker's first level." }
+  "modelDescriptionsDesc": { "zh": "一级列表里每个模型名下面写一行说明。", "en": "A line under each model in the picker's first level." },
+  "subagentModelChoiceTitle": { "zh": "子代理必须选择模型", "en": "Require a subagent model" },
+  "subagentModelChoiceDesc": { "zh": "调用 subagent 时必须同时写上 provider 和 model。与主模型相同也可以。省略会被拒绝。官方「允许 Agent 为子智能体选择模型」未开启，或当前会话没有允许列表时，这个开关不起作用。", "en": "A subagent call must include provider and model together. The parent's own route is allowed. Omitting either field is rejected. This switch does nothing while the official Allow the agent to choose a subagent model switch is off, or while the session has no allowed list." }
 }

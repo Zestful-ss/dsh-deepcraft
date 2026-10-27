@@ -27,6 +27,14 @@ export default {
     parent: 'modelPicker',
     title: 'modelDescriptionsTitle',
     desc: 'modelDescriptionsDesc',
+  }, {
+    // The subagent tool's own model fields: a session-wide rule the host half
+    // enforces, so the row stays editable while the picker or restyle is off.
+    tab: 'composer',
+    rank: 55,
+    pref: 'subagentModelChoice',
+    title: 'subagentModelChoiceTitle',
+    desc: 'subagentModelChoiceDesc',
   }],
   cases: ['brand', 'composer', 'settings', 'sync-fault', 'model-meter']
 } satisfies FeatureManifest

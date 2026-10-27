@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-27",
+  "group": "new",
+  "order": 0,
+  "external": false,
+  "zh": "新增「子代理必须选择模型」开关：打开后调用 subagent 必须同时写明 provider 与 model，省略会由宿主拒绝；与主模型相同的路由可以显式选择。",
+  "en": "Add the Require a subagent model switch: while it is on, a subagent call must name provider and model together, an omission is rejected by the host, and the parent's own route stays selectable."
+}

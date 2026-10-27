@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">新增功能</h3>
+
+- 新增「子代理必须选择模型」开关：打开后调用 subagent 必须同时写明 provider 与 model，省略会由宿主拒绝；与主模型相同的路由可以显式选择。
+
+<h3 id="en-unreleased">New Features</h3>
+
+- Add the Require a subagent model switch: while it is on, a subagent call must name provider and model together, an omission is rejected by the host, and the parent's own route stays selectable.
+
 ## [0.19.4] - 2026-10-26
 
 [中文](#cn-0.19.4) | [English](#en-0.19.4)
