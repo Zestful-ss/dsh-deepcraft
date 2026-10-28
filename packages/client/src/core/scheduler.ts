@@ -27,6 +27,7 @@ export interface Handles {
   permissions: FeatureHandle
   contextStats: FeatureHandle
   model: ModelHandle
+  subagentModel: FeatureHandle
   peakrate: PeakRateHandle
   effort: FeatureHandle
   heroMenu: FeatureHandle

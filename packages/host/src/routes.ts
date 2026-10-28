@@ -28,6 +28,8 @@ import { packageRoot } from './package-root.js'
 import { createPeakRate } from './peakrate.js'
 import { QUERY_MAX, createSessionSearch } from './search.js'
 import { petRoutes } from './pets/routes.js'
+import { subagentModelRoutes } from './subagent-models/route.js'
+import type { SubagentModelStore } from './subagent-models/store.js'
 import { createUsage } from './usage.js'
 
 /** The copy document, built from `packages/client/data/model-descriptions.json` by scripts/build.mjs. */
@@ -233,8 +235,9 @@ async function deleteSession(ctx: DshContext, req: DshRequest, res: DshResponse)
  * @param ctx - host plugin context.
  * @param scope - the inject scope that carries the `webServer` declaration, or
  *     `ctx` itself on a host whose context injects nothing.
+ * @param models - the subagent selection store the route reads and writes.
  */
-export function registerRoutes(ctx: DshContext, scope: DshScope) {
+export function registerRoutes(ctx: DshContext, scope: DshScope, models: SubagentModelStore) {
   // The built output and the bundled fonts hang off the plugin package's own
   // directory; the fonts a user drops in live under the harness home.
   const root = packageRoot()
@@ -475,6 +478,7 @@ export function registerRoutes(ctx: DshContext, scope: DshScope) {
 
     for (const { label, route } of brandRoutes(ctx)) register(label, route)
     for (const { label, route } of petRoutes(ctx)) register(label, route)
+    for (const { label, route } of subagentModelRoutes(ctx, models)) register(label, route)
 
     return () => {
       usage.dispose()

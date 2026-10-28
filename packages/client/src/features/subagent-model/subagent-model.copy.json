@@ -1,0 +1,20 @@
+{
+  "triggerLabelNone": { "zh": "子代理模型", "en": "Subagent model" },
+  "triggerLabelOne": { "zh": "子代理模型，当前 {model}", "en": "Subagent model, currently {model}" },
+  "triggerLabelMany": { "zh": "子代理模型，已选 {count} 个", "en": "Subagent models, {count} selected" },
+  "triggerLabelUnavailable": { "zh": "子代理模型不可用：{reason}", "en": "Subagent models unavailable: {reason}" },
+  "title": { "zh": "子代理模型", "en": "Subagent models" },
+  "hint": { "zh": "选一条时后续子代理都用它；选多条时由会话模型按任务挑一条。", "en": "One route sends every later subagent through it; with several, the session model picks one for the task at hand." },
+  "hintOne": { "zh": "后续子代理都用这一条。再选一条可以变成按任务挑选。", "en": "Every later subagent uses this route. Picking another one switches to choosing per task." },
+  "clear": { "zh": "清除选择", "en": "Clear selection" },
+  "clearDesc": { "zh": "回到插件开关与官方策略本来的行为。", "en": "Go back to what the plugin switch and the official policy did on their own." },
+  "saving": { "zh": "正在保存…", "en": "Saving…" },
+  "saveFailed": { "zh": "没有保存成功，仍按上一次保存的选择执行。", "en": "The save did not go through; the last saved selection still applies." },
+  "full": { "zh": "已经选到上限 {max} 条。", "en": "The list already holds the {max} routes it takes." },
+  "reasonNoPolicy": { "zh": "官方「允许 Agent 为子智能体选择模型」在这条会话创建时没有开启，因此这条会话没有可选的子代理模型。", "en": "The official switch that lets an agent choose a subagent model was off when this session was created, so the session has no subagent route to pick." },
+  "reasonNoSession": { "zh": "会话还没有打开，暂时读不到它的子代理模型。", "en": "The session is not open yet, so its subagent routes cannot be read." },
+  "reasonStore": { "zh": "子代理模型的选择没能读出来，重新打开页面后再试。", "en": "The saved subagent routes could not be read; reopen the page and try again." },
+  "reasonStale": { "zh": "已保存的选择里有这条会话不再允许的路由，请改选或清除。", "en": "The saved selection names routes this session no longer allows; pick again or clear it." },
+  "pickerTitle": { "zh": "子代理模型选择", "en": "Subagent model entry" },
+  "pickerDesc": { "zh": "在输入框右侧加一个入口，为当前会话选一条或多条子代理模型路由。", "en": "Adds an entry beside the composer for picking the subagent routes the current session delegates on." }
+}

@@ -27,9 +27,13 @@
  *      more sprite sheets than are worth inlining into the bundle, so they ship
  *      as files beside it and the browser fetches each one the first time its
  *      animation plays.
- *   5. Deny a `subagent` call that omits its model pair while the
- *      `subagentModelChoice` preference is on; the rule is in
+ *   5. Deny a `subagent` call that omits its model pair, or names one outside
+ *      the routes the reader picked for the session (or the one the
+ *      `subagentModelChoice` preference made mandatory); the rule is in
  *      subagent-choice.ts.
+ *   6. Keep those picks: one row per session in the plugin's own storage
+ *      domain, read and written through the plugin's own route so the page
+ *      never guesses what the host's policy allows (subagent-models/).
  *
  * The registrations are defensive. A host without a web server, or with the
  * route prefix already taken, or with the settings service absent, must still
@@ -42,6 +46,7 @@
  * this file only mounts them.
  */
 import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
+import { createSubagentModelStore } from './subagent-models/store.js'
 import { registerRoutes } from './routes.js'
 import type { DshContext, DshScope } from '@dsh-deepcraft/engine/node/dsh'
 import { registerSettings } from './settings.js'
@@ -55,6 +60,12 @@ export { Config } from './settings.js'
  * @param ctx - host plugin context.
  */
 export function apply(ctx: DshContext, config?: unknown) {
+  // The reader's picks live in the host's domain form, and both the guard and
+  // the route read the same handle; one store per generation owns it, and its
+  // teardown is registered with the rest of this half.
+  const models = createSubagentModelStore(ctx, ctx.logger)
+  if (typeof ctx.effect === 'function') ctx.effect(() => () => models.dispose())
+  models.warm()
   // Always register through inject, never on the bare ctx. `ctx.get()` reads a
   // service leniently (no inject declaration needed), but the PROPERTY access
   // inside registerRoutes (`scope.webServer`) is gated by the fiber's inject
@@ -63,9 +74,9 @@ export function apply(ctx: DshContext, config?: unknown) {
   // waits for the service and hands registerRoutes a scope that HAS the
   // declaration, so both a boot-time apply and a hot relink register. A host
   // without a web server simply waits here, and the skin still activates.
-  if (typeof ctx.inject === 'function') ctx.inject(['webServer'], (scope: DshScope) => { registerRoutes(ctx, scope) })
-  else registerRoutes(ctx, ctx as DshScope)
+  if (typeof ctx.inject === 'function') ctx.inject(['webServer'], (scope: DshScope) => { registerRoutes(ctx, scope, models) })
+  else registerRoutes(ctx, ctx as DshScope, models)
 
   registerSettings(ctx)
-  registerSubagentChoice(ctx, config)
+  registerSubagentChoice(ctx, config, models)
 }

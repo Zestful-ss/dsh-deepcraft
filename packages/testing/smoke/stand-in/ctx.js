@@ -43,7 +43,7 @@
   // other cases keep no inject, which is what makes them read
   // synchronously at install (the install-fault case depends on that read
   // throwing).
-  if (CASE === 'desktop' || CASE === 'studio' || CASE === 'settings' || CASE === 'chunk-late' || CASE === 'chat-files' || CASE === 'peer-chat-ux' || CASE === 'skin-center-handoff' || CASE === 'skin-center-arrival') {
+  if (CASE === 'desktop' || CASE === 'studio' || CASE === 'settings' || CASE === 'chunk-late' || CASE === 'chat-files' || CASE === 'peer-chat-ux' || CASE === 'skin-center-handoff' || CASE === 'skin-center-arrival' || CASE === 'subagent-model') {
     window.__ctx.inject = function (deps, cb) {
       var disposers = []
       cb({

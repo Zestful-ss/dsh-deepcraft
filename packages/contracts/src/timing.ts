@@ -16,7 +16,7 @@
  */
 
 /** The end-to-end lane's scenarios; the lane checks its own names against these. */
-export const E2E_SCENARIOS = ['conversation', 'narrow', 'tool', 'fileMerge', 'send', 'sendFull', 'scroll', 'readerScroll', 'doorPin', 'streamPace', 'motion', 'processSummary', 'reasoningStream', 'waitLine', 'washLine', 'longSession', 'statsPosition', 'statsOverlay', 'sidebarRail', 'rightbar', 'contract', 'importance', 'remoteSettings', 'customBrand', 'deepcraft', 'petdex', 'dsBot', 'shots'] as const
+export const E2E_SCENARIOS = ['conversation', 'narrow', 'tool', 'fileMerge', 'send', 'sendFull', 'scroll', 'readerScroll', 'doorPin', 'streamPace', 'motion', 'processSummary', 'reasoningStream', 'waitLine', 'washLine', 'longSession', 'statsPosition', 'statsOverlay', 'sidebarRail', 'rightbar', 'contract', 'importance', 'remoteSettings', 'customBrand', 'deepcraft', 'petdex', 'dsBot', 'subagentModel', 'shots'] as const
 
 /** One timing assumption, and how it is held. */
 interface HostTimingEntry {
@@ -78,5 +78,11 @@ export const HOST_TIMING: HostTimingEntry[] = [
     assumption: 'The composer seat is the conversation scroller\u2019s own sibling rather than a row inside the message column, so growing the column moves the transcript under the composer and never the composer itself.',
     use: 'The stream slide puts the column back down with a transform on the column alone (D71); the lane holds the composer\u2019s box still through a fast answer on the strength of that shape.',
     checks: ['scenario:streamPace'],
+  },
+  {
+    id: 'host.composer-right-seat',
+    assumption: 'The composer renders its `conversation.input.right` list seat for a bound session, ahead of the model seat, and mounts a registered entry as that session binds.',
+    use: 'The subagent model entry stands in that seat so the reader changes one session’s delegation beside the model seat; the slot it registers into is a host declaration, not a DOM shape the skin owns.',
+    checks: ['scenario:subagentModel'],
   },
 ]

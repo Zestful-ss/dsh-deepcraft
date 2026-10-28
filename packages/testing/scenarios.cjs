@@ -35,6 +35,7 @@ const { remoteSettingsScenario } = require('./remote-settings.cjs')
 const { customBrandScenario } = require('./custom-brand.cjs')
 const { deepcraftScenario } = require('./deepcraft.cjs')
 const { petdexScenario } = require('./petdex.cjs')
+const { subagentModelScenario } = require('./subagent-model.cjs')
 const { dsBotScenario } = require('./ds-bot.cjs')
 const { CANVAS } = require('./shoot.cjs')
 const { sanitizePage } = require('../../scripts/shared/privacy.cjs')
@@ -559,6 +560,8 @@ const SCENARIOS = {
   petdex: petdexScenario({ check }),
   /** The Chat / Code switch beside ds-bot's published browser half (packages/testing/ds-bot.cjs, D74). */
   dsBot: dsBotScenario({ check }),
+  /** The composer's subagent model entry: one pick, its record, and its reload (packages/testing/subagent-model.cjs). */
+  subagentModel: subagentModelScenario({ check }),
   /** Both palettes captured to the run's out directory and swept for personal data. */
   shots: {
     script: 'greeting',

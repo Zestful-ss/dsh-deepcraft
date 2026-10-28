@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-28",
+  "group": "improvements",
+  "order": 0,
+  "external": false,
+  "zh": "扩展子代理模型规则：会话保存了选择时，subagent 调用必须写明 provider 与 model 并且落在选择里，缺一项、只写一半或选了集合之外的路由都会被拒绝并列出可用路由；选择存储读不出来、或已保存的路由不再被官方策略允许时明确报告，不静默继承父会话。",
+  "en": "Extend the subagent model rule: while a session holds a pick, a subagent call must name provider and model and stay inside that pick — an omitted field, a half pair, or a route outside the pick is refused with the routes it may use; a pick that cannot be read, or that names a route the official policy no longer allows, is reported instead of silently inheriting the parent's route."
+}

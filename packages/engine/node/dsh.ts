@@ -31,9 +31,57 @@ export interface DshContext {
   fiber?: { entry?: { id?: unknown, options?: unknown } }
 }
 
+/** One session's header, as the half reads a session it was handed. */
+export interface DshSessionHeader {
+  readonly id?: string
+  /** The session this one was delegated from; only a subagent's header carries it. */
+  readonly parentSession?: string
+  readonly origin?: string
+}
+
+/** One live session, as far as the half reads it: its durable identity, and nothing it computes. */
+export interface DshSession {
+  readonly header?: DshSessionHeader
+}
+
 /** The sessions service, as the half reads it. */
 export interface DshSessions {
   list(): unknown[]
+  /** One attached session by id; `undefined` for an id this host process has not opened. */
+  get?(id: string): DshSession | undefined
+}
+
+/**
+ * The session projection registry, as the half reads it: one host-only value
+ * per session, folded from that session's own log and keyed by the session
+ * object rather than its id, so a stored session answers nothing until the host
+ * has attached it.
+ */
+export interface DshSessionProjections {
+  stateOf(session: unknown, key: string): unknown
+}
+
+/** One table of a storage domain: synchronous reads from the domain's own state, durable writes. */
+export interface DshStorageTable {
+  get(key: string): unknown
+  put(key: string, value: unknown): Promise<void>
+  delete(key: string): Promise<boolean>
+}
+
+/** One open storage domain. */
+export interface DshStorageDomain {
+  table(name: string): DshStorageTable
+  close(): Promise<void>
+}
+
+/**
+ * The host's domain form (`storageDomain`). `open` validates and loads every
+ * stored record, so it is asynchronous; a name already open in this process is
+ * refused, and `get` answers the handle that holds it.
+ */
+export interface DshStorageDomainFacility {
+  open(spec: unknown): Promise<DshStorageDomain>
+  get(name: string): DshStorageDomain | undefined
 }
 
 /** The scope `inject` hands back: the base context plus the declared services. */

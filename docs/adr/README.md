@@ -24,6 +24,7 @@
 | [D76](D76-manifest-holds-facts.md) | 清单登记界面与构建要用的事实 | D42、D13、D29、D39、D72 |
 | [D77](D77-theme-ownership.md) | 品牌与主题归属 | D30、D50、D64 |
 | [D78](D78-petdex-pets.md) | 复用 Petdex 宠物：原始宠物包与聊天框位置 |  |
+| [D79](D79-session-state-and-policy.md) | 会话级的插件状态：宿主的 domain 表单与官方策略 |  |
 
 ## 作废的编号
 

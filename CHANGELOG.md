@@ -4,6 +4,24 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">新增功能</h3>
+
+- 新增输入框右侧的子代理模型入口：为当前会话选一条或多条官方允许的模型路由，选一条时后续子代理都用它，选多条时由会话模型按任务挑一条；选择按会话保存在宿主存储里，切换与重开页面后各自保留，清除后回到插件开关与官方策略本来的行为。
+
+### 体验优化
+
+- 扩展子代理模型规则：会话保存了选择时，subagent 调用必须写明 provider 与 model 并且落在选择里，缺一项、只写一半或选了集合之外的路由都会被拒绝并列出可用路由；选择存储读不出来、或已保存的路由不再被官方策略允许时明确报告，不静默继承父会话。
+
+<h3 id="en-unreleased">New Features</h3>
+
+- Add a subagent model entry beside the composer: pick one or more of the session's officially allowed model routes, one route sends every later subagent through it and several let the session model choose per task; the pick is stored per session on the host and survives switching and reopening the page, and clearing it restores what the plugin switch and the official policy did on their own.
+
+### Improvements
+
+- Extend the subagent model rule: while a session holds a pick, a subagent call must name provider and model and stay inside that pick — an omitted field, a half pair, or a route outside the pick is refused with the routes it may use; a pick that cannot be read, or that names a route the official policy no longer allows, is reported instead of silently inheriting the parent's route.
+
 ## [0.19.5] - 2026-10-27
 
 [中文](#cn-0.19.5) | [English](#en-0.19.5)

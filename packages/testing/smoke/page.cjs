@@ -73,6 +73,7 @@ const PROBE_PARTS = [
   'sidebar-layout.js',
   'model-meter.js',
   'peer.js',
+  'subagent-model.js',
   'teardown.js',
 ]
 /**

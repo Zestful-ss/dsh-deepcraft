@@ -80,6 +80,7 @@
   "peerDependencies": {
     "@deepseek-ai/dsh-client-ui-primitives": ">=0.1.5-rc.1",
     "@deepseek-ai/schemastery": ">=3.18.0",
+    "zod": ">=4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -101,6 +102,7 @@
     "postcss": "8.5.29",
     "postcss-selector-parser": "7.1.6",
     "typescript": "7.0.2",
-    "vitest": "5.0.3"
+    "vitest": "5.0.3",
+    "zod": "^4.4.3"
   }
 }

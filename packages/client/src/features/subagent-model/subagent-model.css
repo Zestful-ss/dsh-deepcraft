@@ -1,0 +1,131 @@
+/* ---------- the subagent model entry ---------- */
+/* The trigger stands in the host's own `conversation.input.right` seat, so it
+   carries its own shape rather than the composer's: with the restyle off it sits
+   in the host's plain toolbar and must still read as one quiet control. */
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  max-width: 220px;
+  padding: 0 8px;
+  margin: 0;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--dsw-alias-label-secondary);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-btn:hover:not(:disabled) {
+  background: var(--dsh-deepcraft-hover-bg);
+  color: var(--dsw-alias-label-primary);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-btn:disabled {
+  cursor: default;
+  opacity: 1;
+  color: var(--dsw-alias-label-caption);
+}
+
+/* A session with nothing picked says so in the captioned tone, and a pick is the
+   same control in the body tone: which state the entry is in is the only
+   difference the trigger shows without words. */
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-btn[data-dsh-subagent-model="empty"] {
+  color: var(--dsw-alias-label-caption);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-btn[data-dsh-subagent-model="unavailable"] {
+  color: var(--dsw-alias-label-caption);
+  cursor: help;
+}
+
+/* ---------- the card ---------- */
+/* The shared popover card carries the look; what is this entry's is the column
+   of rows, the heading and the notes. */
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-popover {
+  position: fixed;
+  min-width: 260px;
+  max-width: min(360px, calc(100vw - 16px));
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  transform-origin: bottom right;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px 8px 4px;
+  min-width: 0;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-title {
+  color: var(--dsw-alias-label-primary);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-hint,
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-note {
+  color: var(--dsw-alias-label-caption);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 17px;
+  white-space: normal;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-note {
+  padding: 2px 8px 4px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+/* The rows are the shared popover items with a second line: the model's name
+   over the provider it comes from. */
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-option .dsh-deepcraft-popover-item-col {
+  min-width: 0;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-option .dsh-deepcraft-popover-item-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-option .dsh-deepcraft-popover-item-desc {
+  color: var(--dsw-alias-label-caption);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-clear {
+  margin-top: 2px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-option:disabled,
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-clear:disabled {
+  cursor: default;
+  opacity: 0.6;
+}

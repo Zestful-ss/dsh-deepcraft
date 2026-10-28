@@ -49,6 +49,33 @@
       try { asked = JSON.parse((init && init.body) || '{}').id || asked } catch (error) { /* the page sent the default */ }
       return Promise.resolve(jsonResponse({ ok: true, pet: petDescriptor(asked) }))
     }
+    if (url.indexOf('/dsh-deepcraft/subagent-models') === 0) {
+      // The selection route the composer's entry reads and writes. The page keeps
+      // the record itself, so a write is visible on the next read and the probe
+      // can say what was sent: `window.__subagentModel` holds the allowed list,
+      // the saved routes and every body the page posted.
+      if (CASE !== 'subagent-model') return realFetch.apply(window, arguments)
+      var record = window.__subagentModel = window.__subagentModel || {
+        allowed: [
+          { provider: 'deepseek-official', model: 'deepseek-flash' },
+          { provider: 'deepseek-official', model: 'deepseek-v4-pro' },
+          { provider: 'other-provider', model: 'model-the-catalog-lacks' },
+        ],
+        selected: [],
+        writes: [],
+        reason: undefined,
+      }
+      if (init !== undefined && init !== null && init.method === 'POST') {
+        var sent = {}
+        try { sent = JSON.parse(init.body || '{}') } catch (error) { /* the page sent no body */ }
+        record.writes.push(sent)
+        record.selected = Array.isArray(sent.routes) ? sent.routes : []
+        return Promise.resolve(jsonResponse({ ok: true, allowed: record.allowed, selected: record.selected }))
+      }
+      var answer = { ok: true, allowed: record.allowed, selected: record.selected }
+      if (record.reason !== undefined) answer.reason = record.reason
+      return Promise.resolve(jsonResponse(answer))
+    }
     if (url === '/dsh-deepcraft/brand') {
       // The custom-brand case holds both images; the bytes are the runner's to
       // serve (packages/testing/smoke.cjs), since the page loads them as images.

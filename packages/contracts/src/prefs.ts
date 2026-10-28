@@ -209,6 +209,8 @@ export const PREFS = {
   modelDescriptions: { type: 'boolean', default: true },
   /** The session must name a subagent model rather than inherit the parent route. */
   subagentModelChoice: { type: 'boolean', default: false },
+  /** The composer's own entry for the routes one session delegates on. */
+  subagentModelPicker: { type: 'boolean', default: true },
   peakrate: { type: 'boolean', default: true },
   /**
    * The provider ids the picker's first level carries: ids rather than names,
@@ -276,6 +278,7 @@ export const LIVE_PREFS = [
   'caretMotion',
   'mascot',
   'modelPicker',
+  'subagentModelPicker',
   'collapseFooter',
   'composerScope',
 ] as const satisfies readonly PrefKey[]

@@ -12,6 +12,7 @@ const { pathToFileURL } = require('url')
 const { brotliDecompressSync } = require('zlib')
 const { ROOT, HOST, SKIN_FIXTURE, same, check } = require('./shared.cjs')
 const { subagentChoiceChecks } = require('./host-half-subagent.cjs')
+const { subagentStoreChecks } = require('./host-half-subagent-models.cjs')
 const { hostUsage } = require('./host-half-usage.cjs')
 
 // ---------------------------------------------------------------------------
@@ -187,6 +188,7 @@ function request(host, route, method, body, headers, peer = '127.0.0.1') {
 async function hostHalf() {
   const mod = await import(pathToFileURL(HOST).href)
   await subagentChoiceChecks()
+  await subagentStoreChecks()
   const PREFS = '/dsh-deepcraft/prefs'
   const USER = '/dsh-deepcraft/username'
   const browser = { host: '127.0.0.1:43120', origin: 'http://127.0.0.1:43120', 'sec-fetch-site': 'same-origin', cookie: 'dsh-auth-x=1' }

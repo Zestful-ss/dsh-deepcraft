@@ -73,5 +73,14 @@ export const PETS_IMPORT_PATH = `${PETS_PATH}/import`
 /** `POST { url }`: a Petdex pet page, resolved through the official public catalog. */
 export const PETS_IMPORT_URL_PATH = `${PETS_PATH}/import-url`
 
+/**
+ * One session's subagent route selection: `GET ?session=<id>` answers the
+ * routes the session's composition allows and the routes the reader picked,
+ * `POST { session, routes }` replaces the pick (an empty list clears it). The
+ * official `subagent` tool takes the same provider/model pair, and the host
+ * half's guard reads this record, so the two cannot be written apart.
+ */
+export const SUBAGENT_MODELS_PATH = `${ROUTE_PREFIX}/subagent-models`
+
 /** `GET <id>?v=<version>`: one pet's untouched atlas. */
 export const PETS_IMAGE_PATH = `${PETS_PATH}/image`

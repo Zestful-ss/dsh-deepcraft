@@ -18,7 +18,7 @@ module.exports = {
     const expected = {
       general: ['brand', 'username', 'pageZoom', 'autoPopover'],
       appearance: ['palette', 'brandAccent', 'typeface', 'homeLayout', 'homeRipple', 'mascot', 'chatPet', 'mascotScope', 'brandName', 'brandMark', 'brandWordmark', 'brandInk', 'petImport'],
-      composer: ['composerScope', 'modelPicker', 'modelDescriptions', 'quickProviders', 'peakrate', 'permissionsControl', 'subagentModelChoice'],
+      composer: ['composerScope', 'modelPicker', 'modelDescriptions', 'quickProviders', 'subagentModelPicker', 'peakrate', 'permissionsControl', 'subagentModelChoice'],
       sidebar: ['collapseFooter', 'banLocale', 'sidebarSearch', 'searchStyle', 'workspaceView', 'dockCards', 'sidebarLayout'],
       conversation: ['turnNav', 'statsPosition', 'viewTabs', 'headerBand'],
       motion: ['motion', 'chatAnimations', 'chatWait', 'statusDetail', 'statusMotion', 'caretMotion', 'ongoingIndicator', 'chatReveal', 'chatSend', 'messageEnter'],
