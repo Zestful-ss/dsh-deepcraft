@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-28",
+  "group": "chores",
+  "order": 10,
+  "external": false,
+  "zh": "将窄屏输入栏的溢出检查限定在输入卡片内。",
+  "en": "Scope the narrow composer overflow check to its input card."
+}

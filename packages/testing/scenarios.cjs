@@ -204,12 +204,12 @@ const SCENARIOS = {
         const modelLabel = read('.dsh-deepcraft-model-btn-label')
         const meter = read('[data-dsh-deepcraft-context-meter]')
         const card = read('[data-composer-card]')
-        const row = read('[data-dsh-deepcraft-part~="row"]')
+        const row = card?.querySelector('[data-dsh-deepcraft-part~="row"]') ?? null
         return {
           width: window.innerWidth,
           card: box(card),
-          cardOver: card === null ? 0 : card.scrollWidth - card.clientWidth,
-          rowOver: row === null ? 0 : row.scrollWidth - row.clientWidth,
+          cardOver: card === null ? null : card.scrollWidth - card.clientWidth,
+          rowOver: row === null ? null : row.scrollWidth - row.clientWidth,
           perm: box(perm),
           permMax: cap(perm),
           permEllipsis: permLabel === null ? null : getComputedStyle(permLabel).textOverflow,
@@ -248,7 +248,7 @@ const SCENARIOS = {
         check('控件都留在输入卡片里，圆环也不与旁边的控件重叠', fits(narrow),
           JSON.stringify({ card: narrow.card, perm: narrow.perm, model: narrow.model, effort: narrow.effort, meter: narrow.meter })),
         check('再窄一些时控件仍留在卡片里，输入区也不再横向滚动',
-          fits(tight) && tight.cardOver <= 0 && tight.rowOver <= 0,
+          fits(tight) && tight.cardOver !== null && tight.rowOver !== null && tight.cardOver <= 0 && tight.rowOver <= 0,
           JSON.stringify({ width: tight.width, card: tight.card, cardOver: tight.cardOver, rowOver: tight.rowOver, model: tight.model, effort: tight.effort, meter: tight.meter })),
         check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
       ]

@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">其他变更</h3>
+
+- 将窄屏输入栏的溢出检查限定在输入卡片内。
+
+<h3 id="en-unreleased">Chores</h3>
+
+- Scope the narrow composer overflow check to its input card.
+
 ## [0.20.1] - 2026-10-28
 
 [中文](#cn-0.20.1) | [English](#en-0.20.1)
