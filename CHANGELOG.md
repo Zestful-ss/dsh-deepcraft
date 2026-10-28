@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.20.2] - 2026-10-28
 
-<h3 id="cn-unreleased">体验优化</h3>
+[中文](#cn-0.20.2) | [English](#en-0.20.2)
+
+<h3 id="cn-0.20.2">体验优化</h3>
 
 - 将子代理模型入口收成图标，并在选择面板中完整显示模型与供应商名称。
 
@@ -14,7 +16,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - 将窄屏输入栏的溢出检查限定在输入卡片内。
 
-<h3 id="en-unreleased">Improvements</h3>
+<h3 id="en-0.20.2">Improvements</h3>
 
 - Use a compact icon for the subagent model entry and show complete model and provider names in its selection panel.
 
