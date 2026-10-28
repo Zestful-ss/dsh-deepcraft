@@ -281,6 +281,13 @@ function subagentModelScenario({ check }) {
       await page.setViewportSize({ width: 1280, height: 900 })
       await page.evaluate(() => { document.body.removeAttribute('data-ds-dark-theme') })
       await page.click('button[data-dsh-deepcraft-part~="new-session"]')
+      // The shell swaps the composer for the new-session page's own: typing
+      // into the one it replaces lands in a node that is about to leave, and
+      // the press then submits nothing.
+      await page.waitForFunction((previous) => {
+        const shown = document.querySelector('[data-conversation-session]')?.getAttribute('data-conversation-session') ?? ''
+        return shown !== previous
+      }, firstSession, { timeout: 15000 })
       await sendPrompt(page, 'second session')
       await waitForTurn(page)
       await page.waitForSelector(TRIGGER, { timeout: 20000 }).catch(() => {})
@@ -290,7 +297,12 @@ function subagentModelScenario({ check }) {
       await page.click(`${CARD}[data-open="true"] ${OPTION}:nth-child(1)`, { timeout: 5000 }).catch(() => {})
       await page.waitForSelector(`${CARD}[data-open="true"] ${OPTION}:nth-child(2)`, { timeout: 5000 }).catch(() => {})
       await page.click(`${CARD}[data-open="true"] ${OPTION}:nth-child(2)`, { timeout: 5000 }).catch(() => {})
-      await waitForState(page, 'chosen')
+      // The count is what says the second write landed: the entry was already in
+      // its picked state after the first row.
+      await page.waitForFunction((selector) => {
+        const trigger = document.querySelector(selector)
+        return trigger !== null && /2/.test(trigger.textContent ?? '')
+      }, TRIGGER, { timeout: 8000 }).catch(() => {})
       const second = await readEntry(page)
       const secondSession = await shownSession(page)
       const secondRecord = await readRecord(page)

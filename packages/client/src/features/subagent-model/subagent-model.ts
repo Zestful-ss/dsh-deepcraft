@@ -305,9 +305,9 @@ export function install(ctx: HostContext) {
     }, triggerText(drawn))
   }
 
-  /** Register the trigger in the host's seat. */
+  /** Register the trigger in the host's seat; the fiber is what takes it down again. */
   function registerSeat() {
-    registerSlotEntry(ctx, 'dsh-deepcraft: subagent model entry', SEAT_SLOT, {
+    return registerSlotEntry(ctx, 'dsh-deepcraft: subagent model entry', SEAT_SLOT, {
       name: SEAT_SLOT,
       id: SEAT_ID,
       order: 10,
@@ -343,7 +343,7 @@ export function install(ctx: HostContext) {
     }
   }
 
-  registerSeat()
+  const seatFiber = registerSeat()
   sync()
   watchCatalog()
 
@@ -355,6 +355,9 @@ export function install(ctx: HostContext) {
   window.addEventListener('resize', onViewportChange)
 
   return () => {
+    // The seat's entry goes with this feature: a generation retired for another
+    // plugin's page (D74) must not leave its control behind.
+    if (seatFiber !== null && typeof seatFiber.dispose === 'function') seatFiber.dispose()
     document.removeEventListener('pointerdown', onDocumentPress, true)
     document.removeEventListener('keydown', onDocumentKey, true)
     window.removeEventListener('resize', onViewportChange)

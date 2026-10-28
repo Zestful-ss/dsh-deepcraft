@@ -161,7 +161,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
 
   /** Register that control in the header's utilities seat, which renders it wherever it stands. */
   function registerRightbarClose() {
-    registerSlotEntry(ctx, 'dsh-deepcraft: right panel control', UTILITIES_SLOT, {
+    return registerSlotEntry(ctx, 'dsh-deepcraft: right panel control', UTILITIES_SLOT, {
       name: UTILITIES_SLOT,
       id: 'deepcraft-rightbar-close',
       order: 90,
@@ -433,9 +433,10 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   // a streaming batch touches, so such a batch skips this pass (D40). The boxes
   // are read in the pass's read phase and written in its write phase.
   ui.headerBand = { measure, sync, skipOnContentOnly: true }
-  registerRightbarClose()
+  const rightbarFiber = registerRightbarClose()
 
   return () => {
+    if (rightbarFiber !== null && typeof rightbarFiber.dispose === 'function') rightbarFiber.dispose()
     const row = rowStamp.current()
     const title = titleStamp.current()
     const utilities = actionsStamp.current()

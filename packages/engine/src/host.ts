@@ -458,11 +458,17 @@ export function hostSlots(lookup: HostServiceLookup): HostSlotsService | null {
  * service — or a page whose slot never arrives — simply registers nothing; the
  * feature then shows nothing in that seat rather than failing.
  *
+ * The fiber handed back belongs to the inline registration, not to the
+ * feature that asked for it: a feature that comes down while the page stays
+ * (a yield to another plugin, a switch turned off) must dispose it, or its
+ * control outlives the feature on a page the skin no longer owns (D74).
+ *
  * @param ctx - the feature's host context.
  * @param label - what the host's log calls this registration.
  * @param slot - the slot's name, as the host declares it.
  * @param options - the entry's own declaration inside the slot.
  * @param component - what the slot renders.
+ * @returns the registration's fiber, or null when the host carries no slots service.
  */
 export function registerSlotEntry(
   ctx: HostContext,
@@ -470,9 +476,9 @@ export function registerSlotEntry(
   slot: string,
   options: HostSlotOptions,
   component: unknown,
-): void {
-  if (typeof ctx.inject !== 'function') return
-  ctx.inject(['slots'], (scope) => {
+): HostFiber | null {
+  if (typeof ctx.inject !== 'function') return null
+  return ctx.inject(['slots'], (scope) => {
     const slots = hostSlots(scope)
     if (slots === null || typeof slots.inject !== 'function') return
     scope.effect(() => slots.inject(slot, () => slots.register(options, component)), label)
