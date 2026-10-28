@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-28",
+  "group": "fixes",
+  "order": 10,
+  "external": false,
+  "zh": "修复流式输出时收起或展开过程组会使状态行短暂跳动的问题。",
+  "en": "Fix the status line briefly jumping while a process group is folded or unfolded during streaming."
+}

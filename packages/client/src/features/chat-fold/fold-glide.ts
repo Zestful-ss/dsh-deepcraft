@@ -319,11 +319,13 @@ export function installChatFoldGlide() {
       : () => !body.isConnected
     rollShut({
       target: groupRoot !== null ? groupRoot : body,
-      // A group root stops at the header's own stretch: once the body is
-      // folded away, that is what the root's height comes to.
+      // The host adds bottom padding to its expanded group header and removes
+      // it on collapse, so that padding travels with the body rather than the floor.
       floor: groupRoot === null
         ? 0
-        : Math.max(0, inPageBox(groupRoot.getBoundingClientRect()).height - inPageBox(body.getBoundingClientRect()).height),
+        : Math.max(0, inPageBox(groupRoot.getBoundingClientRect()).height
+          - inPageBox(body.getBoundingClientRect()).height
+          - Number.parseFloat(getComputedStyle(control).paddingBottom)),
       collapsed,
       control,
       own: isChatFoldToggle(),

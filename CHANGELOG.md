@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修复流式输出时收起或展开过程组会使状态行短暂跳动的问题。
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Fix the status line briefly jumping while a process group is folded or unfolded during streaming.
+
 ## [0.20.0] - 2026-10-28
 
 [中文](#cn-0.20.0) | [English](#en-0.20.0)
