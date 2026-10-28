@@ -1,8 +1,0 @@
-{
-  "at": "2026-10-28",
-  "group": "new",
-  "order": 0,
-  "external": false,
-  "zh": "新增输入框右侧的子代理模型入口：为当前会话选一条或多条官方允许的模型路由，选一条时后续子代理都用它，选多条时由会话模型按任务挑一条；选择按会话保存在宿主存储里，切换与重开页面后各自保留，清除后回到插件开关与官方策略本来的行为。",
-  "en": "Add a subagent model entry beside the composer: pick one or more of the session's officially allowed model routes, one route sends every later subagent through it and several let the session model choose per task; the pick is stored per session on the host and survives switching and reopening the page, and clearing it restores what the plugin switch and the official policy did on their own."
-}
