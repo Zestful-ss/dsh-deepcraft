@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { buildCardContent, seatActs, seatShown, triggerText, triggerTitle } from './card'
+import { buildCardContent, seatActs, seatShown, triggerTitle } from './card'
 import type { SeatView } from './card'
 import type { HostModelCatalogSnapshot } from '@dsh-deepcraft/contracts/services'
 
@@ -47,22 +47,9 @@ test('the entry stays off the page while the answer is in flight and where there
   expect(seatShown({ ...view(), loading: false })).toBe(true)
 })
 
-test('the trigger names the one route, counts several, and stays quiet for none', () => {
-  const one = triggerText(view({ selected: [routes[0]] }))
-  expect(one).toBe('Terra')
-  expect(triggerText(view({ selected: routes }))).not.toBe('Terra')
-  expect(triggerText(view({ selected: routes }))).toMatch(/2/)
-  expect(triggerText(view())).not.toBe('')
-})
-
-test('an entry that cannot act reports the host\'s reason in its accessible name', () => {
+test('the accessible name explains an unavailable entry and identifies a selected route', () => {
   const unavailable = triggerTitle(view({ reason: 'no-policy', allowed: [] }))
-  expect(unavailable).toMatch(/子代理模型|Subagent/)
-  // The reason sentence rides the name, so the tooltip and the reader's
-  // assistive surface say why rather than repeating the label.
-  expect(unavailable.length).toBeGreaterThan(triggerText(view({ reason: 'no-policy', allowed: [] })).length)
-  // With a pick the name carries it: the trigger's text is the model, and the
-  // accessible name says whose model it is.
+  expect(unavailable).toMatch(/会话|session/i)
   expect(triggerTitle(view({ selected: [routes[0]] }))).toContain('Terra')
 })
 

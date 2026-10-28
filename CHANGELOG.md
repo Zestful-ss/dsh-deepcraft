@@ -6,11 +6,19 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 [中文](#cn-unreleased) | [English](#en-unreleased)
 
-<h3 id="cn-unreleased">其他变更</h3>
+<h3 id="cn-unreleased">体验优化</h3>
+
+- 将子代理模型入口收成图标，并在选择面板中完整显示模型与供应商名称。
+
+### 其他变更
 
 - 将窄屏输入栏的溢出检查限定在输入卡片内。
 
-<h3 id="en-unreleased">Chores</h3>
+<h3 id="en-unreleased">Improvements</h3>
+
+- Use a compact icon for the subagent model entry and show complete model and provider names in its selection panel.
+
+### Chores
 
 - Scope the narrow composer overflow check to its input card.
 

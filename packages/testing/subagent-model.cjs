@@ -3,13 +3,10 @@
  * feeds, on a real host (D66).
  *
  * The entry exists only where a session recorded which routes it may delegate
- * on, so the scenario turns the official settings on with two routes of this
- * boot's model service. It then walks the reader's path once: the list, one row
- * picked, the label that follows it, the record surviving a reload, and the
- * card whole in a narrow window and the dark palette. The second prompt is where
- * the rule answers: the scripted model calls `subagent` without a pair, then
- * with an allowed route the reader did NOT pick, then with the picked one, and
- * the first two calls come back refused.
+ * on. This scenario walks its compact trigger, the complete names in the list,
+ * saved choices after a reload, and the card in a narrow dark window. The second
+ * prompt checks the host rule with calls that omit the route, name an unpicked
+ * route, and name the selected route.
  */
 'use strict'
 const fs = require('node:fs')
@@ -40,18 +37,19 @@ function requestsSince(since) {
   return bodies
 }
 
-/** The provider the official DeepSeek adapter registers, and two of its models. */
+/** Two available routes and a long route name absent from the catalog. */
 const PROVIDER = 'deepseek-official'
+const LONG_MODEL = 'deepseek-v4-flash-opencode-model-with-a-long-provider-route-and-extended-context'
 const ROUTES = [
   { provider: PROVIDER, model: 'deepseek-flash' },
   { provider: PROVIDER, model: 'deepseek-v4-pro' },
+  { provider: PROVIDER, model: LONG_MODEL },
 ]
 
 /**
- * The patch that turns the official settings on with two routes of this boot's
- * model service. The web-app bundle already mounts the settings plugin and the
- * standard preset already gives the `subagent` tool its model fields; the patch
- * only replaces that plugin's config, which is what the Plugins page writes too.
+ * The patch that turns the official settings on with the routes for this boot.
+ * The web-app bundle mounts the settings plugin and the standard preset gives
+ * the `subagent` tool its model fields; this is the config the Plugins page writes.
  */
 const PATCH = [
   '- id: subagent-model-selection-settings',
@@ -95,6 +93,7 @@ function readEntry(page) {
     }
     return {
       present: trigger !== null,
+      box: box(trigger),
       text: (trigger?.textContent ?? '').trim(),
       state: trigger?.getAttribute('data-dsh-subagent-model') ?? null,
       label: trigger?.getAttribute('aria-label') ?? null,
@@ -102,11 +101,16 @@ function readEntry(page) {
       card: {
         open,
         box: box(card),
-        rows: card === null ? [] : [...card.querySelectorAll(selectors.option)].map((row) => ({
-          text: (row.querySelector('.dsh-deepcraft-popover-item-text')?.textContent ?? '').trim(),
-          desc: (row.querySelector('.dsh-deepcraft-popover-item-desc')?.textContent ?? '').trim(),
-          checked: row.getAttribute('aria-checked'),
-        })),
+        rows: card === null ? [] : [...card.querySelectorAll(selectors.option)].map((row) => {
+          const text = row.querySelector('.dsh-deepcraft-popover-item-text')
+          return {
+            text: (text?.textContent ?? '').trim(),
+            desc: (row.querySelector('.dsh-deepcraft-popover-item-desc')?.textContent ?? '').trim(),
+            checked: row.getAttribute('aria-checked'),
+            lines: text === null ? 0 : text.scrollHeight / parseFloat(getComputedStyle(text).lineHeight),
+            clipped: text === null || text.scrollWidth > text.clientWidth,
+          }
+        }),
       },
       viewport: { width: window.innerWidth, height: window.innerHeight },
     }
@@ -139,11 +143,11 @@ async function ensureCardOpen(page) {
   await page.waitForSelector(`${CARD}[data-open="true"]`, { timeout: 5000 }).catch(() => {})
 }
 
-/** Wait until the entry carries `text` again, which is how a write shows it landed. */
-async function waitForText(page, text, timeout = 8000) {
+/** Wait until the entry's accessible name carries the chosen route. */
+async function waitForLabel(page, text, timeout = 8000) {
   await page.waitForFunction((wanted) => {
     const trigger = document.querySelector(wanted.selector)
-    return trigger !== null && (trigger.textContent ?? '').trim() === wanted.text
+    return trigger !== null && (trigger.getAttribute('aria-label') ?? '').includes(wanted.text)
   }, { selector: TRIGGER, text }, { timeout }).catch(() => {})
 }
 
@@ -153,7 +157,7 @@ async function waitForState(page, state, timeout = 8000) {
     { selector: TRIGGER, state }, { timeout }).catch(() => {})
 }
 
-/** The catalog's own name for the first route's model, which the entry shows. */
+/** The catalog's own name for the first route's model. */
 const PICKED = 'DeepSeek-V4.1-Flash'
 /** The catalog's own name for the provider group those routes belong to. */
 const PROVIDER_NAME = 'DeepSeek'
@@ -193,17 +197,22 @@ function subagentModelScenario({ check }) {
         opened.card.rows.length === ROUTES.length && opened.card.rows.every((row) => row.desc === PROVIDER_NAME) &&
           opened.card.rows.some((row) => row.text === PICKED),
         JSON.stringify(opened.card.rows)))
+      const longRow = opened.card.rows.find((row) => row.text === LONG_MODEL)
+      checks.push(check('长模型名称在面板内换行，完整内容可见',
+        longRow !== undefined && longRow.lines > 1 && longRow.clipped === false,
+        JSON.stringify(longRow)))
       checks.push(check('弹层开口朝上并落在窗口之内',
         opened.card.box !== null && opened.card.box.top >= 0 && opened.card.box.bottom <= opened.viewport.height &&
           opened.card.box.left >= 0 && opened.card.box.right <= opened.viewport.width,
         JSON.stringify({ box: opened.card.box, viewport: opened.viewport })))
 
       await page.click(`${CARD}[data-open="true"] ${OPTION}:nth-child(1)`, { timeout: 5000 }).catch(() => {})
-      await waitForText(page, PICKED)
+      await waitForLabel(page, PICKED)
       const picked = await readEntry(page)
-      checks.push(check('选中一条后，入口就该显示这一条，并且行上带勾',
-        picked.text === PICKED && picked.state === 'chosen' && picked.card.rows[0].checked === 'true',
-        JSON.stringify({ text: picked.text, state: picked.state, rows: picked.card.rows })))
+      checks.push(check('选中后入口保持紧凑，完整模型名可以从入口名称与勾选行读出',
+        picked.text === '' && picked.box !== null && picked.box.width <= 32 && picked.label?.includes(PICKED) &&
+          picked.state === 'chosen' && picked.card.rows[0].checked === 'true',
+        JSON.stringify({ box: picked.box, label: picked.label, state: picked.state, rows: picked.card.rows })))
 
       const stored = await readRecord(page)
       checks.push(check('这一条已经写进宿主保存的记录里，并且回到官方允许列表',
@@ -213,10 +222,10 @@ function subagentModelScenario({ check }) {
 
       await page.reload({ waitUntil: 'domcontentloaded' })
       await page.waitForSelector(TRIGGER, { timeout: 20000 }).catch(() => {})
-      await waitForText(page, PICKED, 15000)
+      await waitForLabel(page, PICKED, 15000)
       const reopened = await readEntry(page)
-      checks.push(check('重新打开页面后，这条选择仍在入口上',
-        reopened.text === PICKED && reopened.state === 'chosen', JSON.stringify({ text: reopened.text, state: reopened.state })))
+      checks.push(check('重新打开页面后，入口仍说明这条选择',
+        reopened.label?.includes(PICKED) && reopened.state === 'chosen', JSON.stringify({ label: reopened.label, state: reopened.state })))
 
       await ensureCardOpen(page)
       await page.click(`${CARD}[data-open="true"] ${CLEAR}`)
@@ -231,7 +240,7 @@ function subagentModelScenario({ check }) {
       // scripted calls the mock answers with.
       await ensureCardOpen(page)
       await page.click(`${CARD}[data-open="true"] ${OPTION}:nth-child(1)`)
-      await waitForText(page, PICKED)
+      await waitForLabel(page, PICKED)
       const sentAt = Date.now()
       await sendPrompt(page, 'delegate now')
       // The first turn already left its tail row, so waiting on a tail again
@@ -300,19 +309,19 @@ function subagentModelScenario({ check }) {
       await page.click(`${CARD}[data-open="true"] ${OPTION}:nth-child(1)`, { timeout: 5000 }).catch(() => {})
       await page.waitForSelector(`${CARD}[data-open="true"] ${OPTION}:nth-child(2)`, { timeout: 5000 }).catch(() => {})
       await page.click(`${CARD}[data-open="true"] ${OPTION}:nth-child(2)`, { timeout: 5000 }).catch(() => {})
-      // The count is what says the second write landed: the entry was already in
-      // its picked state after the first row.
+      // The accessible name changes when the second write lands.
       await page.waitForFunction((selector) => {
         const trigger = document.querySelector(selector)
-        return trigger !== null && /2/.test(trigger.textContent ?? '')
+        return trigger !== null && /2/.test(trigger.getAttribute('aria-label') ?? '')
       }, TRIGGER, { timeout: 8000 }).catch(() => {})
       const second = await readEntry(page)
       const secondSession = await shownSession(page)
       const secondRecord = await readRecord(page)
       const firstRecord = await readRecord(page, firstSession)
-      checks.push(check('另一条会话可以同时选两条，入口显示的是数量',
-        secondSession !== firstSession && second.text !== PICKED && second.text !== '' && second.card.rows.length === secondRows,
-        JSON.stringify({ second: secondSession, first: firstSession, text: second.text, rows: second.card.rows })))
+      checks.push(check('另一条会话可以同时选两条，入口说明选择数量',
+        secondSession !== firstSession && /2/.test(second.label ?? '') && second.card.rows.length === secondRows &&
+          second.card.rows.slice(0, 2).every((row) => row.checked === 'true') && second.card.rows[2]?.checked === 'false',
+        JSON.stringify({ second: secondSession, first: firstSession, label: second.label, rows: second.card.rows })))
       checks.push(check('两条会话各自保存自己的选择，互不改写',
         Array.isArray(secondRecord.selected) && secondRecord.selected.length === 2 &&
           Array.isArray(firstRecord.selected) && firstRecord.selected.length === 1 && firstRecord.selected[0].model === ROUTES[0].model,

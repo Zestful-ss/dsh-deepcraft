@@ -469,6 +469,10 @@ The context meter's popover is the host's own panel (it portals it, places it,
 and dismisses it), so the skin drives its trigger on hover and paints nothing of
 the shell itself. What it carries is described under "Context popover" below.
 
+The subagent model entry uses a 28px icon button beside the model control. An
+accent dot marks a saved selection; the button's tooltip names it and the
+selection card wraps model and provider names onto as many lines as needed.
+
 **Card**
 
 | Property | Value |

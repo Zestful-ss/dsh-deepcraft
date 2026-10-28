@@ -81,14 +81,6 @@ export function triggerTitle(view: SeatView): string {
   return copy('triggerLabelNone')
 }
 
-/** The trigger's own text: the picked model, how many, or the entry's name. */
-export function triggerText(view: SeatView): string {
-  const label = selectionLabel(view.selected, view.catalog)
-  if (label.kind === 'one') return label.name
-  if (label.kind === 'many') return copy('triggerLabelMany', { count: label.count })
-  return copy('triggerLabelNone')
-}
-
 /** One model row: its name, the provider under it, and a check while it is picked. */
 function buildRouteRow(view: SeatView, route: SubagentModelRoute, handlers: SeatHandlers) {
   const picked = view.selected.some((candidate) => subagentRouteKey(candidate) === subagentRouteKey(route))

@@ -69,6 +69,10 @@ The settings page switches between the two palettes; light and dark follow the s
 - The composer pet is chosen per theme: Crab Buddy under Claude and Whaledou under DeepSeek, with the original pixel crab and whale still selectable in the same row.
 - "Import a pet package" in the settings page takes a folder, a ZIP or a Petdex link holding `pet.json` and an atlas, keeping the original bytes. The pet art belongs to Petdex and each package's author and is not shipped with this plugin.
 
+### Subagent models
+
+After enabling the host's subagent model selection and creating a session, use the subagent icon beside the composer to choose models. The panel shows complete names, and a dot on the icon marks a selection for the current session.
+
 ## Installation
 
 `lib/` is build output and does not travel with the sources; the packaged release lives on the `dist` branch, so the address names that branch, or build the source checkout first:

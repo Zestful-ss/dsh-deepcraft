@@ -15,12 +15,11 @@
   probe.step(async function () {
     await probe.onlyFor(['subagent-model'], async function () {
       var react = window.__react
-      var TRIGGER = '.dsh-deepcraft-subagent-model-btn'
       var CARD = '.dsh-deepcraft-subagent-model-popover'
       var OPTION = '.dsh-deepcraft-subagent-model-option'
       var CLEAR = '.dsh-deepcraft-subagent-model-clear'
 
-      var read = { present: false, label: null, state: null, expanded: null, rows: [], cardOpen: false, writes: [] }
+      var read = { present: false, rows: [], cardOpen: false }
       r.subagentModel = read
 
       var Component = (window.__slotComponents || {})['deepcraft-subagent-model']
@@ -50,26 +49,14 @@
           react.states = null
         }
         if (tree === null || typeof tree !== 'object' || !tree.props) return null
-        // The host's own createElement collects children into an array; the
-        // entry's label is the one string in it.
-        var children = tree.props.children
-        var text = typeof children === 'string' ? children : Array.isArray(children) ? children.filter(function (child) { return typeof child === 'string' }).join('') : ''
-        return { props: tree.props, text: text }
+        return { props: tree.props }
       }
       var describe = function (entry) {
         return entry === null ? null : {
-          text: entry.text,
           label: entry.props['aria-label'],
           state: entry.props['data-dsh-subagent-model'],
-          expanded: entry.props['aria-expanded'],
         }
       }
-
-      var first = describe(renderEntry())
-      read.label = first && first.label
-      read.state = first && first.state
-      read.expanded = first && first.expanded
-      read.firstText = first && first.text
 
       /** Open the card through the trigger's own declaration, as the host's press would. */
       var press = function (entry) {
@@ -106,7 +93,7 @@
       if (options.length > 0) options[0].click()
       await sleep(200)
       var picked = describe(renderEntry())
-      read.pickedText = picked && picked.text
+      read.pickedLabel = picked && picked.label
       read.pickedState = picked && picked.state
       read.pickedRows = readRows()
 
@@ -116,7 +103,6 @@
       if (rowsAgain.length > 1) rowsAgain[1].click()
       await sleep(200)
       var many = describe(renderEntry())
-      read.manyText = many && many.text
       read.manyLabel = many && many.label
 
       // And the clear row, which the card carries while anything is picked.
@@ -126,17 +112,8 @@
       if (clearRow !== null) clearRow.click()
       await sleep(200)
       var cleared = describe(renderEntry())
-      read.clearedText = cleared && cleared.text
       read.clearedState = cleared && cleared.state
 
-      var record = window.__subagentModel || { writes: [] }
-      read.writes = record.writes.map(function (body) {
-        return {
-          session: body.session,
-          routes: (body.routes || []).map(function (route) { return route.provider + '/' + route.model }),
-        }
-      })
-      read.stored = (record.selected || []).length
       seat.remove()
     })
   })

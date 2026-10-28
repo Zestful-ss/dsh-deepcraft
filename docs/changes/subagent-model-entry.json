@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-29",
+  "group": "improvements",
+  "order": 10,
+  "external": false,
+  "zh": "将子代理模型入口收成图标，并在选择面板中完整显示模型与供应商名称。",
+  "en": "Use a compact icon for the subagent model entry and show complete model and provider names in its selection panel."
+}

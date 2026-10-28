@@ -19,7 +19,7 @@ import { buildElement, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { currentSessionId, hostSessions, registerSlotEntry, sessionModelCatalog, sessionModelDirectory } from '@dsh-deepcraft/engine/host'
 import { closeOtherPopovers, positionAnchoredPopover, registerPopover, setMenuPopoverOpen, unregisterPopover } from '../../shared/popover'
 import { readSubagentRoutes } from '@dsh-deepcraft/contracts/subagent'
-import { buildCardContent, seatActs, seatShown, triggerText, triggerTitle } from './card'
+import { buildCardContent, seatActs, seatShown, triggerTitle } from './card'
 import { toggleRoute } from './state'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { SubagentModelRoute, SubagentModelsAnswer, SubagentModelsReason } from '@dsh-deepcraft/contracts/subagent'
@@ -303,7 +303,15 @@ export function install(ctx: HostContext) {
         if (open) closeCard()
         else openCard(anchor)
       },
-    }, triggerText(drawn))
+    }, React.createElement('svg', {
+      viewBox: '0 0 20 20', width: 16, height: 16, fill: 'none',
+      stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round',
+      'aria-hidden': true, focusable: false,
+    },
+    React.createElement('circle', { cx: 10, cy: 4, r: 2 }),
+    React.createElement('path', { d: 'M10 6v3M5 12v-1a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1' }),
+    React.createElement('circle', { cx: 5, cy: 14.5, r: 2.5 }),
+    React.createElement('circle', { cx: 15, cy: 14.5, r: 2.5 })))
   }
 
   /** Register the trigger in the host's seat; the fiber is what takes it down again. */
