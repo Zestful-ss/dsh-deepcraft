@@ -70,7 +70,17 @@ function samplerSource() {
         reader: scroller !== null && scroller.matches(marks.readerHold),
         scrollTop: scroller === null ? null : Math.round(scroller.scrollTop * 100) / 100,
         content: rowTop === null || viewTop === null || scroller === null ? null : Math.round((rowTop - viewTop + scroller.scrollTop) * 100) / 100,
+        // The same reading taken once the frame's own writes have landed: the
+        // frame callback above runs before the skin's write phase, so the two
+        // values answer different questions — what the sampler saw, and what
+        // the frame then painted.
+        painted: null,
       })
+      const entry = trace[trace.length - 1]
+      window.setTimeout(() => {
+        const node = document.querySelector(marks.running)
+        entry.painted = node === null ? null : Math.round(node.getBoundingClientRect().top * 100) / 100
+      }, 0)
       if (trace.length < 6000) requestAnimationFrame(sample)
     }
     requestAnimationFrame(sample)
@@ -140,8 +150,12 @@ function doorPinScenario({ check }) {
     async assert({ session, notes }) {
       // Each door is read on its own frames, from its press to its landing.
       const trace = notes.trace ?? []
+      // A frame is judged on the place it painted: the row's own reading at the
+      // next task is the layout that frame left on screen.
       const doorFrames = (door) => door === null || door === undefined ? []
-        : trace.slice(door.from, door.to).filter((frame) => frame.row !== null && frame.overflowing && !frame.reader)
+        : trace.slice(door.from, door.to)
+          .filter((frame) => frame.row !== null && frame.overflowing && !frame.reader)
+          .map((frame) => ({ ...frame, row: frame.painted === null || frame.painted === undefined ? frame.row : frame.painted }))
       const doors = [doorFrames(notes.shut), doorFrames(notes.open)]
       const rolling = doors.flatMap((frames) => frames.filter((frame) => frame.rolling))
       const slipped = rolling.filter((frame) => !frame.pinned)
