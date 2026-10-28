@@ -56,12 +56,20 @@ function samplerSource() {
     const sample = () => {
       const scroller = document.querySelector(marks.scroller)
       const row = document.querySelector(marks.running)
+      // The row's place on screen, the scroller's own numbers, and the row's
+      // place inside the content: a pin that holds shows a steady screen place,
+      // and a frame where only the content place moved says the scroller was
+      // still catching up rather than the row sliding.
+      const rowTop = row === null ? null : Math.round(row.getBoundingClientRect().top * 100) / 100
+      const viewTop = scroller === null ? null : Math.round(scroller.getBoundingClientRect().top * 100) / 100
       trace.push({
-        row: row === null ? null : Math.round(row.getBoundingClientRect().top * 100) / 100,
+        row: rowTop,
         pinned: row !== null && getComputedStyle(row).position === 'sticky',
         overflowing: scroller !== null && scroller.scrollHeight > scroller.clientHeight,
         rolling: document.querySelector(marks.rolling) !== null,
         reader: scroller !== null && scroller.matches(marks.readerHold),
+        scrollTop: scroller === null ? null : Math.round(scroller.scrollTop * 100) / 100,
+        content: rowTop === null || viewTop === null || scroller === null ? null : Math.round((rowTop - viewTop + scroller.scrollTop) * 100) / 100,
       })
       if (trace.length < 6000) requestAnimationFrame(sample)
     }
@@ -138,6 +146,14 @@ function doorPinScenario({ check }) {
       const rolling = doors.flatMap((frames) => frames.filter((frame) => frame.rolling))
       const slipped = rolling.filter((frame) => !frame.pinned)
       const spreads = doors.map((frames) => frames.length === 0 ? null : Math.max(...frames.map((frame) => frame.row)) - Math.min(...frames.map((frame) => frame.row)))
+      // Which of the two moved: the screen place, or the place inside the
+      // content the scroller had not caught up with yet.
+      const spreadOf = (frames, key) => {
+        const values = frames.map((frame) => frame[key]).filter((value) => value !== null && value !== undefined)
+        return values.length === 0 ? null : Math.round((Math.max(...values) - Math.min(...values)) * 100) / 100
+      }
+      const contentSpreads = doors.map((frames) => spreadOf(frames, 'content'))
+      const scrollSpreads = doors.map((frames) => spreadOf(frames, 'scrollTop'))
       return [
         check('两扇门都在推理流式输出时滚过',
           notes.shut?.expanded === 'true' && notes.open?.expanded === 'false' && notes.streaming === true &&
@@ -146,7 +162,7 @@ function doorPinScenario({ check }) {
         check('门滚动的每一帧状态行都钉着', rolling.length > 0 && slipped.length === 0,
           `${slipped.length} of ${rolling.length} door frames unpinned${slipped.length === 0 ? '' : `, row ${Math.min(...slipped.map((f) => f.row))}..${Math.max(...slipped.map((f) => f.row))}`}`),
         check('从按下到门落定，状态行停在同一处，连半个像素也不动', spreads.every((spread) => spread === 0),
-          `spread per door ${JSON.stringify(spreads)} over ${doors.map((frames) => frames.length).join(' and ')} frames`),
+          `spread per door ${JSON.stringify(spreads)} over ${doors.map((frames) => frames.length).join(' and ')} frames; content ${JSON.stringify(contentSpreads)}, scrollTop ${JSON.stringify(scrollSpreads)}`),
         check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
       ]
     },
