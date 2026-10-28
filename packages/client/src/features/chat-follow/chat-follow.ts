@@ -224,6 +224,21 @@ export function createChatFollowGuard(options: { foldBusy: () => boolean, submis
   }
 
   /**
+   * The live turn's own row, which carries the mark wherever the flow puts it.
+   *
+   * The host draws it as the flow's last row, and that last-row lookup is the
+   * cheap path; a batch the host commits as one frame can put a newer block
+   * after it, and then the row rides the column's slide unaided — a jump of a
+   * hundred pixels that glides back. So the mark is what decides: the row is
+   * wherever it is inside the column.
+   */
+  const pinnedRowOf = (column: HTMLElement): HTMLElement | null => {
+    const last = column.lastElementChild
+    const near = last === null ? null : last.matches(CHAT_RUNNING_SELECTOR) ? last : last.querySelector(CHAT_RUNNING_SELECTOR)
+    return (near as HTMLElement | null) ?? (column.querySelector(CHAT_RUNNING_SELECTOR) as HTMLElement | null)
+  }
+
+  /**
    * Put the column back down by this frame's growth and slide it to rest.
    *
    * One replace-mode animation at a time: an additive one stays off the
@@ -240,9 +255,7 @@ export function createChatFollowGuard(options: { foldBusy: () => boolean, submis
     const duration = motionMs('--dsh-deepcraft-duration-slide')
     const timing = { duration, easing: motionEase(GLIDE_TOKEN) }
     const columnSlide = column.animate([{ transform: `translateY(${from}px)` }, { transform: 'translateY(0px)' }], timing)
-    // The host draws the live turn's row as the flow's last row.
-    const last = column.lastElementChild
-    const pinned = last === null ? null : last.matches(CHAT_RUNNING_SELECTOR) ? last : last.querySelector(CHAT_RUNNING_SELECTOR)
+    const pinned = pinnedRowOf(column)
     const rowSlide = pinned === null ? null : pinned.animate([{ transform: `translateY(${-from}px)` }, { transform: 'translateY(0px)' }], timing)
     const running = { column: columnSlide, row: rowSlide, from, duration }
     columnSlide.onfinish = () => {
