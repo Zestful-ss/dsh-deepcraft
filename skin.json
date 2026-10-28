@@ -1,0 +1,11 @@
+{
+  "id": "deepcraft",
+  "name": "DeepCraft",
+  "tagline": "Claude 与 DeepSeek 双主题外观",
+  "accent": "#d97757",
+  "bodyAttr": "data-dsh-deepcraft",
+  "package": "dsh-deepcraft",
+  "wiring": {
+    "id": "ui-skin-deepcraft"
+  }
+}
