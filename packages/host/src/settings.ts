@@ -5,7 +5,7 @@
  * The host derives every settings form from the profile entry's Config and
  * exposes only the fields marked `.volatile()`; the schema resolution is
  * defensive because a `link:`-installed plugin resolves its realpath outside
- * the profile tree (see resolveSchemaFactory). A host that cannot resolve the
+ * the profile tree (see host-package.ts). A host that cannot resolve the
  * package still loads the skin — it just loses the settings form.
  *
  * The preference list itself is the shared table, so both halves declare the
@@ -14,46 +14,29 @@
 import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
 import { PREFS } from '@dsh-deepcraft/contracts/prefs'
 import type { PrefKey } from '@dsh-deepcraft/contracts/prefs'
+import { resolveHostPackage } from './host-package.js'
 import type { DshContext, DshScope } from '@dsh-deepcraft/engine/node/dsh'
 
 /**
- * The schemastery instance the HARNESS itself resolves.
- *
- * A plugin installed by link (`link:D:/…`) resolves its realpath outside the
- * profile tree, so Node never walks the profile's `node_modules` and the plain
- * import fails outright — and the copy the profile's interception layer would
- * offer can belong to a DIFFERENT installation (the Desktop bundle's 3.18.2,
- * which has no `.volatile()`). The harness always carries schemastery beside
- * its own bin, and that copy is the instance the settings domain validates
- * forms against, so it is asked for first; normal resolution stays as the
- * fallback for a plainly installed plugin.
- *
- * @returns the schema factory, or null when neither path resolves.
+ * The schemastery instance the HARNESS itself resolves, narrowed to the shape
+ * this half uses (host-package.ts says why the host's own copy is the one that
+ * counts).
  */
-async function resolveSchemaFactory(): Promise<SchemaFactory | null> {
-  try {
-    const { createRequire } = await import('node:module')
-    const anchor = typeof process.argv[1] === 'string' && process.argv[1] !== '' ? process.argv[1] : process.execPath
-    const factory = createRequire(anchor)('@deepseek-ai/schemastery')
-    if (factory !== null && factory !== undefined && typeof factory.object === 'function') return factory as SchemaFactory
-  } catch { /* the anchor carries no schemastery: try normal resolution */ }
-  try {
-    // The specifier stays a value: the module is optional, so neither the type
-    // check nor the build may require it to be installed.
-    const specifier = '@deepseek-ai/schemastery'
-    const resolved = await import(specifier)
-    const factory = resolved?.default ?? resolved?.Schema ?? null
-    return factory !== null && factory !== undefined && typeof factory.object === 'function' ? factory as SchemaFactory : null
-  } catch {
-    return null
+function schemaFactoryOf(resolved: unknown): SchemaFactory | null {
+  if (resolved === null || resolved === undefined) return null
+  // The package hands over an object, a callable, or a module namespace holding
+  // either: schemastery's own export is a function carrying `.object`.
+  const module = resolved as { object?: unknown, default?: unknown, Schema?: unknown }
+  for (const candidate of [module, module.default, module.Schema]) {
+    const shaped = typeof candidate === 'object' || typeof candidate === 'function'
+    if (candidate !== null && shaped && typeof (candidate as SchemaFactory).object === 'function') {
+      return candidate as SchemaFactory
+    }
   }
+  return null
 }
 
-/**
- * The schema factory the host provides (`@deepseek-ai/schemastery`), as far as
- * this half uses it: it is resolved at runtime and may be absent (D75), so the
- * shape is declared here rather than imported.
- */
+/** One schema factory, as far as this half uses it: it is resolved at runtime and may be absent (D75). */
 interface SchemaFactory {
   object(fields: Record<string, unknown>): unknown
   string(): SchemaField
@@ -68,7 +51,7 @@ interface SchemaField {
   volatile?(): SchemaField
 }
 
-const SchemaFactory = await resolveSchemaFactory()
+const SchemaFactory = schemaFactoryOf(await resolveHostPackage('@deepseek-ai/schemastery'))
 
 /** Mark one field editable by the settings page, where the factory supports it. */
 function volatileField(field: SchemaField | null | undefined) {

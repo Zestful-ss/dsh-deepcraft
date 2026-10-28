@@ -1,5 +1,5 @@
 import { MODEL_EFFORT_DEFAULT } from './copy-fallbacks'
-import { currentSessionId, hostModelDirectories, hostSessions } from '@dsh-deepcraft/engine/host'
+import { currentSessionId, hostSessions, sessionModelDirectory } from '@dsh-deepcraft/engine/host'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { HostModelCatalogSnapshot, HostModelDirectory, HostModelEntry, HostModelGroup, HostModelReasoning } from '@dsh-deepcraft/contracts/services'
 import { notifyAll } from '@dsh-deepcraft/engine/notify'
@@ -66,17 +66,10 @@ export function createModelCatalog(options: { ctx: HostContext, schedule?: () =>
     dropSubscription()
     modelDir = null
     modelSessionId = null
-    const dirs = hostModelDirectories(ctx)
-    if (typeof dirs?.directoryFor === 'function') {
-      try {
-        modelDir = dirs.directoryFor(id)
-      } catch (error) {
-        // The host throws for a session id that has not materialized
-        // its scope yet (ui-model-selection directoryFor): no directory
-        // this time, and the next pass asks again.
-        modelDir = null
-      }
-    }
+    // The host throws for a session id that has not materialized its scope yet;
+    // the accessor answers that as "no directory this time", and the next pass
+    // asks again (engine/host.ts).
+    modelDir = sessionModelDirectory(ctx, id)
     modelSessionId = id
     // The directory INSTANCE only carries load/select — its reactive state
     // hangs off the `.store` snapshot store (the host hands that same store

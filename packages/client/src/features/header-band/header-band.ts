@@ -10,7 +10,7 @@ import {
 } from '@dsh-deepcraft/contracts/dom'
 import { observeMatches, observeSize } from '@dsh-deepcraft/engine/bus'
 import { desktopBand } from '@dsh-deepcraft/engine/desktop-band'
-import { findRightbarToggle, findWindowsMenu, hostSlots } from '@dsh-deepcraft/engine/host'
+import { findRightbarToggle, findWindowsMenu, registerSlotEntry } from '@dsh-deepcraft/engine/host'
 import { createStamp, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { inPageBox, inPagePixels } from '../../shared/page-zoom'
 import type { FeatureUi } from '../../core/feature'
@@ -161,15 +161,11 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
 
   /** Register that control in the header's utilities seat, which renders it wherever it stands. */
   function registerRightbarClose() {
-    if (typeof ctx.inject !== 'function') return
-    ctx.inject(['slots'], scope => {
-      const slots = hostSlots(scope)
-      if (slots === undefined || slots === null || typeof slots.inject !== 'function') return
-      scope.effect(() => slots.inject(UTILITIES_SLOT, () => slots.register(
-        { name: UTILITIES_SLOT, id: 'deepcraft-rightbar-close', order: 90 },
-        RightbarClose,
-      )), 'dsh-deepcraft: right panel control')
-    })
+    registerSlotEntry(ctx, 'dsh-deepcraft: right panel control', UTILITIES_SLOT, {
+      name: UTILITIES_SLOT,
+      id: 'deepcraft-rightbar-close',
+      order: 90,
+    }, RightbarClose)
   }
 
   /**

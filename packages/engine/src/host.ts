@@ -1,5 +1,5 @@
 import { CHAT_FLOW_SELECTOR, COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, COMPOSER_PLACEHOLDER_SELECTOR, COMPOSER_SELECTOR, COMPOSER_STACK_SELECTOR, COMPOSER_STATS_SELECTOR, COMPOSER_STAT_SELECTOR, COMPOSER_VARIANT_ATTRIBUTE, CONVERSATION_SCROLL_SELECTOR, CONVERSATION_SESSION_ATTRIBUTE, CONVERSATION_SESSION_SELECTOR, DIALOG_TRIGGER_SELECTOR, FOOT_AREA_SELECTOR, MENU_ROLE_SELECTOR, PERMISSION_TRIGGER_SELECTOR, PHASE_ATTRIBUTE, RIGHTBAR_TOGGLE_SELECTOR, SIDEBAR_BRAND_SELECTOR, SIDEBAR_ROOT_SELECTOR, SIDEBAR_TOGGLE_SELECTOR, WINDOWS_MENU_SELECTOR } from '@dsh-deepcraft/contracts/dom'
-import type { HostAccountService, HostAssistantStep, HostChatSnapshot, HostChatTarget, HostConfigFormsService, HostConversationService, HostLocaleService, HostModelDirectoriesService, HostServiceLookup, HostOutlineTurn, HostRunningCall, HostSession, HostSessionsService, HostShortcutsService, HostSlotsService, HostTurn, HostUiConversationService, HostUiSessionService, HostWorkspacesService } from '@dsh-deepcraft/contracts/services'
+import type { HostAccountService, HostAssistantStep, HostChatSnapshot, HostChatTarget, HostConfigFormsService, HostConversationService, HostLocaleService, HostModelCatalogSnapshot, HostModelDirectoriesService, HostModelDirectory, HostServiceLookup, HostOutlineTurn, HostRunningCall, HostSession, HostSessionsService, HostShortcutsService, HostSlotOptions, HostSlotsService, HostTurn, HostUiConversationService, HostUiSessionService, HostWorkspacesService } from '@dsh-deepcraft/contracts/services'
 import { observeMatches, subscribeMutations } from './bus'
 import { closestFrom } from './dom'
 
@@ -402,6 +402,30 @@ export function hostModelDirectories(lookup: HostServiceLookup | null | undefine
   return directories ?? null
 }
 
+/**
+ * One session's model directory: the instance carrying the catalog load and the
+ * pick, whose reactive state hangs off its `.store`.
+ *
+ * The host refuses a session id whose scope has not materialized yet, so a
+ * miss is answered as "no directory this time" and the next pass asks again.
+ */
+export function sessionModelDirectory(lookup: HostServiceLookup | null | undefined, sessionId: string): HostModelDirectory | null {
+  const directories = hostModelDirectories(lookup)
+  if (typeof directories?.directoryFor !== 'function') return null
+  try {
+    return directories.directoryFor(sessionId) ?? null
+  } catch {
+    return null
+  }
+}
+
+/** One session's model catalog as its own directory holds it, or null before it has one. */
+export function sessionModelCatalog(lookup: HostServiceLookup | null | undefined, sessionId: string): HostModelCatalogSnapshot | null {
+  const directory = sessionModelDirectory(lookup, sessionId)
+  if (directory === null || typeof directory.store?.getSnapshot !== 'function') return null
+  return directory.store.getSnapshot() ?? null
+}
+
 /** The shell's language, and the namespaces it translates. */
 export function hostLocale(lookup: HostServiceLookup | null | undefined): HostLocaleService | null {
   const locale = lookup?.get('locale') as HostLocaleService | undefined
@@ -424,6 +448,35 @@ export function hostShortcuts(lookup: HostServiceLookup | null | undefined): Hos
 export function hostSlots(lookup: HostServiceLookup): HostSlotsService | null {
   const slots = lookup.get('slots') as HostSlotsService | undefined
   return slots ?? null
+}
+
+/**
+ * Register one component into a host slot, once the slot service exists.
+ *
+ * The registration waits for `slots` and drops with the scope that declared it,
+ * so a generation relink leaves no entry behind. A host that carries no slots
+ * service — or a page whose slot never arrives — simply registers nothing; the
+ * feature then shows nothing in that seat rather than failing.
+ *
+ * @param ctx - the feature's host context.
+ * @param label - what the host's log calls this registration.
+ * @param slot - the slot's name, as the host declares it.
+ * @param options - the entry's own declaration inside the slot.
+ * @param component - what the slot renders.
+ */
+export function registerSlotEntry(
+  ctx: HostContext,
+  label: string,
+  slot: string,
+  options: HostSlotOptions,
+  component: unknown,
+): void {
+  if (typeof ctx.inject !== 'function') return
+  ctx.inject(['slots'], (scope) => {
+    const slots = hostSlots(scope)
+    if (slots === null || typeof slots.inject !== 'function') return
+    scope.effect(() => slots.inject(slot, () => slots.register(options, component)), label)
+  })
 }
 
 /** The client remote: the endpoint every service behind it is reached through. */
