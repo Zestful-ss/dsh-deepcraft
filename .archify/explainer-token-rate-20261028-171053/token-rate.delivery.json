@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "6d7fac28-2d78-48e4-b891-195f1eae9dc6",
+  "status": "current",
+  "command": "deliver",
+  "type": "explainer",
+  "input": "E:\\Ai_Working\\dsh\\dsh-deepcraft\\.archify\\explainer-token-rate-20261028-171053\\candidate.archify.md",
+  "output": "E:\\Ai_Working\\dsh\\dsh-deepcraft\\.archify\\explainer-token-rate-20261028-171053\\token-rate.html",
+  "specification": {
+    "sha256": "f76208c001dda65b1824cea125069b77f43e0b49fb0804faddd1b758e705be73",
+    "bytes": 8169
+  },
+  "artifact": {
+    "sha256": "f6a4f9204c37d5b6c969eaa4942e1b8fa168a9e6ff81a87310e1d26256ad2165",
+    "bytes": 193872
+  },
+  "explainer": {
+    "preparedSha256": "0f2ad70e5288de9de1c33bffddacaafcd6a7ddb0aa6db45c8a30414ed4d45565",
+    "dependencies": []
+  }
+}

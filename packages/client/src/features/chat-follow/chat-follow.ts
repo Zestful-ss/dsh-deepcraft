@@ -359,6 +359,18 @@ export function createChatFollowGuard(options: { foldBusy: () => boolean, submis
       if (delta > 0) grew = delta
     }
     holdCheck()
+    // A fold's height step lands in this frame, and the host's own follow is
+    // off while that door rolls (the hold above keeps only the pin standing):
+    // the tail then sits one step short until the fold hands the follow back,
+    // and a slow machine paints that step. The reader is at the tail and the
+    // step is already in the layout, so the end goes back here, in this frame.
+    if (foldBusy() && column !== null && before >= scrollerHeight && column.closest(FOLLOWING_TAIL_SELECTOR) !== null) {
+      const scroller = conversationScroller()
+      if (scroller !== null) {
+        const end = scroller.scrollHeight - scroller.clientHeight
+        if (end - scroller.scrollTop > 0.5) scroller.scrollTop = end
+      }
+    }
     // Only a column that already overflowed had its end pinned by the whole
     // growth; a first screen filling up moves nothing above it.
     if (column === null || grew === 0 || before < scrollerHeight) return
