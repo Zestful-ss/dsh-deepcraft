@@ -19,7 +19,7 @@ import { buildElement, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { currentSessionId, hostSessions, registerSlotEntry, sessionModelCatalog, sessionModelDirectory } from '@dsh-deepcraft/engine/host'
 import { closeOtherPopovers, positionAnchoredPopover, registerPopover, setMenuPopoverOpen, unregisterPopover } from '../../shared/popover'
 import { readSubagentRoutes } from '@dsh-deepcraft/contracts/subagent'
-import { buildCardContent, seatActs, triggerText, triggerTitle } from './card'
+import { buildCardContent, seatActs, seatShown, triggerText, triggerTitle } from './card'
 import { toggleRoute } from './state'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { SubagentModelRoute, SubagentModelsAnswer, SubagentModelsReason } from '@dsh-deepcraft/contracts/subagent'
@@ -286,6 +286,7 @@ export function install(ctx: HostContext) {
       return stop
     }, [])
     const drawn = view()
+    if (!seatShown(drawn)) return null
     const usable = seatActs(drawn)
     return React.createElement('button', {
       type: 'button',
@@ -321,7 +322,10 @@ export function install(ctx: HostContext) {
   // The session the shell shows decides which answer is on show, and a host
   // render can replace the slotted node without telling the closure.
   const sessions = hostSessions(ctx)
-  const stopSessions = typeof sessions?.list?.subscribe === 'function' ? sessions.list.subscribe(() => { sync(); refresh() }) : null
+  // A session switch is what changes the answer, and `sync` reads it on every
+  // notice: re-rendering the seat on each list event would put a React commit in
+  // the composer's frame for no change at all.
+  const stopSessions = typeof sessions?.list?.subscribe === 'function' ? sessions.list.subscribe(() => { sync() }) : null
   // The catalog arrives after the entry does: names for the rows and the
   // trigger come from it, so its store is worth hearing.
   let stopCatalog: (() => void) | null = null
@@ -334,7 +338,14 @@ export function install(ctx: HostContext) {
     if (id === null) return
     const directory = sessionModelDirectory(ctx, id)
     if (typeof directory?.store?.subscribe === 'function') {
-      stopCatalog = directory.store.subscribe(() => { refresh() })
+      // The names come from the catalog's snapshot: only a new one redraws.
+      let shown = sessionModelCatalog(ctx, id)
+      stopCatalog = directory.store.subscribe(() => {
+        const next = sessionModelCatalog(ctx, id)
+        if (next === shown) return
+        shown = next
+        refresh()
+      })
     }
     if (typeof directory?.load === 'function') {
       // A failed catalog load is the host's own to report through the store;

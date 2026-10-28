@@ -54,6 +54,22 @@ export function seatActs(view: SeatView) {
   return view.allowed.length > 0 && (view.reason === undefined || !BLOCKING.includes(view.reason))
 }
 
+/**
+ * Whether the entry belongs on the page at all.
+ *
+ * Until the host answers there is nothing to draw, and a session whose
+ * composition recorded no allowed list has nothing to choose: the composer's row
+ * is the scarcest space in the interface, and the official switch being off is a
+ * fact about that profile, said once by the settings row, not a control worth
+ * its width in every session (`narrow` in the end-to-end lane holds the row's
+ * other controls at 330px). A store that failed is different — that is a fault
+ * the reader can only learn here, so it shows.
+ */
+export function seatShown(view: SeatView & { loading: boolean }): boolean {
+  if (view.loading) return false
+  return view.reason !== 'no-policy' && view.reason !== 'no-session'
+}
+
 /** The trigger's accessible name, which carries the state the label alone leaves out. */
 export function triggerTitle(view: SeatView): string {
   if (!seatActs(view)) {

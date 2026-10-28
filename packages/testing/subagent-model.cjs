@@ -261,8 +261,11 @@ function subagentModelScenario({ check }) {
         asked.includes(DENIED_NO_PAIR), asked.includes(DENIED_NO_PAIR) ? '' : asked.slice(0, 200)))
       checks.push(check('写了允许列表里没有选中的那条也被拒绝',
         asked.includes(DENIED_NOT_PICKED), asked.includes(DENIED_NOT_PICKED) ? '' : asked.slice(0, 200)))
+      // The refusals are this skin's own sentences, so they read the same on
+      // every page language; a started call is what carries neither of them.
       checks.push(check('被拒绝的两次调用都没有启动子智能体',
-        flow.calls.filter((text) => text.includes('已启动')).length === 1, JSON.stringify(flow.calls)))
+        flow.calls.filter((text) => !text.includes(DENIED_NO_PAIR) && !text.includes(DENIED_NOT_PICKED)).length === 1,
+        JSON.stringify(flow.calls)))
       checks.push(check('选中的那条放行，子代理的答复回到父会话里',
         flow.whole.includes('child finished'), flow.whole.slice(-240)))
 

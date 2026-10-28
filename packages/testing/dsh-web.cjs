@@ -248,6 +248,7 @@ async function openPage(url, options = {}) {
       args: options.args,
       width: options.width,
       height: options.height,
+      reducedMotion: options.reducedMotion,
       initScript: options.initScript,
     })
     : await sharedOn(options.browser, options)

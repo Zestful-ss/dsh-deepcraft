@@ -343,6 +343,10 @@ async function runScenario(name, options) {
     // without them: a scenario that carries any starts a browser of its own,
     // which its own `close` takes down again.
     session = await openPage(host.url, {
+      // Every scenario samples frames, and the transcript's own slide only runs
+      // with motion allowed: the machine's setting would decide whether a
+      // reading measures the slide or its absence (packages/testing/browser.cjs).
+      reducedMotion: 'no-preference',
       browser: scenario.browserArgs === undefined ? options.browser : undefined,
       headless: options.headed !== true,
       args: scenario.browserArgs,

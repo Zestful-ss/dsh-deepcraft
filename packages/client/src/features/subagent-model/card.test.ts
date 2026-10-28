@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { buildCardContent, seatActs, triggerText, triggerTitle } from './card'
+import { buildCardContent, seatActs, seatShown, triggerText, triggerTitle } from './card'
 import type { SeatView } from './card'
 import type { HostModelCatalogSnapshot } from '@dsh-deepcraft/contracts/services'
 
@@ -34,6 +34,17 @@ test('a session with no allowed list cannot act, and one whose content merely we
   expect(seatActs(view({ reason: 'stale-selection', selected: routes }))).toBe(true)
   expect(seatActs(view())).toBe(true)
   expect(seatActs(view({ allowed: [] }))).toBe(false)
+})
+
+test('the entry stays off the page while the answer is in flight and where there is nothing to choose', () => {
+  expect(seatShown({ ...view(), loading: true })).toBe(false)
+  expect(seatShown({ ...view({ reason: 'no-policy', allowed: [] }), loading: false })).toBe(false)
+  expect(seatShown({ ...view({ reason: 'no-session' }), loading: false })).toBe(false)
+  // A fault the reader can only learn here keeps the entry, and so does a pick
+  // the policy went stale under.
+  expect(seatShown({ ...view({ reason: 'store-unavailable', allowed: [] }), loading: false })).toBe(true)
+  expect(seatShown({ ...view({ reason: 'stale-selection', selected: routes }), loading: false })).toBe(true)
+  expect(seatShown({ ...view(), loading: false })).toBe(true)
 })
 
 test('the trigger names the one route, counts several, and stays quiet for none', () => {
