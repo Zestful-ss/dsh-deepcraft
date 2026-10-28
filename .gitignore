@@ -10,3 +10,6 @@ lib/
 
 # Editor session state
 .claude/
+
+# Diagram/explainer output from other tooling in this workspace
+.archify/
