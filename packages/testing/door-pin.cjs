@@ -36,14 +36,21 @@ const SKIN = {
 }
 
 /**
- * Sample the page once per frame until the turn settles: the row's place on
- * screen, whether the pin is on it, and whether a door is rolling.
+ * The page-side sampler, run before the page's own scripts.
  *
- * @param page - the lane's page.
- * @returns once the sampler is running; the frames land in the page's own global.
+ * Its callback has to be in a frame before the skin's: a sampler registered
+ * later reads after the skin's own frame callbacks have written, and what it
+ * catches there is a state the frame has not painted yet — the row's position
+ * mid-frame, not the one the reader sees. Registered first, it reads the layout
+ * the previous frame left on screen, which is what "did the row move" means.
+ *
+ * @returns the source of an init script that starts the loop and keeps the
+ *     frames on `window.__doorPinTrace`.
  */
-function watch(page) {
-  return page.evaluate((marks) => {
+function samplerSource() {
+  const marks = { ...HOST, ...SKIN }
+  return `(() => {
+    const marks = ${JSON.stringify(marks)}
     const trace = []
     window.__doorPinTrace = trace
     const sample = () => {
@@ -59,7 +66,7 @@ function watch(page) {
       if (trace.length < 6000) requestAnimationFrame(sample)
     }
     requestAnimationFrame(sample)
-  }, { ...HOST, ...SKIN })
+  })()`
 }
 
 /**
@@ -97,13 +104,14 @@ function doorPinScenario({ check }) {
       '  config:',
       '    transcriptView: standard',
     ],
+    // The sampler's frame callback goes in before the bundle's (D66).
+    initScript: samplerSource(),
     /**
      * Wait for the running group to reason, open, under a transcript taller than
      * the viewport, then roll its door shut and open again.
      */
     async duringTurn(context) {
       const { page } = context
-      await watch(page)
       await page.waitForFunction((marks) => {
         const scroller = document.querySelector(marks.scroller)
         const groups = [...document.querySelectorAll(marks.group)]
