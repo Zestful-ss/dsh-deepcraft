@@ -359,42 +359,10 @@ export function createChatFollowGuard(options: { foldBusy: () => boolean, submis
       if (delta > 0) grew = delta
     }
     holdCheck()
-    // The host's follow is off while a door rolls, so the tail has to be held
-    // here for the door's whole run (pinThroughFold).
-    if (foldBusy()) pinThroughFold()
     // Only a column that already overflowed had its end pinned by the whole
     // growth; a first screen filling up moves nothing above it.
     if (column === null || grew === 0 || before < scrollerHeight) return
     if (slideWanted(column)) startSlide(column, grew)
-  }
-
-  /** The frame the fold's pin is scheduled on, while one runs. */
-  let foldPinFrame: number | null = null
-
-  /**
-   * Hold the end for as long as a door rolls.
-   *
-   * A door's height is animation-driven and lands a step per frame, while the
-   * host's own follow is off until the fold hands it back: one step at the
-   * tail is then painted with the status row that step short, which a slow
-   * machine shows as a jump of a few pixels. The write has to be in every
-   * frame the step lands in — a resize callback alone can run before the
-   * animation's sample — so this walks frames for the door's run and stops on
-   * its own when the fold is over or the reader leaves the tail.
-   */
-  const pinThroughFold = () => {
-    if (foldPinFrame !== null || stopped) return
-    const step = () => {
-      foldPinFrame = null
-      if (stopped || !foldBusy() || readerAway()) return
-      const scroller = conversationScroller()
-      if (scroller !== null) {
-        const end = scroller.scrollHeight - scroller.clientHeight
-        if (end - scroller.scrollTop > 0.5) scroller.scrollTop = end
-      }
-      foldPinFrame = window.requestAnimationFrame(step)
-    }
-    foldPinFrame = window.requestAnimationFrame(step)
   }
 
   /**
