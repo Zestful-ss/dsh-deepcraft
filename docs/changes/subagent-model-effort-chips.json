@@ -1,8 +1,0 @@
-{
-  "at": "2026-10-29",
-  "group": "improvements",
-  "order": 0,
-  "external": false,
-  "zh": "子代理模型入口的思考强度改为模型行下的一行档位：不指定加模型声明的各档并排成一行，当前档实底显示，面板不再为强度单开一列。",
-  "en": "Each picked subagent route's reasoning effort is now one compact row of chips under its model row: Unspecified plus the levels the model declares, the level in force filled solid, so the card no longer opens a whole column for it."
-}

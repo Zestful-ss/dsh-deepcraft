@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.21.1] - 2026-10-29
 
-<h3 id="cn-unreleased">体验优化</h3>
+[中文](#cn-0.21.1) | [English](#en-0.21.1)
+
+<h3 id="cn-0.21.1">体验优化</h3>
 
 - 子代理模型入口的思考强度改为模型行下的一行档位：不指定加模型声明的各档并排成一行，当前档实底显示，面板不再为强度单开一列。
 
-<h3 id="en-unreleased">Improvements</h3>
+<h3 id="en-0.21.1">Improvements</h3>
 
 - Each picked subagent route's reasoning effort is now one compact row of chips under its model row: Unspecified plus the levels the model declares, the level in force filled solid, so the card no longer opens a whole column for it.
 
