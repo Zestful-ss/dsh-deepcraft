@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.21.0] - 2026-10-29
 
-<h3 id="cn-unreleased">体验优化</h3>
+[中文](#cn-0.21.0) | [English](#en-0.21.0)
+
+<h3 id="cn-0.21.0">体验优化</h3>
 
 - 子代理模型入口的每条已选路由可以单独设思考强度：面板列出该模型声明的档位供选择，不指定则沿用模型默认；保存后 subagent 调用必须带上同一个 reasoning_effort，缺写或写错都会被拒绝并说明应传入的值。读不出档位、模型没有档位、或已存档位失效时都明说，可改回「不指定」。
 
-<h3 id="en-unreleased">Improvements</h3>
+<h3 id="en-0.21.0">Improvements</h3>
 
 - Each picked subagent route can carry its own reasoning effort: the entry lists the levels the model declares, with Unspecified keeping the model's default; once saved, a subagent call must pass that same reasoning_effort, and an omitted or mismatched one is refused with the value to pass. A route whose levels cannot be read, that offers none, or whose saved level lapses says so and can be set back to Unspecified.
 
