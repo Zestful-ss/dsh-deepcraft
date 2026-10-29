@@ -50,6 +50,22 @@ export interface DshSessions {
   /** One attached session by id; `undefined` for an id this host process has not opened. */
   get?(id: string): DshSession | undefined
 }
+/**
+ * The host's llm runtime (`ctx.get('llm')`), as the half reads it: the catalog
+ * and the resolver the official `subagent` tool's own validation shares. The
+ * resolved model info narrows at the reader — the shape this half needs is
+ * `reasoning.efforts` with the `id`s `resolveCallConfig` accepts.
+ */
+export interface DshLlm {
+  /** The provider ids this host serves. */
+  listProviders(): Promise<unknown>
+  /** The models one provider serves. */
+  listModels(providerId: string): Promise<unknown>
+  /** One model's descriptor, including its reasoning ladder when it declares one; rejects for an id the catalog lacks. */
+  resolveModelInfo(provider: string, model: string, signal?: AbortSignal): Promise<unknown>
+  /** The call config one provider/model/effort resolves to; rejects for an effort the model does not declare. */
+  resolveCallConfig(config: { provider: string, model: string, reasoningEffort?: string }, signal?: AbortSignal): Promise<unknown>
+}
 
 /**
  * The session projection registry, as the half reads it: one host-only value

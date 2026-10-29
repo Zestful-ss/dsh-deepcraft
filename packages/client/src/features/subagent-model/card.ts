@@ -2,8 +2,9 @@ import { SUBAGENT_ROUTES_MAX, subagentRouteKey } from '@dsh-deepcraft/contracts/
 import { buildElement } from '@dsh-deepcraft/engine/dom'
 import { POPOVER_CHECK_SVG, buildPopoverItem } from '../../shared/popover'
 import { copy } from './copy'
-import { routeNames, selectionLabel } from './state'
-import type { SubagentModelRoute, SubagentModelsReason } from '@dsh-deepcraft/contracts/subagent'
+import { effortIsStale, orderedEffortIds, routeLadder, routeNames, selectionLabel } from './state'
+import type { RouteLadder } from './state'
+import type { SubagentModelRoute, SubagentModelsReason, SubagentRouteEfforts } from '@dsh-deepcraft/contracts/subagent'
 import type { HostModelCatalogSnapshot } from '@dsh-deepcraft/contracts/services'
 import type { CopyKey } from './copy'
 
@@ -17,6 +18,8 @@ export interface SeatView {
   catalog: HostModelCatalogSnapshot | null
   /** Why the entry cannot act, when the host says so. */
   reason?: SubagentModelsReason
+  /** Each allowed route's ladder resolved host-side; the fallback where the catalog cannot say. */
+  efforts?: SubagentRouteEfforts[]
   /** A write is in flight. */
   saving: boolean
   /** The last write failed; the saved selection still applies. */
@@ -25,9 +28,11 @@ export interface SeatView {
   full: boolean
 }
 
-/** The two decisions a row can send. */
+/** The three decisions the card sends. */
 export interface SeatHandlers {
   toggle(route: SubagentModelRoute): void
+  /** Set or clear (undefined) one picked route's reasoning effort. */
+  effort?(route: SubagentModelRoute, effort: string | undefined): void
   clear(): void
 }
 
@@ -81,6 +86,87 @@ export function triggerTitle(view: SeatView): string {
   return copy('triggerLabelNone')
 }
 
+/**
+ * One effort level's option: a real button so the keys reach it, the shared
+ * check slot marking the level in force. A press is this option's own — it must
+ * not reach the row's toggle, and a button cannot sit inside one anyway.
+ */
+function buildEffortOption(
+  route: SubagentModelRoute,
+  label: string,
+  effort: string | undefined,
+  current: string | undefined,
+  handlers: SeatHandlers,
+  saving: boolean,
+): HTMLButtonElement {
+  const option = buildElement('button', 'dsh-deepcraft-subagent-model-effort-option')
+  option.type = 'button'
+  const check = buildElement('span', 'dsh-deepcraft-popover-check')
+  check.innerHTML = current === effort ? POPOVER_CHECK_SVG : ''
+  option.appendChild(check)
+  option.appendChild(buildElement('span', 'dsh-deepcraft-subagent-model-effort-text', label))
+  option.disabled = saving
+  option.addEventListener('click', (event) => {
+    event.stopPropagation()
+    if (saving) return
+    handlers.effort?.(route, effort)
+  })
+  return option
+}
+
+/**
+ * The effort options under one picked row: the model's own name for each level,
+ * or the copy's name for the unspecified and the states a ladder cannot fill.
+ * A stored id the ladder no longer declares still shows, marked stale, so the
+ * reader sees what is in force and can clear it back to unspecified.
+ */
+function buildEffortList(
+  view: SeatView,
+  route: SubagentModelRoute,
+  stored: string | undefined,
+  ladder: RouteLadder,
+  handlers: SeatHandlers,
+): HTMLElement {
+  const list = buildElement('div', 'dsh-deepcraft-subagent-model-effort')
+  list.appendChild(buildElement('span', 'dsh-deepcraft-subagent-model-effort-label', copy('effortTitle')))
+  if (ladder.state === 'ok') {
+    const names = new Map(ladder.efforts.map((level) => [level.id, level.name || level.id]))
+    for (const id of orderedEffortIds(ladder)) {
+      const label = id === undefined ? copy('effortUnspecified') : names.get(id) ?? id
+      list.appendChild(buildEffortOption(route, label, id, stored, handlers, view.saving))
+    }
+  } else {
+    list.appendChild(buildEffortOption(route, copy('effortUnspecified'), undefined, stored, handlers, view.saving))
+    list.appendChild(buildElement(
+      'div',
+      'dsh-deepcraft-subagent-model-effort-note',
+      ladder.state === 'no-efforts' ? copy('effortNone') : copy('effortUnknown'),
+    ))
+  }
+  if (effortIsStale(ladder, stored)) {
+    const stale = buildEffortOption(route, stored as string, stored, stored, handlers, view.saving)
+    stale.classList.add('dsh-deepcraft-subagent-model-effort-stale')
+    list.appendChild(stale)
+    list.appendChild(buildElement('div', 'dsh-deepcraft-subagent-model-effort-note', copy('effortStale')))
+  }
+  return list
+}
+
+/**
+ * One entry in the route list: the model row, and — only while the route is
+ * picked — its effort sub-list as a sibling, since a button cannot nest in the
+ * row's own button.
+ */
+function buildRouteEntry(view: SeatView, route: SubagentModelRoute, handlers: SeatHandlers): HTMLElement {
+  const wrap = buildElement('div', 'dsh-deepcraft-subagent-model-entry')
+  wrap.appendChild(buildRouteRow(view, route, handlers))
+  const pickedRoute = view.selected.find((candidate) => subagentRouteKey(candidate) === subagentRouteKey(route))
+  if (pickedRoute !== undefined) {
+    wrap.appendChild(buildEffortList(view, route, pickedRoute.reasoningEffort, routeLadder(route, view.catalog, view.efforts), handlers))
+  }
+  return wrap
+}
+
 /** One model row: its name, the provider under it, and a check while it is picked. */
 function buildRouteRow(view: SeatView, route: SubagentModelRoute, handlers: SeatHandlers) {
   const picked = view.selected.some((candidate) => subagentRouteKey(candidate) === subagentRouteKey(route))
@@ -113,7 +199,7 @@ function buildRouteRow(view: SeatView, route: SubagentModelRoute, handlers: Seat
  * modes (one route, several) read differently in words.
  *
  * @param view - what to draw.
- * @param handlers - the two decisions.
+ * @param handlers - the card's decisions.
  */
 export function buildCardContent(view: SeatView, handlers: SeatHandlers): HTMLElement {
   const content = buildElement('div', 'dsh-deepcraft-popover-body dsh-deepcraft-subagent-model-content')
@@ -134,7 +220,7 @@ export function buildCardContent(view: SeatView, handlers: SeatHandlers): HTMLEl
 
   if (seatActs(view)) {
     const list = buildElement('div', 'dsh-deepcraft-subagent-model-list')
-    for (const route of view.allowed) list.appendChild(buildRouteRow(view, route, handlers))
+    for (const route of view.allowed) list.appendChild(buildRouteEntry(view, route, handlers))
     content.appendChild(list)
   }
 

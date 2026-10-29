@@ -63,6 +63,22 @@ async function subagentChoiceChecks() {
   check('a pick the rule cannot read is reported rather than treated as none',
     typeof unreadable === 'string' && unreadable.includes('still opening') && unreadable.includes('do not omit'), String(unreadable))
 
+  // --- a picked route's stored effort ---------------------------------------
+  // A route the reader gave a reasoning effort to: the call must name that
+  // same `reasoning_effort`, and the denial says what to pass.
+  const effortPick = { kind: 'routes', routes: [{ provider: 'magpie-responses', model: 'grok-4.7', reasoningEffort: 'high' }] }
+  const noEffort = call({ enabled: false, selection: effortPick, provider: 'magpie-responses', model: 'grok-4.7' })
+  check('a picked route carrying an effort denies a call that omits reasoning_effort, naming the value',
+    typeof noEffort === 'string' && noEffort.includes('reasoning_effort "high"'), String(noEffort))
+  const wrongEffort = call({ enabled: false, selection: effortPick, provider: 'magpie-responses', model: 'grok-4.7', reasoningEffort: 'low' })
+  check('a picked route carrying an effort denies a call naming another, naming the expected value',
+    typeof wrongEffort === 'string' && wrongEffort.includes('"high"') && wrongEffort.includes('"low"'), String(wrongEffort))
+  check('a picked route carrying an effort passes a call naming it',
+    call({ enabled: false, selection: effortPick, provider: 'magpie-responses', model: 'grok-4.7', reasoningEffort: 'high' }) === undefined)
+  const plainPick = { kind: 'routes', routes: [routes[1]] }
+  check('a picked route carrying no effort leaves reasoning_effort to the host\'s own validation',
+    call({ enabled: false, selection: plainPick, provider: routes[1].provider, model: routes[1].model, reasoningEffort: 'low' }) === undefined)
+
   // --- the prompt sentence -------------------------------------------------
   check('the prompt stays empty while the rule is off or the session has no policy',
     choice.subagentChoicePrompt(false, routes, { kind: 'none' }) === '' && choice.subagentChoicePrompt(true, undefined, { kind: 'none' }) === '')
@@ -77,6 +93,12 @@ async function subagentChoiceChecks() {
   const manyPicks = choice.subagentChoicePrompt(false, routes, { kind: 'routes', routes })
   check('with several picks the prompt asks for a choice for the task and denies the order meaning anything',
     manyPicks.includes('task at hand') && manyPicks.includes('List order is not a default.'), manyPicks)
+  const effortPrompt = choice.subagentChoicePrompt(false, routes, { kind: 'routes', routes: [{ provider: 'magpie-responses', model: 'grok-4.7', reasoningEffort: 'high' }] })
+  check('one picked route with an effort names it in the prompt',
+    effortPrompt.includes('grok-4.7') && effortPrompt.includes('reasoning_effort "high"'), effortPrompt)
+  const manyEffortPrompt = choice.subagentChoicePrompt(false, routes, { kind: 'routes', routes: [{ provider: routes[0].provider, model: routes[0].model, reasoningEffort: 'low' }, routes[1]] })
+  check('several picks name only the routes that carry an effort',
+    manyEffortPrompt.includes('reasoning_effort') && manyEffortPrompt.includes('"low"') && !manyEffortPrompt.includes('grok-4.7 on'), manyEffortPrompt)
   check('a pick the policy no longer allows, and one that cannot be read, state nothing in the prompt',
     choice.subagentChoicePrompt(false, routes, { kind: 'routes', routes: [{ provider: 'gone', model: 'old' }] }) === '' &&
       choice.subagentChoicePrompt(false, routes, { kind: 'unavailable', detail: 'x' }) === '')

@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-29",
+  "group": "improvements",
+  "order": 0,
+  "external": false,
+  "zh": "子代理模型入口的每条已选路由可以单独设思考强度：面板列出该模型声明的档位供选择，不指定则沿用模型默认；保存后 subagent 调用必须带上同一个 reasoning_effort，缺写或写错都会被拒绝并说明应传入的值。读不出档位、模型没有档位、或已存档位失效时都明说，可改回「不指定」。",
+  "en": "Each picked subagent route can carry its own reasoning effort: the entry lists the levels the model declares, with Unspecified keeping the model's default; once saved, a subagent call must pass that same reasoning_effort, and an omitted or mismatched one is refused with the value to pass. A route whose levels cannot be read, that offers none, or whose saved level lapses says so and can be set back to Unspecified."
+}

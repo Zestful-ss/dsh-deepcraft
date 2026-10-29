@@ -88,7 +88,9 @@
       read.rows = readRows()
       read.expandedAfterPress = (renderEntry() || {}).props['aria-expanded']
 
-      // Pick the first row: the entry's own write, answered by the page.
+      // Pick the first row — deepseek-flash, the route that declares an effort
+      // ladder: the entry's own write, answered by the page, and the effort
+      // sub-list the pick reveals.
       var options = document.querySelectorAll(CARD + ' ' + OPTION)
       if (options.length > 0) options[0].click()
       await sleep(200)
@@ -96,6 +98,32 @@
       read.pickedLabel = picked && picked.label
       read.pickedState = picked && picked.state
       read.pickedRows = readRows()
+
+      /** The effort options a picked route exposes: their labels and which is in force. */
+      var readEfforts = function () {
+        var card = document.querySelector(CARD)
+        if (card === null) return []
+        var opts = card.querySelectorAll('.dsh-deepcraft-subagent-model-effort-option')
+        var out = []
+        for (var i = 0; i < opts.length; i++) {
+          var check = opts[i].querySelector('.dsh-deepcraft-popover-check')
+          out.push({
+            text: (opts[i].querySelector('.dsh-deepcraft-subagent-model-effort-text') || {}).textContent || '',
+            inForce: check !== null && check.innerHTML !== '',
+          })
+        }
+        return out
+      }
+      read.effortOptions = readEfforts()
+
+      // Press the highest declared level; the page writes the effort on the route.
+      var effortButtons = document.querySelectorAll(CARD + ' .dsh-deepcraft-subagent-model-effort-option')
+      if (effortButtons.length > 1) effortButtons[effortButtons.length - 1].click()
+      await sleep(200)
+      read.effortAfterPick = readEfforts()
+      var lastWrite = (window.__subagentModel && window.__subagentModel.writes || []).slice(-1)[0] || {}
+      read.effortWritten = (lastWrite.routes && lastWrite.routes[0] && lastWrite.routes[0].reasoningEffort) || null
+      read.effortContract = lastWrite.contract === undefined ? null : lastWrite.contract
 
       // Then the second row, which is how several picks are made.
       var afterFirst = document.querySelector(CARD)

@@ -71,7 +71,7 @@ The settings page switches between the two palettes; light and dark follow the s
 
 ### Subagent models
 
-After enabling the host's subagent model selection and creating a session, use the subagent icon beside the composer to choose models. The panel shows complete names, and a dot on the icon marks a selection for the current session.
+After enabling the host's subagent model selection and creating a session, use the subagent icon beside the composer to choose models. The panel shows complete names, and a dot on the icon marks a selection for the current session. Each picked route can also carry its own reasoning effort, which later subagent calls then pass along.
 
 ## Installation
 

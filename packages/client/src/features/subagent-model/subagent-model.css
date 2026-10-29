@@ -135,3 +135,85 @@ body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-clear:disabled {
   cursor: default;
   opacity: 0.6;
 }
+
+/* ---------- the per-route effort list ---------- */
+/* The entry wraps the row and its effort sub-list as siblings: a button cannot
+   nest inside the row's own button, so the sub-list is indented to read as
+   belonging to the row above it. */
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 2px 4px 4px 14px;
+  min-width: 0;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-label {
+  color: var(--dsw-alias-label-caption);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 16px;
+  padding: 0 8px;
+}
+
+/* The options echo the shared popover item in miniature: same check slot, same
+   hover wash, one line of text. */
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 3px 8px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--dsw-alias-label-primary);
+  font-size: 12px;
+  line-height: 17px;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-option:hover:not(:disabled) {
+  background: var(--dsh-deepcraft-hover-bg);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-option:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-option .dsh-deepcraft-popover-check {
+  flex: none;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-text {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* A stored level the model no longer declares: still marked in force, but read
+   as a leftover the note below it asks the reader to clear. */
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-stale {
+  color: var(--dsw-alias-label-caption);
+  text-decoration: line-through;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-note {
+  color: var(--dsw-alias-label-caption);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 17px;
+  padding: 2px 8px 2px;
+  white-space: normal;
+}

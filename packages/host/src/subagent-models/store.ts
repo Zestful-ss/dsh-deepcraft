@@ -24,9 +24,10 @@ const DOMAIN_NAME = 'deepcraft_subagent_models'
 /** The one table: one record per session id. */
 const TABLE_NAME = 'selections'
 /**
- * The stored record's schema version. A record whose shape changes bumps this,
- * and the facility refuses to open a unit written under a version it does not
- * know rather than reading it wrong.
+ * The stored record's schema version. `reasoningEffort` joined the route under
+ * this same version: a record written before it still reads, and an older
+ * generation's strict schema refuses a record that carries it — which the
+ * route's write contract turns into a refusal instead of a silent drop.
  */
 const DOMAIN_VERSION = 1
 /**
@@ -40,6 +41,8 @@ const REOPEN_INTERVAL_MS = 25
 /** One zod value builder, as far as the record schema chains on it. */
 interface ZodValue {
   min(value: number): ZodValue
+  /** Accept the field's absence instead of requiring it. */
+  optional(): ZodValue
   /** Refuse an object carrying a key the schema does not name. */
   strict(): ZodValue
 }
@@ -76,7 +79,7 @@ export interface SubagentModelStore {
 
 /** The record's shape: at least one route, since clearing deletes the record instead. */
 function recordSchema(zod: ZodFactory) {
-  const route = (zod.object({ provider: zod.string().min(1), model: zod.string().min(1) }) as ZodValue).strict()
+  const route = (zod.object({ provider: zod.string().min(1), model: zod.string().min(1), reasoningEffort: zod.string().min(1).optional() }) as ZodValue).strict()
   return (zod.object({ routes: (zod.array(route) as ZodValue).min(1) }) as ZodValue).strict()
 }
 
@@ -226,7 +229,11 @@ export function createSubagentModelStore(ctx: DshContext, log: { warn?(message: 
       await store.delete(sessionId)
       return
     }
-    await store.put(sessionId, { routes: routes.map((route) => ({ provider: route.provider, model: route.model })) })
+    await store.put(sessionId, {
+      routes: routes.map((route) => route.reasoningEffort === undefined
+        ? { provider: route.provider, model: route.model }
+        : { provider: route.provider, model: route.model, reasoningEffort: route.reasoningEffort }),
+    })
   }
 
   function dispose() {

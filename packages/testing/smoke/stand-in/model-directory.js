@@ -19,7 +19,7 @@
       current: { provider: 'deepseek-official', model: 'deepseek-flash' },
       groups: [
         { id: 'deepseek-official', name: 'DeepSeek', models: [
-          { id: 'deepseek-flash', name: 'DeepSeek-V4.1-Flash' },
+          { id: 'deepseek-flash', name: 'DeepSeek-V4.1-Flash', reasoning: { defaultEffort: 'low', efforts: [{ id: 'low', name: 'Low' }, { id: 'high', name: 'High' }] } },
           { id: 'deepseek-v4-pro', name: 'DeepSeek-V4-Pro' },
         ] },
       ],

@@ -79,13 +79,25 @@ function response() {
 
 /**
  * The context both modules read: one live parent session, one of its children,
- * the policy the fake composition recorded, and the domain facility.
+ * the policy the fake composition recorded, the domain facility and — when a
+ * case hands one over — the llm service the route resolves effort ladders
+ * through. `llm` is a map of `provider/model` to a reasoning block, or a
+ * function that throws for a model the resolver rejects.
  */
-function fakeContext(policy) {
+function fakeContext(policy, llm) {
   const parent = { header: { id: 'session-parent' } }
   const child = { header: { id: 'session-child', parentSession: 'session-parent', origin: 'subagent' } }
   const live = new Map([[parent.header.id, parent], [child.header.id, child]])
   const facility = fakeDomainFacility()
+  const llmService = llm === undefined ? undefined : {
+    async resolveModelInfo(provider, model) {
+      const key = `${provider}/${model}`
+      if (typeof llm === 'function') return llm(provider, model)
+      const reasoning = llm[key]
+      if (reasoning === undefined) throw new Error(`no such model ${key}`)
+      return { provider, id: model, name: model, reasoning }
+    },
+  }
   return {
     facility,
     contexts: live,
@@ -97,6 +109,7 @@ function fakeContext(policy) {
         if (name === 'sessionProjections') {
           return { stateOf: (session, key) => (key === 'subagentModelSelectionPolicy' ? (live.has(session.header.id) ? policy : undefined) : undefined) }
         }
+        if (name === 'llm') return llmService
         return undefined
       },
     },
@@ -273,6 +286,78 @@ async function subagentStoreChecks() {
       JSON.stringify(failingStore.read('session-parent')) === JSON.stringify({ kind: 'routes', routes: [policy[0]] }),
       JSON.stringify(failingStore.read('session-parent')))
     failingStore.dispose()
+
+    // --- reasoning effort --------------------------------------------------
+    // The llm the route resolves ladders through: terra offers two levels plus
+    // a declared default, grok resolves but declares none, and an unknown model throws.
+    const llm = {
+      'magpie/terra': { defaultEffort: 'low', efforts: [{ id: 'low', name: 'Low' }, { id: 'high', name: 'High' }] },
+      'magpie/grok': null,
+    }
+    const effortPolicy = [{ provider: 'magpie', model: 'terra' }, { provider: 'magpie', model: 'grok' }]
+    const effort = fakeContext(effortPolicy, llm)
+    const effortStore = storeModule.createSubagentModelStore(effort.ctx, effort.ctx.logger)
+    effortStore.warm()
+    await settle()
+    const effortHandler = routeModule.subagentModelRoutes(effort.ctx, effortStore)[0].route.handler
+    const effortCall = async (method, url, body) => {
+      const res = response()
+      effortHandler(request(method, url, body), res)
+      await settle(40)
+      return res.out
+    }
+    const effortRead = await effortCall('GET', '/dsh-deepcraft/subagent-models?session=session-parent')
+    check('a read answers each allowed route\'s resolved ladder, including a model that declares none',
+      Array.isArray(effortRead.body.efforts) && effortRead.body.efforts.length === 2 &&
+        effortRead.body.efforts[0].state === 'ok' && effortRead.body.efforts[0].efforts.length === 2 && effortRead.body.efforts[0].defaultEffort === 'low' &&
+        effortRead.body.efforts[1].state === 'no-efforts',
+      JSON.stringify(effortRead.body.efforts))
+
+    const effortWrite = await effortCall('POST', '/dsh-deepcraft/subagent-models', { session: 'session-parent', contract: 2, routes: [{ provider: 'magpie', model: 'terra', reasoningEffort: 'high' }] })
+    check('a write that names a declared effort stores it and answers it back',
+      effortWrite.status === 200 && effortWrite.body.selected[0].reasoningEffort === 'high', JSON.stringify(effortWrite.body))
+    const effortReadBack = await effortCall('GET', '/dsh-deepcraft/subagent-models?session=session-parent')
+    check('the saved effort survives a second read', effortReadBack.body.selected[0].reasoningEffort === 'high', JSON.stringify(effortReadBack.body.selected))
+
+    const badEffort = await effortCall('POST', '/dsh-deepcraft/subagent-models', { session: 'session-parent', contract: 2, routes: [{ provider: 'magpie', model: 'terra', reasoningEffort: 'ultra' }] })
+    check('an effort the model does not declare is refused, not stored',
+      badEffort.status === 400 && badEffort.body.error === 'effort-not-allowed', JSON.stringify(badEffort.body))
+    const noLadder = await effortCall('POST', '/dsh-deepcraft/subagent-models', { session: 'session-parent', contract: 2, routes: [{ provider: 'magpie', model: 'grok', reasoningEffort: 'high' }] })
+    check('an effort on a model that declares none is refused, not stored',
+      noLadder.status === 400 && noLadder.body.error === 'effort-not-allowed', JSON.stringify(noLadder.body))
+
+    // The write-contract gate: an old-generation body (no `contract`) that
+    // would overwrite a record holding an effort is refused rather than
+    // silently dropping the field it cannot read.
+    const oldGen = await effortCall('POST', '/dsh-deepcraft/subagent-models', { session: 'session-parent', routes: [{ provider: 'magpie', model: 'grok' }] })
+    check('a write without the contract that would overwrite a stored effort is refused as stale',
+      oldGen.status === 409 && oldGen.body.error === 'stale-write', JSON.stringify(oldGen.body))
+    check('the refused write left the stored effort in place',
+      JSON.stringify(effortStore.read('session-parent')) === JSON.stringify({ kind: 'routes', routes: [{ provider: 'magpie', model: 'terra', reasoningEffort: 'high' }] }),
+      JSON.stringify(effortStore.read('session-parent')))
+    const freshContract = await effortCall('POST', '/dsh-deepcraft/subagent-models', { session: 'session-parent', contract: 2, routes: [] })
+    check('a write under the current contract clears the record again',
+      freshContract.status === 200 && freshContract.body.selected.length === 0, JSON.stringify(freshContract.body))
+    effortStore.dispose()
+
+    // A host whose llm service is absent answers every route `unknown` rather
+    // than failing the read, and refuses an effort write closed.
+    const noLlm = fakeContext(effortPolicy)
+    const noLlmStore = storeModule.createSubagentModelStore(noLlm.ctx, noLlm.ctx.logger)
+    noLlmStore.warm()
+    await settle()
+    const noLlmHandler = routeModule.subagentModelRoutes(noLlm.ctx, noLlmStore)[0].route.handler
+    const noLlmRead = response()
+    noLlmHandler(request('GET', '/dsh-deepcraft/subagent-models?session=session-parent'), noLlmRead)
+    await settle(40)
+    check('a host with no llm service still answers the routes, each ladder unknown',
+      noLlmRead.out.status === 200 && noLlmRead.out.body.efforts.every((entry) => entry.state === 'unknown'), JSON.stringify(noLlmRead.out.body.efforts))
+    const noLlmWrite = response()
+    noLlmHandler(request('POST', '/dsh-deepcraft/subagent-models', { session: 'session-parent', contract: 2, routes: [{ provider: 'magpie', model: 'terra', reasoningEffort: 'high' }] }), noLlmWrite)
+    await settle(40)
+    check('an effort write with no llm to check it against is refused closed',
+      noLlmWrite.out.status === 400 && noLlmWrite.out.body.error === 'effort-not-allowed', JSON.stringify(noLlmWrite.out.body))
+    noLlmStore.dispose()
 
     store.dispose()
     check('the domain the store opened carries the version and the one table the record needs',

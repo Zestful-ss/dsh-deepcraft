@@ -1,5 +1,6 @@
 import { SUBAGENT_ROUTES_MAX, subagentRouteKey } from '@dsh-deepcraft/contracts/subagent'
-import type { SubagentModelRoute } from '@dsh-deepcraft/contracts/subagent'
+import { orderEffortIds } from '../effort/ladder'
+import type { SubagentModelRoute, SubagentRouteEfforts } from '@dsh-deepcraft/contracts/subagent'
 import type { HostModelCatalogSnapshot } from '@dsh-deepcraft/contracts/services'
 
 /**
@@ -74,4 +75,82 @@ export function sameSelection(left: readonly SubagentModelRoute[], right: readon
   if (left.length !== right.length) return false
   const keys = new Set(left.map((route) => subagentRouteKey(route)))
   return right.every((route) => keys.has(subagentRouteKey(route)))
+}
+
+/**
+ * One route's reasoning ladder as the card draws it: `ok` when the levels are
+ * known, `no-efforts` when the model declares none, `unknown` when neither the
+ * catalog nor the host could say.
+ */
+export interface RouteLadder {
+  state: 'ok' | 'no-efforts' | 'unknown'
+  efforts: { id: string, name: string }[]
+  defaultEffort?: string
+}
+
+/**
+ * The ladder one route offers. The session catalog's own `reasoning` answers
+ * first; where the catalog lacks the model or carries no reasoning block, the
+ * GET answer's resolved `efforts` speak instead, and a route neither knows is
+ * `unknown`.
+ */
+export function routeLadder(
+  route: SubagentModelRoute,
+  catalog: HostModelCatalogSnapshot | null,
+  efforts: readonly SubagentRouteEfforts[] | undefined,
+): RouteLadder {
+  if (catalog !== null) {
+    for (const group of catalog.groups) {
+      if (group.id !== route.provider) continue
+      for (const model of group.models) {
+        if (model.id !== route.model) continue
+        if (model.reasoning !== undefined) {
+          return model.reasoning.efforts.length === 0
+            ? { state: 'no-efforts', efforts: [] }
+            : { state: 'ok', efforts: model.reasoning.efforts, defaultEffort: model.reasoning.defaultEffort }
+        }
+      }
+    }
+  }
+  const resolved = efforts?.find((entry) => entry.provider === route.provider && entry.model === route.model)
+  if (resolved !== undefined) {
+    return { state: resolved.state, efforts: resolved.efforts, defaultEffort: resolved.defaultEffort }
+  }
+  return { state: 'unknown', efforts: [] }
+}
+
+/** The ladder's ids in display order: unspecified leads, the declared levels follow by strength. */
+export function orderedEffortIds(ladder: RouteLadder): (string | undefined)[] {
+  return orderEffortIds([undefined, ...ladder.efforts.map((level) => level.id)])
+}
+
+/**
+ * Whether a stored effort no longer belongs to the route: `id` is set and the
+ * ladder does not declare it. A stale id stays in force until the reader clears
+ * it, so the card shows it rather than dropping it silently.
+ */
+export function effortIsStale(ladder: RouteLadder, id: string | undefined): boolean {
+  return id !== undefined && !ladder.efforts.some((level) => level.id === id)
+}
+
+/**
+ * One effort press on a picked route: the next selection with that route's
+ * `reasoningEffort` set, or the field dropped when `effort` is undefined. A
+ * press that changes nothing, or on a route that is not picked, answers null.
+ */
+export function setRouteEffort(
+  selected: readonly SubagentModelRoute[],
+  route: SubagentModelRoute,
+  effort: string | undefined,
+): SubagentModelRoute[] | null {
+  const key = subagentRouteKey(route)
+  const at = selected.findIndex((candidate) => subagentRouteKey(candidate) === key)
+  if (at === -1) return null
+  if (selected[at].reasoningEffort === effort) return null
+  const next = selected.slice()
+  const entry = { ...next[at] }
+  if (effort === undefined) delete entry.reasoningEffort
+  else entry.reasoningEffort = effort
+  next[at] = entry
+  return next
 }

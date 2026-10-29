@@ -61,6 +61,14 @@
           { provider: 'deepseek-official', model: 'deepseek-v4-pro' },
           { provider: 'other-provider', model: 'model-the-catalog-lacks' },
         ],
+        // The ladder the host resolved for each allowed route: deepseek-flash
+        // declares two levels, the other two none. The page reads the answer's
+        // `efforts` for the route its catalog does not carry.
+        efforts: [
+          { provider: 'deepseek-official', model: 'deepseek-flash', state: 'ok', defaultEffort: 'low', efforts: [{ id: 'low', name: 'Low' }, { id: 'high', name: 'High' }] },
+          { provider: 'deepseek-official', model: 'deepseek-v4-pro', state: 'no-efforts', efforts: [] },
+          { provider: 'other-provider', model: 'model-the-catalog-lacks', state: 'unknown', efforts: [] },
+        ],
         selected: [],
         writes: [],
         reason: undefined,
@@ -70,9 +78,9 @@
         try { sent = JSON.parse(init.body || '{}') } catch (error) { /* the page sent no body */ }
         record.writes.push(sent)
         record.selected = Array.isArray(sent.routes) ? sent.routes : []
-        return Promise.resolve(jsonResponse({ ok: true, allowed: record.allowed, selected: record.selected }))
+        return Promise.resolve(jsonResponse({ ok: true, allowed: record.allowed, selected: record.selected, efforts: record.efforts }))
       }
-      var answer = { ok: true, allowed: record.allowed, selected: record.selected }
+      var answer = { ok: true, allowed: record.allowed, selected: record.selected, efforts: record.efforts }
       if (record.reason !== undefined) answer.reason = record.reason
       return Promise.resolve(jsonResponse(answer))
     }

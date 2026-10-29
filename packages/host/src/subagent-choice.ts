@@ -11,6 +11,9 @@
  *   - The preference `subagentModelChoice` makes an explicit pair mandatory in
  *     every session, whether or not the reader picked anything.
  *
+ * A picked route may also carry a reasoning effort the reader chose; the same
+ * rule then requires the call's `reasoning_effort` to name it.
+ *
  * The guard never picks a route itself and never rewrites the call's arguments:
  * it denies and says what to name (D79). An explicit pair stays the official tool's
  * own whitelist to check, and the parent's route is allowed whenever the pick
@@ -28,6 +31,8 @@ export interface SubagentChoiceInput {
   toolName: string
   provider: unknown
   model: unknown
+  /** The reasoning effort the call named, as `reasoning_effort` arrives in the arguments. */
+  reasoningEffort: unknown
   /** The calling session's official allowed routes; `undefined` without a policy. */
   routes: readonly SubagentModelRoute[] | undefined
   /** What the reader picked for that session or its nearest ancestor that picked. */
@@ -68,6 +73,27 @@ function pairNamed(provider: unknown, model: unknown) {
   return { providerNamed, modelNamed, complete: providerNamed && modelNamed }
 }
 
+/** The effort one picked route stores, found by provider+model rather than object identity. */
+function effortOf(routes: readonly SubagentModelRoute[], route: SubagentModelRoute): string | undefined {
+  for (const candidate of routes) if (holdsRoute([candidate], route)) return candidate.reasoningEffort
+  return undefined
+}
+
+/**
+ * The denial for the effort argument of one picked-route execution: the picked
+ * route's stored effort is the one the call must name. A route carrying none
+ * leaves the field to the host's own validation; a missing policy, an
+ * unreadable pick and a route the pick does not hold are all decided earlier.
+ */
+function effortDenial(input: SubagentChoiceInput, route: SubagentModelRoute): string | undefined {
+  if (input.selection.kind !== 'routes') return undefined
+  const expected = effortOf(input.selection.routes, route)
+  if (expected === undefined) return undefined
+  if (input.reasoningEffort === expected) return undefined
+  const passed = typeof input.reasoningEffort === 'string' ? `, not "${input.reasoningEffort}"` : ''
+  return `This session routes ${route.provider}/${route.model} on reasoning effort "${expected}". Pass reasoning_effort "${expected}"${passed} on the subagent call.`
+}
+
 /**
  * The denial reason for one execution, or `undefined` to let it run.
  *
@@ -92,7 +118,7 @@ export function subagentChoiceDenial(input: SubagentChoiceInput): string | undef
     }
     if (named.complete) {
       const route = { provider: input.provider as string, model: input.model as string }
-      if (holdsRoute(selection.routes, route)) return undefined
+      if (holdsRoute(selection.routes, route)) return effortDenial(input, route)
       return `This session routes its subagents through the models its reader picked: ${routeList(selection.routes)}. "${route.provider}/${route.model}" is not one of them. Pass provider and model from that list; the parent's own route is allowed when it is one of them.`
     }
     return `This session routes its subagents through the models its reader picked: ${routeList(selection.routes)}. Pass provider and model together from that list. Do not omit them. Use list_subagent_models for descriptions.`
@@ -108,7 +134,8 @@ export function subagentChoiceDenial(input: SubagentChoiceInput): string | undef
  * With a pick the sentence names the picked routes and asks for one of them for
  * the task at hand; without one it states only what the preference made
  * mandatory. A selection the rule cannot read states nothing here: the tool call
- * itself carries the fault to the model.
+ * itself carries the fault to the model. A picked route's stored effort is
+ * named with its route so the call carries it.
  *
  * @param enabled - the preference's live value.
  * @param routes - the session's allowed routes, when it has a policy.
@@ -125,10 +152,16 @@ export function subagentChoicePrompt(
     const picked = selection.routes
     const outside = picked.filter((route) => !holdsRoute(routes, route))
     if (outside.length > 0) return ''
+    const efforts = picked
+      .map((route) => ({ route, effort: effortOf(picked, route) }))
+      .filter((entry): entry is { route: SubagentModelRoute, effort: string } => entry.effort !== undefined)
     if (picked.length === 1) {
-      return `When calling \`subagent\`, pass provider and model together as ${routeList(picked)}. That is the only route this session delegates on. Any other route, and an omitted pair, is rejected.`
+      const effort = efforts.length === 0 ? '' : ` Pass reasoning_effort "${efforts[0].effort}" with it.`
+      return `When calling \`subagent\`, pass provider and model together as ${routeList(picked)}.${effort} That is the only route this session delegates on. Any other route, and an omitted pair, is rejected.`
     }
-    return `When calling \`subagent\`, pass provider and model together, choosing for the task at hand from the routes this session delegates on: ${routeList(picked)}. Any other route, and an omitted pair, is rejected. List order is not a default. Use list_subagent_models for descriptions.`
+    const effort = efforts.length === 0 ? ''
+      : ` Where a route carries a reasoning effort, pass it as reasoning_effort too: ${efforts.map((entry) => `${entry.route.provider}/${entry.route.model} on "${entry.effort}"`).join('; ')}.`
+    return `When calling \`subagent\`, pass provider and model together, choosing for the task at hand from the routes this session delegates on: ${routeList(picked)}.${effort} Any other route, and an omitted pair, is rejected. List order is not a default. Use list_subagent_models for descriptions.`
   }
   if (selection.kind === 'unavailable' || !enabled) return ''
   return `When calling \`subagent\`, pass provider and model together from this session's allowed routes: ${routeList(routes)}. Omitting either field is rejected. The parent's own route is allowed when it is in that list. Use list_subagent_models for descriptions. List order is not a default.`
@@ -196,7 +229,7 @@ function sessionIdOf(session: unknown): string | null {
  * session the reader configured two levels up had said otherwise.
  *
  * @param ctx - host plugin context, for the session registry and the store.
- * @param store - the selection store.
+ * @param store - the store the reader's picks live in.
  * @param session - the calling session.
  * @returns the pick, or `none` when no session on the chain has one.
  */
@@ -251,6 +284,9 @@ export function registerSubagentChoice(ctx: DshContext, config: unknown, store: 
         toolName: typeof exec?.name === 'string' ? exec.name : '',
         provider,
         model,
+        reasoningEffort: rawArguments !== null && typeof rawArguments === 'object' && 'reasoning_effort' in rawArguments
+          ? rawArguments.reasoning_effort
+          : undefined,
         routes: readSubagentRoutes(ctx.get('sessionProjections'), session),
         selection: resolveSubagentSelection(ctx, store, session),
       })

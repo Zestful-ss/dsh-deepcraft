@@ -18,9 +18,9 @@ import { SUBAGENT_MODELS_ROUTE } from '../../constants'
 import { buildElement, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { currentSessionId, hostSessions, registerSlotEntry, sessionModelCatalog, sessionModelDirectory } from '@dsh-deepcraft/engine/host'
 import { closeOtherPopovers, positionAnchoredPopover, registerPopover, setMenuPopoverOpen, unregisterPopover } from '../../shared/popover'
-import { readSubagentRoutes } from '@dsh-deepcraft/contracts/subagent'
+import { SUBAGENT_MODELS_CONTRACT, readSubagentRoutes } from '@dsh-deepcraft/contracts/subagent'
 import { buildCardContent, seatActs, seatShown, triggerTitle } from './card'
-import { toggleRoute } from './state'
+import { setRouteEffort, toggleRoute } from './state'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { SubagentModelRoute, SubagentModelsAnswer, SubagentModelsReason } from '@dsh-deepcraft/contracts/subagent'
 import type { SeatHandlers, SeatView } from './card'
@@ -45,6 +45,7 @@ const EMPTY: SeatState = {
   allowed: [],
   selected: [],
   catalog: null,
+  efforts: undefined,
   loading: true,
   saving: false,
   failed: false,
@@ -134,6 +135,7 @@ export function install(ctx: HostContext) {
           allowed: routesOf(answer.allowed),
           selected: routesOf(answer.selected),
           catalog: null,
+          efforts: answer.efforts,
           reason: reasonOf(answer.reason),
           loading: false,
           saving: false,
@@ -169,7 +171,7 @@ export function install(ctx: HostContext) {
         method: 'POST',
         credentials: 'same-origin',
         headers: { accept: 'application/json', 'content-type': 'application/json' },
-        body: JSON.stringify({ session: id, routes }),
+        body: JSON.stringify({ session: id, routes, contract: SUBAGENT_MODELS_CONTRACT }),
       })
       const body: unknown = await response.json()
       if (mine !== generation) return
@@ -183,6 +185,7 @@ export function install(ctx: HostContext) {
         ...state,
         allowed: routesOf(answer.allowed),
         selected: routesOf(answer.selected),
+        efforts: answer.efforts,
         reason: reasonOf(answer.reason),
         saving: false,
         failed: false,
@@ -203,6 +206,11 @@ export function install(ctx: HostContext) {
         refresh()
         return
       }
+      void save(next)
+    },
+    effort(route, effort) {
+      const next = setRouteEffort(state.selected, route, effort)
+      if (next === null) return
       void save(next)
     },
     clear() {
