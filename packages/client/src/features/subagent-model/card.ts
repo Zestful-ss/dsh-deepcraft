@@ -101,10 +101,8 @@ function buildEffortOption(
 ): HTMLButtonElement {
   const option = buildElement('button', 'dsh-deepcraft-subagent-model-effort-option')
   option.type = 'button'
-  const check = buildElement('span', 'dsh-deepcraft-popover-check')
-  check.innerHTML = current === effort ? POPOVER_CHECK_SVG : ''
-  option.appendChild(check)
-  option.appendChild(buildElement('span', 'dsh-deepcraft-subagent-model-effort-text', label))
+  option.setAttribute('aria-pressed', current === effort ? 'true' : 'false')
+  option.textContent = label
   option.disabled = saving
   option.addEventListener('click', (event) => {
     event.stopPropagation()
@@ -127,17 +125,18 @@ function buildEffortList(
   ladder: RouteLadder,
   handlers: SeatHandlers,
 ): HTMLElement {
-  const list = buildElement('div', 'dsh-deepcraft-subagent-model-effort')
-  list.appendChild(buildElement('span', 'dsh-deepcraft-subagent-model-effort-label', copy('effortTitle')))
+  const wrap = buildElement('div', 'dsh-deepcraft-subagent-model-effort')
+  const chips = buildElement('div', 'dsh-deepcraft-subagent-model-effort-chips')
+  wrap.appendChild(chips)
   if (ladder.state === 'ok') {
     const names = new Map(ladder.efforts.map((level) => [level.id, level.name || level.id]))
     for (const id of orderedEffortIds(ladder)) {
       const label = id === undefined ? copy('effortUnspecified') : names.get(id) ?? id
-      list.appendChild(buildEffortOption(route, label, id, stored, handlers, view.saving))
+      chips.appendChild(buildEffortOption(route, label, id, stored, handlers, view.saving))
     }
   } else {
-    list.appendChild(buildEffortOption(route, copy('effortUnspecified'), undefined, stored, handlers, view.saving))
-    list.appendChild(buildElement(
+    chips.appendChild(buildEffortOption(route, copy('effortUnspecified'), undefined, stored, handlers, view.saving))
+    wrap.appendChild(buildElement(
       'div',
       'dsh-deepcraft-subagent-model-effort-note',
       ladder.state === 'no-efforts' ? copy('effortNone') : copy('effortUnknown'),
@@ -146,10 +145,10 @@ function buildEffortList(
   if (effortIsStale(ladder, stored)) {
     const stale = buildEffortOption(route, stored as string, stored, stored, handlers, view.saving)
     stale.classList.add('dsh-deepcraft-subagent-model-effort-stale')
-    list.appendChild(stale)
-    list.appendChild(buildElement('div', 'dsh-deepcraft-subagent-model-effort-note', copy('effortStale')))
+    chips.appendChild(stale)
+    wrap.appendChild(buildElement('div', 'dsh-deepcraft-subagent-model-effort-note', copy('effortStale')))
   }
-  return list
+  return wrap
 }
 
 /**

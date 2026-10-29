@@ -106,10 +106,9 @@
         var opts = card.querySelectorAll('.dsh-deepcraft-subagent-model-effort-option')
         var out = []
         for (var i = 0; i < opts.length; i++) {
-          var check = opts[i].querySelector('.dsh-deepcraft-popover-check')
           out.push({
-            text: (opts[i].querySelector('.dsh-deepcraft-subagent-model-effort-text') || {}).textContent || '',
-            inForce: check !== null && check.innerHTML !== '',
+            text: (opts[i].textContent ?? '').trim(),
+            inForce: opts[i].getAttribute('aria-pressed') === 'true',
           })
         }
         return out

@@ -136,10 +136,9 @@ body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-clear:disabled {
   opacity: 0.6;
 }
 
-/* ---------- the per-route effort list ---------- */
-/* The entry wraps the row and its effort sub-list as siblings: a button cannot
-   nest inside the row's own button, so the sub-list is indented to read as
-   belonging to the row above it. */
+/* ---------- the per-route effort row ---------- */
+/* One picked route's levels sit under its row as a single compact line of
+   chips; the picked chip is filled, the rest are outlines. */
 body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-entry {
   display: flex;
   flex-direction: column;
@@ -150,37 +149,31 @@ body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-entry {
 body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  padding: 2px 4px 4px 14px;
+  gap: 2px;
+  padding: 0 4px 4px 14px;
   min-width: 0;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-label {
-  color: var(--dsw-alias-label-caption);
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 16px;
-  padding: 0 8px;
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 2px 8px;
 }
 
-/* The options echo the shared popover item in miniature: same check slot, same
-   hover wash, one line of text. */
 body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-option {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-  padding: 3px 8px;
-  border: none;
-  border-radius: 6px;
+  padding: 1px 9px;
+  border: 1px solid var(--dsw-alias-border-l1, #e8e6dc);
+  border-radius: 999px;
   background: transparent;
-  color: var(--dsw-alias-label-primary);
-  font-size: 12px;
-  line-height: 17px;
-  text-align: left;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 18px;
   cursor: pointer;
   box-sizing: border-box;
   min-width: 0;
+  white-space: nowrap;
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-option:hover:not(:disabled) {
@@ -192,14 +185,10 @@ body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-option:disabled {
   opacity: 0.6;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-option .dsh-deepcraft-popover-check {
-  flex: none;
-}
-
-body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-text {
-  flex: 1;
-  min-width: 0;
-  overflow-wrap: anywhere;
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-option[aria-pressed="true"] {
+  border-color: transparent;
+  background: var(--dsw-alias-brand-primary);
+  color: var(--dsw-alias-label-primary-foreground, #faf9f5);
 }
 
 /* A stored level the model no longer declares: still marked in force, but read
@@ -214,6 +203,6 @@ body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-note {
   font-size: 12px;
   font-weight: 400;
   line-height: 17px;
-  padding: 2px 8px 2px;
+  padding: 0 8px;
   white-space: normal;
 }

@@ -15,7 +15,6 @@
   "reasonNoSession": { "zh": "会话还没有打开，暂时读不到它的子代理模型。", "en": "The session is not open yet, so its subagent routes cannot be read." },
   "reasonStore": { "zh": "子代理模型的选择没能读出来，重新打开页面后再试。", "en": "The saved subagent routes could not be read; reopen the page and try again." },
   "reasonStale": { "zh": "已保存的选择里有这条会话不再允许的路由，请改选或清除。", "en": "The saved selection names routes this session no longer allows; pick again or clear it." },
-  "effortTitle": { "zh": "思考强度", "en": "Reasoning effort" },
   "effortUnspecified": { "zh": "不指定", "en": "Unspecified" },
   "effortNone": { "zh": "这个模型没有可设置的思考强度。", "en": "This model offers no reasoning effort levels." },
   "effortUnknown": { "zh": "没能读出这个模型的思考强度档位；仍可不指定，让它用自己的默认。", "en": "This model's reasoning effort levels could not be read; you can still leave it unspecified and it uses its own default." },
