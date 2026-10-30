@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">体验优化</h3>
+
+- 子代理模型入口的选中标记去掉右上角的点，已有选择时图标本身着主题色。
+
+<h3 id="en-unreleased">Improvements</h3>
+
+- The subagent model entry drops its selection dot; once a route is picked the icon itself takes the theme accent.
+
 ## [0.21.1] - 2026-10-29
 
 [中文](#cn-0.21.1) | [English](#en-0.21.1)

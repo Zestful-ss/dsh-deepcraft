@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-30",
+  "group": "improvements",
+  "order": 0,
+  "external": false,
+  "zh": "子代理模型入口的选中标记去掉右上角的点，已有选择时图标本身着主题色。",
+  "en": "The subagent model entry drops its selection dot; once a route is picked the icon itself takes the theme accent."
+}
