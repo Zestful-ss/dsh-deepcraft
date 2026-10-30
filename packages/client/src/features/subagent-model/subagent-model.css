@@ -31,21 +31,14 @@ body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-btn:disabled {
   color: var(--dsw-alias-label-caption);
 }
 
-/* The selected dot keeps the entry's state visible without putting model names
-   into the composer's narrow control row. */
+/* The pick is read off the mark alone: the icon takes the accent once a route
+   is chosen, and nothing sits beside it. */
 body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-btn[data-dsh-subagent-model="empty"] {
   color: var(--dsw-alias-label-caption);
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-btn[data-dsh-subagent-model="chosen"]::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--dsw-alias-brand-primary);
+body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-btn[data-dsh-subagent-model="chosen"] {
+  color: var(--dsw-alias-brand-primary);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-btn[data-dsh-subagent-model="unavailable"] {
