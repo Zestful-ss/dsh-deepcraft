@@ -1,8 +1,0 @@
-{
-  "at": "2026-11-02",
-  "group": "fixes",
-  "order": 15,
-  "external": false,
-  "zh": "修复发送动画期间重复出现模型选择按钮，保持模型选择器可用。",
-  "en": "Fix duplicate model buttons during the send animation so the model picker remains available."
-}
