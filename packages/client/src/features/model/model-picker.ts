@@ -1,4 +1,4 @@
-import { AUTO_POPOVER_ALL } from '../../constants'
+import { AUTO_POPOVER_ALL, STATIC_COPY_ATTR } from '../../constants'
 import { MODEL_EMPTY_LABEL, MODEL_FALLBACK_LABEL, MODEL_LOADING_LABEL, MODEL_MORE_LABEL, MODEL_OFFICIAL_GROUP, MODEL_TRIGGER_LABEL } from './copy-fallbacks'
 import { activeLocale } from '../../core/i18n'
 import { loadModelCopy } from './model-copy'
@@ -548,7 +548,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       if (modelBtn !== null && modelBtn.parentElement !== null) modelBtn.parentElement.removeChild(modelBtn)
       modelBtn = document.createElement('button')
       modelBtn.type = 'button'
-      modelBtn.className = 'dsh-deepcraft-model-btn'
+      modelBtn.className = 'dsh-deepcraft-model-btn dsh-deepcraft-model-visual'
+      modelBtn.setAttribute(STATIC_COPY_ATTR, 'dsh-deepcraft-model-visual')
       modelBtn.setAttribute('aria-haspopup', 'menu')
       modelBtn.innerHTML = '<span class="dsh-deepcraft-model-btn-label"></span>'
       // Same contract as the account trigger: hover under the "All" scope,

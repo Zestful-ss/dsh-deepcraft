@@ -20,6 +20,9 @@ export const STYLE_ID = 'dsh-deepcraft-style'
 /** The surface sheets' own element, which stays while ds-bot's surface has the page (D74). */
 export const SURFACE_STYLE_ID = 'dsh-deepcraft-surface'
 
+/** The visual class used when a live control is copied into a non-interactive snapshot. */
+export const STATIC_COPY_ATTR = 'data-dsh-deepcraft-static-copy'
+
 /**
  * Settings identity.
  *

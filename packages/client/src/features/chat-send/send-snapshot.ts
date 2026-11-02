@@ -1,5 +1,6 @@
 import { colorAlpha, colorParts } from '@dsh-deepcraft/engine/chat-dom'
 import { COMPOSER_SCROLL_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { STATIC_COPY_ATTR } from '../../constants'
 import { inPageBox } from '../../shared/page-zoom'
 
 /**
@@ -199,14 +200,21 @@ export function chatSendPin(element: HTMLElement, declarations: [string, string]
 }
 
 /**
- * Strip every identity mark out of a cloned tree: the stand-in must not be
- * found as a composer and must not take focus. Which marks and why the style
- * hooks stay: see CHAT_IDENTITY_ATTRIBUTES.
+ * Strip identity marks and turn marked controls into static visuals: the
+ * stand-in must not supply another live control or take focus. See
+ * CHAT_IDENTITY_ATTRIBUTES for the style hooks it keeps.
  */
 export function chatSendScrub(root: Element) {
   const all = [root, ...root.querySelectorAll('*')]
   for (const element of all) {
     for (const name of CHAT_IDENTITY_ATTRIBUTES) element.removeAttribute(name)
+    const visualClass = element.getAttribute(STATIC_COPY_ATTR)
+    if (visualClass !== null) {
+      const visual = document.createElement('span')
+      visual.className = visualClass
+      visual.append(...element.childNodes)
+      element.replaceWith(visual)
+    }
   }
   for (const layer of root.querySelectorAll('[data-dsh-deepcraft-caret-layer]')) layer.remove()
 }

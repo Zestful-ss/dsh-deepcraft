@@ -18,6 +18,11 @@
     // with no pass: a timer that came due just behind a quiet run asks for its
     // frame a few milliseconds later, inside the second the check counts.
     await probe.settle(250)
+    // A font arriving remeasures the caret and asks for another frame.
+    if (document.fonts.status === 'loading') {
+      await document.fonts.ready
+      await probe.settle(250)
+    }
     if (window.SMOKE_TIER !== 'quick') {
       var from = window.__passes
       var mark = performance.now()

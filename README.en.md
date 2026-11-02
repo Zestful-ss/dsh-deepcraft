@@ -71,7 +71,7 @@ The settings page switches between the two palettes; light and dark follow the s
 
 ### Model selection
 
-The model picker follows the control provided by the host composer and leaves the slot when a surface such as Research Workbench hides it. If the model directory is unavailable or fails to load, the menu explains the problem; close and reopen it to retry.
+The model picker follows the control provided by the host composer and leaves the slot when a surface such as Research Workbench hides it. The model button remains available while a message is being sent. If the model directory is unavailable or fails to load, the menu explains the problem; close and reopen it to retry.
 
 ### Subagent models
 

@@ -100,8 +100,18 @@ function cacheFirst<T extends Element>(selector: string) {
  * the skin inserts its own buttons inside that wrapper, so those are skipped.
  */
 export const findAccessTrigger = cacheFirst<HTMLButtonElement>(PERMISSION_TRIGGER_SELECTOR)
-/** The composer's model slot, shared by the picker and scheduler. */
-export const findModelSlot = cacheFirst<HTMLElement>(MODEL_SLOT_SELECTOR)
+/** The first composer's model slot, cached while the host keeps it mounted. */
+const firstModelSlot = cacheFirst<HTMLElement>(MODEL_SLOT_SELECTOR)
+
+/** The active model slot: inert copies cannot provide a host control. */
+export function findModelSlot() {
+  const slot = firstModelSlot()
+  if (slot === null || slot.closest('[inert]') === null) return slot
+  for (const candidate of document.querySelectorAll<HTMLElement>(MODEL_SLOT_SELECTOR)) {
+    if (candidate.closest('[inert]') === null) return candidate
+  }
+  return null
+}
 
 /**
  * The host's hero-phase conversation root: the page before a session is chosen.

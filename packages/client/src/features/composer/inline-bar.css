@@ -5,7 +5,7 @@
    inside the seat keeps its own layout, and the seat root the picker hides is
    never matched — a display here would outrank the hide rule below. */
 body[data-dsh-deepcraft] [data-composer-card][data-composer-variant="inline"] [data-slot="conversation.input.model"] > [data-dsh-deepcraft-part~="host-root"] > [data-dsh-deepcraft-part~="trigger"],
-body[data-dsh-deepcraft] [data-composer-card][data-composer-variant="inline"] [data-slot="conversation.input.model"] > .dsh-deepcraft-model-btn {
+body[data-dsh-deepcraft] [data-composer-card][data-composer-variant="inline"] [data-slot="conversation.input.model"] > .dsh-deepcraft-model-visual {
   display: inline-flex;
   align-items: center;
   font-size: 13px;
@@ -22,7 +22,7 @@ body[data-dsh-deepcraft] [data-composer-card][data-composer-variant="inline"] [d
 body[data-dsh-deepcraft] [data-dsh-deepcraft-model-host] {
   display: none;
 }
-body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-btn {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-visual {
   display: inline-flex;
   align-items: center;
   gap: 2px;
@@ -43,14 +43,14 @@ body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-mo
 body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-btn-label.dsh-deepcraft-model-btn-loading {
   color: var(--dsw-alias-label-caption, #a6a094) !important;
 }
-body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-btn:hover {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-visual:hover {
   background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
   color: var(--dsw-alias-label-primary);
 }
 
 /* Only the whole trigger gets the hover plate; its label/effort spans stay
    transparent so no smaller inner background appears. */
-body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-btn > * {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-visual > * {
   background: transparent;
 }
 body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-btn-label {
@@ -163,7 +163,7 @@ body[data-dsh-deepcraft] [data-composer-stat] {
 body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter],
 body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter] button,
 body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="composer-stack"] [data-composer-stats],
-body[data-dsh-deepcraft] [data-composer-card] [data-dsh-deepcraft-part~="row"] .dsh-deepcraft-model-btn {
+body[data-dsh-deepcraft] [data-composer-card] [data-dsh-deepcraft-part~="row"] .dsh-deepcraft-model-visual {
   font-family: var(--dsw-font-family);
   font-size: 13px;
   font-weight: 500;

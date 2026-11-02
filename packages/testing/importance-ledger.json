@@ -766,8 +766,8 @@
       "prop": "margin",
       "verdict": "transient state"
     },
-    "body[data-dsh-deepcraft][data-dsh-deepcraft-composer-active] [data-dsh-deepcraft-part~=trailing] .dsh-deepcraft-model-btn{display:inline-flex;align-items:center;gap:2px;height:28px;max-width:280px;padding:0 8px;border:none!;border-radius:7px;background:transparent;color:var(--dsw-alias-label-secondary);font-size:13px;font-weight:500;line-height:20px;cursor:pointer;box-sizing:border-box;min-width:0}|border": {
-      "selector": "body[data-dsh-deepcraft][data-dsh-deepcraft-composer-active] [data-dsh-deepcraft-part~=trailing] .dsh-deepcraft-model-btn",
+    "body[data-dsh-deepcraft][data-dsh-deepcraft-composer-active] [data-dsh-deepcraft-part~=trailing] .dsh-deepcraft-model-visual{display:inline-flex;align-items:center;gap:2px;height:28px;max-width:280px;padding:0 8px;border:none!;border-radius:7px;background:transparent;color:var(--dsw-alias-label-secondary);font-size:13px;font-weight:500;line-height:20px;cursor:pointer;box-sizing:border-box;min-width:0}|border": {
+      "selector": "body[data-dsh-deepcraft][data-dsh-deepcraft-composer-active] [data-dsh-deepcraft-part~=trailing] .dsh-deepcraft-model-visual",
       "prop": "border",
       "verdict": "transient state"
     },

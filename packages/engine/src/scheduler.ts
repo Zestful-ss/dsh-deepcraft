@@ -292,6 +292,8 @@ export function installScheduler<Name extends string>(ctx: HostContext, ui: Sche
     if (column === null || (slot !== null && !slot.isConnected)) return false
     if (slot === null && (observedCard === null || !observedCard.isConnected)) return false
     for (const record of records) {
+      if (record.type === 'attributes' && record.attributeName === 'inert'
+        && ((slot !== null && record.target.contains(slot)) || (observedCard !== null && record.target.contains(observedCard)))) return false
       if (!column.contains(record.target) || (slot !== null && slot.contains(record.target))) return false
       if (slot === null && observedCard !== null && observedCard.contains(record.target) && closestFrom(record.target, COMPOSER_INPUT_SELECTOR) === null) return false
       for (const added of record.addedNodes) {
@@ -370,10 +372,8 @@ export function installScheduler<Name extends string>(ctx: HostContext, ui: Sche
     childList: true,
     characterData: true,
     subtree: true,
-    // Only the two attributes a paint depends on: the shipped trigger carries
-    // the current preset in its aria-label, the conversation tabs the view in
-    // aria-selected.
-    attributeFilter: ['aria-label', 'aria-selected'],
+    // The host's labels, tab selection and model slot's interaction state.
+    attributeFilter: ['aria-label', 'aria-selected', 'inert'],
     skipQuiet: true,
   }, records => schedule({ contentOnly: contentOnly(records) }))
   schedule()
