@@ -9,14 +9,15 @@
   var r = probe.report
 
   probe.step(async function () {
-    // The reads below depend on the skin's first pass having landed, and the
-    // full tier's idle check counts the frames the page asks for in one second
-    // of wall clock: a renderer still coming up hands out a frame or two per
-    // second, and a quiet window measured in wall clock alone would read those
-    // frames as a page that never went idle. The settle rule waits on frames
-    // and animations as well (prelude.js), and here also on a quarter second
-    // with no pass: a timer that came due just behind a quiet run asks for its
-    // frame a few milliseconds later, inside the second the check counts.
+    // Deferred scripts and fonts can schedule frames until startup finishes.
+    if (document.readyState !== 'complete') {
+      await new Promise(function (resolve, reject) {
+        var timeout = setTimeout(function () { reject(new Error('smoke: the page did not finish loading within one minute')) }, 60000)
+        window.addEventListener('load', function () { clearTimeout(timeout); resolve() }, { once: true })
+      })
+    }
+    await document.fonts.ready
+    // The idle count starts after frame work and finite animations settle.
     await probe.settle(250)
     // A font arriving remeasures the caret and asks for another frame.
     if (document.fonts.status === 'loading') {
