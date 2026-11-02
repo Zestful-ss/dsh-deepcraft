@@ -11,16 +11,16 @@
   window.__applyError = null
   try { window.__skin.apply(window.__ctx) } catch (e) { window.__applyError = String((e && e.stack) || e) }
   function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms) }) }
-  /** One frame, through the rAF the stand-in did not wrap, so asking for it is no pass of the skin's. */
-  function frame() { return new Promise(function (done) { window.__nativeRaf(function () { done() }) }) }
-  /** Whether every finite animation on the page has landed; an endless one is the page's own life. */
-  function landed() {
-    return document.getAnimations().every(function (animation) {
-      if (animation.playState !== 'running' && animation.playState !== 'pending') return true
-      var timing = animation.effect === null ? null : animation.effect.getComputedTiming()
-      return timing !== null && timing.iterations === Infinity
-    })
+  /** A frame through the native rAF, resumed after the frame's other callbacks. */
+  function frame() { return new Promise(function (done) { window.__nativeRaf(function () { setTimeout(done, 0) }) }) }
+  /** Whether a finite animation still has work to do. */
+  function stillAnimating(animation) {
+    if (animation.playState !== 'running' && animation.playState !== 'pending') return false
+    var timing = animation.effect === null ? null : animation.effect.getComputedTiming()
+    return timing === null || timing.iterations !== Infinity
   }
+  /** Whether every finite animation on the page has landed; an endless one is the page's own life. */
+  function landed() { return !document.getAnimations().some(stillAnimating) }
   /**
    * Record `read()` on every frame from now until the page has settled, and
    * answer the readings with the settled one last (D66: the settle rule). The
@@ -48,7 +48,14 @@
         lastPass = performance.now()
       }
       if (quietFrames >= 2 && performance.now() - lastPass >= Math.max(134, quietMs || 0) && landed()) break
-      if (performance.now() - started > 8000) throw new Error('smoke: the page did not settle within eight seconds')
+      if (performance.now() - started > 8000) {
+        var animations = document.getAnimations().filter(stillAnimating).map(function (animation) {
+          var target = animation.effect === null ? null : animation.effect.target
+          return { name: animation.animationName || '', state: animation.playState, target: target instanceof Element ? target.tagName : '' }
+        })
+        var recentPasses = window.__passTimes.slice(-8).map(function (time) { return Math.round(time - started) })
+        throw new Error('smoke: the page did not settle within eight seconds: ' + JSON.stringify({ quietFrames: quietFrames, sincePass: Math.round(performance.now() - lastPass), recentPasses: recentPasses, fonts: document.fonts.status, animations: animations }))
+      }
     }
     if (read !== undefined) readings.push(read())
     return readings
