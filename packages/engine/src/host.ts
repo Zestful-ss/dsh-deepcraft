@@ -1,4 +1,5 @@
 import { CHAT_FLOW_SELECTOR, COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, COMPOSER_PLACEHOLDER_SELECTOR, COMPOSER_SELECTOR, COMPOSER_STACK_SELECTOR, COMPOSER_STATS_SELECTOR, COMPOSER_STAT_SELECTOR, COMPOSER_VARIANT_ATTRIBUTE, CONVERSATION_SCROLL_SELECTOR, CONVERSATION_SESSION_ATTRIBUTE, CONVERSATION_SESSION_SELECTOR, DIALOG_TRIGGER_SELECTOR, FOOT_AREA_SELECTOR, MENU_ROLE_SELECTOR, PERMISSION_TRIGGER_SELECTOR, PHASE_ATTRIBUTE, RIGHTBAR_TOGGLE_SELECTOR, SIDEBAR_BRAND_SELECTOR, SIDEBAR_ROOT_SELECTOR, SIDEBAR_TOGGLE_SELECTOR, WINDOWS_MENU_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { MODEL_SLOT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import type { HostAccountService, HostAssistantStep, HostChatSnapshot, HostChatTarget, HostConfigFormsService, HostConversationService, HostLocaleService, HostModelCatalogSnapshot, HostModelDirectoriesService, HostModelDirectory, HostServiceLookup, HostOutlineTurn, HostRunningCall, HostSession, HostSessionsService, HostShortcutsService, HostSlotOptions, HostSlotsService, HostTurn, HostUiConversationService, HostUiSessionService, HostWorkspacesService } from '@dsh-deepcraft/contracts/services'
 import { observeMatches, subscribeMutations } from './bus'
 import { closestFrom } from './dom'
@@ -99,6 +100,8 @@ function cacheFirst<T extends Element>(selector: string) {
  * the skin inserts its own buttons inside that wrapper, so those are skipped.
  */
 export const findAccessTrigger = cacheFirst<HTMLButtonElement>(PERMISSION_TRIGGER_SELECTOR)
+/** The composer's model slot, shared by the picker and scheduler. */
+export const findModelSlot = cacheFirst<HTMLElement>(MODEL_SLOT_SELECTOR)
 
 /**
  * The host's hero-phase conversation root: the page before a session is chosen.

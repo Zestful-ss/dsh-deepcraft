@@ -71,6 +71,8 @@ export const COMPOSER_SELECTOR = '[data-composer-seat]'
 export const COMPOSER_INPUT_SELECTOR = '[data-composer-input]'
 /** The card the input sits in; the send flight lifts a copy of the whole card. */
 export const COMPOSER_CARD_SELECTOR = '[data-composer-card]'
+/** The host's model selection slot in the composer. */
+export const MODEL_SLOT_SELECTOR = '[data-slot="conversation.input.model"]'
 /** The draft's own scroll area inside that card. */
 export const COMPOSER_SCROLL_SELECTOR = '[data-input-scroll]'
 /** The echo bubble the host mounts the moment a submission goes through. */

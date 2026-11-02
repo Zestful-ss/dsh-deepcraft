@@ -135,6 +135,14 @@
         1
       ]
     },
+    "packages/testing/model-slot.cjs": {
+      "宿主移除模型控件后按钮和弹层消失": [
+        0
+      ],
+      "控制台没有异常": [
+        0
+      ]
+    },
     "packages/testing/motion.cjs": {
       "用量面板的数字到达时从占位里显出来": [
         0
@@ -285,7 +293,7 @@
       "再窄一些时控件仍留在卡片里，输入区也不再横向滚动": [
         0
       ],
-      "控制台没有异常 (line 253)": [
+      "控制台没有异常 (line 254)": [
         0
       ],
       "收起时那枚按钮不占位置，宿主自己的打开按钮在": [
@@ -298,7 +306,7 @@
       "按下它面板收起，宿主的打开按钮回到原处": [
         0
       ],
-      "控制台没有异常 (line 306)": [
+      "控制台没有异常 (line 307)": [
         0
       ],
       "工具调用单独成行": [
@@ -310,7 +318,7 @@
       "过程组收住了整轮": [
         1
       ],
-      "控制台没有异常 (line 321)": [
+      "控制台没有异常 (line 322)": [
         0
       ],
       "逐帧采样真的在跑": [
@@ -338,7 +346,7 @@
         0,
         10
       ],
-      "控制台没有异常 (line 368)": [
+      "控制台没有异常 (line 369)": [
         0
       ],
       "替身起飞后离开页面": [
@@ -359,32 +367,32 @@
       "Windows 标题栏标记下，替身里的祖先链不画伪元素": [
         0
       ],
-      "控制台没有异常 (line 440)": [
+      "控制台没有异常 (line 441)": [
         0
       ],
       "满屏的对话里也读到了飞行": [
         1,
         5
       ],
-      "替身落地时不低于它替换的那一行 (line 474)": [
+      "替身落地时不低于它替换的那一行 (line 475)": [
         0
       ],
       "落定后那一行带着字": [
         0
       ],
-      "控制台没有异常 (line 476)": [
+      "控制台没有异常 (line 477)": [
         0
       ],
       "没有页面形态的条目已逐条列出": [
         0
       ],
-      "控制台没有异常 (line 531)": [
+      "控制台没有异常 (line 532)": [
         0
       ],
       "脚本回答已渲染": [
         0
       ],
-      "控制台没有异常 (line 578)": [
+      "控制台没有异常 (line 581)": [
         0
       ]
     },
@@ -485,8 +493,9 @@
       "nothing the skin runs leaves an uncaught error or an unhandled rejection": [
         0
       ],
-      "only the two features that read the session list were switched off: the permission control and the model picker": [
-        2
+      "only the permission control retires when the session list is unavailable": [
+        0,
+        1
       ],
       "every unit the footer holds is hidden in place before the drawer is ever opened, the plugin's inline box included": [
         3

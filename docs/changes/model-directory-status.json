@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-02",
+  "group": "fixes",
+  "order": 20,
+  "external": false,
+  "zh": "修复模型目录不可用或加载失败时的提示，并在切换会话后预热该会话的模型目录。",
+  "en": "Fix model directory unavailable and load failure messages, and warm the model directory after switching sessions."
+}

@@ -37,6 +37,7 @@ const { deepcraftScenario } = require('./deepcraft.cjs')
 const { petdexScenario } = require('./petdex.cjs')
 const { subagentModelScenario } = require('./subagent-model.cjs')
 const { dsBotScenario } = require('./ds-bot.cjs')
+const { modelSlotScenario } = require('./model-slot.cjs')
 const { CANVAS } = require('./shoot.cjs')
 const { sanitizePage } = require('../../scripts/shared/privacy.cjs')
 const { bound } = require('./bounds.cjs')
@@ -562,6 +563,8 @@ const SCENARIOS = {
   dsBot: dsBotScenario({ check }),
   /** The composer's subagent model entry: one pick, its record, and its reload (packages/testing/subagent-model.cjs). */
   subagentModel: subagentModelScenario({ check }),
+  /** The model picker follows the host slot when its control is removed and restored. */
+  modelSlot: modelSlotScenario({ check }),
   /** Both palettes captured to the run's out directory and swept for personal data. */
   shots: {
     script: 'greeting',

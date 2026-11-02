@@ -68,5 +68,9 @@ module.exports = {
       picker.off !== undefined && picker.off.trigger === false && picker.off.hostMarked === false &&
         picker.back !== undefined && picker.back.trigger === true && picker.back.hostMarked === true,
       JSON.stringify(picker))
+    check('an unavailable model directory is reported instead of shown as loading',
+      /unavailable|不可用/i.test(r.modelUnavailable || ''), r.modelUnavailable)
+    check('a failed model directory load is reported instead of shown as an empty list',
+      /could not be loaded|加载失败/i.test(r.modelLoadFailure || ''), r.modelLoadFailure)
   },
 }

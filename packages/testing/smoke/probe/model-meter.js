@@ -135,6 +135,33 @@
           hostMarked: document.querySelector('[data-dsh-deepcraft-model-host]') !== null,
         },
       }
+      var modelStatusSelector = '.dsh-deepcraft-model-popover:not(.dsh-deepcraft-model-popover-sub) .dsh-deepcraft-popover-status'
+      var directories = window.__dshSmokeHost.modelDirectories
+      window.__pushForm({ modelPicker: false })
+      await sleep(250)
+      window.__dshSmokeHost.modelDirectories = undefined
+      window.__pushForm({ modelPicker: true })
+      await sleep(300)
+      var unavailableTrigger = document.querySelector('.dsh-deepcraft-model-btn')
+      if (unavailableTrigger !== null) unavailableTrigger.click()
+      await sleep(250)
+      var unavailableStatus = document.querySelector(modelStatusSelector)
+      r.modelUnavailable = unavailableStatus === null ? '' : unavailableStatus.textContent
+
+      window.__pushForm({ modelPicker: false })
+      await sleep(250)
+      window.__dshSmokeHost.modelDirectories = directories
+      var snapshot = directories.directoryFor('smoke-session').store.getSnapshot()
+      snapshot.status = 'error'
+      snapshot.current = null
+      snapshot.groups = []
+      window.__pushForm({ modelPicker: true })
+      await sleep(300)
+      var errorTrigger = document.querySelector('.dsh-deepcraft-model-btn')
+      if (errorTrigger !== null) errorTrigger.click()
+      await sleep(250)
+      var errorStatus = document.querySelector(modelStatusSelector)
+      r.modelLoadFailure = errorStatus === null ? '' : errorStatus.textContent
       card.remove()
     })
   })

@@ -1,4 +1,5 @@
-import { closestComposerCard, findComposerCard, findConversationScroller, hostLocale } from './host'
+import { closestComposerCard, findComposerCard, findConversationScroller, findModelSlot, hostLocale } from './host'
+import { COMPOSER_INPUT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import type { HostContext } from './host'
 import { observeSize, subscribeMutations } from './bus'
 import { requestFrame } from './frame'
@@ -282,18 +283,22 @@ export function installScheduler<Name extends string>(ctx: HostContext, ui: Sche
     }
   }
 
-  /**
-   * Whether every record of the batch lies inside the conversation column.
-   * A removal's target is the parent it left, which is still the column's
-   * node, so removed nodes are read off the target alone.
-   */
+  let observedModelSlot = findModelSlot()
+
+  /** Whether a batch only changes conversation content, away from the model slot. */
   function contentOnly(records: MutationRecord[]) {
+    const slot = observedModelSlot
     const column = findConversationScroller()
-    if (column === null) return false
+    if (column === null || (slot !== null && !slot.isConnected)) return false
+    if (slot === null && (observedCard === null || !observedCard.isConnected)) return false
     for (const record of records) {
-      if (!column.contains(record.target)) return false
+      if (!column.contains(record.target) || (slot !== null && slot.contains(record.target))) return false
+      if (slot === null && observedCard !== null && observedCard.contains(record.target) && closestFrom(record.target, COMPOSER_INPUT_SELECTOR) === null) return false
       for (const added of record.addedNodes) {
-        if (!column.contains(added)) return false
+        if (!column.contains(added) || (slot !== null && added.contains(slot))) return false
+      }
+      for (const removed of record.removedNodes) {
+        if (slot !== null && removed.contains(slot)) return false
       }
     }
     return true
@@ -343,6 +348,7 @@ export function installScheduler<Name extends string>(ctx: HostContext, ui: Sche
           if (content && handleOf(name)?.skipOnContentOnly === true) continue
           runSync(name)
         }
+        if (!content) observedModelSlot = findModelSlot()
         const currentCard = findComposerCard()
         if (currentCard !== observedCard) {
           if (stopCardSize !== null) stopCardSize()

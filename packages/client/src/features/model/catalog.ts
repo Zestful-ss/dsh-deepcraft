@@ -60,12 +60,14 @@ export function createModelCatalog(options: { ctx: HostContext, schedule?: () =>
       dropSubscription()
       modelDir = null
       modelSessionId = null
+      modelWarmRequested = false
       return null
     }
     if (modelSessionId === id && modelDir !== null) return modelDir
     dropSubscription()
     modelDir = null
     modelSessionId = null
+    modelWarmRequested = false
     // The host throws for a session id that has not materialized its scope yet;
     // the accessor answers that as "no directory this time", and the next pass
     // asks again (engine/host.ts).
@@ -185,12 +187,9 @@ export function createModelCatalog(options: { ctx: HostContext, schedule?: () =>
     dropSubscription()
     modelDir = null
     modelSessionId = null
-  }
-
-  /** Let a fresh install warm the catalog again (teardown). */
-  function resetWarm() {
     modelWarmRequested = false
   }
+
 
   return {
     directory,
@@ -202,6 +201,5 @@ export function createModelCatalog(options: { ctx: HostContext, schedule?: () =>
     effort,
     onProviders,
     reset,
-    resetWarm
   }
 }

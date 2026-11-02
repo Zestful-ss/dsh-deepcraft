@@ -4,6 +4,18 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修复科研工作台隐藏模型控件后仍显示模型选择按钮，并在宿主控件恢复时重新显示选择器。
+- 修复模型目录不可用或加载失败时的提示，并在切换会话后预热该会话的模型目录。
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Fix the model picker remaining visible when the research workbench hides the host control, and restore it when the control returns.
+- Fix model directory unavailable and load failure messages, and warm the model directory after switching sessions.
+
 ## [0.21.2] - 2026-10-30
 
 [中文](#cn-0.21.2) | [English](#en-0.21.2)

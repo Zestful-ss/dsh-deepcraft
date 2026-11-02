@@ -3,7 +3,7 @@ import { MODEL_EMPTY_LABEL, MODEL_FALLBACK_LABEL, MODEL_LOADING_LABEL, MODEL_MOR
 import { activeLocale } from '../../core/i18n'
 import { loadModelCopy } from './model-copy'
 import { readPrefs } from '../../core/prefs'
-import { cacheFirstMatch } from '@dsh-deepcraft/engine/host'
+import { findModelSlot } from '@dsh-deepcraft/engine/host'
 import { createModelCatalog } from './catalog'
 import { byModelId, createModelRows } from './rows'
 import { buildElement, closestFrom, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
@@ -31,9 +31,6 @@ export interface ModelHandle extends FeatureHandle {
   onProviders(listener: (providers: CatalogProvider[]) => void): () => void
   teardown(): void
 }
-
-/** The host's model slot, resolved once and re-resolved when the host swaps it (D40). */
-const modelSlotOf = cacheFirstMatch<HTMLElement>('[data-slot="conversation.input.model"]')
 
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   /**
@@ -286,7 +283,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   function renderModelBody() {
     if (!modelBody) return
     const snap = modelCatalog.snapshot()
-    const status = snap ? snap.status : 'idle'
+    const status = snap ? snap.status : 'unavailable'
     const groups = (snap && snap.groups) || []
     const current = modelCatalog.current(snap)
     let sig = [status, activeLocale(), current ? `${current.group.id}/${current.model.id}` : '', readPrefs().quickProviders.join(','), readPrefs().modelDescriptions !== false, rateSignature()].join('|')
@@ -303,12 +300,16 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // providers whose adapters resolve over the network. Only a directory with
     // nothing to show yet falls back to the loading line.
     const seated = groups.length > 0 && current !== null
-    if (!seated && (status === 'idle' || status === 'loading' || status === 'selecting')) {
+    if (status === 'unavailable' || (!seated && status === 'idle')) {
+      modelBody.appendChild(buildElement('div', 'dsh-deepcraft-popover-status', copy('unavailable')))
+      layoutModelFooter(false)
+    } else if (!seated && (status === 'loading' || status === 'selecting')) {
       modelBody.appendChild(buildElement('div', 'dsh-deepcraft-popover-status', copy('loading')))
       layoutModelFooter(false)
     } else {
+      if (status === 'error') modelBody.appendChild(buildElement('div', 'dsh-deepcraft-popover-status', copy('loadFailed')))
       const sections = modelRows.levelOneSections(groups)
-      if (sections.length === 0) {
+      if (sections.length === 0 && status !== 'error') {
         modelBody.appendChild(buildElement('div', 'dsh-deepcraft-popover-status', copy('empty')))
       } else {
         for (let s = 0; s < sections.length; s++) {
@@ -501,6 +502,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     }
     removeStrayNodes(document, '.dsh-deepcraft-model-btn', [])
     modelBtn = null
+    modelSlot = null
     removeStrayNodes(document, '.dsh-deepcraft-model-popover', [])
     modelPop = null
     modelSubPop = null
@@ -524,23 +526,24 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       return
     }
 
-    // The copy document is fetched on first paint of the picker rather than
-    // at install, so a session that never opens it never pays for it.
+    const slot = findModelSlot()
+    if (slot === null) {
+      dropModelControl()
+      return
+    }
+    removeStrayNodes(slot, '.dsh-deepcraft-model-btn', [modelBtn])
+    let hostRoot = slot.firstElementChild
+    while (hostRoot !== null && hostRoot.classList.contains('dsh-deepcraft-model-btn')) hostRoot = hostRoot.nextElementSibling
+    if (hostRoot === null) {
+      dropModelControl()
+      return
+    }
+    modelSlot = slot
     loadModelCopy()
     modelCatalog.directory()
     modelCatalog.warm()
-    const slot = modelSlotOf()
-    modelSlot = slot
-    if (slot === null) return
-    // Hide the host's own seat (React owns the node; re-mark on swap).
-    // Idempotent against a torn-down-less reload, like the account footer:
-    // client HMR drops the old fiber's disposals, so a previous generation's
-    // trigger and popovers are still in the DOM while this fresh scope starts
-    // from null. Sweep the strays, or the seat renders twice.
-    removeStrayNodes(slot, '.dsh-deepcraft-model-btn', [modelBtn])
     removeStrayNodes(document, 'body > .dsh-deepcraft-model-popover', [modelPop, modelSubPop])
-    const hostRoot = slot.firstElementChild
-    if (hostRoot !== null) hostRoot.toggleAttribute('data-dsh-deepcraft-model-host', true)
+    hostRoot.toggleAttribute('data-dsh-deepcraft-model-host', true)
     if (modelBtn === null || modelBtn.parentElement !== slot) {
       if (modelBtn !== null && modelBtn.parentElement !== null) modelBtn.parentElement.removeChild(modelBtn)
       modelBtn = document.createElement('button')
@@ -692,7 +695,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // handed back here rather than by the stylesheet going away.
     teardown() {
       dropModelControl()
-      modelCatalog.resetWarm()
       modelSlot = null
       unregisterPopover('model')
     }
