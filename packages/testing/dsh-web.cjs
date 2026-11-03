@@ -38,6 +38,16 @@ const LIFELINE = path.join(__dirname, 'lifeline.cjs')
 const DRIVER_MESSAGE = /^\[\.WebGL-[^\]]*\]GL Driver Message/
 
 /**
+ * What a first-run overlay never is. A phone-width page puts the shell's own
+ * navigation in a dialog — the drawer carries `data-shortcut-modal="sidebar"` —
+ * and the skin's search palette is the shell's modal wearing the skin's class,
+ * so both wear `role="dialog"` without being anything to answer: pressing the
+ * drawer's buttons opens a session and the palette instead of closing a form,
+ * and the palette then reads as an overlay that never goes away.
+ */
+const NOT_FIRST_RUN = ':not([data-shortcut-modal]):not(.dsh-deepcraft-search-dialog):not(:has(.dsh-deepcraft-search-dialog))'
+
+/**
  * Give the home a workspace of the lane's own when it has none.
  *
  * A fresh `$DSH_HOME` carries an empty workspace registry, and the shell then
@@ -303,13 +313,13 @@ async function waitForSkin(page, timeoutMs = 30000) {
  * @returns which overlay was answered — a dialog with the button's place in it,
  *     a presentation root, its escape, or nothing open to press.
  */
-const pressOverlay = (page, tried) => page.evaluate((spent) => {
+const pressOverlay = (page, tried) => page.evaluate(({ spent, notFirstRun }) => {
   const shown = (element) => element.checkVisibility() && element.getBoundingClientRect().width > 0
   const top = (selector) => {
     const found = Array.from(document.querySelectorAll(selector)).filter(shown)
     return found[found.length - 1]
   }
-  const dialog = top('[role="dialog"]')
+  const dialog = top('[role="dialog"]' + notFirstRun)
   if (dialog !== undefined) {
     const text = dialog.innerText
     const buttons = Array.from(dialog.querySelectorAll('button')).filter(shown)
@@ -319,13 +329,13 @@ const pressOverlay = (page, tried) => page.evaluate((spent) => {
       return { pressed: 'dialog', text, at }
     }
   }
-  const layer = top('[role="presentation"]')
+  const layer = top('[role="presentation"]' + notFirstRun)
   if (layer === undefined) return { pressed: 'none' }
   const button = Array.from(layer.querySelectorAll('button')).filter(shown)[0]
   if (button === undefined) return { pressed: 'escape' }
   button.click()
   return { pressed: 'layer' }
-}, tried)
+}, { spent: tried, notFirstRun: NOT_FIRST_RUN })
 
 /**
  * Close the shell's own first-run overlays so a lane can reach the composer: a
@@ -356,11 +366,12 @@ async function dismissOverlays(page, options = {}) {
   const limit = options.limit ?? 6
   const quietMs = options.quietMs ?? 1000
   const settleMs = options.settleMs ?? 8000
-  const byText = () => page.locator('[role="dialog"]:visible')
-  const roots = () => page.locator('[role="presentation"]:visible')
+  const byText = () => page.locator(`[role="dialog"]${NOT_FIRST_RUN}:visible`)
+  const roots = () => page.locator(`[role="presentation"]${NOT_FIRST_RUN}:visible`)
   /** How many buttons of each dialog were already pressed, keyed by its text. */
   const pressed = new Map()
-  const overlayOpen = () => page.evaluate(() => document.querySelector('[role="dialog"], [role="presentation"]') !== null)
+  const overlayOpen = () => page.evaluate((selector) => Array.from(document.querySelectorAll(selector))
+    .some((element) => element.checkVisibility() && element.getBoundingClientRect().width > 0), `[role="dialog"]${NOT_FIRST_RUN}, [role="presentation"]${NOT_FIRST_RUN}`)
   const started = Date.now()
   let quietSince = null
   let answered = 0
@@ -392,7 +403,7 @@ async function dismissOverlays(page, options = {}) {
  * @returns one line of its text, or an empty string when nothing is open.
  */
 async function firstRunOverlayText(page) {
-  const open = page.locator('[role="dialog"]:visible, [role="presentation"]:visible')
+  const open = page.locator(`[role="dialog"]${NOT_FIRST_RUN}:visible, [role="presentation"]${NOT_FIRST_RUN}:visible`)
   if (await open.count() === 0) return ''
   const text = await open.last().innerText().catch(() => '')
   return text.replace(/\s+/g, ' ').trim().slice(0, 200)
