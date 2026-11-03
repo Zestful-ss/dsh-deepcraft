@@ -1,8 +1,0 @@
-{
-  "at": "2026-11-03",
-  "group": "chores",
-  "order": 10,
-  "external": false,
-  "zh": "调整端到端帧预算的判读：单帧上限改按本次运行自身的中位帧倍数判读，共享运行器的偶发停顿不再算作页面卡顿。",
-  "en": "Read the end-to-end frame budget against the run's own median frame, so a shared runner's occasional hiccup no longer counts as a stalled page."
-}
