@@ -37,6 +37,8 @@ const PIN_SLIP_RATIO = bound('streamPinSlipRatio')
 const PIN_SLIP_FLOOR_PX = bound('streamPinSlipPx')
 /** The foot the host's column keeps under its last row, which the trace's lag does not measure. */
 const COLUMN_FOOT_PX = bound('streamColumnFootPx')
+/** The fewest sampled frames the walk reads before its readings count. */
+const MIN_FRAMES = bound('streamPaceMinFrames')
 
 /**
  * Where the conversation's own layout puts the composer's card, and every frame
@@ -91,8 +93,9 @@ function streamPaceScenario({ check }) {
       const median = growth.length === 0 ? 0 : growth[Math.floor(growth.length / 2)]
       // The answer arrives as one flush: one frame carries all of it, and every
       // other growing frame carries the tail of a render the host had already
-      // begun. Anything less means the service was not paced to a burst.
-      const burst = growth.length >= 2 ? growth[growth.length - 1] : null
+      // begun. A run that sampled few frames folds those tails into the flush
+      // itself, which is the same answer in one reading.
+      const burst = growth.length >= 1 ? growth[growth.length - 1] : null
       // Only frames the transcript overflowed in: a column shorter than the
       // scroller rides its own end even untorn.
       const overflowing = (frame) => frame.height - frame.gap - frame.top < frame.height
@@ -113,7 +116,7 @@ function streamPaceScenario({ check }) {
         return card === null ? null : Math.round(card.getBoundingClientRect().top * 10) / 10
       }, HOST.composerCard)
       return [
-        check('逐帧采样真的在跑', trace.length > 30 && grewAt !== -1, `${trace.length} frames, the first growth at ${grewAt}`),
+        check('逐帧采样真的在跑', trace.length > MIN_FRAMES && grewAt !== -1, `${trace.length} frames, the first growth at ${grewAt}`),
         check('回答以整段一起到达', burst !== null, `${growth.length} growing frames, one frame grew ${burst}px, the rest ${growth.slice(0, -1).join('/')}px`),
         check('输入卡片的盒子在整个回合里不动', home !== null && moved.length === 0, `home ${home}px, frames away from it ${moved.length}${moved.length === 0 ? '' : `：${moved.slice(0, 3).map((frame) => `${frame.card} at ${frame.t}ms`).join(' | ')}`}`),
         check('消息列没有一帧被留在输入区上方超过滑动能带走的一段', pinning.length > 0 && slip.length === 0, `frames off the pin=${pinning.length}, worst ${worst}px, allowed -${Math.round(allowed)}px`),

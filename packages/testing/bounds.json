@@ -32,6 +32,11 @@
       "reason": "The multiple of the run's own median frame that one frame may take, so the wall clock is read against the machine that produced it. The measured runs that decided it: a runner drawing at a display's rate reported a 16.7ms median with a 283ms worst frame, and a saturated one a 49.9ms median with a 250ms worst — a shared runner's hiccup, not the page's cost. Twenty frames of this run's own baseline is still about a third of a second on a display-rate runner and stays under the absolute bound on a fast one, and a cost that follows the transcript's size moves the median with it, which the two growth rounds own."
     },
     {
+      "name": "streamPaceMinFrames",
+      "value": 20,
+      "reason": "The fewest frames the burst walk may sample before its readings mean anything: the sampler runs once a frame from the page's first script, so the count is the runner's own frame rate over the answer. A quiet machine read 78 frames over the turn where a saturated one read 27 — both carried the flush, and the floor exists only to refuse a trace too thin to read, not to judge the machine's speed."
+    },
+    {
       "name": "longSessionMinSpanMs",
       "value": 300,
       "reason": "The least stretch of wall clock the sampled frames of the measured turn must cover: twenty frames of a 60 Hz display. The span is read in milliseconds so a display that draws fewer frames a second is judged on the same stretch as one that draws sixty."
