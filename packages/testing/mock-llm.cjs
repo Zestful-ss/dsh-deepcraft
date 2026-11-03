@@ -264,6 +264,36 @@ const SCRIPTS = {
     ],
     auxiliary: { text: ['Scripted waiting line'] },
   },
+  /**
+   * The Markdown tour the README's conversation shot shows: a heading, the
+   * inline formats, both list shapes, a table, a code block and a quote, in the
+   * language the reader asks in. Scripted so the shot can be retaken on any
+   * machine with no model behind it. The auxiliary text answers the host's own
+   * title request, and it names the session with the stand-in the shot's guard
+   * accepts.
+   */
+  markdownTour: {
+    conversation: [
+      {
+        thinking: ['读者要的是格式示例，', '按常用写法给一遍，每一类给一小段。'],
+        text: [
+          '下面用一个小例子把常用格式都过一遍。\n\n',
+          '## 文本与链接\n\n',
+          '正文里可以混排**粗体**、*斜体*、~~删除线~~和 `行内代码`，也可以放一个[链接](https://example.com)。\n\n',
+          '## 列表与任务\n\n',
+          '1. 先读配置\n2. 再渲染界面\n   - 亮色与暗色各一套\n\n',
+          '- [x] 接入配色令牌\n- [ ] 补全文档\n\n',
+          '## 表格\n\n',
+          '| 格式 | 写法 | 用途 |\n| --- | --- | --- |\n',
+          '| 粗体 | `**文字**` | 强调重点 |\n| 代码 | `code` | 标出标识符 |\n| 引用 | `> 文字` | 摘录原文 |\n\n',
+          '## 代码块\n\n',
+          '```ts\nexport function greet(name: string): string {\n  return `Hello, ${name}!`\n}\n```\n\n',
+          '> 排版清楚的回答，读起来更轻松。\n',
+        ],
+      },
+    ],
+    auxiliary: { text: ['Markdown rendering tour'] },
+  },
 }
 
 /** The `{{name}}` slots of a scripted value, filled from the lane's own values. */
