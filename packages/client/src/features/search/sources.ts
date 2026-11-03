@@ -3,6 +3,7 @@ import { currentSessionId, hostConversation, hostLayout, hostLocale, hostPluginN
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { ContentHit, SearchAnswer } from '@dsh-deepcraft/contracts/usage'
 import type { HostBundleListAnswer, HostConversationInput, HostConversationService, HostInventoryAnswer, HostPluginBundle, HostSessionBinding, HostSessionSummary, HostShortcutRow, HostShortcutsService, HostSkill, HostSkillListAnswer, HostSlotsService, HostSlotStore, HostWorkspaceListSnapshot } from '@dsh-deepcraft/contracts/services'
+import { openableSessions } from '../../shared/openable-sessions'
 import { copy } from './copy'
 
 /** The kinds of thing the palette lists, and the filter that shows them all. */
@@ -106,41 +107,6 @@ export function createSearchSources(ctx: HostContext, reveal: (sessionId: string
     if (query) reference.actions.search(query)
   }
 
-  /** Workspace title by session id, from the workspace list's own accounting. */
-  function workspaceTitles(snapshot: HostWorkspaceListSnapshot) {
-    const titles: Record<string, string> = {}
-    for (let i = 0; i < snapshot.items.length; i++) {
-      const workspace = snapshot.items[i]
-      for (let s = 0; s < workspace.sessionIds.length; s++) {
-        if (titles[workspace.sessionIds[s]] === undefined) titles[workspace.sessionIds[s]] = workspace.title
-      }
-    }
-    return titles
-  }
-
-  /**
-   * The sessions a person can open, newest first: the host's list minus
-   * archived ones, subagent children and blank placeholders — the host
-   * tree's own visibility rule with the archived filter off.
-   */
-  function openableSessions() {
-    const sessions = hostSessions(ctx)
-    const workspaces = hostWorkspaces(ctx)
-    if (!sessions || !workspaces) return []
-    const list = sessions.list.getSnapshot()
-    const archive = workspaces.list.getSnapshot()
-    const archived = new Set(archive.archivedSessionIds)
-    const titles = workspaceTitles(archive)
-    const rows: { summary: HostSessionSummary, workspace: string }[] = []
-    for (let i = 0; i < list.ids.length; i++) {
-      const summary = list.byId[list.ids[i]]
-      if (summary === undefined || summary.blank || summary.origin === 'subagent' || archived.has(summary.id)) continue
-      rows.push({ summary, workspace: titles[summary.id] || '' })
-    }
-    rows.sort((a, b) => b.summary.updatedAt - a.summary.updatedAt)
-    return rows
-  }
-
   /** A session row; `hit`, when given, is its content hit — the excerpt and the match within it. */
   function sessionRow(entry: { summary: HostSessionSummary, workspace: string }, hit?: ContentHit): SearchRow {
     const id = entry.summary.id
@@ -162,7 +128,7 @@ export function createSearchSources(ctx: HostContext, reveal: (sessionId: string
   }
 
   function recentSessions() {
-    return openableSessions().slice(0, RECENT_LIMIT).map(entry => sessionRow(entry))
+    return openableSessions(ctx).slice(0, RECENT_LIMIT).map(entry => sessionRow(entry))
   }
 
   /**
@@ -173,7 +139,7 @@ export function createSearchSources(ctx: HostContext, reveal: (sessionId: string
    */
   function matchSessions(query: string, contentHits: ContentHit[]) {
     const q = query.toLowerCase()
-    const entries = openableSessions()
+    const entries = openableSessions(ctx)
     const byId: Record<string, { summary: HostSessionSummary, workspace: string }> = {}
     const hits: Record<string, ContentHit> = {}
     for (let h = 0; h < contentHits.length; h++) hits[contentHits[h].sessionId] = contentHits[h]
@@ -479,7 +445,7 @@ export function createSearchSources(ctx: HostContext, reveal: (sessionId: string
       return out
     }
     if (filter === 'all' || filter === 'session') {
-      const rows = query === '' ? openableSessions().map(entry => sessionRow(entry)) : matchSessions(query, contentHits)
+      const rows = query === '' ? openableSessions(ctx).map(entry => sessionRow(entry)) : matchSessions(query, contentHits)
       push('session', copy('searchSessions'), rows.slice(0, limit('session')))
     }
     if (filter === 'all' || filter === 'project') push('project', copy('searchProjects'), ranked(projectRows(), query).slice(0, limit('project')))
