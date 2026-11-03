@@ -110,6 +110,10 @@ keeps where it states none of its own; `—` is a token that theme leaves unset.
 | `--dsw-alias-brand-primary-new-colorprimary-new-color` | `#d97757` | `#5368c9` | `#d97757` | `#5368c9` | host's own |  |
 | `--dsh-deepcraft-canvas` | `#fcfcfb` | `#fcfcfb` | `#141413` | `#202427` | `var(--dsw-alias-bg-base)` | the page canvas, the search box |
 | `--dsh-deepcraft-sidebar-canvas` | `#fbfbf9` | `#f2f2ef` | `#141413` | `#1d2124` | `var(--dsw-specific-sidebar-fill)` | the sidebar |
+| `--dsh-deepcraft-float-frame` | `#f1efe8` | `#eef0f4` | `#141413` | `#1d2124` | `var(--dsw-specific-sidebar-fill)` | the outer window frame and sidebar under the floating page look |
+| `--dsh-deepcraft-float-card` | `#fcfcfb` | `#fcfcfb` | `#1c1b19` | `#252a30` | `var(--dsw-alias-bg-base)` | the floating conversation card and raised sidebar pills |
+| `--dsh-deepcraft-float-surface` | `#f4f3ee` | `#f2f3f7` | `#24231f` | `#2b3038` | `var(--dsw-alias-bg-layer-2)` | recessed chips, suggestion cards and code blocks on the floating card |
+| `--dsh-deepcraft-float-surface-strong` | `#eceae3` | `#e5e8f0` | `#2d2c28` | `#333a4a` | `var(--dsw-alias-bg-layer-3)` | filled model pill and user bubble on the floating card |
 | `--dsh-deepcraft-raised` | — | `#fcfcfb` | `#1e1e1d` | `#2b3038` | `var(--dsw-alias-bg-overlay)` | popovers and menus raised above the dark canvas |
 | `--dsh-deepcraft-card` | `#fcfcfb` | `#fcfcfb` | `#1e1e1d` | `#2b3038` | `var(--dsw-alias-bg-overlay)` | cards on the canvas in light and raised in dark: the account popover, the search palette |
 | `--dsh-deepcraft-inverse-fill` | `#141413` | `#202124` | `#faf9f5` | `#eef0f3` | `var(--dsw-alias-interactive-bg-hover)` | the model picker's group label fill: an inverted chip under Claude, a hover-plate chip under the host |
@@ -242,6 +246,14 @@ and scrolls to its end.
   composer card's 18px (the host's 22px less 4), the inline composer's 14px and
   11px, the permission and workspace segments' 7px, the view tabs' 5px, the
   peak-rate and file pills' 999px.
+- The floating page look (Settings › Appearance "Page look", the default) states
+  its own set: the conversation column is a 14px card standing 8px inside the
+  frame with the sidebar's hairline dropped, the hero composer card and the tray
+  under it are one 24px capsule, the in-conversation input box is a 20px capsule
+  with its own elevation, the user bubble rounds to `20px 20px 6px 20px` with a
+  6px tail corner, sidebar rows take 10px, and every control on the capsule — the
+  model pill, the permission tier, the send and stop plates — is a `9999px`
+  pill. `flat` writes none of it: the page keeps the geometry above.
 - A host control whose layout the host itself measures keeps that measurement's
   input: the conversation's view tabs are counted from the tab row's own width
   (120px a view), so the row keeps the width the host gives it and only the

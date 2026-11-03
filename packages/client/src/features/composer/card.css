@@ -234,3 +234,58 @@ body[data-dsh-deepcraft] [data-composer-card]:not([data-has-attachments="true"])
   cursor: default;
 }
 
+/* ---------- the floating page look: the composer as a capsule ---------- */
+/* Settings › Appearance "Page look" (theme/chrome.css carries the card). The
+   card grows into a capsule — a 24px radius on the card, the same radius on the
+   tray under it, and round plates for every control that sits on either — and
+   it lifts off the card's own fill with an elevation instead of the 4px hairline
+   shadow. The dark page has no white to raise a card from, so the capsule takes
+   the recessed fill there and the elevation deepens. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-composer-card] {
+  border-radius: 24px;
+  padding: 14px 12px 10px 18px;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"]:not([data-ds-dark-theme]) [data-composer-card] {
+  background: var(--dsh-deepcraft-float-card);
+  box-shadow: 0 2px 6px rgba(20, 20, 19, 0.06), 0 18px 44px rgba(20, 20, 19, 0.08);
+}
+
+body[data-dsh-deepcraft][data-ds-dark-theme][data-dsh-deepcraft-page-look="float"] [data-composer-card] {
+  background: var(--dsh-deepcraft-float-surface);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35), 0 18px 44px rgba(0, 0, 0, 0.45);
+}
+
+/* The dashed workspace ring is cut at the card's own radius, so the cut follows
+   the capsule. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-composer-card]:after {
+  border-radius: 24px;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27none%27 rx=%2724%27 ry=%2724%27 stroke=%27black%27 stroke-width=%272%27 stroke-dasharray=%274 4%27/%3E%3C/svg%3E");
+  mask: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27%3E%3Crect width=%27100%25%27 height=%27100%25%27 fill=%27none%27 rx=%2724%27 ry=%2724%27 stroke=%27black%27 stroke-width=%272%27 stroke-dasharray=%274 4%27/%3E%3C/svg%3E");
+}
+
+/* The tray tucked under the hero's card closes on the capsule's bottom corners. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"]:not([data-dsh-deepcraft-home-layout="studio"]) [data-dsh-deepcraft-part~="composer-stack"][data-composer-variant="hero"] > [data-dsh-deepcraft-part~="hero-workspace-row"] {
+  border-radius: 0 0 24px 24px;
+}
+
+/* The tray's triggers were chips with a hairline; on the capsule they are pills
+   that carry the same outline as the circle plates beside them. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="hero-workspace-row"] :is(button, [role="button"]) {
+  box-sizing: border-box;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 9999px;
+  corner-shape: round;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] button[data-dsh-deepcraft-control="commands"] {
+  border-radius: 9999px;
+  corner-shape: round;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] :is(button[data-dsh-deepcraft-control="send"], button[data-dsh-deepcraft-control="stop"]) {
+  border-radius: 9999px;
+  corner-shape: round;
+}
+

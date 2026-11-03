@@ -16,7 +16,7 @@ export default {
     rank: 25,
     pref: 'homeLayout',
     title: 'homeTitle',
-    choiceLabels: { classic: 'homeClassic', studio: 'homeStudio' },
+    choiceLabels: { float: 'homeFloat', classic: 'homeClassic', studio: 'homeStudio' },
   }],
   cases: ['hero', 'studio', 'late-forms', 'hdsl', 'hdsl-noskin', 'hdsl-broken']
 } satisfies FeatureManifest

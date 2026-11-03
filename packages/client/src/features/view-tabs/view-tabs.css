@@ -101,3 +101,20 @@ body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="conversation-header"][data-d
   min-height: 0 !important;
   padding-bottom: 10px !important;
 }
+
+/* ---------- the floating page look: the view switcher as a pill ---------- */
+/* Settings › Appearance "Page look". The strip is the small segment look (the
+   shared sheet's 7px shell); on the floating card its shell, its tabs and the
+   sliding pill all round to the same capsule as the composer's plates. The
+   settings page's own segmented controls keep their 7px, which is why the
+   selectors name the strip's mark. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-view-tabs],
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-view-tabs] [data-dsh-deepcraft-part~="view-tab"] {
+  border-radius: 9999px;
+  corner-shape: round;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-view-tabs][data-dsh-deepcraft-pill]::before {
+  border-radius: 9999px;
+  corner-shape: round;
+}

@@ -127,10 +127,20 @@ export const BAN_LOCALE_ZH = 'zh'
 export const BAN_LOCALE_OFF = 'off'
 export const BAN_LOCALES = [BAN_LOCALE_EN, BAN_LOCALE_ZH, BAN_LOCALE_OFF] as const
 
-/** Home-page layouts. `classic` is the centered hero; `studio` is the dashboard form, Claude Code's own home. */
+/**
+ * How the page's boxes are set: `float` lifts the conversation column and the
+ * controls off a warm frame, `flat` leaves every box flush in the host's own
+ * arrangement.
+ */
+export const PAGE_LOOK_FLOAT = 'float'
+export const PAGE_LOOK_FLAT = 'flat'
+export const PAGE_LOOKS = [PAGE_LOOK_FLOAT, PAGE_LOOK_FLAT] as const
+
+/** Home-page layouts. `float` is the deck under a card composer; `classic` is the centered hero; `studio` is the dashboard form, Claude Code's own home. */
+export const HOME_LAYOUT_FLOAT = 'float'
 export const HOME_LAYOUT_CLASSIC = 'classic'
 export const HOME_LAYOUT_STUDIO = 'studio'
-export const HOME_LAYOUTS = [HOME_LAYOUT_CLASSIC, HOME_LAYOUT_STUDIO] as const
+export const HOME_LAYOUTS = [HOME_LAYOUT_FLOAT, HOME_LAYOUT_CLASSIC, HOME_LAYOUT_STUDIO] as const
 
 /** Composer surfaces the restyle may cover, in settings order. */
 export const COMPOSER_SCOPE_OFF = 'off'
@@ -222,7 +232,8 @@ export const PREFS = {
   username: { type: 'text', default: '', max: USERNAME_MAX },
   pageZoom: { type: 'choice', values: PAGE_ZOOMS, default: PAGE_ZOOM_SYSTEM },
   banLocale: { type: 'choice', values: BAN_LOCALES, default: BAN_LOCALE_EN },
-  homeLayout: { type: 'choice', values: HOME_LAYOUTS, default: HOME_LAYOUT_STUDIO },
+  pageLook: { type: 'choice', values: PAGE_LOOKS, default: PAGE_LOOK_FLOAT },
+  homeLayout: { type: 'choice', values: HOME_LAYOUTS, default: HOME_LAYOUT_FLOAT },
   homeRipple: { type: 'boolean', default: false },
   palette: { type: 'choice', values: PALETTES, default: PALETTE_CLAUDE },
   typeface: { type: 'choice', values: TYPEFACES, default: TYPEFACE_CLAUDE },

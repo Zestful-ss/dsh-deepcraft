@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { PALETTE_CLAUDE, PALETTE_HOST, TYPEFACE_CLAUDE, TYPEFACE_HOST } from '../../constants'
+import { PAGE_LOOK_FLAT, PAGE_LOOK_FLOAT, PALETTE_CLAUDE, PALETTE_HOST, TYPEFACE_CLAUDE, TYPEFACE_HOST } from '../../constants'
 import { accentRow, brandRows } from './settings-brand'
 import { copy } from './copy'
 import type { Prefs } from '../../constants'
@@ -24,6 +24,10 @@ export function createSettingsAppearanceTab(): SettingsTab {
       { value: TYPEFACE_CLAUDE, label: copy('typefaceClaude') },
       { value: TYPEFACE_HOST, label: copy('typefaceHost') },
     ]
+    const pageLookOptions: SegmentOption<Prefs['pageLook']>[] = [
+      { value: PAGE_LOOK_FLOAT, label: copy('pageLookFloat') },
+      { value: PAGE_LOOK_FLAT, label: copy('pageLookFlat') },
+    ]
     return [
       {
         rank: 10,
@@ -42,6 +46,15 @@ export function createSettingsAppearanceTab(): SettingsTab {
           copy('typefaceTitle'),
           copy('typefaceDesc'),
           controls.segment(typefaceOptions, prefs.typeface, value => { write({ typeface: value }) }),
+        ),
+      },
+      {
+        rank: 22,
+        node: controls.row(
+          'pageLook',
+          copy('pageLookTitle'),
+          copy('pageLookDesc'),
+          controls.segment(pageLookOptions, prefs.pageLook, value => { write({ pageLook: value }) }),
         ),
       },
       ...brandRows(view),

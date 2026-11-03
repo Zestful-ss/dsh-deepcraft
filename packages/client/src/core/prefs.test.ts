@@ -27,6 +27,10 @@ test('a choice outside its set reads as its default', () => {
   expect(normalizePrefs({ statusDetail: 'verbose' }).statusDetail).toBe(PREF_DEFAULTS.statusDetail)
   expect(normalizePrefs({ ongoingIndicator: ONGOING_INDICATOR_RING }).ongoingIndicator).toBe(ONGOING_INDICATOR_RING)
   expect(normalizePrefs({ ongoingIndicator: 'pulse' }).ongoingIndicator).toBe(PREF_DEFAULTS.ongoingIndicator)
+  expect(normalizePrefs({ pageLook: 'flat' }).pageLook).toBe('flat')
+  expect(normalizePrefs({ pageLook: 'invalid' }).pageLook).toBe(PREF_DEFAULTS.pageLook)
+  expect(normalizePrefs({ homeLayout: 'float' }).homeLayout).toBe('float')
+  expect(normalizePrefs({ homeLayout: 'dashboard' }).homeLayout).toBe(PREF_DEFAULTS.homeLayout)
 })
 
 test('the caret switch reads the retired explicit-moves tier as on', () => {

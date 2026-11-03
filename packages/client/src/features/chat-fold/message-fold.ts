@@ -1,7 +1,7 @@
 import { observeMatches, observeSize, subscribeMutations } from '@dsh-deepcraft/engine/bus'
 import { CHAT_ROW_SELECTOR, conversationColumn, userBubble } from '@dsh-deepcraft/engine/chat-dom'
 import { buildElement, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
-import { MESSAGE_FOLD_ATTR } from '../../constants'
+import { MESSAGE_FOLD_ATTR, USER_BUBBLE_ATTR } from '../../constants'
 import { SUBMISSION_ECHO_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { copy } from './copy'
 
@@ -170,6 +170,9 @@ export function createMessageFold(requestPass: () => void) {
 
   /** Bring one bubble to what its height and the reader's own choice ask for. */
   function apply(bubble: HTMLElement, tall = decided.get(bubble) === true) {
+    // The page look's bubble shape hangs on this mark, and every user bubble
+    // carries it whether or not it is tall enough to fold.
+    setAttributeIfChanged(bubble, USER_BUBBLE_ATTR, '')
     const collapsed = tall && choices.get(bubble) !== 'expanded'
     if (collapsed) setAttributeIfChanged(bubble, MESSAGE_FOLD_ATTR, 'collapsed')
     else bubble.removeAttribute(MESSAGE_FOLD_ATTR)
@@ -272,6 +275,7 @@ export function createMessageFold(requestPass: () => void) {
         const bubble = bubbles.get(row)
         if (bubble === undefined) continue
         bubble.removeAttribute(MESSAGE_FOLD_ATTR)
+        bubble.removeAttribute(USER_BUBBLE_ATTR)
         dropToggle(bubble)
       }
       for (const stop of sizes.values()) stop()

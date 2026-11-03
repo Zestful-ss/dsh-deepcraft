@@ -334,6 +334,24 @@ export const HOME_LAYOUT_ATTR = 'data-dsh-deepcraft-home-layout'
  */
 export const HOME_HERO_ATTR = 'data-dsh-deepcraft-home-hero'
 /**
+ * Present on the hero root while the float layout owns the page shown: the
+ * floating deck's rules hang off it, so a page in another layout carries no
+ * trace of the deck.
+ */
+export const HOME_FLOAT_HERO_ATTR = 'data-dsh-deepcraft-home-float'
+/**
+ * Which page look is in force. The stylesheet branches on it: `float` lifts
+ * the conversation column, the controls and the home deck off a warm frame,
+ * while `flat` leaves every box in the host's own arrangement.
+ */
+export const PAGE_LOOK_ATTR = 'data-dsh-deepcraft-page-look'
+/**
+ * On a user message's bubble (features/chat-fold/message-fold.ts): the
+ * floating page look rounds it into a speech shape whose tail corner alone
+ * stays tight.
+ */
+export const USER_BUBBLE_ATTR = 'data-dsh-deepcraft-user-bubble'
+/**
  * The heat grid's ramp: how much of the heat ink each level paints, in
  * percent, faintest first. Its length is the number of levels a day's tokens
  * are bucketed into (features/home/data.ts); the build writes one rule per

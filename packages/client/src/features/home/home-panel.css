@@ -276,3 +276,147 @@ body[data-dsh-deepcraft] .dsh-deepcraft-home-panel[data-dsh-deepcraft-revealing]
    animation choice resolves to "reduced" (theme/chrome.css): the shared rule
    holds it on its first frame, and it covers "Always" as well. */
 
+/* ---------- the floating home deck ---------- */
+/* The float layout's home block (features/home/float-deck.ts). It takes the same
+   cold seat the studio panel does, so it is drawn only while the hero root
+   carries the float mark, and the stack sorts it under the card and its tray:
+   greeting, capsule, tray, deck. The week's roll-up is the one figure that
+   leaves the column — a pill in the window's top-right corner, over the card's
+   empty headroom, where the conversation header keeps no actions on a page
+   with no session. */
+body[data-dsh-deepcraft] .dsh-deepcraft-home-float {
+  display: none;
+}
+
+body[data-dsh-deepcraft] [data-dsh-deepcraft-home-float] [data-dsh-deepcraft-part~="composer-hero"] > [data-slot="conversation.composer.bar"] > * {
+  order: 1;
+}
+
+body[data-dsh-deepcraft] [data-dsh-deepcraft-home-float] [data-dsh-deepcraft-part~="composer-hero"] > [data-dsh-deepcraft-part~="hero-workspace-row"] {
+  order: 2;
+}
+
+body[data-dsh-deepcraft] [data-dsh-deepcraft-home-float] [data-dsh-deepcraft-part~="composer-hero"] > :is([data-slot="conversation.input.dock"], .dsh-deepcraft-home-seat) > .dsh-deepcraft-home-float {
+  display: flex;
+  order: 3;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 720px;
+  margin: 18px auto 0;
+  padding-bottom: 8px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-home-week {
+  position: fixed;
+  top: 16px;
+  right: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  border: 1px solid var(--dsw-alias-border-l1);
+  border-radius: 9999px;
+  corner-shape: round;
+  background: var(--dsh-deepcraft-float-surface);
+  color: var(--dsw-alias-label-secondary);
+  font-family: var(--dsw-font-family);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  z-index: var(--dsh-deepcraft-layer-control);
+}
+
+/* The sparkline takes the accent: it is the one mark in the deck that is a chart
+   rather than a control (the polyline reads currentColor). */
+body[data-dsh-deepcraft] .dsh-deepcraft-home-week-spark {
+  color: var(--dsw-alias-brand-primary);
+  flex: none;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-home-sugg {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-home-sugg-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--dsw-alias-border-l1);
+  border-radius: 16px;
+  background: var(--dsh-deepcraft-float-surface);
+  /* The card is the button: its title and its line both inherit this face, so
+     the two rows below state only the sizes they differ in. */
+  font-family: var(--dsw-font-family);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dsw-alias-label-primary);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--dsh-deepcraft-timing-feedback);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-home-sugg-card:hover {
+  background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-home-sugg-title {
+  line-height: 19px;
+  /* A title is one line: the card's height is what the three of them share. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-home-sugg-detail {
+  font-size: 12px;
+  line-height: 17px;
+  color: var(--dsw-alias-label-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-home-recents {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-home-recents-label {
+  font-family: var(--dsw-font-family);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--dsw-alias-label-caption, #a6a094);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-home-recent {
+  max-width: 200px;
+  padding: 5px 12px;
+  border: 1px solid var(--dsw-alias-border-l1);
+  border-radius: 9999px;
+  corner-shape: round;
+  background: var(--dsh-deepcraft-float-card);
+  color: var(--dsw-alias-label-secondary);
+  font-family: var(--dsw-font-family);
+  font-size: 12px;
+  line-height: 17px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--dsh-deepcraft-timing-feedback);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-home-recent:hover {
+  color: var(--dsw-alias-label-primary);
+}
+

@@ -311,3 +311,23 @@ body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="text-mono-label"] {
   font-size: 12px;
   letter-spacing: 0;
 }
+
+/* ---------- the floating page look: the message's own shape ---------- */
+/* Settings › Appearance "Page look" (theme/chrome.css carries the card). The
+   reader's message is the one block in the transcript that is a thing he sent
+   rather than prose the assistant wrote, so on the floating card it takes a
+   fill of its own and rounds three corners, leaving the one nearest its own
+   bubble's tail tight. The mark rides the bubble, written by
+   features/chat-fold/message-fold.ts. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-user-bubble] {
+  border-radius: 20px 20px 6px 20px;
+  background: var(--dsh-deepcraft-float-surface-strong);
+}
+
+/* The inline chip sits on the card's recessed fill, and its 1px inset padding
+   leaves the py of the glyphs crowded; the floating look gives it room. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] code:not(pre code) {
+  border-radius: 6px;
+  padding: 1px 6px;
+  background: var(--dsh-deepcraft-float-surface-strong);
+}

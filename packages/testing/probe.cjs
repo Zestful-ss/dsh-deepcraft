@@ -85,11 +85,18 @@ async function probe(page) {
     const root = document.querySelector('[data-phase]')
     const seat = document.querySelector('[data-composer-seat]')
     const input = document.querySelector('[data-composer-card] [data-composer-input]')
+    const col = document.querySelector('[data-dsh-deepcraft-part~="center-column"]')
     const rect = (el) => el ? el.getBoundingClientRect() : null
     const sr = rect(seat), ir = rect(input)
+    // The column the composer is pinned to, never the window: the floating page
+    // look stands the column 8px off the window's bottom and its own 1px edge is
+    // inside the box, so both are taken off before the two are compared.
+    const colRect = rect(col)
+    const colBottom = colRect ? Math.round(colRect.bottom - (parseFloat(getComputedStyle(col).borderBottomWidth) || 0)) : innerHeight
     return {
       phase: root && root.getAttribute('data-phase'),
       seatBottom: sr ? Math.round(sr.bottom) : null,
+      colBottom: colBottom,
       inputH: ir ? Math.round(ir.height) : null,
       innerH: innerHeight,
     }
@@ -97,7 +104,7 @@ async function probe(page) {
 
   const s0 = await state()
   check('session page active', s0.phase === 'active', 'phase=' + s0.phase)
-  check('composer pinned at bottom', s0.seatBottom !== null && Math.abs(s0.seatBottom - s0.innerH) <= 2, 'seatBottom=' + s0.seatBottom + ' innerH=' + s0.innerH)
+  check('composer pinned at bottom', s0.seatBottom !== null && Math.abs(s0.seatBottom - s0.colBottom) <= 2, 'seatBottom=' + s0.seatBottom + ' colBottom=' + s0.colBottom + ' innerH=' + s0.innerH)
   check('single-line start (24px)', s0.inputH === 24, 'inputH=' + s0.inputH)
 
   // grow with multiline content
@@ -106,7 +113,7 @@ async function probe(page) {
   await sleep(1500)
   const s1 = await state()
   check('field grows with content', s1.inputH !== null && s1.inputH >= 160, 'inputH=' + s1.inputH)
-  check('seat stays pinned while grown', s1.seatBottom !== null && Math.abs(s1.seatBottom - s1.innerH) <= 2, 'seatBottom=' + s1.seatBottom)
+  check('seat stays pinned while grown', s1.seatBottom !== null && Math.abs(s1.seatBottom - s1.colBottom) <= 2, 'seatBottom=' + s1.seatBottom + ' colBottom=' + s1.colBottom)
 
   // clear the probe draft (real key events so Lexical processes them)
   await page.evaluate(`(() => { const i = document.querySelector('[data-composer-card] [data-composer-input]'); i.focus(); return true })()`)

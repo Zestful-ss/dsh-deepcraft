@@ -4,8 +4,8 @@ const { BAND_ANIMATION, same, check, basicChecks, commonChecks } = require('./_s
 module.exports = {
   'late-forms'(r) {
     check('apply() completes', r.applyError === null, r.applyError)
-    check('the store stays on the defaults (the studio home) until the namespace is served',
-      r.lateBefore === 'studio', JSON.stringify(r.lateBefore))
+    check('the store stays on the defaults (the floating home) until the namespace is served',
+      r.lateBefore === 'float', JSON.stringify(r.lateBefore))
     check('a namespace served after apply still binds the form and its value (classic)',
       r.lateAfter === null && r.homeLayoutAttr === null,
       JSON.stringify({ after: r.lateAfter, final: r.homeLayoutAttr }))
@@ -17,7 +17,7 @@ module.exports = {
     check('the settings section registers with the settings dialog', settings.registered === true, JSON.stringify(settings.registered))
     const expected = {
       general: ['brand', 'username', 'pageZoom', 'autoPopover'],
-      appearance: ['palette', 'brandAccent', 'typeface', 'homeLayout', 'homeRipple', 'mascot', 'chatPet', 'mascotScope', 'brandName', 'brandMark', 'brandWordmark', 'brandInk', 'petImport'],
+      appearance: ['palette', 'brandAccent', 'typeface', 'pageLook', 'homeLayout', 'homeRipple', 'mascot', 'chatPet', 'mascotScope', 'brandName', 'brandMark', 'brandWordmark', 'brandInk', 'petImport'],
       composer: ['composerScope', 'modelPicker', 'modelDescriptions', 'quickProviders', 'subagentModelPicker', 'peakrate', 'permissionsControl', 'subagentModelChoice'],
       sidebar: ['collapseFooter', 'banLocale', 'sidebarSearch', 'searchStyle', 'workspaceView', 'dockCards', 'sidebarLayout'],
       conversation: ['turnNav', 'statsPosition', 'viewTabs', 'headerBand'],

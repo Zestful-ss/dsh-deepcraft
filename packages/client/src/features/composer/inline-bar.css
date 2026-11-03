@@ -461,3 +461,22 @@ body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-skeleton-value {
     padding: 0;
   }
 }
+
+/* ---------- the floating page look: the model trigger as a filled pill ------ */
+/* Settings › Appearance "Page look". The trigger sat on the composer's own fill;
+   on the floating capsule it takes the recessed fill so the capsule reads as one
+   surface with three plates on it — the model name, the permission tier and the
+   send control — instead of a row of bare labels. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"] [data-slot="conversation.input.model"] > .dsh-deepcraft-model-visual,
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-visual {
+  padding: 0 10px;
+  border-radius: 9999px;
+  corner-shape: round;
+  background: var(--dsh-deepcraft-float-surface-strong);
+}
+
+/* The pill outranks the hover wash above, so it presses by mixing the label ink
+   into its own fill instead: darker in light, lighter in dark. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="trailing"] .dsh-deepcraft-model-visual:hover {
+  background: color-mix(in srgb, var(--dsh-deepcraft-float-surface-strong) 88%, var(--dsw-alias-label-primary));
+}

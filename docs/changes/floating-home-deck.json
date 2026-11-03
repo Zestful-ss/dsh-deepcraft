@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-03",
+  "group": "new",
+  "order": 10,
+  "external": false,
+  "zh": "首页版面的「浮层」并设为默认：在输入框下方给出本周用量与走势、续开最近两次对话的浮卡、进入工作台用量面板的入口与最近对话。",
+  "en": "Add the floating home layout as the default: a deck under the composer carries this week's usage with its trend, cards resuming the two latest conversations, an entry into the Studio usage panel, and the recent conversations."
+}

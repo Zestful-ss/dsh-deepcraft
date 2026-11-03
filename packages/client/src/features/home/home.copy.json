@@ -84,6 +84,22 @@
   "homeTopModel": { "zh": "最常用模型", "en": "Favorite model" },
   "homeHeatTipTokens": { "zh": "{date} — {tokens} Token", "en": "{date} — {tokens} tokens" },
   "homeTitle": { "zh": "首页版面", "en": "Home layout" },
+  "homeFloat": { "zh": "浮层", "en": "Floating" },
   "homeClassic": { "zh": "经典", "en": "Classic" },
-  "homeStudio": { "zh": "工作台", "en": "Studio" }
+  "homeStudio": { "zh": "工作台", "en": "Studio" },
+  "homeWeekSummary": { "zh": "本周 {sessions} 次会话 · {tokens} tok", "en": "This week: {sessions} sessions · {tokens} tok" },
+  "homeContinueTitle": { "zh": "继续 {title}", "en": "Continue {title}" },
+  "homeContinueFallbackTitle": { "zh": "开始新对话", "en": "Start a new conversation" },
+  "homeContinueFallbackDesc": { "zh": "在上方输入框描述任务", "en": "Describe a task above" },
+  "homeResumeTitle": { "zh": "回到 {title}", "en": "Resume {title}" },
+  "homeCommandsTitle": { "zh": "浏览命令与文件", "en": "Commands and files" },
+  "homeCommandsDesc": { "zh": "输入 / 调用命令，@ 引用文件", "en": "Type / for commands, @ for files" },
+  "homeUsageCardTitle": { "zh": "查看本月用量", "en": "View 30-day usage" },
+  "homeUsageCardDesc": { "zh": "{tokens} token · 常用 {model}", "en": "{tokens} tokens · Top model {model}" },
+  "homeUsageCardEmptyDesc": { "zh": "打开工作台概览与热力图面板", "en": "Open the Studio usage overview and heat grid" },
+  "homeRecentsLabel": { "zh": "最近", "en": "Recent" },
+  "homeTimeJustNow": { "zh": "刚刚", "en": "just now" },
+  "homeTimeMinutes": { "zh": "{count} 分钟前", "en": "{count}m ago" },
+  "homeTimeHours": { "zh": "{count} 小时前", "en": "{count}h ago" },
+  "homeTimeDays": { "zh": "{count} 天前", "en": "{count}d ago" }
 }

@@ -224,6 +224,11 @@ module.exports = {
     check('the studio hero mark is on the document on the hero page and off it elsewhere, and the studio rules reach the stack',
       r.homeHero !== undefined && r.homeHero.onHero === true && r.homeHero.offHero === false && r.homeHero.stackMaxWidth === '720px',
       JSON.stringify(r.homeHero))
+    check('the floating home layout marks the hero root, reaches the document, and renders its deck\'s week roll-up and three cards',
+      r.floatHome !== undefined && r.floatHome.mark === true && r.floatHome.pageLook === 'float' &&
+        r.floatHome.layoutAttr === 'float' && r.floatHome.deck.error === null &&
+        r.floatHome.week === true && r.floatHome.cards === 3,
+      JSON.stringify(r.floatHome))
     check('the studio hero draws the conversation\'s permission trigger in the card\'s mode strip, with no segment group',
       r.heroPerm !== undefined && r.heroPerm.trigger === true && r.heroPerm.segments === 0 &&
         r.heroPerm.label === 'Accept edits' && r.heroPerm.disabled === false,

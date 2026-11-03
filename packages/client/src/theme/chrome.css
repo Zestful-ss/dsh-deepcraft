@@ -80,6 +80,67 @@ html[data-windows-titlebar] body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="
   pointer-events: none;
 }
 
+/* ---------- the floating page look ---------- */
+/* Settings › Appearance "Page look". Under `float` the columns stop sharing one
+   canvas: the frame keeps a warm tone, the conversation column lifts off it as a
+   rounded card with a hairline and the host's elevation, and the sidebar paints
+   the frame, so the card is the one raised surface. A wallpaper keeps the host's
+   own painting (theme/wallpaper.css). Every rule hangs on the page-look
+   attribute, so `flat` leaves the page exactly as the host laid it out. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="layout-frame"] {
+  /* The Windows titlebar fills above read this token off the frame. */
+  --dsh-deepcraft-canvas: var(--dsh-deepcraft-float-frame);
+  background: var(--dsh-deepcraft-float-frame);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) :is([data-dsh-deepcraft-part~="sidebar-column"], .dshDesktopSidebarSurface) {
+  --dsw-specific-sidebar-fill: var(--dsh-deepcraft-float-frame);
+  --dsh-deepcraft-sidebar-canvas: var(--dsh-deepcraft-float-frame);
+  background: var(--dsh-deepcraft-float-frame);
+}
+
+/* The card carries the canvas token for its own subtree: the host's markdown,
+   popovers and the composer read the fill they sit on from it. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="center-column"] {
+  --dsw-alias-bg-base: var(--dsh-deepcraft-float-card);
+  --dsh-deepcraft-canvas: var(--dsh-deepcraft-float-card);
+  background: var(--dsh-deepcraft-float-card);
+}
+
+/* The hairline between the columns is the card's edge now, so the sidebar keeps
+   none of its own — including the stub the Windows titlebar block draws. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) :is([data-dsh-deepcraft-part~="sidebar-column"], .dshDesktopSidebarSurface) {
+  border-right-color: transparent;
+}
+
+html[data-windows-titlebar] body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="layout-frame"] > [data-side="sidebar"]::before {
+  border-left-color: transparent;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="center-column"] {
+  margin: 8px 8px 8px 0;
+  border: 1px solid var(--dsw-alias-border-l1);
+  border-radius: 14px;
+  box-shadow: var(--dsw-shadow-lv2);
+  /* The card's own corners clip its scrollers, which the radius would otherwise
+     leave square. */
+  overflow: hidden;
+  /* The composer's seat and the header band fade to the fill the transcript sits
+     on, which is the card here rather than the page canvas. */
+  --dsh-deepcraft-fade-stops:
+    var(--dsh-deepcraft-float-card, var(--dsw-alias-bg-base, #FCFCFB)) 0%,
+    color-mix(in srgb, var(--dsh-deepcraft-float-card, var(--dsw-alias-bg-base, #FCFCFB)) 82%, transparent) 32%,
+    color-mix(in srgb, var(--dsh-deepcraft-float-card, var(--dsw-alias-bg-base, #FCFCFB)) 40%, transparent) 68%,
+    transparent 100%;
+}
+
+/* The Windows block fills the caption row by lifting the column's own colour
+   above its top edge; a card that stands 8px down from it would carry that
+   rectangle out of its rounded corners, so the card keeps the elevation alone. */
+html[data-windows-titlebar] body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="layout-frame"] > [data-dsh-deepcraft-part~="center-column"] {
+  box-shadow: var(--dsw-shadow-lv2);
+}
+
 /* ---------- the right sidebar's panels as floating cards ---------- */
 /* A panel docked in the right column floats 8px inside the window: the skin's
    hairline and the host's own panel elevation over the frame's canvas. It hangs on

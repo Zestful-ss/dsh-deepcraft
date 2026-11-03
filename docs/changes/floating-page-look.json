@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-03",
+  "group": "new",
+  "order": 5,
+  "external": false,
+  "zh": "新增浮层版面并设为默认：主对话区浮成圆角卡片，输入框、侧栏行、权限档位与视图标签页采用胶囊造型，外观页的「界面层次」可切回平铺。",
+  "en": "Add the floating page look as the default: the conversation area becomes a rounded card, the composer, sidebar rows, permission tier and view tabs take pill shapes, and the Appearance tab's page look switches back to flat."
+}

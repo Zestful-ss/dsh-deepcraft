@@ -1058,6 +1058,9 @@
       "with the animation choice on \"reduced\" it holds the idle still frame; a click still pokes it": [
         0
       ],
+      "the floating home layout marks the hero root, reaches the document, and renders its deck's week roll-up and three cards": [
+        3
+      ],
       "the studio hero draws the conversation's permission trigger in the card's mode strip, with no segment group": [
         0
       ],

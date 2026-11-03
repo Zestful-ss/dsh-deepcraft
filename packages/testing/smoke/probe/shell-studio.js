@@ -168,6 +168,44 @@
       // The stack's parts land on the pass after it arrives (D3).
       for (var studioWait = 0; studioWait < 40 && !studioStack.hasAttribute('data-dsh-deepcraft-part'); studioWait++) await sleep(50)
       r.homeHero.stackMaxWidth = getComputedStyle(studioStack).maxWidth
+      // The floating home layout draws its own deck in the same seat: the mark
+      // on the hero root, the page look on the body, and the deck the registered
+      // component hands its seat — the week's roll-up and three cards. The
+      // layout and the page look are pushed through the host form, which is what
+      // the settings rows do; a pass is driven by a mutation, the way the live
+      // page drives one. The studio layout goes back for the rest of this case.
+      window.__pushForm({ homeLayout: 'float', pageLook: 'float' })
+      var wake = document.createElement('i')
+      document.body.appendChild(wake)
+      await sleep(250)
+      r.floatHome = {
+        mark: heroRoot.hasAttribute('data-dsh-deepcraft-home-float'),
+        pageLook: document.body.getAttribute('data-dsh-deepcraft-page-look'),
+        layoutAttr: document.body.getAttribute('data-dsh-deepcraft-home-layout'),
+        deck: { error: null, classes: [] },
+      }
+      var react = window.__react
+      react.rendering = true
+      try {
+        ;(function collect(node) {
+          if (node === null || typeof node !== 'object') return
+          if (Array.isArray(node)) { node.forEach(collect); return }
+          if (node.props && typeof node.props.className === 'string') r.floatHome.deck.classes.push(node.props.className)
+          if (node.props) collect(node.props.children)
+        })(window.__slotComponents['deepcraft-usage']({}))
+      } catch (e) {
+        r.floatHome.deck.error = String((e && e.stack) || e)
+      } finally {
+        react.rendering = false
+      }
+      r.floatHome.week = r.floatHome.deck.classes.indexOf('dsh-deepcraft-home-week') !== -1
+      r.floatHome.cards = r.floatHome.deck.classes.filter(function (name) { return name === 'dsh-deepcraft-home-sugg-card' }).length
+      wake.remove()
+      window.__pushForm({ homeLayout: 'studio' })
+      var wakeBack = document.createElement('i')
+      document.body.appendChild(wakeBack)
+      await sleep(250)
+      wakeBack.remove()
       studioStack.remove()
       heroRoot.remove()
       await sleep(200)

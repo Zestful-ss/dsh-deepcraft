@@ -1,15 +1,16 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom/client'
 import { PHASE_ATTRIBUTE } from '@dsh-deepcraft/contracts/dom'
-import { HOME_HERO_ATTR, HOME_LAYOUT_ATTR, HOME_LAYOUT_STUDIO, PREF_DEFAULTS } from '../../constants'
+import { HOME_FLOAT_HERO_ATTR, HOME_HERO_ATTR, HOME_LAYOUT_ATTR, HOME_LAYOUT_FLOAT, HOME_LAYOUT_STUDIO, PREF_DEFAULTS } from '../../constants'
 import type { Prefs } from '../../constants'
 import { COMPOSER_STACK, cacheFirstMatch, hostSlots } from '@dsh-deepcraft/engine/host'
-import { readPrefs } from '../../core/prefs'
+import { readPrefs, savePrefs } from '../../core/prefs'
 import { motionMs } from '../../shared/motion'
 import { HOME_RANGES, createHomeUsage, homePanelData } from './data'
 import { createGreetingCopy } from './greeting-copy'
 import { createHomeModels } from './models'
 import { createHomeOverview } from './overview'
+import { createHomeFloatDeck } from './float-deck'
 import { buildElement } from '@dsh-deepcraft/engine/dom'
 import type { HostContext, HostFiber } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
@@ -77,6 +78,12 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   const usage = createHomeUsage(ctx)
   const overview = createHomeOverview()
   const models = createHomeModels()
+  /**
+   * The floating layout's deck. Its usage card is the one way into the Studio
+   * panel from the home page, so it writes the layout preference the settings
+   * page's own row writes.
+   */
+  const floatDeck = createHomeFloatDeck(ctx, () => { savePrefs({ homeLayout: HOME_LAYOUT_STUDIO }) })
 
   /**
    * Whether the page currently shows the new-conversation hero.
@@ -90,29 +97,31 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   }
 
   /**
-   * Mark the hero root while the studio layout owns the page shown: the
-   * studio rules key on this one attribute instead of each re-reading the
-   * host's phase marker. The mark rides the root itself, so the flip on a
-   * home switch invalidates the hero page's subtree rather than the document
-   * (D9).
+   * Mark the hero root while a layout other than the flat classic owns the page
+   * shown, and say which one: the studio and floating rules key on these
+   * attributes instead of each re-reading the host's phase marker. The marks ride
+   * the root itself, so the flip on a home switch invalidates the hero page's
+   * subtree rather than the document (D9).
    */
   function syncRootMark() {
     const root = heroRoot()
     if (root !== markedRoot) {
       markedRoot?.removeAttribute(HOME_HERO_ATTR)
+      markedRoot?.removeAttribute(HOME_FLOAT_HERO_ATTR)
       markedRoot = root
     }
     markedRoot?.toggleAttribute(HOME_HERO_ATTR, layout === HOME_LAYOUT_STUDIO)
+    markedRoot?.toggleAttribute(HOME_FLOAT_HERO_ATTR, layout === HOME_LAYOUT_FLOAT)
   }
 
   /** Write the layout onto the document and start loading when it needs data. */
   function setLayout(next: Prefs['homeLayout']) {
     layout = next
-    if (next === HOME_LAYOUT_STUDIO) document.body.setAttribute(HOME_LAYOUT_ATTR, HOME_LAYOUT_STUDIO)
+    if (next === HOME_LAYOUT_STUDIO || next === HOME_LAYOUT_FLOAT) document.body.setAttribute(HOME_LAYOUT_ATTR, next)
     else document.body.removeAttribute(HOME_LAYOUT_ATTR)
     syncRootMark()
     lastHero = heroPhase()
-    if (next === HOME_LAYOUT_STUDIO) usage.load(false)
+    if (next === HOME_LAYOUT_STUDIO || next === HOME_LAYOUT_FLOAT) usage.load(false)
     usage.notify()
   }
 
@@ -155,6 +164,9 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       const timer = window.setTimeout(() => setReveal('settled'), motionMs('--dsh-deepcraft-duration-fade'))
       return () => window.clearTimeout(timer)
     }, [reveal])
+    // The floating layout draws its own deck in the same seat: three cards and
+    // the week's roll-up, off the same store the panel below reads.
+    if (layout === HOME_LAYOUT_FLOAT) return heroPhase() ? floatDeck.view(state, usage.list(), bookPick) : null
     if (layout !== HOME_LAYOUT_STUDIO || !heroPhase()) return null
     const data = homePanelData(state, usage.list(), range, bookPick)
     if (!data.known && reveal !== 'placeholders') setReveal('placeholders')
@@ -245,7 +257,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * is re-mounted on the new stack.
    */
   function syncColdSeat() {
-    const stack = markedRoot !== null && markedRoot.hasAttribute(HOME_HERO_ATTR) ? heroStack() : null
+    const marked = markedRoot !== null && (markedRoot.hasAttribute(HOME_HERO_ATTR) || markedRoot.hasAttribute(HOME_FLOAT_HERO_ATTR))
+    const stack = marked ? heroStack() : null
     if (stack === null || stack.querySelector(`:scope > [data-slot="${DOCK_SLOT}"]`) !== null) {
       unmountColdSeat()
       return
@@ -281,7 +294,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     }
     greeting.sync(hero)
     syncColdSeat()
-    if (next === HOME_LAYOUT_STUDIO) {
+    if (next === HOME_LAYOUT_STUDIO || next === HOME_LAYOUT_FLOAT) {
       usage.load(false)
       usage.loadList()
     }
@@ -297,6 +310,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     usage.stop()
     document.body.removeAttribute(HOME_LAYOUT_ATTR)
     markedRoot?.removeAttribute(HOME_HERO_ATTR)
+    markedRoot?.removeAttribute(HOME_FLOAT_HERO_ATTR)
     markedRoot = null
     if (slotsFiber !== null) {
       if (typeof slotsFiber.dispose === 'function') slotsFiber.dispose()
