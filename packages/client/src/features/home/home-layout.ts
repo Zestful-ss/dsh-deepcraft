@@ -154,9 +154,11 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const setRange = rangeState[1]
     // The numbers landing over the placeholders this panel drew: for one
     // cross-fade the panel is marked, and the stylesheet hands each placeholder
-    // over to what it stood for (home-panel.css). A panel that opens on numbers
-    // already known has nothing to hand over.
-    const revealState = React.useState<'placeholders' | 'revealing' | 'settled'>('settled')
+    // over to what it stood for (home-panel.css). The panel opens in that
+    // hand-over state on every mount: the store answers before a home visit
+    // often enough that a panel waiting to be told otherwise drew its numbers
+    // without the entrance, and the frame drawn here is what the fade is for.
+    const revealState = React.useState<'placeholders' | 'revealing' | 'settled'>('placeholders')
     const reveal = revealState[0]
     const setReveal = revealState[1]
     React.useEffect(() => {
