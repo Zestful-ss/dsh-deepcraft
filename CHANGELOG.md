@@ -4,14 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.22.0] - 2026-11-03
 
-<h3 id="cn-unreleased">新增功能</h3>
+[中文](#cn-0.22.0) | [English](#en-0.22.0)
+
+<h3 id="cn-0.22.0">新增功能</h3>
 
 - 新增浮层版面并设为默认：主对话区浮成圆角卡片，输入框、侧栏行、权限档位与视图标签页采用胶囊造型，外观页的「界面层次」可切回平铺。
 - 首页版面的「浮层」并设为默认：在输入框下方给出本周用量与走势、续开最近两次对话的浮卡、进入工作台用量面板的入口与最近对话。
 
-<h3 id="en-unreleased">New Features</h3>
+<h3 id="en-0.22.0">New Features</h3>
 
 - Add the floating page look as the default: the conversation area becomes a rounded card, the composer, sidebar rows, permission tier and view tabs take pill shapes, and the Appearance tab's page look switches back to flat.
 - Add the floating home layout as the default: a deck under the composer carries this week's usage with its trend, cards resuming the two latest conversations, an entry into the Studio usage panel, and the recent conversations.
