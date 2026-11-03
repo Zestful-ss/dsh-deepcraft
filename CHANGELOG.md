@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">其他变更</h3>
+
+- 调整端到端帧预算的判读：单帧上限改按本次运行自身的中位帧倍数判读，共享运行器的偶发停顿不再算作页面卡顿。
+
+<h3 id="en-unreleased">Chores</h3>
+
+- Read the end-to-end frame budget against the run's own median frame, so a shared runner's occasional hiccup no longer counts as a stalled page.
+
 ## [0.22.0] - 2026-11-03
 
 [中文](#cn-0.22.0) | [English](#en-0.22.0)

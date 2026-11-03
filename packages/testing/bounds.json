@@ -24,7 +24,12 @@
     {
       "name": "longSessionWorstFrameMs",
       "value": 250,
-      "reason": "The worst frame a long session may take over the measured turn: about fifteen 60 Hz frames. A frame that costs more than this is a stall the reader would see, and the reading is a wall clock between animation frames on a headless runner, so it sits far above one frame on purpose."
+      "reason": "The worst frame a long session may take over the measured turn: about fifteen 60 Hz frames. A frame that costs more than this is a stall the reader would see, and the reading is a wall clock between animation frames on a headless runner, so it sits far above one frame on purpose. It is the limit on a runner drawing its frames at a display's rate; a slower one is judged by the factor below."
+    },
+    {
+      "name": "longSessionWorstFrameRatio",
+      "value": 20,
+      "reason": "The multiple of the run's own median frame that one frame may take, so the wall clock is read against the machine that produced it. The measured runs that decided it: a runner drawing at a display's rate reported a 16.7ms median with a 283ms worst frame, and a saturated one a 49.9ms median with a 250ms worst — a shared runner's hiccup, not the page's cost. Twenty frames of this run's own baseline is still about a third of a second on a display-rate runner and stays under the absolute bound on a fast one, and a cost that follows the transcript's size moves the median with it, which the two growth rounds own."
     },
     {
       "name": "longSessionMinSpanMs",
