@@ -1,8 +1,0 @@
-{
-  "at": "2026-11-04",
-  "group": "chores",
-  "order": 30,
-  "external": false,
-  "zh": "按浮层版面重拍两套主题的首页与对话截图，图注改称首页，并补一段脚本化的 Markdown 示例供重拍使用。",
-  "en": "Retake both themes' home and conversation screenshots for the floating page look, rename the captions to home, and add a scripted Markdown example the retake runs on."
-}

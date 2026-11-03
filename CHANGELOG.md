@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.22.3] - 2026-11-03
 
-<h3 id="cn-unreleased">其他变更</h3>
+[中文](#cn-0.22.3) | [English](#en-0.22.3)
+
+<h3 id="cn-0.22.3">其他变更</h3>
 
 - 按浮层版面重拍两套主题的首页与对话截图，图注改称首页，并补一段脚本化的 Markdown 示例供重拍使用。
 
-<h3 id="en-unreleased">Chores</h3>
+<h3 id="en-0.22.3">Chores</h3>
 
 - Retake both themes' home and conversation screenshots for the floating page look, rename the captions to home, and add a scripted Markdown example the retake runs on.
 
