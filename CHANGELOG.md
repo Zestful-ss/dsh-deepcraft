@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.22.2] - 2026-11-03
 
-<h3 id="cn-unreleased">其他变更</h3>
+[中文](#cn-0.22.2) | [English](#en-0.22.2)
+
+<h3 id="cn-0.22.2">其他变更</h3>
 
 - 端到端逐帧采样的下限改由门限表给出，采样帧数不足时不再把整段到达的答案判成没有整段到达。
 
-<h3 id="en-unreleased">Chores</h3>
+<h3 id="en-0.22.2">Chores</h3>
 
 - Read the end-to-end frame sampler's floor from the bounds table, and no longer refuse a single-frame burst for having folded its tails into the flush.
 

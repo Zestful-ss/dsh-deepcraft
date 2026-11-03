@@ -1,8 +1,0 @@
-{
-  "at": "2026-11-03",
-  "group": "chores",
-  "order": 20,
-  "external": false,
-  "zh": "端到端逐帧采样的下限改由门限表给出，采样帧数不足时不再把整段到达的答案判成没有整段到达。",
-  "en": "Read the end-to-end frame sampler's floor from the bounds table, and no longer refuse a single-frame burst for having folded its tails into the flush."
-}
