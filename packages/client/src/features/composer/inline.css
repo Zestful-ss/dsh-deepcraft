@@ -520,52 +520,78 @@ body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="composer-stack"]:not([data-c
 }
 
 /* ---------- the floating page look: the in-conversation capsule ---------- */
-/* Settings › Appearance "Page look". The single-line form's input box is the
-   floating capsule here (the card above it stays transparent, inline.css' own
-   base rules): a 20px radius with a real elevation, so the box reads as lying on
-   the card rather than drawn into it, and round plates for the send, stop and
-   commands controls. Both selector forms are listed, as every rule in this file
-   is. */
+/* Settings › Appearance "Page look". The single-line form's input box and the
+   toolbar row under it become one capsule: the box keeps the top corners and
+   drops its bottom edge, the row closes the bottom corners and carries the whole
+   elevation, and both paint the same fill, so nothing crosses the seam. The row
+   draws its hairline with inset shadows because its own base rule pins
+   `border: none !important`. Both selector forms are listed, as every rule in
+   this file is. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"] [data-input-scroll],
 body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] [data-input-scroll] {
-  border-radius: 20px;
-  box-shadow: 0 2px 6px rgba(20, 20, 19, 0.05), 0 12px 32px rgba(20, 20, 19, 0.06);
+  border-radius: 20px 20px 0 0;
+  border-bottom-width: 0;
+  background: var(--dsh-deepcraft-float-card);
+  box-shadow: none;
 }
 
-body[data-dsh-deepcraft][data-ds-dark-theme][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"] [data-input-scroll],
-body[data-dsh-deepcraft][data-ds-dark-theme][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] [data-input-scroll] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"] [data-dsh-deepcraft-part~="row"],
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] [data-dsh-deepcraft-part~="row"] {
+  margin: 0;
+  padding: 5px 10px 7px;
+  height: auto;
+  min-height: 34px;
+  background: var(--dsh-deepcraft-float-card);
+  border-radius: 0 0 20px 20px;
+  box-shadow:
+    inset 1px 0 0 var(--dsw-alias-border-l1),
+    inset -1px 0 0 var(--dsw-alias-border-l1),
+    inset 0 -1px 0 var(--dsw-alias-border-l1),
+    0 2px 6px rgba(20, 20, 19, 0.05),
+    0 12px 32px rgba(20, 20, 19, 0.06);
+}
+
+body[data-ds-dark-theme][data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"] [data-input-scroll],
+body[data-ds-dark-theme][data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] [data-input-scroll],
+body[data-ds-dark-theme][data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"] [data-dsh-deepcraft-part~="row"],
+body[data-ds-dark-theme][data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] [data-dsh-deepcraft-part~="row"] {
   background: var(--dsh-deepcraft-float-surface);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.30), 0 12px 32px rgba(0, 0, 0, 0.38);
 }
 
-/* The capsule keeps its elevation while the field holds focus: the ring joins
-   the two elevation steps instead of replacing them, and an attachment rail
-   above the box still carries the ring alone. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"]:not([data-ds-dark-theme]) [data-composer-card][data-composer-variant="inline"]:not([data-has-attachments="true"]):focus-within [data-input-scroll],
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"]:not([data-ds-dark-theme]) [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card]:not([data-has-attachments="true"]):focus-within [data-input-scroll] {
-  box-shadow: 0 0 0 1px rgba(20, 20, 19, 0.065), 0 2px 6px rgba(20, 20, 19, 0.05), 0 12px 32px rgba(20, 20, 19, 0.06);
+body[data-ds-dark-theme][data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"] [data-dsh-deepcraft-part~="row"],
+body[data-ds-dark-theme][data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card] [data-dsh-deepcraft-part~="row"] {
+  box-shadow:
+    inset 1px 0 0 var(--dsw-alias-border-l1),
+    inset -1px 0 0 var(--dsw-alias-border-l1),
+    inset 0 -1px 0 var(--dsw-alias-border-l1),
+    0 2px 6px rgba(0, 0, 0, 0.30),
+    0 12px 32px rgba(0, 0, 0, 0.38);
 }
 
-body[data-dsh-deepcraft][data-ds-dark-theme][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"]:not([data-has-attachments="true"]):focus-within [data-input-scroll],
-body[data-dsh-deepcraft][data-ds-dark-theme][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card]:not([data-has-attachments="true"]):focus-within [data-input-scroll] {
-  box-shadow: 0 0 0 1px rgba(250, 249, 245, 0.09), 0 2px 6px rgba(0, 0, 0, 0.30), 0 12px 32px rgba(0, 0, 0, 0.38);
+/* The focus face belongs to the whole capsule: the row takes an inside outline
+   in the focus tone while the card holds the caret, so the ring never stops at
+   the seam and the elevation above is stated once. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"]:focus-within [data-dsh-deepcraft-part~="row"],
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card]:focus-within [data-dsh-deepcraft-part~="row"] {
+  outline: 1px solid rgba(20, 20, 19, 0.18);
+  outline-offset: -1px;
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"]:not([data-ds-dark-theme]) [data-composer-card][data-composer-variant="inline"][data-has-attachments="true"]:focus-within [data-input-scroll],
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"]:not([data-ds-dark-theme]) [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card][data-has-attachments="true"]:focus-within [data-input-scroll] {
-  box-shadow: 0 2px 6px rgba(20, 20, 19, 0.05), 0 12px 32px rgba(20, 20, 19, 0.06);
-}
-
-body[data-dsh-deepcraft][data-ds-dark-theme][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"][data-has-attachments="true"]:focus-within [data-input-scroll],
-body[data-dsh-deepcraft][data-ds-dark-theme][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card][data-has-attachments="true"]:focus-within [data-input-scroll] {
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.30), 0 12px 32px rgba(0, 0, 0, 0.38);
+body[data-ds-dark-theme][data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"]:focus-within [data-dsh-deepcraft-part~="row"],
+body[data-ds-dark-theme][data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card]:focus-within [data-dsh-deepcraft-part~="row"] {
+  outline-color: rgba(250, 249, 245, 0.22);
 }
 
 /* An attachment rail above the box keeps its square top, so the capsule's round
-   edges belong to the box alone. */
+   edges belong to the box alone; the rail takes the capsule's own top corners. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"][data-has-attachments="true"] [data-input-scroll],
 body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card][data-has-attachments="true"] [data-input-scroll] {
-  border-radius: 0 0 20px 20px;
+  border-radius: 0;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"][data-has-attachments="true"] [data-dsh-deepcraft-part~="attachment-rail"],
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="composer-stack"]:not([data-composer-variant="hero"]) [data-composer-card][data-has-attachments="true"] [data-dsh-deepcraft-part~="attachment-rail"] {
+  border-radius: 20px 20px 0 0;
 }
 
 body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-composer-card][data-composer-variant="inline"] button[data-dsh-deepcraft-control="send"],

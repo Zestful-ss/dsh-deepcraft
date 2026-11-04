@@ -4,6 +4,24 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">体验优化</h3>
+
+- 加深浮层版面的层次：对话卡片四周各留 10px、圆角 16px 并换成三段柔和阴影，输入区阴影高于卡片，首页建议卡与最近会话各加一层浅影。
+
+### 问题修复
+
+- 修复浮层版面在桌面端的重叠：输入框、控制行与工作区条合成一个胶囊，卡片底边框不再横穿接缝，会话页工具行有了自己的底面与描边；本周用量浮条移到标题栏下方且不再挡住窗口按钮，宠物让开卡片圆角。
+
+<h3 id="en-unreleased">Improvements</h3>
+
+- Deepen the floating page look: the conversation card stands 10px inside the frame with a 16px radius and a three-step shadow, the composer sits above it with a deeper one, and the home deck's cards take a light shadow of their own.
+
+### Bug Fixes
+
+- Fix the floating page look's overlaps on the desktop: the input, its controls and the workspace row form one capsule with no line across the seam, the conversation's toolbar row carries its own surface and outline, the weekly usage pill stands below the titlebar and no longer covers the window's buttons, and the pets clear the card's rounded corner.
+
 ## [0.22.3] - 2026-11-03
 
 [中文](#cn-0.22.3) | [English](#en-0.22.3)

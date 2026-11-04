@@ -100,3 +100,17 @@ body[data-dsh-deepcraft] .dsh-deepcraft-crab-hit {
   pointer-events: auto;
   touch-action: none;
 }
+
+/* The floating page look rounds the card the crab stands on; 20px keeps its feet
+   clear of that corner. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-crab-anchor="stack"] > .dsh-deepcraft-crab {
+  right: calc(max(var(--dsh-composer-side-clearance, 16px), (100% - var(--dsh-composer-card-max-width, 100%)) / 2) + 20px);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-crab-anchor="panel"] > .dsh-deepcraft-crab {
+  right: calc(max(var(--dsh-composer-side-clearance, 16px) + 16px, (100% - var(--dsh-chat-content-width, 100%)) / 2) + 20px);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-crab-anchor="card"] > .dsh-deepcraft-crab {
+  right: 20px;
+}

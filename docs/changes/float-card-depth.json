@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-04",
+  "group": "improvements",
+  "order": 5,
+  "external": false,
+  "zh": "加深浮层版面的层次：对话卡片四周各留 10px、圆角 16px 并换成三段柔和阴影，输入区阴影高于卡片，首页建议卡与最近会话各加一层浅影。",
+  "en": "Deepen the floating page look: the conversation card stands 10px inside the frame with a 16px radius and a three-step shadow, the composer sits above it with a deeper one, and the home deck's cards take a light shadow of their own."
+}

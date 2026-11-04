@@ -308,9 +308,12 @@ body[data-dsh-deepcraft] [data-dsh-deepcraft-home-float] [data-dsh-deepcraft-par
   padding-bottom: 8px;
 }
 
+/* The pill stands below the desktop shell's caption row (its own height is the
+   token), and it takes no pointer: it is a reading, and the row above it is the
+   window's drag and button strip. */
 body[data-dsh-deepcraft] .dsh-deepcraft-home-week {
   position: fixed;
-  top: 16px;
+  top: calc(var(--dsh-windows-titlebar-height, 0px) + 16px);
   right: 24px;
   display: inline-flex;
   align-items: center;
@@ -326,6 +329,12 @@ body[data-dsh-deepcraft] .dsh-deepcraft-home-week {
   font-weight: 500;
   line-height: 18px;
   z-index: var(--dsh-deepcraft-layer-control);
+  pointer-events: none;
+  box-shadow: 0 1px 2px rgba(20, 20, 19, 0.05);
+}
+
+body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-home-week {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.30);
 }
 
 /* The sparkline takes the accent: it is the one mark in the deck that is a chart
@@ -359,8 +368,13 @@ body[data-dsh-deepcraft] .dsh-deepcraft-home-sugg-card {
   font-weight: 500;
   color: var(--dsw-alias-label-primary);
   text-align: left;
+  box-shadow: 0 1px 2px rgba(20, 20, 19, 0.05);
   cursor: pointer;
   transition: background-color var(--dsh-deepcraft-timing-feedback);
+}
+
+body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-home-sugg-card {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.30);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-home-sugg-card:hover {

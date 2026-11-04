@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-04",
+  "group": "fixes",
+  "order": 5,
+  "external": false,
+  "zh": "修复浮层版面在桌面端的重叠：输入框、控制行与工作区条合成一个胶囊，卡片底边框不再横穿接缝，会话页工具行有了自己的底面与描边；本周用量浮条移到标题栏下方且不再挡住窗口按钮，宠物让开卡片圆角。",
+  "en": "Fix the floating page look's overlaps on the desktop: the input, its controls and the workspace row form one capsule with no line across the seam, the conversation's toolbar row carries its own surface and outline, the weekly usage pill stands below the titlebar and no longer covers the window's buttons, and the pets clear the card's rounded corner."
+}
