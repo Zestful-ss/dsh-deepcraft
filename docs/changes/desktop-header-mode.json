@@ -1,8 +1,0 @@
-{
-  "at": "2026-11-04",
-  "group": "fixes",
-  "order": 0,
-  "external": false,
-  "zh": "修复 Windows 浮层版面中会话模式标签被卡片顶部裁切的问题。",
-  "en": "Fix the session mode label being clipped by the top of the floating card on Windows."
-}
