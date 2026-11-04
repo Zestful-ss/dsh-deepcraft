@@ -12,6 +12,7 @@ import { observeMatches, observeSize } from '@dsh-deepcraft/engine/bus'
 import { desktopBand } from '@dsh-deepcraft/engine/desktop-band'
 import { findRightbarToggle, findWindowsMenu, registerSlotEntry } from '@dsh-deepcraft/engine/host'
 import { createStamp, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
+import { PAGE_LOOK_ATTR, PAGE_LOOK_FLOAT } from '../../constants'
 import { inPageBox, inPagePixels } from '../../shared/page-zoom'
 import type { FeatureUi } from '../../core/feature'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
@@ -28,8 +29,8 @@ import { copy } from './copy'
  * which is the stylesheet's base rule, so a failed placement needs no undoing.
  *
  * The row the title leaves rises by a relative offset: a margin would change its
- * height inside the header's grid and move the conversation, and a relative
- * offset creates no containing block for the fixed pieces. The host's container
+ * height inside the header's grid and move the conversation. The floating
+ * card clips that row, so its top edge limits the rise. The host's container
  * query hides chip labels to protect the title, so this mode shows them again.
  * The marks ride the header, since a body write here would invalidate the whole
  * document on every page change (D9). The sidebar collapse animates width with
@@ -57,9 +58,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    */
   const TITLE_NUDGE = 2
   /**
-   * The row's own stamp and the negative top margin its rule reads: with the
-   * title gone the row holds only the controls, and the host's top inset for a
-   * row that also carried a title leaves it too low.
+   * The row's stamp and relative top offset: once the title leaves, the host's
+   * inset would leave its controls too low.
    */
   const ROW_ATTR = 'data-dsh-header-row'
   const ROW_LIFT = '--dsh-header-band-row-lift'
@@ -86,6 +86,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * about 10px of air between the two lines of text.
    */
   const ROW_TUCK = 2
+  /** The row's breathing room inside a clipping edge. */
+  const ROW_CLIP_GAP = 4
   /** What the row keeps clear at its left end when the shell mounts no menu seat: the sidebar's control. */
   const FURNITURE = 48
   /** Below this a lifted title would be a stub: it stays in the row instead. */
@@ -205,6 +207,15 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     return box.width === 0 && box.height === 0 ? null : box
   }
 
+  /** The floating card's clipping edge, in page pixels. */
+  function floatingCardTop(element: HTMLElement) {
+    if (document.body.getAttribute(PAGE_LOOK_ATTR) !== PAGE_LOOK_FLOAT || document.body.hasAttribute('data-we-wallpaper')) return -Infinity
+    const card = element.closest<HTMLElement>('[data-dsh-deepcraft-part~="center-column"]')
+    if (card === null) return -Infinity
+    const box = rect(card)
+    return box === null ? -Infinity : box.top + card.clientTop
+  }
+
   /**
    * The caption strip's own sizes, in the pixels the placement numbers are read
    * in: the shell publishes them in the viewport's while every `left`, `top` and
@@ -264,6 +275,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     corner: HTMLElement | null
     stripEl: HTMLElement | null
     rowBox: DOMRect | null
+    clipTop: number
     stripBox: DOMRect | null
     menuBox: DOMRect | null
     utilitiesBox: DOMRect | null
@@ -305,6 +317,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       corner,
       stripEl,
       rowBox: rect(row),
+      clipTop: floatingCardTop(row),
       stripBox: rect(stripEl),
       menuBox: rect(findWindowsMenu()),
       utilitiesBox: rect(utilities),
@@ -376,17 +389,15 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const room = rightStop - GAP - (inBand ? stripWidth + GAP : 0) - left
     const titleBox = current.titleBox
     const liftTitle = title !== null && room >= MIN_TITLE
-    // The row the title leaves holds only controls, and the host's inset for a
-    // row that still carried a title would leave them floating below the caption
-    // row. It rides up to tuck ROW_TUCK px into the title's own box, which the
-    // stylesheet centres in the caption row — the target is computed rather than
-    // read, because the title's box is not there yet on the pass that lifts it
-    // and nothing would wake a second pass. Where the offset already applied is
-    // taken back out, or the pass would read the raised row as needing no rise.
+    // The title is not in the caption row on the first pass, so its destination
+    // is calculated. Undo the current offset before computing the next rise.
+    // The controls stay inside the floating card, with air above their row.
     const titleHeight = titleBox === null ? 0 : titleBox.height
     const titleCentre = band.height / 2 + TITLE_NUDGE
-    const applied = parseFloat(row.style.getPropertyValue(ROW_LIFT))
-    const rise = !liftTitle ? 0 : Math.max(0, Math.round(rowBox.top - (isFinite(applied) ? applied : 0) - (titleCentre + titleHeight / 2 - ROW_TUCK)))
+    const applied = rowStamp.current() === row ? parseFloat(row.style.getPropertyValue(ROW_LIFT)) : 0
+    const naturalTop = rowBox.top - (isFinite(applied) ? applied : 0)
+    const requestedRise = Math.max(0, Math.round(naturalTop - (titleCentre + titleHeight / 2 - ROW_TUCK)))
+    const rise = !liftTitle ? 0 : Math.min(requestedRise, Math.floor(naturalTop - current.clipTop - ROW_CLIP_GAP))
 
     rowStamp.mark(liftTitle ? row : null)
     if (liftTitle) setVar(row, ROW_LIFT, `${-rise}px`)

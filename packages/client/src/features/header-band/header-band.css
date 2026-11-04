@@ -56,14 +56,9 @@ body[data-dsh-deepcraft] [data-dsh-titlebar-tabs] [data-dsh-header-band-tabs] {
   left: var(--dsh-header-band-tabs-left, 50%) !important;
 }
 
-/* The row the title left: what it still holds — the preset picker, the
-   background-task chips, whatever the host mounts — rides up to sit just under
-   the title instead of on the line the title used to take. It is offset, not
-   re-laid: a margin would resize the row inside the header's own grid, and an
-   offset leaves the header's height — and with it the conversation below —
-   where the host put it. The pass writes the rise it measured, so the host's
-   inset is not assumed, and the row declares itself no-drag: its top now lies
-   inside the shell's drag strip. */
+/* A relative offset preserves the header grid; the measured rise stays inside
+   the floating card. The row stays clickable wherever it enters the shell's
+   drag strip. */
 body[data-dsh-deepcraft] [data-dsh-header-band~="title"] [data-dsh-header-row] {
   position: relative !important;
   top: var(--dsh-header-band-row-lift, 0px) !important;

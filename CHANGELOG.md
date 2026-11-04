@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修复 Windows 浮层版面中会话模式标签被卡片顶部裁切的问题。
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Fix the session mode label being clipped by the top of the floating card on Windows.
+
 ## [0.22.4] - 2026-11-04
 
 [中文](#cn-0.22.4) | [English](#en-0.22.4)

@@ -22,6 +22,7 @@
  *     leaves the screen while the sidebar is collapsed.
  */
 'use strict'
+const { showWindowsTitlebar } = require('./windows-titlebar.cjs')
 
 /** The ds-bot release the lane checks against. */
 const DS_BOT = 'ds-bot@0.1.5'
@@ -140,19 +141,7 @@ function dsBotScenario({ check }) {
       // strip's box, and the switch moves into that strip at the sidebar
       // column's right edge. Collapsing the rail leaves it no room there, and
       // it leaves the screen while keeping its measured box.
-      await page.evaluate(() => {
-        const root = document.documentElement
-        root.setAttribute('data-windows-titlebar', '')
-        root.style.setProperty('--dsh-windows-titlebar-height', '40px')
-        root.style.setProperty('--dsh-frame-top-clearance', '40px')
-        Object.defineProperty(navigator, 'windowControlsOverlay', {
-          configurable: true,
-          value: Object.assign(new EventTarget(), {
-            visible: true,
-            getTitlebarAreaRect: () => new DOMRect(0, 0, window.innerWidth - 140, 40),
-          }),
-        })
-      })
+      await showWindowsTitlebar(page)
       await page.waitForTimeout(1000)
       notes.desktop = await read(page)
       // The sidebar narrowed until its column cannot hold the switch: a headless

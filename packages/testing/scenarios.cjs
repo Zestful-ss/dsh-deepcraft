@@ -37,6 +37,7 @@ const { deepcraftScenario } = require('./deepcraft.cjs')
 const { petdexScenario } = require('./petdex.cjs')
 const { subagentModelScenario } = require('./subagent-model.cjs')
 const { dsBotScenario } = require('./ds-bot.cjs')
+const { desktopHeaderScenario } = require('./desktop-header.cjs')
 const { modelSlotScenario } = require('./model-slot.cjs')
 const { CANVAS } = require('./shoot.cjs')
 const { sanitizePage } = require('../../scripts/shared/privacy.cjs')
@@ -160,6 +161,7 @@ async function handoverFrames(context) {
 
 /** The scenarios: each boots its own instance, sends its prompt, and asserts. */
 const SCENARIOS = {
+  desktopHeader: desktopHeaderScenario({ check }),
   /** A scripted answer: the reader's message, the thought, the markdown. */
   conversation: {
     script: 'greeting',
