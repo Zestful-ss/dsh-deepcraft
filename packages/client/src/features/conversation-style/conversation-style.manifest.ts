@@ -5,9 +5,8 @@ export default {
   order: 185,
   contracts: [
     'chat.flow', 'chat.flow-block', 'chat.running', 'chat.scroller', 'chat.tool-call-kind',
-    'chat.user-row', 'chat.user-kind', 'composer.card', 'composer.input', 'composer.scroll',
-    'composer.seat', 'composer.stack', 'composer.stat', 'composer.stats', 'composer.variant',
-    'process.group', 'shell.phase', 'shell.slot-anchor',
+    'chat.user-row', 'chat.user-kind', 'composer.card', 'composer.scroll', 'composer.seat',
+    'composer.stack', 'composer.variant', 'shell.phase', 'shell.slot-anchor',
   ],
   pref: 'chatStyle',
   stylesheets: [
@@ -21,7 +20,7 @@ export default {
     pref: 'chatStyle',
     title: 'chatStyleTitle',
     desc: 'chatStyleDesc',
-    choiceLabels: { reader: 'chatStyleReader', spine: 'chatStyleSpine', console: 'chatStyleConsole' },
+    choiceLabels: { reader: 'chatStyleReader', spine: 'chatStyleSpine' },
   }],
   cases: ['settings', 'composer', 'hero'],
 } satisfies FeatureManifest

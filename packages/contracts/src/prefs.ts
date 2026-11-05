@@ -111,11 +111,10 @@ export const ONGOING_INDICATORS = [ONGOING_INDICATOR_BREATHE, ONGOING_INDICATOR_
 /** The chat area's animation switch: on plays the ported set (features/chat-*), off leaves the area to the host. */
 export const CHAT_ANIMATIONS_OFF = 'off'
 
-/** The conversation's reading column, timeline, or terminal arrangement. */
+/** The conversation's reading column or timeline arrangement. */
 export const CHAT_STYLE_READER = 'reader'
 export const CHAT_STYLE_SPINE = 'spine'
-export const CHAT_STYLE_CONSOLE = 'console'
-export const CHAT_STYLES = [CHAT_STYLE_READER, CHAT_STYLE_SPINE, CHAT_STYLE_CONSOLE] as const
+export const CHAT_STYLES = [CHAT_STYLE_READER, CHAT_STYLE_SPINE] as const
 
 /** Where the session's numbers show: in the context popover the meter opens, or on a line of their own under the input card. */
 export const STATS_POSITION_INLINE = 'inline'
@@ -257,7 +256,7 @@ export const PREFS = {
   searchStyle: { type: 'choice', values: SEARCH_STYLES, default: SEARCH_STYLE_OVERLAY },
   sidebarLayout: { type: 'choice', values: SIDEBAR_LAYOUTS, default: SIDEBAR_LAYOUT_RELAXED },
   ongoingIndicator: { type: 'choice', values: ONGOING_INDICATORS, default: ONGOING_INDICATOR_BREATHE },
-  chatStyle: { type: 'choice', values: CHAT_STYLES, default: CHAT_STYLE_READER },
+  chatStyle: { type: 'choice', values: CHAT_STYLES, default: CHAT_STYLE_READER, legacy: { console: CHAT_STYLE_READER } },
   turnNav: { type: 'boolean', default: true },
   viewTabs: { type: 'boolean', default: true },
   headerBand: { type: 'boolean', default: true },

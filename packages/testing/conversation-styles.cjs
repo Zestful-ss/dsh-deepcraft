@@ -13,7 +13,6 @@ const STYLE_ATTRIBUTE = 'data-dsh-deepcraft-chat-style'
 const CHOICES = {
   reader: /^(阅读|Reader)$/,
   spine: /^(时间线|Spine)$/,
-  console: /^(终端|Console)$/,
 }
 const HOME_CHOICES = {
   float: /^(浮层|Floating)$/,
@@ -71,7 +70,6 @@ async function readStyle(page, host) {
     const pseudo = (node) => node === null ? null : getComputedStyle(node, '::before').content
     const card = find(host.composerCard)
     const input = find(host.composer)
-    const scroll = card?.querySelector('[data-input-scroll]') ?? null
     const flow = find(host.flow)
     const row = card?.querySelector('[data-dsh-deepcraft-part~="row"]') ?? null
     const trailing = row?.querySelector('[data-dsh-deepcraft-part~="trailing"]') ?? null
@@ -107,7 +105,7 @@ async function readStyle(page, host) {
       permission: box(find('.dsh-deepcraft-perm-btn')),
       effort: box(find('.dsh-deepcraft-effort-btn')),
       meter: box(meter),
-      prompt: pseudo(scroll), rail: pseudo(flow), marker, heroMarkers,
+      rail: pseudo(flow), marker, heroMarkers,
       cardWidth: seat === null ? null : getComputedStyle(seat).getPropertyValue('--dsh-composer-card-max-width').trim(),
       text: flow?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
     }
@@ -129,12 +127,20 @@ function conversationStylesScenario({ check, HOST }) {
   return {
     script: 'greeting',
     prompt: 'hello there',
+    profilePatch: ['- id: ui-skin-deepcraft', '  config:', '    chatStyle: console'],
     async beforeSend(context) {
+      await context.page.waitForFunction((attribute) => document.body.hasAttribute(attribute), STYLE_ATTRIBUTE, { timeout: 15000 })
+      const initialStyle = await context.page.getAttribute('body', STYLE_ATTRIBUTE)
       const settingsPage = await context.session.context.newPage()
       await settingsPage.goto(context.url, { waitUntil: 'domcontentloaded' })
       await waitForSkin(settingsPage)
       await dismissOverlays(settingsPage)
       const row = await openChoices(settingsPage)
+      context.notes.legacyConversationStyle = {
+        style: initialStyle,
+        choices: await row.getByRole('button').allTextContents(),
+        readerSelected: await row.getByRole('button', { name: CHOICES.reader }).getAttribute('aria-pressed'),
+      }
       const hero = {}
       for (const style of Object.keys(CHOICES)) {
         await chooseStyle(row, context.page, style)
@@ -204,7 +210,11 @@ function conversationStylesScenario({ check, HOST }) {
         Math.abs((item.effort.top + item.effort.bottom) - (item.model.top + item.model.bottom)) <= 2 &&
         item.effort.right <= item.meter.left + 1)
       const heroMarkers = hero.spine.heroMarkers.filter((marker) => marker.content === '""' && Number.isFinite(marker.center))
+      const legacy = notes.legacyConversationStyle
       return [
+        check('旧终端设置使用阅读样式且只显示两个选项',
+          legacy.style === 'reader' && legacy.readerSelected === 'true' && legacy.choices.length === 2 &&
+          CHOICES.reader.test(legacy.choices[0].trim()) && CHOICES.spine.test(legacy.choices[1].trim()), JSON.stringify(legacy)),
         ...Object.keys(CHOICES).map((style) => check(`${style} 可在空会话和现有会话中切换，输入框可见`,
           hero[style].style === style && desktop[style].style === style && ready(hero[style]) && ready(desktop[style]),
           JSON.stringify({ hero: hero[style], desktop: desktop[style] }))),
@@ -215,18 +225,15 @@ function conversationStylesScenario({ check, HOST }) {
           ready(mobileHero[style]) && mobileHero[style].headline?.shown &&
           mobileHero[style].headline.bottom <= mobileHero[style].card.top && mobileHero[style].card.top < mobileHero[style].height,
           JSON.stringify(mobileHero[style]))),
-        ...Object.entries(homeLayouts).map(([layout, variants]) => check(`${layout} 首页兼容三种对话样式`,
+        ...Object.entries(homeLayouts).map(([layout, variants]) => check(`${layout} 首页兼容两种对话样式`,
           Object.entries(variants).every(([style, item]) => item.style === style && ready(item) && item.headline?.shown &&
             inside(item.model, item.width) && (layout !== 'float' || item.homeDeck?.shown) &&
             (layout !== 'studio' || (item.homePanel?.shown && item.heroMaxWidth === '720px'))), JSON.stringify(variants))),
-        check('阅读栏比终端会话列窄', desktop.reader.flow !== null && desktop.console.flow !== null &&
-          desktop.reader.flow.width < desktop.console.flow.width, JSON.stringify({ reader: desktop.reader.flow, console: desktop.console.flow })),
-        check('时间线标记贴合轨道，终端在输入和消息前显示提示符',
+        check('时间线标记贴合轨道',
           desktop.spine.rail === '""' && desktop.spine.marker?.content === '""' &&
           Math.abs(desktop.spine.marker.center - (desktop.spine.flow.left + 7)) <= 2 &&
-          heroMarkers.length === 1 && Math.abs(heroMarkers[0].center - (hero.spine.hero.left + 7)) <= 2 &&
-          (desktop.console.prompt ?? '').includes('❯') && (desktop.console.marker?.content ?? '').includes('❯'),
-          JSON.stringify({ flow: desktop.spine.flow, marker: desktop.spine.marker, hero: hero.spine.hero, heroMarkers, prompt: desktop.console.prompt, user: desktop.console.marker })),
+          heroMarkers.length === 1 && Math.abs(heroMarkers[0].center - (hero.spine.hero.left + 7)) <= 2,
+          JSON.stringify({ flow: desktop.spine.flow, marker: desktop.spine.marker, hero: hero.spine.hero, heroMarkers })),
         ...Object.keys(CHOICES).map((style) => check(`${style} 保留模型、权限和上下文控件`,
           [desktop[style], mobile[style]].every((item) =>
             [item.model, item.permission, item.meter].every((control) => withinCard(control, item.card)) &&

@@ -123,6 +123,8 @@ function provisionHome(home) {
  * @param options.patch - loader patch entries (YAML text) written into a `--patch`
  *     overlay before boot: how a lane points the host's model adapter at the
  *     scripted service (packages/testing/mock-llm.cjs, D66).
+ * @param options.profilePatch - YAML for the scratch profile's writable settings
+ *     layer, when a scenario starts with a saved preference.
  * @param options.args - extra arguments for the web app's own command line
  *     (`--trusted-host <name>`, which a page under a non-loopback name needs).
  * @param options.plugins - other plugins' package specs (`name@version`) added
@@ -146,6 +148,8 @@ async function start(options = {}) {
   // as a path it has to be able to read, and `--home` may be relative.
   const home = path.resolve(options.home ?? DEFAULT_HOME)
   const profile = options.profile ?? 'web'
+  const layer = path.join(home, 'profiles', profile, 'cordis.patch.yml')
+  const pristine = path.join(home, 'profiles', profile, 'cordis.patch.pristine.yml')
   const port = options.port ?? 0
   const timeoutMs = options.timeoutMs ?? 120000
   fs.mkdirSync(home, { recursive: true })
@@ -170,8 +174,6 @@ async function start(options = {}) {
     // it leaves behind are persisted in the profile's patch layer: the layer
     // goes back to the copy kept beside it, or that copy is taken now, so a run
     // starts from the same preferences whatever the run before it turned on.
-    const layer = path.join(home, 'profiles', profile, 'cordis.patch.yml')
-    const pristine = path.join(home, 'profiles', profile, 'cordis.patch.pristine.yml')
     if (fs.existsSync(layer)) {
       if (fs.existsSync(pristine)) fs.copyFileSync(pristine, layer)
       else fs.copyFileSync(layer, pristine)
@@ -182,10 +184,14 @@ async function start(options = {}) {
   // the first run, and pnpm reports "already up to date" afterwards.
   run(`dsh plugin --profile ${profile} add "${ROOT}"`, { env: { ...process.env, DSH_HOME: home } })
   for (const spec of options.plugins ?? []) run(`dsh plugin --profile ${profile} add ${spec}`, { env: { ...process.env, DSH_HOME: home } })
-  // The lane's own entries go into a separate overlay (`--patch`), never into
-  // the profile's `cordis.patch.yml`: that file is the host's user layer, where
-  // the shell persists settings such as the answered onboarding steps, and
-  // overwriting it brings those steps back on every boot.
+  if (options.profilePatch !== undefined) {
+    // Preserve the unseeded layer even when this is the profile's first boot.
+    if (options.resetState === true && !fs.existsSync(pristine)) fs.copyFileSync(layer, pristine)
+    fs.writeFileSync(layer, `${options.profilePatch}\n`)
+  }
+  // Service routing goes into a separate overlay (`--patch`): the profile's
+  // `cordis.patch.yml` is the writable user layer where the shell persists
+  // settings such as the answered onboarding steps.
   const overlay = path.join(home, `${profile}.lane.patch.yml`)
   fs.writeFileSync(overlay, `# Written by packages/testing/dsh-web.cjs for this run.\n${options.patch ?? '[]'}\n`)
 

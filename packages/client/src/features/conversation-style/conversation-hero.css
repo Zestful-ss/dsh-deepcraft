@@ -46,8 +46,8 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]
   margin-bottom: 14px;
 }
 
-/* Spine and Console use the breadth of the conversation surface. */
-body[data-dsh-deepcraft]:is([data-dsh-deepcraft-chat-style="spine"], [data-dsh-deepcraft-chat-style="console"]):not([data-dsh-deepcraft-home-layout="studio"])
+/* The timeline uses the breadth of the conversation surface. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]:not([data-dsh-deepcraft-home-layout="studio"])
   [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-dsh-deepcraft-part~="composer-hero"] {
   max-width: calc(100% - 32px);
 }
@@ -112,24 +112,6 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"][data-dsh-deepcra
   --dsh-conversation-hero-rail-content: none;
 }
 
-/* ---------- console: mono greeting ---------- */
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-phase="hero"] [data-dsh-deepcraft-part~="hero-headline"],
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-phase="hero"] [data-dsh-deepcraft-part~="hero-headline"] [data-dsh-deepcraft-part~="hero-title-group"],
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-phase="hero"] [data-dsh-deepcraft-part~="hero-headline"] [data-dsh-deepcraft-part~="hero-title-group"] > span {
-  font-family: var(--dsh-deepcraft-font-code);
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-hero"] [data-slot] :is(button, [role="button"]),
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-phase="hero"] [data-dsh-deepcraft-part~="hero-workspace-row"] :is(button, [role="button"]) {
-  font-family: var(--dsh-deepcraft-font-code);
-}
-
 /* @composer-gate */
 
 /* ---------- reader: the card keeps the room the narrowed column leaves ---------- */
@@ -153,22 +135,7 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
   border-radius: 6px;
 }
 
-body[data-dsh-deepcraft]:is([data-dsh-deepcraft-chat-style="spine"], [data-dsh-deepcraft-chat-style="console"])
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
   [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-composer-variant="hero"] > [data-dsh-deepcraft-part~="hero-workspace-row"] {
   border-radius: 0 0 6px 6px;
-}
-
-/* ---------- console: prompt line, squared card, mono input ---------- */
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-composer-variant="hero"] [data-composer-card] {
-  border-radius: 6px;
-  box-shadow: 0 0 0 .5px var(--dsw-alias-border-l4);
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-phase="hero"] [data-composer-input],
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-phase="hero"] [data-composer-card] textarea {
-  font-family: var(--dsh-deepcraft-font-code);
 }

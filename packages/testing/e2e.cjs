@@ -326,6 +326,7 @@ async function runScenario(name, options) {
   fs.mkdirSync(userHome, { recursive: true })
   const host = await start({
     patch,
+    profilePatch: scenario.profilePatch?.join('\n'),
     args: scenario.hostArgs,
     env: { DSH_E2E_MOCK_KEY: 'mock', HOME: userHome, USERPROFILE: userHome },
     home,

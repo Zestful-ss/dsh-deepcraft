@@ -1,7 +1,7 @@
 /* Conversation column treatments for the chat-style layouts.
 
-   The switch is the body flag `data-dsh-deepcraft-chat-style` (reader / spine /
-   console), mirrored from the chat-style preference; every block below is
+   The switch is the body flag `data-dsh-deepcraft-chat-style` (reader / spine),
+   mirrored from the chat-style preference; every block below is
    inert while the flag is unset. All geometry stays on host contracts: the
    column, wide tables, the user stack and the to-bottom button all resolve
    `--dsh-chat-content-width`, so one override realigns them together. */
@@ -109,39 +109,4 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"][data-dsh-deepcra
 body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"][data-dsh-deepcraft-mobile-portrait]
   [data-conversation-scroll] [data-chat-flow] [data-chat-flow-key]:not([data-chat-flow-key] [data-chat-flow-key])::before {
   content: none;
-}
-
-/* ---------- console: mono full-bleed terminal ---------- */
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-conversation-scroll] {
-  --dsh-chat-content-width: calc(100% - 40px);
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-conversation-scroll] [data-chat-flow],
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-conversation-scroll] [data-dsh-deepcraft-part~="markdown"] {
-  font-family: var(--dsh-deepcraft-font-code);
-}
-
-/* Prompt line ahead of each user message. The flow item is a block box, so
-   the ::before lands on its own line above the host user row. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-conversation-scroll] [data-chat-flow] [data-chat-flow-kind="user"]::before {
-  display: block;
-  margin-bottom: 2px;
-  color: var(--dsw-alias-state-business-primary);
-  font-size: calc(var(--dsh-content-font-size, 14px) - 1px);
-  line-height: 20px;
-  content: "❯";
-}
-
-/* Tool calls and process groups read as nested output blocks. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-conversation-scroll] [data-chat-flow] [data-chat-flow-kind="tool-call"],
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
-  [data-conversation-scroll] [data-step-process] {
-  padding-left: 10px;
-  box-shadow: inset 2px 0 0 color-mix(in srgb, var(--dsw-alias-label-caption) 45%, transparent);
 }

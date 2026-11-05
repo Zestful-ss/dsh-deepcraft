@@ -706,8 +706,7 @@ together over 0.14s before the modal unmounts.
 The conversation setting selects one layout while leaving the host's message,
 tool and composer controls in place. Reader uses a centered 680px reading
 column and a floating, rounded composer. Spine marks conversation steps with a
-vertical rail and brings the composer to the bottom edge. Console uses the
-available width, monospace text, prompt marks and separated composer controls.
+vertical rail and brings the composer to the bottom edge.
 The rail gives way on narrow screens, and the existing home-layout and composer
 restyle settings continue to govern their respective parts of the page.
 

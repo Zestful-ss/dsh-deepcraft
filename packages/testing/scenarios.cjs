@@ -4,14 +4,14 @@
  * and calls its hooks; a scenario carrying its own reader is a module beside
  * this one (a `*Scenario` export), registered in the table below.
  *
- * A scenario is `{ script, prompt, delayMs?, viewport?, patch?, hostArgs?,
- * browserArgs?, plugins?, initScript?, beforeSend?, duringTurn?, afterTurn?,
- * assert }`: `script` names the scripted model's answer
- * (packages/testing/mock-llm.cjs), `patch` adds loader patch entries,
- * `hostArgs` and `browserArgs` reach the host's command line and the
- * browser's, `plugins` installs other plugins from the registry into a home
- * the scenario boots alone, `initScript` runs in the page before its own
- * scripts, and `assert` returns the checks.
+ * A scenario is `{ script, prompt, delayMs?, viewport?, patch?, profilePatch?,
+ * hostArgs?, browserArgs?, plugins?, initScript?, beforeSend?, duringTurn?,
+ * afterTurn?, assert }`: `script` names the model's answer
+ * (packages/testing/mock-llm.cjs), `patch` adds a loader overlay, and
+ * `profilePatch` supplies the writable user layer. `hostArgs` and `browserArgs`
+ * reach the host's and browser's command lines; `plugins` installs other plugins
+ * from the registry into a home the scenario boots alone, `initScript` runs in
+ * the page before its scripts, and `assert` returns the checks.
  */
 'use strict'
 const path = require('node:path')

@@ -145,8 +145,8 @@ module.exports = {
         stored.breathe?.attribute === 'breathe' && stored.breathe?.width === '6px' && stored.breathe?.animation === 'dsh-deepcraft-pulse',
       JSON.stringify(stored))
     const styles = settings.chatStyles || {}
-    check('each conversation style reaches the page when the setting changes',
-      styles.reader === 'reader' && styles.spine === 'spine' && styles.console === 'console', JSON.stringify(styles))
+    check('conversation styles reach the page and the retired style resolves to reader',
+      styles.reader === 'reader' && styles.spine === 'spine' && styles.console === 'reader', JSON.stringify(styles))
     commonChecks(r)
   },
   'dock-cards'(r) {
