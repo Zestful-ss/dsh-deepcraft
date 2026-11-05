@@ -1,8 +1,0 @@
-{
-  "at": "2026-11-05",
-  "group": "fixes",
-  "order": 0,
-  "external": false,
-  "zh": "修复折叠侧栏页脚偏好开启时，桌面端更新提示被皮肤隐藏的问题。",
-  "en": "Fix the desktop update pill staying hidden while the collapsed sidebar footer preference is on."
-}
