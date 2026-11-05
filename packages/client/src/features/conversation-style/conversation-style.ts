@@ -14,6 +14,8 @@ export function install(_ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     if (next === current) return
     document.body.setAttribute(CHAT_STYLE_ATTR, next)
     current = next
+    // The attribute reflows the composer after this frame's measurements.
+    ui.schedule?.()
   }
 
   ui.conversationStyle = { sync }

@@ -259,6 +259,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       if (stopMeterRow !== null) stopMeterRow()
       stopMeterRow = observeSize([row, stack], () => {
         meterRow = ''
+        meterWidth = 0
         stampContextMeter(cards.all()[0])
       })
       meterRowBox = row
@@ -374,10 +375,9 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * session's numbers asked onto a line of their own the dock keeps the
    * host's placement, nothing overlays the row, and no room is measured.
    *
-   * The meter is re-resolved only when the cached node left the tree, and
-   * its width is re-read only when its reading moved (the trigger IS the
-   * percentage text, whose width follows the text): a pass with an unmoved
-   * meter reads no layout, which during streaming would otherwise force one.
+   * The meter is re-resolved only when the cached node left the tree. Its width
+   * is re-read when its reading, restyle scope or row size changes: a pass with
+   * an unmoved meter reads no layout, which during streaming would force one.
    * A reading taken with no box — the composer's seat is display: none while
    * another conversation tab is up — is no reading: it stays unrecorded, the
    * row keeps the room it has, and the next pass measures again.
@@ -399,9 +399,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     if (meter !== null) {
       meter.toggleAttribute('data-dsh-deepcraft-context-meter', true)
       const reading = meter.textContent || ''
-      // Re-measure when the reading moved or the restyle scope flipped:
-      // either can change what the room should be.
-      if (reading !== meterReading || active !== meterMeasuredActive) {
+      // Row size changes can hide the percentage text without changing its reading.
+      if (reading !== meterReading || active !== meterMeasuredActive || (active && meterWidth === 0)) {
         const width = active ? meterPillWidth(meter) : 0
         // A zero width with the restyle on is the composer having no box
         // right now, never a meter that takes no room.
