@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.24.0] - 2026-11-05
 
-<h3 id="cn-unreleased">移除</h3>
+[中文](#cn-0.24.0) | [English](#en-0.24.0)
+
+<h3 id="cn-0.24.0">移除</h3>
 
 - 移除终端对话样式，已保存的终端样式设置自动使用阅读样式。
 
-<h3 id="en-unreleased">Removals</h3>
+<h3 id="en-0.24.0">Removals</h3>
 
 - Remove the Console conversation style and use Reader for saved Console settings.
 
