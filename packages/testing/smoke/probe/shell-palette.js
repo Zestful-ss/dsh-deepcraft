@@ -401,6 +401,14 @@
         window.__pushForm({ ongoingIndicator: 'breathe' })
         await sleep(120)
         r.settings.ongoingStored = { ring: ringRunning, breathe: readRunning() }
+        var chatStyles = {}
+        for (var styleName of ['reader', 'spine', 'console']) {
+          window.__pushForm({ chatStyle: styleName })
+          await sleep(120)
+          chatStyles[styleName] = document.body.getAttribute('data-dsh-deepcraft-chat-style')
+        }
+        r.settings.chatStyles = chatStyles
+        window.__pushForm({ chatStyle: 'reader' })
         window.__pushForm({ modelPicker: false, mascot: 'off', sidebarSearch: false, palette: 'host' })
         r.settings.parentsOff = { appearance: renderTab('appearance'), composer: renderTab('composer'), sidebar: renderTab('sidebar') }
         window.__pushForm({ modelPicker: true, mascot: 'brand', sidebarSearch: true, palette: 'claude' })

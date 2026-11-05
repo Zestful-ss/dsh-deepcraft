@@ -701,6 +701,16 @@ and shows the Enter glyph; the others hide it. The card fades in and settles
 from 6px above at 98.5% scale over 0.18s; on close card and mask fade out
 together over 0.14s before the modal unmounts.
 
+## Conversation styles · 对话样式
+
+The conversation setting selects one layout while leaving the host's message,
+tool and composer controls in place. Reader uses a centered 680px reading
+column and a floating, rounded composer. Spine marks conversation steps with a
+vertical rail and brings the composer to the bottom edge. Console uses the
+available width, monospace text, prompt marks and separated composer controls.
+The rail gives way on narrow screens, and the existing home-layout and composer
+restyle settings continue to govern their respective parts of the page.
+
 ## Chat / Code switch · 聊天 / 代码切换
 
 With ds-bot installed, the switch is two 28×22 options on a 2px-padded plate

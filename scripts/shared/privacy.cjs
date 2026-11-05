@@ -9,6 +9,8 @@
  * instead of shipping. The regex sources stay strings so the page sweep and the
  * final assertion rebuild from one copy.
  */
+const { userInfo } = require('node:os')
+
 const PROJECT_NAMES = ['demo-project', 'sample-app', 'docs-site', 'theme-lab', 'notes-app', 'e-comm-demo']
 const SESSION_NAMES = [
   'Fix flaky onboarding test',
@@ -27,7 +29,10 @@ const USERNAME = 'Ada'
  * LEAK covers the local username, drive paths and quota amounts; PATH and
  * BALANCE cover the two rewrites.
  */
-const USERNAME_RE_SOURCE = 'Nwflower'
+const USERNAME_RE_SOURCE = [...new Set(['Nwflower', userInfo().username])]
+  .filter(Boolean)
+  .map((name) => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+  .join('|')
 const PATH_RE_SOURCE = '[A-Z]:[\\\\/][^\\s"\']*'
 const BALANCE_RE_SOURCE = '\u00a5\\s?[0-9][0-9.,]*'
 

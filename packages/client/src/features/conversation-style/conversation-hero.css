@@ -1,0 +1,174 @@
+/* Empty sessions use the host's own hero stack. The home layout still owns
+   the order and contents of its dashboard; the conversation style gives that
+   stack room between the greeting and the composer. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style]:not([data-dsh-deepcraft-home-layout="studio"])
+  [data-phase="hero"] [data-dsh-deepcraft-part~="scroll-body"] {
+  justify-content: flex-start;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style]:not([data-dsh-deepcraft-home-layout="studio"])
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-seat"] {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style]:not([data-dsh-deepcraft-home-layout="studio"])
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-dsh-deepcraft-part~="composer-hero"] {
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  padding-top: clamp(48px, 12vh, 120px);
+  padding-bottom: 16px;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style]:not([data-dsh-deepcraft-home-layout="studio"])
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-hero"] > [data-dsh-deepcraft-holds~="hero-headline"] {
+  flex: 0 0 auto;
+  height: auto;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style]:not([data-dsh-deepcraft-home-layout="studio"])
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-hero"] > [data-slot="conversation.composer.bar"] > * {
+  margin-top: auto;
+}
+
+/* ---------- reader: a narrower centred column ---------- */
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]:not([data-dsh-deepcraft-home-layout="studio"])
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-dsh-deepcraft-part~="composer-hero"] {
+  max-width: min(640px, calc(100% - 48px));
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-hero"] > [data-dsh-deepcraft-holds~="hero-headline"] {
+  margin-bottom: 14px;
+}
+
+/* Spine and Console use the breadth of the conversation surface. */
+body[data-dsh-deepcraft]:is([data-dsh-deepcraft-chat-style="spine"], [data-dsh-deepcraft-chat-style="console"]):not([data-dsh-deepcraft-home-layout="studio"])
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-dsh-deepcraft-part~="composer-hero"] {
+  max-width: calc(100% - 32px);
+}
+
+/* ---------- spine: a left rail ahead of the input at the bottom ---------- */
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="hero-headline"] {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-dsh-deepcraft-part~="composer-hero"] {
+  position: relative;
+  padding-left: var(--dsh-conversation-hero-rail-padding, 28px);
+  gap: 14px;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-dsh-deepcraft-part~="composer-hero"]::before {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 7px;
+  width: 0;
+  border-left: .5px solid var(--dsw-alias-border-l4);
+  content: var(--dsh-conversation-hero-rail-content, "");
+}
+
+/* The greeting marks the beginning of the empty conversation. Slot anchors
+   have no box of their own, so the marker belongs to the greeting itself. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-hero"] > [data-dsh-deepcraft-holds~="hero-headline"] {
+  position: relative;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-hero"] > [data-dsh-deepcraft-holds~="hero-headline"]::before {
+  position: absolute;
+  top: 10px;
+  left: -25px;
+  width: 9px;
+  height: 9px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--dsw-alias-state-business-primary);
+  border-radius: 50%;
+  background: var(--dsw-alias-state-business-primary);
+  content: var(--dsh-conversation-hero-rail-content, "");
+}
+
+@container (width <= 640px) {
+  body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+    [data-phase="hero"] [data-dsh-deepcraft-part~="composer-hero"] {
+    --dsh-conversation-hero-rail-padding: 0px;
+    --dsh-conversation-hero-rail-content: none;
+  }
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"][data-dsh-deepcraft-mobile-portrait] {
+  --dsh-conversation-hero-rail-padding: 0px;
+  --dsh-conversation-hero-rail-content: none;
+}
+
+/* ---------- console: mono greeting ---------- */
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="hero-headline"],
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="hero-headline"] [data-dsh-deepcraft-part~="hero-title-group"],
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="hero-headline"] [data-dsh-deepcraft-part~="hero-title-group"] > span {
+  font-family: var(--dsh-deepcraft-font-code);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-hero"] [data-slot] :is(button, [role="button"]),
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="hero-workspace-row"] :is(button, [role="button"]) {
+  font-family: var(--dsh-deepcraft-font-code);
+}
+
+/* @composer-gate */
+
+/* ---------- reader: the card keeps the room the narrowed column leaves ---------- */
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-composer-variant="hero"] [data-composer-card] {
+  border-radius: 24px;
+}
+
+/* The classic tray closes the card's silhouette; its bottom corners follow
+   the 24px so card and tray read as one rounded block. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-composer-variant="hero"] > [data-dsh-deepcraft-part~="hero-workspace-row"] {
+  border-radius: 0 0 24px 24px;
+}
+
+/* ---------- spine: the card squares into a rail-end ---------- */
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-composer-variant="hero"] [data-composer-card] {
+  border-radius: 6px;
+}
+
+body[data-dsh-deepcraft]:is([data-dsh-deepcraft-chat-style="spine"], [data-dsh-deepcraft-chat-style="console"])
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-composer-variant="hero"] > [data-dsh-deepcraft-part~="hero-workspace-row"] {
+  border-radius: 0 0 6px 6px;
+}
+
+/* ---------- console: prompt line, squared card, mono input ---------- */
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-composer-variant="hero"] [data-composer-card] {
+  border-radius: 6px;
+  box-shadow: 0 0 0 .5px var(--dsw-alias-border-l4);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-phase="hero"] [data-composer-input],
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-phase="hero"] [data-composer-card] textarea {
+  font-family: var(--dsh-deepcraft-font-code);
+}

@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">新增功能</h3>
+
+- 新增阅读栏、步骤时间线和终端三种可切换的对话样式。
+
+<h3 id="en-unreleased">New Features</h3>
+
+- Add switchable reading column, step timeline, and terminal conversation styles.
+
 ## [0.22.5] - 2026-11-04
 
 [中文](#cn-0.22.5) | [English](#en-0.22.5)

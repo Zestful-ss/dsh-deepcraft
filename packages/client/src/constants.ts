@@ -102,6 +102,8 @@ export const SIDEBAR_LAYOUT_ATTR = 'data-dsh-deepcraft-sidebar-layout'
  */
 export const ONGOING_INDICATOR_ATTR = 'data-dsh-deepcraft-ongoing-indicator'
 export const STATS_POSITION_ATTR = 'data-dsh-deepcraft-stats-position'
+/** The conversation arrangement selected by the reader. */
+export const CHAT_STYLE_ATTR = 'data-dsh-deepcraft-chat-style'
 /**
  * The page zoom in force, as the factor the stylesheet scales the page by
  * (theme/chrome.css). Absent while the page follows the system; the scale every

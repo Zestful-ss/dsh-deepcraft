@@ -32,6 +32,7 @@ const { longSessionScenario } = require('./long-session.cjs')
 const { statsScenarios } = require('./stats-position.cjs')
 const { sidebarRailScenario } = require('./sidebar-rail.cjs')
 const { remoteSettingsScenario } = require('./remote-settings.cjs')
+const { conversationStylesScenario } = require('./conversation-styles.cjs')
 const { customBrandScenario } = require('./custom-brand.cjs')
 const { deepcraftScenario } = require('./deepcraft.cjs')
 const { petdexScenario } = require('./petdex.cjs')
@@ -162,6 +163,7 @@ async function handoverFrames(context) {
 /** The scenarios: each boots its own instance, sends its prompt, and asserts. */
 const SCENARIOS = {
   desktopHeader: desktopHeaderScenario({ check }),
+  conversationStyles: conversationStylesScenario({ check, HOST }),
   /** A scripted answer: the reader's message, the thought, the markdown. */
   conversation: {
     script: 'greeting',

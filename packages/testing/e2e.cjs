@@ -43,6 +43,7 @@ const { startMockLlm } = require('./mock-llm.cjs')
 const { startMockPlatform, accountStore } = require('./mock-platform.cjs')
 const { loadModule } = require('../../scripts/shared/ts-module.cjs')
 const { withLock } = require('../../scripts/shared/verify-lock.cjs')
+const { sanitizePage } = require('../../scripts/shared/privacy.cjs')
 
 const ROOT = path.resolve(__dirname, '..', '..')
 const DEFAULT_OUT = path.join(ROOT, '.debug', 'e2e', 'out')
@@ -103,7 +104,8 @@ const PARKED = new Set(['statsPosition', 'statsOverlay'])
 async function captureFailure(session, out, name, say) {
   const { page } = session
   const file = path.join(out, `${name}-failure.png`)
-  await page.screenshot({ path: file }).catch(() => {})
+  await sanitizePage((expression) => page.evaluate(expression))
+  await page.screenshot({ path: file })
   const state = await page.evaluate(() => {
     const input = document.querySelector('[data-composer-input]')
     return {

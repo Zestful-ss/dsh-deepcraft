@@ -1,0 +1,147 @@
+/* Conversation column treatments for the chat-style layouts.
+
+   The switch is the body flag `data-dsh-deepcraft-chat-style` (reader / spine /
+   console), mirrored from the chat-style preference; every block below is
+   inert while the flag is unset. All geometry stays on host contracts: the
+   column, wide tables, the user stack and the to-bottom button all resolve
+   `--dsh-chat-content-width`, so one override realigns them together. */
+
+/* ---------- reader: centred narrow measure ---------- */
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]
+  [data-conversation-scroll] {
+  --dsh-chat-content-width: min(680px, calc(100% - 48px));
+  --dsh-chat-flow-gap: 10px;
+}
+
+/* A user row opens a turn; giving it extra leading space sets the reading
+   rhythm without touching host row markup. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]
+  [data-conversation-scroll] [data-chat-flow] [data-chat-flow-kind="user"]:not(:first-child) {
+  margin-top: 20px;
+}
+
+/* ---------- spine: left step timeline ---------- */
+
+/* Every flow row carries data-chat-turn / data-chat-flow-kind. A per-row
+   ::before draws the node while the container's own ::before draws the
+   spine through the --dsh-chat-flow-gap margins between rows. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+  [data-conversation-scroll] [data-chat-flow] {
+  position: relative;
+  padding-left: 28px;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+  [data-conversation-scroll] [data-chat-flow]::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 7px;
+  width: 0;
+  border-left: .5px solid color-mix(in srgb, var(--dsw-alias-label-caption) 45%, transparent);
+  content: "";
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+  [data-conversation-scroll] [data-chat-flow] [data-chat-flow-key]:not([data-chat-flow-key] [data-chat-flow-key]) {
+  position: relative;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+  [data-conversation-scroll] [data-chat-flow] [data-chat-flow-key]:not([data-chat-flow-key] [data-chat-flow-key])::before {
+  position: absolute;
+  top: 8px;
+  left: -25px;
+  width: 9px;
+  height: 9px;
+  box-sizing: border-box;
+  border: 1.5px solid color-mix(in srgb, var(--dsw-alias-label-caption) 45%, transparent);
+  border-radius: 50%;
+  background: var(--dsw-alias-bg-base);
+  content: "";
+}
+
+/* Turn-opening rows carry the accent node; tool calls read as sub-steps. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+  [data-conversation-scroll] [data-chat-flow] [data-chat-flow-key]:not([data-chat-flow-key] [data-chat-flow-key])[data-chat-flow-kind="user"]::before {
+  border-color: var(--dsw-alias-state-business-primary);
+  background: var(--dsw-alias-state-business-primary);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+  [data-conversation-scroll] [data-chat-flow] [data-chat-flow-key]:not([data-chat-flow-key] [data-chat-flow-key])[data-chat-flow-kind="tool-call"]::before {
+  top: 10px;
+  left: -24px;
+  width: 7px;
+  height: 7px;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+  [data-conversation-scroll] [data-chat-running] {
+  position: relative;
+  padding-left: 4px;
+}
+
+/* The host scroll container is already `container-type: inline-size`; fold
+   the timeline away before it collides with the narrowed column. */
+@container (width <= 640px) {
+  body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+    [data-conversation-scroll] [data-chat-flow] {
+    padding-left: 0;
+  }
+
+  body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+    [data-conversation-scroll] [data-chat-flow]::before,
+  body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
+    [data-conversation-scroll] [data-chat-flow] [data-chat-flow-key]:not([data-chat-flow-key] [data-chat-flow-key])::before {
+    content: none;
+  }
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"][data-dsh-deepcraft-mobile-portrait]
+  [data-conversation-scroll] [data-chat-flow] {
+  padding-left: 0;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"][data-dsh-deepcraft-mobile-portrait]
+  [data-conversation-scroll] [data-chat-flow]::before,
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"][data-dsh-deepcraft-mobile-portrait]
+  [data-conversation-scroll] [data-chat-flow] [data-chat-flow-key]:not([data-chat-flow-key] [data-chat-flow-key])::before {
+  content: none;
+}
+
+/* ---------- console: mono full-bleed terminal ---------- */
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-conversation-scroll] {
+  --dsh-chat-content-width: calc(100% - 40px);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-conversation-scroll] [data-chat-flow],
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-conversation-scroll] [data-dsh-deepcraft-part~="markdown"] {
+  font-family: var(--dsh-deepcraft-font-code);
+}
+
+/* Prompt line ahead of each user message. The flow item is a block box, so
+   the ::before lands on its own line above the host user row. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-conversation-scroll] [data-chat-flow] [data-chat-flow-kind="user"]::before {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--dsw-alias-state-business-primary);
+  font-size: calc(var(--dsh-content-font-size, 14px) - 1px);
+  line-height: 20px;
+  content: "❯";
+}
+
+/* Tool calls and process groups read as nested output blocks. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-conversation-scroll] [data-chat-flow] [data-chat-flow-kind="tool-call"],
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  [data-conversation-scroll] [data-step-process] {
+  padding-left: 10px;
+  box-shadow: inset 2px 0 0 color-mix(in srgb, var(--dsw-alias-label-caption) 45%, transparent);
+}

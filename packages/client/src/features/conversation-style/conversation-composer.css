@@ -1,0 +1,88 @@
+/* Composer treatments for the chat-style layouts. Companion sheet to
+   conversation-style.css; the same body flag switches the input zone. */
+
+/* @composer-gate */
+
+/* ---------- reader: floating capsule ---------- */
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]
+  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat] {
+  --dsh-composer-card-max-width: min(720px, calc(100% - 48px));
+}
+
+/* The seat keeps its opaque bar and fade band around the rounded input. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]
+  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-card] {
+  margin-bottom: 10px;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]
+  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-card] [data-input-scroll] {
+  border-radius: 24px;
+}
+
+/* Spine and Console use the same full-width input surface. The seat's
+   opaque bar keeps masking the transcript behind it. */
+body[data-dsh-deepcraft]:is([data-dsh-deepcraft-chat-style="spine"], [data-dsh-deepcraft-chat-style="console"])
+  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat] {
+  --dsh-composer-card-max-width: calc(100% - var(--dsh-composer-side-clearance, 0px) - var(--dsh-composer-side-clearance, 0px));
+}
+
+body[data-dsh-deepcraft]:is([data-dsh-deepcraft-chat-style="spine"], [data-dsh-deepcraft-chat-style="console"])
+  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-card] {
+  border-radius: 6px;
+  box-shadow: 0 0 0 .5px color-mix(in srgb, var(--dsw-alias-label-caption) 45%, transparent);
+}
+
+body[data-dsh-deepcraft]:is([data-dsh-deepcraft-chat-style="spine"], [data-dsh-deepcraft-chat-style="console"])
+  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-card] [data-input-scroll] {
+  border-radius: 6px;
+}
+
+/* ---------- console: prompt line + segmented control strip ---------- */
+
+/* Keep the prompt beside the host's editable draft and its placeholder. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  :is([data-phase="hero"], [data-phase="active"], [data-content-phase="active"]) [data-composer-card] [data-input-scroll] {
+  padding-left: 34px;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  :is([data-phase="hero"], [data-phase="active"], [data-content-phase="active"]) [data-composer-card] [data-input-scroll]::before {
+  position: absolute;
+  top: 7px;
+  left: 14px;
+  color: var(--dsw-alias-state-business-primary);
+  font-size: calc(var(--dsh-content-font-size, 14px) - 1px);
+  line-height: 20px;
+  pointer-events: none;
+  content: "❯";
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-input],
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-card] textarea,
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-stats],
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-stat] {
+  font-family: var(--dsh-deepcraft-font-code);
+}
+
+/* One bordered strip: hairline over the control row, segment separators
+   between the tools / modes / trailing clusters. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-card] [data-dsh-deepcraft-part~="row"] {
+  margin-top: 2px;
+  padding-top: 6px;
+  box-shadow: inset 0 .5px 0 var(--dsw-alias-border-l4);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-card] [data-dsh-deepcraft-part~="modes"],
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="console"]
+  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-card] [data-dsh-deepcraft-part~="trailing"] {
+  padding-left: 12px;
+  box-shadow: inset 1px 0 0 var(--dsw-alias-border-l4);
+}
