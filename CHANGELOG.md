@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修复折叠侧栏页脚偏好开启时，桌面端更新提示被皮肤隐藏的问题。
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Fix the desktop update pill staying hidden while the collapsed sidebar footer preference is on.
+
 ## [0.24.0] - 2026-11-05
 
 [中文](#cn-0.24.0) | [English](#en-0.24.0)

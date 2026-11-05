@@ -10,13 +10,16 @@
    `sidebar.settings` slot anchor (a display:contents div), which the child
    selector alone never crossed. The host's own account row is the skin's entry
    where it exists (features/account/account-footer.ts marks it), so the row itself
-   stays and only the controls next to it — the connection pill, the update pill
-   ("Retry update") — go. The account menu and its sign-in dialog are portals and
-   the settings panel is the row's sibling, so all three still open. */
+   stays and only the controls next to it — the connection pill — go. The
+   desktop update pill stays: the host parks it beside the account row as the
+   update's persistent surface, and it is the one settings-trigger button
+   carrying aria-disabled without a popup attribute. The account menu and its
+   sign-in dialog are portals and the settings panel is the row's sibling, so
+   all three still open. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~="foot-area"] > [data-dsh-deepcraft-part~="footer-actions"] :is([data-dsh-deepcraft-part~="footer-buttons"], > button) {
   display: none;
 }
-body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~="foot-area"] [data-dsh-deepcraft-part~="settings-trigger"] :is(button, [role="button"], a):not([data-dsh-deepcraft-account-host-row]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~="foot-area"] [data-dsh-deepcraft-part~="settings-trigger"] :is(button, [role="button"], a):not([data-dsh-deepcraft-account-host-row]):not(button[aria-disabled]:not([aria-haspopup])) {
   display: none;
 }
 /* Both containers stay mounted at zero size so the overlays they host keep
