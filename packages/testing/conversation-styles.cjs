@@ -186,8 +186,9 @@ function conversationStylesScenario({ check, HOST }, legacyStyle) {
           hero.style === 'reader' && ready(hero) && Math.abs(hero.stack.width - 640) <= 1 &&
           hero.card.width <= 721,
           JSON.stringify({ hero, cardWidth: hero.cardWidth })),
-        check('空会话将标题留在上方、输入区放在下方',
-          hero.headline?.shown && hero.headline.top < hero.height * 0.25 && hero.card.top > hero.height * 0.55 && hero.card.bottom <= hero.height,
+        check('空会话把标题留在输入区上方，两块都在窗口内',
+          hero.headline?.shown && hero.card?.shown && hero.headline.bottom <= hero.card.top &&
+          hero.headline.top >= 0 && hero.card.bottom <= hero.height,
           JSON.stringify({ headline: hero.headline, card: hero.card })),
         check('手机空会话保留标题和阅读栏',
           mobileHero.style === 'reader' && ready(mobileHero) && mobileHero.headline?.shown &&
