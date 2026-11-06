@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.25.0] - 2026-11-06
 
-<h3 id="cn-unreleased">问题修复</h3>
+[中文](#cn-0.25.0) | [English](#en-0.25.0)
+
+<h3 id="cn-0.25.0">问题修复</h3>
 
 - 修复侧栏页脚接管隐藏宿主的断线重连提示、更新提示和插件入口的问题，宿主控件恢复显示与操作。
 
@@ -14,7 +16,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - 移除对话设置中的「对话样式」切换，对话固定使用阅读栏。
 
-<h3 id="en-unreleased">Bug Fixes</h3>
+<h3 id="en-0.25.0">Bug Fixes</h3>
 
 - Fix the sidebar footer takeover hiding the host's reconnect, update and plugin controls; they are visible and operable again.
 
