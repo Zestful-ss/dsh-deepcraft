@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.25.1] - 2026-11-06
 
-<h3 id="cn-unreleased">体验优化</h3>
+[中文](#cn-0.25.1) | [English](#en-0.25.1)
+
+<h3 id="cn-0.25.1">体验优化</h3>
 
 - 放大对话页的视图切换胶囊，并让各视图名称之间留出间距。
 
-<h3 id="en-unreleased">Improvements</h3>
+<h3 id="en-0.25.1">Improvements</h3>
 
 - Enlarge the conversation view switcher's capsule and give its view names room between them.
 
