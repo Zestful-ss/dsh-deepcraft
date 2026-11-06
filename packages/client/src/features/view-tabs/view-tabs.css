@@ -44,9 +44,30 @@ body[data-dsh-deepcraft] [data-dsh-view-tabs] {
 body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="center-column"]:hover [data-dsh-view-tabs] {
   opacity: 1;
 }
+body[data-dsh-deepcraft] [data-dsh-view-tabs].dsh-deepcraft-view-switch {
+  gap: 3px;
+  padding: 3px;
+  border-radius: 9px;
+}
+
+/* The host's tab is a hit area for its shipped underline: a 35px minimum box
+   pulled together by a -10px inline margin around a 10px padding. In a pill
+   those negative margins cancel the padding and the labels run together, and
+   the minimum box overflows the shell the skin draws. The strip's tab is its
+   own box instead: the shell's 3px inset all round, a 6px tab radius, and a
+   14px side padding that leaves the labels apart. */
 body[data-dsh-deepcraft] [data-dsh-view-tabs] [data-dsh-deepcraft-part~="view-tab"] {
-  height: 22px;
-  padding: 0 10px;
+  box-sizing: border-box;
+  height: 26px;
+  min-height: 0;
+  margin: 0;
+  padding: 0 14px;
+  font-size: 12px;
+  line-height: 18px;
+  border-radius: 6px;
+}
+body[data-dsh-deepcraft] [data-dsh-view-tabs].dsh-deepcraft-view-switch[data-dsh-deepcraft-pill]::before {
+  border-radius: 6px;
 }
 /* The shipped active-tab underline has no place in a pill. */
 body[data-dsh-deepcraft] [data-dsh-view-tabs] [data-dsh-deepcraft-part~="view-tab"]::after {
