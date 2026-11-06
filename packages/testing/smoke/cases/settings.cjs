@@ -20,7 +20,7 @@ module.exports = {
       appearance: ['palette', 'brandAccent', 'typeface', 'pageLook', 'homeLayout', 'homeRipple', 'mascot', 'chatPet', 'mascotScope', 'brandName', 'brandMark', 'brandWordmark', 'brandInk', 'petImport'],
       composer: ['composerScope', 'modelPicker', 'modelDescriptions', 'quickProviders', 'subagentModelPicker', 'peakrate', 'permissionsControl', 'subagentModelChoice'],
       sidebar: ['collapseFooter', 'banLocale', 'sidebarSearch', 'searchStyle', 'workspaceView', 'dockCards', 'sidebarLayout'],
-      conversation: ['chatStyle', 'turnNav', 'statsPosition', 'viewTabs', 'headerBand'],
+      conversation: ['turnNav', 'statsPosition', 'viewTabs', 'headerBand'],
       motion: ['motion', 'chatAnimations', 'chatWait', 'statusDetail', 'statusMotion', 'caretMotion', 'ongoingIndicator', 'chatReveal', 'chatSend', 'messageEnter'],
     }
     // Greyed by the page itself rather than by a preference: the title-bar
@@ -144,9 +144,6 @@ module.exports = {
       stored.ring?.attribute === 'ring' && stored.ring?.width === '10px' && stored.ring?.animation === 'dsh-deepcraft-ongoing-spin' &&
         stored.breathe?.attribute === 'breathe' && stored.breathe?.width === '6px' && stored.breathe?.animation === 'dsh-deepcraft-pulse',
       JSON.stringify(stored))
-    const styles = settings.chatStyles || {}
-    check('conversation styles reach the page and the retired style resolves to reader',
-      styles.reader === 'reader' && styles.spine === 'spine' && styles.console === 'reader', JSON.stringify(styles))
     commonChecks(r)
   },
   'dock-cards'(r) {

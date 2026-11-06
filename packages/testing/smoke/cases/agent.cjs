@@ -113,7 +113,10 @@ module.exports = {
     check('apply() completes', r.applyError === null, r.applyError)
     check('no injected markup executed', r.pwned === 0, `${r.pwned} executions`)
     check('account name rendered as text', r.accountUser === MARKUP, JSON.stringify(r.accountUser))
-    check('mirrored plugin label and badge rendered as text', r.mirroredText === MARKUP && r.mirroredBadge === MARKUP, JSON.stringify([r.mirroredText, r.mirroredBadge]))
+    check('the plugin\'s own footer entry keeps its label and badge and stays visible, the skin neither cloning nor rewriting it',
+      r.footerPluginAction !== null && r.footerPluginAction.label === MARKUP && r.footerPluginAction.badge === MARKUP &&
+      r.footerPluginAction.display !== 'none' && r.footerPluginAction.visible === true,
+      JSON.stringify(r.footerPluginAction))
     check('account-hold toast renders the username as text', r.banToast === MARKUP + ': account_banned', JSON.stringify(r.banToast))
     check('avatar URL adds no attribute to the page',
       r.avatarAttrs !== null && r.avatarAttrs.every((a) => a === 'class' || a === 'data-dsh-deepcraft-photo') &&
@@ -170,11 +173,11 @@ module.exports = {
   },
   desktop(r) {
     check('apply() completes', r.applyError === null, r.applyError)
-    check('every unit the footer holds is hidden in place before the drawer is ever opened, the plugin\'s inline box included',
-      Array.isArray(r.footerEntriesBeforeOpen) && r.footerEntriesBeforeOpen.length === 3 &&
-        same(r.footerEntriesBeforeOpen.map(function (entry) { return entry.kind }), ['slot', 'slot', 'card']) &&
-        r.footerEntriesBeforeOpen.every(function (entry) { return entry.hidden === true && entry.display === 'none' }),
-      JSON.stringify(r.footerEntriesBeforeOpen))
+    check('the footer\'s own entries stay in place with their own boxes and no skin mark, the plugin\'s inline box included',
+      Array.isArray(r.footerUnitsBeforeOpen) && r.footerUnitsBeforeOpen.length === 3 &&
+        same(r.footerUnitsBeforeOpen.map(function (unit) { return unit.kind }), ['slot', 'slot', 'card']) &&
+        r.footerUnitsBeforeOpen.every(function (unit) { return unit.marked === false && unit.display !== 'none' && unit.width > 0 && unit.height > 0 }),
+      JSON.stringify(r.footerUnitsBeforeOpen))
     check("the host's own account row stays visible; the skin builds no trigger",
       r.hostRowVisible === true && r.hostRowDisplay !== 'none' && r.syntheticBtn === false,
       JSON.stringify({ visible: r.hostRowVisible, display: r.hostRowDisplay, synthetic: r.syntheticBtn }))
@@ -186,8 +189,8 @@ module.exports = {
     check("our container is injected as the list's first child",
       r.injectInViewport === true && r.injectFirst === true,
       JSON.stringify({ inViewport: r.injectInViewport, first: r.injectFirst }))
-    check('the injected container carries the header and the plugin rows, the card mounted outside the slot keeping its own markup among them',
-      same(r.injectRows, ['header', 'action', 'embed', 'embed']) && r.injectName === 'Ada',
+    check('the injected container carries the account header alone; the plugin entries stay in the host footer',
+      same(r.injectRows, ['header']) && r.injectName === 'Ada',
       JSON.stringify({ rows: r.injectRows, name: r.injectName }))
     check('the injected header names the same user as the host account row',
       r.injectName !== null && r.injectName === r.hostRowText,
@@ -220,8 +223,6 @@ module.exports = {
     check('a host re-render is healed: container first and rows unchanged',
       r.injectHealedFirst === true && r.injectHealedSame === true,
       JSON.stringify({ first: r.injectHealedFirst, same: r.injectHealedSame }))
-    check("the host's keyboard walk reaches our injected button",
-      r.focusInInjected === true, JSON.stringify(r.focusInInjected))
     check('the hold screen opens over the menu and survives the leaves its overlay causes',
       r.banOpened === 1 && r.banSurvivesLeave === 1,
       JSON.stringify({ opened: r.banOpened, survived: r.banSurvivesLeave }))

@@ -29,20 +29,22 @@
       for (var n = 0; n < 4; n++) { document.body.appendChild(document.createElement('i')); await sleep(80) }
     })
     await probe.onlyFor(['desktop'], async function () {
-      // Every unit the footer holds — the action slot's two entries and the
-      // card a plugin mounted beside them — is hidden in place from the first
-      // pass: nothing in this case has opened the drawer yet, so this read is
-      // the state a fresh page shows beside the account row. (The first pass
-      // runs on a frame.) One entry writes its own box inline, so this read is
-      // where the takeover's weight over an inline style is judged.
+      // The host's footer stays the host's: the action slot's entries and the
+      // card a plugin mounted beside them keep their own nodes, their own
+      // inline boxes and their own marks. Nothing in this case has opened the
+      // drawer yet, so this read is the state a fresh page shows beside the
+      // account row.
       await sleep(500)
-      r.footerEntriesBeforeOpen = Array.prototype.map.call(
-        document.querySelectorAll('[data-dsh-deepcraft-part~="foot-area"] [data-dsh-deepcraft-footer-entry]'),
-        function (entry) {
+      r.footerUnitsBeforeOpen = Array.prototype.map.call(
+        document.querySelectorAll('[data-dsh-deepcraft-part~="foot-area"] [data-slot="sidebar.footer.action"] > *, [data-dsh-deepcraft-part~="foot-area"] [data-dsh-usage-foot-card]'),
+        function (unit) {
+          var box = unit.getBoundingClientRect()
           return {
-            kind: entry.getAttribute('data-dsh-usage-foot-card') === null ? 'slot' : 'card',
-            hidden: entry.hasAttribute('data-dsh-deepcraft-footer-hidden'),
-            display: getComputedStyle(entry).display,
+            kind: unit.hasAttribute('data-dsh-usage-foot-card') ? 'card' : 'slot',
+            display: getComputedStyle(unit).display,
+            width: box.width,
+            height: box.height,
+            marked: unit.hasAttribute('data-dsh-deepcraft-footer-entry') || unit.hasAttribute('data-dsh-deepcraft-footer-hidden'),
           }
         })
       // The first login frame makes the skin read the profile once.
@@ -189,11 +191,6 @@
       var inject2 = document.querySelector('.dsh-deepcraft-account-inject')
       r.injectHealedFirst = !!(viewport2 && inject2 && viewport2.firstElementChild === inject2)
       r.injectHealedSame = !!(inject2 && inject2.innerHTML === htmlBefore)
-      // The host's keyboard walk reaches our injected button.
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }))
-      await sleep(80)
-      var focused = document.activeElement
-      r.focusInInjected = !!(focused && inject2 && inject2.contains(focused) && focused.tagName === 'BUTTON')
       // The hold screen entered from the header: the overlay takes the pointer,
       // so the row and the card it covered report a leave without the pointer
       // moving, and with the hover preference on those leaves must neither

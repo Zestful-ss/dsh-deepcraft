@@ -1,0 +1,8 @@
+{
+  "group": "removals",
+  "order": 0,
+  "external": false,
+  "at": "2026-11-06",
+  "zh": "移除对话设置中的「对话样式」切换，对话固定使用阅读栏。",
+  "en": "Remove the conversation-style switch from the settings page; the reading column is the only conversation layout."
+}

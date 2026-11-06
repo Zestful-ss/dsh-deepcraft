@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 0,
+  "external": false,
+  "at": "2026-11-06",
+  "zh": "修复侧栏页脚接管隐藏宿主的断线重连提示、更新提示和插件入口的问题，宿主控件恢复显示与操作。",
+  "en": "Fix the sidebar footer takeover hiding the host's reconnect, update and plugin controls; they are visible and operable again."
+}

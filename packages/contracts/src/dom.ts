@@ -246,14 +246,18 @@ export const MENU_LIST_SELECTOR = '[role="presentation"]'
 /** The host's account trigger in the sidebar footer. */
 export const ACCOUNT_TRIGGER_SELECTOR = '[aria-haspopup="menu"][data-signed-out]'
 /**
- * The popup-opening control in the footer's settings area, which the account
- * menu rows open. The older host puts its settings dialog trigger there
- * (`aria-haspopup="dialog"`); the newer one puts the account menu's own trigger
- * (`aria-haspopup="menu"`), so the value is not part of the contract.
+ * The control in the footer's settings area that opens a popup, which the
+ * account menu rows open. The host's shapes differ: the account menu's own
+ * trigger (`aria-haspopup="menu"`) fills the `settings.launcher` slot on the
+ * desktop, a dialog trigger (`aria-haspopup="dialog"`) stands in that slot on a
+ * host that fills it with its settings launcher or its fallback, and the older
+ * web footer puts the dialog trigger straight under the settings area. The
+ * first shape is the account trigger, which the caller turns away: it opens
+ * that menu, never the settings dialog.
  */
-export const SETTINGS_BUTTON_SELECTOR = '[data-dsh-deepcraft-part~="settings-area"] button[aria-haspopup]'
-/** The sidebar's action list, whose entries the skin mirrors into its drawer. */
-export const FOOTER_ACTIONS_SELECTOR = '[data-dsh-deepcraft-part~="footer-actions"]'
+export const SETTINGS_BUTTON_SELECTOR = '[data-dsh-deepcraft-part~="settings-area"] button[aria-haspopup="menu"][data-signed-out], ' +
+  '[data-dsh-deepcraft-part~="settings-area"] [data-slot="settings.launcher"] button[aria-haspopup="dialog"], ' +
+  '[data-dsh-deepcraft-part~="settings-area"] > button[aria-haspopup="dialog"]'
 /** A slot anchor; its children are the host's real entries. */
 export const SLOT_ANCHOR_SELECTOR = '[data-slot]'
 /**

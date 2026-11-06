@@ -66,7 +66,7 @@ The settings page switches between the two palettes; light and dark follow the s
 
 ### Layout
 
-- The Conversation tab's "Conversation style" chooses a reading column or a timeline of steps for the transcript and composer.
+- The conversation page keeps a centred reading column and a floating rounded composer; the host's message, tool and composer controls stay in place, and the host's connection, update and plugin controls in the sidebar footer stay visible and operable.
 - The Appearance tab's "Page look" sets the page's shape: "Floating" lifts the conversation area into a rounded card, and the composer, the sidebar rows and the view tabs take pill shapes with it; "Flat" hands the page back to the host's own arrangement.
 - The home layout's "Floating" form draws a deck under the composer: this week's usage with its trend, the conversation to continue, the one before it, the month's usage leading into the Studio panel, and the recent conversations.
 

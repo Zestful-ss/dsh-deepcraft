@@ -34,12 +34,6 @@ interface Element {
   /** The host's account row bound by this generation (features/account). */
   __dshHostRowToken?: object
   __dshBanBound?: boolean
-  /** A mirrored footer entry: the icon markup it carries, the host entry and the click it forwards. */
-  __dshIconHtml?: string
-  __dshEntry?: Element | null
-  __dshForward?: HTMLElement | null
-  /** The live footer control a mirrored menu item presses. */
-  __dshActivator?: HTMLElement | null
   /** The account stream the body follows (features/account/profile). */
   __dshAccountStream?: unknown
 }

@@ -8,19 +8,11 @@ export default {
     'chat.user-row', 'chat.user-kind', 'composer.card', 'composer.scroll', 'composer.seat',
     'composer.stack', 'composer.variant', 'shell.phase', 'shell.slot-anchor',
   ],
-  pref: 'chatStyle',
+  ungated: 'The reading layout is the only conversation layout.',
   stylesheets: [
     { file: 'conversation-style.css', rank: 390 },
     { file: 'conversation-composer.css', rank: 395, gate: true },
     { file: 'conversation-hero.css', rank: 396, gate: true },
   ],
-  settingsRows: [{
-    tab: 'conversation',
-    rank: 10,
-    pref: 'chatStyle',
-    title: 'chatStyleTitle',
-    desc: 'chatStyleDesc',
-    choiceLabels: { reader: 'chatStyleReader', spine: 'chatStyleSpine' },
-  }],
   cases: ['settings', 'composer', 'hero'],
 } satisfies FeatureManifest

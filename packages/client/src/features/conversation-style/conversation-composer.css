@@ -1,5 +1,5 @@
-/* Composer treatments for the chat-style layouts. Companion sheet to
-   conversation-style.css; the same body flag switches the input zone. */
+/* Composer treatment for the reading layout. Companion sheet to
+   conversation-style.css; the same body flag marks its lifetime. */
 
 /* @composer-gate */
 
@@ -22,13 +22,6 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]
   border-radius: 24px;
 }
 
-/* The seat's opaque bar keeps masking the transcript behind the full-width input. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
-  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat] {
-  --dsh-conversation-composer-inset: var(--dsh-composer-side-clearance, 0px);
-  --dsh-composer-card-max-width: calc(100% - var(--dsh-conversation-composer-inset) - var(--dsh-conversation-composer-inset));
-}
-
 /* The dock is positioned against the stack's padding box, while the card's
    percentage width is resolved against its narrower content box. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style][data-dsh-deepcraft-stats-position="context"]
@@ -44,15 +37,4 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style][data-dsh-deepcraft-stats
     :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat] {
     --dsh-conversation-composer-inset: 0px;
   }
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
-  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-card] {
-  border-radius: 6px;
-  box-shadow: 0 0 0 .5px color-mix(in srgb, var(--dsw-alias-label-caption) 45%, transparent);
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
-  :is([data-phase="active"], [data-content-phase="active"]) [data-composer-card] [data-input-scroll] {
-  border-radius: 6px;
 }

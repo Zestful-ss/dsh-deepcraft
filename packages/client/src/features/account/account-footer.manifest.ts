@@ -4,7 +4,7 @@ export default {
   id: 'footer',
   order: 120,
   reads: ['ban'],
-  contracts: ['shell.account-trigger', 'shell.foot-area', 'shell.footer-actions', 'shell.menu', 'shell.menu-list', 'shell.settings-button'],
+  contracts: ['shell.account-trigger', 'shell.foot-area', 'shell.menu', 'shell.menu-list', 'shell.settings-button'],
   pref: 'collapseFooter',
   stylesheets: [
     { file: 'account-footer.css', rank: 240 },

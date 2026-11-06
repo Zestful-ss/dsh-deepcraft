@@ -125,9 +125,9 @@ body[data-dsh-deepcraft] .dsh-deepcraft-account-popover {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  /* The drawer's rows are built and reconciled while it is closed (the mirror
-     sync only runs then), so the panel takes the closed state the shared card
-     gives every card: out of the paint and the tab order, its box still
+  /* The drawer's rows are built and reconciled while it is closed, on the same
+     pass that keeps the trigger, so the panel takes the closed state the shared
+     card gives every card: out of the paint and the tab order, its box still
      measurable for the placement. It grows out of the account row below it. */
   transform-origin: bottom left;
 }
@@ -351,18 +351,20 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"] [data-dsh-deepcraf
   --dsw-menu-surface-fill: var(--dsh-deepcraft-card);
   --dsw-menu-backdrop-filter: none;
 }
-/* The entry animation is keyed on the armed marker rather than on the card
-   marker (constants.ts): the armed marker is in place before the host mounts
-   the card, so the animation runs from the card's first frame instead of
-   replaying over a card that was already painted. The host's shared menu card
-   is the only thing that mounts inside that window.
+/* The entry animation and the hold are keyed on the armed marker rather than on
+   the account-menu marker (constants.ts): the host mounts its card with its own
+   rows and paints it in that frame, while the skin's pass marks and fills it on
+   the next one. The armed marker is in place before the host's own press mounts
+   the card, so the hold and the entrance start at the card's first frame; the
+   menu-material mark names the host's portalled menu card (the skin's own cards
+   carry none), which in this window is the account menu the press is opening.
 
-   The card is also held until the reveal marker lands. The host mounts its card
-   with its own rows and places it from that geometry; the skin's container
-   arrives a frame later, the card grows, and the host re-places it a frame after
-   that. A card revealed on the mount frame fades in low and jumps up mid-fade,
-   so inside the armed window it stays unpainted until surface.ts has seen our
-   rows inside it and the host's placement stand still. */
+   The card is held until the reveal marker lands. The host mounts it with its
+   own rows and places it from that geometry; the skin's container arrives a
+   frame later, the card grows, and the host re-places it a frame after that. A
+   card revealed on the mount frame fades in low and jumps up mid-fade, so inside
+   the armed window it stays unpainted until surface.ts has seen our rows inside
+   it and the host's placement stand still. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-account-armed] div[role="menu"][data-menu-material]:not([data-dsh-deepcraft-account-ready]) {
   visibility: hidden;
   animation: none;

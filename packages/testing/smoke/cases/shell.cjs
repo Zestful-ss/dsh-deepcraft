@@ -258,8 +258,8 @@ module.exports = {
   // settings row, the nickname and the avatar.
   account(r) {
     basicChecks(r)
-    check('synthetic path: the popover carries the header, the plugin rows and the settings row',
-      r.drawer !== null && same(r.drawer, ['embed', 'action', 'embed', 'settings']) && r.syntheticHeader === true,
+    check('synthetic path: the popover carries the header and the settings row',
+      r.drawer !== null && same(r.drawer, ['settings']) && r.syntheticHeader === true,
       JSON.stringify({ drawer: r.drawer, header: r.syntheticHeader }))
     check('synthetic path injects nothing into a host menu', r.syntheticInject === 0, `${r.syntheticInject} containers`)
     check('a custom nickname outranks the signed-in profile', r.accountUser === 'Tester', JSON.stringify(r.accountUser))

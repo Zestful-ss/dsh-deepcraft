@@ -235,11 +235,6 @@
       "prop": "background",
       "verdict": "unmatched"
     },
-    "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=foot-area]>.dsh-deepcraft-popover-item{display:none!}|display": {
-      "selector": "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=foot-area]>.dsh-deepcraft-popover-item",
-      "prop": "display",
-      "verdict": "unmatched"
-    },
     "body[data-dsh-deepcraft] .dsh-deepcraft-view-switch button{appearance:none;border:none!;background:transparent;color:var(--dsw-alias-label-tertiary, #8f8d84);font-family:var(--dsw-font-family);font-size:12px;font-weight:500;line-height:18px;border-radius:5px;cursor:pointer;user-select:none;-webkit-user-select:none;transition:color var(--dsh-deepcraft-timing-feedback)}|border": {
       "selector": "body[data-dsh-deepcraft] .dsh-deepcraft-view-switch button",
       "prop": "border",
@@ -1962,16 +1957,6 @@
       "selector": "body[data-dsh-deepcraft][data-dsh-deepcraft-composer-active] [data-dsh-deepcraft-hero-menu] [data-dsh-deepcraft-part~=menu-submenu]:before",
       "prop": "width",
       "verdict": "transient state"
-    },
-    "body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~=foot-area] [data-dsh-deepcraft-footer-entry]:not([data-dsh-deepcraft-footer-hidden]){display:contents!}|display": {
-      "selector": "body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~=foot-area] [data-dsh-deepcraft-footer-entry]:not([data-dsh-deepcraft-footer-hidden])",
-      "prop": "display",
-      "verdict": "unmatched"
-    },
-    "body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~=foot-area] [data-dsh-deepcraft-footer-hidden]{display:none!}|display": {
-      "selector": "body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~=foot-area] [data-dsh-deepcraft-footer-hidden]",
-      "prop": "display",
-      "verdict": "unmatched"
     },
     "body[data-dsh-deepcraft][data-dsh-deepcraft-dock-look=card] [data-dsh-deepcraft-part~=rightbar-column] [data-dockkit-split]>[data-dockkit-column]>[data-dockkit-pane]{margin:6px!}|margin": {
       "selector": "body[data-dsh-deepcraft][data-dsh-deepcraft-dock-look=card] [data-dsh-deepcraft-part~=rightbar-column] [data-dockkit-split]>[data-dockkit-column]>[data-dockkit-pane]",

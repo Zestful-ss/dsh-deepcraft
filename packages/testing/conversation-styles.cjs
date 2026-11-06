@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * conversation-styles.cjs — switch the conversation layouts through the real
- * settings page and read their hero, transcript and composer on the host (D66).
+ * conversation-styles.cjs — the reading layout on the real host: a conversation
+ * style an earlier build stored must neither change the layout nor leave a
+ * switch behind (D66).
  */
 'use strict'
 const path = require('node:path')
@@ -10,17 +11,21 @@ const { openSkinSettings, SETTINGS_PAGE } = require('./settings-route.cjs')
 const { sanitizePage } = require('../../scripts/shared/privacy.cjs')
 
 const STYLE_ATTRIBUTE = 'data-dsh-deepcraft-chat-style'
-const CHOICES = {
-  reader: /^(阅读|Reader)$/,
-  spine: /^(时间线|Spine)$/,
-}
+/** The conversation tab's rows, in the order it keeps them now. */
+const CONVERSATION_ROWS = [
+  /^(对话导航|Conversation navigator)$/,
+  /^(对话统计信息位置|Conversation statistics position)$/,
+  /^(重绘标签条|Chat \/ Trajectory tabs)$/,
+  /^(标题进入顶栏|Header in the title bar)$/,
+]
+const STYLE_ROW = /对话样式|Conversation style/
 const HOME_CHOICES = {
   float: /^(浮层|Floating)$/,
   classic: /^(经典|Classic)$/,
   studio: /^(工作台|Studio)$/,
 }
 
-async function openChoices(page) {
+async function openConversationTab(page) {
   await openSkinSettings(page)
   const settings = page.locator(SETTINGS_PAGE).first()
   await settings.getByRole('tab', { name: /^(通用|General)$/ }).click()
@@ -28,17 +33,17 @@ async function openChoices(page) {
   await username.fill('Demo')
   await username.press('Enter')
   await settings.getByRole('tab', { name: /^(对话|Conversation)$/ }).click()
-  return settings.locator('.dsh-deepcraft-settings-row').filter({ hasText: /对话样式|Conversation style/ })
+  return settings
 }
 
-async function chooseStyle(row, target, style) {
-  await row.page().bringToFront()
-  await row.getByRole('button', { name: CHOICES[style] }).click()
-  await target.bringToFront()
-  await target.waitForFunction(({ attribute, wanted }) => document.body.getAttribute(attribute) === wanted,
-    { attribute: STYLE_ATTRIBUTE, wanted: style }, { timeout: 15000 })
-  await target.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))))
-  await target.waitForTimeout(200)
+async function readConversationRows(settingsPage) {
+  // The tab the page just left is still on show for its slide, as a copy
+  // without the tabpanel role (settings.ts); the role names the open one alone.
+  return settingsPage.evaluate((selector) => {
+    const panel = document.querySelector(`${selector} [role="tabpanel"]`)
+    return panel === null ? [] : [...panel.querySelectorAll('.dsh-deepcraft-settings-row-title')]
+      .map((node) => node.textContent.replace(/\s+/g, ' ').trim())
+  }, SETTINGS_PAGE)
 }
 
 async function chooseHome(settingsPage, target, layout) {
@@ -55,6 +60,11 @@ async function chooseHome(settingsPage, target, layout) {
 }
 
 async function readStyle(page, host) {
+  // A viewport change on a page in the background is laid out when it comes
+  // forward; reading before that shows the previous size's boxes.
+  await page.bringToFront()
+  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))))
+  await page.waitForTimeout(150)
   return page.evaluate(({ host, attribute }) => {
     const find = (selector) => document.querySelector(selector)
     const box = (node) => {
@@ -67,7 +77,6 @@ async function readStyle(page, host) {
         over: node.scrollWidth - node.clientWidth,
       }
     }
-    const pseudo = (node) => node === null ? null : getComputedStyle(node, '::before').content
     const card = find(host.composerCard)
     const input = find(host.composer)
     const flow = find(host.flow)
@@ -78,19 +87,6 @@ async function readStyle(page, host) {
     const meter = find('[data-dsh-deepcraft-context-meter]')
     const dock = meter?.closest('[data-dsh-deepcraft-part~="composer-dock"]') ?? null
     const hero = find('[data-phase="hero"] [data-dsh-deepcraft-part~="composer-hero"]')
-    const user = flow?.querySelector('[data-chat-flow-kind="user"]') ?? null
-    const markerStyle = user === null ? null : getComputedStyle(user, '::before')
-    const marker = markerStyle === null ? null : {
-      content: markerStyle.content,
-      center: user.getBoundingClientRect().left + parseFloat(markerStyle.left) + parseFloat(markerStyle.width) / 2,
-      color: markerStyle.backgroundColor,
-    }
-    const heroMarkers = [...hero?.children ?? []]
-      .filter((node) => node.matches('[data-dsh-deepcraft-holds~="hero-headline"], [data-dsh-deepcraft-holds~="composer-card"], [data-dsh-deepcraft-part~="hero-workspace-row"]'))
-      .map((node) => {
-        const style = getComputedStyle(node, '::before')
-        return { content: style.content, center: node.getBoundingClientRect().left + parseFloat(style.left) + parseFloat(style.width) / 2 }
-      })
     return {
       style: document.body.getAttribute(attribute),
       width: innerWidth, height: innerHeight,
@@ -105,102 +101,74 @@ async function readStyle(page, host) {
       permission: box(find('.dsh-deepcraft-perm-btn')),
       effort: box(find('.dsh-deepcraft-effort-btn')),
       meter: box(meter),
-      rail: pseudo(flow), marker, heroMarkers,
       cardWidth: seat === null ? null : getComputedStyle(seat).getPropertyValue('--dsh-composer-card-max-width').trim(),
       text: flow?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
     }
   }, { host, attribute: STYLE_ATTRIBUTE })
 }
 
-async function capture(page, out, style) {
+async function capture(page, out, label) {
   const dark = await page.evaluate(() => document.body.hasAttribute('data-ds-dark-theme'))
   for (const scheme of ['light', 'dark']) {
     await page.evaluate((value) => document.body.toggleAttribute('data-ds-dark-theme', value), scheme === 'dark')
     await sanitizePage((expression) => page.evaluate(expression))
     await page.evaluate((value) => document.body.toggleAttribute('data-ds-dark-theme', value), scheme === 'dark')
-    await page.screenshot({ path: path.join(out, `conversation-style-${style}-${scheme}.png`) })
+    await page.screenshot({ path: path.join(out, `conversation-style-${label}-${scheme}.png`) })
   }
   await page.evaluate((value) => document.body.toggleAttribute('data-ds-dark-theme', value), dark)
 }
 
-function conversationStylesScenario({ check, HOST }) {
+function conversationStylesScenario({ check, HOST }, legacyStyle) {
   return {
     script: 'greeting',
     prompt: 'hello there',
-    profilePatch: ['- id: ui-skin-deepcraft', '  config:', '    chatStyle: console'],
+    profilePatch: ['- id: ui-skin-deepcraft', '  config:', `    chatStyle: ${legacyStyle}`],
     async beforeSend(context) {
       await context.page.waitForFunction((attribute) => document.body.hasAttribute(attribute), STYLE_ATTRIBUTE, { timeout: 15000 })
-      const initialStyle = await context.page.getAttribute('body', STYLE_ATTRIBUTE)
       const settingsPage = await context.session.context.newPage()
       await settingsPage.goto(context.url, { waitUntil: 'domcontentloaded' })
       await waitForSkin(settingsPage)
       await dismissOverlays(settingsPage)
-      const row = await openChoices(settingsPage)
-      context.notes.legacyConversationStyle = {
-        style: initialStyle,
-        choices: await row.getByRole('button').allTextContents(),
-        readerSelected: await row.getByRole('button', { name: CHOICES.reader }).getAttribute('aria-pressed'),
+      const settings = await openConversationTab(settingsPage)
+      context.notes.readerLayout = {
+        legacyStyle,
+        attribute: await context.page.getAttribute('body', STYLE_ATTRIBUTE),
+        rows: await readConversationRows(settingsPage),
       }
-      const hero = {}
-      for (const style of Object.keys(CHOICES)) {
-        await chooseStyle(row, context.page, style)
-        hero[style] = await readStyle(context.page, HOST)
-        if (process.env.DSH_CAPTURE_CONVERSATION_STYLES === '1') {
-          await capture(context.page, context.out, `hero-${style}`)
-        }
+      const hero = await readStyle(context.page, HOST)
+      if (process.env.DSH_CAPTURE_CONVERSATION_STYLES === '1') {
+        await capture(context.page, context.out, `hero-${legacyStyle}`)
       }
-      const mobileHero = {}
       await context.page.setViewportSize({ width: 390, height: 844 })
-      for (const style of Object.keys(CHOICES)) {
-        await chooseStyle(row, context.page, style)
-        mobileHero[style] = await readStyle(context.page, HOST)
-      }
+      const mobileHero = await readStyle(context.page, HOST)
       await context.page.setViewportSize({ width: 1280, height: 900 })
       const homeLayouts = {}
       for (const layout of Object.keys(HOME_CHOICES)) {
         await chooseHome(settingsPage, context.page, layout)
-        homeLayouts[layout] = {}
-        for (const style of Object.keys(CHOICES)) {
-          await chooseStyle(row, context.page, style)
-          homeLayouts[layout][style] = await readStyle(context.page, HOST)
-        }
+        homeLayouts[layout] = await readStyle(context.page, HOST)
       }
       await chooseHome(settingsPage, context.page, 'float')
-      await chooseStyle(row, context.page, 'reader')
-      context.styleSettings = { page: settingsPage, row }
+      context.styleSettings = { page: settingsPage }
       context.notes.conversationStyles = { hero, mobileHero, homeLayouts, desktop: {}, mobile: {}, tight: {} }
     },
     async afterTurn(context) {
       const { page, out, notes, styleSettings } = context
-      const { row } = styleSettings
       const styles = notes.conversationStyles
       await page.locator('[data-dsh-deepcraft-context-meter]').first().waitFor({ state: 'visible', timeout: 15000 })
-      for (const style of Object.keys(CHOICES)) {
-        await chooseStyle(row, page, style)
-        styles.desktop[style] = await readStyle(page, HOST)
-      }
+      styles.desktop = await readStyle(page, HOST)
       await page.setViewportSize({ width: 390, height: 844 })
-      for (const style of Object.keys(CHOICES)) {
-        await chooseStyle(row, page, style)
-        styles.mobile[style] = await readStyle(page, HOST)
-      }
+      styles.mobile = await readStyle(page, HOST)
       await page.setViewportSize({ width: 330, height: 844 })
-      for (const style of Object.keys(CHOICES)) {
-        await chooseStyle(row, page, style)
-        styles.tight[style] = await readStyle(page, HOST)
-      }
+      styles.tight = await readStyle(page, HOST)
       await page.setViewportSize({ width: 1280, height: 900 })
       if (process.env.DSH_CAPTURE_CONVERSATION_STYLES === '1') {
-        for (const style of Object.keys(CHOICES)) {
-          await chooseStyle(row, page, style)
-          await capture(page, out, style)
-        }
+        await capture(page, out, `conversation-${notes.readerLayout.legacyStyle}`)
       }
-      await chooseStyle(row, page, 'reader')
       await styleSettings.page.close()
     },
     async assert({ notes, session }) {
       const { hero, mobileHero, homeLayouts, desktop, mobile, tight } = notes.conversationStyles
+      const layout = notes.readerLayout
       const inside = (item, width) => item !== null && item.shown && item.left >= -1 && item.right <= width + 1
       const withinCard = (control, card) => control !== null && control.shown && card !== null &&
         control.left >= card.left - 1 && control.right <= card.right + 1
@@ -209,43 +177,37 @@ function conversationStylesScenario({ check, HOST }) {
         Math.abs(item.effort.left - item.model.right - 2) <= 2 &&
         Math.abs((item.effort.top + item.effort.bottom) - (item.model.top + item.model.bottom)) <= 2 &&
         item.effort.right <= item.meter.left + 1)
-      const heroMarkers = hero.spine.heroMarkers.filter((marker) => marker.content === '""' && Number.isFinite(marker.center))
-      const legacy = notes.legacyConversationStyle
       return [
-        check('旧终端设置使用阅读样式且只显示两个选项',
-          legacy.style === 'reader' && legacy.readerSelected === 'true' && legacy.choices.length === 2 &&
-          CHOICES.reader.test(legacy.choices[0].trim()) && CHOICES.spine.test(legacy.choices[1].trim()), JSON.stringify(legacy)),
-        ...Object.keys(CHOICES).map((style) => check(`${style} 可在空会话和现有会话中切换，输入框可见`,
-          hero[style].style === style && desktop[style].style === style && ready(hero[style]) && ready(desktop[style]),
-          JSON.stringify({ hero: hero[style], desktop: desktop[style] }))),
-        check('空会话将标题留在上方、输入区放在下方', Object.values(hero).every((item) =>
-          item.headline?.shown && item.headline.top < item.height * 0.25 && item.card.top > item.height * 0.55 && item.card.bottom <= item.height),
-        JSON.stringify(Object.fromEntries(Object.entries(hero).map(([style, item]) => [style, { headline: item.headline, card: item.card }])))),
-        ...Object.keys(CHOICES).map((style) => check(`${style} 的手机空会话保留标题和输入区`,
-          ready(mobileHero[style]) && mobileHero[style].headline?.shown &&
-          mobileHero[style].headline.bottom <= mobileHero[style].card.top && mobileHero[style].card.top < mobileHero[style].height,
-          JSON.stringify(mobileHero[style]))),
-        ...Object.entries(homeLayouts).map(([layout, variants]) => check(`${layout} 首页兼容两种对话样式`,
-          Object.entries(variants).every(([style, item]) => item.style === style && ready(item) && item.headline?.shown &&
-            inside(item.model, item.width) && (layout !== 'float' || item.homeDeck?.shown) &&
-            (layout !== 'studio' || (item.homePanel?.shown && item.heroMaxWidth === '720px'))), JSON.stringify(variants))),
-        check('时间线标记贴合轨道',
-          desktop.spine.rail === '""' && desktop.spine.marker?.content === '""' &&
-          Math.abs(desktop.spine.marker.center - (desktop.spine.flow.left + 7)) <= 2 &&
-          heroMarkers.length === 1 && Math.abs(heroMarkers[0].center - (hero.spine.hero.left + 7)) <= 2,
-          JSON.stringify({ flow: desktop.spine.flow, marker: desktop.spine.marker, hero: hero.spine.hero, heroMarkers })),
-        ...Object.keys(CHOICES).map((style) => check(`${style} 保留模型、权限和上下文控件`,
-          [desktop[style], mobile[style]].every((item) =>
-            [item.model, item.permission, item.meter].every((control) => withinCard(control, item.card)) &&
-            alignedEffort(item)),
-          JSON.stringify({ desktop: desktop[style], mobile: mobile[style] }))),
-        check('切换样式保留会话消息', Object.values(desktop).every((item) => item.text.includes('hello there') && item.text.includes('Hello')),
-          JSON.stringify(Object.fromEntries(Object.entries(desktop).map(([style, item]) => [style, item.text.slice(0, 80)])))),
-        ...Object.keys(CHOICES).map((style) => check(`${style} 在手机宽度保持输入区和控件可见`,
-          [mobile[style], tight[style]].every((item) => ready(item) && item.row !== null && item.row.over <= 0 &&
-            [item.model, item.permission, item.meter].every((control) => withinCard(control, item.card)) &&
-            alignedEffort(item)),
-          JSON.stringify({ mobile: mobile[style], tight: tight[style] }))),
+        check(`旧配置中的 ${layout.legacyStyle} 仍使用阅读布局，对话设置只剩四项且没有样式行`,
+          layout.attribute === 'reader' && layout.rows.length === CONVERSATION_ROWS.length &&
+          layout.rows.every((title, index) => CONVERSATION_ROWS[index].test(title)) &&
+          !layout.rows.some((title) => STYLE_ROW.test(title)), JSON.stringify(layout)),
+        check('空会话使用阅读布局，狭窄的阅读栏与输入框都可见',
+          hero.style === 'reader' && ready(hero) && Math.abs(hero.stack.width - 640) <= 1 &&
+          hero.card.width <= 721,
+          JSON.stringify({ hero, cardWidth: hero.cardWidth })),
+        check('空会话将标题留在上方、输入区放在下方',
+          hero.headline?.shown && hero.headline.top < hero.height * 0.25 && hero.card.top > hero.height * 0.55 && hero.card.bottom <= hero.height,
+          JSON.stringify({ headline: hero.headline, card: hero.card })),
+        check('手机空会话保留标题和阅读栏',
+          mobileHero.style === 'reader' && ready(mobileHero) && mobileHero.headline?.shown &&
+          mobileHero.headline.bottom <= mobileHero.card.top && mobileHero.card.top < mobileHero.height,
+          JSON.stringify(mobileHero)),
+        ...Object.entries(homeLayouts).map(([layoutName, item]) => check(`${layoutName} 首页保持阅读布局的标题、输入区与控件`,
+          item.style === 'reader' && ready(item) && item.headline?.shown &&
+            inside(item.model, item.width) && (layoutName !== 'float' || item.homeDeck?.shown) &&
+            (layoutName !== 'studio' || (item.homePanel?.shown && item.heroMaxWidth === '720px')),
+          JSON.stringify(item))),
+        check('现有会话保留阅读栏、模型、权限和上下文控件',
+          [desktop, mobile].every((item) => item.style === 'reader' && ready(item) &&
+            [item.model, item.permission, item.meter].every((control) => withinCard(control, item.card)) && alignedEffort(item)),
+          JSON.stringify({ desktop, mobile })),
+        check('会话消息仍在页面里',
+          desktop.text.includes('hello there') && desktop.text.includes('Hello'), desktop.text.slice(0, 120)),
+        check('手机宽度保持输入区和控件可见',
+          [mobile, tight].every((item) => ready(item) && item.row !== null && item.row.over <= 0 &&
+            [item.model, item.permission, item.meter].every((control) => withinCard(control, item.card)) && alignedEffort(item)),
+          JSON.stringify({ mobile, tight })),
         check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
       ]
     },

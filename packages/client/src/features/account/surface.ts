@@ -68,9 +68,8 @@ export function createAccountSurface(options: {
    * leave, so the stylesheet holds it (the armed window, constants.ts) until
    * our rows are in the list AND its placement has stopped moving — a
    * placement read twice with the same value, after the rows landed. A card
-   * that carries no inline placement has nothing to wait for and is revealed
-   * as soon as the rows are in; one that never settles is revealed at the
-   * bound rather than staying unpainted. The watch stops with the card.
+   * that never settles, or one this host never places inline, is revealed at
+   * the bound rather than staying unpainted. The watch stops with the card.
    */
   function revealMenu(menu: HTMLElement) {
     if (menu.hasAttribute(ACCOUNT_READY_ATTR)) return
@@ -83,7 +82,7 @@ export function createAccountSurface(options: {
       const top = menu.style.top
       stable = rows && top !== '' && top === lastTop ? stable + 1 : 0
       lastTop = top
-      if (stable >= 1 || (rows && top === '') || tries >= 10) {
+      if (stable >= 1 || tries >= 10) {
         menu.setAttribute(ACCOUNT_READY_ATTR, '')
         return
       }

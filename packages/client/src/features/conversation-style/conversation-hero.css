@@ -1,5 +1,5 @@
 /* Empty sessions use the host's own hero stack. The home layout still owns
-   the order and contents of its dashboard; the conversation style gives that
+   the order and contents of its dashboard; the reading layout gives that
    stack room between the greeting and the composer. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style]:not([data-dsh-deepcraft-home-layout="studio"])
   [data-phase="hero"] [data-dsh-deepcraft-part~="scroll-body"] {
@@ -46,72 +46,6 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]
   margin-bottom: 14px;
 }
 
-/* The timeline uses the breadth of the conversation surface. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]:not([data-dsh-deepcraft-home-layout="studio"])
-  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-dsh-deepcraft-part~="composer-hero"] {
-  max-width: calc(100% - 32px);
-}
-
-/* ---------- spine: a left rail ahead of the input at the bottom ---------- */
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
-  [data-phase="hero"] [data-dsh-deepcraft-part~="hero-headline"] {
-  justify-content: flex-start;
-  text-align: left;
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
-  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-dsh-deepcraft-part~="composer-hero"] {
-  position: relative;
-  padding-left: var(--dsh-conversation-hero-rail-padding, 28px);
-  gap: 14px;
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
-  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-dsh-deepcraft-part~="composer-hero"]::before {
-  position: absolute;
-  top: 4px;
-  bottom: 4px;
-  left: 7px;
-  width: 0;
-  border-left: .5px solid var(--dsw-alias-border-l4);
-  content: var(--dsh-conversation-hero-rail-content, "");
-}
-
-/* The greeting marks the beginning of the empty conversation. Slot anchors
-   have no box of their own, so the marker belongs to the greeting itself. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
-  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-hero"] > [data-dsh-deepcraft-holds~="hero-headline"] {
-  position: relative;
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
-  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-hero"] > [data-dsh-deepcraft-holds~="hero-headline"]::before {
-  position: absolute;
-  top: 10px;
-  left: -25px;
-  width: 9px;
-  height: 9px;
-  box-sizing: border-box;
-  border: 1.5px solid var(--dsw-alias-state-business-primary);
-  border-radius: 50%;
-  background: var(--dsw-alias-state-business-primary);
-  content: var(--dsh-conversation-hero-rail-content, "");
-}
-
-@container (width <= 640px) {
-  body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
-    [data-phase="hero"] [data-dsh-deepcraft-part~="composer-hero"] {
-    --dsh-conversation-hero-rail-padding: 0px;
-    --dsh-conversation-hero-rail-content: none;
-  }
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"][data-dsh-deepcraft-mobile-portrait] {
-  --dsh-conversation-hero-rail-padding: 0px;
-  --dsh-conversation-hero-rail-content: none;
-}
-
 /* @composer-gate */
 
 /* ---------- reader: the card keeps the room the narrowed column leaves ---------- */
@@ -126,16 +60,4 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]
 body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="reader"]
   [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-composer-variant="hero"] > [data-dsh-deepcraft-part~="hero-workspace-row"] {
   border-radius: 0 0 24px 24px;
-}
-
-/* ---------- spine: the card squares into a rail-end ---------- */
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
-  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-composer-variant="hero"] [data-composer-card] {
-  border-radius: 6px;
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style="spine"]
-  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-composer-variant="hero"] > [data-dsh-deepcraft-part~="hero-workspace-row"] {
-  border-radius: 0 0 6px 6px;
 }

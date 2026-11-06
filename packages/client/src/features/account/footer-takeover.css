@@ -1,82 +1,14 @@
 /* ---------- Footer takeover ----------
-   Everything in this block modifies the HOST's own footer (it hides entries and
-   zeroes the containers that host them) and exists only because the skin
-   replaces that footer with its account row. The "Collapse the sidebar settings
-   area" preference turns the whole takeover off, so each rule below carries
-   data-dsh-deepcraft-footer-takeover — the skin sets it on <body> only while the takeover is on,
-   and with it absent the host footer renders exactly as shipped. */
-/* Hide the controls beside the account row while keeping containers intact for
-   modals. The trigger row is not settingsArea's child: it renders inside the
-   `sidebar.settings` slot anchor (a display:contents div), which the child
-   selector alone never crossed. The host's own account row is the skin's entry
-   where it exists (features/account/account-footer.ts marks it), so the row itself
-   stays and only the controls next to it — the connection pill — go. The
-   desktop update pill stays: the host parks it beside the account row as the
-   update's persistent surface, and it is the one settings-trigger button
-   carrying aria-disabled without a popup attribute. The account menu and its
-   sign-in dialog are portals and the settings panel is the row's sibling, so
-   all three still open. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~="foot-area"] > [data-dsh-deepcraft-part~="footer-actions"] :is([data-dsh-deepcraft-part~="footer-buttons"], > button) {
+   The skin's account row is the footer's entry, so the host's own settings
+   launcher steps aside: the account menu opens the same dialog. Every other
+   control the host draws in that area — the connection state, the update pill,
+   a plugin's entry — keeps its own node, its own box and its own behaviour.
+   The "Collapse the sidebar settings area" preference turns the takeover off,
+   so the rule below carries data-dsh-deepcraft-footer-takeover: the skin sets
+   it on <body> only while the takeover is on, and with it absent the host
+   footer renders exactly as shipped. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-host-settings-trigger] {
   display: none;
-}
-body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~="foot-area"] [data-dsh-deepcraft-part~="settings-trigger"] :is(button, [role="button"], a):not([data-dsh-deepcraft-account-host-row]):not(button[aria-disabled]:not([aria-haspopup])) {
-  display: none;
-}
-/* Both containers stay mounted at zero size so the overlays they host keep
-   painting, but the collapse must stay geometric. font-size and line-height
-   inherit, and the settings dialog mounts IN PLACE inside settingsArea (the
-   host renders its overlay as a sibling of the trigger row — no portal): the
-   dialog inherited font-size: 0 with line-height: 0px, so every text line
-   that sets an explicit font-size without its own line-height (the SubAgent
-   page's rows, the onboarding overlay) collapsed to a 0px line box and
-   vanished. settingsArea hosts nothing besides its display:none'd trigger row
-   and those in-place overlays, so it keeps only the geometric collapse and
-   hands real inherited metrics down; footerActions still hosts plain plugin
-   entries whose stray in-flow text only the zeroing keeps invisible, so the
-   full collapse stays there. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~="foot-area"] > [data-dsh-deepcraft-part~="settings-area"] {
-  position: static;
-  width: 0;
-  height: 0;
-  margin: 0;
-  padding: 0;
-  overflow: visible;
-}
-/* A settingsArea that holds the host's account row gets its box back: that row
-   has to paint in the footer, not inside a zero-sized cell. Everything else
-   keeps the geometric collapse. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~="foot-area"] > [data-dsh-deepcraft-part~="settings-area"][data-dsh-deepcraft-holds~="account-row"] {
-  width: 100%;
-  height: auto;
-}
-body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~="foot-area"] > [data-dsh-deepcraft-part~="footer-actions"] {
-  position: static;
-  width: 0;
-  height: 0;
-  margin: 0;
-  padding: 0;
-  line-height: 0;
-  font-size: 0;
-  overflow: visible;
-}
-
-/* Generic footer redirection. The unit the takeover collects is whatever the
-   footer holds: the `sidebar.footer.action` slot's entries, and a card a plugin
-   mounted beside them (features/account/footer-mirror.ts). Each one is marked
-   `data-dsh-deepcraft-footer-entry` and hidden in place once it is rebuilt into
-   the account popover. An entry that hosts a floating overlay (a fixed panel or
-   a dialog) keeps its subtree visible — the overlay must stay reachable after
-   the mirrored popover item opens it — while the entry's own box goes, so only
-   the overlay surfaces. A plugin writes its entry's box inline, which no plain
-   rule beats, so the box is taken away by weight: `display: contents` drops the
-   box and leaves the overlay laying out as if the entry were not there. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~="foot-area"] [data-dsh-deepcraft-footer-entry]:not([data-dsh-deepcraft-footer-hidden]) {
-  display: contents !important;
-}
-/* A collected entry goes whole, subtree and all. The weight here stands over
-   the plugin's own inline `display` on the entry it wrote. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~="foot-area"] [data-dsh-deepcraft-footer-hidden] {
-  display: none !important;
 }
 
 /* Collapsed rail mode adaptations */
@@ -129,18 +61,6 @@ body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="sidebar-root"][data-dsh-deep
   width: 12px;
   height: auto;
 }
-/* In the rail the account button is the only control; the settings entry lives
-   in the popover. The settings container is zero-sized rather than hidden (its
-   dialog must stay reachable), which is enough while the sidebar is wide — the
-   entry is squeezed to a 4px sliver. A plugin that ships its own rail variant
-   escapes that box instead: the settings plugin's `…_rail` trigger keeps its
-   full 36px square and lands straight on top of the Claude mark. Hide the entry
-   in the rail. Reachability is unaffected — the popover's settings item opens
-   the real trigger programmatically (`realTrigger.click()`), which
-   display:none does not block. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~="sidebar-root"][data-dsh-deepcraft-part~="sidebar-collapsed"] [data-dsh-deepcraft-part~="foot-area"] [data-dsh-deepcraft-part~="settings-area"] :is(button, [data-dsh-deepcraft-part~="settings-trigger"]):not([data-dsh-deepcraft-account-host-row]):not([data-dsh-deepcraft-holds~="account-row"]) {
-  display: none;
-}
 /* The rail's host account row is a 36px square with neither label nor chevron,
    matching the self-built trigger's rail shape. */
 body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="sidebar-root"][data-dsh-deepcraft-part~="sidebar-collapsed"] [data-dsh-deepcraft-account-host-row] {
@@ -153,29 +73,3 @@ body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="sidebar-root"][data-dsh-deep
 body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="sidebar-root"][data-dsh-deepcraft-part~="sidebar-collapsed"] [data-dsh-deepcraft-account-host-row]::after {
   display: none;
 }
-
-/* Embedded footer widgets: display-only plugin entries (progress bars,
-   status panels — the cost-meter balance/quota stack is the known case)
-   cannot collapse into a text menu item, so overrides.js embeds a live clone
-   of the entry into the popover. The embed sits above the action items with
-   a hairline separator; the cloned plugin markup keeps its own classes, so
-   the plugin's own stylesheet styles the content. */
-body[data-dsh-deepcraft] .dsh-deepcraft-popover-embed {
-  padding: 2px 2px 6px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid var(--dsw-alias-border-l2, #2e2c29);
-  border-radius: 7px;
-}
-
-body[data-dsh-deepcraft] .dsh-deepcraft-popover-embed[data-clickable] {
-  cursor: pointer;
-}
-
-body[data-dsh-deepcraft] .dsh-deepcraft-popover-embed[data-clickable]:hover {
-  background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
-}
-
-body[data-dsh-deepcraft]:not([data-ds-dark-theme]) .dsh-deepcraft-popover-embed {
-  border-bottom-color: var(--dsw-alias-border-l1);
-}
-

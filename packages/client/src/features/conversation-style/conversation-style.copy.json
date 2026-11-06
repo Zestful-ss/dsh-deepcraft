@@ -1,6 +1,0 @@
-{
-  "chatStyleTitle": { "zh": "对话样式", "en": "Conversation style" },
-  "chatStyleDesc": { "zh": "选择阅读栏或步骤时间线布局。", "en": "Choose a reading column or a timeline of steps." },
-  "chatStyleReader": { "zh": "阅读", "en": "Reader" },
-  "chatStyleSpine": { "zh": "时间线", "en": "Spine" }
-}

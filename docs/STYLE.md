@@ -701,14 +701,13 @@ and shows the Enter glyph; the others hide it. The card fades in and settles
 from 6px above at 98.5% scale over 0.18s; on close card and mask fade out
 together over 0.14s before the modal unmounts.
 
-## Conversation styles · 对话样式
+## Conversation layout · 对话布局
 
-The conversation setting selects one layout while leaving the host's message,
-tool and composer controls in place. Reader uses a centered 680px reading
-column and a floating, rounded composer. Spine marks conversation steps with a
-vertical rail and brings the composer to the bottom edge.
-The rail gives way on narrow screens, and the existing home-layout and composer
-restyle settings continue to govern their respective parts of the page.
+The reading column is the only arrangement: a centered 680px measure, a 20px
+lead above each turn's first user row, and a floating, rounded 720px composer.
+The host's message, tool and composer controls stay where the host draws them.
+The existing home-layout and composer restyle settings continue to govern their
+respective parts of the page.
 
 ## Chat / Code switch · 聊天 / 代码切换
 

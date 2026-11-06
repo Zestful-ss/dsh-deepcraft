@@ -126,10 +126,9 @@ function dsBotScenario({ check }) {
       await page.waitForTimeout(500)
       notes.code = await read(page)
 
-      // ds-bot's own controls: its footer button back to the Bot surface (the
-      // theme's footer keeps it out of sight, so it is pressed as the drawer
-      // presses it), then its own Agent mode item.
-      await page.evaluate(() => document.querySelector('.bt-return').click())
+      // ds-bot's own controls: its footer button back to the Bot surface, left
+      // where ds-bot drew it, then its own Agent mode item.
+      await page.locator('.bt-return').click()
       await settle(page, 'chat')
       notes.ownChat = await read(page)
       await page.locator('.bt-account').click()

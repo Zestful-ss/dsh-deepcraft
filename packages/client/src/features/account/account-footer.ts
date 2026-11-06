@@ -1,8 +1,8 @@
 import { ACCOUNT_ARMED_ATTR, AUTO_POPOVER_OFF } from '../../constants'
 import { findFootArea, findSidebarRoot } from '@dsh-deepcraft/engine/host'
+import { createStamp } from '@dsh-deepcraft/engine/dom'
 import { getUsername } from '../../shared/identity'
 import { readPrefs } from '../../core/prefs'
-import { createFooterMirror } from './footer-mirror'
 import { createHostAccountMenu } from './host-menu'
 import { createAccountProfile } from './profile'
 import { createAccountRows } from './rows'
@@ -29,8 +29,8 @@ export interface FooterHandle extends FeatureHandle {
  * injected into the host's own account menu; on a host without one (Web)
  * the skin self-builds the trigger and the popover and the popover's
  * body is the container. The rows themselves — the account header with the
- * hold-screen easter egg, the plugin footer entries (account/footer-mirror.ts)
- * and, on the self-built path only, the settings row — are shared.
+ * hold-screen easter egg and, on the self-built path only, the settings row —
+ * are shared. The host's own footer controls stay where the host drew them.
  *
  * The host's row is only marked, never copied or moved, so it keeps its own
  * labels, keyboard order and toggle. Our rows fold the host menu with an
@@ -43,6 +43,9 @@ export interface FooterHandle extends FeatureHandle {
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   /** The marker the stylesheet hangs the host account row's Claude shape on. */
   const HOST_ROW_ATTR = 'data-dsh-deepcraft-account-host-row'
+  /** The marker the stylesheet hides the host's own settings launcher on. */
+  const HOST_SETTINGS_TRIGGER_ATTR = 'data-dsh-deepcraft-host-settings-trigger'
+  const settingsTriggerStamp = createStamp<HTMLElement>(HOST_SETTINGS_TRIGGER_ATTR)
   const profile = createAccountProfile(ctx, () => {
     if (typeof ui.schedule === 'function') ui.schedule()
   })
@@ -77,14 +80,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     if (!accountPopover || !accountBtn) return
     cancelClosePopover()
     closeOtherPopovers('account')
-    // Mirrors are frozen while the popover is open (footer-mirror.sync
-    // bails), so reconcile them here — before the reveal — to show fresh
-    // content/order and bind click targets for the upcoming interaction.
-    // Opening must not fail because of a mirror sync; a failing one is reported.
-    try {
-      const footArea = findFootArea()
-      if (footArea) mirror.sync(footArea)
-    } catch (error) { reportError(error) }
     // Resolve the rail anchor before the reveal so the panel never paints at
     // its stale coordinates for a frame.
     positionAccountPopover()
@@ -176,12 +171,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     syntheticContainer() { return popoverBody },
     onMode: onSurfaceMode,
     onMenu: onHostMenuChanged
-  })
-  const mirror = createFooterMirror({
-    body() { return surface.container() },
-    anchor() { return settingsItem },
-    isOpen() { return surface.mode() === 'synthetic' && isPopoverOpen() },
-    close: closeSurface
   })
   // The account area takes part in the shared popover rule (shared/popover.ts):
   // ONE entry for both surfaces, since a given host has only one of them.
@@ -329,6 +318,10 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
         const escape = new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true })
         escape.__dshHostMenuEscape = true
         menu.dispatchEvent(escape)
+      } else {
+        // The poll pressed the trigger and no card followed (the host refused
+        // the open): the armed window ends here, watch and all.
+        disarmAccountMenu()
       }
       return
     }
@@ -508,7 +501,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * stylesheet's takeover rules gated on the same attribute, the footer then
    * renders exactly as shipped.
    */
-  function dropAccountFooter(footArea: Element | null) {
+  function dropAccountFooter() {
     cancelClosePopover()
     hostHoverIntent.cancel()
     // The drive that presses the host's own settings row stops with the footer
@@ -526,6 +519,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       document.body.style.removeProperty('--dsh-deepcraft-account-inset-right')
     }
     dropSynthetic()
+    settingsTriggerStamp.release()
     // The menu marker goes with the takeover: an open host menu must not
     // keep the skin's card styling after the footer is handed back.
     surface.clearMenu()
@@ -540,7 +534,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     }
     hostRowBindings.clear()
     unbindHostMenu()
-    if (footArea) mirror.clear(footArea)
   }
 
   /** The entry row's boxes, taken in the pass's read phase when the row already stands (D40). */
@@ -602,7 +595,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     if (footArea === null) return
 
     if (!readPrefs().collapseFooter) {
-      dropAccountFooter(footArea)
+      dropAccountFooter()
       return
     }
     surface.sync()
@@ -625,11 +618,11 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     syncAccountRowBox(entryRow, footArea)
     if (hostTrigger !== null) bindHostRowHover(hostTrigger)
 
-    // The host's footer entries are hidden in place on every pass, drawer or
-    // no drawer: the host re-renders them, and a pass that skipped this left
-    // their icons painted beside the account row until the drawer had been
-    // opened once. Only the mirroring needs a container to write into.
-    mirror.sync(footArea)
+    // The host's own settings launcher is the one control the takeover hides:
+    // the account row opens the same dialog. The connection state, the update
+    // pill and any other control the host draws keep their own box and their
+    // own behaviour.
+    settingsTriggerStamp.mark(hostMenu.settingsTrigger())
 
     const root = surface.mode() === 'host' ? surface.container() : accountPopover
     if (root === null) return
@@ -678,6 +671,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   return () => {
     profile.stop()
     unregisterPopover('account')
-    dropAccountFooter(findFootArea())
+    dropAccountFooter()
   }
 }

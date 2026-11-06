@@ -222,29 +222,15 @@
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=sidebar-root][data-dsh-deepcraft-part~=sidebar-collapsed] :is(.dsh-deepcraft-account-label,.dsh-deepcraft-account-chevron)",
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=sidebar-root][data-dsh-deepcraft-part~=sidebar-collapsed] .dsh-deepcraft-account-popover",
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=sidebar-root][data-dsh-deepcraft-part~=sidebar-collapsed] [data-dsh-deepcraft-account-menu]",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~=sidebar-root][data-dsh-deepcraft-part~=sidebar-collapsed] [data-dsh-deepcraft-part~=foot-area] [data-dsh-deepcraft-part~=settings-area] :is(button,[data-dsh-deepcraft-part~=settings-trigger]):not([data-dsh-deepcraft-account-host-row]):not([data-dsh-deepcraft-holds~=account-row])",
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=sidebar-root][data-dsh-deepcraft-part~=sidebar-collapsed] [data-dsh-deepcraft-account-host-row]"
       ]
     },
     {
-      "reason": "宿主的账户菜单与它的账户行：只在桌面外壳里出现，走查跑在网页外壳",
+      "reason": "账户菜单的个别状态：准备窗口的第一帧、暗色下的菜单、菜单底栏与选中项，走查的页面不出现这些形态",
       "selectors": [
         "body[data-dsh-deepcraft][data-ds-dark-theme] :is([data-dsh-deepcraft-account-menu],[data-dsh-deepcraft-hero-menu])",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-account-host-row]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-account-host-row] img",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=foot-area] [data-dsh-deepcraft-part~=settings-trigger][data-dsh-deepcraft-holds~=account-row]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=foot-area] [data-dsh-deepcraft-part~=settings-trigger] [data-dsh-deepcraft-holds~=account-row]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-account-inject",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu]",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette=claude] [data-dsh-deepcraft-account-menu]",
         "body[data-dsh-deepcraft][data-dsh-deepcraft-account-armed] div[role=menu][data-menu-material]:not([data-dsh-deepcraft-account-ready])",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-account-armed] div[role=menu][data-menu-material][data-dsh-deepcraft-account-ready]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] [data-dsh-deepcraft-part~=menu-item]>[role=menuitem]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] [role=separator]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] [data-dsh-deepcraft-part~=menu-viewport]",
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] [data-dsh-deepcraft-part~=menu-footer]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] .dsh-deepcraft-account-inject",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~=foot-area]>[data-dsh-deepcraft-part~=settings-area][data-dsh-deepcraft-holds~=account-row]",
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] [data-dsh-deepcraft-part~=menu-item-selected]"
       ]
     },
@@ -326,7 +312,6 @@
       "reason": "自定义品牌：走查一次只写一个标记，读者提供的图形与文字不在页面上",
       "selectors": [
         "body[data-dsh-deepcraft] .dsh-deepcraft-masked-mark",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-masked-word",
         "body[data-dsh-deepcraft][data-dsh-deepcraft-custom-mark] [data-dsh-deepcraft-part~=hero-mark]",
         "body[data-dsh-deepcraft][data-dsh-deepcraft-custom-mark][data-dsh-deepcraft-custom-tint] :is([data-dsh-deepcraft-part~=brand-mark],[data-dsh-deepcraft-part~=rail-mark])",
         "body[data-dsh-deepcraft][data-dsh-deepcraft-custom-mark][data-dsh-deepcraft-custom-tint] [data-dsh-deepcraft-part~=hero-mark]",
@@ -356,11 +341,7 @@
         "body[data-dsh-deepcraft] .dsh-deepcraft-popover-status",
         "body[data-dsh-deepcraft] .dsh-deepcraft-popover-item-badge",
         "body[data-dsh-deepcraft] .dsh-deepcraft-popover-item.dsh-deepcraft-popover-item-stale .dsh-deepcraft-popover-item-text",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-popover-item.dsh-deepcraft-popover-item-stale .dsh-deepcraft-popover-item-badge",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=foot-area]>.dsh-deepcraft-popover-item",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-popover-embed",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-popover-embed[data-clickable]",
-        "body[data-dsh-deepcraft]:not([data-ds-dark-theme]) .dsh-deepcraft-popover-embed"
+        "body[data-dsh-deepcraft] .dsh-deepcraft-popover-item.dsh-deepcraft-popover-item-stale .dsh-deepcraft-popover-item-badge"
       ]
     },
     {
@@ -411,7 +392,6 @@
       "reason": "设置页里的个别状态：出错、按下、展开、选好图片",
       "selectors": [
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-error",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-settings-switch[data-moved][data-on] .dsh-deepcraft-settings-switch-knob",
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-picker[aria-expanded=true]",
         "body[data-dsh-deepcraft] .dsh-deepcraft-brand-image-preview>img",
         "body[data-dsh-deepcraft] .dsh-deepcraft-brand-image-error"
@@ -447,17 +427,8 @@
     {
       "reason": "宿主品牌标志在首页上的形态：走查写品牌标记时不在首页",
       "selectors": [
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-brand=deepseek] [data-dsh-deepcraft-part~=hero-mark] svg",
         "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced] [data-dsh-deepcraft-part~=hero-mark]",
         "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced] [data-dsh-deepcraft-part~=hero-mark]+[data-dsh-deepcraft-part~=hero-title-group]"
-      ]
-    },
-    {
-      "reason": "底部接管：临时宿主的页脚没有那些按钮",
-      "selectors": [
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~=foot-area]>[data-dsh-deepcraft-part~=footer-actions] :is([data-dsh-deepcraft-part~=footer-buttons],>button)",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~=foot-area] [data-dsh-deepcraft-footer-hidden]",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-part~=foot-area] [data-dsh-deepcraft-footer-entry]:not([data-dsh-deepcraft-footer-hidden])"
       ]
     },
     {
@@ -531,23 +502,9 @@
       ]
     },
     {
-      "reason": "皮肤自己的归档视图与设置分区：走查没有打开归档视图，也没有走到设置页的这一项",
-      "selectors": [
-        "body[data-dsh-deepcraft] button[data-dsh-section=deepcraft] [data-dsh-deepcraft-part~=nav-icon]",
-        "body[data-dsh-deepcraft] button[data-dsh-section=deepcraft]",
-        "body[data-dsh-deepcraft]:not([data-ds-dark-theme]) button[data-dsh-section=deepcraft]"
-      ]
-    },
-    {
       "reason": "减少动效配上等待行的状态动效：走查把动画偏好与等待行的状态动效分开走",
       "selectors": [
         "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced][data-dsh-deepcraft-status-motion=wash] .dsh-deepcraft-chat-wait .dsh-deepcraft-swap-shimmer"
-      ]
-    },
-    {
-      "reason": "减少动效配上正在进行的会话行：走查写动画偏好时那一轮已经落定，侧栏里没有正在进行的会话",
-      "selectors": [
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced] svg[data-state=ongoing]"
       ]
     },
     {
@@ -592,6 +549,12 @@
       "either": true,
       "selectors": [
         "body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-search-key"
+      ]
+    },
+    {
+      "reason": "底部接管只隐藏宿主的设置启动器：网页外壳的入口就是账户菜单按钮，皮肤不会把它标记为对话框启动器",
+      "selectors": [
+        "body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-host-settings-trigger]"
       ]
     }
   ]

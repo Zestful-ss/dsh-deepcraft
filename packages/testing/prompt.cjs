@@ -7,6 +7,7 @@
  * the same way, so both import them from here.
  */
 'use strict'
+const { dismissOverlays } = require('./dsh-web.cjs')
 
 /** The host's own marks this module waits on; each is a D3 entry in packages/contracts/src/dom.ts. */
 const HOST = {
@@ -17,7 +18,7 @@ const HOST = {
 }
 
 /** Type a prompt into the composer and send it, the way a reader does. */
-async function sendPrompt(page, text) {
+async function typeAndSend(page, text) {
   await page.waitForSelector(HOST.composer, { timeout: 60000 })
   // Focused by the element, not by a press at a point: on a fresh page the
   // sidebar is still settling, and a press aimed at the composer's centre
@@ -49,6 +50,28 @@ async function sendPrompt(page, text) {
       }
     }, HOST.composer).catch(() => null)
     throw new Error(`the composer did not hand the prompt to a turn: ${JSON.stringify({ typed: text, ...state })}`)
+  }
+}
+
+/**
+ * Type a prompt into the composer and send it.
+ *
+ * A fresh host can mount its first-run notice after the lane has answered the
+ * overlays it could see — the notice waits on the plugin inventory — and the
+ * mask then takes the press the composer receives while Enter is typed. An
+ * overlay open on a prompt that produced no row is answered here and the
+ * prompt is sent once more.
+ */
+async function sendPrompt(page, text) {
+  try {
+    await typeAndSend(page, text)
+  } catch (error) {
+    const overlayOpen = await page.locator('[role="dialog"]:visible').count() > 0
+    if (!overlayOpen || !(await dismissOverlays(page))) throw error
+    await page.evaluate((selector) => document.querySelector(selector)?.focus(), HOST.composer)
+    await page.keyboard.press('Control+A')
+    await page.keyboard.press('Backspace')
+    await typeAndSend(page, text)
   }
 }
 

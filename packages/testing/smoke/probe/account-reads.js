@@ -62,10 +62,13 @@
       }
       r.skinPixels = { face: pixelAt(32, 32), hatTop: pixelAt(2, 2), hatBottom: pixelAt(62, 62), margin: pixelAt(62, 30) }
     }
-    var mirrored = drawer ? drawer.querySelector('[data-action-index]') : null
-    r.mirroredText = mirrored ? mirrored.querySelector('.dsh-deepcraft-popover-item-text').textContent : null
-    var badge = mirrored ? mirrored.querySelector('.dsh-deepcraft-popover-item-badge') : null
-    r.mirroredBadge = badge ? badge.textContent : null
+    var pluginAction = document.getElementById('plugin-action')
+    r.footerPluginAction = pluginAction === null ? null : {
+      label: pluginAction.getAttribute('aria-label'),
+      badge: pluginAction.getAttribute('data-cordis-badge'),
+      display: getComputedStyle(pluginAction).display,
+      visible: pluginAction.getBoundingClientRect().width > 0 && pluginAction.getBoundingClientRect().height > 0,
+    }
     r.stylesheet = !!document.getElementById('dsh-deepcraft-style')
     // The skin's sheet wears this package's own module-system tags (D9): the
     // host's claim sweep reads untagged tags alone, so a tagged sheet cannot be

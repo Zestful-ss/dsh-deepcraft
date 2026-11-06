@@ -201,8 +201,3 @@ body[data-dsh-deepcraft] .dsh-deepcraft-popover-item.dsh-deepcraft-popover-item-
 body[data-dsh-deepcraft] .dsh-deepcraft-popover-item.dsh-deepcraft-popover-item-stale .dsh-deepcraft-popover-item-badge {
   background: transparent !important;
 }
-
-/* Ensure popover items only display inside the popover */
-body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="foot-area"] > .dsh-deepcraft-popover-item {
-  display: none !important;
-}

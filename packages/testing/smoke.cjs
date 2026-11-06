@@ -29,11 +29,13 @@
  *                folds the one before it — the skin's own cards and the host's
  *                hero menu alike;
  *   - desktop    the 0.1.7 desktop footer: the host's own account row is the
- *                entry, and our container is injected into its account menu —
- *                first child, self-healing across a host re-render, reachable
- *                by the host's keyboard walk, and gone when the menu closes;
+ *                entry, its own entries stay in place with their own boxes, and
+ *                our container is injected into its account menu — first child,
+ *                self-healing across a host re-render, and gone when the menu
+ *                closes;
  *   - markup     strings from settings, the account service and plugins render
- *                as text, never as markup;
+ *                as text, never as markup, and a plugin's own footer entry is
+ *                left to the host;
  *   - isolation  a host API that breaks one feature — at install or at sync —
  *                retires only that feature and hands its surface back (D12);
  *   - deepy      the DeepSeek brand: the whale stands on the home card and on
