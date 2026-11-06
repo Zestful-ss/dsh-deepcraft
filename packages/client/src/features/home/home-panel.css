@@ -300,24 +300,58 @@ body[data-dsh-deepcraft] [data-dsh-deepcraft-home-float] [data-dsh-deepcraft-par
   display: flex;
   order: 3;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   box-sizing: border-box;
-  width: 100%;
+  /* The capsule's own side clearance: the deck's cards line up with the card
+     and the tray instead of overhanging them by the stack's edges. */
+  width: calc(100% - var(--dsh-composer-side-clearance, 0px) - var(--dsh-composer-side-clearance, 0px));
   max-width: 720px;
-  margin: 18px auto 0;
+  margin: 16px auto 0;
   padding-bottom: 8px;
 }
 
-/* The pill stands below the desktop shell's caption row (its own height is the
-   token), and it takes no pointer: it is a reading, and the row above it is the
-   window's drag and button strip. */
+/* The float home is one block: the reading sheet's hero keeps the greeting at
+   the top and pushes the composer to the bottom of the page, which spreads them
+   over the whole height. With the deck under the capsule the three parts travel
+   together, centred by auto margins; a short window collapses those margins and
+   the scroll body scrolls the block as usual. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style][data-dsh-deepcraft-page-look][data-dsh-deepcraft-home-layout="float"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-dsh-deepcraft-part~="composer-hero"] {
+  flex: 0 0 auto;
+  margin-block: auto;
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style][data-dsh-deepcraft-page-look][data-dsh-deepcraft-home-layout="float"]
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-hero"] > [data-slot="conversation.composer.bar"] > * {
+  margin-top: 0;
+}
+
+/* A pet stands on the card's top edge, and the float home keeps that edge 14px
+   under the greeting: with the card's own inset the body lands on the greeting's
+   last word. On a wide page the pet hangs over the card's corner instead, clear
+   of the words, while its feet keep the same edge; a phone-width card has no
+   margin to hang into. */
+@media (min-width: 900px) {
+  body[data-dsh-deepcraft][data-dsh-deepcraft-chat-style][data-dsh-deepcraft-page-look][data-dsh-deepcraft-home-layout="float"]
+    [data-phase="hero"] :is([data-dsh-deepcraft-deepy-anchor="card"] > .dsh-deepcraft-deepy,
+      [data-dsh-deepcraft-crab-anchor="card"] > .dsh-deepcraft-crab,
+      [data-dsh-deepcraft-petdex-anchor="card"] > .dsh-deepcraft-petdex) {
+    right: -24px;
+  }
+}
+
+/* The week's roll-up is a reading, not a control: it takes no pointer. It is
+   the deck's own header row, right-aligned over the cards and inside the
+   block's width; it used to float in the window's corner, where it read as a
+   stray tag rather than part of the page. */
 body[data-dsh-deepcraft] .dsh-deepcraft-home-week {
-  position: fixed;
-  top: calc(var(--dsh-windows-titlebar-height, 0px) + 16px);
-  right: 24px;
   display: inline-flex;
+  align-self: flex-end;
   align-items: center;
   gap: 10px;
+  margin: 0;
   padding: 6px 14px;
   border: 1px solid var(--dsw-alias-border-l1);
   border-radius: 9999px;
@@ -328,7 +362,6 @@ body[data-dsh-deepcraft] .dsh-deepcraft-home-week {
   font-size: 12px;
   font-weight: 500;
   line-height: 18px;
-  z-index: var(--dsh-deepcraft-layer-control);
   pointer-events: none;
   box-shadow: 0 1px 2px rgba(20, 20, 19, 0.05);
 }

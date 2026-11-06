@@ -1,0 +1,8 @@
+{
+  "group": "improvements",
+  "order": 0,
+  "external": false,
+  "at": "2026-11-07",
+  "zh": "收紧浮层首页：问候、输入胶囊与浮层卡片收成一个居中的块，浮卡与胶囊同宽，周统计并入浮层，宠物让开标题。",
+  "en": "Tighten the floating home: the greeting, the composer capsule and the suggestion cards form one centred block, the deck matches the capsule's width, the week's roll-up sits in the deck, and the pet clears the greeting."
+}

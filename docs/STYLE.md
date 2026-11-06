@@ -781,9 +781,9 @@ scrolling.
 
 ## Home layouts · 首页版面
 
-The new-conversation page has two arrangements. `homeLayout` (settings: Home
+The new-conversation page has three arrangements. `homeLayout` (settings: Home
 layout) writes `data-dsh-claude-home-layout` onto `<body>` and
-`packages/client/src/features/home/home-panel.css` branches on it. Both are the host's own
+`packages/client/src/features/home/home-panel.css` branches on it. All three are the host's own
 hero markup — the greeting, the workspace row, the dock and the composer card
 inside `…_composerStack …_composerHero` — so only the arrangement differs.
 
@@ -795,6 +795,17 @@ inside `…_composerStack …_composerHero` — so only the arrangement differs.
 | permission control | the segment group | the conversation's trigger and its card |
 | workspace / preset row | the card's footer tray | hairline chips directly above the card |
 | column width | the hero's centred box | a 720px composer column; the greeting and the panel form a 480px block against its left edge |
+
+**The floating form.** The third arrangement puts the suggestion deck under the
+capsule (`features/home/float-deck.ts`): the greeting, the capsule and the deck
+travel as one block, centred by the stack's auto margins so a short window
+scrolls it rather than clipping its top. The deck keeps the capsule's side
+clearance, so its cards and the recent chips line up with the card and the tray
+instead of overhanging them. The week's roll-up is the deck's header row,
+right-aligned over the cards rather than a pill in the window's corner. The card
+and the tray keep the capsule's silhouette — the card gives up its bottom
+corners, the tray closes them — and a pet standing on the card's top edge hangs
+over its right corner, clear of the greeting's last word.
 
 The studio composer is stamped `data-composer-variant="inline"` (composer.ts's
 pass reads the same preference), so the home card is drawn by the conversation's

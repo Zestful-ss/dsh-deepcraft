@@ -302,6 +302,14 @@ body[data-dsh-deepcraft][data-ds-dark-theme][data-dsh-deepcraft-page-look="float
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
+/* The reading layout's hero card is a 24px block with all four corners; where
+   the tray closes the capsule underneath, the card gives up its bottom corners
+   so the two halves read as one silhouette. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"][data-dsh-deepcraft-chat-style]:not([data-dsh-deepcraft-home-layout="studio"])
+  [data-phase="hero"] [data-dsh-deepcraft-part~="composer-stack"][data-composer-variant="hero"] [data-composer-card] {
+  border-radius: 24px 24px 0 0;
+}
+
 /* The tray's triggers were chips with a hairline; on the capsule they are pills
    that carry the same outline as the circle plates beside them. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="hero-workspace-row"] :is(button, [role="button"]) {
