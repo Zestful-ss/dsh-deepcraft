@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.25.2] - 2026-11-06
 
-<h3 id="cn-unreleased">体验优化</h3>
+[中文](#cn-0.25.2) | [English](#en-0.25.2)
+
+<h3 id="cn-0.25.2">体验优化</h3>
 
 - 收紧浮层首页：问候、输入胶囊与浮层卡片收成一个居中的块，浮卡与胶囊同宽，周统计并入浮层，宠物让开标题。
 
-<h3 id="en-unreleased">Improvements</h3>
+<h3 id="en-0.25.2">Improvements</h3>
 
 - Tighten the floating home: the greeting, the composer capsule and the suggestion cards form one centred block, the deck matches the capsule's width, the week's roll-up sits in the deck, and the pet clears the greeting.
 
