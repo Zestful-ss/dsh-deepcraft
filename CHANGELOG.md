@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.26.0] - 2026-11-07
 
-<h3 id="cn-unreleased">新增功能</h3>
+[中文](#cn-0.26.0) | [English](#en-0.26.0)
+
+<h3 id="cn-0.26.0">新增功能</h3>
 
 - 新增深海蓝、暖橙与森林绿三套独立配色，各自覆盖浅色与深色；切换配色只换颜色，不再连标志、名称或宠物一起换。
 
@@ -18,7 +20,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - 移除主题自带的 Claude 品牌档、标志与账户暂停彩蛋；品牌名称、标志、字标与强调色仍可自行设置，旧配置中的品牌与宠物选择会自动迁移。
 
-<h3 id="en-unreleased">New Features</h3>
+<h3 id="en-0.26.0">New Features</h3>
 
 - Add three independent palettes — ocean blue, warm ember and forest green — each with its own light and dark colours; switching changes colours alone, not the mark, name or pet.
 
