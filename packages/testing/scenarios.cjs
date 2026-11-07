@@ -5,8 +5,8 @@
  * this one (a `*Scenario` export), registered in the table below.
  *
  * A scenario is `{ script, prompt, delayMs?, viewport?, patch?, profilePatch?,
- * hostArgs?, browserArgs?, plugins?, initScript?, beforeSend?, duringTurn?,
- * afterTurn?, assert }`: `script` names the model's answer
+ * hostArgs?, browserArgs?, plugins?, prepareHome?, initScript?, beforeSend?,
+ * duringTurn?, afterTurn?, assert }`: `script` names the model's answer
  * (packages/testing/mock-llm.cjs), `patch` adds a loader overlay, and
  * `profilePatch` supplies the writable user layer. `hostArgs` and `browserArgs`
  * reach the host's and browser's command lines; `plugins` installs other plugins
@@ -39,6 +39,7 @@ const { deepcraftScenario } = require('./deepcraft.cjs')
 const { petdexScenario } = require('./petdex.cjs')
 const { paletteScenario, legacyScenario } = require('./palette.cjs')
 const { subagentModelScenario } = require('./subagent-model.cjs')
+const { workspacePinsScenario } = require('./workspace-pins.cjs')
 const { dsBotScenario } = require('./ds-bot.cjs')
 const { desktopHeaderScenario } = require('./desktop-header.cjs')
 const { modelSlotScenario } = require('./model-slot.cjs')
@@ -578,6 +579,8 @@ const SCENARIOS = {
   dsBot: dsBotScenario({ check }),
   /** The composer's subagent model entry: one pick, its record, and its reload (packages/testing/subagent-model.cjs). */
   subagentModel: subagentModelScenario({ check }),
+  /** The pinned aggregate above every workspace, through the host's own menus (packages/testing/workspace-pins.cjs). */
+  workspacePins: workspacePinsScenario({ check }),
   /** The model picker follows the host slot when its control is removed and restored. */
   modelSlot: modelSlotScenario({ check }),
   /** Both palettes captured to the run's out directory and swept for personal data. */

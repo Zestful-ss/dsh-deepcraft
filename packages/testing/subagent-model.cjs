@@ -13,6 +13,7 @@ const fs = require('node:fs')
 const path = require('node:path')
 const { sendPrompt, waitForTurn } = require('./prompt.cjs')
 const { DEFAULT_LOG } = require('./mock-llm.cjs')
+const { openSkinSettings, setAccentColor } = require('./settings-route.cjs')
 
 /**
  * Every request the scripted model received since `since`, as raw bodies.
@@ -44,6 +45,9 @@ const ROUTES = [
   { provider: PROVIDER, model: 'deepseek-flash' },
   { provider: PROVIDER, model: 'deepseek-v4-pro' },
   { provider: PROVIDER, model: LONG_MODEL },
+  // The capsule's own fourth route: the host policy takes it without the
+  // catalog naming it, so the count can reach the top rung.
+  { provider: PROVIDER, model: `${LONG_MODEL}-capsule` },
 ]
 
 /**
@@ -185,6 +189,61 @@ async function waitForLabel(page, text, timeout = 8000) {
 async function waitForState(page, state, timeout = 8000) {
   await page.waitForFunction((wanted) => document.querySelector(wanted.selector)?.getAttribute('data-dsh-subagent-model') === wanted.state,
     { selector: TRIGGER, state }, { timeout }).catch(() => {})
+}
+
+/** The capsule mark's value, both halves' boxes and their computed outline colours. */
+function readCapsule(page) {
+  return page.evaluate((selectors) => {
+    const parent = document.querySelector(selectors.capsule)
+    const subagent = document.querySelector(selectors.trigger)
+    const model = document.querySelector(selectors.model)
+    const box = (element) => {
+      if (element === null) return null
+      const rect = element.getBoundingClientRect()
+      return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height }
+    }
+    const colour = (shadow) => String(shadow).match(/rgba?\([^)]+\)/)?.[0] ?? String(shadow)
+    return {
+      value: parent?.getAttribute(selectors.attr) ?? null,
+      label: subagent?.getAttribute('aria-label') ?? '',
+      subagent: box(subagent),
+      model: box(model),
+      subagentColour: colour(subagent === null ? '' : getComputedStyle(subagent).boxShadow),
+      modelColour: colour(model === null ? '' : getComputedStyle(model).boxShadow),
+      parentDisplay: parent === null ? null : getComputedStyle(parent).display,
+      gap: parent === null ? null : getComputedStyle(parent).gap,
+    }
+  }, { capsule: '[data-dsh-deepcraft-model-capsule]', attr: 'data-dsh-deepcraft-model-capsule', trigger: TRIGGER, model: '.dsh-deepcraft-model-visual' })
+}
+
+/** Wait until the capsule carries `value`; the write follows the host's answer. */
+function waitForCapsule(page, value, timeout = 10000) {
+  return page.waitForFunction((wanted) => document.querySelector(wanted.selector)?.getAttribute(wanted.attr) === wanted.value,
+    { selector: '[data-dsh-deepcraft-model-capsule]', attr: 'data-dsh-deepcraft-model-capsule', value }, { timeout })
+    .then(() => true, () => false)
+}
+
+/** The capsule's rung and the edge colour the page's own tokens resolve to. */
+function readCapsuleEdge(page, selector) {
+  return page.evaluate((selector) => {
+    const part = document.querySelector(`${selector} [data-dsh-deepcraft-model-capsule-part="subagent"]`)
+    const parent = document.querySelector(selector)
+    const body = getComputedStyle(document.body)
+    const probe = document.createElement('span')
+    probe.style.color = body.getPropertyValue('--dsw-alias-state-business-primary').trim()
+    document.body.appendChild(probe)
+    const expected = getComputedStyle(probe).color
+    probe.remove()
+    return {
+      value: parent?.getAttribute('data-dsh-deepcraft-model-capsule') ?? null,
+      palette: document.body.getAttribute('data-dsh-deepcraft-palette'),
+      dark: document.body.hasAttribute('data-ds-dark-theme'),
+      accent: document.body.hasAttribute('data-dsh-deepcraft-accent'),
+      edge: (String(part === null ? '' : getComputedStyle(part).boxShadow).match(/rgba?\([^)]+\)/) ?? [''])[0],
+      expected,
+      radius: part === null ? null : getComputedStyle(part).borderTopLeftRadius,
+    }
+  }, selector)
 }
 
 /** The catalog's own name for the first route's model. */
@@ -413,6 +472,131 @@ function subagentModelScenario({ check }) {
           Array.isArray(firstRecord.selected) && firstRecord.selected.length === 1 && firstRecord.selected[0].model === ROUTES[0].model &&
           firstRecord.selected[0].reasoningEffort === 'off',
         JSON.stringify({ second: secondRecord.selected, first: firstRecord.selected })))
+
+      // The capsule: no pick, then every rung the count can reach.
+      await ensureCardOpen(page)
+      await page.click(`${CARD}[data-open="true"] ${CLEAR}`)
+      const atZero = await waitForCapsule(page, '0')
+      const zero = await readCapsule(page)
+      const rungs = []
+      for (let n = 1; n <= ROUTES.length; n++) {
+        await ensureCardOpen(page)
+        await page.click(`${CARD}[data-open="true"] ${ENTRY}:nth-child(${n}) ${OPTION}`, { timeout: 5000 }).catch(() => {})
+        // The count in the accessible name is the host's answer; the capsule
+        // value alone repeats its previous rung until the write lands.
+        await waitForLabel(page, String(n), 15000)
+        const wanted = String(Math.min(n, 3))
+        if (!await waitForCapsule(page, wanted)) break
+        rungs.push(await readCapsule(page))
+      }
+      const atOne = rungs[0]
+      const atTwo = rungs[1]
+      const atThree = rungs[2]
+      const atFour = rungs[3]
+      const colours = [zero, atOne, atTwo, atThree].map((reading) => reading?.subagentColour ?? '')
+      checks.push(check('未选时入口已排成胶囊，外框是中性色', atZero && zero.value === '0' && zero.parentDisplay === 'flex' && zero.gap === '0px' && zero.subagentColour !== '', JSON.stringify(zero)))
+      checks.push(check('选择 1、2、3 条各取一档外框颜色，三档互不相同',
+        colours.length === 4 && new Set(colours).size === 4, JSON.stringify(colours)))
+      checks.push(check('第 4 条选择停在同一最高档，两半外框同色且等高相接',
+        atFour !== undefined && atFour.value === '3' && atFour.subagentColour === atThree?.subagentColour &&
+          atFour.subagent !== null && atFour.model !== null &&
+          Math.round(atFour.subagent.height) === 28 && Math.round(atFour.model.height) === 28 &&
+          Math.abs(atFour.subagent.right - atFour.model.left) <= 1,
+        JSON.stringify(atFour)))
+      checks.push(check('无障碍名称与鼠标提示说出未选、1 条与 4 条',
+        /未选择|none selected/i.test(zero.label) && /1/.test(atOne?.label ?? '') && /4/.test(atFour?.label ?? ''),
+        JSON.stringify({ zero: zero.label, one: atOne?.label, four: atFour?.label })))
+
+      // The two menus stay independent: opening one folds the other.
+      await page.keyboard.press('Escape')
+      await page.click('.dsh-deepcraft-model-visual')
+      await page.waitForSelector('.dsh-deepcraft-model-popover:not(.dsh-deepcraft-model-popover-sub)[data-open="true"]', { timeout: 5000 }).catch(() => {})
+      await page.click(TRIGGER)
+      await page.waitForSelector(`${CARD}[data-open="true"]`, { timeout: 5000 }).catch(() => {})
+      const menus = await page.evaluate((selectors) => ({
+        model: document.querySelector(selectors.model) !== null,
+        subagent: document.querySelector(selectors.card) !== null,
+      }), { model: '.dsh-deepcraft-model-popover:not(.dsh-deepcraft-model-popover-sub)[data-open="true"]', card: `${CARD}[data-open="true"]` })
+      checks.push(check('打开子代理面板会收起主模型面板，两个入口都可打开', menus.subagent && !menus.model, JSON.stringify(menus)))
+      await page.keyboard.press('Escape')
+
+      // A reload keeps the count, and each session draws its own.
+      await page.reload({ waitUntil: 'domcontentloaded' })
+      await page.waitForSelector(TRIGGER, { timeout: 20000 }).catch(() => {})
+      const keptCount = await waitForCapsule(page, '3')
+      await waitForLabel(page, '4', 15000)
+      const afterReload = await readCapsule(page)
+      await page.click(`[data-row-key="session:${firstSession}"]`)
+      await page.waitForFunction((id) => (document.querySelector('[data-conversation-session]')?.getAttribute('data-conversation-session') ?? '') === id, firstSession, { timeout: 15000 }).catch(() => {})
+      const firstDrawn = await waitForCapsule(page, '1')
+      const inFirst = await readCapsule(page)
+      checks.push(check('刷新后颜色按保存的数量恢复，切换会话后换成该会话自己的数量',
+        keptCount && afterReload.value === '3' && firstDrawn && inFirst.value === '1', JSON.stringify({ afterReload: afterReload.value, first: inFirst.value })))
+
+      // Back to the session with four routes for the theme and width readings.
+      await page.click(`[data-row-key="session:${secondSession}"]`)
+      await page.waitForFunction((id) => (document.querySelector('[data-conversation-session]')?.getAttribute('data-conversation-session') ?? '') === id, secondSession, { timeout: 15000 }).catch(() => {})
+      await waitForCapsule(page, '3')
+
+      // Every built-in palette, the host palette, both light and dark, and a
+      // custom accent: the top rung always resolves to the page's own accent.
+      await openSkinSettings(page)
+      await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: /^(外观|Appearance)$/ }).first().click()
+      const paletteReadings = []
+      const paletteIds = ['ocean', 'ember', 'forest', 'host']
+      for (let i = 0; i < paletteIds.length; i++) {
+        await page.locator('.dsh-deepcraft-palette-options button').nth(i).click()
+        await page.waitForFunction((id) => document.body.getAttribute('data-dsh-deepcraft-palette') === id, paletteIds[i], { timeout: 15000 }).catch(() => {})
+        const light = await readCapsuleEdge(page, '[data-dsh-deepcraft-model-capsule]')
+        await page.evaluate(() => document.body.setAttribute('data-ds-dark-theme', ''))
+        await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))))
+        const dark = await readCapsuleEdge(page, '[data-dsh-deepcraft-model-capsule]')
+        await page.evaluate(() => document.body.removeAttribute('data-ds-dark-theme'))
+        paletteReadings.push({ palette: paletteIds[i], light, dark })
+      }
+      checks.push(check('四套配色在浅色和深色下都把最高档画成当前强调色',
+        paletteReadings.every(({ light, dark }) => light.value === '3' && dark.value === '3' &&
+          light.edge === light.expected && dark.edge === dark.expected &&
+          light.palette !== null && dark.palette === light.palette),
+        JSON.stringify(paletteReadings.map(({ palette, light, dark }) => ({ palette, light: [light.edge, light.expected], dark: [dark.edge, dark.expected] })))))
+
+      await page.locator('.dsh-deepcraft-palette-options button').nth(0).click()
+      await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-palette') === 'ocean', undefined, { timeout: 15000 }).catch(() => {})
+      await setAccentColor(page, '#1a7f5a')
+      await page.waitForFunction(() => document.body.hasAttribute('data-dsh-deepcraft-accent'), undefined, { timeout: 15000 }).catch(() => {})
+      const accentReading = await readCapsuleEdge(page, '[data-dsh-deepcraft-model-capsule]')
+      checks.push(check('自定义强调色接管最高档外框', accentReading.accent && accentReading.value === '3' && accentReading.edge === accentReading.expected,
+        JSON.stringify({ accent: accentReading.accent, edge: accentReading.edge, expected: accentReading.expected })))
+
+      const pageLookRow = page.locator('.dsh-deepcraft-settings-row').filter({ has: page.locator('.dsh-deepcraft-settings-row-title').filter({ hasText: /^(界面层次|Page look)$/ }) }).first()
+      await pageLookRow.locator('button').filter({ hasText: /^(平铺|Flat)$/ }).click()
+      await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-page-look') === 'flat', undefined, { timeout: 15000 }).catch(() => {})
+      await waitForCapsule(page, '3')
+      const flat = await readCapsuleEdge(page, '[data-dsh-deepcraft-model-capsule]')
+      await pageLookRow.locator('button').filter({ hasText: /^(浮层|Floating)$/ }).click()
+      await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-page-look') === 'float', undefined, { timeout: 15000 }).catch(() => {})
+      await waitForCapsule(page, '3')
+      const float = await readCapsuleEdge(page, '[data-dsh-deepcraft-model-capsule]')
+      checks.push(check('浮层与平铺都保持胶囊，外框形状随页面层次变化',
+        flat.value === '3' && float.value === '3' && flat.radius !== null && float.radius !== null && flat.radius !== float.radius,
+        JSON.stringify({ flat: flat.radius, float: float.radius })))
+      await page.keyboard.press('Escape')
+      await page.locator('[role="dialog"]').first().waitFor({ state: 'detached', timeout: 10000 }).catch(() => {})
+
+      // Two narrow widths: the capsule stays inside the window and keeps its seam.
+      const narrowReadings = []
+      for (const width of [390, 330]) {
+        await page.setViewportSize({ width, height: 760 })
+        await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))))
+        await waitForCapsule(page, '3')
+        narrowReadings.push({ width, ...await readCapsule(page) })
+      }
+      checks.push(check('390 与 330 像素宽时胶囊仍在窗口内且两半相接',
+        narrowReadings.every((reading) => reading.value === '3' && reading.subagent !== null && reading.model !== null &&
+          reading.subagent.left >= 0 && reading.model.right <= reading.width + 1 &&
+          Math.abs(reading.subagent.right - reading.model.left) <= 1),
+        JSON.stringify(narrowReadings.map(({ width, subagent, model }) => ({ width, subagent: subagent?.left, right: model?.right })))))
+
       return checks
     },
   }

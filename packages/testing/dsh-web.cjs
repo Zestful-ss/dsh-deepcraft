@@ -141,6 +141,9 @@ function provisionHome(home) {
  *     registry, without which the shell asks for a workspace instead of starting
  *     a turn.
  * @param options.timeoutMs - how long to wait for the printed URL.
+ * @param options.prepareHome - runs after the workspace registry is seeded and
+ *     before the host process starts, so a scenario can add a second workspace
+ *     or other boot-time state to its own home.
  * @returns `{ url, home, stop() }`; `stop` ends the host and everything it spawned.
  */
 async function start(options = {}) {
@@ -180,6 +183,7 @@ async function start(options = {}) {
     }
   }
   ensureWorkspace(home)
+  if (options.prepareHome !== undefined) await options.prepareHome(home)
   // Idempotent: the profile is initialized and the checkout linked into it on
   // the first run, and pnpm reports "already up to date" afterwards.
   run(`dsh plugin --profile ${profile} add "${ROOT}"`, { env: { ...process.env, DSH_HOME: home } })

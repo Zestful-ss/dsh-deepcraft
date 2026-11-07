@@ -1,6 +1,6 @@
 {
-  "triggerLabelNone": { "zh": "子代理模型", "en": "Subagent model" },
-  "triggerLabelOne": { "zh": "子代理模型，当前 {model}", "en": "Subagent model, currently {model}" },
+  "triggerLabelNone": { "zh": "子代理模型，未选择", "en": "Subagent models, none selected" },
+  "triggerLabelOne": { "zh": "子代理模型，已选 1 个：{model}", "en": "Subagent models, 1 selected: {model}" },
   "triggerLabelMany": { "zh": "子代理模型，已选 {count} 个", "en": "Subagent models, {count} selected" },
   "triggerLabelUnavailable": { "zh": "子代理模型不可用：{reason}", "en": "Subagent models unavailable: {reason}" },
   "title": { "zh": "子代理模型", "en": "Subagent models" },

@@ -19,7 +19,7 @@
  * itself reads, so the migration is exercised where it happens.
  */
 'use strict'
-const { openSkinSettings } = require('./settings-route.cjs')
+const { openSkinSettings, setAccentColor } = require('./settings-route.cjs')
 const { waitForSkin, dismissOverlays } = require('./dsh-web.cjs')
 const { packageZip, upload, waitForGuest } = require('./petdex.cjs')
 
@@ -147,13 +147,7 @@ function paletteScenario({ check }) {
       }
       // The reader's accent over every skin palette, kept as the palette moves.
       await pickPalette(page, 'ocean')
-      await page.evaluate(() => {
-        const input = document.querySelector('.dsh-deepcraft-settings-color')
-        const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set
-        setter.call(input, '#1a7f5a')
-        input.dispatchEvent(new Event('input', { bubbles: true }))
-        input.dispatchEvent(new Event('change', { bubbles: true }))
-      })
+      await setAccentColor(page, '#1a7f5a')
       await page.waitForFunction(() => document.body.hasAttribute('data-dsh-deepcraft-accent'), null, { timeout: 15000 })
       read.tinted = {}
       for (const id of ['ocean', 'ember', 'forest']) {

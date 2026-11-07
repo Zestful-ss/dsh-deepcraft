@@ -73,6 +73,14 @@ export const COMPOSER_INPUT_SELECTOR = '[data-composer-input]'
 export const COMPOSER_CARD_SELECTOR = '[data-composer-card]'
 /** The host's model selection slot in the composer. */
 export const MODEL_SLOT_SELECTOR = '[data-slot="conversation.input.model"]'
+/** The composer's own right-hand list seat, where the subagent model entry stands beside the model slot. */
+export const COMPOSER_RIGHT_SLOT_SELECTOR = '[data-slot="conversation.input.right"]'
+/** The workspace section's label: the heading the view's own control is laid over. */
+export const WORKSPACE_SECTION_LABEL_SELECTOR = '[data-dsh-deepcraft-part~="section-label"]'
+/** The workspace section's list area: the box holding the session tree. */
+export const WORKSPACE_LIST_AREA_SELECTOR = '[data-dsh-deepcraft-part~="list-area"]'
+/** The workspace tree's rows: the host's own row key, or either row part. */
+export const WORKSPACE_TREE_ROW_SELECTOR = '[data-row-key], [data-dsh-deepcraft-part~="session-row"], [data-dsh-deepcraft-part~="project-row"]'
 /** The draft's own scroll area inside that card. */
 export const COMPOSER_SCROLL_SELECTOR = '[data-input-scroll]'
 /** The echo bubble the host mounts the moment a submission goes through. */

@@ -42,4 +42,21 @@ async function openSkinSettings(page) {
   await settings.waitFor({ timeout: SETTINGS_WAIT_MS })
 }
 
-module.exports = { openSkinSettings, SETTINGS_PAGE }
+/**
+ * Write the reader's custom accent through the colour well. React reads the
+ * native setter's write; a plain `value =` update is invisible to it.
+ *
+ * @param page - the Playwright page on the host.
+ * @param value - a `#rrggbb` colour.
+ */
+async function setAccentColor(page, value) {
+  await page.evaluate((hex) => {
+    const input = document.querySelector('.dsh-deepcraft-settings-color')
+    const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set
+    setter.call(input, hex)
+    input.dispatchEvent(new Event('input', { bubbles: true }))
+    input.dispatchEvent(new Event('change', { bubbles: true }))
+  }, value)
+}
+
+module.exports = { openSkinSettings, setAccentColor, SETTINGS_PAGE }

@@ -4,6 +4,24 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">新增功能</h3>
+
+- 新增跨工作区置顶汇总，按宿主置顶顺序列出已置顶会话，并从宿主菜单打开、重命名、取消置顶或归档。
+
+### 体验优化
+
+- 子代理模型入口与主模型触发器合成一个胶囊，外框按当前会话已选的路由数量分级显色。
+
+<h3 id="en-unreleased">New Features</h3>
+
+- Add a pinned aggregate above every workspace, listing pinned conversations in the host's own pin order with the host menu for opening, renaming, unpinning and archiving.
+
+### Improvements
+
+- Draw the subagent model entry and the model trigger as one capsule whose outline changes colour with the number of routes the session has selected.
+
 ## [0.26.0] - 2026-11-07
 
 [中文](#cn-0.26.0) | [English](#en-0.26.0)

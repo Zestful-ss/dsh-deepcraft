@@ -38,6 +38,8 @@ export interface HostSessionSummary {
   origin?: string
   /** A placeholder the host never prompted. */
   blank?: boolean
+  /** The durable log-backed title; absent until the host projects one. */
+  title?: string
   displayTitle: string
   updatedAt: number
 }
@@ -48,6 +50,8 @@ export interface HostWorkspaceListSnapshot {
   phase?: string
   items: HostWorkspaceRow[]
   archivedSessionIds: string[]
+  /** The registry-global pin set, most recently pinned first; absent on an older host. */
+  pinnedSessionIds?: string[]
 }
 
 /** One workspace: its identity, its name, where it lives, and the sessions under it. */
@@ -261,7 +265,7 @@ export interface HostSessionStatusSnapshot extends Iterable<[string, HostSession
 }
 
 /** One session's live status: whether it runs, waits on the reader, or finished unread. */
-interface HostSessionStatus {
+export interface HostSessionStatus {
   running?: boolean
   pendingInteraction?: unknown
   completionUnread?: boolean
@@ -361,8 +365,25 @@ interface HostCommandResult {
 
 /** The shell's `uiSession`: which session is selected, and how it is doing. */
 export interface HostUiSessionService {
-  current?: { value?: { key?: unknown } }
+  current?: {
+    value?: { key?: unknown }
+    /** The selection changes; absent on a host build that publishes the value alone. */
+    subscribe?(listener: () => void): () => void
+  }
   sessionStatus?: HostSnapshotSource<HostSessionStatusSnapshot>
+}
+
+/**
+ * The host's shared context menu: the one popup the session rows and their
+ * menus open, with every action another plugin registered for the target.
+ */
+export interface HostContextMenusService {
+  /** The menu open right now, or null after it is dismissed. */
+  active: HostSnapshotSource<{ kind: string, value: unknown } | null>
+  /** Open the shared menu for one session, at a viewport point. */
+  open(target: { kind: 'session', value: { sessionId: string, displayTitle: string } }, point: { x: number, y: number }): void
+  /** Close it, cancelling any metadata query it started. */
+  close(): void
 }
 
 /** The shell's `uiConversation`: one session's conversation binding. */

@@ -33,6 +33,7 @@ export interface Handles {
   quickProviders: QuickProvidersHandle
   footer: FooterHandle
   workspace: FeatureHandle
+  workspacePins: FeatureHandle
   search: FeatureHandle
   turnNav: FeatureHandle
   conversationStyle: FeatureHandle

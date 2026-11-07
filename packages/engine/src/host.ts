@@ -1,7 +1,8 @@
-import { CHAT_FLOW_SELECTOR, COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, COMPOSER_PLACEHOLDER_SELECTOR, COMPOSER_SELECTOR, COMPOSER_STACK_SELECTOR, COMPOSER_STATS_SELECTOR, COMPOSER_STAT_SELECTOR, COMPOSER_VARIANT_ATTRIBUTE, CONVERSATION_SCROLL_SELECTOR, CONVERSATION_SESSION_ATTRIBUTE, CONVERSATION_SESSION_SELECTOR, DIALOG_TRIGGER_SELECTOR, FOOT_AREA_SELECTOR, MENU_ROLE_SELECTOR, PERMISSION_TRIGGER_SELECTOR, PHASE_ATTRIBUTE, RIGHTBAR_TOGGLE_SELECTOR, SIDEBAR_BRAND_SELECTOR, SIDEBAR_ROOT_SELECTOR, SIDEBAR_TOGGLE_SELECTOR, WINDOWS_MENU_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { CHAT_FLOW_SELECTOR, COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, COMPOSER_PLACEHOLDER_SELECTOR, COMPOSER_SELECTOR, COMPOSER_STACK_SELECTOR, COMPOSER_STATS_SELECTOR, COMPOSER_STAT_SELECTOR, COMPOSER_VARIANT_ATTRIBUTE, CONVERSATION_SCROLL_SELECTOR, CONVERSATION_SESSION_ATTRIBUTE, CONVERSATION_SESSION_SELECTOR, DIALOG_TRIGGER_SELECTOR, FOOT_AREA_SELECTOR, MENU_ROLE_SELECTOR, PERMISSION_TRIGGER_SELECTOR, PHASE_ATTRIBUTE, RIGHTBAR_TOGGLE_SELECTOR, SIDEBAR_BRAND_SELECTOR, SIDEBAR_ROOT_SELECTOR, SIDEBAR_TOGGLE_SELECTOR, WINDOWS_MENU_SELECTOR, WORKSPACE_LIST_AREA_SELECTOR, WORKSPACE_SECTION_LABEL_SELECTOR, WORKSPACE_TREE_ROW_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { MODEL_SLOT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
-import type { HostAccountService, HostAssistantStep, HostChatSnapshot, HostChatTarget, HostConfigFormsService, HostConversationService, HostLocaleService, HostModelCatalogSnapshot, HostModelDirectoriesService, HostModelDirectory, HostServiceLookup, HostOutlineTurn, HostRunningCall, HostSession, HostSessionsService, HostShortcutsService, HostSlotOptions, HostSlotsService, HostTurn, HostUiConversationService, HostUiSessionService, HostWorkspacesService } from '@dsh-deepcraft/contracts/services'
+import type { HostAccountService, HostAssistantStep, HostChatSnapshot, HostChatTarget, HostConfigFormsService, HostContextMenusService, HostConversationService, HostLocaleService, HostModelCatalogSnapshot, HostModelDirectoriesService, HostModelDirectory, HostServiceLookup, HostOutlineTurn, HostRunningCall, HostSession, HostSessionsService, HostShortcutsService, HostSlotOptions, HostSlotsService, HostTurn, HostUiConversationService, HostUiSessionService, HostWorkspacesService } from '@dsh-deepcraft/contracts/services'
 import { observeMatches, subscribeMutations } from './bus'
+import type { MatchList } from './bus'
 import { closestFrom } from './dom'
 
 /**
@@ -129,6 +130,66 @@ export const findFootArea = cacheFirst<HTMLElement>(FOOT_AREA_SELECTOR)
  * host mounts this column once and replaces it whole.
  */
 export const findSidebarRoot = cacheFirst<HTMLElement>(SIDEBAR_ROOT_SELECTOR)
+
+/** The workspace section's label and its tree, as one reader keeps them. */
+export interface HostWorkspaceRegion {
+  /** The heading whose section keeps a list area, or null while the sidebar is a rail. */
+  findLabel(): HTMLElement | null
+  /** The list area holding `label`'s tree, or null while the section has no rows. */
+  findTree(label: Element): HTMLElement | null
+  /** Drop the bus subscription the reader took. */
+  release(): void
+}
+
+/**
+ * Follow the workspace section's label through the observation bus (D40): the
+ * section is the label's header's parent, recognised by the list area holding
+ * tree rows inside it, so a section without one is not this seat. The answer is
+ * kept while it stands, and the document is walked once by the bus rather than
+ * per pass. Both readers — the two-state view and the pinned aggregate — take
+ * the same region, and each releases its own subscription.
+ */
+export function watchWorkspaceRegion(): HostWorkspaceRegion {
+  let kept: HTMLElement | null = null
+  let watch: MatchList<HTMLElement> | null = null
+  function sectionRoot(label: Element) {
+    const header = label.parentElement
+    return header === null ? null : header.parentElement
+  }
+  function sectionOf(label: Element) {
+    const root = sectionRoot(label)
+    if (root === null) return null
+    return root.querySelector(WORKSPACE_LIST_AREA_SELECTOR) === null ? null : root
+  }
+  return {
+    findLabel() {
+      if (kept !== null && kept.isConnected && sectionOf(kept) !== null) return kept
+      watch ??= observeMatches<HTMLElement>(WORKSPACE_SECTION_LABEL_SELECTOR)
+      const labels = watch.all()
+      for (let i = 0; i < labels.length; i++) {
+        if (sectionOf(labels[i]) === null) continue
+        kept = labels[i]
+        return labels[i]
+      }
+      kept = null
+      return null
+    },
+    findTree(label) {
+      let region: Element | null = label.parentElement
+      while (region !== null && region !== document.body) {
+        const tree = region.querySelector(WORKSPACE_LIST_AREA_SELECTOR)
+        if (tree !== null && tree.querySelector(WORKSPACE_TREE_ROW_SELECTOR) !== null) return tree as HTMLElement
+        region = region.parentElement
+      }
+      return null
+    },
+    release() {
+      watch?.release()
+      watch = null
+      kept = null
+    },
+  }
+}
 
 /**
  * The sidebar's brand row and its collapse toggle, and the desktop window's own
@@ -528,6 +589,12 @@ export function hostWorkspaces(lookup: HostServiceLookup | null | undefined): Ho
 /** The shell's workspace actions: open a session, start one. */
 export function hostUiWorkspace(lookup: HostServiceLookup | null | undefined): HostValue {
   return lookup?.get('uiWorkspace')
+}
+
+/** The host's shared session and workspace menu: the one the row menus open. */
+export function hostContextMenus(lookup: HostServiceLookup | null | undefined): HostContextMenusService | null {
+  const menus = lookup?.get('contextMenus') as HostContextMenusService | undefined
+  return menus ?? null
 }
 
 /** The shell's plugin page navigation. */

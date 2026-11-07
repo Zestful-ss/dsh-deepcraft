@@ -15,6 +15,7 @@
  */
 import * as React from 'react'
 import { SUBAGENT_MODELS_ROUTE } from '../../constants'
+import { COMPOSER_RIGHT_SLOT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { buildElement, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { currentSessionId, hostSessions, registerSlotEntry, sessionModelCatalog, sessionModelDirectory } from '@dsh-deepcraft/engine/host'
 import { closeOtherPopovers, positionAnchoredPopover, registerPopover, setMenuPopoverOpen, unregisterPopover } from '../../shared/popover'
@@ -22,6 +23,7 @@ import { SUBAGENT_MODELS_CONTRACT, readSubagentRoutes } from '@dsh-deepcraft/con
 import { buildCardContent, seatActs, seatShown, triggerTitle } from './card'
 import { setRouteEffort, toggleRoute } from './state'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
+import type { FeatureUi } from '../../core/feature'
 import type { SubagentModelRoute, SubagentModelsAnswer, SubagentModelsReason } from '@dsh-deepcraft/contracts/subagent'
 import type { SeatHandlers, SeatView } from './card'
 import type manifest from './subagent-model.manifest'
@@ -34,6 +36,9 @@ const SEAT_ID = 'deepcraft-subagent-model'
 const POPOVER_NAME = 'subagent-model'
 /** Gap between the trigger and the card. */
 const CARD_GAP = 6
+/** The attribute the two composer entries share while they draw as one capsule, and its parts. */
+const CAPSULE_ATTR = 'data-dsh-deepcraft-model-capsule'
+const CAPSULE_PART_ATTR = 'data-dsh-deepcraft-model-capsule-part'
 
 /** What the entry holds right now, after every read and write. */
 interface SeatState extends SeatView {
@@ -63,7 +68,7 @@ function reasonOf(value: unknown): SubagentModelsReason | undefined {
   return allowed.find((reason) => reason === value)
 }
 
-export function install(ctx: HostContext) {
+export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   let state: SeatState = EMPTY
   /** The session whose answer is loaded, so a switch starts a new read. */
   let loadedSession: string | null = null
@@ -74,6 +79,11 @@ export function install(ctx: HostContext) {
   /** A write or read in flight, so two answers never land out of order. */
   let generation = 0
   const listeners = new Set<() => void>()
+  /** The button the host rendered, and the nodes the capsule mark was last written on. */
+  let seatNode: HTMLButtonElement | null = null
+  let capsuleParent: HTMLElement | null = null
+  let capsuleSubagent: HTMLElement | null = null
+  let capsuleModel: HTMLElement | null = null
 
   /** Tell the slot's component to redraw; the card, when up, redraws with it. */
   function refresh() {
@@ -107,6 +117,73 @@ export function install(ctx: HostContext) {
   function view(): SeatState {
     const id = loadedSession ?? sessionId()
     return id === null ? state : { ...state, catalog: sessionModelCatalog(ctx, id) }
+  }
+
+  /** Take the capsule mark off every node that carried it. */
+  function clearCapsule() {
+    capsuleParent?.removeAttribute(CAPSULE_ATTR)
+    capsuleSubagent?.removeAttribute(CAPSULE_PART_ATTR)
+    capsuleModel?.removeAttribute(CAPSULE_PART_ATTR)
+    capsuleParent = null
+    capsuleSubagent = null
+    capsuleModel = null
+  }
+
+  /** Whether `node` draws anything: its own box, or a descendant's. */
+  function draws(node: Element) {
+    if (node.getClientRects().length > 0) return true
+    const children = node.querySelectorAll('*')
+    for (let i = 0; i < children.length; i++) {
+      if (children[i].getClientRects().length > 0) return true
+    }
+    return false
+  }
+
+  /**
+   * Draw the subagent entry and the model trigger as one capsule, in the
+   * composer's right-hand cluster. The host owns both seats and the anchors are
+   * `display: contents`, so the two buttons are direct flex items of the same
+   * parent; the mark goes on that parent and on each button. A third entry in
+   * the right seat, a missing model trigger, or another composer shape takes
+   * the mark away and leaves every control to its own layout.
+   */
+  function markCapsule() {
+    const modelBtn = ui.model?.trigger() ?? null
+    const modelSlot = ui.model?.seat() ?? null
+    const button = seatNode
+    if (button === null || !button.isConnected || modelBtn === null || !modelBtn.isConnected || modelSlot === null || modelBtn.parentElement !== modelSlot) {
+      clearCapsule()
+      return
+    }
+    const rightSlot = button.parentElement
+    const parent = rightSlot?.parentElement
+    if (rightSlot === null || parent === null || parent === undefined || !rightSlot.matches(COMPOSER_RIGHT_SLOT_SELECTOR) || modelSlot.parentElement !== parent) {
+      clearCapsule()
+      return
+    }
+    if (getComputedStyle(parent).display !== 'flex') {
+      clearCapsule()
+      return
+    }
+    for (let i = 0; i < rightSlot.children.length; i++) {
+      const child = rightSlot.children[i]
+      if (child !== button && draws(child)) {
+        clearCapsule()
+        return
+      }
+    }
+    const drawn = view()
+    const usable = seatActs(drawn)
+    const value = !usable ? 'unavailable' : drawn.selected.length >= 3 ? '3' : String(drawn.selected.length)
+    if (capsuleParent !== null && capsuleParent !== parent) capsuleParent.removeAttribute(CAPSULE_ATTR)
+    if (capsuleSubagent !== null && capsuleSubagent !== button) capsuleSubagent.removeAttribute(CAPSULE_PART_ATTR)
+    if (capsuleModel !== null && capsuleModel !== modelBtn) capsuleModel.removeAttribute(CAPSULE_PART_ATTR)
+    capsuleParent = parent
+    capsuleSubagent = button
+    capsuleModel = modelBtn
+    setAttributeIfChanged(parent, CAPSULE_ATTR, value)
+    setAttributeIfChanged(button, CAPSULE_PART_ATTR, 'subagent')
+    setAttributeIfChanged(modelBtn, CAPSULE_PART_ATTR, 'model')
   }
 
   /** Read one session's allowed routes and saved selection. */
@@ -293,12 +370,20 @@ export function install(ctx: HostContext) {
       sync()
       return stop
     }, [])
+    // The host can repaint the seat between passes; a commit that changes the
+    // selection or the drawn state re-writes the capsule mark in the same frame.
+    React.useLayoutEffect(() => { markCapsule() })
     const drawn = view()
     if (!seatShown(drawn)) return null
     const usable = seatActs(drawn)
     return React.createElement('button', {
       type: 'button',
       id: SEAT_ID,
+      ref: (node: HTMLButtonElement | null) => {
+        seatNode = node
+        if (node === null) clearCapsule()
+        else markCapsule()
+      },
       className: 'dsh-deepcraft-subagent-model-btn',
       'data-dsh-subagent-model': usable ? (drawn.selected.length > 0 ? 'chosen' : 'empty') : 'unavailable',
       'aria-label': triggerTitle(drawn),
@@ -373,6 +458,14 @@ export function install(ctx: HostContext) {
   const seatFiber = registerSeat()
   sync()
   watchCatalog()
+  ui.subagentModel = {
+    sync() {
+      sync()
+      markCapsule()
+    },
+    // The two seats sit on the composer, outside the streaming column.
+    skipOnContentOnly: true,
+  }
 
   // The scheduler's own pass is where a host re-render lands; keep the card
   // anchored while the window moves under it.
@@ -393,6 +486,9 @@ export function install(ctx: HostContext) {
     if (stopCatalog !== null) stopCatalog()
     listeners.clear()
     closeCard()
+    clearCapsule()
+    seatNode = null
+    delete ui.subagentModel
     if (card !== null) card.remove()
     card = null
     trigger = null

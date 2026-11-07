@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-07",
+  "group": "new",
+  "order": 0,
+  "external": true,
+  "zh": "新增跨工作区置顶汇总，按宿主置顶顺序列出已置顶会话，并从宿主菜单打开、重命名、取消置顶或归档。",
+  "en": "Add a pinned aggregate above every workspace, listing pinned conversations in the host's own pin order with the host menu for opening, renaming, unpinning and archiving."
+}

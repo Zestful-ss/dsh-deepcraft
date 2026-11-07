@@ -2,9 +2,7 @@ import * as React from 'react'
 import * as primitives from '@deepseek-ai/dsh-client-ui-primitives'
 import * as reactDom from 'react-dom/client'
 import { SESSION_DELETE_ROUTE } from '../../constants'
-import { findSidebarRoot, hostLocale, hostSessions, hostWorkspaces } from '@dsh-deepcraft/engine/host'
-import { observeMatches } from '@dsh-deepcraft/engine/bus'
-import type { MatchList } from '@dsh-deepcraft/engine/bus'
+import { findSidebarRoot, hostLocale, hostSessions, hostWorkspaces, watchWorkspaceRegion } from '@dsh-deepcraft/engine/host'
 import { buildElement, closestFrom, createStamp } from '@dsh-deepcraft/engine/dom'
 import { removeStrayNodes } from '../../shared/popover'
 import { VIEW_SWITCH_CLASS } from '../../shared/segment-control'
@@ -75,69 +73,11 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   let disposed = false
 
   /**
-   * The workspace section's label: the skin's own part for it (D3), kept only
-   * where the section around it holds a list area — the label's parent is the
-   * header and the header's parent is the section root, where the view mark and
-   * the control go. A host that renames the local name leaves the part
-   * unwritten, and the section keeps its plain label: the feature stays off
-   * rather than mounting on a section that happens to be first.
-   *
-   * The answer is kept while it still stands: the section is a seat the host
-   * mounts once and replaces whole, and this runs on every pass — a document
-   * query and a walk of every label per frame for an answer the pass before it
-   * had already given (D9).
+   * The workspace section, read through the engine's shared region: the label
+   * whose section keeps a list area, its tree and the bus subscription they
+   * ride. The answer is kept while it stands, so this pass reads no document.
    */
-  let sectionLabel: HTMLElement | null = null
-  /** The section labels on the page, taken from the bus and released with the section. */
-  let labelWatch: MatchList<HTMLElement> | null = null
-  /** The section root a label sits in: the label's header, and that header's parent. */
-  function sectionRoot(label: Element) {
-    const header = label.parentElement
-    return header === null ? null : header.parentElement
-  }
-  /** The section root a label stands in, or null when that root keeps no list area. */
-  function sectionOf(label: Element) {
-    const root = sectionRoot(label)
-    if (root === null) return null
-    return root.querySelector(LIST_AREA_SELECTOR) === null ? null : root
-  }
-  function findSection() {
-    const kept = sectionLabel
-    if (kept !== null && kept.isConnected && sectionOf(kept) !== null) return kept
-    // The labels of every section the sidebar holds, kept current by the bus
-    // (D40): which one dresses a control is decided here per pass, but the
-    // document is walked once rather than on every pass.
-    labelWatch ??= observeMatches<HTMLElement>('[data-dsh-deepcraft-part~="section-label"]')
-    const labels = labelWatch.all()
-    for (let i = 0; i < labels.length; i++) {
-      if (sectionOf(labels[i]) === null) continue
-      sectionLabel = labels[i]
-      return labels[i]
-    }
-    sectionLabel = null
-    return null
-  }
-
-  /** The tree's rows: the host's own row key, or either row part. */
-  const TREE_ROW_SELECTOR = '[data-row-key], [data-dsh-deepcraft-part~="session-row"], [data-dsh-deepcraft-part~="project-row"]'
-  /** The section's list area, the sibling its header shares a parent with. */
-  const LIST_AREA_SELECTOR = '[data-dsh-deepcraft-part~="list-area"]'
-
-  /**
-   * The section's list area, which is what the view mark rides: the mark goes on
-   * the list area's PARENT (sync below), and the header is that parent's other
-   * child, so the stylesheet's cross-fade reads both (D3). The list area holds
-   * the tree and its rows, which is how it is told apart from the header.
-   */
-  function findTree(label: Element) {
-    let region = label.parentElement
-    while (region !== null && region !== document.body) {
-      const tree = region.querySelector(LIST_AREA_SELECTOR)
-      if (tree !== null && tree.querySelector(TREE_ROW_SELECTOR) !== null) return tree
-      region = region.parentElement
-    }
-    return null
-  }
+  const region = watchWorkspaceRegion()
 
   function relativeTime(at: unknown) {
     if (typeof at !== 'number' || !isFinite(at)) return ''
@@ -408,12 +348,11 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     labelStamp.release()
     treeStamp.release()
     viewStamp.release()
-    labelWatch?.release()
-    labelWatch = null
+    region.release()
   }
 
   function sync() {
-    const label = findSection()
+    const label = region.findLabel()
     // No heading to dress: the sidebar is a rail, and the section keeps its
     // plain look until it is wide again.
     if (label === null || label.parentElement === null) {
@@ -442,7 +381,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       if (item.getAttribute('aria-checked') !== (on ? 'true' : 'false')) item.setAttribute('aria-checked', on ? 'true' : 'false')
     }
     segmentPill.sync(control)
-    const tree = findTree(label)
+    const tree = region.findTree(label)
     if (tree === null) return
     treeStamp.mark(tree)
     const host = tree.parentElement

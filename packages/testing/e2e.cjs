@@ -331,6 +331,7 @@ async function runScenario(name, options) {
     env: { DSH_E2E_MOCK_KEY: 'mock', HOME: userHome, USERPROFILE: userHome },
     home,
     plugins: scenario.plugins,
+    prepareHome: scenario.prepareHome,
     resetState: true,
   })
   say(`\n== ${name} ==  mock ${mock.url}  host ${host.url}\n`)

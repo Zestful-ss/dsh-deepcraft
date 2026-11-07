@@ -3,9 +3,10 @@ import type { FeatureManifest } from '../../core/feature'
 export default {
   id: 'subagentModel',
   order: 85,
-  contracts: [],
+  reads: ['model'],
+  contracts: ['composer.right-slot'],
   pref: 'subagentModelPicker',
-  stylesheets: [{ file: 'subagent-model.css', rank: 268 }],
+  stylesheets: [{ file: 'subagent-model.css', rank: 268, gate: true }],
   settingsRows: [{
     // The entry is the reader's way to route one session's subagents; the rule
     // it feeds is the host half's, and stands on its own switch (rank 55).

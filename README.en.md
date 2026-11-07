@@ -63,6 +63,7 @@ The settings page switches between three palettes; light and dark follow the sys
 - The conversation page keeps a centred reading column and a floating rounded composer; the host's message, tool and composer controls stay in place, and the host's connection, update and plugin controls in the sidebar footer stay visible and operable.
 - The Appearance tab's "Page look" sets the page's shape: "Floating" lifts the conversation area into a rounded card, and the composer, the sidebar rows and the view tabs take pill shapes with it; "Flat" hands the page back to the host's own arrangement.
 - The home layout's "Floating" form draws a deck under the composer: this week's usage with its trend, the conversation to continue, the one before it, the month's usage leading into the Studio panel, and the recent conversations.
+- The sidebar gathers every pinned conversation above the workspaces, most recently pinned first; each row names its workspace and opens, renames, unpins or archives through the host's own session menu, while the host's row stays in its workspace.
 
 ### Pets
 
@@ -75,7 +76,7 @@ The model picker follows the control provided by the host composer and leaves th
 
 ### Subagent models
 
-After enabling the host's subagent model selection and creating a session, use the subagent icon beside the composer to choose models. The panel shows complete names, and the icon taking the accent marks a selection for the current session. Each picked route can also carry its own reasoning effort, which later subagent calls then pass along.
+After enabling the host's subagent model selection and creating a session, use the subagent icon beside the composer to choose models. The panel shows complete names, and the subagent entry and the model button draw as one capsule whose outline changes colour with the number of routes the session has selected. Each picked route can also carry its own reasoning effort, which later subagent calls then pass along.
 
 ## Installation
 
