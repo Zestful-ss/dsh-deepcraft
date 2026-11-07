@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.27.1] - 2026-11-07
 
-<h3 id="cn-unreleased">问题修复</h3>
+[中文](#cn-0.27.1) | [English](#en-0.27.1)
+
+<h3 id="cn-0.27.1">问题修复</h3>
 
 - 修复浮层页面下模型胶囊的接缝：模型半边保留原有整颗圆角，与子代理半边之间出现缺口。
 
-<h3 id="en-unreleased">Bug Fixes</h3>
+<h3 id="en-0.27.1">Bug Fixes</h3>
 
 - Fix the model capsule's seam on the floating page look, where the model half kept its fully rounded corners and left a notch against the subagent half.
 
