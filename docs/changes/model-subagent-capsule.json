@@ -1,8 +1,0 @@
-{
-  "at": "2026-11-07",
-  "group": "improvements",
-  "order": 0,
-  "external": true,
-  "zh": "子代理模型入口与主模型触发器合成一个胶囊，外框按当前会话已选的路由数量分级显色。",
-  "en": "Draw the subagent model entry and the model trigger as one capsule whose outline changes colour with the number of routes the session has selected."
-}
