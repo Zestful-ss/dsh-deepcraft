@@ -1,5 +1,5 @@
 /**
- * The shell cases' page reads: the Claude palette, the classic hero's welcome,
+ * The shell cases' page reads: the three palettes, the classic hero's welcome,
  * the conversation view tabs' pill, the composer's marked host controls and the
  * sidebar's search row. The strip the view-tabs case builds and the root the
  * search case mounts are handed to the probe for the teardown step.
@@ -11,7 +11,7 @@
   var r = probe.report
 
   probe.step(async function () {
-    await probe.onlyFor(['brand'], async function () {
+    await probe.onlyFor(['palette'], async function () {
       // Minimal CSS contract fixture to verify CSS inheritance and color rules
       // for prose links and inline file mentions in code. Real host UI mapping
       // is covered by e2e scenarios.
@@ -50,29 +50,19 @@
         }
       }
 
-      var claudeLight = readTheme()
-      document.body.setAttribute('data-ds-dark-theme', '')
-      var claudeDark = readTheme()
-      var claudeRaised = getComputedStyle(document.body).getPropertyValue('--dsh-deepcraft-raised').trim()
-      document.body.removeAttribute('data-ds-dark-theme')
-
-      r.claudePalette = Object.assign(claudeLight, {
-        dark: Object.assign(claudeDark, { raised: claudeRaised }),
-      })
-
-      window.__pushForm({ brand: 'deepseek' })
-      await sleep(150)
-      var dsLight = readTheme()
-      document.body.setAttribute('data-ds-dark-theme', '')
-      var dsDark = readTheme()
-      var dsRaised = getComputedStyle(document.body).getPropertyValue('--dsh-deepcraft-raised').trim()
-      document.body.removeAttribute('data-ds-dark-theme')
-
-      r.deepseekPalette = Object.assign(dsLight, {
-        dark: Object.assign(dsDark, { raised: dsRaised }),
-      })
-
-      window.__pushForm({ brand: 'claude' })
+      r.palettes = {}
+      for (var at = 0; at < ['ocean', 'ember', 'forest'].length; at++) {
+        var id = ['ocean', 'ember', 'forest'][at]
+        window.__pushForm({ palette: id })
+        await sleep(150)
+        var light = readTheme()
+        document.body.setAttribute('data-ds-dark-theme', '')
+        var dark = readTheme()
+        var raised = getComputedStyle(document.body).getPropertyValue('--dsh-deepcraft-raised').trim()
+        document.body.removeAttribute('data-ds-dark-theme')
+        r.palettes[id] = Object.assign(light, { dark: Object.assign(dark, { raised: raised }) })
+      }
+      window.__pushForm({ palette: 'ocean' })
       await sleep(150)
       linkHolder.remove()
     })

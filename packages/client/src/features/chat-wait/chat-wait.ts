@@ -8,8 +8,7 @@ import { buildElement, writeTextInPlace } from '@dsh-deepcraft/engine/dom'
 import { formatHostDuration } from '../../shared/format'
 import { motionMs } from '../../shared/motion'
 import { releaseSwappingText, setSwappingText } from '../../shared/swapping-text'
-import { activityWords, waitingWord, THINKING_KEY } from '../../shared/turn-activity'
-import { startWaitLoader, releaseWaitLoader } from './wait-loader'
+import { activityWords, THINKING_KEY } from '../../shared/turn-activity'
 import { CHAT_RUNNING_SELECTOR, CHAT_RUNNING_TEXT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { WAIT_OVERTIME_MS, openTurn, waitStart, wordForPass } from './wait-state'
 import { foreignRunningLineOwns } from './running-owner'
@@ -23,7 +22,6 @@ import { copy, copyState } from './copy'
 /** One row's line: its box, the parts every pass writes into it, and the turn it speaks for. */
 interface WaitLine {
   line: HTMLElement
-  loader: HTMLElement
   label: HTMLElement
   clock: HTMLElement
   badge: HTMLElement
@@ -33,10 +31,9 @@ interface WaitLine {
 
 /**
  * The live turn's running row: what the turn is doing now in this line's own
- * words (shared/turn-activity.ts), the word its brand waits on where no state
- * can be read — the skin's own 「正在思考」 under the Claude brand, the host's own
- * 「深度求索中」 under the DeepSeek brand — the turn's elapsed time as a quiet
- * clock beside it, and 「暂未响应」 once the model has been silent for ten seconds
+ * words (shared/turn-activity.ts), the host's own word where no state can be
+ * read (「深度求索中」), the turn's elapsed time as a quiet clock beside it, and
+ * 「暂未响应」 once the model has been silent for ten seconds
  * (wait-state.ts). Under the
  * Precise choice three of those states name more than a state: a call in
  * flight says the file it works on (「正在读取 app.js」) or the description it
@@ -48,12 +45,11 @@ interface WaitLine {
  * transitions.dev's "Thinking states" (MIT): a sweeping highlight while a word
  * stands, and a two-copy swap when it changes (shared/swapping-text.ts).
  *
- * The host keeps its row, its divider and its live region: the line is a span of
- * the skin's own beside the host's own icon, marked quiet so its ticking wakes
- * no pass, and the stylesheet hides the host's words while it stands
- * (chat-wait.css). Under the Claude brand the host's whale tail gives way to the
- * skin's own loading dots, which lead the line where the whale did. The words,
- * the clock's units and the session's turns are the host's.
+ * The host keeps its row, its divider, its whale and its live region: the line
+ * is a span of the skin's own beside the host's own icon, marked quiet so its
+ * ticking wakes no pass, and the stylesheet hides the host's words while it
+ * stands (chat-wait.css). The words, the clock's units and the session's turns
+ * are the host's.
  */
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   /** On the host's running row while the line stands in for its words. */
@@ -134,28 +130,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     follows.set(row, { sessionId, stop: target.subscribe(scheduleSync) })
   }
 
-  /**
-   * The loader the Claude brand leads the row with, where the host draws its
-   * whale tail: one lane of dots of the accent in force for each of the loader's
-   * three motions (chat-wait.css) — three hopping, three walking their own lines,
-   * four swapping the corners of a 45 : 55 rectangle. Every motion is built up
-   * front, so taking one out of play and another in is a hand-over rather than a
-   * redraw. The dots are decorative — the host's live region is what a reader
-   * hears — so they are hidden from the reader's own tree; which lane is in play,
-   * and when it is swapped for another, is features/chat-wait/wait-loader.ts's.
-   */
-  function buildLoader() {
-    const loader = buildElement('span', 'dsh-deepcraft-chat-wait-loader')
-    loader.setAttribute('aria-hidden', 'true')
-    const laneDots: [string, number][] = [['is-bounce', 3], ['is-line', 3], ['is-orbit', 4]]
-    for (const [lane, count] of laneDots) {
-      const dots = buildElement('span', `dsh-deepcraft-chat-wait-lane ${lane}`)
-      for (let dot = 0; dot < count; dot += 1) dots.append(buildElement('span', 'dsh-deepcraft-chat-wait-dot'))
-      loader.append(dots)
-    }
-    return loader
-  }
-
   /** The line inside one row, built the first time beside the host's words. */
   function lineOf(row: HTMLElement, words: Element, key: string | HTMLElement): WaitLine {
     const previous = hostWords.get(row)
@@ -175,27 +149,18 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     line.setAttribute(QUIET_ATTR, '')
     // The host's own words are hidden while this line stands in for them
     // (chat-wait.css), so the line carries what a reader gets: the wording, the
-    // clock and the wait badge are ordinary text, and the host's live region
-    // still announces the row. The loader leads them, where the host's own icon
-    // stands and stays under the other brands.
+    // clock and the wait badge as ordinary text, while the host's live region
+    // still announces the row. The host's own whale leads it where the host drew
+    // it (D80).
     // The badge starts hidden: it comes out only once a wait runs over (syncBadge).
     const label = buildElement('span', 'dsh-deepcraft-chat-wait-label')
     const clock = buildElement('span', 'dsh-deepcraft-chat-wait-clock')
     const badge = buildElement('span', 'dsh-deepcraft-chat-wait-badge')
     badge.hidden = true
-    const loader = buildLoader()
-    line.append(loader, label, clock, badge)
+    line.append(label, clock, badge)
     words.after(line)
-    const parts = { line, loader, label, clock, badge, key }
-    // The line is recorded before its loader starts. wait-loader.ts refuses to
-    // start a motion the stylesheet leaves without a lane, a fade length or a
-    // turn to hand over; thrown from here, with the record not yet written, every
-    // pass would put up another line and another set of dots beside the words —
-    // and the wording, the swap and the paint below would never run at all.
+    const parts = { line, label, clock, badge, key }
     lines.set(row, parts)
-    // The loader's motions rotate on their own clock, not on what the turn is
-    // doing: it is set going here, with the line, and lets go when the row does.
-    startWaitLoader(loader)
     return parts
   }
 
@@ -214,7 +179,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const key: string | HTMLElement = sessionId !== null && turn !== undefined ? `${sessionId}:${turn.turn}` : row
     if (typeof key === 'string') live.add(key)
     const line = lineOf(row, words, key)
-    const { loader, label, clock, badge } = line
+    const { label, clock, badge } = line
     // What the turn is doing, and the one word its brand waits on for a turn
     // whose state cannot be read (D74): the line says the model's work, never a
     // guess.
@@ -230,11 +195,10 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const precise = prefs.statusDetail === true
     const activity = activityWords(snapshot, turn, precise)
     // One word stands for the model thinking and for a wait nothing can be read
-    // from (shared/turn-activity): the skin's own under the Claude brand, the
-    // host's own under the DeepSeek brand. The thinking state answers no word of
-    // its own — that word is the one below — so the clause standing from before
-    // holds the line instead of a fallback and a return.
-    const waiting = waitingWord(prefs.brand, hostChatCopy('chat.deepDiving', 'Deep diving', ctx), copy(THINKING_KEY))
+    // from: the host's own (D80). The thinking state answers no word of its own —
+    // that word is the one below — so the clause standing from before holds the
+    // line instead of a fallback and a return.
+    const waiting = hostChatCopy('chat.deepDiving', 'Deep diving', ctx)
     const own = activity !== null && activity.key === null && activity.aboutCall === undefined
     const said = activity === null || activity.key === THINKING_KEY
       ? null
@@ -248,8 +212,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     }, wording.get(key), now)
     wording.set(key, pass.row)
     setSwappingText(label, pass.word, true)
-    // The loader does not follow that wording: its three motions rotate on its
-    // own clock (wait-loader.ts), set going once with the line itself.
     clock.hidden = turn === undefined || turn.start === undefined
     if (turn !== undefined && turn.start !== undefined) writeTextInPlace(clock, formatHostDuration(Math.max(1000, now - turn.start.time), t))
     let overtime = false
@@ -294,7 +256,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const parts = lines.get(row)
     if (parts !== undefined) {
       releaseSwappingText(parts.label)
-      releaseWaitLoader(parts.loader)
       parts.line.remove()
       // A row standing for no turn holds its own wording; one standing for a
       // turn leaves it to that turn, which the next pass of the same turn picks

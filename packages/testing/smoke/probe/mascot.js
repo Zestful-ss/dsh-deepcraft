@@ -24,7 +24,7 @@
       var wakeDeepyPass = probe.wakePass
       var bodyStyle = getComputedStyle(document.body)
       r.states = {
-        brand: document.body.getAttribute('data-dsh-deepcraft-brand'),
+        palette: document.body.getAttribute('data-dsh-deepcraft-palette'),
         canvas: bodyStyle.backgroundColor,
         ink: bodyStyle.color,
         accent: bodyStyle.getPropertyValue('--dsw-alias-brand-primary').trim(),

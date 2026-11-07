@@ -55,7 +55,8 @@ import { renderWhaleIcon, renderWhaleSheet } from '../packages/assets/whale.mjs'
 import { openBuildCache } from './build-cache.mjs'
 import { checkContracts, checkCycles, checkDependencies, checkListed, checkManifests, checkMotionSources, checkScrollOwner, checkTypes } from './build-checks.mjs'
 import { chunkFiles, chunkModules, ownModuleIds, splitChunks } from './chunks.mjs'
-import { TOKEN_SHEET, buildStylesheet, loadTokens, writeLayerTable, writeMotionTable, writeTokenTable } from './css.mjs'
+import { buildStylesheet } from './css.mjs'
+import { TOKEN_SHEET, loadTokens, writeLayerTable, writeMotionTable, writeTokenTable } from './shared/design-tokens.mjs'
 import { FEATURE_SHEET_CONSTANTS } from './feature-sheets.mjs'
 import { motionValues } from './shared/motion-tokens.mjs'
 import { readSourceTree } from './source-tree.mjs'
@@ -216,16 +217,15 @@ const CONSTANTS = (() => {
     if (module[name] === undefined) throw new Error(`build: ${file} exports no ${name}`)
     return [name, module[name]]
   }))
-  const { BRAND_ATTR, BRAND_DEEPSEEK, COMPOSER_ATTR, PALETTE_ATTR, PALETTE_CLAUDE, PALETTE_HOST, TYPEFACE_ATTR, TYPEFACE_CLAUDE, TYPEFACE_HOST } = pick(constants, constantsFile, ['BRAND_ATTR', 'BRAND_DEEPSEEK', 'COMPOSER_ATTR', 'PALETTE_ATTR', 'PALETTE_CLAUDE', 'PALETTE_HOST', 'TYPEFACE_ATTR', 'TYPEFACE_CLAUDE', 'TYPEFACE_HOST'])
+  const { COMPOSER_ATTR, PALETTE_ATTR, PALETTE_HOST, SKIN_PALETTES, TYPEFACE_ATTR, TYPEFACE_CLAUDE, TYPEFACE_HOST } = pick(constants, constantsFile, ['COMPOSER_ATTR', 'PALETTE_ATTR', 'PALETTE_HOST', 'SKIN_PALETTES', 'TYPEFACE_ATTR', 'TYPEFACE_CLAUDE', 'TYPEFACE_HOST'])
   return {
     // The gate attributes scripts/css.mjs checks, stamps and writes the token
-    // blocks under: who paints the colours and who sets the type (D77), the
-    // composer preference (D9) and the DeepSeek brand's own blocks (D77).
+    // blocks under: which palette paints the colours and which typeface sets
+    // the type (D80), and the composer preference (D9).
     gates: {
       composer: COMPOSER_ATTR,
-      palette: { attribute: PALETTE_ATTR, claude: PALETTE_CLAUDE, host: PALETTE_HOST },
+      palette: { attribute: PALETTE_ATTR, ids: [...SKIN_PALETTES], host: PALETTE_HOST },
       typeface: { attribute: TYPEFACE_ATTR, claude: TYPEFACE_CLAUDE, host: TYPEFACE_HOST },
-      brand: { attribute: BRAND_ATTR, deepseek: BRAND_DEEPSEEK },
     },
     ...pick(sheets, sheetsFile, ['CRAB_SHEETS', 'DEEPY_SHEETS', 'DEEPY_GUTTER']),
     featureSheets: pick(constants, constantsFile, FEATURE_SHEET_CONSTANTS),
@@ -239,14 +239,9 @@ const CONSTANTS = (() => {
  * address, whichever the asset manifest decided).
  */
 const BRAND_MARKS = [
-  // DeepCraft's own mark: the whale the mascot draws (packages/assets/whale.mjs).
+  // DeepCraft's own mark: the whale the mascot draws (packages/assets/whale.mjs),
+  // and the account row's picture when no avatar is behind it.
   'deepcraft-mark.svg',
-  'claude-mark.svg',
-  'claude-word.svg',
-  'claude-mark-clay.svg',
-  // The account row's picture when no avatar is behind it, under the Claude
-  // brand: Anthropic's own mark.
-  'anthropic-mark.svg',
   // The host's own whale mark (ui-primitives FishLogo, FISH_LOGO_PATH), in
   // DeepSeek's brand blue: a picture where it is painted, a shape where it masks.
   'deepseek-mark.svg',
@@ -370,7 +365,7 @@ async function main() {
 
   const tokenDoc = loadTokens(SRC)
   const css = buildStylesheet({ sheets, srcDir: SRC, sources, tokenDoc, gates: CONSTANTS.gates, images, featureConstants: CONSTANTS.featureSheets })
-  if (writeTokenTable(STYLE_GUIDE, tokenDoc)) console.log('built docs/STYLE.md token table from packages/client/src/theme/tokens.json')
+  if (writeTokenTable(STYLE_GUIDE, tokenDoc, CONSTANTS.gates.palette.ids)) console.log('built docs/STYLE.md token table from packages/client/src/theme/tokens.json')
   if (writeMotionTable(STYLE_GUIDE, tokenDoc)) console.log('built docs/STYLE.md motion table from packages/client/src/theme/tokens.json')
   if (writeLayerTable(STYLE_GUIDE, tokenDoc)) console.log('built docs/STYLE.md layer table from packages/client/src/theme/tokens.json')
 

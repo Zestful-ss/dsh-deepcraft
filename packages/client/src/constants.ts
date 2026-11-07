@@ -60,11 +60,9 @@ export const SETTINGS_SECTION_SLOT = 'settings.section'
  */
 export const REPOSITORY_URL = 'https://github.com/Zestful-ss/dsh-deepcraft'
 
-/** The document attribute the stylesheet switches on. */
-export const BRAND_ATTR = 'data-dsh-deepcraft-brand'
 
 /**
- * The custom brand layer over either brand (D77, packages/client/src/features/brand/brand.ts). Each part stands only while
+ * The custom brand layer over the default identity (D80, packages/client/src/features/brand/brand.ts). Each part stands only while
  * the reader has supplied it: CUSTOM_MARK_ATTR while a mark image is in place,
  * CUSTOM_WORD_ATTR as `image` while a wordmark image is and as `text` while
  * only a brand name is, CUSTOM_TINT_ATTR while the images take the text colour
@@ -92,7 +90,7 @@ export const STATUS_MOTION_ATTR = 'data-dsh-deepcraft-status-motion'
 export const PALETTE_ATTR = 'data-dsh-deepcraft-palette'
 export const TYPEFACE_ATTR = 'data-dsh-deepcraft-typeface'
 export const MASCOT_ATTR = 'data-dsh-deepcraft-mascot'
-/** The mascot the brand resolves to: a Petdex package, chosen per theme and shared by both places. */
+/** The mascot "follow the theme" resolves to: the reader's one Petdex package, shared by both places. */
 export const MASCOT_PETDEX = 'petdex'
 export const SEARCH_STYLE_ATTR = 'data-dsh-deepcraft-search-style'
 export const SIDEBAR_LAYOUT_ATTR = 'data-dsh-deepcraft-sidebar-layout'

@@ -1,0 +1,8 @@
+{
+  "group": "removals",
+  "order": 0,
+  "external": true,
+  "at": "2026-11-07",
+  "zh": "移除主题自带的 Claude 品牌档、标志与账户暂停彩蛋；品牌名称、标志、字标与强调色仍可自行设置，旧配置中的品牌与宠物选择会自动迁移。",
+  "en": "Remove the theme's own Claude brand tier, marks and account-hold easter egg; the brand name, mark, wordmark and accent colour stay customizable, and an older configuration's brand and pet choices migrate automatically."
+}

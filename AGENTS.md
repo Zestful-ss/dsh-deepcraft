@@ -1,6 +1,6 @@
 # AGENTS.md
 
-`dsh-deepcraft` is a theme plugin for DeepSeek Harness that replicates the look and interaction of Claude Code Desktop. It is a layer over the host: until the host offers an extension point for something, the effect is made with CSS and DOM overrides in the browser (D43).
+`dsh-deepcraft` is a theme plugin for DeepSeek Harness: customisable branding over three independent colour palettes, plus interaction overrides. It is a layer over the host: until the host offers an extension point for something, the effect is made with CSS and DOM overrides in the browser (D43).
 
 The shape of the tree, the two halves and the invariants that cross them are in [ARCHITECTURE.md](ARCHITECTURE.md). A direction is recorded in [docs/adr/](docs/adr/README.md) as one page: the background it answers, the decision, what follows from it, and what would make it worth revisiting. Read the ones a change touches before making it; the numbers code comments cite are those files' names.
 
@@ -54,7 +54,7 @@ Hard stops: stop the moment one triggers, without first judging whether it is wo
 
 ### CSS
 
-- Stylesheets are plain CSS: attributes are spelled out, and a brand mark is read as `var(--dsh-deepcraft-image-<name>)`. The build checks scope, the composer gate, `:has()` placement, the token gates and that every `data-dsh-*` attribute a selector reads is written somewhere in the TypeScript, on the syntax tree (D9). Dark tokens are the base, light overrides go under `:not([data-ds-dark-theme])`. Light canvas `#FCFCFB`, dark `#141413`, accent ember orange `#D97757`; no pure white, pure black or cold grays.
+- Stylesheets are plain CSS: attributes are spelled out, and a brand mark is read as `var(--dsh-deepcraft-image-<name>)`. The build checks scope, the composer gate, `:has()` placement, the token gates and that every `data-dsh-*` attribute a selector reads is written somewhere in the TypeScript, on the syntax tree (D9). Dark tokens are the base, light overrides go under `:not([data-ds-dark-theme])`. No pure white, pure black or cold grays; every palette's values live in `tokens.json` (ocean blue is the default).
 - `!important` only where the page needs it: over a host `!important`, an inline style or another skin rule. The lane's `importance` scenario drops each one on the real page and fails on any that changes nothing (D9); run it after writing one.
 - Token values and host aliases live in `packages/client/src/theme/tokens.json`; the token stylesheet and the token, motion and layer tables in `docs/STYLE.md` are generated from it. A time, an easing curve (D9) and a z-index above 9 (D9) are read from it, never written.
 - A feature never borrows another feature's class names; shared looks use the neutral shared classes (`dsh-deepcraft-popover-card`, `dsh-deepcraft-popover-item`, …).
@@ -118,7 +118,7 @@ npm run verify -- --full --e2e                  # everything the tool holds, ask
 npx jscpd                                       # list every copied stretch the lint rule reads, as .jscpd.json scans them
 node packages/testing/probe.cjs --token <launch-token>          # composer invariants against a running dsh web
 node packages/testing/probe-timing.cjs --token <launch-token>   # startup, catalog readiness, open latency, heap
-node packages/testing/shoot.cjs --token <launch-token> --brand <claude|deepseek> --scene <home|conversation>   # re-shoot one README screenshot pair
+node packages/testing/shoot.cjs --token <launch-token> --palette <ocean|ember|forest> --scene <home|conversation>   # re-shoot one README screenshot pair
 node packages/testing/dsh-web.cjs                       # boot a scratch dsh web (`$DSH_HOME` under .debug/) with this checkout linked in, and print its URL
 node packages/testing/e2e.cjs --scenario <name>[,<name>…] [--headed]   # one scenario; the shots scenario writes its captures to the trace directory
 node packages/testing/e2e.cjs --shard <index>:<total>   # one slice of the lane's default table, which is how the cloud's four jobs each run one

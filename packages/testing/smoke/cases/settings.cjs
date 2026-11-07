@@ -16,10 +16,10 @@ module.exports = {
     const settings = r.settings || {}
     check('the settings section registers with the settings dialog', settings.registered === true, JSON.stringify(settings.registered))
     const expected = {
-      general: ['brand', 'username', 'pageZoom', 'autoPopover'],
-      appearance: ['palette', 'brandAccent', 'typeface', 'pageLook', 'homeLayout', 'homeRipple', 'mascot', 'chatPet', 'mascotScope', 'brandName', 'brandMark', 'brandWordmark', 'brandInk', 'petImport'],
+      general: ['username', 'pageZoom', 'autoPopover'],
+      appearance: ['palette', 'brandAccent', 'typeface', 'pageLook', 'homeLayout', 'homeRipple', 'mascot', 'chatPet', 'mascotScope', 'brandName', 'brandMark', 'brandWordmark', 'brandInk'],
       composer: ['composerScope', 'modelPicker', 'modelDescriptions', 'quickProviders', 'subagentModelPicker', 'peakrate', 'permissionsControl', 'subagentModelChoice'],
-      sidebar: ['collapseFooter', 'banLocale', 'sidebarSearch', 'searchStyle', 'workspaceView', 'dockCards', 'sidebarLayout'],
+      sidebar: ['collapseFooter', 'sidebarSearch', 'searchStyle', 'workspaceView', 'dockCards', 'sidebarLayout'],
       conversation: ['turnNav', 'statsPosition', 'viewTabs', 'headerBand'],
       motion: ['motion', 'chatAnimations', 'chatWait', 'statusDetail', 'statusMotion', 'caretMotion', 'ongoingIndicator', 'chatReveal', 'chatSend', 'messageEnter'],
     }
@@ -48,12 +48,12 @@ module.exports = {
         !!off.sidebar && JSON.stringify(off.sidebar.disabled) === '["searchStyle"]',
       JSON.stringify(off))
     const unmet = settings.requirementsOff || {}
-    check('with the composer restyle off, the model picker with its sub-rows, the permission control and the statistics\' position grey out, the two switches and the position saying what they wait for; with the footer takeover off, so does the easter egg under it',
+    check('with the composer restyle off, the model picker with its sub-rows, the permission control and the statistics\' position grey out, the two switches and the position saying what they wait for; with the footer takeover off, the host footer entries stay under their own control',
       !!unmet.composer && JSON.stringify(unmet.composer.disabled) === '["modelPicker","modelDescriptions","quickProviders","peakrate","permissionsControl"]' &&
         JSON.stringify(unmet.composer.notes) === '["modelPicker","permissionsControl"]' &&
         !!unmet.conversation && JSON.stringify(unmet.conversation.disabled) === '["statsPosition","headerBand"]' &&
         JSON.stringify(unmet.conversation.notes) === '["statsPosition","headerBand"]' &&
-        !!unmet.sidebar && JSON.stringify(unmet.sidebar.disabled) === '["banLocale"]' && JSON.stringify(unmet.sidebar.notes) === '[]',
+        !!unmet.sidebar && JSON.stringify(unmet.sidebar.disabled) === '[]' && JSON.stringify(unmet.sidebar.notes) === '[]',
       JSON.stringify(unmet))
     const hero = settings.heroOnly || {}
     check('with the restyle on the home page alone, the picker and the permission control take input and the statistics\' position still waits for a conversation',

@@ -77,7 +77,7 @@ body[data-dsh-deepcraft] {
 
 /* The body's own canvas; a wallpaper plugin showing one keeps it unpainted
    (theme/wallpaper.css). */
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"]:not([data-we-wallpaper]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):not([data-we-wallpaper]) {
   background-color: var(--dsh-deepcraft-canvas);
 }
 
@@ -283,7 +283,7 @@ body[data-dsh-deepcraft] :is(code:not(pre code) > [data-dsh-deepcraft-part~="fil
 
 /* A prose link keeps its own hue under the pointer; chrome.css states the
    accent's hover for interface links, so the markdown selector mirrors its
-   link-button exclusion and sits over it (D77, docs/STYLE.md). */
+   link-button exclusion and sits over it (D80, docs/STYLE.md). */
 body[data-dsh-deepcraft] :is(code:not(pre code) > [data-dsh-deepcraft-part~="file-mention"], code:not(pre code) > a):hover,
 body[data-dsh-deepcraft] :is(code:not(pre code) > [data-dsh-deepcraft-part~="file-mention"], code:not(pre code) > a):focus-visible,
 body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="markdown"] :is(a:hover, a:focus-visible):not([data-dsh-deepcraft-part~="link-button"]) {

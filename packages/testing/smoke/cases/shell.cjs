@@ -1,53 +1,47 @@
 'use strict'
 const { same, check, basicChecks, commonChecks } = require('./_shared.cjs')
 
-/** The shell surfaces a wallpaper plugin shows through, and what the Claude palette paints them */
-const CLAUDE_SHELL = ['body', 'sidebar', 'conversation']
-const CLAUDE_FILLS = [['body', 'rgb(252, 252, 251)'], ['sidebar', 'rgb(251, 251, 249)'], ['conversation', 'rgb(252, 252, 251)']]
+/** The shell surfaces a wallpaper plugin shows through, and what the warm palette paints them */
+const EMBER_SHELL = ['body', 'sidebar', 'conversation']
+const EMBER_FILLS = [['body', 'rgb(252, 252, 251)'], ['sidebar', 'rgb(251, 251, 249)'], ['conversation', 'rgb(252, 252, 251)']]
 
 module.exports = {
-  // The skin's own Claude and DeepSeek palettes: the canvases, accents, computed
+  // The skin's three palettes (D80): each one's canvases, accents, computed
   // primary button fills, prose links, inline file mentions, data ink, and
-  // categorical multi-color data-1..6 palette separation.
-  brand(r) {
+  // categorical multi-colour chart separation.
+  palette(r) {
     basicChecks(r)
-    const palette = r.claudePalette || {}
-    const claudeDark = palette.dark || {}
-    check('the Claude brand keeps its ivory and warm-black canvases and the clay accent',
-      palette.canvas === 'rgb(252, 252, 251)' && palette.accent === '#d97757' && !!palette.dark &&
-        claudeDark.canvas === 'rgb(20, 20, 19)' && claudeDark.accent === '#d97757' && claudeDark.raised === '#1e1e1d',
-      JSON.stringify(palette))
-    check('Claude primary button fill, prose links, and file mentions compute to their brand palette steps in light and dark',
-      palette.buttonFill === 'rgb(217, 119, 87)' && palette.proseLink === 'rgb(61, 95, 134)' &&
-        palette.mention === palette.proseLink && palette.mention !== palette.codeFg &&
-        claudeDark.buttonFill === 'rgb(217, 119, 87)' && claudeDark.proseLink === 'rgb(169, 194, 223)' &&
-        claudeDark.mention === claudeDark.proseLink,
-      JSON.stringify({ light: { button: palette.buttonFill, prose: palette.proseLink, mention: palette.mention }, dark: { button: claudeDark.buttonFill, prose: claudeDark.proseLink, mention: claudeDark.mention } }))
+    const palettes = r.palettes || {}
+    const EXPECTED = [
+      ['ocean', { light: 'rgb(252, 252, 251)', dark: 'rgb(32, 36, 39)', accent: '#5368c9', button: 'rgb(83, 104, 201)', prose: 'rgb(62, 91, 214)', darkProse: 'rgb(142, 162, 242)', dataInk: '#4a5fc4', wave: '#5f73d9', darkDataInk: '#8ea2f2', darkWave: '#8ea2f2', raised: '#2b3038' }],
+      ['ember', { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)', accent: '#d97757', button: 'rgb(217, 119, 87)', prose: 'rgb(61, 95, 134)', darkProse: 'rgb(169, 194, 223)', dataInk: '#b9542f', wave: '#c6613f', darkDataInk: '#e8967a', darkWave: '#e08a6d', raised: '#1e1e1d' }],
+      ['forest', { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)', accent: '#397657', button: 'rgb(57, 118, 87)', prose: 'rgb(40, 102, 73)', darkProse: 'rgb(134, 197, 162)', dataInk: '#286649', wave: '#286649', darkDataInk: '#86c5a2', darkWave: '#86c5a2', raised: '#1e1e1d' }],
+    ]
     const validRanks = (tier) =>
       !!tier && Array.isArray(tier.ranks) && tier.ranks.length === 7 &&
       tier.ranks.every((v) => typeof v === 'string' && v.trim().length > 0) &&
       new Set(tier.ranks.slice(0, 6)).size === 6 && !tier.ranks.slice(0, 6).includes(tier.accent)
-    check('Claude categorical chart ranks 1..6 maintain distinct hues and differ from rank 0 accent in light and dark',
-      [palette, claudeDark].every(validRanks) &&
-        palette.dataInk === '#b9542f' && palette.wave === '#c6613f' &&
-        claudeDark.dataInk === '#e8967a' && claudeDark.wave === '#e08a6d',
-      JSON.stringify({ light: { ranks: palette.ranks, dataInk: palette.dataInk, wave: palette.wave }, dark: { ranks: claudeDark.ranks, dataInk: claudeDark.dataInk, wave: claudeDark.wave } }))
-    const ds = r.deepseekPalette || {}
-    const dsDark = ds.dark || {}
-    check('the DeepSeek brand switches to cool canvas, periwinkle accent, and matching button fill in light and dark',
-      ds.accent === '#5368c9' && ds.buttonFill === 'rgb(83, 104, 201)' && !!ds.dark &&
-        dsDark.canvas === 'rgb(32, 36, 39)' && dsDark.accent === '#5368c9' && dsDark.buttonFill === 'rgb(83, 104, 201)',
-      JSON.stringify(ds))
-    check('DeepSeek prose links and data ink follow the blue brand family while ranks 1..6 preserve multi-color categories',
-      ds.proseLink === 'rgb(62, 91, 214)' && ds.mention === ds.proseLink && ds.dataInk === '#4a5fc4' && ds.wave === '#5f73d9' &&
-        dsDark.proseLink === 'rgb(142, 162, 242)' && dsDark.mention === dsDark.proseLink &&
-        dsDark.dataInk === '#8ea2f2' && dsDark.wave === '#8ea2f2' &&
-        [ds, dsDark].every(validRanks),
-      JSON.stringify({ light: { prose: ds.proseLink, dataInk: ds.dataInk, wave: ds.wave, ranks: ds.ranks }, dark: { prose: dsDark.proseLink, dataInk: dsDark.dataInk, wave: dsDark.wave, ranks: dsDark.ranks } }))
+    for (const [id, want] of EXPECTED) {
+      const palette = palettes[id] || {}
+      const dark = palette.dark || {}
+      check(`${id}: the palette has its own canvases, accent and button fill in light and dark`,
+        palette.canvas === want.light && palette.accent === want.accent && dark.canvas === want.dark &&
+          dark.accent === want.accent && dark.buttonFill === want.button,
+        JSON.stringify({ light: { canvas: palette.canvas, accent: palette.accent, button: palette.buttonFill }, dark: { canvas: dark.canvas, accent: dark.accent, button: dark.buttonFill } }))
+      check(`${id}: prose links and file mentions take the palette's own hue in light and dark`,
+        palette.proseLink === want.prose && palette.mention === palette.proseLink &&
+          dark.proseLink === want.darkProse && dark.mention === dark.proseLink,
+        JSON.stringify({ light: { prose: palette.proseLink, mention: palette.mention }, dark: { prose: dark.proseLink, mention: dark.mention } }))
+      check(`${id}: data ink and the ripple follow the palette, and ranks 1..6 stay distinct categories`,
+        palette.dataInk === want.dataInk && palette.wave === want.wave &&
+          dark.dataInk === want.darkDataInk && dark.wave === want.darkWave && [palette, dark].every(validRanks),
+        JSON.stringify({ light: { dataInk: palette.dataInk, wave: palette.wave, ranks: palette.ranks }, dark: { dataInk: dark.dataInk, wave: dark.wave, ranks: dark.ranks } }))
+      check(`${id}: the dark canvas keeps the palette's own raised surface`, dark.raised === want.raised, JSON.stringify(dark))
+    }
     commonChecks(r)
   },
-  // The custom brand over the Claude brand (D77): both images painted where the
-  // brand's art stood, the text-colour ink and the accent once the preferences
+  // The custom brand over a skin palette (D80): both images painted where the
+  // default identity's art stood, the text-colour ink and the accent once the preferences
   // ask for them, and the brand's own accent back once it is cleared.
   'custom-brand'(r) {
     basicChecks(r)
@@ -74,11 +68,11 @@ module.exports = {
       tinted.accent === '#1a7f5a' && tinted.accentInk === '#faf9f5' &&
         tinted.dataInk === '#1a7f5a' && tinted.wave === '#1a7f5a',
       JSON.stringify({ accent: tinted.accent, ink: tinted.accentInk, dataInk: tinted.dataInk, wave: tinted.wave }))
-    const dsTinted = brand.deepseekTinted || {}
-    check('a custom accent remains in force when switching to the DeepSeek brand',
-      dsTinted.accent === '#1a7f5a' && dsTinted.dataInk === '#1a7f5a' &&
-        dsTinted.wave === '#1a7f5a' && dsTinted.buttonFill === 'rgb(26, 127, 90)',
-      JSON.stringify(dsTinted))
+    const forestTinted = brand.forestTinted || {}
+    check('a custom accent remains in force when switching to another skin palette',
+      forestTinted.accent === '#1a7f5a' && forestTinted.dataInk === '#1a7f5a' &&
+        forestTinted.wave === '#1a7f5a' && forestTinted.buttonFill === 'rgb(26, 127, 90)',
+      JSON.stringify(forestTinted))
     const cleared = brand.cleared || {}
     check('clearing the accent hands the brand\'s own accent back, and the images return to their own colours',
       cleared.accent === '#d97757' && cleared.tintAttr === null && cleared.mark.image.includes(markUrl) &&
@@ -387,30 +381,30 @@ module.exports = {
       wall.sidebar === 'rgba(0, 0, 0, 0)' && wall.popover === 'rgba(255, 255, 255, 0.6)' &&
         wall.account === 'rgba(255, 255, 255, 0.6)' && wall.body === 'rgba(0, 0, 0, 0)',
       JSON.stringify(wall))
-    const claude = hp.claude || {}
-    check('back on Claude the skin\'s palette and faces return',
-      claude.base === '#fcfcfb' && claude.body === 'rgb(252, 252, 251)' && claude.account === 'rgb(252, 252, 251)' &&
-        claude.popover === 'rgb(255, 255, 255)' && /Anthropic Serif Web Text/.test(claude.heading || ''),
-      JSON.stringify(claude))
-    // A wallpaper under the Claude palette. The shell canvases stand down
-    // and one fixed mask in the canvas colour lies over the wallpaper; the base
+    const ember = hp.ember || {}
+    check('back on the warm palette the skin\'s colours and faces return',
+      ember.base === '#fcfcfb' && ember.body === 'rgb(252, 252, 251)' && ember.account === 'rgb(252, 252, 251)' &&
+        ember.popover === 'rgb(255, 255, 255)' && /Anthropic Serif Web Text/.test(ember.heading || ''),
+      JSON.stringify(ember))
+    // A wallpaper under the warm palette. The shell canvases stand down and
+    // one fixed mask in the canvas colour lies over the wallpaper; the base
     // canvas the host paints its dialogs and cards with stays opaque, and so do
     // the skin's own faces. Taking the marker away brings the fills back and
     // lifts the mask. The document element's canvas stays behind the layer.
-    const wallClaude = hp.claudeWallpaper || {}
-    check('with the Claude palette and a wallpaper up the shell stands down under one mask',
-      CLAUDE_SHELL.every((key) => wallClaude[key] === 'rgba(0, 0, 0, 0)') && wallClaude.sidebarFill === 'transparent' &&
-        wallClaude.maskPosition === 'fixed' && /^color\(srgb 0\.98\d* 0\.98\d* 0\.98\d* \/ 0\.86\)$/.test(wallClaude.mask || '') &&
-        wallClaude.html === 'rgb(252, 252, 251)',
-      JSON.stringify(wallClaude))
+    const wallEmber = hp.emberWallpaper || {}
+    check('with a skin palette and a wallpaper up the shell stands down under one mask',
+      EMBER_SHELL.every((key) => wallEmber[key] === 'rgba(0, 0, 0, 0)') && wallEmber.sidebarFill === 'transparent' &&
+        wallEmber.maskPosition === 'fixed' && /^color\(srgb 0\.98\d* 0\.98\d* 0\.98\d* \/ 0\.86\)$/.test(wallEmber.mask || '') &&
+        wallEmber.html === 'rgb(252, 252, 251)',
+      JSON.stringify(wallEmber))
     check('and the base canvas and the skin\'s own faces keep their fill',
-      wallClaude.base === '#fcfcfb' && wallClaude.popover === claude.popover && wallClaude.account === claude.account &&
-        wallClaude.search === claude.search,
-      JSON.stringify({ wallpaper: wallClaude, claude }))
+      wallEmber.base === '#fcfcfb' && wallEmber.popover === ember.popover && wallEmber.account === ember.account &&
+        wallEmber.search === ember.search,
+      JSON.stringify({ wallpaper: wallEmber, ember }))
     check('with the wallpaper gone the skin\'s own fills are back and the mask is lifted',
-      CLAUDE_FILLS.every(([key, value]) => claude[key] === value) && claude.sidebarFill === '#fbfbf9' &&
-        claude.mask === 'rgba(0, 0, 0, 0)',
-      JSON.stringify(claude))
+      EMBER_FILLS.every(([key, value]) => ember[key] === value) && ember.sidebarFill === '#fbfbf9' &&
+        ember.mask === 'rgba(0, 0, 0, 0)',
+      JSON.stringify(ember))
     commonChecks(r)
   },
 }

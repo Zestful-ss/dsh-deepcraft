@@ -37,6 +37,9 @@
       "动画设为减弱时鲸鱼停在静帧，点一下仍有反应": [
         0
       ],
+      "账号菜单仍是普通菜单：没有暂停页入口，名字一行不带按钮角色": [
+        0
+      ],
       "控制台没有异常": [
         0
       ]
@@ -213,6 +216,17 @@
         0
       ]
     },
+    "packages/testing/palette.cjs": {
+      "控制台没有异常": [
+        0
+      ],
+      "旧的按主题宠物迁移为唯一一项聊天宠物，且选择留在设置里": [
+        200
+      ],
+      "控制台除导入前的这一次取用外没有异常": [
+        0
+      ]
+    },
     "packages/testing/petdex.cjs": {
       "两个完整包经宿主半边的导入路由原样落盘": [
         2,
@@ -221,7 +235,7 @@
       "版本与图集不符的包整包拒绝；穿越路径的条目也拒绝": [
         400
       ],
-      "Claude 主题画 Claude 选中的包：72×78，同一张原图": [
+      "选中的包画在首页：72×78，同一张原图": [
         72,
         78
       ]
@@ -344,7 +358,7 @@
       "再窄一些时控件仍留在卡片里，输入区也不再横向滚动": [
         0
       ],
-      "控制台没有异常 (line 263)": [
+      "控制台没有异常 (line 264)": [
         0
       ],
       "收起时那枚按钮不占位置，宿主自己的打开按钮在": [
@@ -357,7 +371,7 @@
       "按下它面板收起，宿主的打开按钮回到原处": [
         0
       ],
-      "控制台没有异常 (line 316)": [
+      "控制台没有异常 (line 317)": [
         0
       ],
       "工具调用单独成行": [
@@ -369,7 +383,7 @@
       "过程组收住了整轮": [
         1
       ],
-      "控制台没有异常 (line 331)": [
+      "控制台没有异常 (line 332)": [
         0
       ],
       "逐帧采样真的在跑": [
@@ -397,7 +411,7 @@
         0,
         10
       ],
-      "控制台没有异常 (line 378)": [
+      "控制台没有异常 (line 379)": [
         0
       ],
       "替身起飞后离开页面": [
@@ -418,32 +432,32 @@
       "Windows 标题栏标记下，替身里的祖先链不画伪元素": [
         0
       ],
-      "控制台没有异常 (line 450)": [
+      "控制台没有异常 (line 451)": [
         0
       ],
       "满屏的对话里也读到了飞行": [
         1,
         5
       ],
-      "替身落地时不低于它替换的那一行 (line 484)": [
+      "替身落地时不低于它替换的那一行 (line 485)": [
         0
       ],
       "落定后那一行带着字": [
         0
       ],
-      "控制台没有异常 (line 486)": [
+      "控制台没有异常 (line 487)": [
         0
       ],
       "没有页面形态的条目已逐条列出": [
         0
       ],
-      "控制台没有异常 (line 541)": [
+      "控制台没有异常 (line 542)": [
         0
       ],
       "脚本回答已渲染": [
         0
       ],
-      "控制台没有异常 (line 590)": [
+      "控制台没有异常 (line 596)": [
         0
       ]
     },
@@ -559,15 +573,6 @@
       "the card stays unpainted until the skin's rows are in it and the host has placed it": [
         0
       ],
-      "the hold screen opens over the menu and survives the leaves its overlay causes": [
-        1
-      ],
-      "the host menu stays up behind the hold screen and the screen leaves by its own control, playing its exit first": [
-        0
-      ],
-      "with the easter egg off the account row is a plain name a press does not open, and back on it is the button again": [
-        0
-      ],
       "closing the host menu leaves no injected container behind": [
         0
       ],
@@ -583,7 +588,7 @@
       "a repeated same-state frame reads nothing more": [
         1
       ],
-      "no feature reported a failure (line 251)": [
+      "no feature reported a failure (line 240)": [
         0
       ],
       "the skin's rail stands in the host rail's slot, one mark per turn, the host's rail hidden but laid out": [
@@ -738,45 +743,6 @@
       ],
       "the other plugin leaving hands the seat keys back": [
         3
-      ],
-      "加载点把三条轨道都建好了——三颗跳球、三颗走路、四颗交换四角——其中一条在用，主机的鲸鱼尾让位": [
-        3
-      ],
-      "跳球那条：一颗球从地面弹起 8px 再落回，三颗各错开一个相位": [
-        0,
-        0.5,
-        7.5,
-        40
-      ],
-      "走路那条：三颗各沿自己的线走简谐、两端停得比中间久、相位各错三分之一，去程与回程是同一条曲线，最长的一帧也不比跳球大": [
-        0,
-        0.05,
-        0.38,
-        0.5,
-        1.001,
-        3,
-        7,
-        45
-      ],
-      "交换四角那条：四颗球站成 45 : 55 的矩形，一圈里 A 段换一对对角、B 段换另一对、再各换回来，每颗走的是弧、走完停半段": [
-        0,
-        0.05,
-        0.06,
-        0.6,
-        1,
-        2,
-        3,
-        10,
-        25,
-        45,
-        55,
-        60
-      ],
-      "加载点每 10 秒换一条轨道，换的不会是正站着的那一条": [
-        2
-      ],
-      "换轨道是一次交接：旧的那条各自淡出、新的那条各自淡入，没有一颗球是被搬过去的，框里也从不同时画两条": [
-        0
       ],
       "the old wording leaves upward with a blur: the leave pose is set, its opacity falls and its glyphs blur": [
         0,
@@ -1227,9 +1193,6 @@
       ],
       "一个说法锁住一秒：状态换得再快，这一行也只一秒换一次": [
         0
-      ],
-      "加载点站在那一行里、落在说法的行上，不探出行外": [
-        2
       ],
       "控制台没有异常": [
         0

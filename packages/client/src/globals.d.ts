@@ -33,7 +33,6 @@ interface Element {
   __dshContextLineToken?: object
   /** The host's account row bound by this generation (features/account). */
   __dshHostRowToken?: object
-  __dshBanBound?: boolean
   /** The account stream the body follows (features/account/profile). */
   __dshAccountStream?: unknown
 }

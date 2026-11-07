@@ -69,12 +69,6 @@ export interface FeatureFields {
   /** The smoke cases that cover the feature (`npm run smoke -- --feature <dir>`). */
   cases: string[]
   /**
-   * The themes this feature belongs to (D77). Absent, it belongs to every
-   * theme. A feature that names themes installs only while the current brand
-   * is one of them, and is torn down when the brand changes away.
-   */
-  brands?: readonly Prefs['brand'][]
-  /**
    * The host contract's entries this feature's own modules name
    * (packages/contracts/src/table.ts, D3): the answer to "what breaks if the host
    * changes this", and the build refuses an entry no manifest claims.
@@ -214,7 +208,7 @@ export type RowControlNames<M> = M extends { settingsRows: readonly (infer R)[] 
 export type SettingsControlsOf<M> = Record<RowControlNames<M>, React.ComponentType<SettingsRowView>>
 
 /** The manifest fields the browser half reads. */
-export type FeatureRuntime = FeatureIdentity & Pick<FeatureFields, 'order' | 'yieldsTo' | 'settingsRows' | 'brands'> & {
+export type FeatureRuntime = FeatureIdentity & Pick<FeatureFields, 'order' | 'yieldsTo' | 'settingsRows'> & {
   pref?: keyof Prefs
   prefValues?: string[]
   ungated?: string

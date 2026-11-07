@@ -66,54 +66,6 @@
       ]
     },
     {
-      "reason": "禁入页面：走查里宿主的语言不在被禁的那几种里",
-      "selectors": [
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-settled]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-leaving]",
-        "body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-ban",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban *",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban svg",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-bar",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-brand",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-mark",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-word",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-bar-actions",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-signout",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-window",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-win",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-toast",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-toast-icon",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-toast-text",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-toast-close",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-scroll",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-column",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-lock",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-title",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-lead",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-lead strong",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-next",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-subtitle",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-card",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-step",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-step-num",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-step-body",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-step-title",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-action-title",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-step-desc",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-primary",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-actions",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-action",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-action+.dsh-deepcraft-ban-action",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-action-icon",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-action-text",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-action-title-danger",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-action .dsh-deepcraft-ban-action-title-danger",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-action-desc",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban-action-chevron"
-      ]
-    },
-    {
       "reason": "脚本回答里没有文件操作：走查那一轮不读写文件",
       "selectors": [
         "body[data-dsh-deepcraft] .dsh-deepcraft-file-root",
@@ -244,14 +196,7 @@
         "html[data-windows-titlebar] body[data-dsh-deepcraft]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~=layout-frame]>[data-dsh-deepcraft-part~=center-column]",
         "html[data-windows-titlebar] body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=layout-frame]>[data-side=sidebar]",
         "html[data-windows-titlebar] body[data-dsh-deepcraft] [data-slot=sidebar] [data-dsh-deepcraft-part~=logo-row]",
-        "html[data-windows-titlebar] body[data-dsh-deepcraft] [data-dsh-deepcraft-search-row]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar] .dsh-deepcraft-ban-bar",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar][data-dsh-deepcraft-ban-controls=left] .dsh-deepcraft-ban-bar",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar] .dsh-deepcraft-ban-brand",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar] .dsh-deepcraft-ban-signout",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar] .dsh-deepcraft-ban-window",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar] .dsh-deepcraft-ban-scroll",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-ban[data-dsh-deepcraft-ban-titlebar] .dsh-deepcraft-ban-toast"
+        "html[data-windows-titlebar] body[data-dsh-deepcraft] [data-dsh-deepcraft-search-row]"
       ]
     },
     {
@@ -311,14 +256,11 @@
     {
       "reason": "自定义品牌：走查一次只写一个标记，读者提供的图形与文字不在页面上",
       "selectors": [
-        "body[data-dsh-deepcraft] .dsh-deepcraft-masked-mark",
         "body[data-dsh-deepcraft][data-dsh-deepcraft-custom-mark] [data-dsh-deepcraft-part~=hero-mark]",
         "body[data-dsh-deepcraft][data-dsh-deepcraft-custom-mark][data-dsh-deepcraft-custom-tint] :is([data-dsh-deepcraft-part~=brand-mark],[data-dsh-deepcraft-part~=rail-mark])",
         "body[data-dsh-deepcraft][data-dsh-deepcraft-custom-mark][data-dsh-deepcraft-custom-tint] [data-dsh-deepcraft-part~=hero-mark]",
         "body[data-dsh-deepcraft][data-dsh-deepcraft-custom-word=image][data-dsh-deepcraft-custom-tint] [data-dsh-deepcraft-part~=brand-identity]>[data-dsh-deepcraft-part~=brand-name]",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-custom-mark] [data-dsh-deepcraft-part~=hero-mark]>*",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette=claude][data-dsh-deepcraft-accent][data-ds-dark-theme]",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette=claude][data-dsh-deepcraft-brand=deepseek][data-dsh-deepcraft-accent]"
+        "body[data-dsh-deepcraft][data-dsh-deepcraft-custom-mark] [data-dsh-deepcraft-part~=hero-mark]>*"
       ]
     },
     {
@@ -375,17 +317,6 @@
         "body[data-dsh-deepcraft] .dsh-deepcraft-effort[data-dragging] .dsh-deepcraft-effort-fill",
         "body[data-dsh-deepcraft] .dsh-deepcraft-effort[data-empty] .dsh-deepcraft-effort-track",
         "body[data-dsh-deepcraft] .dsh-deepcraft-effort[data-empty] .dsh-deepcraft-effort-value"
-      ]
-    },
-    {
-      "reason": "宿主开了壁纸：临时宿主用默认外观",
-      "selectors": [
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette=claude][data-we-wallpaper]",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette=claude][data-ds-dark-theme][data-we-wallpaper]",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette=claude][data-we-wallpaper] :is([data-dsh-deepcraft-part~=layout-frame][data-dsh-deepcraft-holds~=sidebar-column],[data-dsh-deepcraft-part~=center-column],[data-dsh-deepcraft-part~=rightbar-column],[data-dsh-deepcraft-holds~=conversation-scroll])",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette=claude][data-we-wallpaper] :is([data-pane=sidebar],[data-dsh-deepcraft-part~=sidebar-column])",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette=claude][data-we-wallpaper] :is([data-phase=active],[data-content-phase=active]) [data-composer-seat]",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette=claude][data-we-wallpaper] [data-dsh-deepcraft-part~=conversation-header][data-dsh-deepcraft-holds~=view-tabs]"
       ]
     },
     {
@@ -505,12 +436,6 @@
       "reason": "减少动效配上等待行的状态动效：走查把动画偏好与等待行的状态动效分开走",
       "selectors": [
         "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced][data-dsh-deepcraft-status-motion=wash] .dsh-deepcraft-chat-wait .dsh-deepcraft-swap-shimmer"
-      ]
-    },
-    {
-      "reason": "减少动效配上加载点：走查写动画偏好时那一轮已经落定，状态行没有加载点",
-      "selectors": [
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced] .dsh-deepcraft-chat-wait-lane .dsh-deepcraft-chat-wait-dot"
       ]
     },
     {

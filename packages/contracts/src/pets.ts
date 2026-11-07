@@ -1,7 +1,7 @@
 /**
  * The Petdex contract: the animation vocabulary a package's atlas carries, the
  * atlas geometry both halves read, the pet a package describes and the presets
- * this plugin offers (D78).
+ * this plugin offers (D80).
  *
  * A package is its own `pet.json` and one PNG/WebP atlas, byte for byte: the
  * bytes are stored as they arrived and the descriptor below is derived from

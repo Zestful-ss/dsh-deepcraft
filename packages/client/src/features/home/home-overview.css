@@ -65,7 +65,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-home-heat {
 }
 
 /* The heat grid is a data ramp in the brand's data ink — Claude's orange,
-   DeepSeek's blue (D77, docs/STYLE.md "Home layouts"): the empty cell stays the
+   DeepSeek's blue (D80, docs/STYLE.md "Home layouts"): the empty cell stays the
    neutral base tone, and each level mixes that ink in by its share of the ramp
    (constants.ts's HOME_HEAT_RAMP; the build writes one rule per level,
    scripts/feature-sheets.mjs). The local name is what those generated rules

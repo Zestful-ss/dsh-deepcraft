@@ -17,7 +17,7 @@ A fix is welcome as a pull request on its own: describe the symptom, the cause a
 
 Any other change — a new feature, a new setting, a reworked layout — starts as an issue with the rationale and waits for an answer before the code is written.
 
-This theme aims to faithfully replicate the Claude Code Desktop experience; changes should align with the [design tokens](docs/STYLE.md).
+The theme keeps one of three independent colour palettes beside a reader-replaceable brand identity; changes should align with the [design tokens](docs/STYLE.md).
 
 ## Code changes
 

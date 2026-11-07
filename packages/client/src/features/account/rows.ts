@@ -5,8 +5,8 @@ import type { HostAccountMenu } from './host-menu'
 import { copy } from './copy'
 
 /**
- * The account rows: the header with the hold-screen easter egg, the
- * self-built trigger's picture, and the self-built path's settings row.
+ * The account rows: the header with the nickname, the self-built trigger's
+ * picture, and the self-built path's settings row.
  *
  * The footer (account-footer.ts) builds the containers and decides which
  * mount point is active (account/surface.ts); this factory builds and syncs
@@ -16,7 +16,7 @@ import { copy } from './copy'
  * the nickname and the picture come from the identity chain
  * (packages/client/src/core/host.ts).
  */
-export function createAccountRows(options: { hostMenu: HostAccountMenu, openBan(): void, banAvailable(): boolean, onChange?(): void }) {
+export function createAccountRows(options: { hostMenu: HostAccountMenu, onChange?(): void }) {
   const hostMenu = options.hostMenu
 
   /**
@@ -184,7 +184,6 @@ export function createAccountRows(options: { hostMenu: HostAccountMenu, openBan(
    */
   function buildAccountHeader(username: string) {
     const header = buildElement('div', 'dsh-deepcraft-account-popover-header')
-    header.setAttribute('data-dsh-deepcraft-ban-row', '')
 
     const rowEl = buildElement('div', 'dsh-deepcraft-account-popover-row')
 
@@ -218,56 +217,12 @@ export function createAccountRows(options: { hostMenu: HostAccountMenu, openBan(
     return copy('accountNameFallback')
   }
 
-  /**
-   * The header's row is the easter egg's button while the easter egg is
-   * installed, and a plain name while it is switched off (or retired): no
-   * role, no stop in the tab order, no hover plate (account-footer.css).
-   */
-  function syncBanEntry(rowEl: HTMLElement) {
-    const available = options.banAvailable()
-    if (available === (rowEl.getAttribute('role') === 'button')) return
-    if (available) {
-      rowEl.setAttribute('role', 'button')
-      rowEl.setAttribute('tabindex', '0')
-      rowEl.setAttribute('aria-haspopup', 'dialog')
-    } else {
-      rowEl.removeAttribute('role')
-      rowEl.removeAttribute('tabindex')
-      rowEl.removeAttribute('aria-haspopup')
-    }
-  }
-
-  /**
-   * Sync the header of the active container: the nickname and the easter
-   * egg's binding. Bound OUTSIDE the build branch so the pass that creates
-   * the container already wires the row; `__dshBanBound` keeps a later pass
-   * from binding it twice, which would open the overlay twice per click.
-   */
+  /** Sync the header of the active container: the nickname the identity chain resolved. */
   function syncAccountHeader(root: Element | null, hostRow: Element | null) {
     if (root === null) return
     const nameEl = root.querySelector('.dsh-deepcraft-account-popover-name')
     const username = accountDisplayName(hostRow)
     if (nameEl && nameEl.textContent !== username) nameEl.textContent = username
-    const rowEl = root.querySelector<HTMLElement>('.dsh-deepcraft-account-popover-row')
-    if (rowEl !== null) syncBanEntry(rowEl)
-    const banRow = root.querySelector<HTMLElement>('[data-dsh-deepcraft-ban-row]')
-    if (banRow && !banRow.__dshBanBound) {
-      banRow.__dshBanBound = true
-      banRow.addEventListener('click', e => {
-        if (!options.banAvailable()) return
-        // The row's gesture is the easter egg, not a menu selection.
-        e.preventDefault()
-        e.stopPropagation()
-        options.openBan()
-      })
-      banRow.addEventListener('keydown', e => {
-        if (e.key !== 'Enter' && e.key !== ' ') return
-        if (!options.banAvailable()) return
-        e.preventDefault()
-        e.stopPropagation()
-        options.openBan()
-      })
-    }
   }
 
   /** The container injected at the head of the host's account menu. */

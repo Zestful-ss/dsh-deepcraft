@@ -1,32 +1,24 @@
 /* ---------- Claude Code layout: hero brand mark ---------- */
-/* The new-conversation hero ships the DeepSeek fish; swap it for the selected
-   brand mark. Every child of the hitbox is hidden — the mark can sit behind a
-   slot wrapper, not always a bare svg — and the mark is painted on the hitbox,
-   so React keeps owning its own node. Each brand paints its own art in the one
-   box. */
-body[data-dsh-deepcraft]:is([data-dsh-deepcraft-brand="claude"], [data-dsh-deepcraft-brand="deepseek"]) [data-dsh-deepcraft-part~="hero-mark"] > * {
+/* The new-conversation hero ships the DeepSeek fish; the skin takes the host's
+   own whale as a mask over the accent (D80). Every child of the hitbox is
+   hidden — the mark can sit behind a slot wrapper, not always a bare svg — and
+   the mark is painted on the hitbox, so React keeps owning its own node. It
+   stays crisp at the 21px the home line leaves it and at the larger box the
+   conversation hero gives it; the reader's own mark replaces it through the
+   custom-brand layer. */
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="hero-mark"] > * {
   display: none !important;
 }
 
-body[data-dsh-deepcraft]:is([data-dsh-deepcraft-brand="claude"], [data-dsh-deepcraft-brand="deepseek"]) [data-dsh-deepcraft-part~="hero-mark"] svg {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="hero-mark"] svg {
   display: none;
 }
 
-body[data-dsh-deepcraft]:is([data-dsh-deepcraft-brand="claude"], [data-dsh-deepcraft-brand="deepseek"]) [data-dsh-deepcraft-part~="hero-mark"]::before {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="hero-mark"]::before {
   content: "";
   flex: none;
   width: 42.5px;
   height: 42.5px;
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] [data-dsh-deepcraft-part~="hero-mark"]::before {
-  background-image: var(--dsh-deepcraft-image-claude-mark-clay);
-}
-
-/* The DeepSeek brand takes the host's own whale as a mask over the accent, so
-   the mark stays crisp at the 21px the home line leaves it and at the larger
-   box the conversation hero gives it. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] [data-dsh-deepcraft-part~="hero-mark"]::before {
   background-color: var(--dsw-alias-brand-primary);
   -webkit-mask: var(--dsh-deepcraft-mask-deepseek-mark);
   mask: var(--dsh-deepcraft-mask-deepseek-mark);

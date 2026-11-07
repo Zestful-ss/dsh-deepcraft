@@ -45,10 +45,6 @@
       "count": 2,
       "reason": "The composer's input, read when a send begins and when the flight's seat is measured."
     },
-    "packages/client/src/features/ban-screen/ban-screen.ts": {
-      "count": 1,
-      "reason": "The hold screen's own node, swept once when the screen is installed."
-    },
     "packages/client/src/features/chat-fold/process-fold.ts": {
       "count": 1,
       "reason": "The process groups already on the page, settled once right after install."

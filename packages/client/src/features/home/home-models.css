@@ -71,7 +71,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-label {
 
 /* The ramp: the biggest spender takes the accent in force, the walk down the
    brand's own data steps, and the last step the neutral every model past the
-   list wears (D77, docs/STYLE.md "Home layouts"). */
+   list wears (D80, docs/STYLE.md "Home layouts"). */
 body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank="0"],
 body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank="0"] {
   background: var(--dsw-alias-brand-primary);

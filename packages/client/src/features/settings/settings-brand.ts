@@ -8,23 +8,23 @@ import type { Prefs } from '../../constants'
 import { copy } from './copy'
 
 /**
- * The Appearance tab's custom brand rows (D77), after the mascot: the brand
+ * The Appearance tab's custom brand rows (D80), after the mascot: the brand
  * name, the two images and how the images are inked. The name is a
  * preference written through the page's own write path; the images live in
  * the host half's brand directory and go through the shared image state
  * (packages/client/src/shared/custom-brand.ts). The accent colour stands
- * apart from them as Colours' sub-row (accentRow).
+ * apart from them as the palette row's sub-row (accentRow).
  */
 
 /** Pause after the last edit before a typed name or a dragged colour is written to the settings store. */
 const DRAFT_SAVE_DEBOUNCE_MS = 600
-/** What the colour well shows while no custom accent is set and the accent token is not a `#rrggbb` colour. */
-const ACCENT_FALLBACK = '#d97757'
+/** What the colour well shows while no custom accent is set and the accent token is not a `#rrggbb` colour: the default palette's accent. */
+const ACCENT_FALLBACK = '#5368c9'
 
 /**
  * The accent the page paints right now. Sampled after a commit, not while
  * rendering: the palette attribute is mirrored outside React, so a sample
- * taken during render can still describe the previous brand (D77).
+ * taken during render can still describe the previous palette (D80).
  */
 function paintedAccent() {
   const live = getComputedStyle(document.body).getPropertyValue('--dsw-alias-brand-primary').trim().toLowerCase()
@@ -174,9 +174,9 @@ function BrandImageControl(props: { kind: BrandImageKind }) {
 
 /**
  * The accent colour: a colour well and, while a custom colour is set, the
- * button that hands the accent back to the brand. Unset, the well shows the
- * accent the page paints right now — the selected brand's, which a brand or
- * palette switch changes under it.
+ * button that hands the accent back to the palette. Unset, the well shows the
+ * accent the page paints right now — the selected palette's, which a palette
+ * switch changes under it.
  */
 function BrandAccentControl(props: { stored: string, write: SettingsView['write'], disabled?: boolean }) {
   const { draft, change, flush } = useDraft(props.stored, value => props.write({ brandAccent: value }))
@@ -208,9 +208,9 @@ function BrandAccentControl(props: { stored: string, write: SettingsView['write'
 }
 
 /**
- * The accent colour as Colours' sub-row (D72): the accent paints only over
- * the skin's own palette (D77), so the row greys out while Colours follows
- * the host, still showing the stored colour.
+ * The accent colour as the palette row's sub-row (D72, D80): the accent paints
+ * only over the skin's own palettes, so the row greys out while Colours
+ * follows the host, still showing the stored colour.
  */
 export function accentRow(view: SettingsView): SettingsRow {
   const { prefs, write, controls } = view

@@ -1,4 +1,4 @@
-import { BRAND_ATTR, BRAND_DEEPSEEK, COMPOSER_ATTR, MASCOT_PETDEX, DOCK_LOOK_ATTR, DOCK_LOOK_CARD, DOCK_LOOK_FLUSH, FOOTER_ATTR, MASCOT_ATTR, MASCOT_BRAND, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, ONGOING_INDICATOR_ATTR, PAGE_ZOOM_ATTR, PAGE_ZOOM_SYSTEM, PAGE_LOOK_ATTR, PACKAGE_NAME, PALETTE_ATTR, SEARCH_STYLE_ATTR, SETTINGS_ENTRY_FALLBACK, SIDEBAR_LAYOUT_ATTR, STATS_POSITION_ATTR, STATUS_MOTION_ATTR, TYPEFACE_ATTR } from '../constants'
+import { COMPOSER_ATTR, MASCOT_PETDEX, DOCK_LOOK_ATTR, DOCK_LOOK_CARD, DOCK_LOOK_FLUSH, FOOTER_ATTR, MASCOT_ATTR, MASCOT_BRAND, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, ONGOING_INDICATOR_ATTR, PAGE_ZOOM_ATTR, PAGE_ZOOM_SYSTEM, PAGE_LOOK_ATTR, PACKAGE_NAME, PALETTE_ATTR, SEARCH_STYLE_ATTR, SETTINGS_ENTRY_FALLBACK, SIDEBAR_LAYOUT_ATTR, STATS_POSITION_ATTR, STATUS_MOTION_ATTR, TYPEFACE_ATTR } from '../constants'
 import type { PrefKey, Prefs } from '../constants'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import { clampPrefs } from '@dsh-deepcraft/contracts/prefs'
@@ -90,7 +90,6 @@ interface PrefMirror {
 }
 
 const MIRRORS = [
-  { key: 'brand', attr: BRAND_ATTR, value: (prefs: Prefs) => prefs.brand },
   { key: 'palette', attr: PALETTE_ATTR, value: (prefs: Prefs) => prefs.palette },
   { key: 'pageLook', attr: PAGE_LOOK_ATTR, value: (prefs: Prefs) => prefs.pageLook },
   { key: 'typeface', attr: TYPEFACE_ATTR, value: (prefs: Prefs) => prefs.typeface },
@@ -185,11 +184,6 @@ export function motionReduced() {
 export function resolveMascot(current: Prefs) {
   if (current.mascot !== MASCOT_BRAND) return current.mascot
   return MASCOT_PETDEX
-}
-
-/** The package the current theme uses in the chat position (D78). */
-export function resolveThemePet(current: Prefs) {
-  return current.brand === BRAND_DEEPSEEK ? current.chatPetDeepseek : current.chatPetClaude
 }
 
 /**

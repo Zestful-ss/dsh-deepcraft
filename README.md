@@ -2,9 +2,9 @@
 
 # DeepCraft
 
-**为 DeepSeek Harness 提供 Claude 与 DeepSeek 双主题的外观与交互插件。**
+**为 DeepSeek Harness 提供可自定义品牌、多套配色与界面交互的外观插件。**
 
-> **同一套界面，在 Claude Code Desktop 与 DeepSeek 两种气质之间切换。**
+> **默认深海蓝，另有暖橙与森林绿；标志、名称、强调色与宠物都可以换成你自己的。**
 
 [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red.svg)](README.md) [![English](https://img.shields.io/badge/lang-English-blue.svg)](README.en.md)
 
@@ -15,52 +15,48 @@
 
 ## 预览
 
-两套主题在插件设置里切换，亮暗跟随系统。两套主题共用布局，并分别搭配强调色、辅助色与中性色；Claude 选用暖灰底色、灰蓝正文链接与余烬橙强调色，DeepSeek 选用冷灰底色、群青链接与长春花蓝强调色；图表分类保留多种易区分的辅助色。
+三套配色在插件设置里切换，亮暗跟随系统。三套共用同一套版面，切换配色只换颜色，不改标志、名称与宠物；外观页还可以换上自己的标志、文字标志、强调色和宠物。
 
-### Claude
+### 深海蓝（默认）
 
 <table>
   <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-home-light.png" alt="Claude 档首页 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-home-dark.png" alt="Claude 档首页 —— 暗色" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ocean-home-light.png" alt="深海蓝首页 —— 亮色" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ocean-home-dark.png" alt="深海蓝首页 —— 暗色" /></td>
   </tr>
   <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-conversation-light.png" alt="Claude 档 Markdown 对话 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-conversation-dark.png" alt="Claude 档 Markdown 对话 —— 暗色" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ocean-conversation-light.png" alt="深海蓝 Markdown 对话 —— 亮色" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ocean-conversation-dark.png" alt="深海蓝 Markdown 对话 —— 暗色" /></td>
+  </tr>
+</table>
+
+### 暖橙
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-light.png" alt="暖橙首页 —— 亮色" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-dark.png" alt="暖橙首页 —— 暗色" /></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="./docs/screenshots/ember-conversation-light.png" alt="暖橙 Markdown 对话 —— 亮色" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ember-conversation-dark.png" alt="暖橙 Markdown 对话 —— 暗色" /></td>
+  </tr>
+</table>
+
+### 森林绿
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="./docs/screenshots/forest-home-light.png" alt="森林绿首页 —— 亮色" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/forest-home-dark.png" alt="森林绿首页 —— 暗色" /></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="./docs/screenshots/forest-conversation-light.png" alt="森林绿 Markdown 对话 —— 亮色" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/forest-conversation-dark.png" alt="森林绿 Markdown 对话 —— 暗色" /></td>
   </tr>
 </table>
 
 > 首页（上），对话界面（下）；浅色在左，深色在右。
-
-### DeepSeek
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-home-light.png" alt="DeepSeek 档首页 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-home-dark.png" alt="DeepSeek 档首页 —— 暗色" /></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-conversation-light.png" alt="DeepSeek 档 Markdown 对话 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-conversation-dark.png" alt="DeepSeek 档 Markdown 对话 —— 暗色" /></td>
-  </tr>
-</table>
-
-> 输入框上沿站着 Whaledou；原版像素小鲸鱼 Deepy 仍可手动选择，八个状态：
-
-<table>
-  <tr>
-    <td align="center" width="25%"><img src="./docs/gifs/idle.gif" width="120" alt="空闲" /><br />空闲</td>
-    <td align="center" width="25%"><img src="./docs/gifs/thinking.gif" width="120" alt="思考" /><br />思考</td>
-    <td align="center" width="25%"><img src="./docs/gifs/typing.gif" width="120" alt="写回答、调用工具" /><br />写回答、调用工具</td>
-    <td align="center" width="25%"><img src="./docs/gifs/conducting.gif" width="120" alt="指挥子代理" /><br />指挥子代理</td>
-  </tr>
-  <tr>
-    <td align="center" width="25%"><img src="./docs/gifs/notification.gif" width="120" alt="等你操作" /><br />等你操作</td>
-    <td align="center" width="25%"><img src="./docs/gifs/error.gif" width="120" alt="失败" /><br />失败</td>
-    <td align="center" width="25%"><img src="./docs/gifs/happy.gif" width="120" alt="完成" /><br />完成</td>
-    <td align="center" width="25%"><img src="./docs/gifs/sleeping.gif" width="120" alt="睡着" /><br />睡着</td>
-  </tr>
-</table>
 
 ### 版面
 
@@ -70,8 +66,8 @@
 
 ### 宠物
 
-- 聊天框右上角的宠物按主题分别选择：Claude 默认 Crab Buddy，DeepSeek 默认 Whaledou；原有的像素螃蟹与像素鲸鱼仍在同一行里可选。
-- 设置页的「导入宠物包」接受包含 `pet.json` 与图集的文件夹、ZIP 或 Petdex 链接，原文件字节不改动。宠物原画由 Petdex 与各包作者提供，不随本插件发布。
+- 聊天框右上角的宠物只有一项选择，不随配色或标识变化：默认 Whaledou，也可以选 Crab Buddy、原有的像素螃蟹或像素鲸鱼。
+- 设置页的「聊天框宠物包」接受包含 `pet.json` 与图集的文件夹、ZIP 或 Petdex 链接，原文件字节不改动。宠物原画由 Petdex 与各包作者提供，不随本插件发布。
 
 ### 模型选择
 

@@ -35,7 +35,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-account-btn[data-open="true"] {
 body[data-dsh-deepcraft] .dsh-deepcraft-account-avatar {
   width: 18px;
   height: 18px;
-  background: var(--dsh-deepcraft-image-anthropic-mark) center / contain no-repeat;
+  background: var(--dsh-deepcraft-image-deepcraft-mark) center / contain no-repeat;
   flex: none;
   margin-right: 8px;
   /* The host's own avatar is a circle (32px with a 16px radius). Ours is 18px to
@@ -45,12 +45,9 @@ body[data-dsh-deepcraft] .dsh-deepcraft-account-avatar {
   corner-shape: round;
   overflow: hidden;
 }
-/* Under the DeepSeek brand the picture with no account behind it is the pixel
-   whale the mascot draws. A real account photo still covers it. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] .dsh-deepcraft-account-avatar {
-  background-image: var(--dsh-deepcraft-image-deepcraft-mark);
-}
-/* The reader's own mark takes that place under either brand (D77). Tinted, it
+/* The picture with no account behind it is the pixel whale the mascot draws; a
+   real account photo still covers it. */
+/* The reader's own mark takes that place on every palette (D80). Tinted, it
    is a shape in the label colour on a layer of its own: a mask on the avatar
    itself would cut the account photo layered over it to the mark's outline,
    and the photo and skin rules below hide that layer whenever a picture
@@ -142,15 +139,10 @@ body[data-dsh-deepcraft] .dsh-deepcraft-account-popover::after {
   background: transparent;
 }
 
-/* The account row is the ban-screen easter egg's trigger
-   (packages/client/src/features/ban-screen/ban-screen.ts). The header is only the wrapper — the clickable
-   strip is the inner row, so the hover plate covers the name and not the divider
-   that follows it. With the easter egg switched off the row carries no button
-   role and stays a plain name, without the pointer or the plate (rows.ts). */
 /* The row's content is the name alone, a plain block: the row itself is the
    centring box, and its box model matches the shared popover item — `border-box`
-   with the height as a minimum — so the hover plate is the whole row and the
-   name sits in the middle of it rather than against its top edge. */
+   with the height as a minimum — so the name sits in the middle of it rather
+   than against its top edge. */
 body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-row {
   box-sizing: border-box;
   display: flex;
@@ -158,15 +150,6 @@ body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-row {
   min-height: 32px;
   padding: 2px 7px;
   border-radius: 6px;
-  transition: background-color var(--dsh-deepcraft-timing-feedback);
-}
-body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-row[role="button"] {
-  cursor: pointer;
-}
-body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-row[role="button"]:hover,
-body[data-dsh-deepcraft] .dsh-deepcraft-account-popover-row[role="button"]:focus-visible {
-  background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
-  outline: none;
 }
 
 /* The rule under the account name belongs to the POPOVER, not to the row: it
@@ -344,10 +327,10 @@ body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] {
   font-family: var(--dsw-font-family);
 }
 /* The card's visible fill is the MenuSurface material layer, not this box:
-   under the Claude palette the surface token is rebound so that layer paints
+   under a skin palette the surface token is rebound so that layer paints
    the same card fill, and its backdrop blur is dropped for the flat skin card.
    Under the host's colours the host's material stands. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"] [data-dsh-deepcraft-account-menu] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]) [data-dsh-deepcraft-account-menu] {
   --dsw-menu-surface-fill: var(--dsh-deepcraft-card);
   --dsw-menu-backdrop-filter: none;
 }

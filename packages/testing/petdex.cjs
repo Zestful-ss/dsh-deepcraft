@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * petdex.cjs — Petdex pets on the real host (D78).
+ * petdex.cjs — Petdex pets on the real host (D80).
  *
  * Registered in the lane's scenario table (packages/testing/scenarios.cjs).
  *
  * Two complete packages are packed here and installed through the host half's
- * own import route, byte for byte; the settings page then picks one per theme,
+ * own import route, byte for byte; the settings page then picks one for the chat
  * and the home card must draw that package's atlas at 72×78 with its own
  * action names. The run does not download a preset and does not touch the
  * machine's own `~/.petdex`: the host boots with a scratch user home
@@ -18,7 +18,7 @@ const path = require('node:path')
 const { PNG } = require('pngjs')
 const { zipSync } = require('fflate')
 const { openSkinSettings } = require('./settings-route.cjs')
-const { waitForSkin } = require('./dsh-web.cjs')
+const { waitForSkin, dismissOverlays } = require('./dsh-web.cjs')
 
 const ROUTES = {
   library: '/dsh-deepcraft/pets',
@@ -77,6 +77,7 @@ async function openAppearance(page) {
 
 /** Open the settings page on its Appearance tab, through the shell's own way in. */
 async function openSettings(page) {
+  await dismissOverlays(page)
   await openSkinSettings(page)
   await openAppearance(page)
 }
@@ -130,13 +131,10 @@ async function waitForGuest(page, id) {
   return readGuest(page)
 }
 
-async function pickBrand(page, brand) {
-  // The two brand cards live on the General tab.
-  await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: /^(通用|General)$/ }).first().click()
-  await page.waitForTimeout(250)
-  await page.locator(`.dsh-deepcraft-brand-card[data-brand="${brand}"]`).first().click()
-  await page.waitForTimeout(400)
-  await openAppearance(page)
+/** The palette choices on the Appearance tab, in the settings page's order. */
+async function pickPalette(page, at) {
+  await page.locator('.dsh-deepcraft-palette-options button').nth(at).click()
+  await page.waitForTimeout(300)
 }
 
 function petdexScenario({ check }) {
@@ -147,10 +145,10 @@ function petdexScenario({ check }) {
     async beforeSend({ page, home, url }) {
       read.packages = []
       await openSettings(page)
-      const claudeId = 'e2e-crab'
-      const deepseekId = 'e2e-whale'
+      const firstId = 'e2e-crab'
+      const secondId = 'e2e-whale'
       read.imported = []
-      for (const [id, seed] of [[claudeId, 1], [deepseekId, 2]]) {
+      for (const [id, seed] of [[firstId, 1], [secondId, 2]]) {
         const answer = await upload(page, packageZip(id, seed))
         read.imported.push({ id, status: answer.status, pet: answer.answer.pet })
       }
@@ -163,30 +161,35 @@ function petdexScenario({ check }) {
       await page.waitForTimeout(800)
       await openSettings(page)
 
-      // Each theme's chat field chooses its own package.
-      await pickBrand(page, 'claude')
-      await openAppearance(page)
+      // One choice for the chat position, whatever palette is in force (D80).
       read.libraryEarly = await page.evaluate(async () => (await fetch('/dsh-deepcraft/pets')).json())
       read.chatOptions = await chatOptions(page)
-      if (!(read.chatOptions ?? []).includes(claudeId)) {
-        throw new Error(`the chat picker does not offer ${claudeId}: ${JSON.stringify({ options: read.chatOptions, library: read.libraryEarly })}`)
+      if (!(read.chatOptions ?? []).includes(firstId)) {
+        throw new Error(`the chat picker does not offer ${firstId}: ${JSON.stringify({ options: read.chatOptions, library: read.libraryEarly })}`)
       }
-      await rowOf(page, TITLE.chat).locator('.dsh-deepcraft-settings-pet-select').selectOption(claudeId)
+      await rowOf(page, TITLE.chat).locator('.dsh-deepcraft-settings-pet-select').selectOption(firstId)
       await page.waitForTimeout(200)
       await openHome(page, url)
-      read.claude = await waitForGuest(page, claudeId)
+      read.first = await waitForGuest(page, firstId)
 
+      // The palettes change colours alone: the same guest stays through both.
       await openSettings(page)
-      await pickBrand(page, 'deepseek')
-      await rowOf(page, TITLE.chat).locator('.dsh-deepcraft-settings-pet-select').selectOption(deepseekId)
+      await pickPalette(page, 1)
+      await openHome(page, url)
+      read.ember = await waitForGuest(page, firstId)
+      await openSettings(page)
+      await pickPalette(page, 2)
+      await openHome(page, url)
+      read.forest = await waitForGuest(page, firstId)
+
+      // A new choice replaces it, and survives a reload.
+      await openSettings(page)
+      await rowOf(page, TITLE.chat).locator('.dsh-deepcraft-settings-pet-select').selectOption(secondId)
       await page.waitForTimeout(200)
       await openHome(page, url)
-      read.deepseek = await waitForGuest(page, deepseekId)
-
-      await openSettings(page)
-      await pickBrand(page, 'claude')
+      read.second = await waitForGuest(page, secondId)
       await openHome(page, url)
-      read.backToClaude = await waitForGuest(page, claudeId)
+      read.afterReload = await waitForGuest(page, secondId)
 
       // The chat switch retires the guest alone.
       await openSettings(page)
@@ -195,19 +198,19 @@ function petdexScenario({ check }) {
       await page.waitForTimeout(400)
       read.chatOff = await readGuest(page)
       await openSettings(page)
-      await pickMascot(page, /跟随主题宠物|Theme pet/)
+      await pickMascot(page, /Petdex 宠物|Petdex pet/)
       await openHome(page, url)
-      read.chatBack = await waitForGuest(page, claudeId)
+      read.chatBack = await waitForGuest(page, secondId)
 
       // The library reports what was installed, with the original ids intact.
       read.library = await page.evaluate(async (route) => (await fetch(route)).json(), ROUTES.library)
       read.userHome = path.join(home, 'user', '.petdex', 'pets')
-      read.stored = fs.existsSync(path.join(read.userHome, claudeId, 'pet.json')) &&
-        fs.existsSync(path.join(read.userHome, deepseekId, 'pet.json'))
+      read.stored = fs.existsSync(path.join(read.userHome, firstId, 'pet.json')) &&
+        fs.existsSync(path.join(read.userHome, secondId, 'pet.json'))
     },
     async assert() {
-      const claude = read.claude
-      const deepseek = read.deepseek
+      const first = read.first
+      const second = read.second
       const imported = read.imported ?? []
       return [
         check('两个完整包经宿主半边的导入路由原样落盘',
@@ -216,25 +219,27 @@ function petdexScenario({ check }) {
         check('版本与图集不符的包整包拒绝；穿越路径的条目也拒绝',
           read.wrongVersion?.status === 400 && read.traversal?.status === 400,
           JSON.stringify({ version: read.wrongVersion?.status, traversal: read.traversal?.status })),
-        check('Claude 主题画 Claude 选中的包：72×78，同一张原图',
-          !!claude && claude.id === 'e2e-crab' && claude.ready && claude.width === 72 && claude.height === 78 &&
-            claude.spriteWidth === 72 && claude.spriteHeight === 78 &&
-            typeof claude.sheet === 'string' && claude.sheet.includes(`${ROUTES.image}/e2e-crab`) && claude.action === 'idle',
-          JSON.stringify(claude)),
-        check('DeepSeek 主题画自己选中的人：两个主题各自的聊天框字段互不影响',
-          !!deepseek && deepseek.id === 'e2e-whale' && deepseek.ready && deepseek.sheet.includes(`${ROUTES.image}/e2e-whale`),
-          JSON.stringify(deepseek)),
-        check('切回 Claude 后仍是 Claude 原先选中的包',
-          !!read.backToClaude && read.backToClaude.id === 'e2e-crab', JSON.stringify(read.backToClaude)),
+        check('选中的包画在首页：72×78，同一张原图',
+          !!first && first.id === 'e2e-crab' && first.ready && first.width === 72 && first.height === 78 &&
+            first.spriteWidth === 72 && first.spriteHeight === 78 &&
+            typeof first.sheet === 'string' && first.sheet.includes(`${ROUTES.image}/e2e-crab`) && first.action === 'idle',
+          JSON.stringify(first)),
+        check('换到暖橙与森林绿后仍是同一只宠物，配色不改宠物选择',
+          read.ember?.id === 'e2e-crab' && read.forest?.id === 'e2e-crab',
+          JSON.stringify({ ember: read.ember?.id, forest: read.forest?.id })),
+        check('换一只宠物后画的是一只，刷新后选择仍在',
+          !!second && second.id === 'e2e-whale' && second.ready && second.sheet.includes(`${ROUTES.image}/e2e-whale`) &&
+            read.afterReload?.id === 'e2e-whale',
+          JSON.stringify({ second, afterReload: read.afterReload })),
         check('导入后库里两个包都在，清单 id 未被改写',
           read.library?.ok === true && ['e2e-crab', 'e2e-whale'].every((id) => read.library.pets.some((pet) => pet.id === id && pet.sourceId === id)),
           JSON.stringify(read.library?.pets?.map((pet) => pet.id))),
         check('聊天位置的开关收起聊天宠物，随后重新出现',
-          read.chatOff === null && read.chatBack?.id === 'e2e-crab',
+          read.chatOff === null && read.chatBack?.id === 'e2e-whale',
           JSON.stringify({ off: read.chatOff, back: read.chatBack })),
       ]
     },
   }
 }
 
-module.exports = { petdexScenario }
+module.exports = { petdexScenario, packageZip, upload, ROUTES, readGuest, waitForGuest, chatOptions, rowOf, TITLE }

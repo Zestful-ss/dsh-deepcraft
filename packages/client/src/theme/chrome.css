@@ -14,11 +14,11 @@ body[data-dsh-deepcraft] {
     transparent 100%;
 }
 
-/* Under the Claude palette the skin paints the columns; under "follow the
+/* Under one of the skin's palettes the columns take its colours; under "follow the
    host" they take the host's own tokens and only the hairline stays. While a
    wallpaper plugin shows one the columns are left unpainted, under the mask
    theme/wallpaper.css lays over it, and only the hairline stays. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"]:not([data-we-wallpaper]) :is([data-pane="sidebar"], [data-dsh-deepcraft-part~="sidebar-column"], .dshDesktopSidebarSurface) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):not([data-we-wallpaper]) :is([data-pane="sidebar"], [data-dsh-deepcraft-part~="sidebar-column"], .dshDesktopSidebarSurface) {
   --dsw-specific-sidebar-fill: var(--dsh-deepcraft-sidebar-canvas);
   background: var(--dsh-deepcraft-sidebar-canvas);
 }
@@ -31,7 +31,7 @@ body[data-dsh-deepcraft] :is([data-pane="sidebar"], [data-dsh-deepcraft-part~="s
   border-right: 0.5px solid var(--dsw-alias-border-l1);
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"]:not([data-we-wallpaper]) :is([data-pane="conversation"], [data-dsh-deepcraft-part~="center-column"]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):not([data-we-wallpaper]) :is([data-pane="conversation"], [data-dsh-deepcraft-part~="center-column"]) {
   background: var(--dsh-deepcraft-canvas);
 }
 
@@ -87,13 +87,13 @@ html[data-windows-titlebar] body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="
    the frame, so the card is the one raised surface. A wallpaper keeps the host's
    own painting (theme/wallpaper.css). Every rule hangs on the page-look
    attribute, so `flat` leaves the page exactly as the host laid it out. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="layout-frame"] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="layout-frame"] {
   /* The Windows titlebar fills above read this token off the frame. */
   --dsh-deepcraft-canvas: var(--dsh-deepcraft-float-frame);
   background: var(--dsh-deepcraft-float-frame);
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) :is([data-dsh-deepcraft-part~="sidebar-column"], .dshDesktopSidebarSurface) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) :is([data-dsh-deepcraft-part~="sidebar-column"], .dshDesktopSidebarSurface) {
   --dsw-specific-sidebar-fill: var(--dsh-deepcraft-float-frame);
   --dsh-deepcraft-sidebar-canvas: var(--dsh-deepcraft-float-frame);
   background: var(--dsh-deepcraft-float-frame);
@@ -101,7 +101,7 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-dsh-deepcraft
 
 /* The card carries the canvas token for its own subtree: the host's markdown,
    popovers and the composer read the fill they sit on from it. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="center-column"] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="center-column"] {
   --dsw-alias-bg-base: var(--dsh-deepcraft-float-card);
   --dsh-deepcraft-canvas: var(--dsh-deepcraft-float-card);
   background: var(--dsh-deepcraft-float-card);
@@ -143,7 +143,7 @@ body[data-dsh-deepcraft][data-ds-dark-theme][data-dsh-deepcraft-page-look="float
    of its rounded corners, so the card keeps the elevation alone — the light and
    the dark stack, since the block below it names the palette rather than a
    theme. */
-html[data-windows-titlebar] body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="layout-frame"] > [data-dsh-deepcraft-part~="center-column"] {
+html[data-windows-titlebar] body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="layout-frame"] > [data-dsh-deepcraft-part~="center-column"] {
   box-shadow: 0 1px 2px rgba(20, 20, 19, 0.05), 0 8px 24px rgba(20, 20, 19, 0.07), 0 24px 64px rgba(20, 20, 19, 0.08);
 }
 

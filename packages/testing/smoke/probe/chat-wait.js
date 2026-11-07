@@ -52,9 +52,7 @@
         var line = row.querySelector('.dsh-deepcraft-chat-wait')
         if (line === null) return null
         // The line's parts are read by their own names rather than by position:
-        // the loader leads them, and where each of the rest sits is the
-        // stylesheet's business (chat-wait.css).
-        var loader = line.querySelector('.dsh-deepcraft-chat-wait-loader')
+        // where each sits is the stylesheet's business (chat-wait.css).
         var label = line.querySelector('.dsh-deepcraft-chat-wait-label')
         var clock = line.querySelector('.dsh-deepcraft-chat-wait-clock')
         var badge = line.querySelector('.dsh-deepcraft-chat-wait-badge')
@@ -99,46 +97,7 @@
           opacity: movingStyle === null ? '1' : movingStyle.opacity,
           clock: clock.hidden ? null : clock.textContent,
           badge: badge.hidden ? null : badge.textContent,
-          // The loader the Claude brand leads the line with, and the host's own
-          // whale tail it stands in for: two lanes of three dots in the accent in
-          // force, one lane for each motion, of which the lane in play is drawn
-          // and the other waits out of the page
-          // (features/chat-wait/wait-loader.ts). A change between the motions
-          // fades one lane's dots out and the other's in, each on its own moment,
-          // so both lanes are read whole — their opacities, the poses their
-          // motions stand them at, and their own starts — and the animation
-          // beside them is the one the lane in play runs.
-          loader: (function () {
-            var lanes = Array.from(loader.children).map(function (lane) {
-              var laneDots = Array.from(lane.children)
-              return {
-                name: lane.className,
-                opacity: laneDots.map(function (one) { return Number(getComputedStyle(one).opacity) }),
-                translate: laneDots.map(function (one) { return getComputedStyle(one).translate }),
-                scale: laneDots.map(function (one) { return getComputedStyle(one).scale }),
-                delays: laneDots.map(function (one) { return getComputedStyle(one).animationDelay }),
-                animation: laneDots.length === 0 ? null : getComputedStyle(laneDots[0]).animationName,
-              }
-            })
-            var playing = loader.querySelector('.dsh-deepcraft-chat-wait-lane.is-active')
-            var playingDots = playing === null ? [] : Array.from(playing.children)
-            var playingStyle = playingDots.length === 0 ? null : getComputedStyle(playingDots[0])
-            return {
-              shown: getComputedStyle(loader).display !== 'none',
-              lanes: lanes,
-              motion: playing === null ? null : playing.className,
-              animation: playingStyle === null ? null : playingStyle.animationName,
-              duration: playingStyle === null ? null : playingStyle.animationDuration,
-              delay: playingDots.length < 3 ? null : getComputedStyle(playingDots[2]).animationDelay,
-              background: playingStyle === null ? null : playingStyle.backgroundColor,
-              shadow: playingStyle === null ? null : playingStyle.boxShadow,
-              translate: playingStyle === null ? null : playingStyle.translate,
-              scale: playingStyle === null ? null : playingStyle.scale,
-              // Each dot's own start in its motion: the phase a dot stands at,
-              // which is what tells two dots doing the same walk apart.
-              delays: playingDots.map(function (one) { return getComputedStyle(one).animationDelay }),
-            }
-          })(),
+          // The host's own running whale, which the line leaves in place (D80).
           whaleShown: getComputedStyle(whale).display !== 'none',
           // The box the swap runs in, and where the clock beside it sits: the
           // hidden sizer holds the wider half while words change, so neither may
@@ -192,101 +151,17 @@
         var frames = await framesToWord(want, what || 'the line reaching its wording')
         return frames[frames.length - 1]
       }
-      r.wait = { working: await awaitWord(function (reading) { return reading.word === 'Thinking…' && reading.copies === 1 }) }
-      // The whale tail is DeepSeek's own character: under that brand the host's
-      // icon comes back and the skin's dots stand down, and the Claude brand
-      // takes them up again. The word the line waits on follows the brand too
-      // (shared/turn-activity): the skin's own under Claude, and the host's own
-      // — the one the host's own interface shows — under DeepSeek.
-      window.__pushForm({ brand: 'deepseek' })
-      r.wait.deepseek = await awaitWord(function (reading) { return reading.word === 'Deep diving' && reading.copies === 1 })
-      window.__pushForm({ brand: 'claude' })
-      r.wait.claudeAgain = await awaitWord(function (reading) { return reading.word === 'Thinking…' && reading.copies === 1 })
+      // The host's own word for a wait is the one the line stands on (D80).
+      r.wait = { working: await awaitWord(function (reading) { return reading.word === 'Deep diving' && reading.copies === 1 }) }
       foreignLine.remove()
       words.parentElement.appendChild(foreignLine)
       await probe.settle()
       r.wait.foreignAfter = lineOf()
-      // One lane's motion read off the animation itself: a lane's dots run the
-      // same clock, so stepping that clock through a whole turn — all of them
-      // together, which keeps their own phases — reads the motion's own curve
-      // rather than what the display happened to render, at even steps with no
-      // frame timing in them. The lane is put in play for the reading (the
-      // loader's own choice is put back afterwards, and the next rotation puts
-      // every lane back in its place anyway).
-      var watchLane = async function (laneName, rounds, step) {
-        var line = row.querySelector('.dsh-deepcraft-chat-wait')
-        var loader = line === null ? null : line.querySelector('.dsh-deepcraft-chat-wait-loader')
-        var lane = loader === null ? null : loader.querySelector('.dsh-deepcraft-chat-wait-lane.' + laneName)
-        if (lane === null) return null
-        var lanes = Array.prototype.slice.call(loader.children)
-        var saved = lanes.map(function (one) { return one.className })
-        lanes.forEach(function (one) { one.classList.remove('is-active', 'is-leaving', 'is-resting') })
-        lane.classList.add('is-active')
-        var dots = Array.prototype.slice.call(lane.children)
-        var running = dots.map(function (dot) { return dot.getAnimations()[0] })
-        var read = function () {
-          return dots.map(function (dot) { return getComputedStyle(dot) })
-        }
-        if (running.some(function (animation) { return animation === undefined })) {
-          lanes.forEach(function (one, at) { one.className = saved[at] })
-          return null
-        }
-        var stood = running[0].currentTime
-        var began = performance.now()
-        var frames = []
-        for (var round = 0; round < rounds; round += 1) {
-          var at = round * step
-          running.forEach(function (animation) { animation.currentTime = at })
-          var styles = read()
-          frames.push({
-            at: at,
-            translate: styles.map(function (style) { return style.translate }),
-            scale: styles.map(function (style) { return style.scale }),
-            opacity: styles.map(function (style) { return Number(style.opacity) }),
-            delays: styles.map(function (style) { return style.animationDelay }),
-            animation: styles[0].animationName,
-            duration: styles[0].animationDuration,
-          })
-        }
-        running.forEach(function (animation) { animation.currentTime = stood + (performance.now() - began) })
-        lanes.forEach(function (one, at) { one.className = saved[at] })
-        return { step: step, frames: frames }
-      }
-      // The rotation: the loader opens on one motion and takes up another every
-      // ten seconds, never the one already standing. Its length is the
-      // product's own (D66: a duration that is the behaviour), so every frame is
-      // recorded with its moment until two changes have landed: the stretch one
-      // motion stood and the hand-over between two of them are both read off it.
-      // While the lane leaving fades out no lane is in play yet, so a change is
-      // counted when the next lane comes into play.
-      var watchRotation = function () {
-        return probe.until(function () {
-          var reading = lineOf()
-          return { at: performance.now(), loader: reading === null ? null : reading.loader }
-        }, function (frames) {
-          var changes = 0
-          var standing = null
-          frames.forEach(function (frame) {
-            if (frame.loader === null || frame.loader.motion === null) return
-            if (standing !== null && standing !== frame.loader.motion) changes += 1
-            standing = frame.loader.motion
-          })
-          return changes >= 2
-        }, 'two changes of the loader rotation', 25000)
-      }
       // A tool call in flight is a state of its own, with no block streaming.
       window.__dshSmokeHost.turnFixtureRunning.steps = [{ data: { get: function (kind) { return kind === 'assistant-step' ? { status: 'settled', step: 1, blocks: [{ kind: 'reasoning' }, { kind: 'tool-call' }] } : undefined } } }]
       var calls = window.__dshSmokeHost.turnFixtureCalls
       calls.push({ turn: 2 })
       r.wait.tools = await awaitWord(function (reading) { return reading.word === 'Running tools…' && reading.copies === 1 })
-      // Each lane's own motion, one at a time: the hopping wave reads a whole
-      // bounce, the walk a whole period, the corner swap a whole turn.
-      r.wait.bounceLane = await watchLane('is-bounce', 40, 25)
-      r.wait.lineLane = await watchLane('is-line', 50, 25)
-      r.wait.orbitLane = await watchLane('is-orbit', 61, 40)
-      // And the rotation itself: long enough for two changes to land, so the
-      // stretch between two of them can be timed.
-      r.wait.rotation = await watchRotation()
       // A call that has its arguments names the file it works on; one whose
       // arguments are still arriving names nothing yet.
       calls[0] = { turn: 2, phase: 'start', name: 'read', argsRaw: JSON.stringify({ file_path: 'C:\\work\\app.js' }) }
@@ -294,7 +169,7 @@
       calls[0] = { turn: 2, phase: 'preparing', name: 'read', argsRaw: '{"file_path":"C:\\\\work\\\\app' }
       r.wait.arriving = await awaitWord(function (reading) { return reading.word === 'Running tools…' && reading.copies === 1 })
       // The model goes silent: the running turn has written nothing and no call
-      // is in flight, so the line stands on the word its brand waits on — the
+      // is in flight, so the line stands on the host's own word for a wait — the
       // same word it says while the model is thinking. The two halves of the
       // swap that reaches it travel together: the old one leaves upward with a
       // blur while the new one stands parked below and is released one gap
@@ -306,12 +181,12 @@
       window.__dshSmokeHost.turnFixtureRunning.steps = []
       r.wait.silent = await framesToWord(function (reading) {
         var label = row.querySelector('.dsh-deepcraft-chat-wait-label')
-        var copy = label === null ? null : label.querySelector('.dsh-deepcraft-swap-copy[data-text="Thinking…"]')
+        var copy = label === null ? null : label.querySelector('.dsh-deepcraft-swap-copy[data-text="Deep diving"]')
         if (copy !== null) {
           var style = getComputedStyle(copy)
           enterFrames.push({ opacity: Number(style.opacity), filter: style.filter, transform: style.transform })
         }
-        return reading.word === 'Thinking…' && reading.copies === 1 && reading.phase === null
+        return reading.word === 'Deep diving' && reading.copies === 1 && reading.phase === null
       }, 'the swap to the silent wording')
       // The box takes the arriving width after the words have landed, and the
       // clock slides with it: the frames run on until the page settles.
@@ -356,9 +231,9 @@
       reason('先看清工作区。')
       await probe.settle()
       r.wait.reducedHeld = lineOf()
-      // The dots under that choice: read on every frame until the page settles,
-      // so a motion that never stops shows up as the first and last readings
-      // differing.
+      // The words' paint under that choice: read on every frame until the page
+      // settles, so a motion that never stops shows up as the first and last
+      // readings differing.
       var stillFrames = await probe.watch(lineOf)
       r.wait.reducedStill = { first: stillFrames[0], second: stillFrames[stillFrames.length - 1] }
       window.__pushForm({ motion: 'system' })

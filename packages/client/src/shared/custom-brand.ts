@@ -4,7 +4,7 @@ import { BRAND_MARK_ROUTE, BRAND_ROUTE, BRAND_WORDMARK_ROUTE } from '../constant
 import { notifyAll } from '@dsh-deepcraft/engine/notify'
 
 /**
- * The reader's own brand images as the page paints them (D77): which of the
+ * The reader's own brand images as the page paints them (D80): which of the
  * mark and the wordmark the host half holds, each with an address that changes
  * with its bytes and its width over its height. The brand feature paints them
  * (packages/client/src/features/brand/brand.ts) and the settings page replaces

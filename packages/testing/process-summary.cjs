@@ -130,12 +130,10 @@ function processSummaryScenario({ check }) {
       return [
         check('the running row carries the skin\'s line in place of the host\'s words',
           early.line === true && early.wordsShown === false, JSON.stringify(early)),
-        // The brand in force here is the Claude one, whose wait word is the
-        // skin's own: the host's own words under the line are not what stands
-        // (shared/turn-activity.ts, one word per brand).
-        check('a wait nothing can be read from stands on the brand\'s own word, not the host\'s',
-          [COPY.chatWaitThinking.zh, COPY.chatWaitThinking.en].includes(early.label ?? '') &&
-            (early.words ?? '').includes(early.label ?? '') === false,
+        // The line stands on the host's own word for a wait — the one its own
+        // row uses under the line (D80).
+        check('a wait nothing can be read from stands on the host\'s own word, the one its row uses',
+          (early.label ?? '') !== '' && (early.words ?? '').includes(early.label ?? ''),
           JSON.stringify({ label: early.label, words: early.words })),
         check('the line keeps the turn\'s clock in the host\'s units', /^\d+\s*(s|sec|secs|second|seconds|秒)$/i.test(early.clock ?? ''), JSON.stringify(early.clock)),
         check('past ten seconds of silence the line says the model has not answered', overtime.badge === COPY.chatWaitOvertime[lang], JSON.stringify(overtime)),

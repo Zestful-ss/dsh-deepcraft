@@ -14,7 +14,7 @@
     // Following the host's colours and type: with the host's palette in the
     // page, the skin writes none of the host's tokens, paints none of the
     // host's frame, and its own surfaces read the host's tokens; a wallpaper
-    // plugin's cleared canvas and glass then reach both. Back on Claude the
+    // plugin's cleared canvas and glass then reach both. Back on the warm palette the
     // skin's own palette returns.
     await probe.onlyFor(['host-palette'], async function () {
       var hostProbe = function (html) {
@@ -42,12 +42,12 @@
           base: bodyStyle.getPropertyValue('--dsw-alias-bg-base').trim(),
           family: bodyStyle.getPropertyValue('--dsw-font-family').trim(),
           body: bodyStyle.backgroundColor,
-          // The mask the Claude palette lays over a wallpaper
+          // The mask the warm palette lays over a wallpaper
           mask: getComputedStyle(document.body, '::after').backgroundColor,
           maskPosition: getComputedStyle(document.body, '::after').position,
           html: getComputedStyle(document.documentElement).backgroundColor,
           sidebar: getComputedStyle(hostNodes.sidebar).backgroundColor,
-          // The sidebar element carries this token itself: the Claude canvas
+          // The sidebar element carries this token itself: the skin canvas
           // while the palette paints it, cleared while a wallpaper is up.
           sidebarFill: getComputedStyle(hostNodes.sidebar).getPropertyValue('--dsw-specific-sidebar-fill').trim(),
           conversation: getComputedStyle(hostNodes.conversation).backgroundColor,
@@ -66,11 +66,11 @@
       r.hostPalette = {
         host: await readHost({ palette: 'host', typeface: 'host' }, false),
         wallpaper: await readHost(null, true),
-        claude: await readHost({ palette: 'claude', typeface: 'claude' }, false),
-        // The wallpaper plugin showing one under the Claude palette: the
+        ember: await readHost({ palette: 'ember', typeface: 'claude' }, false),
+        // The wallpaper plugin showing one under the warm palette: the
         // shell stands down, one mask lies over the wallpaper, and the base
         // canvas and the skin's own faces keep their fill.
-        claudeWallpaper: await readHost(null, true),
+        emberWallpaper: await readHost(null, true),
       }
       document.body.removeAttribute('data-we-wallpaper')
       await sleep(120)
@@ -403,7 +403,7 @@
         r.settings.ongoingStored = { ring: ringRunning, breathe: readRunning() }
         window.__pushForm({ modelPicker: false, mascot: 'off', sidebarSearch: false, palette: 'host' })
         r.settings.parentsOff = { appearance: renderTab('appearance'), composer: renderTab('composer'), sidebar: renderTab('sidebar') }
-        window.__pushForm({ modelPicker: true, mascot: 'brand', sidebarSearch: true, palette: 'claude' })
+        window.__pushForm({ modelPicker: true, mascot: 'brand', sidebarSearch: true, palette: 'ocean' })
         // The rows that wait for another setting: the composer restyle off greys
         // the picker, its sub-rows, the permission control and the statistics'
         // position; the footer takeover off greys the easter egg under it. Home

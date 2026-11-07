@@ -22,11 +22,11 @@ export default {
     desc: 'mascotDesc',
     choiceLabels: { brand: 'mascotBrand', crab: 'mascotCrab', deepy: 'mascotDeepy', off: 'mascotOff' },
   }, {
-    // The chat pet follows the theme; the field written is the one in front.
+    // One pet for the chat position, whichever palette is in force (D80); the
+    // controls below it import a package and take it as the choice.
     tab: 'appearance',
     rank: 35,
-    pref: 'chatPetClaude',
-    key: 'chatPet',
+    pref: 'chatPet',
     parent: 'mascot',
     control: 'chatPet',
     title: 'petChatTitle',
@@ -39,16 +39,6 @@ export default {
     parent: 'mascot',
     title: 'mascotScopeTitle',
     choiceLabels: { home: 'mascotScopeHome', all: 'mascotScopeAll' },
-  }, {
-    // Imported packages are selected by the chat row above; this row only adds
-    // them, so it takes the other theme field as its own identity.
-    tab: 'appearance',
-    rank: 55,
-    pref: 'chatPetDeepseek',
-    key: 'petImport',
-    control: 'petImport',
-    title: 'petImportTitle',
-    desc: 'petImportDesc',
   }],
   cases: ['crab-states', 'deepy', 'petdex-claude', 'petdex-deepseek', 'hero', 'studio']
 } satisfies FeatureManifest

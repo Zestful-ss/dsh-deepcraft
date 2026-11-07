@@ -368,141 +368,11 @@ module.exports = {
     const working = wait.working || {}
     check('the running row takes the skin\'s line beside the host\'s words, which step aside',
       working.marked === true && working.besideWords === true && working.wordsShown === false, JSON.stringify(working))
-    const loader = working.loader || {}
-    const laneOf = (reading, name) => (reading.lanes || []).find((lane) => String(lane.name).includes(name)) || {}
-    const numbers = (text) => (String(text).match(/-?[\d.]+/g) || []).map(Number)
-    const LANE_DOTS = [['is-bounce', 3], ['is-line', 3], ['is-orbit', 4]]
-    const OPENINGS = ['dsh-deepcraft-wait-dot', 'dsh-deepcraft-wait-dot-line', 'dsh-deepcraft-wait-dot-orbit-1']
-    // 三条轨道都在页面上、各带自己的球数（3 / 3 / 4），其中一条在用；开哪一条是随机的，
-    // 所以这里只认「用的是三条之一」。
-    check('加载点把三条轨道都建好了——三颗跳球、三颗走路、四颗交换四角——其中一条在用，主机的鲸鱼尾让位',
-      loader.shown === true && (loader.lanes || []).length === 3 &&
-        LANE_DOTS.every(([name, count]) => (laneOf(loader, name).opacity || []).length === count) &&
-        LANE_DOTS.some(([name]) => String(loader.motion).includes(name)) &&
-        OPENINGS.includes(String(loader.animation)) && loader.background === 'rgb(217, 119, 87)' &&
-        loader.shadow === 'none' && working.whaleShown === false,
-      JSON.stringify({ loader, whaleShown: working.whaleShown }))
-    // 每条轨道自己的动作：探针把它临时放到「在用」的位置、用它自己的时钟走完一圈，
-    // 所以读的是样式表写下的曲线，与此刻轮到谁无关。
-    const bounceFrames = (wait.bounceLane || { frames: [] }).frames || []
-    const bounceY = bounceFrames.map((frame) => numbers(frame.translate[0])[1]).filter((one) => Number.isFinite(one))
-    check('跳球那条：一颗球从地面弹起 8px 再落回，三颗各错开一个相位',
-      bounceFrames.length >= 40 && bounceFrames[0].animation === 'dsh-deepcraft-wait-dot' &&
-        bounceFrames[0].duration === '0.5s' && (bounceFrames[0].delays || []).join(',') === '-0.5s,-0.3s,-0.2s' &&
-        Math.min(...bounceY) <= -7.5 && Math.max(...bounceY) >= -0.5,
-      JSON.stringify({ readings: bounceFrames.length, low: Math.min(...bounceY), high: Math.max(...bounceY), head: bounceFrames[0] }))
-    // 走路那条：一端走到另一端各占半个周期，所以过半个周期球落在中点另一侧、离中点的距离与
-    // 大小都一样；三颗各错开三分之一个周期（相差半个周期就是把同一个动作镜像过去），
-    // 而且两端最多就是球本来的大小。简谐运动在两端慢、中间快：离中点超过四分之三幅度的
-    // 时间约占一周的 46%，匀速往返只占 25%，读的就是这一项。
-    const lineFrames = (wait.lineLane || { frames: [] }).frames || []
-    const lineY = lineFrames.map((frame) => numbers(frame.translate[0])[1])
-    const lineScale = lineFrames.map((frame) => Number(String(frame.scale[0]).split(' ')[0]))
-    const trace = lineY.filter((one) => Number.isFinite(one))
-    const sizes = lineScale.filter((one) => Number.isFinite(one))
-    const lowest = trace.length === 0 ? 0 : Math.min(...trace)
-    const highest = trace.length === 0 ? 0 : Math.max(...trace)
-    const middle = (lowest + highest) / 2
-    const half = Math.floor(trace.length / 2)
-    const place = trace.slice(0, half).map((one, at) => Math.abs(one + trace[at + half] - 2 * middle))
-    const size = sizes.slice(0, half).map((one, at) => Math.abs(one - sizes[at + half]))
-    const drift = place.length === 0 ? Infinity : Math.max(...place)
-    const sizeDrift = size.length === 0 ? Infinity : Math.max(...size)
-    const reach = (highest - lowest) / 2
-    const dwell = trace.length === 0 ? 0 : trace.filter((one) => Math.abs(one - middle) > reach * 0.75).length / trace.length
-    const phaseOf = (delay) => {
-      const seconds = Number(String(delay).replace('s', ''))
-      return ((-seconds % 1.25) + 1.25) % 1.25 / 1.25
-    }
-    const phases = (lineFrames[0] === undefined ? [] : lineFrames[0].delays || []).map(phaseOf)
-    const clash = phases.some((one, at) => phases.some((two, other) => other > at &&
-      (Math.abs(one - two) < 0.02 || Math.abs(Math.abs(one - two) - 0.5) < 0.02)))
-    check('走路那条：三颗各沿自己的线走简谐、两端停得比中间久、相位各错三分之一，去程与回程是同一条曲线，最长的一帧也不比跳球大',
-      lineFrames.length >= 45 && lineFrames[0].animation === 'dsh-deepcraft-wait-dot-line' &&
-        lineFrames[0].duration === '1.25s' && phases.length === 3 && !clash &&
-        highest - lowest >= 7 && Math.max(...sizes) <= 1.001 && drift <= 0.5 && sizeDrift <= 0.05 && dwell >= 0.38,
-      JSON.stringify({
-        readings: lineFrames.length,
-        phases,
-        travel: Number((highest - lowest).toFixed(2)),
-        drift: Number(drift.toFixed(2)),
-        sizeDrift: Number(sizeDrift.toFixed(3)),
-        dwell: Number(dwell.toFixed(2)),
-      }))
-    // 交换四角那条：四颗球站成 45 : 55 的矩形；一圈四个四分之一圈——A 段一对对角换位、
-    // B 段另一对，再各换回来，所以整圈走完每颗球回到原处。每颗球走的是一段椭圆弧：
-    // 弧的中点离「起点到终点那条直线」有明显距离，不是被直线搬过去。
-    const orbitFrames = (wait.orbitLane || { frames: [] }).frames || []
-    const spot = (frame, dot) => ({ x: numbers(frame.translate[dot])[0], y: numbers(frame.translate[dot])[1] })
-    const near = (one, two, allowance) => one !== undefined && two !== undefined &&
-      Math.abs(one.x - two.x) <= allowance && Math.abs(one.y - two.y) <= allowance
-    const shape = orbitFrames.length === 0 ? { width: 0, height: 0 } : (() => {
-      const xs = [0, 1, 2, 3].map((dot) => spot(orbitFrames[0], dot).x)
-      const ys = [0, 1, 2, 3].map((dot) => spot(orbitFrames[0], dot).y)
-      return { width: Math.max(...xs) - Math.min(...xs), height: Math.max(...ys) - Math.min(...ys) }
-    })()
-    const bow = orbitFrames.length < 11 ? 0 : (() => {
-      const from = spot(orbitFrames[0], 0)
-      const to = spot(orbitFrames[10], 0)
-      const mid = spot(orbitFrames[5], 0)
-      const length = Math.hypot(to.x - from.x, to.y - from.y)
-      return length === 0 ? 0 : Math.abs((to.x - from.x) * (from.y - mid.y) - (from.x - mid.x) * (to.y - from.y)) / length
-    })()
-    const closes = orbitFrames.length > 60 &&
-      [0, 1, 2, 3].every((dot) => near(spot(orbitFrames[60], dot), spot(orbitFrames[0], dot), 0.05))
-    // 每段 400ms 走弧、随后 200ms 停住（= 0.5 倍那段用时），所以「刚走完」与「停顿结束」
-    // 读出来是同一个位置。
-    const dwells = [[10, 15], [25, 30], [40, 45], [55, 60]].every(([just, later]) =>
-      [0, 1, 2, 3].every((dot) => near(spot(orbitFrames[just], dot), spot(orbitFrames[later], dot), 0.05)))
-    check('交换四角那条：四颗球站成 45 : 55 的矩形，一圈里 A 段换一对对角、B 段换另一对、再各换回来，每颗走的是弧、走完停半段',
-      orbitFrames.length > 60 && shape.height > 0 && Math.abs(shape.width / shape.height - 45 / 55) <= 0.06 &&
-        near(spot(orbitFrames[10], 0), spot(orbitFrames[0], 2), 0.6) && near(spot(orbitFrames[10], 2), spot(orbitFrames[0], 0), 0.6) &&
-        near(spot(orbitFrames[10], 1), spot(orbitFrames[0], 1), 0.05) && near(spot(orbitFrames[10], 3), spot(orbitFrames[0], 3), 0.05) &&
-        near(spot(orbitFrames[25], 1), spot(orbitFrames[10], 3), 0.6) && near(spot(orbitFrames[25], 3), spot(orbitFrames[10], 1), 0.6) &&
-        near(spot(orbitFrames[25], 0), spot(orbitFrames[10], 0), 0.05) && dwells && closes && bow >= 1,
-      JSON.stringify({ readings: orbitFrames.length, shape, bow: Number(bow.toFixed(2)), closes, dwells }))
-    // 轮换：一个动作站满 10 秒才换，换的是另一条轨道（不会换到自己）；换的那一下是交接，
-    // 旧的那条各自淡出到 0、等最后一颗走完新的那条才进场、各自淡入到 1；
-    // 旧的淡出期间没有哪条在场，这几帧不算换。
-    const rotation = (wait.rotation || []).filter((frame) => frame !== null && frame.loader !== null && frame.loader.motion !== null)
-    const seen = rotation.map((frame) => ({ at: frame.at, motion: String(frame.loader.motion), loader: frame.loader }))
-    const starts = seen.length === 0 ? [] : [0]
-    for (let at = 1; at < seen.length; at += 1) if (seen[at].motion !== seen[at - 1].motion) starts.push(at)
-    const motionOf = (at) => (String(seen[at].motion).match(/is-(bounce|line|orbit)/) || [])[1]
-    const changes = starts.slice(1)
-    // 换与换之间隔多久：只看相邻两次换之间的那一段，采样起点不算一次变化。
-    const gaps = changes.slice(1).map((at, index) => seen[at].at - seen[changes[index]].at)
-    const rotated = changes.map((at, index) => motionOf(at) !== motionOf(starts[index]))
-    check('加载点每 10 秒换一条轨道，换的不会是正站着的那一条',
-      changes.length >= 2 &&
-        gaps.every((one) => one >= bound('loaderRotateGapMinMs') && one <= bound('loaderRotateGapMaxMs')) &&
-        rotated.every((one) => one === true),
-      JSON.stringify({ changes: changes.length, gaps: gaps.map((one) => Math.round(one)), motions: starts.map((at) => motionOf(at)) }))
-    const laneTail = (frame, name) => ((laneOf(frame.loader, name).opacity || [])[0])
-    // The hand-over is read on the frames between the first change and the next:
-    // the lane that stood before it fades out and the one it names fades in.
-    const before = changes.length === 0 ? null : seen[changes[0] - 1]
-    const comeLane = changes.length === 0 ? null : ['is-bounce', 'is-line', 'is-orbit'].find((name) => name === `is-${motionOf(changes[0])}`) ?? null
-    const goneLane = before === null ? null : ['is-bounce', 'is-line', 'is-orbit'].find((name) => laneTail(before, name) > 0.9) ?? null
-    const settled = changes.length < 2 || goneLane === null || comeLane === null ? null
-      : seen.slice(changes[0], changes[1]).find((frame) => laneTail(frame, goneLane) < 0.1 && laneTail(frame, comeLane) > 0.9) ?? null
-    const crowded = (wait.rotation || []).filter((frame) => frame !== null && frame.loader !== null)
-      .filter((frame) => (frame.loader.lanes || []).filter((lane) => (lane.opacity || []).some((one) => one > 0.05)).length > 1)
-    check('换轨道是一次交接：旧的那条各自淡出、新的那条各自淡入，没有一颗球是被搬过去的，框里也从不同时画两条',
-      goneLane !== null && comeLane !== null && goneLane !== comeLane && settled !== null && String(settled.motion).includes(comeLane) &&
-        crowded.length === 0,
-      JSON.stringify({ gone: goneLane, come: comeLane, settled: settled === null ? null : settled.motion, crowded: crowded.length }))
-    check('the DeepSeek brand keeps the host\'s whale tail, stands the skin\'s dots down and waits on the host\'s own word',
-      wait.deepseek?.loader?.shown === false && wait.deepseek?.whaleShown === true && wait.deepseek?.word === 'Deep diving',
-      JSON.stringify(wait.deepseek))
-    check('the Claude brand takes the dots back and waits on the skin\'s own word',
-      wait.claudeAgain?.loader?.shown === true && wait.claudeAgain?.whaleShown === false && wait.claudeAgain?.word === 'Thinking…',
-      JSON.stringify(wait.claudeAgain))
     check('only the host words are marked and a third-party line stays visible before or after the waiting line mounts',
       working.wordsMarked === true && working.foreignShown === true && wait.foreignAfter?.foreignShown === true,
       JSON.stringify({ working, after: wait.foreignAfter }))
     check('the line says what the turn is doing, sweeping, with the turn\'s clock in the host\'s units',
-      working.word === 'Thinking…' && working.sweep === BAND_ANIMATION && working.statusMotion === 'sweep' && /^1m [5-9]s$/.test(working.clock || ''),
+      working.word === 'Deep diving' && working.sweep === BAND_ANIMATION && working.statusMotion === 'sweep' && /^1m [5-9]s$/.test(working.clock || ''),
       JSON.stringify(working))
     check('the band rides the copy holding the words, never the label (a first write and a reduced-motion one alike)',
       working.sweepOnLabel === false && wait.reduced?.sweepOnLabel === false,
@@ -558,9 +428,9 @@ module.exports = {
       JSON.stringify({ steps: steps.length, largest: steps.length === 0 ? 0 : Math.max(...steps), travelled }))
     check('the new wording is the one left standing once the copy that left is taken down',
       silent[0].displayed === 'Running tools…' && silent[0].copies === 1 && silent[0].phase === null &&
-        Number(last.opacity) === 1 && last.copies === 1 && last.word === 'Thinking…',
+        Number(last.opacity) === 1 && last.copies === 1 && last.word === 'Deep diving',
       JSON.stringify({ first: [silent[0].displayed, silent[0].copies, silent[0].phase], rest: [last.opacity, last.filter, last.copies, last.word] }))
-    check('a wait nothing can be read from stands on the word the brand says while the model thinks, not a second word of its own',
+    check('a wait nothing can be read from stands on the host\'s own word, not a second word of its own',
       last.word === working.word, JSON.stringify({ silent: last.word, working: working.word }))
     check('a model silent past ten seconds shows the overtime badge', last.badge === 'No response yet', JSON.stringify(last))
     const tools = wait.tools || {}
@@ -596,19 +466,15 @@ module.exports = {
       reducedHeld.word === 'Checking the row now' && reducedHeld.copies === 1, JSON.stringify(reducedHeld))
     // Reduced presses every skin animation to a hundredth of a millisecond but
     // leaves its iteration count alone, so an animation left running strobes
-    // instead of settling: the loader's dots have to be held, and the words'
-    // own paint is already either left out under the choice or held by
-    // shared/motion.css. Two readings a tenth of a second apart say so.
+    // instead of settling: the words' paint is either left out under the choice
+    // or held by shared/motion.css. Two readings a tenth of a second apart say
+    // so.
     const still = wait.reducedStill || {}
-    const held = (reading) => reading !== null && reading !== undefined && reading.loader !== undefined &&
+    const held = (reading) => reading !== null && reading !== undefined &&
       (reading.sweep === 'none' || reading.sweepState === 'paused')
-    const stillSame = (one, two) => one !== undefined && one !== null && two !== undefined && two !== null &&
-      one.loader !== undefined && two.loader !== undefined &&
-      one.loader.translate === two.loader.translate && one.loader.scale === two.loader.scale &&
-      held(one) && held(two)
-    check('「减弱」时加载点的球停在一个帧上、字上的画法也停住：相隔十分之一秒的两次读数一致',
-      stillSame(still.first, still.second),
-      JSON.stringify({ first: { loader: still.first?.loader, sweep: still.first?.sweep, sweepState: still.first?.sweepState }, second: { loader: still.second?.loader, sweep: still.second?.sweep, sweepState: still.second?.sweepState } }))
+    check('「减弱」时字上的画法停住：相隔十分之一秒的两次读数一致',
+      held(still.first) && held(still.second),
+      JSON.stringify({ first: { sweep: still.first?.sweep, sweepState: still.first?.sweepState }, second: { sweep: still.second?.sweep, sweepState: still.second?.sweepState } }))
     check('words that settle shorter take the box down with them, so the clock sits right after them',
       reduced.box?.sizer?.text === reduced.word && reduced.box.width === reduced.box.sizer.width &&
         reduced.box.clockLeft - reduced.box.labelLeft - reduced.box.width <= 10,

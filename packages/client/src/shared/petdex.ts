@@ -1,5 +1,5 @@
 /**
- * The pets library as the browser half reads it (D78): one shared client for
+ * The pets library as the browser half reads it (D80): one shared client for
  * every caller, one in-flight request per question, and the installed list
  * that both the mascot and the settings page follow.
  *

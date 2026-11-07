@@ -43,7 +43,7 @@ export const USAGE_PATH = `${ROUTE_PREFIX}/usage`
 export const SESSION_SEARCH_PATH = `${ROUTE_PREFIX}/session-search`
 
 /**
- * The reader's own brand images (D77): `GET` answers which of them are in
+ * The reader's own brand images (D80): `GET` answers which of them are in
  * place, each with a version that changes with its bytes.
  */
 export const BRAND_PATH = `${ROUTE_PREFIX}/brand`

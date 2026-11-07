@@ -1,76 +1,37 @@
 /* ---------- Claude Code layout: sidebar brand ---------- */
-/* The shipped whale and wordmark give way to the selected brand, each painted as
-   an alpha mask over currentColor so it follows the label colour. The choice is a
-   document attribute, so the settings page flips one attribute and the UI follows.
-   Sizing: an 18px cap height to match the shipped brandName box, the wordmark's
-   width read from that height through the artwork's aspect ratio (its viewBox,
-   512.22 × 121.54, packages/assets/src/brand/claude-word.svg). */
-body[data-dsh-deepcraft]:is([data-dsh-deepcraft-brand="claude"], [data-dsh-deepcraft-brand="deepseek"]) :is([data-dsh-deepcraft-part~="brand-mark"], [data-dsh-deepcraft-part~="rail-mark"]) > * {
+/* The skin's default identity is the host's own whale and wordmark, drawn as
+   alpha masks over currentColor so both stay crisp at 18px (D80). The reader's
+   own mark and wordmark replace them through the custom-brand layer
+   (features/brand/brand.css). The host's name artwork carries the HARNESS chip;
+   the skin's wordmark is the same letters without it, at the cap height the
+   shipped brandName box takes. */
+body[data-dsh-deepcraft] :is([data-dsh-deepcraft-part~="brand-mark"], [data-dsh-deepcraft-part~="rail-mark"]) > * {
   display: none !important;
 }
 
-body[data-dsh-deepcraft]:is([data-dsh-deepcraft-brand="claude"], [data-dsh-deepcraft-brand="deepseek"]) :is([data-dsh-deepcraft-part~="brand-mark"], [data-dsh-deepcraft-part~="rail-mark"])::before {
-  content: "";
-  display: block;
-  flex: none;
-  background-color: currentColor;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-}
-
-/* Claude (default): starburst mark + the Claude wordmark. The mask values are
-   the shared ones (shared/masked.css). */
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] :is([data-dsh-deepcraft-part~="brand-mark"], [data-dsh-deepcraft-part~="rail-mark"])::before {
-  width: 18px;
-  height: 18px;
-  -webkit-mask: var(--dsh-deepcraft-mask-claude-mark);
-  mask: var(--dsh-deepcraft-mask-claude-mark);
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] [data-dsh-deepcraft-part~="brand-identity"] > [data-dsh-deepcraft-part~="brand-name"] > * {
-  display: none !important;
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] [data-dsh-deepcraft-part~="brand-identity"] > [data-dsh-deepcraft-part~="brand-name"]::before {
-  content: "";
-  display: block;
-  flex: none;
-  background-color: currentColor;
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="claude"] [data-dsh-deepcraft-part~="brand-identity"] > [data-dsh-deepcraft-part~="brand-name"]::before {
-  width: calc(18px * 512.22 / 121.54);
-  max-width: 100%;
-  height: 18px;
-  -webkit-mask: var(--dsh-deepcraft-mask-claude-word);
-  mask: var(--dsh-deepcraft-mask-claude-word);
-}
-
-/* DeepSeek: the host's own whale and wordmark, drawn as alpha masks over the
-   brand ink so both stay crisp at 18px. The host's name artwork carries the
-   HARNESS chip; the skin's wordmark is the same letters without it, at the cap
-   height the Claude wordmark takes. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] :is([data-dsh-deepcraft-part~="brand-mark"], [data-dsh-deepcraft-part~="rail-mark"])::before {
+body[data-dsh-deepcraft] :is([data-dsh-deepcraft-part~="brand-mark"], [data-dsh-deepcraft-part~="rail-mark"])::before {
   content: "";
   display: block;
   flex: none;
   width: 22px;
   height: 18px;
   background-color: currentColor;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
   -webkit-mask: var(--dsh-deepcraft-mask-deepseek-mark);
   mask: var(--dsh-deepcraft-mask-deepseek-mark);
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] [data-dsh-deepcraft-part~="brand-identity"] {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="brand-identity"] {
   color: var(--dsh-deepcraft-logo-ink);
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] [data-dsh-deepcraft-part~="brand-identity"] > [data-dsh-deepcraft-part~="brand-name"] svg {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="brand-identity"] > [data-dsh-deepcraft-part~="brand-name"] svg {
   display: none;
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-brand="deepseek"] [data-dsh-deepcraft-part~="brand-identity"] > [data-dsh-deepcraft-part~="brand-name"]::before {
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="brand-identity"] > [data-dsh-deepcraft-part~="brand-name"]::before {
   content: "";
   display: block;
   flex: none;

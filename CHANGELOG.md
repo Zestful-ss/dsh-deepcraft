@@ -4,6 +4,32 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">新增功能</h3>
+
+- 新增深海蓝、暖橙与森林绿三套独立配色，各自覆盖浅色与深色；切换配色只换颜色，不再连标志、名称或宠物一起换。
+
+### 体验优化
+
+- 聊天框宠物合并为一项选择，不随配色变化；原有的像素螃蟹、像素鲸鱼与导入的宠物包继续保留。
+
+### 移除
+
+- 移除主题自带的 Claude 品牌档、标志与账户暂停彩蛋；品牌名称、标志、字标与强调色仍可自行设置，旧配置中的品牌与宠物选择会自动迁移。
+
+<h3 id="en-unreleased">New Features</h3>
+
+- Add three independent palettes — ocean blue, warm ember and forest green — each with its own light and dark colours; switching changes colours alone, not the mark, name or pet.
+
+### Improvements
+
+- Make the chat pet one choice that no palette changes; the original pixel crab, pixel whale and imported packages stay available.
+
+### Removals
+
+- Remove the theme's own Claude brand tier, marks and account-hold easter egg; the brand name, mark, wordmark and accent colour stay customizable, and an older configuration's brand and pet choices migrate automatically.
+
 ## [0.25.2] - 2026-11-06
 
 [中文](#cn-0.25.2) | [English](#en-0.25.2)

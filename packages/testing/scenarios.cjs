@@ -37,6 +37,7 @@ const { hostVisibilityScenario } = require('./host-visibility.cjs')
 const { customBrandScenario } = require('./custom-brand.cjs')
 const { deepcraftScenario } = require('./deepcraft.cjs')
 const { petdexScenario } = require('./petdex.cjs')
+const { paletteScenario, legacyScenario } = require('./palette.cjs')
 const { subagentModelScenario } = require('./subagent-model.cjs')
 const { dsBotScenario } = require('./ds-bot.cjs')
 const { desktopHeaderScenario } = require('./desktop-header.cjs')
@@ -53,15 +54,15 @@ const MAX_FOLLOW_GAP_PX = bound('laneFollowMaxGapPx')
 
 /**
  * Capture the page in both palettes and prove the capture is fit to keep: the
- * palette is the one the brand resolves to, and the visible text carries no
+ * palette is the one the page carries, and the visible text carries no
  * personal data (scripts/shared/privacy.cjs). The files land in the run's out
  * directory for a reviewer; nothing is compared against a stored picture.
  */
 async function captureBothSchemes(context) {
   const { page, out } = context
-  const brand = await page.evaluate(() => document.body.getAttribute('data-dsh-deepcraft-brand'))
-  const canvas = CANVAS[brand]
-  if (canvas === undefined) throw new Error(`the page carries brand "${brand}", which has no recorded palette`)
+  const palette = await page.evaluate(() => document.body.getAttribute('data-dsh-deepcraft-palette'))
+  const canvas = CANVAS[palette]
+  if (canvas === undefined) throw new Error(`the page carries palette "${palette}", which has no recorded palette`)
   const files = []
   const checks = []
   for (const scheme of ['light', 'dark']) {
@@ -562,12 +563,17 @@ const SCENARIOS = {
   importance: importanceScenario({ check, observe, sendPrompt, waitForTurn, host: HOST }),
   /** A page under a non-loopback name reads and writes the host's settings beside the loopback one (packages/testing/remote-settings.cjs, D75). */
   remoteSettings: remoteSettingsScenario({ check }),
-  /** The reader's own brand images through the host half's routes and on the real shell (packages/testing/custom-brand.cjs, D77). */
+  /** The reader's own brand images through the host half's routes and on the real shell (packages/testing/custom-brand.cjs, D80). */
   customBrand: customBrandScenario({ check }),
-  /** DeepCraft's own walk: the themes, the whale girl's gestures and states, and the account-hold page's theme (packages/testing/deepcraft.cjs, D77). */
+  /** DeepCraft's own walk: the default identity, the whale's gestures and states, and a plain account menu (packages/testing/deepcraft.cjs, D80). */
   deepcraft: deepcraftScenario({ check }),
-  /** Complete Petdex packages imported into the real host and drawn per theme (packages/testing/petdex.cjs, D78). */
+  /** Complete Petdex packages imported into the real host and kept as one pet across palettes (packages/testing/petdex.cjs, D80). */
   petdex: petdexScenario({ check }),
+  /** Every skin palette's computed colours and the reader's own identity across a switch (palette.cjs, D80). */
+  palette: paletteScenario({ check }),
+  /** An older profile's brand and per-theme pet migrate to one palette and one pet (palette.cjs, D80). */
+  paletteLegacyClaude: legacyScenario('claude', { check }),
+  paletteLegacyDeepseek: legacyScenario('deepseek', { check }),
   /** The Chat / Code switch beside ds-bot's published browser half (packages/testing/ds-bot.cjs, D74). */
   dsBot: dsBotScenario({ check }),
   /** The composer's subagent model entry: one pick, its record, and its reload (packages/testing/subagent-model.cjs). */

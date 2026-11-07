@@ -1,5 +1,5 @@
 import { MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, MASCOT_PETDEX, MASCOT_SCOPE_ALL } from '../../constants'
-import { readPrefs, resolveMascot, resolveThemePet } from '../../core/prefs'
+import { readPrefs, resolveMascot } from '../../core/prefs'
 import { createMascotCrab } from './crab'
 import { createMascotWhale } from './whale'
 import { createPetdexMascot } from './petdex'
@@ -10,11 +10,11 @@ import type { FeatureUi } from '../../core/feature'
 import type manifest from './mascot.manifest'
 
 /**
- * The companion on the composer: chosen per theme and following its own switch
- * (D78).
+ * The companion on the composer: one choice of its own that no palette or
+ * brand changes (D80).
  *
- * `brand` means the theme's Petdex package (crab-buddy under Claude, whaledou
- * under DeepSeek), drawn from its own atlas. The two original characters stay
+ * `brand` means the reader's current Petdex package (`chatPet`, whaledou out of
+ * the box), drawn from its own atlas. The two original characters stay
  * selectable by hand, and `off` retires the composer guest. `mascotScope` still
  * decides whether the composer guest also stands in the conversation.
  *
@@ -66,7 +66,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     }
     if (token !== generation) return
     const prefs = readPrefs()
-    if (resolveMascot(prefs) !== MASCOT_PETDEX || resolveThemePet(prefs) !== id) return
+    if (resolveMascot(prefs) !== MASCOT_PETDEX || prefs.chatPet !== id) return
     failedId = null
     if (petdex !== null) petdex.player.dispose()
     petdex = { id, player: createPetdexMascot(ctx, ui, pet) }
@@ -93,7 +93,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       crab.release()
       whale.release()
       if (petdex !== null) petdex.player.sync(conversation)
-      void openPetdex(resolveThemePet(prefs), conversation)
+      void openPetdex(prefs.chatPet, conversation)
     } else if (mascot === MASCOT_OFF) {
       releaseChat()
     }

@@ -36,5 +36,5 @@ export default {
     title: 'subagentModelChoiceTitle',
     desc: 'subagentModelChoiceDesc',
   }],
-  cases: ['brand', 'composer', 'settings', 'sync-fault', 'model-meter']
+  cases: ['palette', 'composer', 'settings', 'sync-fault', 'model-meter']
 } satisfies FeatureManifest

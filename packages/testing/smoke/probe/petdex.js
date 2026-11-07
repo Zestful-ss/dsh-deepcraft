@@ -1,5 +1,5 @@
 /**
- * The two Petdex chat cases: each theme's own package, drawn from its untouched
+ * The two Petdex chat cases: the reader's chosen package, drawn from its untouched
  * atlas — the home card, every hand gesture, the nine actions the session
  * states pick, one image URL throughout, the reduced-motion still frame, the
  * quiet minute and the exit.
@@ -45,7 +45,7 @@
       var spriteBox = sprite === null ? null : sprite.getBoundingClientRect()
       var stripStyle = strip === null ? null : getComputedStyle(strip)
       r.petdex = {
-        brand: document.body.getAttribute('data-dsh-deepcraft-brand'),
+        palette: document.body.getAttribute('data-dsh-deepcraft-palette'),
         expectedId: expectedId,
         home: read(),
         geometry: node === null ? null : {

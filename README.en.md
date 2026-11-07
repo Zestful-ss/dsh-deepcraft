@@ -2,9 +2,9 @@
 
 # DeepCraft
 
-**A Claude and DeepSeek dual-theme plugin for the DeepSeek Harness Web GUI.**
+**Customizable branding, color palettes and interactions for the DeepSeek Harness Web GUI.**
 
-> **One interface, two temperaments: Claude Code Desktop and DeepSeek.**
+> **Ocean blue by default, with Warm ember and Forest green beside it; the mark, name, accent and pet can all be your own.**
 
 [![English](https://img.shields.io/badge/lang-English-blue.svg)](README.en.md) [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red.svg)](README.md)
 
@@ -15,54 +15,48 @@
 
 ## Preview
 
-The settings page switches between the two palettes; light and dark follow the system. Both themes share layouts with dedicated accent, auxiliary and neutral palettes: Claude pairs warm gray grounds with slate-blue prose links and ember orange accents, while DeepSeek pairs cool gray grounds with ultramarine links and periwinkle accents; categorical charts preserve multiple easily distinguishable auxiliary colors.
+The settings page switches between three palettes; light and dark follow the system. They share every layout, and switching changes colours alone — not the mark, the name or the pet. The Appearance tab also takes your own mark, wordmark, accent colour and pet.
 
-### Claude
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-home-light.png" alt="Claude brand, home — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-home-dark.png" alt="Claude brand, home — dark" /></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-conversation-light.png" alt="Claude brand, Markdown conversation — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/claude-conversation-dark.png" alt="Claude brand, Markdown conversation — dark" /></td>
-  </tr>
-</table>
-
-> Home above, Markdown conversation below; light on the left, dark on the right. Ivory canvas `#FCFCFB`, warm black `#141413`, ember orange `#D97757` for every action, and Claude Code's pixel crab on the composer.
-
-### DeepSeek
+### Ocean blue (default)
 
 <table>
   <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-home-light.png" alt="DeepSeek brand, home — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-home-dark.png" alt="DeepSeek brand, home — dark" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ocean-home-light.png" alt="Ocean blue, home — light" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ocean-home-dark.png" alt="Ocean blue, home — dark" /></td>
   </tr>
   <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-conversation-light.png" alt="DeepSeek brand, Markdown conversation — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/deepseek-conversation-dark.png" alt="DeepSeek brand, Markdown conversation — dark" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ocean-conversation-light.png" alt="Ocean blue, Markdown conversation — light" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ocean-conversation-dark.png" alt="Ocean blue, Markdown conversation — dark" /></td>
   </tr>
 </table>
 
-> Sky-blue canvas `#F7FAFF`, blue-black `#13161D`, DeepSeek blue `#4D6BFE`; Whaledou stands on the composer, with the original pixel whale Deepy still selectable, in eight states:
+### Warm ember
 
 <table>
   <tr>
-    <td align="center" width="25%"><img src="./docs/gifs/idle.gif" width="120" alt="Idle" /><br />Idle</td>
-    <td align="center" width="25%"><img src="./docs/gifs/thinking.gif" width="120" alt="Thinking" /><br />Thinking</td>
-    <td align="center" width="25%"><img src="./docs/gifs/typing.gif" width="120" alt="Answering and calling tools" /><br />Answering and calling tools</td>
-    <td align="center" width="25%"><img src="./docs/gifs/conducting.gif" width="120" alt="Conducting subagents" /><br />Conducting subagents</td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-light.png" alt="Warm ember, home — light" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-dark.png" alt="Warm ember, home — dark" /></td>
   </tr>
   <tr>
-    <td align="center" width="25%"><img src="./docs/gifs/notification.gif" width="120" alt="Waiting on you" /><br />Waiting on you</td>
-    <td align="center" width="25%"><img src="./docs/gifs/error.gif" width="120" alt="Failed" /><br />Failed</td>
-    <td align="center" width="25%"><img src="./docs/gifs/happy.gif" width="120" alt="Finished" /><br />Finished</td>
-    <td align="center" width="25%"><img src="./docs/gifs/sleeping.gif" width="120" alt="Asleep" /><br />Asleep</td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ember-conversation-light.png" alt="Warm ember, Markdown conversation — light" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/ember-conversation-dark.png" alt="Warm ember, Markdown conversation — dark" /></td>
   </tr>
 </table>
 
-> The workspaces, sessions, usage figures and nickname in the screenshots are sample data.
+### Forest green
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="./docs/screenshots/forest-home-light.png" alt="Forest green, home — light" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/forest-home-dark.png" alt="Forest green, home — dark" /></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="./docs/screenshots/forest-conversation-light.png" alt="Forest green, Markdown conversation — light" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/forest-conversation-dark.png" alt="Forest green, Markdown conversation — dark" /></td>
+  </tr>
+</table>
+
+> Home above, Markdown conversation below; light on the left, dark on the right.
 
 ### Layout
 
@@ -72,8 +66,8 @@ The settings page switches between the two palettes; light and dark follow the s
 
 ### Pets
 
-- The composer pet is chosen per theme: Crab Buddy under Claude and Whaledou under DeepSeek, with the original pixel crab and whale still selectable in the same row.
-- "Import a pet package" in the settings page takes a folder, a ZIP or a Petdex link holding `pet.json` and an atlas, keeping the original bytes. The pet art belongs to Petdex and each package's author and is not shipped with this plugin.
+- The composer pet is one choice, changed by neither palette nor brand: Whaledou by default, or Crab Buddy, the original pixel crab or the pixel whale.
+- "Chat pet package" in the settings page takes a complete package — a folder, a ZIP or a Petdex link holding `pet.json` and an atlas — keeping the original bytes. The pet art belongs to Petdex and each package's author and is not shipped with this plugin.
 
 ### Model selection
 

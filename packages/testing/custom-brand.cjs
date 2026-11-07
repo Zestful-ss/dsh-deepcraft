@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * custom-brand.cjs — the reader's own brand images on the real host (D77).
+ * custom-brand.cjs — the reader's own brand images on the real host (D80).
  *
  * Registered in the lane's scenario table (packages/testing/scenarios.cjs).
  *

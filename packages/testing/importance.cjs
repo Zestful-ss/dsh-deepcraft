@@ -4,7 +4,7 @@
  * The audit itself is in importance-audit.cjs; this file is the walk that gives
  * it states to read — the empty page and a conversation, a draft in the
  * composer, the answer streaming, each of the skin's popovers and a host menu
- * open, the dark flip, the DeepSeek brand, the host's palette, every preference
+ * open, the dark flip, the skin palettes, the host's palette, every preference
  * the skin marks the page with, the settings page with each of its tabs and
  * controls, and the pointer on every element a `:hover` rule waits for. One the
  * states show to change nothing fails the run, and so does a selector no state
@@ -125,7 +125,7 @@ function pointAtInPage(selectors) {
  * `!important` declarations audited across the page states the scratch host
  * reaches — the empty page and a conversation, a draft in the composer, the
  * answer streaming, each of the skin's popovers and a host menu open, the dark
- * flip, the DeepSeek brand, the host's palette, the pointer on every element
+ * flip, the skin palettes, the host's palette, the pointer on every element
  * a `:hover` rule waits for, and the settings page with each of its tabs. One
  * the states show to change nothing fails it; so does a selector no state
  * matches an element with. The full verdict is written to
@@ -289,19 +289,20 @@ function importanceScenario(lane) {
         await audit.state('attachment')
       }
       // The document attributes the stylesheet switches on, each as the page
-      // itself carries it: the dark flip, the DeepSeek brand, and the host's own
+      // itself carries it: the dark flip, the skin palettes, and the host's own
       // palette and typefaces.
       await attribute(page, 'data-ds-dark-theme', '')
       await audit.state('dark')
-      await attribute(page, 'data-dsh-deepcraft-brand', 'deepseek')
-      await audit.state('deepseek dark')
+      await attribute(page, 'data-dsh-deepcraft-palette', 'forest')
+      await audit.state('forest dark')
       await attribute(page, 'data-ds-dark-theme', null)
-      await audit.state('deepseek light')
-      await attribute(page, 'data-dsh-deepcraft-brand', 'claude')
+      await audit.state('forest light')
+      await attribute(page, 'data-dsh-deepcraft-palette', 'ember')
+      await audit.state('ember light')
       await attribute(page, 'data-dsh-deepcraft-palette', 'host')
       await attribute(page, 'data-dsh-deepcraft-typeface', 'host')
       await audit.state('host palette')
-      await attribute(page, 'data-dsh-deepcraft-palette', 'claude')
+      await attribute(page, 'data-dsh-deepcraft-palette', 'ocean')
       await attribute(page, 'data-dsh-deepcraft-typeface', 'claude')
       // The preferences the skin marks the page with, one state each.
       for (const [name, key, value] of MARKS) {

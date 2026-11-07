@@ -57,10 +57,10 @@ function stateChecks(r, label) {
 }
 
 /**
- * What a reader reads on the brand's palettes: the body ink and a link on the
- * canvas, and — where the brand promises it — a filled accent against the ink
- * it carries. Read as contrast, not as hex, so a palette change that keeps the
- * page legible does not fail an old value.
+ * What a reader reads on a palette: the body ink and a link on the canvas,
+ * and — where the case asks — a filled accent against the ink it carries. Read
+ * as contrast, not as hex, so a palette change that keeps the page legible
+ * does not fail an old value.
  */
 function paletteChecks(r, label, { accent = false } = {}) {
   const s = r.states || {}
@@ -78,18 +78,18 @@ function paletteChecks(r, label, { accent = false } = {}) {
 }
 
 /**
- * The Petdex cases: each theme's package, drawn from one untouched atlas. The
+ * The Petdex cases: the reader's chosen package, drawn from one untouched atlas. The
  * native action is read beside the semantic animation, so a mapping that
  * drifts from the official rows fails here; the atlas URL is collected across
  * every reading, because one package is one image whatever it plays.
  */
-function petdexChecks(r, label, { brand, id }) {
+function petdexChecks(r, label, { palette, id }) {
   const p = r.petdex || {}
   const home = p.home || null
   const geometry = p.geometry || null
-  check(`${label}: the theme's own package is on the page, drawn by Petdex`,
-    p.brand === brand && !!home && home.petId === id && home.ready === true,
-    JSON.stringify({ brand: p.brand, home }))
+  check(`${label}: the chosen package is on the page, drawn by Petdex`,
+    p.palette === palette && !!home && home.petId === id && home.ready === true,
+    JSON.stringify({ palette: p.palette, home }))
   check(`${label}: the window is 72×78 and the atlas keeps eight columns by nine rows`,
     !!geometry && geometry.width === 72 && geometry.height === 78 &&
       geometry.spriteWidth === 72 && geometry.spriteHeight === 78 &&
@@ -136,31 +136,30 @@ function petdexChecks(r, label, { brand, id }) {
 module.exports = {
   'petdex-claude'(r) {
     basicChecks(r)
-    petdexChecks(r, 'the Claude Petdex pet', { brand: 'claude', id: 'crab-buddy' })
+    petdexChecks(r, 'the ember palette’s Petdex pet', { palette: 'ember', id: 'crab-buddy' })
     commonChecks(r)
   },
   'petdex-deepseek'(r) {
     basicChecks(r)
-    petdexChecks(r, 'the DeepSeek Petdex pet', { brand: 'deepseek', id: 'whaledou' })
+    petdexChecks(r, 'the ocean palette’s Petdex pet', { palette: 'ocean', id: 'whaledou' })
     commonChecks(r)
   },
   'crab-states'(r) {
     basicChecks(r)
     const s = r.states || {}
-    check('the crab case runs under the Claude brand, with the crab out',
-      s.brand === 'claude' && s.crab === true, JSON.stringify({ brand: s.brand, crab: s.crab }))
-    paletteChecks(r, 'Claude')
+    check('the crab case runs under the default palette, with the crab out',
+      s.palette === 'ocean' && s.crab === true, JSON.stringify({ palette: s.palette, crab: s.crab }))
+    paletteChecks(r, 'Ocean')
     stateChecks(r, 'the crab')
     commonChecks(r)
   },
-  // The DeepSeek brand's whale: the same walk as the crab's, with its own
-  // palettes and its own art.
+  // The whale: the same walk as the crab's, with the default palette's art.
   deepy(r) {
     basicChecks(r)
     const s = r.states || {}
-    check('the brand stored as "off" reads as DeepSeek, and the crab gives way to the whale',
-      s.brand === 'deepseek' && s.crab === false, JSON.stringify({ brand: s.brand, crab: s.crab }))
-    paletteChecks(r, 'DeepSeek', { accent: true })
+    check('the brand stored as "off" migrates to the ocean palette, and the crab gives way to the whale',
+      s.palette === 'ocean' && s.crab === false, JSON.stringify({ palette: s.palette, crab: s.crab }))
+    paletteChecks(r, 'Ocean', { accent: true })
     stateChecks(r, 'the whale')
     commonChecks(r)
   },

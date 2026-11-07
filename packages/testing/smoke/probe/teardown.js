@@ -26,12 +26,6 @@
     var topUpCS = topUp ? getComputedStyle(topUp) : null
     r.topUpInk = topUpCS ? topUpCS.color : null
     r.topUpFill = topUpCS ? topUpCS.backgroundColor : null
-    var banRow = document.querySelector('[data-dsh-deepcraft-ban-row]')
-    if (banRow) banRow.click()
-    var toast = document.querySelector('.dsh-deepcraft-ban-toast-text')
-    r.banToast = toast ? toast.textContent : null
-    var dismiss = document.querySelector('.dsh-deepcraft-ban [data-dsh-deepcraft-ban-dismiss]')
-    if (dismiss) dismiss.click()
     // A closed popover card must not answer the host's menu role: the host's
     // keyboard arbitration queries every [role=menu] in the document as a menu
     // that owns the foreground, so a hidden card silently disarms the shortcuts

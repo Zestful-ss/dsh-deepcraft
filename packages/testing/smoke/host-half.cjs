@@ -220,7 +220,7 @@ async function hostHalf() {
           return { ok: false, detail: `refused: ${error.message}` }
         }
       }
-      for (const config of [{ chatAnimations: 'enhanced' }, { chatAnimations: 'redraw' }, { chatAnimations: 'off' }, { chatAnimations: false }, { autoPopover: false }, { autoPopover: 'all' }]) {
+      for (const config of [{ chatAnimations: 'enhanced' }, { chatAnimations: 'redraw' }, { chatAnimations: 'off' }, { chatAnimations: false }, { autoPopover: false }, { autoPopover: 'all' }, { brand: 'off' }, { brand: 'claude' }, { chatPetClaude: 'crab-buddy' }, { chatPetDeepseek: 'whaledou' }, { palette: 'claude' }, { palette: 'forest' }, { chatPet: 'my-pet' }]) {
         const { ok, detail } = resolved(config)
         check(`the Config takes a stored ${JSON.stringify(config)}`, typeof mod.Config === 'function' && ok, detail)
       }
@@ -597,7 +597,7 @@ async function hostHalf() {
     `HTTP ${overridden.status} ${JSON.stringify(overridden.headers)}`)
   fs.rmSync(fontHome, { recursive: true, force: true })
 
-  // The pets library and its import boundaries (D78). Every file lands under a
+  // The pets library and its import boundaries (D80). Every file lands under a
   // scratch user profile, never the machine's own ~/.petdex; the atlas is a
   // generated 768×936 PNG with the v1 geometry (eight columns, nine rows).
   console.log('\nhost half — the pets library')

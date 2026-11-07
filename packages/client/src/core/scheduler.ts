@@ -5,7 +5,6 @@ import { onModelCopyLoaded } from '../features/model/model-copy'
 import { loadPrefs, refreshMotionAttribute, subscribePrefs } from './prefs'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FooterHandle } from '../features/account/account-footer'
-import type { BanHandle } from '../features/ban-screen/ban-screen'
 import type { ChatFoldHandle } from '../features/chat-fold/chat-fold'
 import type { ComposerHandle } from '../features/composer/composer'
 import type { ChatSendHandle } from '../features/chat-send/send-flight'
@@ -33,7 +32,6 @@ export interface Handles {
   heroMenu: FeatureHandle
   quickProviders: QuickProvidersHandle
   footer: FooterHandle
-  ban: BanHandle
   workspace: FeatureHandle
   search: FeatureHandle
   turnNav: FeatureHandle

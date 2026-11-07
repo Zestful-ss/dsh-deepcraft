@@ -1,8 +1,8 @@
-/* The canvases the Claude palette paints onto the host's own structure; under
+/* The canvases a skin palette paints onto the host's own structure; under
    "follow the host" none of them apply. While a wallpaper plugin shows one
    (`data-we-wallpaper`) these canvases are not painted, and theme/wallpaper.css
    lays its mask over the layer the plugin put under the shell */
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"]:not([data-ds-dark-theme]):not([data-we-wallpaper]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):not([data-ds-dark-theme]):not([data-we-wallpaper]) {
   color: var(--dsw-alias-label-primary);
   background-color: var(--dsh-deepcraft-canvas);
 }
@@ -11,11 +11,11 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"]:not([data-ds-dark-
    light palette states its canvas here — the same #fcfcfb under both brands. It
    stays painted under a wallpaper: the layer sits above this canvas and below
    the shell. */
-html:has(body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"]:not([data-ds-dark-theme])) {
+html:has(body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):not([data-ds-dark-theme])) {
   background-color: #fcfcfb;
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"]:not([data-ds-dark-theme]):not([data-we-wallpaper]) #root {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):not([data-ds-dark-theme]):not([data-we-wallpaper]) #root {
   background-color: var(--dsh-deepcraft-canvas);
 }
 
@@ -26,7 +26,7 @@ body[data-dsh-deepcraft]:not([data-ds-dark-theme]) :is([data-pane="sidebar"], [d
   border-right: 0.5px solid var(--dsw-alias-border-l1);
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette="claude"]:not([data-ds-dark-theme]):not([data-we-wallpaper]) :is([data-pane="conversation"], [data-dsh-deepcraft-part~="center-column"]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):not([data-ds-dark-theme]):not([data-we-wallpaper]) :is([data-pane="conversation"], [data-dsh-deepcraft-part~="center-column"]) {
   background: var(--dsh-deepcraft-canvas);
 }
 

@@ -38,7 +38,7 @@
  *                left to the host;
  *   - isolation  a host API that breaks one feature — at install or at sync —
  *                retires only that feature and hands its surface back (D12);
- *   - deepy      the DeepSeek brand: the whale stands on the home card and on
+ *   - deepy      the original pixel whale: it stands on the home card and on
  *                the conversation's input area (or the panel replacing its
  *                card), follows the session's state and moments, changes
  *                frames without waking a pass, and leaves with the page;

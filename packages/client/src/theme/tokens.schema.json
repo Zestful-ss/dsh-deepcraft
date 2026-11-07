@@ -39,17 +39,17 @@
       }
     },
     "palette": {
-      "description": "Colour tokens: the Claude brand's two themes, the DeepSeek brand's overrides of them, and the alias under the host palette.",
+      "description": "Colour tokens: every skin palette's light and dark themes, and the alias under the host palette (D80).",
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["token"],
-        "anyOf": [{ "required": ["claude"] }, { "required": ["deepseek"] }, { "required": ["host"] }],
+        "required": ["token", "ember", "ocean", "forest"],
         "additionalProperties": false,
         "properties": {
           "token": { "$ref": "#/$defs/token" },
-          "claude": { "$ref": "#/$defs/themes" },
-          "deepseek": { "$ref": "#/$defs/themes" },
+          "ember": { "$ref": "#/$defs/fullThemes" },
+          "ocean": { "$ref": "#/$defs/fullThemes" },
+          "forest": { "$ref": "#/$defs/fullThemes" },
           "host": { "$ref": "#/$defs/value" },
           "use": { "description": "What the token paints, for the docs/STYLE.md table.", "type": "string", "minLength": 1 },
           "note": { "$ref": "#/$defs/note" }
@@ -91,9 +91,10 @@
     "token": { "type": "string", "pattern": "^--(dsw|dsh-deepcraft)-[a-z0-9-]+$" },
     "value": { "type": "string", "minLength": 1, "pattern": "^[^;{}]+$" },
     "note": { "description": "Why the value has this shape; kept for maintainers, not emitted.", "type": "string", "minLength": 1 },
-    "themes": {
+    "fullThemes": {
+      "description": "One skin palette's two themes: both are stated, so no palette inherits a value from another.",
       "type": "object",
-      "minProperties": 1,
+      "required": ["dark", "light"],
       "additionalProperties": false,
       "properties": {
         "dark": { "$ref": "#/$defs/value" },

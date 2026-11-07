@@ -1,8 +1,8 @@
 {
   "id": "deepcraft",
   "name": "DeepCraft",
-  "tagline": "Claude 与 DeepSeek 双主题外观",
-  "accent": "#d97757",
+  "tagline": "自定义品牌与多套配色",
+  "accent": "#5368c9",
   "bodyAttr": "data-dsh-deepcraft",
   "package": "dsh-deepcraft",
   "wiring": {

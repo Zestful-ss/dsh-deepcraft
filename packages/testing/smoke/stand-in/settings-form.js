@@ -24,6 +24,8 @@
   var username = CASE === 'markup' ? MARKUP : CASE === 'desktop' || launcherCase ? '' : 'Tester'
   var formListeners = []
   var formValue = { username: username, collapseFooter: true, homeLayout: CASE === 'studio' ? 'studio' : 'classic', brand: CASE === 'deepy' ? 'off' : undefined }
+  // The default identity's pet is whaledou; the crab case below picks the crab.
+  if (CASE === 'petdex-claude') Object.assign(formValue, { palette: 'ember', chatPet: 'crab-buddy' })
   // The crab-states case picks the crab, whose states it walks through.
   if (CASE === 'crab-states' || CASE === 'shell' || CASE === 'studio') formValue.mascot = 'crab'
   if (CASE === 'deepy') formValue.mascot = 'deepy'

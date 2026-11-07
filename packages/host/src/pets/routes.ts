@@ -1,5 +1,5 @@
 /**
- * The pets routes (D78): the library the chat pet reads and the three ways a
+ * The pets routes (D80): the library the chat pet reads and the three ways a
  * complete package arrives.
  *
  * Every route runs the same request fence as the rest of the plugin's private

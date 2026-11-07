@@ -1,0 +1,8 @@
+{
+  "group": "improvements",
+  "order": 0,
+  "external": false,
+  "at": "2026-11-07",
+  "zh": "聊天框宠物合并为一项选择，不随配色变化；原有的像素螃蟹、像素鲸鱼与导入的宠物包继续保留。",
+  "en": "Make the chat pet one choice that no palette changes; the original pixel crab, pixel whale and imported packages stay available."
+}

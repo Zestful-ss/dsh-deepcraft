@@ -1,6 +1,6 @@
 /**
  * The two file formats an import reads, through mature parsers rather than a
- * second implementation of either (D78): fflate streams the ZIP and counts the
+ * second implementation of either (D80): fflate streams the ZIP and counts the
  * bytes it actually produces, and image-size reads the atlas header.
  *
  * The build bundles both libraries into this module alone

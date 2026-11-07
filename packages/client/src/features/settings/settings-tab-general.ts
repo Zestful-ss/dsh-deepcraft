@@ -1,13 +1,12 @@
 import * as React from 'react'
-import { AUTO_POPOVER_ACCOUNT, AUTO_POPOVER_ALL, AUTO_POPOVER_OFF, BRAND_CLAUDE, BRAND_DEEPSEEK, PAGE_ZOOM_08, PAGE_ZOOM_1, PAGE_ZOOM_125, PAGE_ZOOM_15, PAGE_ZOOM_SYSTEM, USERNAME_MAX } from '../../constants'
-import { COMBINE_SVGS } from 'virtual:dsh-deepcraft/generated'
+import { AUTO_POPOVER_ACCOUNT, AUTO_POPOVER_ALL, AUTO_POPOVER_OFF, PAGE_ZOOM_08, PAGE_ZOOM_1, PAGE_ZOOM_125, PAGE_ZOOM_15, PAGE_ZOOM_SYSTEM, USERNAME_MAX } from '../../constants'
 import type { Prefs } from '../../constants'
 import type { SegmentOption, SettingsTab, SettingsView } from './settings-controls'
 import { copy } from './copy'
 
 /**
- * The settings page's General tab: the theme style, the username, the page's
- * own scale and the hover-open popovers.
+ * The settings page's General tab: the username, the page's own scale and the
+ * hover-open popovers.
  *
  * Each tab is a `{ id, label, rows(view) }` record: `rows` runs on every
  * render of the page (packages/client/src/features/settings/settings.ts) with the page's
@@ -15,50 +14,6 @@ import { copy } from './copy'
  * field's state.
  */
 export function createSettingsGeneralTab(): SettingsTab {
-  /**
-   * The theme style renders as a grid of large cards, each carrying the
-   * brand's own mark: brands are presets, not sibling tiers of one setting.
-   * The stylesheet picks the mark off the logo's data-brand, so a new brand
-   * is one option here plus one rule in settings-cards.css.
-   */
-  function themePicker(prefs: Prefs, write: SettingsView['write']) {
-    const brandOptions: SegmentOption<Prefs['brand']>[] = [
-      { value: BRAND_DEEPSEEK, label: copy('brandDeepseek') },
-      { value: BRAND_CLAUDE, label: copy('brandClaude') },
-    ]
-    return React.createElement(
-      'div',
-      { className: 'dsh-deepcraft-brand-picker', role: 'group' },
-      brandOptions.map(option => React.createElement(
-        'button',
-        {
-          key: option.value,
-          type: 'button',
-          className: 'dsh-deepcraft-brand-card',
-          // The card names its own brand: the two cards draw their art differently
-          // (Claude's mark beside its word, DeepSeek's lockup as one piece), so the
-          // card, not the art inside it, is what a reader and the lane press.
-          'data-brand': option.value,
-          'data-active': option.value === prefs.brand ? '' : undefined,
-          'aria-pressed': option.value === prefs.brand ? 'true' : 'false',
-          'aria-label': option.label,
-          onClick: () => { if (option.value !== prefs.brand) write({ brand: option.value }) },
-        },
-        option.value === BRAND_DEEPSEEK
-          // DeepSeek's lockup is one piece of art that already draws the mark with its word.
-          ? React.createElement('span', {
-            className: 'dsh-deepcraft-brand-card-lockup',
-            'aria-hidden': 'true',
-            dangerouslySetInnerHTML: { __html: COMBINE_SVGS.deepseek },
-          })
-          : [
-            React.createElement('span', { key: 'mark', className: 'dsh-deepcraft-brand-card-logo', 'data-brand': option.value, 'aria-hidden': 'true' }),
-            React.createElement('span', { key: 'word', className: 'dsh-deepcraft-brand-card-word dsh-deepcraft-masked-word', 'aria-hidden': 'true' }),
-          ],
-      )),
-    )
-  }
-
   function rows(view: SettingsView) {
     const prefs = view.prefs
     const write = view.write
@@ -77,16 +32,6 @@ export function createSettingsGeneralTab(): SettingsTab {
     ]
     const username = view.username
     return [
-      {
-        rank: 10,
-        node: controls.row(
-          'brand',
-          copy('brandTitle'),
-          copy('brandDesc'),
-          themePicker(prefs, write),
-          { block: true },
-        ),
-      },
       {
         rank: 20,
         node: controls.row(

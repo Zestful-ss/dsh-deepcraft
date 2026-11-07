@@ -1,5 +1,5 @@
 /**
- * The pets library and the imports that fill it (D78).
+ * The pets library and the imports that fill it (D80).
  *
  * Every package lives at `~/.petdex/pets/<id>/` in the layout a Petdex package
  * keeps, with its manifest and atlas exactly as they arrived. Content is

@@ -21,7 +21,7 @@ export const HERO_GREETING_SLOTS = [
     'Midday check-in, {name}?',
   ] },
   { from: 14, to: 18, lines: [
-    'Coffee and Claude time?',
+    'Coffee and coding time?',
     'Good afternoon, {name}.',
     'How’s the day going, {name}?',
     'Afternoon, {name}. What’s next?',

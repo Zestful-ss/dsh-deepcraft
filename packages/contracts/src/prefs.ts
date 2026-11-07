@@ -12,19 +12,6 @@ import { OFFICIAL_MODEL_GROUP } from './services'
 
 /* ---------- the value vocabulary ---------- */
 
-/** Brand marks selectable from the settings page. `claude` is the default. */
-export const BRAND_CLAUDE = 'claude'
-/**
- * The DeepSeek brand: the host's own brand area stays (no Claude variant
- * matches) and takes DeepSeek's brand blue, both palettes turn blue
- * (theme/tokens.css), the skin's Claude marks give way to DeepSeek's whale,
- * and Deepy the pixel whale takes the crab's place on the composer.
- */
-export const BRAND_DEEPSEEK = 'deepseek'
-/** What earlier builds stored for the DeepSeek choice, when it was labelled "Off". */
-export const BRAND_DEEPSEEK_LEGACY = 'off'
-export const BRANDS = [BRAND_CLAUDE, BRAND_DEEPSEEK] as const
-
 /** How the custom brand images are painted: in their own colours, or as a shape in the text colour. */
 export const BRAND_INK_ORIGINAL = 'original'
 export const BRAND_INK_TEXT = 'text'
@@ -68,10 +55,18 @@ export const MESSAGE_ENTER_FLIGHT = 'flight'
 export const MESSAGE_ENTER_GROW = 'grow'
 export const MESSAGE_ENTER_MODES = [MESSAGE_ENTER_FLIGHT, MESSAGE_ENTER_GROW] as const
 
-/** Who paints the colours: the skin's own palette, or the host's colour tokens left to the host and other theme plugins. */
-export const PALETTE_CLAUDE = 'claude'
+/**
+ * Who paints the colours: one of the skin's own palettes, each a full light
+ * and dark set of its own (theme/tokens.json, D80), or the host's colour tokens
+ * left to the host and other theme plugins.
+ */
+export const PALETTE_OCEAN = 'ocean'
+export const PALETTE_EMBER = 'ember'
+export const PALETTE_FOREST = 'forest'
 export const PALETTE_HOST = 'host'
-export const PALETTES = [PALETTE_CLAUDE, PALETTE_HOST] as const
+/** The skin's own palettes, in the settings page's order; `PALETTE_HOST` follows them. */
+export const SKIN_PALETTES = [PALETTE_OCEAN, PALETTE_EMBER, PALETTE_FOREST] as const
+export const PALETTES = [...SKIN_PALETTES, PALETTE_HOST] as const
 /** Who sets the type, under the same two answers. */
 export const TYPEFACE_CLAUDE = 'claude'
 export const TYPEFACE_HOST = 'host'
@@ -115,17 +110,6 @@ export const CHAT_ANIMATIONS_OFF = 'off'
 export const STATS_POSITION_INLINE = 'inline'
 export const STATS_POSITION_CONTEXT = 'context'
 export const STATS_POSITIONS = [STATS_POSITION_INLINE, STATS_POSITION_CONTEXT] as const
-
-/**
- * The language the account-hold easter egg (features/ban-screen/) is written
- * in, or `off` for none. It is its own preference rather than "follow the
- * shell", because the page reproduces a real Claude screen: the point is to
- * read it in the language Claude actually used.
- */
-export const BAN_LOCALE_EN = 'en'
-export const BAN_LOCALE_ZH = 'zh'
-export const BAN_LOCALE_OFF = 'off'
-export const BAN_LOCALES = [BAN_LOCALE_EN, BAN_LOCALE_ZH, BAN_LOCALE_OFF] as const
 
 /**
  * How the page's boxes are set: `float` lifts the conversation column and the
@@ -203,7 +187,6 @@ export type PrefSpec = BooleanSpec | ChoiceSpec | TextSpec | ColorSpec | ListSpe
  * shapes, so an old value never keeps the package from starting.
  */
 export const PREFS = {
-  brand: { type: 'choice', values: BRANDS, default: BRAND_CLAUDE, legacy: { [BRAND_DEEPSEEK_LEGACY]: BRAND_DEEPSEEK } },
   brandName: { type: 'text', default: '', max: BRAND_NAME_MAX },
   brandInk: { type: 'choice', values: BRAND_INKS, default: BRAND_INK_ORIGINAL },
   brandAccent: { type: 'color', default: '' },
@@ -231,18 +214,16 @@ export const PREFS = {
   quickProviders: { type: 'list', default: [], max: QUICK_PROVIDERS_MAX, entryMax: PROVIDER_ID_MAX, drop: [OFFICIAL_MODEL_GROUP] },
   username: { type: 'text', default: '', max: USERNAME_MAX },
   pageZoom: { type: 'choice', values: PAGE_ZOOMS, default: PAGE_ZOOM_SYSTEM },
-  banLocale: { type: 'choice', values: BAN_LOCALES, default: BAN_LOCALE_EN },
   pageLook: { type: 'choice', values: PAGE_LOOKS, default: PAGE_LOOK_FLOAT },
   homeLayout: { type: 'choice', values: HOME_LAYOUTS, default: HOME_LAYOUT_FLOAT },
   homeRipple: { type: 'boolean', default: false },
-  palette: { type: 'choice', values: PALETTES, default: PALETTE_CLAUDE },
+  palette: { type: 'choice', values: PALETTES, default: PALETTE_OCEAN },
   typeface: { type: 'choice', values: TYPEFACES, default: TYPEFACE_CLAUDE },
   /** The mascot on the composer; the resolved one rides the document. */
   mascot: { type: 'choice', values: MASCOTS, default: MASCOT_BRAND },
   mascotScope: { type: 'choice', values: MASCOT_SCOPES, default: MASCOT_SCOPE_ALL },
-  /** Each theme's chat pet, by package directory id. */
-  chatPetClaude: { type: 'text', default: 'crab-buddy', max: PET_ID_MAX },
-  chatPetDeepseek: { type: 'text', default: 'whaledou', max: PET_ID_MAX },
+  /** The chat pet, by package directory id; it follows neither the palette nor the brand (D80). */
+  chatPet: { type: 'text', default: 'whaledou', max: PET_ID_MAX },
   permissionsControl: { type: 'boolean', default: true },
   statsPosition: { type: 'choice', values: STATS_POSITIONS, default: STATS_POSITION_CONTEXT },
   workspaceView: { type: 'boolean', default: true },
@@ -275,7 +256,6 @@ export const LIVE_PREFS = [
   'homeRipple',
   'permissionsControl',
   'statsPosition',
-  'banLocale',
   'workspaceView',
   'sidebarSearch',
   'turnNav',
@@ -321,6 +301,47 @@ export const PREF_DEFAULTS = Object.freeze(Object.fromEntries(
 /** A `#rrggbb` colour, which is all the custom accent accepts. */
 const COLOR_RE = /^#[0-9a-f]{6}$/i
 
+/** The values earlier builds stored for their brand choice; only the migration below reads them (D80). */
+const LEGACY_BRAND_DEEPSEEK = 'deepseek'
+const LEGACY_BRAND_OFF = 'off'
+const LEGACY_PALETTE_CLAUDE = 'claude'
+
+/**
+ * The colour palette a stored configuration means (D80). A value this build
+ * knows wins; the host's palette stands; otherwise the old brand (or, without
+ * one, the old palette) decides between the skin's blue and its warm palette.
+ */
+function migratePalette(section: Record<string, unknown>) {
+  const raw = section.palette
+  if (typeof raw === 'string' && (PALETTES as readonly string[]).includes(raw)) return raw
+  if (raw === PALETTE_HOST) return PALETTE_HOST
+  const brand = section.brand
+  if (brand !== undefined) {
+    return brand === LEGACY_BRAND_DEEPSEEK || brand === LEGACY_BRAND_OFF ? PALETTE_OCEAN : PALETTE_EMBER
+  }
+  return raw === LEGACY_PALETTE_CLAUDE ? PALETTE_EMBER : PALETTE_OCEAN
+}
+
+/**
+ * The chat pet a stored configuration means (D80). The current field wins; an
+ * older build's per-theme field is read next, with that field's own default
+ * when it holds nothing; a configuration that never chose a theme keeps the
+ * shipped pet.
+ */
+function migrateChatPet(section: Record<string, unknown>) {
+  const current = typeof section.chatPet === 'string' ? section.chatPet.trim() : ''
+  if (current !== '') return current.slice(0, PET_ID_MAX)
+  const history = section.brand !== undefined || section.palette !== undefined
+    || section.chatPetClaude !== undefined || section.chatPetDeepseek !== undefined
+  if (!history) return 'whaledou'
+  const brand = section.brand
+  const deepseek = brand === LEGACY_BRAND_DEEPSEEK || brand === LEGACY_BRAND_OFF
+  const older = typeof section[deepseek ? 'chatPetDeepseek' : 'chatPetClaude'] === 'string'
+    ? (section[deepseek ? 'chatPetDeepseek' : 'chatPetClaude'] as string).trim()
+    : ''
+  return (older || (deepseek ? 'whaledou' : 'crab-buddy')).slice(0, PET_ID_MAX)
+}
+
 /** One preference's value, clamped to its declaration; anything unreadable reads as the default. */
 function clampPref(spec: PrefSpec, raw: unknown): unknown {
   const legacy = spec.legacy === undefined ? undefined : spec.legacy[String(raw)]
@@ -354,5 +375,9 @@ export function clampPrefs(value: unknown): Prefs {
   const section: Record<string, unknown> = value !== null && typeof value === 'object' ? value as Record<string, unknown> : {}
   const out: Record<string, unknown> = {}
   for (const [key, spec] of Object.entries(PREFS) as [PrefKey, PrefSpec][]) out[key] = clampPref(spec, section[key])
+  // These two read fields the table no longer declares: the older build's brand
+  // and its per-theme pets (D80).
+  out.palette = migratePalette(section)
+  out.chatPet = migrateChatPet(section)
   return out as unknown as Prefs
 }

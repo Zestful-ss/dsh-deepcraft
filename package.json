@@ -1,6 +1,6 @@
 {
   "name": "dsh-deepcraft",
-  "description": "DeepCraft — Claude and DeepSeek themes for the DeepSeek Harness (dsh) web GUI: visual and interaction overhaul",
+  "description": "DeepCraft — customizable branding, color palettes and interactions for the DeepSeek Harness web GUI",
   "version": "0.25.2",
   "type": "module",
   "main": "lib/host/index.js",
@@ -64,10 +64,7 @@
     "cordis",
     "web-ui",
     "theme",
-    "claude",
-    "claude-code",
     "desktop-theme",
-    "anthropic",
     "editorial"
   ],
   "license": "MIT",

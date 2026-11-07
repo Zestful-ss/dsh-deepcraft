@@ -19,7 +19,7 @@
       return 'other'
     }) : null
     var syntheticPopover = document.querySelector('.dsh-deepcraft-account-popover')
-    r.syntheticHeader = !!(syntheticPopover && syntheticPopover.querySelector('[data-dsh-deepcraft-ban-row]'))
+    r.syntheticHeader = !!(syntheticPopover && syntheticPopover.querySelector('.dsh-deepcraft-account-popover-header'))
     // The closed drawer's rows are built and reconciled while it is closed, so
     // the panel sits over the account row with its icons in it: visibility has
     // to take that content out of the paint and hit-test tree.

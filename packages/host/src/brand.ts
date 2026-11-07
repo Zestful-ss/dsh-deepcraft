@@ -1,5 +1,5 @@
 /**
- * The reader's own brand images (D77), kept under the harness home's
+ * The reader's own brand images (D80), kept under the harness home's
  * `dsh-deepcraft/brand/` as `mark.<ext>` and `wordmark.<ext>`.
  *
  * The status route answers which images are in place; each image's route

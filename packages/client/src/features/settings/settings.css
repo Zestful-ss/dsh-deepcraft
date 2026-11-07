@@ -242,9 +242,9 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-text {
   padding-right: 48px;
 }
 
-/* A block row stacks its control under the text — the brand picker's cards
-   and the four-way mascot choice need more room than an inline control slot
-   gives. A control keeps its own width; only the brand cards span the row. */
+/* A block row stacks its control under the text — the palette choice and the
+   four-way mascot choice need more room than an inline control slot gives.
+   A control keeps its own width; only the palette's group spans the row. */
 /* A block row is a column, so it stands apart from the row's wrap rules: its
    children never wrap sideways, and its text keeps no width basis — in a
    column a flex basis reads as a height. */
@@ -259,6 +259,21 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-block > .dsh-deepcraft-sett
   flex: none;
   align-self: stretch;
   padding-right: 0;
+}
+
+/* The four palette choices sit on one line while it holds them and wrap onto
+   the next rather than running past a narrow page (D80). The group's sliding
+   pill covers the chosen item on whichever line it lands
+   (shared/sliding-pill.css). */
+body[data-dsh-deepcraft] .dsh-deepcraft-palette-options {
+  display: flex;
+  align-self: stretch;
+  min-width: 0;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-palette-options > .dsh-deepcraft-segments {
+  flex: 0 1 auto;
+  flex-wrap: wrap;
 }
 
 /* The row title is UI text in the host's row metrics: the sans face, not the
@@ -543,7 +558,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-quick-popover {
   transform-origin: bottom right !important;
 }
 
-/* ── Pets (D78) ──────────────────────────────────────────────────────────────
+/* ── Pets (D80) ──────────────────────────────────────────────────────────────
    The chat pet's package picker and its action preview, and the importer's
    three ways in. The preview shows the atlas cell itself, at the same cell
    geometry the composer uses. */

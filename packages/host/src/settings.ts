@@ -59,6 +59,16 @@ function volatileField(field: SchemaField | null | undefined) {
 }
 
 /**
+ * The fields the older build stored and the migration reads (D80): its brand
+ * choice and its per-theme chat pets. They are not preferences any more, so
+ * they carry no default and never render a row; they only reach the browser
+ * half beside the form's own values.
+ */
+const LEGACY_FIELDS = ['brand', 'chatPetClaude', 'chatPetDeepseek'] as const
+/** Preferences whose unsaved state must stay readable: see prefsField. */
+const UNDEFAULTED: Readonly<Record<string, true>> = { palette: true, chatPet: true }
+
+/**
  * One Config field for one preference, permissive on purpose: it takes the
  * shapes a stored value may have carried — a string, a boolean or an array of
  * strings — and keeps the table's default (packages/contracts/src/prefs.ts,
@@ -70,9 +80,10 @@ function volatileField(field: SchemaField | null | undefined) {
  * what it reads and falls back to the default (packages/client/src/core/prefs.ts).
  */
 function prefsField(Schema: SchemaFactory, key: PrefKey) {
-  return Schema
-    .union([Schema.string(), Schema.boolean(), Schema.array(Schema.string())])
-    .default(PREFS[key].default)
+  const field = Schema.union([Schema.string(), Schema.boolean(), Schema.array(Schema.string())])
+  // The migration needs to tell an unsaved field from one saved as its default
+  // (D80): these two keep no default in the form, so an absent value stays absent.
+  return UNDEFAULTED[key] === true ? field : field.default(PREFS[key].default)
 }
 
 /**
@@ -96,9 +107,12 @@ function prefsField(Schema: SchemaFactory, key: PrefKey) {
  */
 export const Config = SchemaFactory === null
   ? undefined
-  : SchemaFactory.object(Object.fromEntries(
-      Object.keys(PREFS).map(key => [key, volatileField(prefsField(SchemaFactory, key as PrefKey))]),
-    ))
+  : SchemaFactory.object({
+      ...Object.fromEntries(Object.keys(PREFS).map(key => [key, volatileField(prefsField(SchemaFactory, key as PrefKey))])),
+      ...Object.fromEntries(LEGACY_FIELDS.map(key => [key, volatileField(
+        SchemaFactory.union([SchemaFactory.string(), SchemaFactory.boolean(), SchemaFactory.array(SchemaFactory.string())]),
+      )])),
+    })
 
 /**
  * Register the settings surface: the skin ships its own settings page, which

@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
-import { BRAND_CLAUDE, BRAND_DEEPSEEK, BRAND_DEEPSEEK_LEGACY, BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, CHAT_ANIMATIONS_OFF, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, MASCOT_PETDEX, ONGOING_INDICATOR_RING, PREF_DEFAULTS, PROVIDER_ID_MAX, QUICK_PROVIDERS_MAX, STATUS_MOTION_WASH, USERNAME_MAX } from '../constants'
+import { BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, CHAT_ANIMATIONS_OFF, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, MASCOT_PETDEX, ONGOING_INDICATOR_RING, PREF_DEFAULTS, PROVIDER_ID_MAX, QUICK_PROVIDERS_MAX, STATUS_MOTION_WASH, USERNAME_MAX } from '../constants'
 import { MODEL_OFFICIAL_GROUP } from '../features/model/copy-fallbacks'
-import { resolveMascot, resolveThemePet } from './prefs'
+import { resolveMascot } from './prefs'
 import { clampPrefs as normalizePrefs } from '@dsh-deepcraft/contracts/prefs'
 
 test('an empty or unreadable value reads as the defaults', () => {
@@ -39,10 +39,15 @@ test('the caret switch reads the retired explicit-moves tier as on', () => {
   expect(normalizePrefs({ caretMotion: 'move' }).caretMotion).toBe(PREF_DEFAULTS.caretMotion)
 })
 
-test('the brand stored under its earlier name lands on its choice, anything else on Claude', () => {
-  expect(normalizePrefs({ brand: BRAND_DEEPSEEK }).brand).toBe(BRAND_DEEPSEEK)
-  expect(normalizePrefs({ brand: BRAND_DEEPSEEK_LEGACY }).brand).toBe(BRAND_DEEPSEEK)
-  expect(normalizePrefs({ brand: 'anthropic' }).brand).toBe(BRAND_CLAUDE)
+test('the older brand and palette choices land on one independent palette (D80)', () => {
+  expect(normalizePrefs({ brand: 'off', palette: 'claude' }).palette).toBe('ocean')
+  expect(normalizePrefs({ brand: 'deepseek' }).palette).toBe('ocean')
+  expect(normalizePrefs({ brand: 'claude' }).palette).toBe('ember')
+  expect(normalizePrefs({ brand: 'anthropic' }).palette).toBe('ember')
+  expect(normalizePrefs({ palette: 'claude' }).palette).toBe('ember')
+  expect(normalizePrefs({ palette: 'host' }).palette).toBe('host')
+  expect(normalizePrefs({ palette: 'forest' }).palette).toBe('forest')
+  expect(normalizePrefs({}).palette).toBe('ocean')
 })
 
 test('the hover-open preference takes its earlier boolean shape', () => {
@@ -94,18 +99,19 @@ test('the custom images keep their own colours unless the text colour is chosen'
   expect(normalizePrefs({ brandInk: 'mono' }).brandInk).toBe(BRAND_INK_ORIGINAL)
 })
 
-test('the chat position reads its own field of the theme in front', () => {
-  expect(resolveThemePet(normalizePrefs({ brand: BRAND_CLAUDE }))).toBe('crab-buddy')
-  expect(resolveThemePet(normalizePrefs({ brand: BRAND_DEEPSEEK }))).toBe('whaledou')
-  const picked = normalizePrefs({ chatPetClaude: 'other-custom', chatPetDeepseek: 'my-custom' })
-  expect(resolveThemePet(picked)).toBe('other-custom')
-  expect(resolveThemePet({ ...picked, brand: BRAND_DEEPSEEK })).toBe('my-custom')
+test('the chat pet is one choice and the older per-theme fields move into it (D80)', () => {
+  expect(normalizePrefs({}).chatPet).toBe('whaledou')
+  expect(normalizePrefs({ chatPet: '  my-pet  ' }).chatPet).toBe('my-pet')
+  expect(normalizePrefs({ brand: 'off', palette: 'claude', chatPetDeepseek: 'my-whale' }).chatPet).toBe('my-whale')
+  expect(normalizePrefs({ brand: 'deepseek', chatPetDeepseek: '' }).chatPet).toBe('whaledou')
+  expect(normalizePrefs({ brand: 'claude', palette: 'claude', chatPetClaude: 'my-crab' }).chatPet).toBe('my-crab')
+  expect(normalizePrefs({ palette: 'claude' }).chatPet).toBe('crab-buddy')
+  expect(normalizePrefs({ brand: 'claude', palette: 'forest', chatPet: 'new-pet' }).chatPet).toBe('new-pet')
 })
 
 test('"follow the theme" resolves to the Petdex guest; a manual character stands, and off only leaves the chat place', () => {
-  expect(resolveMascot(normalizePrefs({ brand: BRAND_CLAUDE }))).toBe(MASCOT_PETDEX)
-  expect(resolveMascot(normalizePrefs({ brand: BRAND_DEEPSEEK }))).toBe(MASCOT_PETDEX)
-  expect(resolveMascot(normalizePrefs({ brand: BRAND_DEEPSEEK, mascot: MASCOT_CRAB }))).toBe(MASCOT_CRAB)
+  expect(resolveMascot(normalizePrefs({}))).toBe(MASCOT_PETDEX)
+  expect(resolveMascot(normalizePrefs({ mascot: MASCOT_CRAB }))).toBe(MASCOT_CRAB)
   expect(resolveMascot(normalizePrefs({ mascot: MASCOT_DEEPY }))).toBe(MASCOT_DEEPY)
   expect(resolveMascot(normalizePrefs({ mascot: MASCOT_OFF }))).toBe(MASCOT_OFF)
 })

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * shoot.cjs — capture the README screenshots, light and dark, for one brand and
- * one scene: `docs/screenshots/<brand>-<scene>-light.png` and `-dark.png`.
+ * shoot.cjs — capture the README screenshots, light and dark, for one palette and
+ * one scene: `docs/screenshots/<palette>-<scene>-light.png` and `-dark.png`.
  *
  * Drives a headless Chrome against a running DSH web GUI with this
  * theme loaded, replaces personal data in the DOM (workspace / session titles,
@@ -23,12 +23,12 @@
  *                 must be a stand-in: send DEMO_PROMPT in a scratch instance
  *                 to make one.
  *
- * The brand is the instance's own (the settings page's Theme style); `--brand`
+ * The palette is the instance's own (the settings page's Colours row); `--palette`
  * names the one expected, and a page carrying another fails the run.
  *
  * Usage:
  *   node packages/testing/shoot.cjs --token <launch-token> [--url http://127.0.0.1:3080]
- *     [--brand claude|deepseek] [--scene home|conversation] [--session <title>]
+ *     [--palette ocean|ember|forest] [--scene home|conversation] [--session <title>]
  *
  * The launch token comes from the `dsh web` banner (GUI URL `/?token=…`) or
  * the DSH_WEB_TOKEN env var. Chrome comes from packages/testing/browser.cjs and
@@ -51,14 +51,15 @@ const DEMO_PROMPT = '用一段简短的示例，展示你支持的 Markdown 格�
 const DEMO_TITLE = 'Markdown rendering tour'
 
 /**
- * Canvas colors that identify the resolved palette, per brand. Host builtin
- * themes carry empty token maps, so every color comes from the stylesheets
- * branching on `data-ds-dark-theme`: dark tokens are the base, light overrides
- * sit under `:not([data-ds-dark-theme])`, and the DeepSeek brand rewrites both.
+ * Canvas colors that identify the resolved palette. Host builtin themes carry
+ * empty token maps, so every color comes from the stylesheets branching on
+ * `data-ds-dark-theme`: dark tokens are the base and the light overrides sit
+ * under `:not([data-ds-dark-theme])`.
  */
 const CANVAS = {
-  claude: { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)' },
-  deepseek: { light: 'rgb(252, 252, 251)', dark: 'rgb(32, 36, 39)' },
+  ocean: { light: 'rgb(252, 252, 251)', dark: 'rgb(32, 36, 39)' },
+  ember: { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)' },
+  forest: { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)' },
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -89,7 +90,7 @@ async function openDemoConversation(page, title) {
 }
 
 async function captureOnce(page, options, scheme, outFile) {
-  const { scene, brand, startUrl } = options
+  const { scene, palette, startUrl } = options
   await page.setViewportSize({ width: WIDTH, height: HEIGHTS[scene] })
   await page.goto(startUrl, { waitUntil: 'domcontentloaded' })
   await sleep(12000)
@@ -97,8 +98,8 @@ async function captureOnce(page, options, scheme, outFile) {
   if (!(await page.evaluate(`!!document.body.hasAttribute('data-dsh-deepcraft')`))) {
     throw new Error('theme not applied — is the plugin active in this profile?')
   }
-  const pageBrand = await page.evaluate(`document.body.getAttribute('data-dsh-deepcraft-brand')`)
-  if (pageBrand !== brand) throw new Error(`the page carries brand "${pageBrand}", expected "${brand}" — switch the Theme style in settings`)
+  const pagePalette = await page.evaluate(`document.body.getAttribute('data-dsh-deepcraft-palette')`)
+  if (pagePalette !== palette) throw new Error(`the page carries palette "${pagePalette}", expected "${palette}" — switch Colours in settings`)
 
   if (scene === 'conversation') {
     await openDemoConversation(page, options.session)
@@ -114,7 +115,7 @@ async function captureOnce(page, options, scheme, outFile) {
     // snapshot; no durable preference is read or written.
     await page.evaluate(`document.body.setAttribute('data-ds-dark-theme', '')`)
   }
-  const wantBg = CANVAS[brand][scheme]
+  const wantBg = CANVAS[palette][scheme]
   const bg = await page.evaluate(`getComputedStyle(document.body).backgroundColor`)
   if (bg !== wantBg) {
     throw new Error(`${scheme} palette did not take effect (body bg ${bg}, expected ${wantBg})`)
@@ -132,30 +133,30 @@ async function captureOnce(page, options, scheme, outFile) {
   }
 
   const buf = await page.screenshot({ path: outFile })
-  console.log(`captured ${outFile} (${buf.length} bytes, brand=${brand}, scene=${scene}, scheme=${scheme}, sanitized ${swapped} nodes, sweep caught ${caught.length})`)
+  console.log(`captured ${outFile} (${buf.length} bytes, palette=${palette}, scene=${scene}, scheme=${scheme}, sanitized ${swapped} nodes, sweep caught ${caught.length})`)
   console.log('--- visible text ---')
   console.log(visibleText.replace(/\n{2,}/g, '\n').slice(0, 1200))
   console.log('--- end text ---')
 }
 
 /**
- * Capture one brand and scene in light and dark.
+ * Capture one palette and scene in light and dark.
  *
- * @param options - `{ token, url, out, brand, scene, session, name, prepare }`:
- *   `name` is the file stem (default `<brand>-<scene>`), `prepare(page)` an
+ * @param options - `{ token, url, out, palette, scene, session, name, prepare }`:
+ *   `name` is the file stem (default `<palette>-<scene>`), `prepare(page)` an
  *   optional hook that stages the page before the sanitize.
  * @returns the two files written.
  */
 async function shoot(options) {
-  const brand = options.brand || 'claude'
+  const palette = options.palette || 'ocean'
   const scene = options.scene || 'home'
-  if (!CANVAS[brand]) throw new Error(`unknown brand "${brand}" (claude or deepseek)`)
+  if (!CANVAS[palette]) throw new Error(`unknown palette "${palette}" (ocean, ember or forest)`)
   if (!HEIGHTS[scene]) throw new Error(`unknown scene "${scene}" (home or conversation)`)
   const base = (options.url || 'http://127.0.0.1:3080').replace(/\/+$/, '')
   const out = path.resolve(options.out || path.join(__dirname, '..', '..', 'docs', 'screenshots'))
-  const name = options.name || `${brand}-${scene}`
+  const name = options.name || `${palette}-${scene}`
   const run = {
-    brand,
+    palette,
     scene,
     session: options.session || DEMO_TITLE,
     prepare: options.prepare,
@@ -183,10 +184,10 @@ if (require.main === module) {
   }
   const token = argOf('token') || process.env.DSH_WEB_TOKEN
   if (!token) {
-    console.error('usage: node packages/testing/shoot.cjs --token <launch-token> [--url <base>] [--brand claude|deepseek] [--scene home|conversation] [--session <title>]')
+    console.error('usage: node packages/testing/shoot.cjs --token <launch-token> [--url <base>] [--palette ocean|ember|forest] [--scene home|conversation] [--session <title>]')
     process.exit(2)
   }
-  shoot({ token, url: argOf('url'), out: argOf('out'), brand: argOf('brand'), scene: argOf('scene'), session: argOf('session') })
+  shoot({ token, url: argOf('url'), out: argOf('out'), palette: argOf('palette'), scene: argOf('scene'), session: argOf('session') })
     .then(() => console.log('\nSCREENSHOTS CAPTURED'))
     .catch((e) => { console.error(e.message || e); process.exitCode = 1 })
 }

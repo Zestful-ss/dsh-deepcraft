@@ -45,16 +45,14 @@ const isSwitched = (feature: Feature): feature is SwitchedFeature => feature.pre
 
 /**
  * Whether a feature comes and goes during the generation: its preference is
- * a live switch, it belongs to some themes only, or it yields to a plugin that
- * can arrive or leave.
+ * a live switch, or it yields to a plugin that can arrive or leave.
  */
-const isLive = (feature: Feature) => isSwitched(feature) || feature.yieldsTo !== undefined || feature.brands !== undefined
+const isLive = (feature: Feature) => isSwitched(feature) || feature.yieldsTo !== undefined
 
 /**
  * Whether a live feature is wanted now: a boolean switch is on unless stored
  * as `false`, a choice switch runs under the values its manifest names
- * (`prefValues`), the current brand is one the feature belongs to, and no
- * plugin it yields to is on the page.
+ * (`prefValues`), and no plugin it yields to is on the page.
  */
 function isWanted(feature: Feature) {
   if (isSwitched(feature)) {
@@ -64,7 +62,6 @@ function isWanted(feature: Feature) {
       : typeof value === 'string' && feature.prefValues.includes(value)
     if (!on) return false
   }
-  if (feature.brands !== undefined && !feature.brands.includes(readPrefs().brand)) return false
   return feature.yieldsTo === undefined || !peerPresent(feature.yieldsTo)
 }
 

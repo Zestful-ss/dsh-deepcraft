@@ -321,7 +321,7 @@ async function runScenario(name, options) {
   const patch = ['- id: llm-deepseek', '  config:', `    baseURL: ${mock.url}`, '    apiKeyEnv: DSH_E2E_MOCK_KEY', ...accountPatch, ...scenario.patch ?? []].join('\n')
   // The host and everything it starts see a scratch user home: the pets
   // library and any cache a child keeps resolve under the run's home, never
-  // the machine's (D78).
+  // the machine's (D80).
   const userHome = path.join(home, 'user')
   fs.mkdirSync(userHome, { recursive: true })
   const host = await start({

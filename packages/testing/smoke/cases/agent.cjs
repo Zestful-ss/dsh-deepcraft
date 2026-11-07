@@ -117,7 +117,6 @@ module.exports = {
       r.footerPluginAction !== null && r.footerPluginAction.label === MARKUP && r.footerPluginAction.badge === MARKUP &&
       r.footerPluginAction.display !== 'none' && r.footerPluginAction.visible === true,
       JSON.stringify(r.footerPluginAction))
-    check('account-hold toast renders the username as text', r.banToast === MARKUP + ': account_banned', JSON.stringify(r.banToast))
     check('avatar URL adds no attribute to the page',
       r.avatarAttrs !== null && r.avatarAttrs.every((a) => a === 'class' || a === 'data-dsh-deepcraft-photo') &&
       (r.photo === null || r.photo.attrs.every((a) => !/^on/i.test(a))), JSON.stringify([r.avatarAttrs, r.photo]))
@@ -223,16 +222,6 @@ module.exports = {
     check('a host re-render is healed: container first and rows unchanged',
       r.injectHealedFirst === true && r.injectHealedSame === true,
       JSON.stringify({ first: r.injectHealedFirst, same: r.injectHealedSame }))
-    check('the hold screen opens over the menu and survives the leaves its overlay causes',
-      r.banOpened === 1 && r.banSurvivesLeave === 1,
-      JSON.stringify({ opened: r.banOpened, survived: r.banSurvivesLeave }))
-    check('the host menu stays up behind the hold screen and the screen leaves by its own control, playing its exit first',
-      r.menuBehindBan === true && r.banLeaving === true && r.banAfterDismiss === 0,
-      JSON.stringify({ menu: r.menuBehindBan, leaving: r.banLeaving, exitMs: r.banExitMs, dismissed: r.banAfterDismiss }))
-    check('with the easter egg off the account row is a plain name a press does not open, and back on it is the button again',
-      !!r.banOff && !!r.banOff.row && r.banOff.row.role === null && r.banOff.row.tabindex === null && r.banOff.opened === 0 &&
-        !!r.banOn && !!r.banOn.row && r.banOn.row.role === 'button' && r.banOn.row.tabindex === '0',
-      JSON.stringify({ off: r.banOff, on: r.banOn }))
     check('closing the host menu leaves no injected container behind',
       r.injectAfterClose === 0 && r.hostMenuAfterClose === 0,
       JSON.stringify({ containers: r.injectAfterClose, menus: r.hostMenuAfterClose }))

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { BRAND_DEEPSEEK } from '../../constants'
 import { PETDEX_ACTIONS, PETDEX_STATES } from '@dsh-deepcraft/contracts/pets'
 import type { PetDescriptor, PetdexState } from '@dsh-deepcraft/contracts/pets'
 import {
@@ -17,7 +16,7 @@ import { copy } from '../settings/copy'
 import type { SettingsRowView } from '../../core/feature'
 
 /**
- * The Appearance tab's pets (D78): the chat guest's package is read from the
+ * The Appearance tab's pets (D80): the chat guest's package is read from the
  * current theme's own field, and one import adds complete Petdex packages to
  * the shared library.
  *
@@ -39,11 +38,6 @@ function usePetLibrary(): PetLibrary {
     return unsubscribe
   }, [])
   return library
-}
-
-/** The chat field of the theme in front. */
-function chatField(brand: string) {
-  return brand === BRAND_DEEPSEEK ? 'chatPetDeepseek' as const : 'chatPetClaude' as const
 }
 
 /** One package's nine native actions, played at the author's own frame times. */
@@ -121,11 +115,10 @@ function PetSelect(props: {
   )
 }
 
-/** The current theme's chat guest, with the selected package's actions previewed. */
+/** The chat guest, its selected package's actions previewed, and the import controls beside them. */
 function ChatPetControl(view: SettingsRowView) {
   const library = usePetLibrary()
-  const field = chatField(view.prefs.brand)
-  const selected = view.prefs[field]
+  const selected = view.prefs.chatPet
   const pet = library.pets.find(item => item.id === selected)
   React.useEffect(() => {
     // A preset the reader has never displayed yet is downloaded on first
@@ -140,11 +133,11 @@ function ChatPetControl(view: SettingsRowView) {
       value: selected,
       disabled: view.disabled,
       onPick(value) {
-        if (field === 'chatPetDeepseek') view.write({ chatPetDeepseek: value })
-        else view.write({ chatPetClaude: value })
+        view.write({ chatPet: value })
       },
     }),
     pet === undefined ? null : React.createElement(PetPreview, { pet }),
+    React.createElement(ImportPetControl, view),
   )
 }
 
@@ -174,7 +167,6 @@ function pickFiles(input: HTMLInputElement): Promise<FileList | null> {
 /** Import a complete package from a ZIP, a folder or a Petdex page. */
 function ImportPetControl(view: SettingsRowView) {
   const library = usePetLibrary()
-  const field = chatField(view.prefs.brand)
   const [busy, setBusy] = React.useState(false)
   const [message, setMessage] = React.useState<string | null>(null)
   const [url, setUrl] = React.useState('')
@@ -186,8 +178,7 @@ function ImportPetControl(view: SettingsRowView) {
     try {
       const pet = await work
       await decodePet(pet)
-      if (field === 'chatPetDeepseek') view.write({ chatPetDeepseek: pet.id })
-      else view.write({ chatPetClaude: pet.id })
+      view.write({ chatPet: pet.id })
       await loadPetLibrary(true)
       setMessage(copy('petImportDone', { name: pet.displayName }))
     } catch (error) {
@@ -260,8 +251,7 @@ function ImportPetControl(view: SettingsRowView) {
   )
 }
 
-/** The two rows the mascot manifest places in the Appearance tab. */
+/** The row the mascot manifest places in the Appearance tab. */
 export const controls = {
   chatPet: ChatPetControl,
-  petImport: ImportPetControl,
 }

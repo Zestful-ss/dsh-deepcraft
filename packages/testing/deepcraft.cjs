@@ -1,23 +1,23 @@
 #!/usr/bin/env node
 /**
- * deepcraft.cjs — the DeepCraft scenario on the real host (D66, D77).
+ * deepcraft.cjs — the default identity and its whale on the real host (D66, D80).
  *
  * Registered in the lane's scenario table (packages/testing/scenarios.cjs).
- * The walk switches themes through the skin's own settings page, drives the
- * whale girl through every hand gesture on the home card, samples the states
- * the live turn asks for, checks where the account-hold page belongs, writes
- * the DeepSeek home and conversation captures, and exports the eighteen
- * animation sheets the build drew.
+ * The walk stands the original pixel whale on the composer through the skin's
+ * own settings page, drives every hand gesture on the home card, samples the
+ * states the live turn asks for, keeps her on the home page and back, holds her
+ * still under reduced motion, and writes the ocean home and conversation
+ * captures. It also proves the account row is a plain row: the hold-screen
+ * easter egg is gone, so a press opens no page.
  *
  * Every setting is written by pressing the real control; nothing here sets a
  * body attribute to imitate a preference.
  */
 'use strict'
-const fs = require('node:fs')
 const path = require('node:path')
 const { bound } = require('./bounds.cjs')
-const { waitForSkin, dismissOverlays } = require('./dsh-web.cjs')
 const { openSkinSettings, SETTINGS_PAGE } = require('./settings-route.cjs')
+const { dismissOverlays } = require('./dsh-web.cjs')
 const { CANVAS } = require('./shoot.cjs')
 const { sanitizePage } = require('../../scripts/shared/privacy.cjs')
 
@@ -26,14 +26,11 @@ const SKIN = {
   tab: '.dsh-deepcraft-settings-tabs [role="tab"]',
   row: '.dsh-deepcraft-settings-row',
   rowTitle: '.dsh-deepcraft-settings-row-title',
-  brandCard: (brand) => `.dsh-deepcraft-brand-card[data-brand="${brand}"]`,
   whale: '.dsh-deepcraft-deepy',
-  crab: '.dsh-deepcraft-crab',
   whaleHit: '.dsh-deepcraft-deepy-hit',
   whaleStrip: '.dsh-deepcraft-deepy-strip',
   accountBtn: '.dsh-deepcraft-account-btn',
-  banRow: '[data-dsh-deepcraft-ban-row] .dsh-deepcraft-account-popover-row',
-  ban: '.dsh-deepcraft-ban',
+  accountRow: '.dsh-deepcraft-account-popover-row',
   menuTrigger: '[aria-haspopup="menu"][data-signed-out]',
 }
 
@@ -42,24 +39,17 @@ const ROWS = {
   mascot: /^(聊天框宠物|Chat pet)$/,
   scope: /出现位置|Where it appears/,
   motion: /动画效果|Animation/,
-  banLocale: /封号彩蛋|Account-hold easter egg/,
 }
 const TABS = {
-  general: /^(通用|General)$/,
   appearance: /^(外观|Appearance)$/,
-  sidebar: /^(侧栏|Sidebar)$/,
   motion: /^(动效|Motion)$/,
 }
-const BRANDS = { claude: 'claude', deepseek: 'deepseek' }
 const MOTIONS = { system: /^(随系统|Follow the system)$/, reduced: /^(减弱|Reduced)$/, full: /^(总是|Always)$/ }
-const MASCOTS = { crab: /^(原有像素螃蟹|Original pixel crab)$/, off: /^(关闭|Off)$/, deepy: /^(原有像素鲸鱼|Original pixel whale)$/ }
+const MASCOTS = { deepy: /^(原有像素鲸鱼|Original pixel whale)$/, off: /^(关闭|Off)$/ }
 const SCOPES = { home: /^(首页|Home)$/, all: /^(首页与对话|Home and conversation)$/ }
-const BAN_CHOICE = { off: /^(关闭|Off)$/ }
 
 /** How long the whale may take to appear, change state or leave. */
 const WHALE_WAIT_MS = bound('deepcraftWhaleWaitMs')
-
-const bodyAttr = (page, name) => page.evaluate((key) => document.body.getAttribute(key), name)
 
 /** A label's exact match, for a control whose text was read back from the page. */
 const labelRe = (text) => new RegExp(`^${String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`)
@@ -82,9 +72,6 @@ async function pickIn(page, title, label) {
   await page.waitForTimeout(250)
 }
 
-/** Whether a row refuses input right now. */
-const rowDisabled = (page, title) => rowOf(page, title).first().getAttribute('data-disabled')
-
 /** Close the settings dialog. */
 async function closeSettings(page) {
   await page.keyboard.press('Escape')
@@ -98,37 +85,6 @@ async function openAccountMenu(page) {
   if (await own.count() > 0) await own.click()
   else await page.locator(SKIN.menuTrigger).first().click()
   await page.waitForTimeout(400)
-}
-
-/** Make sure the account menu is open, then wait for the ban row inside it. */
-async function ensureBanRow(page) {
-  if (await page.locator(SKIN.banRow).count() === 0) await openAccountMenu(page)
-  await page.waitForSelector(SKIN.banRow, { timeout: WHALE_WAIT_MS })
-}
-
-/** Press the account header row and answer whether the hold page opened. */
-async function banOpensFromRow(page) {
-  await ensureBanRow(page)
-  await page.locator(SKIN.banRow).first().click()
-  await page.waitForTimeout(600)
-  const opened = await page.locator(SKIN.ban).count() > 0
-  if (opened) {
-    await page.keyboard.press('Escape')
-    await page.waitForSelector(SKIN.ban, { state: 'detached', timeout: WHALE_WAIT_MS }).catch(() => {})
-  }
-  return opened
-}
-
-/** Switch to the Claude brand in the settings dialog and wait for the crab to mount. */
-async function switchToClaude(page) {
-  await openTab(page, TABS.general)
-  await page.locator(SKIN.brandCard(BRANDS.claude)).first().click()
-  await page.waitForTimeout(400)
-  // The walk tests the original crab, not the theme's Petdex guest.
-  await openTab(page, TABS.appearance)
-  await pickIn(page, ROWS.mascot, MASCOTS.crab)
-  await closeSettings(page)
-  await page.waitForSelector(SKIN.crab, { state: 'attached', timeout: WHALE_WAIT_MS })
 }
 
 /** Wait for the whale to be on the page, or to be gone. */
@@ -157,43 +113,25 @@ async function pressAt(page, at, fromRight = false) {
   return animationOf(page)
 }
 
-/** The sheet of the animation on screen, for the "another sheet" check. */
+/** The sheet of the animation on screen, for the "own art" check. */
 const sheetOf = (page) => page.evaluate((selector) => getComputedStyle(document.querySelector(selector)).getPropertyValue('--dsh-deepcraft-deepy-sheet'), SKIN.whale)
 
-/**
- * The layout both brands share, in CSS pixels: the composer card, the
- * conversation column, the sidebar and the composer's own stack. The two brands
- * paint different colours and different characters; these boxes have to match.
- */
-async function measureLayout(page) {
-  return page.evaluate(() => {
-    const box = (selector) => {
-      const element = document.querySelector(selector)
-      if (element === null) return null
-      const rect = element.getBoundingClientRect()
-      return [rect.x, rect.y, rect.width, rect.height].map((value) => Math.round(value * 10) / 10)
-    }
-    return {
-      card: box('[data-composer-card]'),
-      scroll: box('[data-conversation-scroll]'),
-      sidebar: box('[data-slot="sidebar"]'),
-      stack: box('[data-dsh-deepcraft-part~="composer-stack"]'),
-    }
-  })
-}
-
-/** The colours a brand paints: the canvas and the accent, read off the page. */
+/** The colours a palette paints: the canvas, the accent and the prose link, read off the page. */
 async function readPalette(page) {
   return page.evaluate(() => {
     const style = getComputedStyle(document.body)
-    return { canvas: style.backgroundColor, accent: style.getPropertyValue('--dsw-alias-brand-primary').trim() }
+    return {
+      canvas: style.backgroundColor,
+      accent: style.getPropertyValue('--dsw-alias-brand-primary').trim(),
+      link: style.getPropertyValue('--dsh-deepcraft-link').trim(),
+    }
   })
 }
 
-/** Capture the page in both palettes, swept for personal data. */
-async function capture(page, out, name, brand) {
-  const expected = CANVAS[brand]
-  if (expected === undefined) throw new Error(`deepcraft: no recorded palette for "${brand}"`)
+/** Capture the page in both schemes under one palette, swept for personal data. */
+async function capture(page, out, name, palette) {
+  const expected = CANVAS[palette]
+  if (expected === undefined) throw new Error(`deepcraft: no recorded palette for "${palette}"`)
   const files = []
   for (const scheme of ['light', 'dark']) {
     if (scheme === 'dark') await page.evaluate(() => document.body.setAttribute('data-ds-dark-theme', ''))
@@ -209,51 +147,6 @@ async function capture(page, out, name, brand) {
   return files
 }
 
-/** How far two readings of one box may differ: a browser's own rounding. */
-const LAYOUT_GIVE = 1
-
-/** Whether every box both brands measured agrees within the give. */
-function layoutsAgree(pair) {
-  const [left, right] = [pair && pair.claude, pair && pair.deepseek]
-  if (left === undefined || right === undefined) return false
-  return Object.keys(left).every((key) => {
-    const a = left[key]
-    const b = right[key]
-    if (a === null || b === null) return a === b
-    return a.every((value, at) => Math.abs(value - b[at]) <= LAYOUT_GIVE)
-  })
-}
-
-/**
- * Export every sheet the build drew, in one SVG: each animation on its own row
- * beside its name, on the light canvas and on the dark one. The renderer that made them is what this reads, so
- * the export cannot drift from the shipped art.
- */
-async function exportSheets(out) {
-  const { renderWhaleSheet } = await import('../../packages/assets/whale.mjs')
-  const { loadModule } = require('../../scripts/shared/ts-module.cjs')
-  const { DEEPY_SHEETS, DEEPY_GUTTER } = loadModule('packages/client/src/features/mascot/sheets.ts')
-  const rows = Object.entries(DEEPY_SHEETS)
-  const scale = 0.5
-  const imageWidth = 432 * scale
-  const rowHeight = 54 * scale * Math.ceil(Math.max(...rows.map(([, sheet]) => sheet.frames)) / 8) + 8
-  const width = 110 + imageWidth * 2 + 12
-  const height = rows.length * rowHeight + 20
-  const parts = [`<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="100%" height="100%" fill="#ffffff"/><rect x="${110 + imageWidth + 6}" y="0" width="${imageWidth + 6}" height="${height}" fill="#202427"/>`]
-  rows.forEach(([name, sheet], at) => {
-    const svg = renderWhaleSheet(name, sheet, DEEPY_GUTTER)
-    const uri = `data:image/svg+xml;base64,${Buffer.from(svg, 'utf8').toString('base64')}`
-    const y = 16 + at * rowHeight
-    parts.push(`<text x="8" y="${y + 14}" font-family="sans-serif" font-size="11" fill="#141413">${name}</text>`)
-    parts.push(`<image x="110" y="${y}" width="${imageWidth}" height="${(54 * Math.ceil(sheet.frames / 8)) * scale}" href="${uri}"/>`)
-    parts.push(`<image x="${110 + imageWidth + 6}" y="${y}" width="${imageWidth}" height="${(54 * Math.ceil(sheet.frames / 8)) * scale}" href="${uri}"/>`)
-  })
-  parts.push('</svg>')
-  const file = path.join(out, 'deepcraft-whale-sheets.svg')
-  fs.writeFileSync(file, parts.join(''), 'utf8')
-  return file
-}
-
 function deepcraftScenario({ check }) {
   return {
     script: 'greeting',
@@ -263,42 +156,24 @@ function deepcraftScenario({ check }) {
     viewport: { width: 1440, height: 900 },
     async beforeSend(context) {
       const { page, out } = context
-      const notes = { gestures: {}, states: {}, files: [], sheets: null }
+      const notes = { gestures: {}, states: {}, files: [] }
       context.notes.deepcraft = notes
       // What the walk found before it changed anything, to put back at the end.
+      await dismissOverlays(page)
       await openSkinSettings(page)
-      await openTab(page, TABS.general)
-      notes.before = { brand: await bodyAttr(page, 'data-dsh-deepcraft-brand') }
       await openTab(page, TABS.appearance)
-      notes.before.mascotPick = await pickedIn(page, ROWS.mascot)
-      notes.before.scope = await pickedIn(page, ROWS.scope)
+      notes.before = {
+        mascotPick: await pickedIn(page, ROWS.mascot),
+        scope: await pickedIn(page, ROWS.scope),
+      }
       await pickIn(page, ROWS.scope, SCOPES.all)
-      await pickIn(page, ROWS.mascot, MASCOTS.crab)
-      await openTab(page, TABS.motion)
-      notes.before.motionPick = await pickedIn(page, ROWS.motion)
-      await openTab(page, TABS.sidebar)
-      notes.before.banLocale = await pickedIn(page, ROWS.banLocale)
-      // The Claude theme first: its own colours and its own character, on the
-      // same layout the DeepSeek theme paints next.
-      await switchToClaude(page)
-      notes.layout = { home: { claude: await measureLayout(page) } }
-      notes.palette = { claude: await readPalette(page) }
-      notes.files.push(...await capture(page, out, 'deepcraft-home-claude', 'claude'))
-
-      // Then DeepSeek: the settings page's own card switches it.
-      await openSkinSettings(page)
-      await openTab(page, TABS.general)
-      await page.locator(SKIN.brandCard(BRANDS.deepseek)).first().click()
-      await page.waitForTimeout(400)
-      await openTab(page, TABS.appearance)
       await pickIn(page, ROWS.mascot, MASCOTS.deepy)
       await openTab(page, TABS.motion)
+      notes.before.motionPick = await pickedIn(page, ROWS.motion)
       await pickIn(page, ROWS.motion, MOTIONS.full)
       await closeSettings(page)
-      notes.brandAfterSwitch = await bodyAttr(page, 'data-dsh-deepcraft-brand')
       await waitWhale(page, true)
-      notes.palette.deepseek = await readPalette(page)
-      notes.layout.home.deepseek = await measureLayout(page)
+      notes.palette = { home: await readPalette(page) }
       notes.gestures.idle = await animationOf(page)
       notes.gestures.sheet = await sheetOf(page)
 
@@ -323,7 +198,7 @@ function deepcraftScenario({ check }) {
       await page.waitForTimeout(400)
       notes.gestures.afterDrag = await animationOf(page)
 
-      notes.files.push(...await capture(page, out, 'deepcraft-home-deepseek', 'deepseek'))
+      notes.files.push(...await capture(page, out, 'deepcraft-home', 'ocean'))
     },
     async duringTurn(context) {
       const { page } = context
@@ -340,20 +215,21 @@ function deepcraftScenario({ check }) {
       notes.states.streamed = [...seen]
     },
     async afterTurn(context) {
-      const { page, session, out } = context
+      const { page, out } = context
       const notes = context.notes.deepcraft
       notes.states.afterTurn = await animationOf(page)
-      notes.palette.conversation = { deepseek: await readPalette(page) }
-      notes.layout.conversation = { deepseek: await measureLayout(page) }
-      notes.files.push(...await capture(page, out, 'deepcraft-conversation-deepseek', 'deepseek'))
+      notes.palette.conversation = await readPalette(page)
+      notes.files.push(...await capture(page, out, 'deepcraft-conversation', 'ocean'))
 
       // Scope: keeping her on the home card leaves the conversation without her.
+      await dismissOverlays(page)
       await openSkinSettings(page)
       await openTab(page, TABS.appearance)
       await pickIn(page, ROWS.scope, SCOPES.home)
       await closeSettings(page)
       await waitWhale(page, false)
       notes.states.homeOnlyAbsent = true
+      await dismissOverlays(page)
       await openSkinSettings(page)
       await openTab(page, TABS.appearance)
       await pickIn(page, ROWS.scope, SCOPES.all)
@@ -361,6 +237,7 @@ function deepcraftScenario({ check }) {
       await waitWhale(page, true)
 
       // Reduced motion: the sheet's still frame stands, and a press still reacts.
+      await dismissOverlays(page)
       await openSkinSettings(page)
       await openTab(page, TABS.motion)
       await pickIn(page, ROWS.motion, MOTIONS.reduced)
@@ -368,79 +245,45 @@ function deepcraftScenario({ check }) {
       await page.waitForTimeout(400)
       notes.states.reducedAnimated = await page.evaluate((selector) => document.querySelector(selector)?.getAnimations().length ?? -1, SKIN.whaleStrip)
       notes.states.reducedPoke = await pressAt(page, 6)
+      await dismissOverlays(page)
       await openSkinSettings(page)
       await openTab(page, TABS.motion)
       await pickIn(page, ROWS.motion, labelRe(notes.before.motionPick))
       await closeSettings(page)
 
-      // The account-hold page belongs to the Claude theme: it opens there, leaves
-      // the moment another page puts the theme on DeepSeek, and its row refuses
-      // input while DeepSeek is in force.
-      await openSkinSettings(page)
-      await switchToClaude(page)
-      // The same conversation under Claude: its own palette and its own crab,
-      // where DeepSeek had the whale.
-      notes.palette.conversation.claude = await readPalette(page)
-      notes.layout.conversation.claude = await measureLayout(page)
-      notes.files.push(...await capture(page, out, 'deepcraft-conversation-claude', 'claude'))
+      // The account menu is a plain menu: no hold-screen entry, and the row is
+      // not a button (D80).
       await openAccountMenu(page)
-      await page.waitForSelector(SKIN.banRow, { timeout: WHALE_WAIT_MS })
-      notes.ban = { rowIsButton: await page.locator(SKIN.banRow).first().getAttribute('role') }
-      await page.locator(SKIN.banRow).first().click()
-      await page.waitForSelector(SKIN.ban, { timeout: WHALE_WAIT_MS })
-      notes.ban.opened = true
-
-      const remote = await session.context.newPage()
-      try {
-        await remote.goto(context.url, { waitUntil: 'domcontentloaded' })
-        await waitForSkin(remote)
-        await dismissOverlays(remote)
-        await openSkinSettings(remote)
-        await openTab(remote, TABS.general)
-        await remote.locator(SKIN.brandCard(BRANDS.deepseek)).first().click()
-        await remote.waitForTimeout(400)
-        await openTab(remote, TABS.sidebar)
-        notes.ban.disabledUnderDeepseek = await rowDisabled(remote, ROWS.banLocale)
-        notes.ban.noteUnderDeepseek = await rowOf(remote, ROWS.banLocale).locator('.dsh-deepcraft-settings-row-desc').innerText().catch(() => '')
-        // The page holding the overlay answers the theme flip with the other page.
-        await page.waitForFunction((selector) => document.querySelector(selector) === null, SKIN.ban, { timeout: WHALE_WAIT_MS })
-        notes.ban.closedByThemeFlip = true
-        notes.ban.accountUsable = await page.locator(`${SKIN.menuTrigger}, ${SKIN.accountBtn}`).first().isVisible()
-        // Back to Claude: the entry returns and the stored language stands; the
-        // language choice then turns the easter egg off and back on.
-        await openTab(remote, TABS.general)
-        await remote.locator(SKIN.brandCard(BRANDS.claude)).first().click()
-        await remote.waitForTimeout(400)
-        await openTab(remote, TABS.sidebar)
-        notes.ban.pickedBack = await pickedIn(remote, ROWS.banLocale)
-        await pickIn(remote, ROWS.banLocale, BAN_CHOICE.off)
-        await remote.waitForTimeout(900)
-        notes.ban.opensAfterOff = await banOpensFromRow(page)
-        await pickIn(remote, ROWS.banLocale, labelRe(notes.before.banLocale))
-        await remote.waitForTimeout(900)
-        notes.ban.opensRestored = await banOpensFromRow(page)
-      } finally {
-        await remote.close()
+      notes.account = {
+        rows: await page.locator(SKIN.accountRow).count(),
+        holdRows: await page.locator('[data-dsh-deepcraft-ban-row]').count(),
+        role: await page.locator(SKIN.accountRow).first().getAttribute('role').catch(() => null),
       }
+      await page.keyboard.press('Escape')
+      await page.waitForTimeout(300)
+
+      // The theme's own identity: no brand attribute, and the whale mask the
+      // sidebar and the hero paint is the one the body defines.
+      notes.identity = await page.evaluate(() => ({
+        brandAttr: document.body.hasAttribute('data-dsh-deepcraft-brand'),
+        maskToken: getComputedStyle(document.body).getPropertyValue('--dsh-deepcraft-mask-deepseek-mark').trim(),
+      }))
+
       // Put the first page back where the walk found it.
+      await dismissOverlays(page)
       await openSkinSettings(page)
-      await openTab(page, TABS.general)
-      await page.locator(SKIN.brandCard(notes.before.brand)).first().click()
-      await page.waitForTimeout(400)
       await openTab(page, TABS.appearance)
       await pickIn(page, ROWS.mascot, labelRe(notes.before.mascotPick))
       await pickIn(page, ROWS.scope, labelRe(notes.before.scope))
       await openTab(page, TABS.motion)
       await pickIn(page, ROWS.motion, labelRe(notes.before.motionPick))
       await closeSettings(page)
-      notes.sheets = await exportSheets(out)
     },
     async assert(context) {
       const notes = context.notes.deepcraft
       const gestures = notes.gestures
       const states = notes.states
       return [
-        check('设置页把主题切到 DeepSeek，页面带上新的品牌标记', notes.brandAfterSwitch === 'deepseek', `brand=${notes.brandAfterSwitch}`),
         check('首页卡片上站着像素小鲸鱼，播放构建为它画出的帧图',
           gestures.idle === 'idle' && /^(url\(["']?)?(data:image\/svg\+xml|(?:https?:[^"']*)?\/dsh-deepcraft\/assets\/[0-9a-f]{12}\.svg)/.test(gestures.sheet || ''),
           JSON.stringify({ idle: gestures.idle, sheet: gestures.sheet })),
@@ -458,25 +301,14 @@ function deepcraftScenario({ check }) {
         check('动画设为减弱时鲸鱼停在静帧，点一下仍有反应',
           states.reducedAnimated === 0 && states.reducedPoke === 'poke-left',
           JSON.stringify({ animations: states.reducedAnimated, poke: states.reducedPoke })),
-        check('Claude 主题下账号行是彩蛋入口，点开出现整页',
-          notes.ban.rowIsButton === 'button' && notes.ban.opened === true,
-          JSON.stringify({ role: notes.ban.rowIsButton })),
-        check('另一页面把主题切到 DeepSeek 后，打开的彩蛋撤下，账号入口仍可用',
-          notes.ban.closedByThemeFlip === true && notes.ban.accountUsable === true,
-          JSON.stringify(notes.ban)),
-        check('DeepSeek 主题下彩蛋设置禁用并写明仅 Claude 可用',
-          notes.ban.disabledUnderDeepseek !== null && /Claude/.test(notes.ban.noteUnderDeepseek),
-          JSON.stringify({ disabled: notes.ban.disabledUnderDeepseek, note: notes.ban.noteUnderDeepseek })),
-        check('切回 Claude 时保存的语言仍在，关闭后入口不再打开彩蛋，把语言放回后入口恢复',
-          notes.ban.pickedBack === notes.before.banLocale && notes.ban.opensAfterOff === false && notes.ban.opensRestored === true,
-          JSON.stringify({ picked: notes.ban.pickedBack, off: notes.ban.opensAfterOff, restored: notes.ban.opensRestored })),
-        check('两套主题各自画自己的颜色，切到哪一套就是哪一套',
-          notes.palette.claude.accent !== notes.palette.deepseek.accent &&
-            notes.palette.conversation.claude.accent !== notes.palette.conversation.deepseek.accent,
+        check('账号菜单仍是普通菜单：没有暂停页入口，名字一行不带按钮角色',
+          notes.account.holdRows === 0 && notes.account.rows > 0 && notes.account.role === null,
+          JSON.stringify(notes.account)),
+        check('页面不带旧品牌属性，侧栏标志画的是皮肤自己的鲸鱼',
+          notes.identity.brandAttr === false && /^url\(/.test(notes.identity.maskToken || ''),
+          JSON.stringify(notes.identity)),
+        check('首页与对话画的是同一套 ocean 配色', notes.palette.home.accent === '#5368c9' && notes.palette.conversation.accent === '#5368c9',
           JSON.stringify(notes.palette)),
-        check('两套主题的布局框逐个对齐，切换只换颜色与角色',
-          layoutsAgree(notes.layout.home) && layoutsAgree(notes.layout.conversation),
-          JSON.stringify(notes.layout)),
         check('控制台没有异常', context.session.problems.length === 0, context.session.problems.slice(0, 3).join(' | ')),
       ]
     },

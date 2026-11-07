@@ -1,5 +1,5 @@
 /**
- * The custom-brand case (D77): the host half's status names a mark and a 4:1
+ * The custom-brand case (D80): the host half's status names a mark and a 4:1
  * wordmark, and the page paints them over the brand's own art — the sidebar's
  * mark and wordmark, the hero's mark and the account row's fallback picture —
  * then inks them in the text colour and takes a custom accent once the
@@ -63,10 +63,10 @@
       window.__pushForm({ brandInk: 'text', brandAccent: '#1a7f5a', brandName: 'Acme' })
       await sleep(150)
       r.customBrand.tinted = read()
-      window.__pushForm({ brand: 'deepseek' })
+      window.__pushForm({ palette: 'forest' })
       await sleep(150)
-      r.customBrand.deepseekTinted = read()
-      window.__pushForm({ brand: 'claude', brandInk: 'original', brandAccent: '' })
+      r.customBrand.forestTinted = read()
+      window.__pushForm({ palette: 'ember', brandInk: 'original', brandAccent: '' })
       await sleep(150)
       r.customBrand.cleared = read()
       sidebar.remove()

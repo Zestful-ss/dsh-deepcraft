@@ -28,9 +28,9 @@ export interface FooterHandle extends FeatureHandle {
  * an account row (Desktop 0.1.7+) that row is the entry and our container is
  * injected into the host's own account menu; on a host without one (Web)
  * the skin self-builds the trigger and the popover and the popover's
- * body is the container. The rows themselves — the account header with the
- * hold-screen easter egg and, on the self-built path only, the settings row —
- * are shared. The host's own footer controls stay where the host drew them.
+ * body is the container. The rows themselves — the account header and, on the
+ * self-built path only, the settings row — are shared. The host's own footer
+ * controls stay where the host drew them.
  *
  * The host's row is only marked, never copied or moved, so it keeps its own
  * labels, keyboard order and toggle. Our rows fold the host menu with an
@@ -65,11 +65,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * unattached (the same reason session-stats keeps a binding token).
    */
   const hostRowBindingToken = {}
-  // Whether the popover is up because it was CLICKED (rather than hovered).
-  // Clicking the account row opens the ban-screen easter egg and leaves the
-  // pointer inside the popover, so without this the row's own mouseleave
-  // would tear the popover down behind the overlay; a click-opened popover
-  // instead stays until the pointer leaves the whole footer.
+  // Whether the popover is up because it was CLICKED (rather than hovered):
+  // a click-opened popover stays until the pointer leaves the whole footer.
   let popoverOpenedByClick = false
 
   function isPopoverOpen() {
@@ -149,18 +146,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // observer can see, so the picture asks for the pass that paints it.
     onChange() {
       if (typeof ui.schedule === 'function') ui.schedule()
-    },
-    openBan() {
-      // Leave the surface up: the overlay is a full-window surface, so what
-      // is behind it does not matter, and the footer is left as the user
-      // had it once the screen is dismissed.
-      popoverOpenedByClick = true
-      if (ui.ban) ui.ban.open()
-    },
-    // The handle is there exactly while the easter egg is installed: its
-    // language switch is on, its chunk has arrived and it has not retired.
-    banAvailable() {
-      return ui.ban !== undefined
     },
   })
   const surface = createAccountSurface({
@@ -264,10 +249,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
         cancelClosePopover()
       })
       accountPopover.addEventListener('mouseleave', () => {
-        // The hold screen takes the window, so its opening "leaves" the
-        // card without the pointer moving; that leave must not fold the
-        // drawer behind the page (openBan leaves the footer as it was).
-        if (ui.ban?.isOpen() === true) return
         scheduleClosePopover()
       })
 
@@ -369,14 +350,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * its first placement frames, so a leave can arrive while the pointer is
    * still on the row or on the card. Only a pointer that is genuinely
    * elsewhere dismisses the menu; the next leave closes it.
-   *
-   * The hold-screen overlay covers the whole window, so opening it "leaves"
-   * the row and the card without the pointer moving: that leave stands down
-   * — the surface the reader had behind the page stays up and the footer is
-   * handed back as it was once the screen is dismissed.
    */
   function closeHostMenuForHover() {
-    if (ui.ban?.isOpen() === true) return
     const row = hostMenu.trigger()
     if (row !== null && row.matches(':hover')) return
     const menu = hostMenu.findMenu()

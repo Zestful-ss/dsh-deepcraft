@@ -143,7 +143,7 @@
       r.injectInViewport = !!(viewport && inject && inject.parentElement === viewport)
       r.injectFirst = !!(viewport && viewport.firstElementChild === inject)
       r.injectRows = inject ? Array.prototype.map.call(inject.children, function (c) {
-        if (c.hasAttribute('data-dsh-deepcraft-ban-row')) return 'header'
+        if (c.classList.contains('dsh-deepcraft-account-popover-header')) return 'header'
         if (c.hasAttribute('data-action-index')) return 'action'
         if (c.hasAttribute('data-embed-index')) return 'embed'
         return 'other'
@@ -191,54 +191,6 @@
       var inject2 = document.querySelector('.dsh-deepcraft-account-inject')
       r.injectHealedFirst = !!(viewport2 && inject2 && viewport2.firstElementChild === inject2)
       r.injectHealedSame = !!(inject2 && inject2.innerHTML === htmlBefore)
-      // The hold screen entered from the header: the overlay takes the pointer,
-      // so the row and the card it covered report a leave without the pointer
-      // moving, and with the hover preference on those leaves must neither
-      // dismiss the host menu behind the page nor — through the footer's
-      // synthetic Escape to that menu — the page itself.
-      var banEntry = document.querySelector('.dsh-deepcraft-account-inject [data-dsh-deepcraft-ban-row]')
-      if (banEntry) {
-        banEntry.click()
-        await sleep(80)
-        r.banOpened = document.querySelectorAll('[data-dsh-deepcraft-ban]').length
-        if (hostRow) hostRow.dispatchEvent(new MouseEvent('mouseleave'))
-        var coveredMenu = document.querySelector('body > [role="menu"]')
-        if (coveredMenu) coveredMenu.dispatchEvent(new MouseEvent('mouseleave'))
-        await sleep(300)
-        r.banSurvivesLeave = document.querySelectorAll('[data-dsh-deepcraft-ban]').length
-        r.menuBehindBan = accountMenuOpen()
-        // The page leaves on its own exit: it is marked leaving at once and gone
-        // once the exit's duration has played.
-        var banDismiss = document.querySelector('.dsh-deepcraft-ban [data-dsh-deepcraft-ban-dismiss]')
-        if (banDismiss) banDismiss.click()
-        r.banLeaving = document.querySelector('[data-dsh-deepcraft-ban][data-dsh-deepcraft-ban-leaving]') !== null
-        // The token as the shipped sheet spells it: the minifier writes times in
-        // whichever unit is shorter.
-        var exitToken = getComputedStyle(document.body).getPropertyValue('--dsh-deepcraft-duration-exit').trim()
-        r.banExitMs = parseFloat(exitToken) * (/ms$/.test(exitToken) ? 1 : 1000)
-        await sleep(r.banExitMs + 80)
-        r.banAfterDismiss = document.querySelectorAll('[data-dsh-deepcraft-ban]').length
-        // The easter egg switched off: the row is a plain name, out of the tab
-        // order, and a press opens nothing; switched back on it is the button again.
-        var headerRow = function () {
-          var row = document.querySelector('.dsh-deepcraft-account-inject .dsh-deepcraft-account-popover-row')
-          return row === null ? null : { role: row.getAttribute('role'), tabindex: row.getAttribute('tabindex') }
-        }
-        window.__pushForm({ banLocale: 'off' })
-        await sleep(150)
-        r.banOff = { row: headerRow() }
-        window.__pushForm({ banLocale: 'en' })
-        await sleep(300)
-        r.banOn = { row: headerRow() }
-        window.__pushForm({ banLocale: 'off' })
-        await sleep(150)
-        var plainEntry = document.querySelector('.dsh-deepcraft-account-inject [data-dsh-deepcraft-ban-row]')
-        if (plainEntry) plainEntry.click()
-        await sleep(80)
-        r.banOff.opened = document.querySelectorAll('[data-dsh-deepcraft-ban]').length
-        window.__pushForm({ banLocale: 'en' })
-        await sleep(300)
-      }
       // Closing the host's menu (its own Escape) leaves no container behind.
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }))
       await sleep(400)
