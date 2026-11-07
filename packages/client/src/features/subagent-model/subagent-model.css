@@ -249,7 +249,7 @@ body[data-dsh-deepcraft] [data-composer-card] [data-dsh-deepcraft-model-capsule-
   border-radius: 7px 0 0 7px;
 }
 
-body[data-dsh-deepcraft] [data-composer-card] [data-dsh-deepcraft-model-capsule-part='model'] {
+body[data-dsh-deepcraft] [data-composer-card][data-composer-variant='inline'] [data-slot="conversation.input.model"] > [data-dsh-deepcraft-model-capsule-part='model'] {
   --dsh-deepcraft-capsule-side: -1px;
   padding: 0 10px;
   border-radius: 0 7px 7px 0;
@@ -259,7 +259,7 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-page-look='float'] [data-composer-ca
   border-radius: 9999px 0 0 9999px;
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look='float'] [data-composer-card] [data-dsh-deepcraft-model-capsule-part='model'] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-page-look='float'] [data-composer-card][data-composer-variant='inline'] [data-slot="conversation.input.model"] > [data-dsh-deepcraft-model-capsule-part='model'] {
   border-radius: 0 9999px 9999px 0;
 }
 

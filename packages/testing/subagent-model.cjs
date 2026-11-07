@@ -227,6 +227,7 @@ function waitForCapsule(page, value, timeout = 10000) {
 function readCapsuleEdge(page, selector) {
   return page.evaluate((selector) => {
     const part = document.querySelector(`${selector} [data-dsh-deepcraft-model-capsule-part="subagent"]`)
+    const model = document.querySelector(`${selector} [data-dsh-deepcraft-model-capsule-part="model"]`)
     const parent = document.querySelector(selector)
     const body = getComputedStyle(document.body)
     const probe = document.createElement('span')
@@ -242,6 +243,8 @@ function readCapsuleEdge(page, selector) {
       edge: (String(part === null ? '' : getComputedStyle(part).boxShadow).match(/rgba?\([^)]+\)/) ?? [''])[0],
       expected,
       radius: part === null ? null : getComputedStyle(part).borderTopLeftRadius,
+      seam: part === null ? null : getComputedStyle(part).borderTopRightRadius,
+      modelSeam: model === null ? null : getComputedStyle(model).borderTopLeftRadius,
     }
   }, selector)
 }
@@ -577,9 +580,10 @@ function subagentModelScenario({ check }) {
       await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-page-look') === 'float', undefined, { timeout: 15000 }).catch(() => {})
       await waitForCapsule(page, '3')
       const float = await readCapsuleEdge(page, '[data-dsh-deepcraft-model-capsule]')
-      checks.push(check('浮层与平铺都保持胶囊，外框形状随页面层次变化',
-        flat.value === '3' && float.value === '3' && flat.radius !== null && float.radius !== null && flat.radius !== float.radius,
-        JSON.stringify({ flat: flat.radius, float: float.radius })))
+      checks.push(check('浮层与平铺都保持胶囊，外框形状随页面层次变化，接缝两侧都是直角',
+        flat.value === '3' && float.value === '3' && flat.radius !== null && float.radius !== null && flat.radius !== float.radius &&
+          flat.seam === '0px' && flat.modelSeam === '0px' && float.seam === '0px' && float.modelSeam === '0px',
+        JSON.stringify({ flat: [flat.radius, flat.seam, flat.modelSeam], float: [float.radius, float.seam, float.modelSeam] })))
       await page.keyboard.press('Escape')
       await page.locator('[role="dialog"]').first().waitFor({ state: 'detached', timeout: 10000 }).catch(() => {})
 
