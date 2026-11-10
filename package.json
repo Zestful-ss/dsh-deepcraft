@@ -20,6 +20,7 @@
     "agents:check": "node scripts/agents-commands.mjs --check",
     "lint": "node scripts/lint.mjs",
     "probe": "node packages/testing/probe.cjs",
+    "preview": "node scripts/preview.mjs",
     "smoke": "node packages/testing/smoke.cjs",
     "test": "vitest run",
     "verify": "node scripts/verify.mjs",

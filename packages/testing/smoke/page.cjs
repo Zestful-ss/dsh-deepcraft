@@ -438,4 +438,4 @@ ${foldArea}
 </body></html>`
 }
 
-module.exports = { page }
+module.exports = { page, STAND_IN_PARTS, readParts }

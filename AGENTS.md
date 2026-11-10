@@ -100,6 +100,7 @@ Each script states its own purpose at the top of the script; the table below is 
 | `npm run agents:check` | fail when AGENTS.md's command table differs from `package.json`; the cloud job runs this |
 | `npm run lint` | the rules that need no build |
 | `npm run probe` | headless UI regression probe for the composer invariants |
+| `npm run preview` | serve the plugin's live preview page: the built bundle against a host stand-in, with scenes, auto-reload and the settings page mounted |
 | `npm run smoke` | zero-dependency smoke test of the BUILT plugin (`lib/`); no running DSH instance is needed |
 | `npm test` | the unit lane on its own, as the cloud job runs it: Vitest in browser mode on the local Chrome or Edge |
 | `npm run verify` | the one entry a test run goes through |

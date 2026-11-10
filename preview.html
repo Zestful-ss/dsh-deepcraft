@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeepCraft preview</title>
+<link rel="stylesheet" href="/preview/preview.css">
+<script>
+  // The smoke stand-in reads its case and the fixtures before its own parts run.
+  // `settings` is the case whose config form, slot registry and inject are ready;
+  // the preview adds the real React and mounts the page the skin registers.
+  window.SMOKE_CASE = 'settings'
+  window.SMOKE_GROUPS = []
+  window.SMOKE_TIER = 'full'
+  window.SMOKE_MARKUP = ''
+  window.SMOKE_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+</script>
+</head>
+<body>
+<header class="preview-toolbar" data-preview-chrome>
+  <div class="preview-title">
+    <span class="preview-mark" aria-hidden="true"></span>
+    <span>DeepCraft preview</span>
+  </div>
+  <nav class="preview-scenes" aria-label="Scene">
+    <button type="button" data-scene-target="chat" aria-selected="true">Chat</button>
+    <button type="button" data-scene-target="settings" aria-selected="false">Settings</button>
+  </nav>
+  <div class="preview-controls">
+    <label class="preview-field">Palette
+      <select id="preview-palette">
+        <option value="ocean">Ocean</option>
+        <option value="ember">Ember</option>
+        <option value="forest">Forest</option>
+        <option value="host">Host</option>
+      </select>
+    </label>
+    <button type="button" id="preview-theme">Light mode</button>
+    <button type="button" id="preview-reload">Reload</button>
+    <span id="preview-build" class="preview-build"></span>
+    <details id="preview-diagnostics" class="preview-diagnostics">
+      <summary><span id="preview-errors">no errors</span></summary>
+      <ul id="preview-diagnostics-list"></ul>
+    </details>
+  </div>
+</header>
+
+<main class="preview-stage">
+  <!-- The conversation scene: the host's shell markup around the built skin. -->
+  <section class="preview-scene" data-scene="chat">
+    <div class="preview-app" data-slot="root">
+      <div class="preview-sidebar _sidebarCol_x_1" data-slot="sidebar">
+        <div class="preview-sidebar-inner _root_x_1">
+          <div class="preview-logo _logoRow_x_1">
+            <div class="_brand_x_1 preview-brand" role="img" aria-label="DeepSeek">
+              <span class="_brandIdentity_x_1">
+                <span class="_brandMark_x_1 preview-brand-mark" aria-hidden="true"></span>
+                <span class="_brandName_x_1 preview-brand-name" aria-hidden="true"></span>
+              </span>
+            </div>
+            <button type="button" class="_toggle_x_1 preview-icon-button" aria-label="Collapse sidebar">‹</button>
+          </div>
+          <div class="_regionArea_x_1 preview-sidebar-region">
+            <button type="button" class="_newSession_x_1 preview-new-session">
+              <span class="_newSessionLabelMask_x_1"><span class="_newSessionContent_x_1">New chat</span></span>
+              <span class="_newSessionShortcut_x_1">Ctrl N</span>
+            </button>
+            <div class="_sectionHeader_x_1 preview-section-header">
+              <span class="_sectionLabel_x_1">Today</span>
+            </div>
+            <div class="_treeBody_x_1 preview-tree" role="tree">
+              <div class="_sessionRow_x_1 _selected_x_1 preview-session-row preview-session-row-on" role="treeitem" aria-selected="true">
+                <span class="_slot_x_1"><svg data-state="ongoing" viewBox="0 0 16 16" width="10" height="10" aria-hidden="true"><circle cx="8" cy="8" r="4"></circle></svg></span>
+                <span class="_title_x_1">A palette walk-through</span>
+              </div>
+              <div class="_sessionRow_x_1 preview-session-row" role="treeitem">
+                <span class="_slot_x_1"></span>
+                <span class="_title_x_1">Composer invariants</span>
+              </div>
+              <div class="_sessionRow_x_1 preview-session-row" role="treeitem">
+                <span class="_slot_x_1"></span>
+                <span class="_title_x_1">Settings page review</span>
+              </div>
+            </div>
+          </div>
+          <div class="preview-foot _footArea_x_1">
+            <div class="_footerActions_x_1 preview-footer-actions">
+              <div data-slot="sidebar.footer.action">
+                <button type="button" id="plugin-action" class="preview-icon-button" aria-label="Cost meter" data-cordis-badge="3">
+                  <span aria-hidden="true">◔</span>
+                </button>
+              </div>
+            </div>
+            <div class="_settingsArea_x_1 preview-settings-trigger">
+              <div data-slot="sidebar.settings">
+                <div class="_triggerRow_s_1 preview-trigger-row">
+                  <div data-slot="settings.launcher">
+                    <button type="button" id="host-account" data-signed-out="false" aria-label="Account menu" aria-haspopup="menu" aria-expanded="false">Ada</button>
+                  </div>
+                  <button type="button" aria-haspopup="dialog" aria-label="Settings" class="preview-icon-button">⚙</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-center _centerCol_x_1">
+        <div class="preview-header _header_x_1" data-slot="conversation.header">
+          <div class="_titleRow_x_1 preview-title-row">
+            <div class="_titleCluster_x_1">
+              <span class="_crumbs_x_1 preview-crumbs">A palette walk-through</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="preview-scroll _scrollBody_x_1" data-conversation-scroll data-phase="active">
+          <div data-conversation-session="smoke-session" class="preview-session">
+            <div class="preview-flow" data-chat-flow>
+              <div class="preview-row preview-row-user" data-chat-flow-kind="user" data-chat-turn="1">
+                <div class="preview-bubble">Walk me through the three palettes and where the settings page lives.</div>
+              </div>
+              <div class="preview-row preview-row-assistant" data-chat-flow-kind="assistant-step" data-chat-turn="1">
+                <div class="preview-assistant-name">DeepSeek</div>
+                <div class="preview-markdown" data-markdown-variant="default">
+                  <p>Ocean is the default palette; Ember and Forest repaint the same tokens. The skin's own page sits under <code>Settings → DeepCraft</code>.</p>
+                  <pre class="preview-code"><code>body[data-dsh-deepcraft-palette="ocean"] {
+  --dsh-deepcraft-canvas: #0f1a24;
+}</code></pre>
+                  <p>Every row, switch and preview card on that page is rendered by the skin itself.</p>
+                </div>
+              </div>
+              <div class="preview-row preview-row-tool" data-chat-flow-kind="tool-call" data-chat-turn="1" data-chat-call-id="call-1">
+                <div class="preview-call _callRow_x_1">
+                  <span class="preview-call-icon" aria-hidden="true">⌘</span>
+                  <span>Read <code>packages/client/src/features/settings/settings.css</code></span>
+                </div>
+              </div>
+              <div class="preview-running" data-chat-running>
+                <span><span data-shimmer>Deep diving</span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="preview-composer-stack _composerStack_h_1">
+            <div class="preview-composer _card_x_1" data-composer-card>
+              <div id="editor" contenteditable="true" role="textbox" aria-label="Message" class="preview-input" data-composer-input>Ask anything…</div>
+              <div class="preview-composer-row _row_x_1">
+                <div class="preview-tools _tools_x_1">
+                  <button type="button" class="preview-icon-button _add_x_1" aria-label="Add files or run commands" aria-haspopup="listbox">+</button>
+                  <div class="_modes_x_1 preview-modes">
+                    <div data-slot="conversation.input.permission">
+                      <button type="button" class="preview-mode">Edit</button>
+                    </div>
+                  </div>
+                  <div data-slot="conversation.input.model">
+                    <button type="button" class="preview-mode _trigger_x_1">DeepSeek V4</button>
+                  </div>
+                </div>
+                <div class="preview-trailing _trailing_x_1">
+                  <button type="button" id="send" class="preview-send _primary_x_1" aria-label="Send message">↑</button>
+                </div>
+              </div>
+            </div>
+            <div class="preview-dock _dock_x_1">
+              <span class="preview-stat" data-composer-stat="time">1 turns 2 steps</span>
+              <span class="preview-stat" data-composer-stat="usage">105 tok · cache hit 90%</span>
+              <span class="preview-meter" id="context-meter">
+                <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5.5"></circle><circle cx="7" cy="7" r="5.5" stroke-dasharray="29 5.56"></circle></svg>
+                <span>84%</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The settings scene: the host dialog with the skin's own page mounted. -->
+  <section class="preview-scene" data-scene="settings" hidden>
+    <div class="preview-settings-overlay _overlay_x_1" role="dialog" aria-modal="true" aria-label="Settings">
+      <div class="preview-settings-panel _panel_x_1">
+        <div class="preview-settings-rail _navList_x_1" role="tablist" aria-label="Settings sections">
+          <button type="button" aria-selected="true"><span class="_navIcon_x_1"></span>DeepCraft</button>
+          <button type="button" aria-selected="false"><span class="_navIcon_x_1"></span>General</button>
+        </div>
+        <div class="preview-settings-main">
+          <div class="preview-settings-head">
+            <span>Settings</span>
+            <button type="button" class="preview-icon-button" aria-label="Close settings">×</button>
+          </div>
+          <div class="preview-settings-scroll">
+            <div id="preview-settings-mount">
+              <p class="preview-loading">Loading the settings page…</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- The host stand-in runs before the bundle; the bundle registers its factory;
+     the boot applies it and mounts the settings page. -->
+<script src="/vendor/react.js"></script>
+<script src="/vendor/react-dom.js"></script>
+<script src="/preview/stand-in.js"></script>
+<script src="/preview/host-extra.js"></script>
+<script src="/client.js"></script>
+<script src="/preview/boot.js"></script>
+</body>
+</html>
