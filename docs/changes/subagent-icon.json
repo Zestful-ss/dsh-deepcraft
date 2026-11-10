@@ -1,8 +1,0 @@
-{
-  "group": "improvements",
-  "order": 1,
-  "external": true,
-  "at": "2026-11-10",
-  "zh": "子代理模型入口的图标改为同心圆。",
-  "en": "Redraw the subagent model entry's icon as concentric circles."
-}

@@ -1,8 +1,0 @@
-{
-  "group": "removals",
-  "order": 0,
-  "external": true,
-  "at": "2026-11-10",
-  "zh": "移除设置页的动效标签页：动画效果分段移入外观标签页，聊天区滚动动画、状态行动画与精确状态行移入对话标签页。",
-  "en": "Remove the settings page's Motion tab: the animation segment moves to the Appearance tab, and the chat-area animations, the waiting line's switch and the precise status line move to the Conversation tab."
-}

@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.29.1] - 2026-11-10
 
-<h3 id="cn-unreleased">体验优化</h3>
+[中文](#cn-0.29.1) | [English](#en-0.29.1)
+
+<h3 id="cn-0.29.1">体验优化</h3>
 
 - 子代理模型入口的图标改为同心圆。
 
@@ -14,7 +16,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - 移除设置页的动效标签页：动画效果分段移入外观标签页，聊天区滚动动画、状态行动画与精确状态行移入对话标签页。
 
-<h3 id="en-unreleased">Improvements</h3>
+<h3 id="en-0.29.1">Improvements</h3>
 
 - Redraw the subagent model entry's icon as concentric circles.
 
