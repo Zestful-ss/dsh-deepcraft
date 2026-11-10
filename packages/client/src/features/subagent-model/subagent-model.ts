@@ -401,10 +401,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round',
       'aria-hidden': true, focusable: false,
     },
-    React.createElement('circle', { cx: 10, cy: 4, r: 2 }),
-    React.createElement('path', { d: 'M10 6v3M5 12v-1a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1' }),
-    React.createElement('circle', { cx: 5, cy: 14.5, r: 2.5 }),
-    React.createElement('circle', { cx: 15, cy: 14.5, r: 2.5 })))
+    React.createElement('circle', { cx: 10, cy: 10, r: 7 }),
+    React.createElement('circle', { cx: 10, cy: 10, r: 3 })))
   }
 
   /** Register the trigger in the host's seat; the fiber is what takes it down again. */

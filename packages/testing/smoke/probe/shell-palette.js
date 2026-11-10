@@ -121,7 +121,7 @@
       }
       r.settings = { registered: typeof Section === 'function', pages: {} }
       if (r.settings.registered) {
-        var tabIds = ['general', 'appearance', 'composer', 'sidebar', 'conversation', 'motion']
+        var tabIds = ['general', 'appearance', 'composer', 'sidebar', 'conversation']
         for (var ti = 0; ti < tabIds.length; ti++) r.settings.pages[tabIds[ti]] = renderTab(tabIds[ti])
         r.settings.link = r.settings.pages.general.link
         // The heading's mark: the build inlines the asset into the token sheet

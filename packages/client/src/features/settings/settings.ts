@@ -11,7 +11,6 @@ import { createSettingsAppearanceTab } from './settings-tab-appearance'
 import { createSettingsComposerTab } from './settings-tab-composer'
 import { createSettingsConversationTab } from './settings-tab-conversation'
 import { createSettingsGeneralTab } from './settings-tab-general'
-import { createSettingsMotionTab } from './settings-tab-motion'
 import { createSettingsSidebarTab } from './settings-tab-sidebar'
 import { installThemeFlip } from './theme-flip'
 import type { Prefs } from '../../constants'
@@ -83,7 +82,6 @@ export const SETTINGS_TABS: SettingsTab[] = [
   createSettingsComposerTab(),
   createSettingsSidebarTab(),
   createSettingsConversationTab(),
-  createSettingsMotionTab(),
 ]
 export const SETTINGS_CONTROLS = createSettingsControls()
 

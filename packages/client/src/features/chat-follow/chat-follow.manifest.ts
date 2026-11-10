@@ -9,10 +9,10 @@ export default {
   yieldsTo: 'dsh-chat-ux',
   stylesheets: [{ file: 'chat-follow.css', rank: 160 }],
   settingsRows: [{
-    // The Motion tab's own row: what is left of the chat-area switch after the
-    // waiting line and the sent message's entrance took switches of their own.
-    tab: 'motion',
-    rank: 10,
+    // The chat-area switch, what remains after the waiting line took a switch
+    // of its own.
+    tab: 'conversation',
+    rank: 14,
     pref: 'chatAnimations',
     title: 'chatAnimationsTitle',
   }],

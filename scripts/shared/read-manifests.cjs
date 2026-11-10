@@ -24,7 +24,7 @@ const SUFFIX = '.manifest.ts'
 /** The preference table both halves share: a settings row names one of its keys (D73). */
 const { PREFS } = loadModule('packages/contracts/src/prefs.ts')
 /** The settings page's tabs (core/feature.ts SettingsTabId). */
-const SETTINGS_TABS = new Set(['general', 'appearance', 'composer', 'sidebar', 'conversation', 'motion'])
+const SETTINGS_TABS = new Set(['general', 'appearance', 'composer', 'sidebar', 'conversation'])
 /** The settings page's own copy: the lines two features' rows share live there (D72). */
 const SETTINGS_COPY = (() => {
   const file = path.join(FEATURES, 'settings', 'settings.copy.json')

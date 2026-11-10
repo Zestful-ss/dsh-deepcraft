@@ -20,7 +20,7 @@ module.exports = {
     // The rows the ported features own, each on the tab its manifest registers it
     // on (D74, D72). headerBand carries a note of its own on a page that is not
     // the Windows desktop, so its note says nothing about the peer plugin.
-    const ported = { motion: ['chatAnimations', 'chatWait'] }
+    const ported = { conversation: ['chatAnimations', 'chatWait'] }
     const answers = (tab) => page(tab).answers || {}
     // The reader's own answer stays on show (both switches on) while the control
     // refuses input and the accent line names the plugin that owns the behaviour.
@@ -35,18 +35,18 @@ module.exports = {
       settings.registered === true && Object.keys(ported).every(tab => ported[tab].every(key => carried(tab, key))),
       JSON.stringify(Object.keys(tabs).map(tab => `${tab}: ${(page(tab).rows || []).join(', ')}`)))
     check('the chat-area animation row is a switch, with no segmented control on it',
-      (answers('motion').chatAnimations || {}).on === true && JSON.stringify((answers('motion').chatAnimations || {}).options) === '[]',
-      JSON.stringify(answers('motion').chatAnimations))
+      (answers('conversation').chatAnimations || {}).on === true && JSON.stringify((answers('conversation').chatAnimations || {}).options) === '[]',
+      JSON.stringify(answers('conversation').chatAnimations))
     check('each ported control is greyed out and marked as managed by the other plugin',
       Object.keys(ported).every(tab => ported[tab].every(key => refusingIn(tab).includes(key) && managedIn(tab).includes(key))),
       JSON.stringify(Object.keys(ported).map(tab => `${tab} refusing=${refusingIn(tab).join(',')} managed=${managedIn(tab).join(',')}`)))
     check('each ported control keeps showing the reader\'s own answer',
       Object.keys(ported).every(tab => ported[tab].every(key => showsOwnAnswer[key](answers(tab)[key] || {}))),
-      JSON.stringify({ chatAnimations: answers('motion').chatAnimations, chatWait: answers('motion').chatWait }))
+      JSON.stringify({ chatAnimations: answers('conversation').chatAnimations, chatWait: answers('conversation').chatWait }))
     check('the accent line names dsh-chat-ux',
       (settings.texts || []).some(text => text.includes('dsh-chat-ux')), JSON.stringify(settings.texts))
     check('the rows the other plugin does not own keep answering',
-      [['conversation', 'turnNav'], ['conversation', 'viewTabs'], ['motion', 'motion']]
+      [['conversation', 'turnNav'], ['conversation', 'viewTabs'], ['appearance', 'motion']]
         .every(([tab, key]) => refusingIn(tab).includes(key) === false),
       JSON.stringify(Object.keys(ported).map(tab => `${tab} refusing=${refusingIn(tab).join(',')}`)))
     commonChecks(r)

@@ -45,7 +45,6 @@
   "tabComposer": { "zh": "输入区", "en": "Composer" },
   "tabSidebar": { "zh": "侧栏", "en": "Sidebar" },
   "tabConversation": { "zh": "对话", "en": "Conversation" },
-  "tabMotion": { "zh": "动效", "en": "Motion" },
   "paletteTitle": { "zh": "配色", "en": "Colours" },
   "paletteDesc": { "zh": "内置配色或跟随宿主；切换配色只换颜色，不改标识与宠物。", "en": "A built-in palette or the host's colours; switching changes colours alone, not the brand or the pet." },
   "paletteOcean": { "zh": "深海蓝", "en": "Ocean blue" },

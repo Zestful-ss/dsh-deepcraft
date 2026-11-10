@@ -111,7 +111,7 @@ export interface SettingsCopyLine {
 /**
  * The settings tabs, by id (packages/client/src/features/settings/settings-tab-*.ts).
  */
-export type SettingsTabId = 'general' | 'appearance' | 'composer' | 'sidebar' | 'conversation' | 'motion'
+export type SettingsTabId = 'general' | 'appearance' | 'composer' | 'sidebar' | 'conversation'
 
 /**
  * One settings row a feature owns (D72). The control follows the preference's

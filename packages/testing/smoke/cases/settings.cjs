@@ -17,11 +17,10 @@ module.exports = {
     check('the settings section registers with the settings dialog', settings.registered === true, JSON.stringify(settings.registered))
     const expected = {
       general: ['username', 'autoPopover'],
-      appearance: ['palette', 'brandAccent', 'typeface', 'pageLook', 'homeLayout', 'homeRipple', 'mascot', 'chatPet', 'mascotScope', 'brandName', 'brandMark', 'brandWordmark', 'brandInk'],
+      appearance: ['palette', 'brandAccent', 'typeface', 'pageLook', 'motion', 'homeLayout', 'homeRipple', 'mascot', 'chatPet', 'mascotScope', 'brandName', 'brandMark', 'brandWordmark', 'brandInk'],
       composer: ['composerScope', 'modelPicker', 'modelDescriptions', 'quickProviders', 'subagentModelPicker', 'peakrate', 'permissionsControl', 'subagentModelChoice'],
       sidebar: ['collapseFooter', 'sidebarSearch', 'searchStyle', 'workspaceView', 'dockCards', 'sidebarLayout'],
-      conversation: ['turnNav', 'statsPosition', 'viewTabs', 'headerBand'],
-      motion: ['motion', 'chatAnimations', 'chatWait', 'statusDetail'],
+      conversation: ['chatAnimations', 'chatWait', 'statusDetail', 'turnNav', 'statsPosition', 'viewTabs', 'headerBand'],
     }
     // Greyed by the page itself rather than by a preference: the title-bar
     // band waits for the Windows desktop window.
@@ -29,7 +28,7 @@ module.exports = {
     const pages = settings.pages || {}
     for (const tab of Object.keys(expected)) {
       const page = pages[tab] || {}
-      check(`the ${tab} tab is selected in the six-tab strip and carries its rows, greying only the rows that wait for something`,
+      check(`the ${tab} tab is selected in the five-tab strip and carries its rows, greying only the rows that wait for something`,
         JSON.stringify(page.tabs) === JSON.stringify(Object.keys(expected)) && page.selected === tab &&
           JSON.stringify(page.rows) === JSON.stringify(expected[tab]) &&
           JSON.stringify(page.disabled || []) === JSON.stringify(expectedGrey[tab] || []) &&

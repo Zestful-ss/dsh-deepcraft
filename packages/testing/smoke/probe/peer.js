@@ -33,11 +33,11 @@
         groupOpen: !document.querySelector('[data-step-process-body]').hasAttribute('hidden'),
       }
       // The settings page, through the same React-tree walk the settings case
-      // uses: the rows of the tabs the ported controls are registered on —
-      // which of them refuse input, which carry the line naming the owner,
-      // and what answer each control shows.
+      // uses: the rows of the tabs the ported controls and the motion row are
+      // registered on — which of them refuse input, which carry the line
+      // naming the owner, and what answer each control shows.
       var PeerSection = (window.__slotComponents || {})['deepcraft']
-      var PEER_TABS = ['conversation', 'motion']
+      var PEER_TABS = ['conversation', 'appearance']
       var peerWalk = function (node, visit) {
         if (node === null || node === undefined || typeof node !== 'object') return
         if (Array.isArray(node)) { node.forEach(function (child) { peerWalk(child, visit) }); return }

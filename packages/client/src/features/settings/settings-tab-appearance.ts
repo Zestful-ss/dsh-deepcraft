@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { PAGE_LOOK_FLAT, PAGE_LOOK_FLOAT, PALETTE_EMBER, PALETTE_FOREST, PALETTE_HOST, PALETTE_OCEAN, TYPEFACE_CLAUDE, TYPEFACE_HOST } from '../../constants'
+import { MOTION_FULL, MOTION_REDUCED, MOTION_SYSTEM, PAGE_LOOK_FLAT, PAGE_LOOK_FLOAT, PALETTE_EMBER, PALETTE_FOREST, PALETTE_HOST, PALETTE_OCEAN, TYPEFACE_CLAUDE, TYPEFACE_HOST } from '../../constants'
 import { accentRow, brandRows } from './settings-brand'
 import { copy } from './copy'
 import type { Prefs } from '../../constants'
@@ -7,9 +7,10 @@ import type { SegmentOption, SettingsTab, SettingsView } from './settings-contro
 
 /**
  * The settings page's Appearance tab: which palette paints the colours — with
- * the accent colour as that row's sub-row — who sets the type, and the custom
- * brand rows (settings-brand.ts). The home layout, the mascot and where it
- * stands are the features' own rows, placed here by their manifests (D72).
+ * the accent colour as that row's sub-row — who sets the type, how much motion
+ * the skin runs, and the custom brand rows (settings-brand.ts). The home
+ * layout, the mascot and where it stands are the features' own rows, placed
+ * here by their manifests (D72).
  */
 export function createSettingsAppearanceTab(): SettingsTab {
   function rows(view: SettingsView) {
@@ -29,6 +30,11 @@ export function createSettingsAppearanceTab(): SettingsTab {
     const pageLookOptions: SegmentOption<Prefs['pageLook']>[] = [
       { value: PAGE_LOOK_FLOAT, label: copy('pageLookFloat') },
       { value: PAGE_LOOK_FLAT, label: copy('pageLookFlat') },
+    ]
+    const motionOptions: SegmentOption<Prefs['motion']>[] = [
+      { value: MOTION_SYSTEM, label: copy('motionSystem') },
+      { value: MOTION_REDUCED, label: copy('motionReduced') },
+      { value: MOTION_FULL, label: copy('motionFull') },
     ]
     return [
       {
@@ -62,6 +68,15 @@ export function createSettingsAppearanceTab(): SettingsTab {
           copy('pageLookTitle'),
           copy('pageLookDesc'),
           controls.segment(pageLookOptions, prefs.pageLook, value => { write({ pageLook: value }) }),
+        ),
+      },
+      {
+        rank: 24,
+        node: controls.row(
+          'motion',
+          copy('motionTitle'),
+          null,
+          controls.segment(motionOptions, prefs.motion, value => { write({ motion: value }) }),
         ),
       },
       ...brandRows(view),
