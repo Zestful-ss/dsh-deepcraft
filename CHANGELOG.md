@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.28.0] - 2026-11-10
 
-<h3 id="cn-unreleased">移除</h3>
+[中文](#cn-0.28.0) | [English](#en-0.28.0)
+
+<h3 id="cn-0.28.0">移除</h3>
 
 - 移除设置页「通用」的页面缩放；页面按系统与 DSH 给出的尺寸绘制，已保存的 `pageZoom` 设置不再生效。
 
-<h3 id="en-unreleased">Removals</h3>
+<h3 id="en-0.28.0">Removals</h3>
 
 - Remove page zoom from the settings page's General tab; the page is drawn at the size the system and DSH give it, and a stored `pageZoom` setting no longer takes effect.
 
