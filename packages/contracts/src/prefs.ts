@@ -32,30 +32,6 @@ export const MOTION_FULL = 'full'
 export const MOTION_MODES = [MOTION_SYSTEM, MOTION_REDUCED, MOTION_FULL] as const
 
 /**
- * What the words on the waiting line wear while a turn runs: the highlight band
- * the host's own rows sweep (`sweep`, the default), or the colour wash
- * transitions.dev's "Pro gradient text" moves through the letters (`wash`).
- */
-export const STATUS_MOTION_SWEEP = 'sweep'
-export const STATUS_MOTION_WASH = 'wash'
-export const STATUS_MOTIONS = [STATUS_MOTION_SWEEP, STATUS_MOTION_WASH] as const
-
-/** The composer caret's motion: `typing` takes the caret over and transitions every move, `off` leaves the browser's own. */
-export const CARET_MOTION_OFF = 'off'
-export const CARET_MOTION_TYPING = 'typing'
-export const CARET_MOTIONS = [CARET_MOTION_TYPING, CARET_MOTION_OFF] as const
-
-/** Whether the characters arriving in a streaming answer fade in. */
-export const CHAT_REVEAL_OFF = 'off'
-export const CHAT_REVEAL_ON = 'on'
-export const CHAT_REVEAL_MODES = [CHAT_REVEAL_ON, CHAT_REVEAL_OFF] as const
-
-/** How a message the reader sends arrives: a stand-in flying up from the composer, or the row growing in place. */
-export const MESSAGE_ENTER_FLIGHT = 'flight'
-export const MESSAGE_ENTER_GROW = 'grow'
-export const MESSAGE_ENTER_MODES = [MESSAGE_ENTER_FLIGHT, MESSAGE_ENTER_GROW] as const
-
-/**
  * Who paints the colours: one of the skin's own palettes, each a full light
  * and dark set of its own (theme/tokens.json, D80), or the host's colour tokens
  * left to the host and other theme plugins.
@@ -99,9 +75,6 @@ export const SIDEBAR_LAYOUTS = [SIDEBAR_LAYOUT_RELAXED, SIDEBAR_LAYOUT_COMPACT] 
  * breathing in place over the idle seat's hollow circle, or the ring turning
  * that the skin drew before the light.
  */
-export const ONGOING_INDICATOR_BREATHE = 'breathe'
-export const ONGOING_INDICATOR_RING = 'ring'
-export const ONGOING_INDICATORS = [ONGOING_INDICATOR_BREATHE, ONGOING_INDICATOR_RING] as const
 
 /** The chat area's animation switch: on plays the ported set (features/chat-*), off leaves the area to the host. */
 export const CHAT_ANIMATIONS_OFF = 'off'
@@ -178,7 +151,6 @@ export const PREFS = {
   brandInk: { type: 'choice', values: BRAND_INKS, default: BRAND_INK_ORIGINAL },
   brandAccent: { type: 'color', default: '' },
   motion: { type: 'choice', values: MOTION_MODES, default: MOTION_SYSTEM },
-  statusMotion: { type: 'choice', values: STATUS_MOTIONS, default: STATUS_MOTION_SWEEP },
   /** An earlier build stored the two words; `precise` is what the switch being on means. */
   statusDetail: { type: 'boolean', default: true, legacy: { precise: true, simple: false } },
   collapseFooter: { type: 'boolean', default: true },
@@ -217,17 +189,12 @@ export const PREFS = {
   sidebarSearch: { type: 'boolean', default: true },
   searchStyle: { type: 'choice', values: SEARCH_STYLES, default: SEARCH_STYLE_OVERLAY },
   sidebarLayout: { type: 'choice', values: SIDEBAR_LAYOUTS, default: SIDEBAR_LAYOUT_RELAXED },
-  ongoingIndicator: { type: 'choice', values: ONGOING_INDICATORS, default: ONGOING_INDICATOR_BREATHE },
   turnNav: { type: 'boolean', default: true },
   viewTabs: { type: 'boolean', default: true },
   headerBand: { type: 'boolean', default: true },
   /** It held a choice before it became a switch again; every retired choice meant on bar `off`. */
   chatAnimations: { type: 'boolean', default: true, legacy: { [CHAT_ANIMATIONS_OFF]: false, enhanced: true, redraw: true } },
   chatWait: { type: 'boolean', default: true },
-  chatSend: { type: 'boolean', default: true },
-  chatReveal: { type: 'choice', values: CHAT_REVEAL_MODES, default: CHAT_REVEAL_OFF },
-  caretMotion: { type: 'choice', values: CARET_MOTIONS, default: CARET_MOTION_TYPING },
-  messageEnter: { type: 'choice', values: MESSAGE_ENTER_MODES, default: MESSAGE_ENTER_FLIGHT },
 } as const satisfies Record<string, PrefSpec>
 
 /** One preference's key. */
@@ -249,10 +216,7 @@ export const LIVE_PREFS = [
   'headerBand',
   'chatAnimations',
   'chatWait',
-  'chatSend',
-  'chatReveal',
   'peakrate',
-  'caretMotion',
   'mascot',
   'modelPicker',
   'subagentModelPicker',

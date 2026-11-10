@@ -19,9 +19,7 @@ import { copy } from './copy'
  * Both faces of a sent message are folded: the echo the host mounts the moment
  * the message goes out, and the durable row that replaces it. The reader sees
  * his message clamped as soon as it lands, not once the turn is over: the echo
- * is folded in the batch that mounts it rather than in the pass after, because
- * the send flight takes the bubble's box at take-off and carries its stand-in to
- * that box for the whole animation (chat-send/send-flight.ts).
+ * is folded in the batch that mounts it rather than in the pass after.
  *
  * A message the reader opened stays open while its node stands — the choice is
  * kept per bubble, and every later pass re-applies it.
@@ -240,13 +238,6 @@ export function createMessageFold(requestPass: () => void) {
   /**
    * The echo the host mounts the moment a submission goes through, folded in the
    * batch that mounts it.
-   *
-   * The send flight (chat-send/send-flight.ts) measures the bubble it hands the
-   * message to and carries its stand-in to that box, so a fold landing in the
-   * pass after the echo mounts leaves the stand-in flying to the message's full
-   * height and holds the real row back until the flight's own wait runs out. This
-   * watch is made at install and the flight's own only once a submission has been
-   * captured, so this callback runs first and the flight measures what it wrote.
    */
   const stopEchoWatch = subscribeMutations(document.body, { childList: true, subtree: true, skipQuiet: true }, records => {
     for (const record of records) {

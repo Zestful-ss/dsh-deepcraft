@@ -106,7 +106,7 @@ function placeFollowTail(stamp: ReturnType<typeof createStamp<HTMLElement>>, car
  *
  * @param options.foldBusy - whether a fold glide is animating a height right now.
  * @param options.submissionHeld - whether the reader's own message is still
- *     taking its place (see the composer's slide stand-down).
+ *     taking its place (the scroll owner's submission hold).
  * @returns teardown: the subscriptions go away.
  */
 export function createChatFollowGuard(options: { foldBusy: () => boolean, submissionHeld: () => boolean }) {
@@ -510,7 +510,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
      * chunk has not arrived, its switch is off, or another plugin owns the
      * entrance.
      */
-    submissionHeld: () => (ui.chatSend === undefined ? submissionHolds() : ui.chatSend.isEntering()),
+    submissionHeld: () => submissionHolds(),
   })
   const stopProcess = createChatProcessFollow()
   const tailStamp = createStamp<HTMLElement>(FOLLOW_TAIL_ATTR)

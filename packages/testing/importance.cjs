@@ -72,8 +72,6 @@ const SURFACES = [
 const MARKS = [
   ['motion reduced', 'data-dsh-deepcraft-motion', 'reduced'],
   ['motion full', 'data-dsh-deepcraft-motion', 'full'],
-  ['status motion sweep', 'data-dsh-deepcraft-status-motion', 'sweep'],
-  ['status motion wash', 'data-dsh-deepcraft-status-motion', 'wash'],
   ['search style icon', 'data-dsh-deepcraft-search-style', 'icon'],
   ['search style overlay', 'data-dsh-deepcraft-search-style', 'overlay'],
   ['search style standalone', 'data-dsh-deepcraft-search-style', 'standalone'],

@@ -14,49 +14,27 @@
     // ported features stand down whole, and the settings page shows their
     // switches off and disabled with the reason.
     await probe.onlyFor(['peer-chat-ux'], async function () {
-      var peerHighlights = function () {
-        var registry = window.CSS && window.CSS.highlights
-        if (!registry) return 0
-        // The reveal registers one highlight per step under this prefix
-        // (constants.ts's CHAT_REVEAL_HIGHLIGHT_PREFIX); any of them is a live engine.
-        var count = 0
-        registry.forEach(function (_highlight, name) { if (name.indexOf('dsh-deepcraft-tok-') === 0) count += 1 })
-        return count
-      }
-      // A chat area and a focused composer: live features would mark, fold or
-      // draw on them within a pass or two.
+      // A chat area and a focused composer: live features would mark or fold
+      // it within a pass or two.
       var peerChat = document.createElement('div')
       peerChat.innerHTML = '<div data-chat-flow><div data-streaming><p>streaming text</p></div>' +
         '<div data-variant="think" data-state="running"><button type="button">Thinking</button></div>' +
         '<div data-step-process><button type="button" data-process-activity><span data-shimmer>Working</span></button>' +
         '<div data-step-process-body hidden="until-found"><div data-step-process-content>x</div></div></div></div>'
       document.body.appendChild(peerChat)
-      var peerEditor = document.querySelector('[data-composer-input]')
-      if (peerEditor !== null) {
-        peerEditor.focus()
-        document.dispatchEvent(new Event('selectionchange'))
-      }
-      // The fade ships off, so the choice is turned on here: the reveal staying
-      // uninstalled below is then the hand-over rather than the default.
-      window.__pushForm({ chatReveal: 'on' })
       await sleep(300)
       r.peer = {
         marks: {
           follow: document.body.hasAttribute('data-dsh-deepcraft-chat-follow'),
           fold: document.body.hasAttribute('data-dsh-deepcraft-chat-fold'),
-          reveal: document.body.hasAttribute('data-dsh-deepcraft-chat-reveal'),
-          caretLayer: document.querySelector('[data-dsh-deepcraft-caret-layer]') !== null,
-          caretMark: peerEditor !== null && peerEditor.hasAttribute('data-dsh-deepcraft-caret'),
         },
         seats: (window.__slots || []).filter(function (entry) { return entry.key === 'tool.call.toolview' }).length,
-        highlights: peerHighlights(),
         thinkExpanded: document.querySelector('[data-variant="think"]').hasAttribute('data-expanded'),
         groupOpen: !document.querySelector('[data-step-process-body]').hasAttribute('hidden'),
       }
       // The settings page, through the same React-tree walk the settings case
-      // uses: the rows of the two tabs the ported controls are registered on —
-      // the chat-area animation on the Conversation tab, the caret on the Motion
-      // tab — which of them refuse input, which carry the line naming the owner,
+      // uses: the rows of the tabs the ported controls are registered on —
+      // which of them refuse input, which carry the line naming the owner,
       // and what answer each control shows.
       var PeerSection = (window.__slotComponents || {})['deepcraft']
       var PEER_TABS = ['conversation', 'motion']

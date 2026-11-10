@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">移除</h3>
+
+- 移除输入框光标的平滑移动、流式回答的逐字淡入、发送消息的替身飞行与原地生长入场、状态行文字的色彩晕染以及侧栏运行指示的圆环选项；已保存的 `caretMotion`、`chatReveal`、`chatSend`、`messageEnter`、`statusMotion`、`ongoingIndicator` 设置不再生效。
+
+<h3 id="en-unreleased">Removals</h3>
+
+- Remove the composer caret's smooth tracking, the streamed answer's per-character fade, the sent message's stand-in flight and in-place grow entrances, the waiting line's colour wash, and the sidebar running indicator's ring option; stored `caretMotion`, `chatReveal`, `chatSend`, `messageEnter`, `statusMotion` and `ongoingIndicator` settings no longer take effect.
+
 ## [0.28.0] - 2026-11-10
 
 [中文](#cn-0.28.0) | [English](#en-0.28.0)

@@ -285,7 +285,7 @@ export function findDockedContextMeter(card: Element | null) {
   return null
 }
 
-/** The editable draft inside `scope`: the element the caret and the send flight read. */
+/** The editable draft inside `scope`: the element the placeholder hint mirrors. */
 export function findComposerInput(scope: ParentNode = document) {
   return scope.querySelector<HTMLElement>(COMPOSER_INPUT_SELECTOR)
 }

@@ -331,7 +331,6 @@
     {
       "reason": "换字动画的中间帧：走查把页面停住，帧已经落下",
       "selectors": [
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-status-motion=wash] .dsh-deepcraft-chat-wait .dsh-deepcraft-swap-shimmer",
         "body[data-dsh-deepcraft] .dsh-deepcraft-swap-copy.is-enter-start",
         "body[data-dsh-deepcraft] .dsh-deepcraft-swap-copy.is-exit",
         "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced] .dsh-deepcraft-swap-copy",
@@ -385,13 +384,6 @@
       ]
     },
     {
-      "reason": "输入光标：宿主的输入框不在走查的页面形态里",
-      "selectors": [
-        "body[data-dsh-deepcraft] textarea[data-dsh-deepcraft-caret]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-caret-host]"
-      ]
-    },
-    {
       "reason": "高峰费率表：宿主拿到费率档时才画这颗标，画的是哪个时段随时机而变",
       "either": true,
       "selectors": [
@@ -430,34 +422,6 @@
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-notice",
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-tab-notice",
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-tab-notice+.dsh-deepcraft-settings-row"
-      ]
-    },
-    {
-      "reason": "减少动效配上等待行的状态动效：走查把动画偏好与等待行的状态动效分开走",
-      "selectors": [
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced][data-dsh-deepcraft-status-motion=wash] .dsh-deepcraft-chat-wait .dsh-deepcraft-swap-shimmer"
-      ]
-    },
-    {
-      "reason": "减少动效配上状态行预览的换字标记：这个标记由偏好写入的那一帧落下，走查读到与否要看当时停在哪个页面形态上",
-      "either": true,
-      "selectors": [
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced] [data-dsh-deepcraft-word-alt] .dsh-deepcraft-motion-word",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced] [data-dsh-deepcraft-word-alt] .dsh-deepcraft-motion-word+.dsh-deepcraft-motion-word"
-      ]
-    },
-    {
-      "reason": "加载点换动作的中间帧：走查把页面停住，退出中的那一列已经淡完",
-      "either": true,
-      "selectors": [
-        "body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-lane.is-leaving .dsh-deepcraft-chat-wait-dot"
-      ]
-    },
-    {
-      "reason": "消息气泡动画选「在原地长出来」：走查的发送按出厂默认飞上来，这一档不在它的轮次里",
-      "selectors": [
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-message-enter]",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced] [data-dsh-deepcraft-message-enter]"
       ]
     },
     {

@@ -364,8 +364,8 @@ export function installScheduler<Name extends string>(ctx: HostContext, ui: Sche
   ui.schedule = schedule
 
   // Every change under <body> asks for a pass, the skin's own quiet writes
-  // (QUIET_ATTR) aside: the caret motion measures through probes and redraws
-  // per frame, and without this every keystroke would schedule a pass for work
+  // (QUIET_ATTR) aside: features like the waiting line redraw their own marks
+  // per frame, and without this that frame work would schedule passes for work
   // no feature reads. A batch the conversation column holds alone (streaming)
   // asks for the pass its readers need and skips the page-wide ones.
   const stopMutations = subscribeMutations(document.body, {

@@ -67,7 +67,7 @@ const READABLE_PSEUDO = new Set(['::before', '::after', '::marker', '::placehold
  * which did not, called it unmatched. Each entry is a contract, not a
  * convenience: the skin's own marks that go on and come off within one
  * animation (`fold-motion.css`'s rolling door, `inline.css`'s active-composer
- * controls, the send flight, the wait badge's leave, the reveal of a panel, the
+ * controls, the wait badge's leave, the reveal of a panel, the
  * reasoning window whose markdown variant the walk's turn sometimes carries), a
  * state a pointer holds (a dragged effort knob, a file row swapping its
  * operation), and the host's own mark for a theme transition. The hover walk
@@ -77,11 +77,9 @@ const TRANSIENT_SELECTORS = [
   '[data-dsh-deepcraft-rolling]', '[data-dsh-deepcraft-composer-active]',
   '[data-dsh-deepcraft-revealing]', '[data-dsh-deepcraft-page-enter]', '[data-dsh-deepcraft-page-leave]',
   '[data-dsh-deepcraft-search-closing]', '[data-dsh-deepcraft-turn-nav-landed]',
-  '[data-dsh-deepcraft-send-ghost]', '[data-dsh-deepcraft-send-flight]', '[data-dsh-deepcraft-send-link]',
   '[data-dsh-deepcraft-follow-tail]', '[data-dsh-deepcraft-follow-hold]',
   '[data-dsh-deepcraft-reader-hold]', '[data-dsh-deepcraft-summary-running]', '[data-dsh-deepcraft-wait-badge-leaving]',
-  '[data-dsh-deepcraft-file-merge]', '[data-dsh-deepcraft-chat-reveal]', '[data-dsh-deepcraft-roll]',
-  '[data-dsh-deepcraft-dragging]', '[data-dsh-deepcraft-swapping]',
+  '[data-dsh-deepcraft-file-merge]', '[data-dsh-deepcraft-roll]',
   '[data-dsh-deepcraft-reason-window]',
   '[data-dsh-theme-transitioning]',
 ]

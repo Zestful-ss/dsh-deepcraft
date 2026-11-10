@@ -40,8 +40,6 @@ export const ROW_PHASE_ATTRIBUTE = 'data-state'
 export const RUNNING_STATE = 'running'
 /** The markdown layer marks the container with this while an assistant message streams. */
 export const STREAMING_SELECTOR = '[data-streaming]'
-/** The same contract as an attribute name: the reveal watches it appearing and going. */
-export const STREAMING_ATTRIBUTE = 'data-streaming'
 /**
  * TextShimmer's swept element: while it is attached, that piece of content
  * is still moving. Both names are read, because an older host build writes
@@ -67,9 +65,9 @@ export const FOLLOW_THRESHOLD_PX = 25
 export const CHAT_RUNNING_SELECTOR = '[data-chat-running]'
 /** The composer area: a pointer or key inside it is the reader typing, not taking the scroll over. */
 export const COMPOSER_SELECTOR = '[data-composer-seat]'
-/** The composer's editable surface (contenteditable); the caret motion is drawn for it. */
+/** The composer's editable surface (contenteditable); the placeholder hint mirrors its text. */
 export const COMPOSER_INPUT_SELECTOR = '[data-composer-input]'
-/** The card the input sits in; the send flight lifts a copy of the whole card. */
+/** The card the input sits in. */
 export const COMPOSER_CARD_SELECTOR = '[data-composer-card]'
 /** The host's model selection slot in the composer. */
 export const MODEL_SLOT_SELECTOR = '[data-slot="conversation.input.model"]'
@@ -85,13 +83,6 @@ export const WORKSPACE_TREE_ROW_SELECTOR = '[data-row-key], [data-dsh-deepcraft-
 export const COMPOSER_SCROLL_SELECTOR = '[data-input-scroll]'
 /** The echo bubble the host mounts the moment a submission goes through. */
 export const SUBMISSION_ECHO_SELECTOR = '[data-submission-echo]'
-/**
- * A plain text box inside the composer seat: a question card's answer box
- * (under [data-question-key]) and a queued message's inline editor (under
- * [data-queue-dock]). Both are textareas, in the main session and in the
- * sidebar's subagent sessions alike.
- */
-export const COMPOSER_TEXTAREA_SELECTOR = '[data-composer-seat] textarea'
 /** The host puts this on every process group. */
 export const PROCESS_GROUP_SELECTOR = '[data-step-process]'
 /** The host puts this on every process group's body. */

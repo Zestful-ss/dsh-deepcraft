@@ -52,8 +52,8 @@
       await sleep(400)
       r.states.home = whaleNow()
       r.states.crab = document.querySelector('.dsh-deepcraft-crab') !== null
-      // Frames change on the whale's own node, and no frame wakes a pass. The
-      // caret motion's own frames are settled first (see the crab case).
+      // Frames change on the whale's own node, and no frame wakes a pass. Any
+      // focused control is blurred first so nothing else's frames ride along.
       if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
       await sleep(250)
       var deepyPasses = window.__passes

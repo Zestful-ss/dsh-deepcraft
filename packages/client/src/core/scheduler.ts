@@ -7,7 +7,6 @@ import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FooterHandle } from '../features/account/account-footer'
 import type { ChatFoldHandle } from '../features/chat-fold/chat-fold'
 import type { ComposerHandle } from '../features/composer/composer'
-import type { ChatSendHandle } from '../features/chat-send/send-flight'
 import type { ModelHandle } from '../features/model/model-picker'
 import type { PeakRateHandle } from '../features/peakrate/peakrate'
 import type { QuickProvidersHandle } from '../features/settings/quick-providers'
@@ -40,10 +39,7 @@ export interface Handles {
   chatFollow: FeatureHandle
   chatFold: ChatFoldHandle
   chatWait: FeatureHandle
-  chatReveal: FeatureHandle
   chatFiles: FeatureHandle
-  chatSend: ChatSendHandle
-  caret: FeatureHandle
   viewTabs: FeatureHandle
   headerBand: FeatureHandle
   settingsNav: FeatureHandle

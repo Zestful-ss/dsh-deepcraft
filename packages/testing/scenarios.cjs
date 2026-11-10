@@ -15,7 +15,7 @@
  */
 'use strict'
 const path = require('node:path')
-const { HOST, SKIN, readFlow, check, observe } = require('./lane.cjs')
+const { HOST, readFlow, check, observe } = require('./lane.cjs')
 const { recordProbes } = require('./contract-probe.cjs')
 const { sendPrompt, waitForTurn } = require('./prompt.cjs')
 const { importanceScenario } = require('./importance.cjs')
@@ -27,7 +27,6 @@ const { processSummaryScenario } = require('./process-summary.cjs')
 const { fileMergeScenario } = require('./file-merge.cjs')
 const { reasoningStreamScenario } = require('./reasoning-stream.cjs')
 const { waitLineScenario } = require('./wait-line.cjs')
-const { washLineScenario } = require('./wash-line.cjs')
 const { longSessionScenario } = require('./long-session.cjs')
 const { statsScenarios } = require('./stats-position.cjs')
 const { sidebarRailScenario } = require('./sidebar-rail.cjs')
@@ -84,84 +83,6 @@ async function captureBothSchemes(context) {
   return { checks, files }
 }
 
-/**
- * The frames a flight's stand-in and the row it replaces are both readable in.
- * Every reading carries both boxes whole (packages/testing/e2e.cjs), because two
- * of the flight's own rules are about the pair: the row may only be shown once
- * the stand-in is on it, and the stand-in may never stand shorter than the row.
- */
-function flightBoxes(flight) {
-  return flight.filter((frame) => frame.shell !== null && frame.shell !== undefined && frame.bubble !== null && frame.bubble !== undefined)
-}
-
-/**
- * How far the stand-in is off the row in a frame, in pixels: the largest of the
- * two edges' differences. A few pixels is the landing's own give.
- */
-function flightGap(frame) {
-  return Math.max(
-    Math.abs(frame.shell[0] - frame.bubble[0]),
-    Math.abs(frame.shell[1] - frame.bubble[1]),
-    Math.abs(frame.shell[3] - frame.bubble[3]),
-  )
-}
-
-/** The row's own foot, left uncovered by the few pixels a moving transcript costs. */
-const LANDING_GIVE = 4
-
-/**
- * One check on every frame the row is shown in: the stand-in is on it.
- *
- * Two copies of the same message, one above the other, is what a reader sees
- * when the row is released before the stand-in has arrived (send-flight.ts's
- * arrived()), and a stand-in left short by a row that moved under it uncovers
- * the row's own foot, which reads as a line under the message. The host can move
- * the row between two samples (the transcript gliding to its tail) and the
- * flight re-pins the stand-in in its own frame, so a gap the next sample no
- * longer shows was never painted: only a gap that holds is judged. A row that
- * moved between the two samples explains the gap by itself — the trace carries
- * the frame the row moved in with the stand-in's position from before it — so
- * the gap that holds over a row standing still is the one a reader saw.
- */
-function onRowCheck(shown) {
-  const gaps = shown.map((frame) => flightGap(frame))
-  const rowBox = (frame) => `${frame.bubble[1]}/${frame.bubble[3]}`
-  const apart = shown.filter((frame, at) => {
-    if (gaps[at] <= LANDING_GIVE) return false
-    const next = shown[at + 1]
-    if (next === undefined || gaps[at + 1] <= LANDING_GIVE) return false
-    return rowBox(next) === rowBox(frame)
-  })
-  return check('真行显形期间替身一直落在它身上', shown.length > 0 && apart.length === 0,
-    `frames with the row shown=${shown.length}, of them apart=${apart.length}${apart.length === 0 ? '' : `：${apart.slice(0, 3).map((frame) => `${flightGap(frame).toFixed(2)}px`).join(' | ')}`}`)
-}
-
-/**
- * The frames and the row once the handover has finished.
- *
- * The runner reads the trace the moment the turn settles (e2e.cjs's
- * startTrace), and the stand-in leaves a beat after the handover: on a slow
- * runner that read ends before the real row is shown, so a check reading its
- * last frame called a row that had not appeared yet invisible, and found no
- * frame to say the stand-in had landed on it. The page keeps sampling after
- * that read, so the frames past it are read here, together with the last frame
- * carrying a row, which is the row the reader is left with. What is read here
- * is written back into the run's context: the exported trace has to carry the
- * frames the checks judged, or a failure cannot be read from the artifact.
- */
-async function handoverFrames(context) {
-  const { page, trace } = context
-  await page.waitForSelector(SKIN.sendGhost, { state: 'detached', timeout: 15000 }).catch(() => {})
-  await page.waitForTimeout(300)
-  const later = await page.evaluate(() => window.__e2eTrace ?? [])
-  const frames = later.length >= trace.length ? later : trace
-  let settled = frames[frames.length - 1]
-  for (let at = frames.length - 1; at >= 0; at -= 1) {
-    if (frames[at].rows > 0) { settled = frames[at]; break }
-  }
-  context.trace = frames
-  return { frames, settled }
-}
 
 /** The scenarios: each boots its own instance, sends its prompt, and asserts. */
 const SCENARIOS = {
@@ -392,103 +313,6 @@ const SCENARIOS = {
   streamPace: streamPaceScenario({ check }),
   /** The transitions.dev surfaces where they move: greeting, panel, switch, tab, badge, menu (motion.cjs, D9). */
   motion: motionScenario({ check }),
-  /** The send flight: the stand-in takes off, the row lands, the words stay put. */
-  send: {
-    script: 'greeting',
-    prompt: 'hello there',
-    /**
-     * The page as the Windows desktop shell marks it: the host's layout frame
-     * then draws its title bar strip as a `::before`, which the stand-in's
-     * imitation chain carries a copy of (send-flight.css).
-     */
-    async beforeSend({ page }) {
-      await page.evaluate(() => {
-        document.documentElement.setAttribute('data-windows-titlebar', '')
-        document.documentElement.style.setProperty('--dsh-windows-titlebar-height', '40px')
-      })
-    },
-    async assert(context) {
-      const { page, session } = context
-      const { frames, settled } = await handoverFrames(context)
-      const firstGhost = frames.findIndex((frame) => frame.ghost)
-      const takeOffFrame = frames.find((frame) => frame.takeOff !== undefined)
-      const flight = firstGhost === -1 ? [] : frames.slice(firstGhost)
-      const hidden = flight.filter((frame) => frame.rowFlying)
-      const exposedWhileFlying = hidden.filter((frame) => frame.rowVisible)
-      const last = frames[frames.length - 1]
-      const goneByNow = await page.evaluate((selector) => document.querySelector(selector) === null, SKIN.sendGhost)
-      const words = flight.filter((frame) => (frame.ghostWords ?? []).includes('hello there') || (frame.rowWords ?? []).includes('hello there'))
-      const takeOff = takeOffFrame?.takeOff
-      const sameType = takeOff !== undefined && takeOff.clone !== null && takeOff.composer !== null
-        && takeOff.clone.family === takeOff.composer.family && takeOff.clone.size === takeOff.composer.size
-        && takeOff.clone.weight === takeOff.composer.weight && takeOff.clone.color === takeOff.composer.color
-      // The stand-in lands on the row it replaces, and it has to be at least as
-      // tall as that row: a row taller than the stand-in keeps the page's paint
-      // below it while the covered part carries the stand-in's faded paint, and
-      // the seam reads as a stripe across the bubble. Height only: the stand-in
-      // is above the row while it travels, and its own landing give is a
-      // fraction of a pixel.
-      const covered = flightBoxes(flight)
-      const short = covered.filter((frame) => frame.shell[3] - frame.shell[1] < frame.bubble[3] - frame.bubble[1] - 1)
-      // The stand-in's plate is the row's colour as the screen paints it: a
-      // translucent token left translucent composites again over the row.
-      const translucent = covered.filter((frame) => /rgba\([^)]*,\s*0?\.\d+\)/.test(frame.shellFill ?? ''))
-      // While the row is shown, the stand-in has to be on it (onRowCheck).
-      const shown = covered.filter((frame) => frame.rowVisible === true)
-      // The chain's links paint nothing: an ancestor's pseudo-element copied onto
-      // one is a band across the stand-in in the ancestor's colour.
-      const linkPaints = [...new Set(flight.flatMap((frame) => frame.linkPaints ?? []))]
-      const withLinks = flight.filter((frame) => (frame.links ?? 0) > 0).length
-      return [
-        check('替身起飞后离开页面', firstGhost !== -1 && goneByNow, `firstGhost at ${firstGhost === -1 ? 'n/a' : `${frames[firstGhost].t}ms`}, ghost at the end=${last.ghost}, left by now=${goneByNow}`),
-        check('真行在飞行期间不可见', hidden.length > 0 && exposedWhileFlying.length === 0, `flying frames=${hidden.length}, of them visible=${exposedWhileFlying.length}`),
-        check('读者的字每一帧都看得见', words.length === flight.length, `words on ${words.length} of ${flight.length} frames after take-off`),
-        check('真行落定后可见并带着字', settled.rows > 0 && settled.rowVisible === true && (settled.rowWords ?? []).includes('hello there'), `rows=${settled.rows} visible=${settled.rowVisible} words=${JSON.stringify(settled.rowWords)}`),
-        check('替身带走了输入卡片的样子', sameType === true, takeOff === undefined ? 'no take-off frame in the trace' : `clone ${takeOff.clone.size}/${takeOff.clone.color} vs composer ${takeOff.composer.size}/${takeOff.composer.color}, card ${takeOff.cloneCard} vs ${takeOff.composerCard}`),
-        check('替身落地时不低于它替换的那一行', covered.length > 0 && short.length === 0, `readable frames=${covered.length}, standing above the row's own foot=${covered.length - short.length}${short.length === 0 ? '' : `：${short.slice(0, 3).map((frame) => `shell ${(frame.shell[3] - frame.shell[1]).toFixed(1)} vs row ${frame.bubble[3] - frame.bubble[1]}`).join(' | ')}`}`),
-        onRowCheck(shown),
-        check('替身的底色是画面上的颜色，不是半透明的令牌', covered.length > 0 && translucent.length === 0, `translucent fills=${translucent.length}${translucent.length === 0 ? '' : `（${[...new Set(translucent.map((frame) => frame.shellFill))].join('、')}）`}`),
-        check('Windows 标题栏标记下，替身里的祖先链不画伪元素', withLinks > 0 && linkPaints.length === 0, `frames carrying the chain=${withLinks}${linkPaints.length === 0 ? '' : `，painting: ${linkPaints.join('、')}`}`),
-        check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
-      ]
-    },
-  },
-  /**
-   * The hand-over in a transcript that is already full: the host glides to the
-   * tail after a submission, which moves the row the flight is landing on. The
-   * row must not be shown while the stand-in is still travelling (send-flight.ts's
-   * arrived()), and this is the state that says so — an empty transcript never
-   * moves, and the flight's own check passes there without proving anything.
-   */
-  sendFull: {
-    script: 'greeting',
-    prompt: 'hello there',
-    async afterTurn(context) {
-      // Six turns first, so the transcript is taller than the viewport and the
-      // next submission has somewhere to glide from.
-      for (let index = 0; index < 6; index += 1) {
-        await sendPrompt(context.page, 'fill the transcript')
-        await waitForTurn(context.page)
-      }
-      await context.page.waitForTimeout(600)
-    },
-    async assert(context) {
-      const { page, session } = context
-      const { frames, settled } = await handoverFrames(context)
-      const firstGhost = frames.findIndex((frame) => frame.ghost)
-      const flight = firstGhost === -1 ? [] : frames.slice(firstGhost)
-      const covered = flightBoxes(flight)
-      const short = covered.filter((frame) => frame.shell[3] - frame.shell[1] < frame.bubble[3] - frame.bubble[1] - 1)
-      const shown = covered.filter((frame) => frame.rowVisible === true)
-      return [
-        check('满屏的对话里也读到了飞行', firstGhost !== -1 && covered.length > 5, `firstGhost at ${firstGhost === -1 ? 'n/a' : `${frames[firstGhost].t}ms`}, readable frames=${covered.length}`),
-        onRowCheck(shown),
-        check('替身落地时不低于它替换的那一行', covered.length > 0 && short.length === 0, `readable frames=${covered.length}, standing above the row's own foot=${covered.length - short.length}`),
-        check('落定后那一行带着字', settled.rows > 0 && settled.rowVisible === true, `rows=${settled.rows} visible=${settled.rowVisible}`),
-        check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
-      ]
-    },
-  },
   /** The host contract table, entry by entry, in the page state each one lives in (D3). */
   contract: {
     script: 'inspect',
@@ -556,8 +380,6 @@ const SCENARIOS = {
   reasoningStream: reasoningStreamScenario({ check }),
   /** The waiting line's own words: the model's clause and the file a call works on (wait-line.cjs, D74). */
   waitLine: waitLineScenario({ check }),
-  /** The waiting line's second paint, chosen in the settings (wash-line.cjs, D40). */
-  washLine: washLineScenario({ check }),
   /** What a frame costs in a transcript that is already long (long-session.cjs, D40). */
   longSession: longSessionScenario({ check }),
   /** Every `!important` the skin writes is needed on the real page (packages/testing/importance.cjs, D9). */

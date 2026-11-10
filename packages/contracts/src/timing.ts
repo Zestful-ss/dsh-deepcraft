@@ -16,7 +16,7 @@
  */
 
 /** The end-to-end lane's scenarios; the lane checks its own names against these. */
-export const E2E_SCENARIOS = ['conversation', 'conversationStyles', 'conversationLegacyConsole', 'hostVisibility', 'narrow', 'tool', 'fileMerge', 'send', 'sendFull', 'scroll', 'readerScroll', 'doorPin', 'streamPace', 'motion', 'processSummary', 'reasoningStream', 'waitLine', 'washLine', 'longSession', 'statsPosition', 'statsOverlay', 'sidebarRail', 'rightbar', 'contract', 'importance', 'remoteSettings', 'customBrand', 'deepcraft', 'petdex', 'palette', 'paletteLegacyClaude', 'paletteLegacyDeepseek', 'dsBot', 'subagentModel', 'workspacePins', 'modelSlot', 'shots', 'desktopHeader'] as const
+export const E2E_SCENARIOS = ['conversation', 'conversationStyles', 'conversationLegacyConsole', 'hostVisibility', 'narrow', 'tool', 'fileMerge', 'scroll', 'readerScroll', 'doorPin', 'streamPace', 'motion', 'processSummary', 'reasoningStream', 'waitLine', 'longSession', 'statsPosition', 'statsOverlay', 'sidebarRail', 'rightbar', 'contract', 'importance', 'remoteSettings', 'customBrand', 'deepcraft', 'petdex', 'palette', 'paletteLegacyClaude', 'paletteLegacyDeepseek', 'dsBot', 'subagentModel', 'workspacePins', 'modelSlot', 'shots', 'desktopHeader'] as const
 
 /** One timing assumption, and how it is held. */
 interface HostTimingEntry {
@@ -46,19 +46,19 @@ export const HOST_TIMING: HostTimingEntry[] = [
   {
     id: 'host.streaming-marks',
     assumption: 'The markdown layer marks its container while an assistant answer streams and clears the mark when the turn settles.',
-    use: 'The reveal keys its fade on the mark, and the lane reads it as the streaming state of the contract test.',
+    use: 'The scroll owner keys its streaming state on the mark, and the lane reads it as the streaming state of the contract test.',
     checks: ['scenario:contract'],
   },
   {
     id: 'host.submission-echo',
     assumption: 'A submission mounts an optimistic row immediately and replaces it with the settled row: the echo is on the page for a few frames, not for the length of the turn.',
-    use: 'The send flight hides the real row while its stand-in flies and hands the reader\u2019s words over without a blank frame (D74).',
-    checks: ['scenario:send', 'scenario:contract'],
+    use: 'The message fold clamps the echo while it stands, so the reader\u2019s own message is folded the moment it mounts (D74).',
+    checks: ['scenario:contract'],
   },
   {
     id: 'host.think-phase',
     assumption: 'A thinking row carries `data-state="running"` while the model is thinking, and another value once that piece of work has settled.',
-    use: 'The fold and the reveal read the phase to know whether the row is still moving.',
+    use: 'The fold reads the phase to know whether the row is still moving.',
     checks: ['scenario:contract'],
   },
   {

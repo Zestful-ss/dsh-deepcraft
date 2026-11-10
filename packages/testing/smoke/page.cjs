@@ -63,11 +63,8 @@ const PROBE_PARTS = [
   'mascot.js',
   'petdex.js',
   'chat-follow.js',
-  'chat-caret.js',
   'chat-fold.js',
-  'chat-reveal.js',
   'chat-files.js',
-  'chat-send.js',
   'chat-wait.js',
   'dock-cards.js',
   'sidebar-layout.js',
@@ -209,12 +206,6 @@ function page(name, tier, cases) {
       '<div data-step-process><div data-step-process-body><div data-step-process-content style="height:400px">capped</div></div></div>' +
       '<div data-step-process data-group-expanded-mode="detailed"><div data-step-process-body><div data-step-process-content style="height:400px">expanded</div></div></div>'
     : ''
-  // The caret case drives both editable surfaces: the shared contenteditable
-  // composer input, and a plain textarea under a composer seat — the shape a
-  // question card's answer box has.
-  var caretArea = name === 'caret'
-    ? '<div data-composer-seat><textarea id="debugAnswer" rows="3">hello world</textarea></div>'
-    : ''
   // The right sidebar the dock-cards case drives: the column's own empty host,
   // one docked pane and a split of two columns, each with the host's own
   // divider line under it. The panes carry no styling of their own, so what the
@@ -343,9 +334,9 @@ function page(name, tier, cases) {
       '})();' +
       '</script>'
     : ''
-  // The composer as the host wires it: Enter in the editor submits, which the
-  // skin's send feature watches for its own origin, and the host answers the
-  // submission with its echo. The chat area's own case drives this.
+  // The composer as the host wires it: Enter in the editor submits, and the
+  // host answers the submission with its echo. The chat area's own case drives
+  // this.
   var chatSubmit = name === 'chat-follow'
     ? '<div data-echo-holder id="debugEchoHolder"></div>'
     : ''
@@ -361,37 +352,11 @@ function page(name, tier, cases) {
   var skinOwner = name === 'skin-center-handoff'
     ? '<script>document.documentElement.setAttribute("data-dsh-skin", "blue-fantasy")</script>'
     : ''
-  // The system's reduced-motion setting, driven by hand: the reveal case flips it
-  // while the animation choice is "follow the system", which is the one path that
-  // reaches the features through the resolved attribute alone (packages/client/src/core/prefs.ts,
-  // refreshMotionAttribute). Only that case gets the stub; every other case keeps
-  // the browser's real answer.
-  var motionStub = name === 'chat-reveal'
-    ? '<script>(function () {' +
-        'var listeners = [];' +
-        'var query = {' +
-          'media: "(prefers-reduced-motion: reduce)",' +
-          'matches: false,' +
-          'addEventListener: function (type, listener) { if (type === "change") listeners.push(listener) },' +
-          'removeEventListener: function (type, listener) {' +
-            'var at = listeners.indexOf(listener);' +
-            'if (at >= 0) listeners.splice(at, 1);' +
-          '},' +
-        '};' +
-        'var real = window.matchMedia.bind(window);' +
-        'window.matchMedia = function (text) { return String(text).indexOf("prefers-reduced-motion") >= 0 ? query : real(text) };' +
-        'window.__setSystemReduced = function (value) {' +
-          'query.matches = value;' +
-          'for (var i = 0; i < listeners.length; i++) listeners[i]({ matches: value, media: query.media });' +
-        '};' +
-      '})();</script>'
-    : ''
   return `<!doctype html>
 <html><head><meta charset="utf-8"><title>dsh-deepcraft smoke: ${name}</title></head>
 <body>
 ${boot}
 ${skinOwner}
-${motionStub}
 <div data-slot="root">
 <div data-slot="sidebar">
   <div class="_root_x_1">
@@ -410,9 +375,7 @@ ${chatArea}
 <div class="_composerStack_h_1">
 <div data-composer-card${name === 'automode-hero' ? ' data-phase="hero"' : ''}>
 ${heroRow}
-  ${name === 'chat-send' ? '<div data-input-scroll style="overflow:auto;max-height:120px">' : ''}
   <div data-composer-input contenteditable="true" id="editor">/comp</div>
-  ${name === 'chat-send' ? '</div>' : ''}
   <div class="_row_x_1">
     <div class="_tools_x_1">
       <button class="_add_x_1" aria-label="Add files or run commands" aria-haspopup="listbox" id="commands"><svg viewBox="0 0 16 16" width="14" height="14"><path d="M8 2v12M2 8h12"/></svg></button>
@@ -426,7 +389,6 @@ ${dock}
 </div>
 ${heroLayout}
 ${hostControls}
-${caretArea}
 ${chatSubmit}
 ${dockArea}
 ${foldArea}

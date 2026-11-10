@@ -104,12 +104,10 @@ body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-label {
   color: var(--dsw-alias-label-secondary);
 }
 
-/* What the words wear: the band the host's own rows sweep, or the colour wash
-   the reader can pick instead (Motion tab). Both paints live in
-   shared/motion.css, beside the presets and the periods they read, and are
-   written once for the line and for the settings page's preview cards; this
-   sheet only says that the copy carrying the words is the box the line paints
-   them onto. The reader's animation choice (D40) is the gate there as well. */
+/* What the words wear: the band the host's own rows sweep. The paint lives in
+   shared/motion.css, beside the presets and the periods it reads; this sheet
+   only says that the copy carrying the words is the box the line paints them
+   onto. The reader's animation choice (D40) is the gate there as well. */
 
 body[data-dsh-deepcraft] .dsh-deepcraft-chat-wait-clock {
   margin-left: 8px;

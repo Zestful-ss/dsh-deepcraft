@@ -67,9 +67,8 @@ export function createReasoningFold(onRows?: (rows: readonly Element[]) => void)
       const control = row.querySelector('[role="button"], button')
       if (!(control instanceof HTMLElement)) continue
       // The capture listener below sees this same click, so the press has to
-      // be declared: it is not the reader asking. The token reveal's own fold
-      // guard reads it in the same turn, or the automatic fold would silence
-      // the text that just started streaming for 400 ms.
+      // be declared: it is not the reader asking, and the feature's own replay
+      // guard (process-fold.ts) reads the declaration in the same turn.
       beginChatFoldToggle()
       try {
         control.click()

@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, CHAT_ANIMATIONS_OFF, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, MASCOT_PETDEX, ONGOING_INDICATOR_RING, PREF_DEFAULTS, PROVIDER_ID_MAX, QUICK_PROVIDERS_MAX, STATUS_MOTION_WASH, USERNAME_MAX } from '../constants'
+import { BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, CHAT_ANIMATIONS_OFF, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, MASCOT_PETDEX, PREF_DEFAULTS, PROVIDER_ID_MAX, QUICK_PROVIDERS_MAX, USERNAME_MAX } from '../constants'
 import { MODEL_OFFICIAL_GROUP } from '../features/model/copy-fallbacks'
 import { resolveMascot } from './prefs'
 import { clampPrefs as normalizePrefs } from '@dsh-deepcraft/contracts/prefs'
@@ -20,23 +20,13 @@ test('a choice outside its set reads as its default', () => {
   expect(normalizePrefs({ motion: 'reduced' }).motion).toBe('reduced')
   expect(normalizePrefs({ motion: 'sometimes' }).motion).toBe(PREF_DEFAULTS.motion)
   expect(normalizePrefs({ motion: 1 }).motion).toBe(PREF_DEFAULTS.motion)
-  expect(normalizePrefs({ statusMotion: STATUS_MOTION_WASH }).statusMotion).toBe(STATUS_MOTION_WASH)
-  expect(normalizePrefs({ statusMotion: 'glow' }).statusMotion).toBe(PREF_DEFAULTS.statusMotion)
   expect(normalizePrefs({ statusDetail: 'simple' }).statusDetail).toBe(false)
   expect(normalizePrefs({ statusDetail: 'precise' }).statusDetail).toBe(true)
   expect(normalizePrefs({ statusDetail: 'verbose' }).statusDetail).toBe(PREF_DEFAULTS.statusDetail)
-  expect(normalizePrefs({ ongoingIndicator: ONGOING_INDICATOR_RING }).ongoingIndicator).toBe(ONGOING_INDICATOR_RING)
-  expect(normalizePrefs({ ongoingIndicator: 'pulse' }).ongoingIndicator).toBe(PREF_DEFAULTS.ongoingIndicator)
   expect(normalizePrefs({ pageLook: 'flat' }).pageLook).toBe('flat')
   expect(normalizePrefs({ pageLook: 'invalid' }).pageLook).toBe(PREF_DEFAULTS.pageLook)
   expect(normalizePrefs({ homeLayout: 'float' }).homeLayout).toBe('float')
   expect(normalizePrefs({ homeLayout: 'dashboard' }).homeLayout).toBe(PREF_DEFAULTS.homeLayout)
-})
-
-test('the caret switch reads the retired explicit-moves tier as on', () => {
-  expect(normalizePrefs({ caretMotion: 'typing' }).caretMotion).toBe('typing')
-  expect(normalizePrefs({ caretMotion: 'off' }).caretMotion).toBe('off')
-  expect(normalizePrefs({ caretMotion: 'move' }).caretMotion).toBe(PREF_DEFAULTS.caretMotion)
 })
 
 test('the older brand and palette choices land on one independent palette (D80)', () => {

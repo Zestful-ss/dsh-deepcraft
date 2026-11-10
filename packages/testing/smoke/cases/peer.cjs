@@ -9,10 +9,7 @@ module.exports = {
     const peer = r.peer || {}
     const marks = peer.marks || {}
     check('a streaming chat area gets none of the ported chat effects',
-      marks.follow === false && marks.fold === false && marks.reveal === false, JSON.stringify(marks))
-    check('a focused composer gets no drawn caret',
-      marks.caretLayer === false && marks.caretMark === false, JSON.stringify(marks))
-    check('no character is registered as a step highlight', peer.highlights === 0, JSON.stringify(peer.highlights))
+      marks.follow === false && marks.fold === false, JSON.stringify(marks))
     check('the file change rows leave the host its two seat keys',
       peer.seats === 0, JSON.stringify(peer.seats))
     check('a running thinking row is left as the host rendered it', peer.thinkExpanded === false, JSON.stringify(peer.thinkExpanded))
@@ -21,24 +18,15 @@ module.exports = {
     const tabs = settings.tabs || {}
     const page = (tab) => tabs[tab] || {}
     // The rows the ported features own, each on the tab its manifest registers it
-    // on (D74, D72). The line's switch and the sent message's entrance carry
-    // switches of their own beside the chat-area switch, so all five sit on the
-    // Motion tab. headerBand carries a note of its own on a page that is not the
-    // Windows desktop, so its note says nothing about the peer plugin.
-    const ported = { motion: ['chatAnimations', 'chatWait', 'chatSend', 'caretMotion', 'chatReveal'] }
+    // on (D74, D72). headerBand carries a note of its own on a page that is not
+    // the Windows desktop, so its note says nothing about the peer plugin.
+    const ported = { motion: ['chatAnimations', 'chatWait'] }
     const answers = (tab) => page(tab).answers || {}
-    // The reader's own answer stays on show (the chat-area animations on, the
-    // line's switch on, the sent message's entrance on, the caret's own choice,
-    // the fade on) while the control refuses input and the accent line names the
-    // plugin that owns the behaviour. The fade ships off, so the probe turns it
-    // on before this walk: the row's answer is what that turn-on left, and the
-    // reveal's own absence below is the hand-over.
+    // The reader's own answer stays on show (both switches on) while the control
+    // refuses input and the accent line names the plugin that owns the behaviour.
     const showsOwnAnswer = {
       chatAnimations: (answer) => answer.on === true,
       chatWait: (answer) => answer.on === true,
-      chatSend: (answer) => answer.on === true,
-      caretMotion: (answer) => answer.option === 'typing',
-      chatReveal: (answer) => answer.option === 'on',
     }
     const refusingIn = (tab) => page(tab).refusing || []
     const managedIn = (tab) => page(tab).managed || []
@@ -54,7 +42,7 @@ module.exports = {
       JSON.stringify(Object.keys(ported).map(tab => `${tab} refusing=${refusingIn(tab).join(',')} managed=${managedIn(tab).join(',')}`)))
     check('each ported control keeps showing the reader\'s own answer',
       Object.keys(ported).every(tab => ported[tab].every(key => showsOwnAnswer[key](answers(tab)[key] || {}))),
-      JSON.stringify({ chatAnimations: answers('motion').chatAnimations, chatWait: answers('motion').chatWait, chatSend: answers('motion').chatSend, caretMotion: answers('motion').caretMotion, chatReveal: answers('motion').chatReveal }))
+      JSON.stringify({ chatAnimations: answers('motion').chatAnimations, chatWait: answers('motion').chatWait }))
     check('the accent line names dsh-chat-ux',
       (settings.texts || []).some(text => text.includes('dsh-chat-ux')), JSON.stringify(settings.texts))
     check('the rows the other plugin does not own keep answering',

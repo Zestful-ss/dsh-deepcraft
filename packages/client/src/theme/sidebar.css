@@ -407,17 +407,13 @@ body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="session-row"] [data-dsh-deep
   box-sizing: border-box;
 }
 
-/* Session status ongoing indicator: the host's own spinner, repainted as the
-   mark the Motion tab picks. Its glyph is a `<g>` of two circles and is hidden
-   below, so the box itself is the whole paint. The idle seat's hollow circle
-   stays 6px, so the shipped look is a filled dot of the same size breathing in
-   place — filled against hollow is what reads a row as running, and the breath
-   is what tells it from a state the host paints filled and still. The other
-   look is the 10px ring the skin drew before the dot: a track with one lit head
-   turning through it. The settings page's two preview cards carry the same
-   looks on `.dsh-deepcraft-ongoing-mark`, which is why every rule below names both
-   boxes. */
-body[data-dsh-deepcraft] :is(svg[data-state="ongoing"], .dsh-deepcraft-ongoing-mark) {
+/* Session status ongoing indicator: the host's own spinner, repainted as a
+   breathing dot. Its glyph is a `<g>` of two circles and is hidden below, so
+   the box itself is the whole paint. The idle seat's hollow circle stays 6px,
+   so the look is a filled dot of the same size breathing in place — filled
+   against hollow is what reads a row as running, and the breath is what tells
+   it from a state the host paints filled and still. */
+body[data-dsh-deepcraft] svg[data-state="ongoing"] {
   width: 6px;
   height: 6px;
   box-sizing: border-box;
@@ -433,38 +429,14 @@ body[data-dsh-deepcraft] :is(svg[data-state="ongoing"], .dsh-deepcraft-ongoing-m
   color: transparent;
   fill: none;
 }
-/* The ring, under the reader's choice on <body> (core/prefs.ts) or under the
-   preview card's own `data-look`. The track is the theme's own, kept apart from
-   the head on top of it, which is what the rotation carries. */
-body[data-dsh-deepcraft] .dsh-deepcraft-ongoing-mark[data-look="ring"],
-body[data-dsh-deepcraft][data-dsh-deepcraft-ongoing-indicator="ring"] svg[data-state="ongoing"] {
-  width: 10px;
-  height: 10px;
-  border: 1.5px solid rgba(255, 255, 255, 0.18);
-  border-top-color: var(--dsw-alias-label-primary);
-  background: transparent;
-  animation: dsh-deepcraft-ongoing-spin var(--dsh-deepcraft-period-spin) linear infinite;
-  transform-origin: center center;
-}
-body[data-dsh-deepcraft]:not([data-ds-dark-theme]) .dsh-deepcraft-ongoing-mark[data-look="ring"],
-body[data-dsh-deepcraft]:not([data-ds-dark-theme])[data-dsh-deepcraft-ongoing-indicator="ring"] svg[data-state="ongoing"] {
-  border-color: rgba(20, 20, 19, 0.12);
-  border-top-color: var(--dsw-alias-label-secondary);
-}
-@keyframes dsh-deepcraft-ongoing-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
 body[data-dsh-deepcraft] svg[data-state="ongoing"] * {
   display: none;
 }
-/* The reader's animation choice (D40): Reduced holds both looks still — the lit
-   dot and the ring's lit head still read a row as running — so neither needs the
-   exception the ring carried while it was the only mark. The system's own
-   setting reaches this rule through the resolved attribute, and the host's
-   reduced-motion block reaches its spinner's `<g>` and arc, hidden above, and
-   never this box. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] :is(svg[data-state="ongoing"], .dsh-deepcraft-ongoing-mark) {
+/* The reader's animation choice (D40): a still dot still reads a row as
+   running. The system's own setting reaches this rule through the resolved
+   attribute, and the host's reduced-motion block reaches its spinner's `<g>`
+   and arc, hidden above, and never this box. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-motion="reduced"] svg[data-state="ongoing"] {
   animation: none;
 }
 

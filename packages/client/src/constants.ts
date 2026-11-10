@@ -79,13 +79,6 @@ export const ACCENT_ATTR = 'data-dsh-deepcraft-accent'
 /** The document attribute the resolved animation answer rides. */
 export const MOTION_ATTR = 'data-dsh-deepcraft-motion'
 
-/**
- * The waiting line's paint rides this attribute, and the stylesheets decide it
- * (features/chat-wait/chat-wait.css): the wording, the swap and the clock are
- * untouched by the choice.
- */
-export const STATUS_MOTION_ATTR = 'data-dsh-deepcraft-status-motion'
-
 /** The document attributes the choices below resolve onto; the values themselves are in the table (contracts/prefs.ts). */
 export const PALETTE_ATTR = 'data-dsh-deepcraft-palette'
 export const TYPEFACE_ATTR = 'data-dsh-deepcraft-typeface'
@@ -94,11 +87,6 @@ export const MASCOT_ATTR = 'data-dsh-deepcraft-mascot'
 export const MASCOT_PETDEX = 'petdex'
 export const SEARCH_STYLE_ATTR = 'data-dsh-deepcraft-search-style'
 export const SIDEBAR_LAYOUT_ATTR = 'data-dsh-deepcraft-sidebar-layout'
-/**
- * The mark a running conversation carries in the sidebar (theme/sidebar.css):
- * its presence and value pick the breathing light or the turning ring.
- */
-export const ONGOING_INDICATOR_ATTR = 'data-dsh-deepcraft-ongoing-indicator'
 export const STATS_POSITION_ATTR = 'data-dsh-deepcraft-stats-position'
 /** The conversation arrangement selected by the reader. */
 export const CHAT_STYLE_ATTR = 'data-dsh-deepcraft-chat-style'
@@ -130,46 +118,13 @@ export const FOLLOW_HOLD_ATTR = 'data-dsh-deepcraft-follow-hold'
  */
 export const READER_HOLD_ATTR = 'data-dsh-deepcraft-reader-hold'
 /**
- * Present while the ported token reveal is installed
- * (packages/client/src/features/chat-reveal/): its step rules hang off it,
- * and switching the feature off leaves the page with no trace of it.
- */
-export const CHAT_REVEAL_ATTR = 'data-dsh-deepcraft-chat-reveal'
-/**
- * The reveal's fade: how many alpha steps a character walks through, the
- * faintest of them, the prefix of each step's highlight name and the custom
- * property an element publishes its own colour to. The engine registers one
- * highlight per step; the build writes one `::highlight()` rule per step from
- * the same four values (scripts/feature-sheets.mjs).
- */
-export const CHAT_REVEAL_STEPS = 24
-/** The faintest step: a fifth faint, which still reads as text arriving in both themes. */
-export const CHAT_REVEAL_MIN_OPACITY = 0.2
-export const CHAT_REVEAL_HIGHLIGHT_PREFIX = 'dsh-deepcraft-tok-'
-export const CHAT_REVEAL_COLOR_VAR = '--dsh-deepcraft-run-color'
-/**
- * On the real message row while the send bubble's stand-in is flying
- * (packages/client/src/features/chat-send/): the stylesheet hides that row, keeping its layout
- * box so the stand-in can measure the destination from it every frame.
- */
-export const CHAT_FLYING_ATTR = 'data-dsh-deepcraft-send-flight'
-/**
- * On the row of a message just sent while it grows in place
- * (packages/client/src/features/chat-send/): the stylesheet hangs the entrance
- * animation off it, so that row animates once — a row rendered by a restored
- * session never carries the mark and never animates.
- */
-export const MESSAGE_ENTER_ATTR = 'data-dsh-deepcraft-message-enter'
-/**
  * On a user message the skin holds folded
  * (packages/client/src/features/chat-fold/message-fold.ts): the stylesheet
- * clamps the bubble to the fold's own cap and softens its bottom edge. The send
- * flight reads it too: a message the fold holds is not one to carry up whole.
+ * clamps the bubble to the fold's own cap and softens its bottom edge.
  */
 export const MESSAGE_FOLD_ATTR = 'data-dsh-deepcraft-message-fold'
 /**
- * On a node the skin owns purely for its own bookkeeping — the caret
- * motion's probe container and the caret it draws. The shared scheduler
+ * On a node the skin owns purely for its own bookkeeping. The shared scheduler
  * ignores mutations against such a node (D40), so measuring or redrawing
  * never wakes a pass that no feature needs.
  */
@@ -198,12 +153,6 @@ export const HOLDS_ATTR = 'data-dsh-deepcraft-holds'
  * natural height instead of being squeezed by flex (fold-motion.css).
  */
 export const CHAT_ROLLING_ATTR = 'data-dsh-deepcraft-rolling'
-/** On an editable surface once the caret motion has taken it over (packages/client/src/features/caret/). */
-export const CARET_ATTR = 'data-dsh-deepcraft-caret'
-export const CARET_LAYER_ATTR = 'data-dsh-deepcraft-caret-layer'
-export const CARET_VISIBLE_ATTR = 'data-dsh-deepcraft-caret-visible'
-/** On a parent lent the positioning context the drawn caret is placed against. */
-export const CARET_HOST_ATTR = 'data-dsh-deepcraft-caret-host'
 /**
  * Present while the ported automatic folding is installed
  * (packages/client/src/features/chat-fold/): the stylesheet's header-summary rules hang off it,

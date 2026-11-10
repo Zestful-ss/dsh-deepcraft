@@ -36,17 +36,13 @@
       foreignLine.textContent = 'Third-party status'
       words.parentElement.appendChild(foreignLine)
       // The paint one copy wears: the host's band (shared/sweep-band.ts) is a
-      // child the copy carries, drawn only under the sweep, and its two halves
-      // run one animation each; the wash rides the copy's pseudo-element.
+      // child the copy carries, and its two halves run one animation each.
       var paintOf = function (copy) {
         var band = copy.querySelector('.dsh-deepcraft-sweep-band')
-        if (band !== null && getComputedStyle(band).display !== 'none') {
-          var held = getComputedStyle(band)
-          var glyphs = getComputedStyle(band.firstElementChild)
-          return { name: held.animationName + ', ' + glyphs.animationName, state: held.animationPlayState }
-        }
-        var paint = getComputedStyle(copy, '::before')
-        return { name: paint.animationName, state: paint.animationPlayState }
+        if (band === null || getComputedStyle(band).display === 'none') return { name: 'none', state: 'none' }
+        var held = getComputedStyle(band)
+        var glyphs = getComputedStyle(band.firstElementChild)
+        return { name: held.animationName + ', ' + glyphs.animationName, state: held.animationPlayState }
       }
       var lineOf = function () {
         var line = row.querySelector('.dsh-deepcraft-chat-wait')
@@ -80,18 +76,13 @@
           copies: copies.length,
           phase: leaving !== null ? 'exit' : (entering !== null ? 'enter' : null),
           displayed: moving === undefined ? null : moving.textContent,
-          // The paint rides the copy showing the words — never the label, whose
+          // The band rides the copy showing the words — never the label, whose
           // box stands taller by the swap's travel — so the reading is taken
-          // off the last copy (the one arriving while a swap runs). Which paint
-          // that is comes from the Motion tab's choice, read here off the
-          // document as well so a name and a choice that disagree are caught:
-          // the band's two halves while the band is drawn, the wash's
-          // pseudo-element otherwise.
+          // off the last copy (the one arriving while a swap runs).
           sweep: copies.length > 0 ? paintOf(copies[copies.length - 1]).name : 'none',
-          // Whether that paint is running or held: the Reduced choice freezes
+          // Whether the band is running or held: the Reduced choice freezes
           // it, and a pressed animation left running would flicker.
           sweepState: copies.length > 0 ? paintOf(copies[copies.length - 1]).state : 'none',
-          statusMotion: document.body.getAttribute('data-dsh-deepcraft-status-motion'),
           sweepOnLabel: label.classList.contains('dsh-deepcraft-swap-shimmer'),
           filter: movingStyle === null ? 'none' : movingStyle.filter,
           opacity: movingStyle === null ? '1' : movingStyle.opacity,
@@ -238,16 +229,6 @@
       r.wait.reducedStill = { first: stillFrames[0], second: stillFrames[stillFrames.length - 1] }
       window.__pushForm({ motion: 'system' })
       await probe.settle()
-      // The Motion tab's second paint: the words take the colour wash and its
-      // two loops instead of the band, and picking the band again hands them
-      // back. The choice is one document attribute, so a reading once the page
-      // has settled is the whole paint.
-      window.__pushForm({ statusMotion: 'wash' })
-      await probe.settle()
-      r.wait.wash = lineOf()
-      window.__pushForm({ statusMotion: 'sweep' })
-      await probe.settle()
-      r.wait.sweepAgain = lineOf()
       var previousWords = words
       words = document.createElement('span')
       words.setAttribute('data-shimmer', 'true')

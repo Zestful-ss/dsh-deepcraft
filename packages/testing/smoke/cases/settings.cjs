@@ -21,7 +21,7 @@ module.exports = {
       composer: ['composerScope', 'modelPicker', 'modelDescriptions', 'quickProviders', 'subagentModelPicker', 'peakrate', 'permissionsControl', 'subagentModelChoice'],
       sidebar: ['collapseFooter', 'sidebarSearch', 'searchStyle', 'workspaceView', 'dockCards', 'sidebarLayout'],
       conversation: ['turnNav', 'statsPosition', 'viewTabs', 'headerBand'],
-      motion: ['motion', 'chatAnimations', 'chatWait', 'statusDetail', 'statusMotion', 'caretMotion', 'ongoingIndicator', 'chatReveal', 'chatSend', 'messageEnter'],
+      motion: ['motion', 'chatAnimations', 'chatWait', 'statusDetail'],
     }
     // Greyed by the page itself rather than by a preference: the title-bar
     // band waits for the Windows desktop window.
@@ -69,72 +69,6 @@ module.exports = {
     check('the link\'s mark is the inlined asset, painted as a mask in the quiet ink',
       mark.mask.includes('data:image/svg+xml') && mark.size === '16px×16px',
       JSON.stringify(mark))
-    const paintCards = settings.paintCards || {}
-    const cards = paintCards.cards || []
-    const previews = paintCards.previews || {}
-    check('the Motion tab\'s row is two preview cards carrying no text of their own: each names itself for the reader, the stored choice alone is drawn as picked, and a card holds nothing but its words',
-      cards.length === 2 && cards.every((card) => typeof card.label === 'string' && card.label.length > 0 && card.sample === true && card.sampleHidden === true) &&
-        cards.every((card) => Array.isArray(card.words) && card.words.length === 2 && card.words[0] !== card.words[1]) &&
-        cards[0].active === true && cards[0].pressed === 'true' && cards[1].active === false && cards[1].pressed === 'false',
-      JSON.stringify(cards))
-    check('each card previews its own paint: the host\'s band crosses a copy of the words, the wash fills them with seven orbiting washes over the ramp',
-      previews.sweep?.band?.animation === BAND_ANIMATION && previews.sweep?.band?.matches === true && previews.sweep?.washes === 0 &&
-        previews.wash?.band === null && previews.wash?.animation === 'dsh-deepcraft-wash-hue, dsh-deepcraft-wash-drift' && previews.wash?.washes === 7 &&
-        previews.sweep?.words?.join() === previews.wash?.words?.join(),
-      JSON.stringify(previews))
-    const delayOf = (value) => Number.parseFloat(value || '0')
-    check('the card\'s two wordings take turns where one stands: both run the line\'s swap on the preset card\'s period, the second offset half a turn, and they share one centre in a box as wide as the longer of them',
-      ['sweep', 'wash'].every((kind) => {
-        const preview = previews[kind] || {}
-        const delays = preview.wordDelays || []
-        const centres = preview.wordCentres || []
-        return preview.wordAnimations?.join() === 'dsh-deepcraft-motion-word,dsh-deepcraft-motion-word' &&
-          delays.length === 2 && delayOf(delays[0]) === 0 && delayOf(delays[1]) < 0 &&
-          Math.abs(delayOf(delays[1])) === 2 && centres[0] === centres[1] &&
-          preview.width === Math.max(...(preview.wordWidths || [0]))
-      }),
-      JSON.stringify(previews))
-    const caretPreview = settings.caretPreview || {}
-    const typingCaret = caretPreview.typing || {}
-    const standingCaret = caretPreview.standing || {}
-    const offCaret = caretPreview.off || {}
-    check('the caret row previews its two answers on one typed line: a character waiting for its turn is unseen while the typed ones stand, the caret stands where the last typed character ends, and it is lit for the whole time the line is being typed and blinks on the native cycle once the line stands whole',
-      typingCaret.typed === 'visible' && typingCaret.waiting === 'hidden' && typingCaret.x === 34 &&
-        typingCaret.animation === 'none' && standingCaret.animation === 'dsh-deepcraft-caret-blink',
-      JSON.stringify(caretPreview))
-    check('the on card\'s caret glides to each new place the line hands it and the off card\'s arrives there at once',
-      typingCaret.transition === '0.08s' && offCaret.animation === 'dsh-deepcraft-caret-blink' && offCaret.transition === '0s',
-      JSON.stringify(caretPreview))
-    const revealPreview = settings.revealPreview || {}
-    const fade = revealPreview.fade || {}
-    const waiting = revealPreview.waiting || {}
-    const plain = revealPreview.plain || {}
-    check('the new-text fade row previews its two answers: the fade card\'s character lands faint and settles over the reveal\'s own duration, the other stands solid as it arrives, and a character waiting for its turn is unseen',
-      fade.animation === 'dsh-deepcraft-reveal-piece' && Number.parseFloat(fade.duration) === 0.12 && fade.fill === 'both' &&
-        waiting.opacity === '0' && plain.animation === 'none' && plain.opacity === '1',
-      JSON.stringify(revealPreview))
-    const ongoing = settings.ongoingCards || {}
-    const ongoingCards = ongoing.cards || []
-    check('the ongoing-mark row is two cards carrying the pair a sidebar row leads with, the mark first and a title beside it: each card names its own mark, the stored choice alone is drawn as picked, and the sample takes no reading',
-      ongoingCards.length === 2 &&
-        ongoingCards.map((card) => card.look).join() === 'breathe,ring' &&
-        ongoingCards.every((card) => typeof card.label === 'string' && card.label.length > 0 &&
-          card.sample === true && typeof card.title === 'string' && card.title.length > 0) &&
-        ongoingCards[0].active === true && ongoingCards[0].pressed === 'true' &&
-        ongoingCards[1].active === false && ongoingCards[1].pressed === 'false',
-      JSON.stringify(ongoingCards))
-    const marks = settings.ongoingMarks || {}
-    check('each card wears its own mark: the breathing dot is the idle seat\'s filled 6px circle pulsing on the shared breath, the ring a wider ring with a drawn track whose lit head turns on its own period',
-      marks.breathe?.width === '6px' && marks.breathe?.border === '0px' &&
-        marks.breathe?.animation === 'dsh-deepcraft-pulse' && Number.parseFloat(marks.breathe?.duration) === 2.4 &&
-        marks.ring?.width === '10px' && parseFloat(marks.ring?.border) >= 1 &&
-        marks.ring?.animation === 'dsh-deepcraft-ongoing-spin' && Number.parseFloat(marks.ring?.duration) === 0.85,
-      JSON.stringify(marks))
-    const stored = settings.ongoingStored || {}
-    check('the reader\'s stored mark reaches the page and repaints the running row\'s own mark, live',
-      stored.ring?.attribute === 'ring' && stored.ring?.width === '10px' && stored.ring?.animation === 'dsh-deepcraft-ongoing-spin' &&
-        stored.breathe?.attribute === 'breathe' && stored.breathe?.width === '6px' && stored.breathe?.animation === 'dsh-deepcraft-pulse',
-      JSON.stringify(stored))
     commonChecks(r)
   },
   'dock-cards'(r) {

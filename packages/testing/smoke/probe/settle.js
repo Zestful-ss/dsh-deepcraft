@@ -19,7 +19,7 @@
     await document.fonts.ready
     // The idle count starts after frame work and finite animations settle.
     await probe.settle(250)
-    // A font arriving remeasures the caret and asks for another frame.
+    // A font arriving can ask for another frame.
     if (document.fonts.status === 'loading') {
       await document.fonts.ready
       await probe.settle(250)

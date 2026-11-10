@@ -100,9 +100,8 @@
           crabHit.dispatchEvent(new PointerEvent('pointerdown', Object.assign({ buttons: 1 }, crabPress)))
           crabHit.dispatchEvent(new PointerEvent('pointerup', Object.assign({ buttons: 0 }, crabPress)))
         }
-        // The press settles focus (and the caret motion's own frames with it),
-        // so the count starts once that is over: what is measured is the poke's
-        // animation running on the browser's engine.
+        // The press settles focus, so the count starts once that is over: what
+        // is measured is the poke's animation running on the browser's engine.
         pokeCrab()
         await sleep(300)
         r.mascot.poked = crab.getAttribute('data-animation')

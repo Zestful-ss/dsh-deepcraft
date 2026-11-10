@@ -316,9 +316,9 @@ edit; the build refuses a time or a curve written anywhere else.
 - The presets these tokens feed live in `packages/client/src/shared/motion.css`:
   a surface arriving or leaving, a menu growing out of its trigger, a plain
   fade, one half of a wording swap, the pulse a placeholder and the sidebar's
-  ongoing light share, and the two paints
-  the waiting line's words can wear (a highlight band and a colour wash). A
-  feature that needs its own effect reads the tokens and keeps its own
+  ongoing light share, and the band
+  the waiting line's words wear.
+  A feature that needs its own effect reads the tokens and keeps its own
   keyframes.
 
 The table below is generated from `packages/client/src/theme/tokens.json` by `npm run build`;
@@ -327,10 +327,8 @@ edit the JSON, not the table.
 <!-- generated:motion (packages/client/src/theme/tokens.json) -->
 | Token | Value | Use |
 |---|---|---|
-| `--dsh-deepcraft-duration-instant` | `80ms` | the composer caret following the insertion point |
 | `--dsh-deepcraft-duration-feedback` | `120ms` | a control answering hover, press or focus: its colour, background, border, shadow, or a small turn or slide of its own parts |
 | `--dsh-deepcraft-duration-reveal` | `120ms` | content entering the chat area: an opened row's body, and each streamed piece of the answer |
-| `--dsh-deepcraft-duration-enter` | `320ms` | one message the reader sends growing into its row, and the same growth on the Motion tab's card |
 | `--dsh-deepcraft-duration-surface` | `150ms` | a floating surface or a group of controls appearing: popover cards, menus, panels, the search dialog, a toast, a strip fading in |
 | `--dsh-deepcraft-duration-exit` | `120ms` | a surface leaving on the reader's dismissal: a menu or a dialog closing, the overtime badge leaving |
 | `--dsh-deepcraft-duration-open` | `250ms` | a surface growing out of its anchor: a menu out of its trigger, a full-window dialog out of the centre, a settings page sliding in, the overtime badge sliding onto its line |
@@ -342,7 +340,6 @@ edit the JSON, not the table.
 | `--dsh-deepcraft-duration-slide` | `240ms` | the segmented controls' sliding highlight, a sidebar icon's quarter turn, the wording box taking the width of the words arriving, and streamed content sliding up from the bottom edge |
 | `--dsh-deepcraft-duration-fade` | `300ms` | a slow cross-fade: the theme flip, the titlebar tabs' hover reveal, the reasoning knob's glow, a placeholder handing its place to what it stood for |
 | `--dsh-deepcraft-duration-bounce` | `350ms` | a switch's knob travelling across with its double bounce |
-| `--dsh-deepcraft-duration-flight` | `400ms` | the sent message flying from the composer to its row |
 | `--dsh-deepcraft-duration-step` | `500ms` | one step of the reasoning window's text rising two lines |
 | `--dsh-deepcraft-duration-pop` | `500ms` | something popping into place: the overtime badge's own pill |
 | `--dsh-deepcraft-duration-rise` | `500ms` | a line of the home greeting rising into place |
@@ -350,22 +347,13 @@ edit the JSON, not the table.
 | `--dsh-deepcraft-duration-reduced` | `0.01ms` | every skin animation and transition under the Reduced animation choice (D40) |
 | `--dsh-deepcraft-period-host-sweep` | `1500ms` | one pass of the highlight band across the waiting line's words and a running process group's header |
 | `--dsh-deepcraft-duration-host-sweep-delay` | `300ms` | how long the highlight band waits after its words appear before its first pass |
-| `--dsh-deepcraft-period-preview-swap` | `4000ms` | one turn of the settings page's waiting-line preview: one wording standing, leaving, and standing again |
-| `--dsh-deepcraft-period-preview-reveal` | `4000ms` | one turn of the settings page's new-text fade preview: the sample arriving character by character, then standing before the next wipe |
-| `--dsh-deepcraft-period-preview-caret` | `4000ms` | one turn of the settings page's caret preview: the sample line typed out, then standing whole before the next turn |
-| `--dsh-deepcraft-period-preview-enter` | `2600ms` | one turn of the Motion tab's message-entrance card: one message arriving, standing, and giving way to the next |
-| `--dsh-deepcraft-period-wash-hue` | `4000ms` | one turn of the hue rotation the waiting line's colour wash runs through |
-| `--dsh-deepcraft-period-wash-drift` | `5000ms` | one orbit of the colour washes around the waiting line's glyph box |
 | `--dsh-deepcraft-period-pulse` | `1600ms` | a placeholder breathing while its numbers are computed |
 | `--dsh-deepcraft-period-flash` | `1450ms` | one flash of the reasoning slider's top-rung matrix |
-| `--dsh-deepcraft-period-blink` | `1000ms` | one blink of the composer caret |
 | `--dsh-deepcraft-period-breathe` | `2400ms` | one breath of the sidebar's ongoing-conversation light |
-| `--dsh-deepcraft-period-spin` | `850ms` | one turn of the sidebar's ongoing-conversation ring |
 | `--dsh-deepcraft-period-landed` | `1400ms` | the mark on the turn the conversation navigator landed on |
 | `--dsh-deepcraft-period-hold` | `840ms` | how long the reasoning window's text stands between two steps |
 | `--dsh-deepcraft-ease-standard` | `ease` | feedback and surfaces: the default curve |
 | `--dsh-deepcraft-ease-out` | `ease-out` | something arriving and settling: a fold's door, content entering the chat area, the landing mark |
-| `--dsh-deepcraft-ease-enter` | `cubic-bezier(0.34, 1.3, 0.64, 1)` | a message the reader sends growing into its row: the slight overshoot as it takes its full size |
 | `--dsh-deepcraft-ease-in-out` | `ease-in-out` | something that leaves and returns, or swaps in place: wording swaps, pulses, flashes |
 | `--dsh-deepcraft-ease-glide` | `cubic-bezier(0.22, 0.61, 0.36, 1)` | travel along a track: the sliding highlight, the reasoning slider, the search dialog's entrance, the reasoning window's step, the wording box's width, the stream's slide |
 | `--dsh-deepcraft-ease-roll` | `cubic-bezier(0.4, 0, 0.2, 1)` | digits rolling over: the file rows' tail and the process group header's counts |
@@ -373,7 +361,7 @@ edit the JSON, not the table.
 | `--dsh-deepcraft-ease-settle` | `cubic-bezier(0.22, 1, 0.36, 1)` | a surface or a page settling into place out of its anchor: menus and dialogs opening and closing, a settings page sliding, the overtime badge sliding onto its line, the greeting's lines rising |
 | `--dsh-deepcraft-ease-host-sweep` | `steps(48, end)` | the band across the waiting line's words and a running process group's header |
 | `--dsh-deepcraft-distance-nudge` | `4px` | the short offset a surface rises from, and a small row's wording swap travels |
-| `--dsh-deepcraft-distance-travel` | `8px` | the waiting line's wording swap, a settings page's slide, the overtime badge's sideways slide, and both directions of the waiting line's loader dots: the lift off their floor and the reach along their own lines |
+| `--dsh-deepcraft-distance-travel` | `8px` | the waiting line's wording swap, a settings page's slide, and the overtime badge's sideways slide |
 | `--dsh-deepcraft-distance-rise` | `12px` | how far below its place a line of the home greeting starts, and the overtime badge's upward slide |
 | `--dsh-deepcraft-blur-soft` | `2px` | the blur words and badges pass through while they swap or pop in, and a placeholder passes through as it hands its place over |
 | `--dsh-deepcraft-blur-enter` | `3px` | the blur a settings page or a line of the home greeting passes through as it slides or rises in |
@@ -403,7 +391,6 @@ edit the JSON, not the table.
 | `--dsh-deepcraft-layer-picker` | `20` | a picker that hangs its card from inside the composer: the permission picker, whose card has to stand over the controls beside it |
 | `--dsh-deepcraft-layer-chrome` | `30` | the window's title row the skin draws into: the header band's title and actions, the titlebar's view tabs, over the host's own header |
 | `--dsh-deepcraft-layer-float` | `99999` | a floating card or menu over everything the host draws: the popover cards, the hero menu |
-| `--dsh-deepcraft-layer-takeover` | `2147483000` | a surface that covers the whole window: the account-hold page, the sent message's stand-in in flight |
 <!-- /generated:layers -->
 
 ## Text selection
@@ -733,21 +720,15 @@ the turn's clock 8px later in the caption at 13px with tabular figures, and the
 radius, the warning label over 16% of itself). The line takes the row's own
 width and gives way inside it: the words are carried whole, so a clause the row
 has no room for is clipped where the room ends and the copy draws an ellipsis,
-with the clock and the badge keeping their places. The wording wears
-one of two paints, whichever the Motion tab's Waiting-line animation holds: a
-highlight band swept across it the way the host's own rows sweep — 1.5s a pass
-with the band resting the last third of it, in the host's shimmer tint — or a
-colour wash, the seven radial washes of `packages/client/src/shared/motion.css`
-over a grey ramp, orbiting the glyph box (5s an orbit while the hue turns a full
-circle over 4s), which is the effect transitions.dev ships as its Pro gradient
-text. A wording that changes runs both halves of the swap at once and is over in
+with the clock and the badge keeping their places. The wording wears the
+highlight band the host's own rows sweep — 1.5s a pass
+with the band resting the last third of it, in the host's shimmer tint
+(`packages/client/src/shared/motion.css`). A wording that changes runs both
+halves of the swap at once and is over in
 0.2s: the old one
 leaves upward with a 2px blur while the new one, parked one gap, enters from 4px
-below; under Reduced motion the band is left out, the wash holds its still frame,
-and the wording is written at once. The Motion tab's preview cards
-wear these same two paints (`packages/client/src/features/settings/settings.css`)
-and take turns between a state word and the host's own word for a wait, so a card
-shows the wording swap as well as the paint.
+below; under Reduced motion the band is left out
+and the wording is written at once.
 
 With the chat area's own follow on, the row is pinned while the conversation
 follows its tail, at the place that follow's glide comes to rest — the

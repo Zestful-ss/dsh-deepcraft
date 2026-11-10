@@ -78,10 +78,6 @@ module.exports = {
       Array.isArray(submitted.echo) && Array.isArray(submitted.row) &&
         submitted.echo.concat(submitted.row).filter((count) => count !== 0).length === 0,
       JSON.stringify({ echo: submitted.echo, row: submitted.row }))
-    check('the same message growing into its row does not slide either: both entrances stand the slide down',
-      Array.isArray(submitted.growWaiting) && Array.isArray(submitted.growPlaying) &&
-        submitted.growWaiting.concat(submitted.growPlaying).filter((count) => count !== 0).length === 0,
-      JSON.stringify({ waiting: submitted.growWaiting, playing: submitted.growPlaying }))
     // A growth wider than a slide carries is a burst, not a replaced column:
     // it is slid from the stretch a slide carries rather than jumped whole
     // (chat-follow.ts's startSlide).
@@ -102,31 +98,6 @@ module.exports = {
       paceFrames.length > 4 && paceFrames.every((gap) => Number.isFinite(gap) && gap <= pace.growth + bound('followSlideRowDriftPx')) &&
         (pace.settled ?? 1) <= AT_END_PX,
       JSON.stringify(pace))
-  },
-  caret(r) {
-    basicChecks(r)
-    const caret = r.caret || {}
-    const on = caret.on || {}
-    const off = caret.off || {}
-    const back = caret.back || {}
-    check('the focused composer surface gets a drawn caret and the native one gives way',
-      on.layer === true && on.visible === true && on.marked === true && on.nativeHidden === true,
-      JSON.stringify(on))
-    check('the drawn caret is placed with a transform',
-      typeof on.transform === 'string' && on.transform.indexOf('translate(') === 0, JSON.stringify(on.transform))
-    check('off takes the drawn caret and the mark away and gives the native caret back',
-      off.layer === false && off.marked === false && off.nativeHidden === false, JSON.stringify(off))
-    check('switching it back draws it again', back.layer === true && back.marked === true, JSON.stringify(back))
-    const plain = caret.plain || {}
-    check('a textarea under the composer seat is taken over the same way',
-      plain.layer === true && plain.marked === true && plain.visible === true && plain.nativeHidden === true,
-      JSON.stringify(plain))
-    const caretReduced = caret.reduced || {}
-    check('the animation choice stills the drawn caret without taking it away (D40)',
-      caretReduced.layer === true &&
-        String(caretReduced.transition).split(',').every(value => value.trim() === '0s') &&
-        caretReduced.animation === 'none',
-      JSON.stringify(caretReduced), 'timing')
   },
   'chat-fold'(r) {
     basicChecks(r)
@@ -257,31 +228,6 @@ module.exports = {
     check('switching it back brings the fold mark back',
       (fold.animationsBack || {}).mark === true, JSON.stringify(fold.animationsBack))
   },
-  'chat-reveal'(r) {
-    basicChecks(r)
-    const reveal = r.reveal || {}
-    const shipped = reveal.shipped || {}
-    const opening = reveal.opening || []
-    const grown = reveal.grown || []
-    const settled = reveal.settled || {}
-    const off = reveal.off || {}
-    const back = reveal.back || {}
-    const reduced = reveal.reduced || {}
-    check('the fade ships off: a streaming container gets no step highlights and no mark until the choice is turned on',
-      shipped.total === 0 && shipped.mark === false, JSON.stringify(shipped))
-    check('characters arriving in a streaming container are registered as step highlights from the faintest step',
-      opening.some((frame) => frame.mark === true && frame.total > 0 && frame.steps > 0), JSON.stringify(opening.slice(0, 4)))
-    check('more characters arriving join them', grown.some((frame) => frame.total > 0 && frame.steps >= 1), JSON.stringify(grown.slice(0, 4)))
-    check('once faded they leave the registry', settled.total === 0, JSON.stringify(settled))
-    check('the preference withdraws the engine whole, and switching it back installs it again',
-      off.total === 0 && off.mark === false && back.mark === true, JSON.stringify({ off: off, back: back }))
-    check('the animation choice reaches it too: Reduced withdraws the engine, not the system query (D40)',
-      reduced.total === 0 && reduced.mark === false, JSON.stringify(reduced))
-    const flip = reveal.systemFlip || {}
-    check('the system setting flipping under "follow the system" takes the running engine with it, and brings it back',
-      (flip.reduced || {}).total === 0 && (flip.reduced || {}).mark === false && (flip.back || {}).mark === true,
-      JSON.stringify(flip))
-  },
   'chat-files'(r) {
     basicChecks(r)
     const files = r.files || {}
@@ -357,8 +303,8 @@ module.exports = {
     const peerOff = files.peerOff || {}
     check('the other plugin arriving mid-session takes the seat keys down',
       peerOn.seats === 0, JSON.stringify(peerOn))
-    check('it takes the ported fold and reveal marks down with them',
-      peerOn.revealBeforePeer === true && peerOn.foldMark === false && peerOn.revealMark === false, JSON.stringify(peerOn))
+    check('it takes the ported fold mark down with them',
+      peerOn.foldMark === false, JSON.stringify(peerOn))
     check('the other plugin leaving hands the seat keys back', peerOff.seats === 3, JSON.stringify(peerOff))
     check('leaving brings the fold mark back', peerOff.foldMark === true, JSON.stringify(peerOff))
   },
@@ -372,15 +318,11 @@ module.exports = {
       working.wordsMarked === true && working.foreignShown === true && wait.foreignAfter?.foreignShown === true,
       JSON.stringify({ working, after: wait.foreignAfter }))
     check('the line says what the turn is doing, sweeping, with the turn\'s clock in the host\'s units',
-      working.word === 'Deep diving' && working.sweep === BAND_ANIMATION && working.statusMotion === 'sweep' && /^1m [5-9]s$/.test(working.clock || ''),
+      working.word === 'Deep diving' && working.sweep === BAND_ANIMATION && /^1m [5-9]s$/.test(working.clock || ''),
       JSON.stringify(working))
     check('the band rides the copy holding the words, never the label (a first write and a reduced-motion one alike)',
       working.sweepOnLabel === false && wait.reduced?.sweepOnLabel === false,
       JSON.stringify({ working: working.sweepOnLabel, reduced: wait.reduced?.sweepOnLabel }))
-    check('the Motion tab\'s other paint takes the line\'s words over: the copy runs the wash and its two loops, and the band returns when it is picked again',
-      wait.wash?.statusMotion === 'wash' && wait.wash?.sweep === 'dsh-deepcraft-wash-hue, dsh-deepcraft-wash-drift' &&
-        wait.sweepAgain?.statusMotion === 'sweep' && wait.sweepAgain?.sweep === BAND_ANIMATION,
-      JSON.stringify({ wash: wait.wash, sweepAgain: wait.sweepAgain }))
     check('a model at work shows no overtime badge', working.badge === null, JSON.stringify(working))
     const silent = wait.silent || []
     const blurOf = (frame) => Number((/blur\(([\d.]+)px\)/.exec(frame.filter || '') || [])[1] || 0)
@@ -412,10 +354,14 @@ module.exports = {
     // one move and the direction it holds, not the sign of it.
     const travelled = boxes[boxes.length - 1].width - boxes[0].width
     const toward = travelled < 0 ? -1 : 1
+    // The sub-pixel slack a first layout reading carries: the box's own
+    // measure and the sizer it holds differ by a fraction of a pixel before the
+    // move starts, which is not a step the reader sees.
+    const pixelSlack = 0.05
     check('the box the swap runs in never reads as empty, holds its height, and moves the clock only where the words themselves changed',
       boxes.length > 4 &&
         boxes.every((box) => box.width > 0 && box.height === boxes[0].height) &&
-        boxes.every((box, at) => at === 0 || (toward * (box.width - boxes[at - 1].width) >= 0 && toward * (box.clockLeft - boxes[at - 1].clockLeft) >= 0)) &&
+        boxes.every((box, at) => at === 0 || (toward * (box.width - boxes[at - 1].width) >= -pixelSlack && toward * (box.clockLeft - boxes[at - 1].clockLeft) >= -pixelSlack)) &&
         boxes[boxes.length - 1].clockLeft - boxes[0].clockLeft === travelled,
       JSON.stringify({ first: boxes[0], last: boxes[boxes.length - 1], widths: boxes.map((box) => box.width), heights: boxes.map((box) => box.height), clockLefts: boxes.map((box) => box.clockLeft) }))
     // The width is travelled rather than written (shared/swapping-text.ts pins
@@ -508,48 +454,5 @@ module.exports = {
       check(`the waiting line returns when the replacement stops owning the words (${name})`,
         owner.line === true && owner.marked === true && owner.wordsMarked === true, JSON.stringify(owner))
     }
-  },
-  'chat-send'(r) {
-    basicChecks(r)
-    const send = r.send || {}
-    const flying = send.flying || {}
-    const landed = send.landed || {}
-    check('a submission finds the composer input', send.inputFound === true, JSON.stringify(send.inputFound))
-    check('a submission lifts a stand-in off the composer card',
-      flying.ghost === true && flying.clone === true, JSON.stringify(flying))
-    check('the real row is hidden while the stand-in flies',
-      flying.hidden === true && flying.visibility === 'hidden', JSON.stringify(flying))
-    check('the flight plays an animation', flying.animations > 0, JSON.stringify(flying.animations))
-    check('when the flight lands the stand-in is gone', landed.ghost === false, JSON.stringify(landed))
-    check('the row is visible again when the flight lands',
-      landed.hidden === false && landed.visibility === 'visible', JSON.stringify(landed))
-    // The plate the flight is drawn on (send-morph.ts): the bubble's own fill as
-    // the screen paints it, on the shape, from the first frame — with nothing
-    // light left over the destination once it gets there.
-    const plate = send.plate || {}
-    check('the stand-in is drawn in the destination bubble\'s own colour from the first frame',
-      plate.frames > 5 && plate.wrong === 0 && plate.light === 0, JSON.stringify(plate))
-    // The hand-over (send-flight.ts's land): with the echo taken away and no row
-    // mounted, the stand-in holds instead of fading into the page.
-    const hold = send.hold || {}
-    const handed = send.handed || {}
-    check('the stand-in holds while no row is on the page to land on',
-      hold.ghost === true && hold.opacity === 1, JSON.stringify(hold))
-    check('a row mounting later takes the hand-over',
-      handed.ghost === false && handed.hidden === false && handed.visibility === 'visible', JSON.stringify(handed))
-    const sendReduced = send.reduced || {}
-    check('the animation choice reaches it too: Reduced flies nothing and leaves the row visible (D40)',
-      sendReduced.ghost === false && sendReduced.hidden === false && sendReduced.visibility === 'visible',
-      JSON.stringify(sendReduced))
-    // The row's own entrance (send-grow.ts, the Motion tab's other card): the
-    // echo waits hidden, no stand-in goes up, and the row that takes the echo's
-    // place is marked with the growth the stylesheet hangs off it.
-    const grow = send.grow || {}
-    check('the other entrance flies nothing: the echo waits hidden and no stand-in goes up',
-      grow.waiting === true && grow.ghost === false, JSON.stringify(grow))
-    check('the row that takes the echo\'s place grows about its own bottom-right corner, and can be seen from the first frame',
-      grow.marked === true && grow.animation === 'dsh-deepcraft-enter-grow' && grow.duration !== '0s' && grow.visibility === 'visible' &&
-        grow.grownLeft > 2 && grow.grownLeft + grow.grownTop > 4 * (grow.grownRight + grow.grownBottom),
-      JSON.stringify(grow))
   },
 }

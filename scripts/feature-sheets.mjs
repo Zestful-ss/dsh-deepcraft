@@ -4,7 +4,6 @@
  * whose length the code reads too, so the count and the rules have one source
  * in packages/client/src/constants.ts.
  *
- *   reveal-steps  one ::highlight() rule per step of the reveal's fade (features/chat-reveal)
  *   heat-levels   one rule per level of the home heat grid's ramp (features/home)
  *
  * A manifest names one as `{ generated: '<name>', rank }` (FeatureStylesheet).
@@ -13,45 +12,11 @@
 
 /** The constants the generators read, by name; scripts/build.mjs picks them out of constants.ts. */
 export const FEATURE_SHEET_CONSTANTS = [
-  'CHAT_REVEAL_ATTR',
-  'CHAT_REVEAL_STEPS',
-  'CHAT_REVEAL_MIN_OPACITY',
-  'CHAT_REVEAL_HIGHLIGHT_PREFIX',
-  'CHAT_REVEAL_COLOR_VAR',
   'HOME_HEAT_RAMP',
 ]
 
 const SCOPE = 'body[data-dsh-deepcraft]'
 
-/**
- * The reveal's fading rules, one per step: step 0 is the faintest a character
- * ever is, the last step is its own colour, so the text reaches its final
- * colour exactly when its segment leaves the highlight registry.
- *
- * The fade is a change of the text's own alpha, never a swap of colours: every
- * step paints the character in the colour it will come to rest in (its own,
- * published per element to the colour variable by the engine) and walks the
- * alpha up to fully opaque. `::highlight()` accepts no `opacity`, so the alpha
- * rides on `color`: `color-mix(in srgb, C p%, transparent)` weights the
- * result's alpha by p and leaves the hue alone.
- *
- * Every rule sits under the streaming containers: the fade happens nowhere
- * else, and elements outside one are filtered out by their ancestor during
- * style matching. The two selectors per step cover the container's own text
- * and the text of any element under it.
- */
-function revealSteps(constants) {
-  const steps = constants.CHAT_REVEAL_STEPS
-  const floor = constants.CHAT_REVEAL_MIN_OPACITY
-  const scope = `${SCOPE}[${constants.CHAT_REVEAL_ATTR}] [data-streaming]`
-  const rules = []
-  for (let step = 0; step < steps; step += 1) {
-    const name = `${constants.CHAT_REVEAL_HIGHLIGHT_PREFIX}${step}`
-    const alpha = ((floor + (1 - floor) * step / (steps - 1)) * 100).toFixed(2)
-    rules.push(`${scope}::highlight(${name}),\n${scope} ::highlight(${name}) {\n  color: color-mix(in srgb, var(${constants.CHAT_REVEAL_COLOR_VAR}, currentColor) ${alpha}%, transparent);\n}\n`)
-  }
-  return rules.join('\n')
-}
 
 /**
  * The heat grid's levels: level n mixes the ramp's n-th share of the heat ink
@@ -62,7 +27,7 @@ function heatLevels(constants) {
   return constants.HOME_HEAT_RAMP.map((share, index) => `${SCOPE} .dsh-deepcraft-home-heat-cell[data-level="${index + 1}"] {\n  background: color-mix(in srgb, var(--dsh-deepcraft-heat-ink) ${share}%, transparent);\n}\n`).join('\n')
 }
 
-const GENERATORS = { 'reveal-steps': revealSteps, 'heat-levels': heatLevels }
+const GENERATORS = { 'heat-levels': heatLevels }
 
 /**
  * One generated feature stylesheet.

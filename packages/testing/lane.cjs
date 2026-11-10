@@ -19,22 +19,15 @@ const HOST = {
   turnProcess: 'button[data-turn-process]', // the host's own process control, which the skin leaves alone
   scroller: '[data-conversation-scroll]', // CONVERSATION_SCROLL_SELECTOR
   followingTail: '[data-chat-following-tail]', // FOLLOWING_TAIL_SELECTOR
-  echo: '[data-submission-echo]', // SUBMISSION_ECHO_SELECTOR
   running: '[data-chat-running]', // CHAT_RUNNING_SELECTOR
   accountTrigger: '[aria-haspopup="menu"][data-signed-out]', // ACCOUNT_TRIGGER_SELECTOR
 }
 
 /**
- * The skin's own marks (packages/client/src/constants.ts): the stand-in the composer leaves
- * behind for the send flight, and the attribute it puts on the real row while
- * that stand-in flies, which the flight stylesheet hides.
+ * The skin's own marks (packages/client/src/constants.ts): the attribute the
+ * scroll pin reads while a door rolls (FOLLOW_HOLD_ATTR).
  */
 const SKIN = {
-  sendGhost: '[data-dsh-deepcraft-send-ghost]', // CHAT_SEND_GHOST_ATTR
-  sendLink: '[data-dsh-deepcraft-send-link]', // CHAT_SEND_LINK_ATTR
-  flyingMark: 'data-dsh-deepcraft-send-flight', // CHAT_FLYING_ATTR
-  echoAttribute: 'data-submission-echo', // SUBMISSION_ECHO_SELECTOR without its brackets
-  // The other mark the pin reads while a door rolls (FOLLOW_HOLD_ATTR).
   hold: '[data-dsh-deepcraft-follow-hold]', // FOLLOW_HOLD_ATTR
 }
 

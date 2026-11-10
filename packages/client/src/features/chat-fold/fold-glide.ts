@@ -112,8 +112,8 @@ export function installChatFoldGlide() {
    *
    * A press this feature made itself is replayed as one (fold-toggle.ts): the
    * replay lands after the door, outside the press that declared it, and the
-   * reader-intent guards — the token reveal's among them — would otherwise
-   * read it as the reader's.
+   * reader-intent guard (process-fold.ts) would otherwise read it as the
+   * reader's.
    */
   const replay = (control: HTMLElement, own: boolean) => {
     glideShutting = false

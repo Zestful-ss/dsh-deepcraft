@@ -7,14 +7,12 @@ export default {
   pref: 'chatWait',
   yieldsTo: 'dsh-chat-ux',
   stylesheets: [{ file: 'chat-wait.css', rank: 175 }],
-  // The line has its own switch on the Motion tab, with the paint it wears as
-  // the option under it (settings-tab-motion.ts): the row says what the switch
-  // turns on and off, and the cards show the two paints.
+  // The line has its own switch on the Motion tab.
   settingsRows: [{
     tab: 'motion',
     rank: 15,
     pref: 'chatWait',
-    title: 'statusMotionTitle',
+    title: 'chatWaitTitle',
   }, {
     // The line's detail choice: on writes the specifics a moment carries, off
     // the bare states alone. It belongs to the switch above it.
@@ -23,13 +21,6 @@ export default {
     pref: 'statusDetail',
     parent: 'chatWait',
     title: 'statusDetailTitle',
-  }, {
-    // The option under the line's own switch: the two paints as preview cards.
-    tab: 'motion',
-    rank: 17,
-    pref: 'statusMotion',
-    control: 'status-paint',
-    stillWhenReduced: true,
   }],
   cases: ['chat-wait']
 } satisfies FeatureManifest
