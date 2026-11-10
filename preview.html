@@ -142,9 +142,14 @@
             </div>
           </div>
 
+          <div class="preview-seat" data-composer-seat>
           <div class="preview-composer-stack _composerStack_h_1">
             <div class="preview-composer _card_x_1" data-composer-card>
-              <div id="editor" contenteditable="true" role="textbox" aria-label="消息" class="preview-input" data-composer-input>随便问点什么…</div>
+              <div class="preview-input-scroll" data-input-scroll>
+                <div class="_grow_h_1 preview-input-grow">
+                  <div id="editor" contenteditable="true" role="textbox" aria-label="消息" class="preview-input" data-composer-input>随便问点什么…</div>
+                </div>
+              </div>
               <div class="preview-composer-row _row_x_1">
                 <div class="preview-tools _tools_x_1">
                   <button type="button" class="preview-icon-button _add_x_1" aria-label="添加文件或运行命令" aria-haspopup="listbox">+</button>
@@ -165,10 +170,10 @@
             <div class="preview-dock _dock_x_1">
               <span class="preview-stat" data-composer-stat="time">1 轮 2 步</span>
               <span class="preview-stat" data-composer-stat="usage">105 tok · 缓存命中 90%</span>
-              <span class="preview-meter" id="context-meter">
+              <button type="button" class="preview-meter" id="context-meter" aria-haspopup="dialog" aria-expanded="false" aria-label="上下文占用 84%">
                 <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5.5"></circle><circle cx="7" cy="7" r="5.5" stroke-dasharray="29 5.56"></circle></svg>
                 <span>84%</span>
-              </span>
+              </button>
             </div>
           </div>
         </div>

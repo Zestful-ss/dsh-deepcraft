@@ -302,13 +302,16 @@ button, select { font: inherit; color: inherit; }
 .preview-crumbs { font-size: 13px; font-weight: 600; }
 
 .preview-scroll {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-height: 0;
   overflow: auto;
   padding: 26px 32px 20px;
 }
 
-.preview-session { width: min(760px, 100%); margin: 0 auto; }
+.preview-session { flex: 1 0 auto; width: min(760px, 100%); margin: 0 auto; }
+.preview-seat { flex: none; width: 100%; }
 
 .preview-flow { display: flex; flex-direction: column; gap: 20px; }
 
@@ -371,6 +374,9 @@ button, select { font: inherit; color: inherit; }
 .preview-composer-stack {
   position: sticky;
   bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: min(760px, 100%);
   margin: 28px auto 0;
   padding: 0 0 6px;
@@ -440,7 +446,16 @@ button, select { font: inherit; color: inherit; }
   color: var(--preview-muted);
 }
 
-.preview-meter { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.preview-meter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
 .preview-meter svg { fill: none; stroke: currentColor; stroke-width: 1.5; }
 .preview-meter svg circle:last-child { stroke: var(--preview-accent); }
 
