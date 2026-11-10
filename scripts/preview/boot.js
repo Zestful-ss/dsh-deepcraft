@@ -69,7 +69,7 @@
     if (mounted || mountWaited >= 10000) {
       clearInterval(mountPoll)
       if (!mounted) {
-        mount.textContent = 'The settings section did not arrive. Check the diagnostics below.'
+        mount.textContent = '设置页没有到达，请查看下方诊断。'
         mount.setAttribute('data-preview-failed', '')
       }
     }
@@ -105,7 +105,7 @@
   }
   if (themeButton !== null) {
     var paintTheme = function () {
-      themeButton.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode'
+      themeButton.textContent = theme === 'dark' ? '浅色模式' : '深色模式'
       themeButton.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false')
     }
     paintTheme()
@@ -128,14 +128,14 @@
 
   function paintBuild() {
     var id = body.getAttribute('data-dsh-deepcraft')
-    if (buildNode !== null) buildNode.textContent = id === null ? 'no skin on the page' : 'build ' + id.slice(0, 8)
+    if (buildNode !== null) buildNode.textContent = id === null ? '页面上没有皮肤' : '构建 ' + id.slice(0, 8)
   }
 
   function paintErrors() {
     var errors = (window.__uncaught || []).concat(window.__errors || [])
     if (applyError !== null) errors.unshift(applyError)
     if (errorsNode !== null) {
-      errorsNode.textContent = errors.length === 0 ? 'no errors' : errors.length + (errors.length === 1 ? ' error' : ' errors')
+      errorsNode.textContent = errors.length === 0 ? '无报错' : errors.length + ' 个错误'
       errorsNode.toggleAttribute('data-preview-bad', errors.length !== 0)
     }
     if (diagnostics !== null) {

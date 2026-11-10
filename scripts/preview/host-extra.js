@@ -17,6 +17,9 @@
   var stored = null
   try { stored = JSON.parse(window.localStorage.getItem(PREFS_KEY) || 'null') } catch (error) { /* private mode */ }
   if (stored !== null && typeof stored === 'object') Object.assign(host.formValue, stored)
+  // The stand-in's own default name is the English fixture's; the preview reads
+  // Chinese until the reader writes a name of their own.
+  if (stored === null || stored.username === undefined) host.formValue.username = '预览用户'
 
   var formListeners = host.formListeners
   var extraListeners = []
@@ -41,6 +44,46 @@
       }))
     }
     return pageFetch.apply(window, arguments)
+  }
+
+  // The shell's language: the preview reads Chinese, so the skin's copy files
+  // answer with their `zh` lines and the host strings the skin reads are
+  // translated here. The stand-in's locale service exists only for a few smoke
+  // cases; this one is always present and always Chinese.
+  var hostText = {
+    'chat.deepDiving': '深度思考中',
+    'chat.turnNavigation.jump': '跳到第 {turn} 轮',
+    'chat.turnNavigation.turn': '第 {turn} 轮',
+    'duration.compactSeconds': '{seconds} 秒',
+    'duration.compactMinutes': '{minutes} 分 {seconds} 秒',
+    'duration.secondUnit': '秒',
+    'duration.minuteUnit': '分 ',
+    'duration.hourUnit': '小时 ',
+    'message.turnUsage.cacheHit': '缓存命中',
+    'stats.counts': '{turns} 轮 {steps} 步',
+    'stats.cacheHit': '缓存命中 {percent}%',
+  }
+  var permissionText = {
+    'preset.readOnly': '仅可查看',
+    'preset.workspaceWrite': '工作区内修改',
+    'preset.fullAccess': '完全权限',
+    'auto.label': '自动审查',
+  }
+  var localeService = {
+    getSnapshot: function () { return { active: 'zh' } },
+    subscribe: function () { return function () {} },
+    bind: function (namespace) {
+      var table = namespace === 'permission.access' ? permissionText : namespace === 'chat' ? hostText : {}
+      return function (key, params) {
+        var text = table[key] === undefined ? key : table[key]
+        if (params === undefined) return text
+        return text.replace(/\{(\w+)\}/g, function (match, name) { return String(params[name]) })
+      }
+    },
+  }
+  var baseGet = window.__ctx.get
+  window.__ctx.get = function (name) {
+    return name === 'locale' ? localeService : baseGet.call(window.__ctx, name)
   }
 
   // The form controller the settings binding writes through: every field is

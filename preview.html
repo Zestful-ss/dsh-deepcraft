@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DeepCraft preview</title>
+<title>DeepCraft 预览</title>
 <link rel="stylesheet" href="/preview/preview.css">
 <script>
   // The smoke stand-in reads its case and the fixtures before its own parts run.
@@ -20,26 +20,26 @@
 <header class="preview-toolbar" data-preview-chrome>
   <div class="preview-title">
     <span class="preview-mark" aria-hidden="true"></span>
-    <span>DeepCraft preview</span>
+    <span>DeepCraft 预览</span>
   </div>
-  <nav class="preview-scenes" aria-label="Scene">
-    <button type="button" data-scene-target="chat" aria-selected="true">Chat</button>
-    <button type="button" data-scene-target="settings" aria-selected="false">Settings</button>
+  <nav class="preview-scenes" aria-label="场景">
+    <button type="button" data-scene-target="chat" aria-selected="true">对话</button>
+    <button type="button" data-scene-target="settings" aria-selected="false">设置</button>
   </nav>
   <div class="preview-controls">
-    <label class="preview-field">Palette
+    <label class="preview-field">配色
       <select id="preview-palette">
-        <option value="ocean">Ocean</option>
-        <option value="ember">Ember</option>
-        <option value="forest">Forest</option>
-        <option value="host">Host</option>
+        <option value="ocean">深海蓝</option>
+        <option value="ember">暖橙</option>
+        <option value="forest">森林绿</option>
+        <option value="host">跟随宿主</option>
       </select>
     </label>
-    <button type="button" id="preview-theme">Light mode</button>
-    <button type="button" id="preview-reload">Reload</button>
+    <button type="button" id="preview-theme">浅色模式</button>
+    <button type="button" id="preview-reload">重新加载</button>
     <span id="preview-build" class="preview-build"></span>
     <details id="preview-diagnostics" class="preview-diagnostics">
-      <summary><span id="preview-errors">no errors</span></summary>
+      <summary><span id="preview-errors">无报错</span></summary>
       <ul id="preview-diagnostics-list"></ul>
     </details>
   </div>
@@ -58,35 +58,35 @@
                 <span class="_brandName_x_1 preview-brand-name" aria-hidden="true"></span>
               </span>
             </div>
-            <button type="button" class="_toggle_x_1 preview-icon-button" aria-label="Collapse sidebar">‹</button>
+            <button type="button" class="_toggle_x_1 preview-icon-button" aria-label="收起侧栏">‹</button>
           </div>
           <div class="_regionArea_x_1 preview-sidebar-region">
             <button type="button" class="_newSession_x_1 preview-new-session">
-              <span class="_newSessionLabelMask_x_1"><span class="_newSessionContent_x_1">New chat</span></span>
+              <span class="_newSessionLabelMask_x_1"><span class="_newSessionContent_x_1">新建对话</span></span>
               <span class="_newSessionShortcut_x_1">Ctrl N</span>
             </button>
             <div class="_sectionHeader_x_1 preview-section-header">
-              <span class="_sectionLabel_x_1">Today</span>
+              <span class="_sectionLabel_x_1">今天</span>
             </div>
             <div class="_treeBody_x_1 preview-tree" role="tree">
               <div class="_sessionRow_x_1 _selected_x_1 preview-session-row preview-session-row-on" role="treeitem" aria-selected="true">
                 <span class="_slot_x_1"><svg data-state="ongoing" viewBox="0 0 16 16" width="10" height="10" aria-hidden="true"><circle cx="8" cy="8" r="4"></circle></svg></span>
-                <span class="_title_x_1">A palette walk-through</span>
+                <span class="_title_x_1">配色一览</span>
               </div>
               <div class="_sessionRow_x_1 preview-session-row" role="treeitem">
                 <span class="_slot_x_1"></span>
-                <span class="_title_x_1">Composer invariants</span>
+                <span class="_title_x_1">输入区规范</span>
               </div>
               <div class="_sessionRow_x_1 preview-session-row" role="treeitem">
                 <span class="_slot_x_1"></span>
-                <span class="_title_x_1">Settings page review</span>
+                <span class="_title_x_1">设置页走查</span>
               </div>
             </div>
           </div>
           <div class="preview-foot _footArea_x_1">
             <div class="_footerActions_x_1 preview-footer-actions">
               <div data-slot="sidebar.footer.action">
-                <button type="button" id="plugin-action" class="preview-icon-button" aria-label="Cost meter" data-cordis-badge="3">
+                <button type="button" id="plugin-action" class="preview-icon-button" aria-label="用量" data-cordis-badge="3">
                   <span aria-hidden="true">◔</span>
                 </button>
               </div>
@@ -95,9 +95,9 @@
               <div data-slot="sidebar.settings">
                 <div class="_triggerRow_s_1 preview-trigger-row">
                   <div data-slot="settings.launcher">
-                    <button type="button" id="host-account" data-signed-out="false" aria-label="Account menu" aria-haspopup="menu" aria-expanded="false">Ada</button>
+                    <button type="button" id="host-account" data-signed-out="false" aria-label="账号菜单" aria-haspopup="menu" aria-expanded="false">预览用户</button>
                   </div>
-                  <button type="button" aria-haspopup="dialog" aria-label="Settings" class="preview-icon-button">⚙</button>
+                  <button type="button" aria-haspopup="dialog" aria-label="设置" class="preview-icon-button">⚙</button>
                 </div>
               </div>
             </div>
@@ -109,7 +109,7 @@
         <div class="preview-header _header_x_1" data-slot="conversation.header">
           <div class="_titleRow_x_1 preview-title-row">
             <div class="_titleCluster_x_1">
-              <span class="_crumbs_x_1 preview-crumbs">A palette walk-through</span>
+              <span class="_crumbs_x_1 preview-crumbs">配色一览</span>
             </div>
           </div>
         </div>
@@ -118,39 +118,39 @@
           <div data-conversation-session="smoke-session" class="preview-session">
             <div class="preview-flow" data-chat-flow>
               <div class="preview-row preview-row-user" data-chat-flow-kind="user" data-chat-turn="1">
-                <div class="preview-bubble">Walk me through the three palettes and where the settings page lives.</div>
+                <div class="preview-bubble">带我看看三套配色，以及设置页在哪里。</div>
               </div>
               <div class="preview-row preview-row-assistant" data-chat-flow-kind="assistant-step" data-chat-turn="1">
                 <div class="preview-assistant-name">DeepSeek</div>
                 <div class="preview-markdown" data-markdown-variant="default">
-                  <p>Ocean is the default palette; Ember and Forest repaint the same tokens. The skin's own page sits under <code>Settings → DeepCraft</code>.</p>
+                  <p>深海蓝是默认配色，暖橙与森林绿会重绘同一组 token。皮肤自己的设置页在 <code>设置 → DeepCraft</code>。</p>
                   <pre class="preview-code"><code>body[data-dsh-deepcraft-palette="ocean"] {
   --dsh-deepcraft-canvas: #0f1a24;
 }</code></pre>
-                  <p>Every row, switch and preview card on that page is rendered by the skin itself.</p>
+                  <p>设置页的每一行、开关和预览卡片都由皮肤自己渲染。</p>
                 </div>
               </div>
               <div class="preview-row preview-row-tool" data-chat-flow-kind="tool-call" data-chat-turn="1" data-chat-call-id="call-1">
                 <div class="preview-call _callRow_x_1">
                   <span class="preview-call-icon" aria-hidden="true">⌘</span>
-                  <span>Read <code>packages/client/src/features/settings/settings.css</code></span>
+                  <span>读取 <code>packages/client/src/features/settings/settings.css</code></span>
                 </div>
               </div>
               <div class="preview-running" data-chat-running>
-                <span><span data-shimmer>Deep diving</span></span>
+                <span><span data-shimmer>深度思考中</span></span>
               </div>
             </div>
           </div>
 
           <div class="preview-composer-stack _composerStack_h_1">
             <div class="preview-composer _card_x_1" data-composer-card>
-              <div id="editor" contenteditable="true" role="textbox" aria-label="Message" class="preview-input" data-composer-input>Ask anything…</div>
+              <div id="editor" contenteditable="true" role="textbox" aria-label="消息" class="preview-input" data-composer-input>随便问点什么…</div>
               <div class="preview-composer-row _row_x_1">
                 <div class="preview-tools _tools_x_1">
-                  <button type="button" class="preview-icon-button _add_x_1" aria-label="Add files or run commands" aria-haspopup="listbox">+</button>
+                  <button type="button" class="preview-icon-button _add_x_1" aria-label="添加文件或运行命令" aria-haspopup="listbox">+</button>
                   <div class="_modes_x_1 preview-modes">
                     <div data-slot="conversation.input.permission">
-                      <button type="button" class="preview-mode">Edit</button>
+                      <button type="button" class="preview-mode">编辑</button>
                     </div>
                   </div>
                   <div data-slot="conversation.input.model">
@@ -158,13 +158,13 @@
                   </div>
                 </div>
                 <div class="preview-trailing _trailing_x_1">
-                  <button type="button" id="send" class="preview-send _primary_x_1" aria-label="Send message">↑</button>
+                  <button type="button" id="send" class="preview-send _primary_x_1" aria-label="发送消息">↑</button>
                 </div>
               </div>
             </div>
             <div class="preview-dock _dock_x_1">
-              <span class="preview-stat" data-composer-stat="time">1 turns 2 steps</span>
-              <span class="preview-stat" data-composer-stat="usage">105 tok · cache hit 90%</span>
+              <span class="preview-stat" data-composer-stat="time">1 轮 2 步</span>
+              <span class="preview-stat" data-composer-stat="usage">105 tok · 缓存命中 90%</span>
               <span class="preview-meter" id="context-meter">
                 <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5.5"></circle><circle cx="7" cy="7" r="5.5" stroke-dasharray="29 5.56"></circle></svg>
                 <span>84%</span>
@@ -178,20 +178,19 @@
 
   <!-- The settings scene: the host dialog with the skin's own page mounted. -->
   <section class="preview-scene" data-scene="settings" hidden>
-    <div class="preview-settings-overlay _overlay_x_1" role="dialog" aria-modal="true" aria-label="Settings">
+    <div class="preview-settings-overlay _overlay_x_1" role="dialog" aria-modal="true" aria-label="设置">
       <div class="preview-settings-panel _panel_x_1">
-        <div class="preview-settings-rail _navList_x_1" role="tablist" aria-label="Settings sections">
+        <div class="preview-settings-rail _navList_x_1" role="tablist" aria-label="设置分区">
           <button type="button" aria-selected="true"><span class="_navIcon_x_1"></span>DeepCraft</button>
-          <button type="button" aria-selected="false"><span class="_navIcon_x_1"></span>General</button>
         </div>
         <div class="preview-settings-main">
           <div class="preview-settings-head">
-            <span>Settings</span>
-            <button type="button" class="preview-icon-button" aria-label="Close settings">×</button>
+            <span>设置</span>
+            <button type="button" class="preview-icon-button" aria-label="关闭设置">×</button>
           </div>
           <div class="preview-settings-scroll">
             <div id="preview-settings-mount">
-              <p class="preview-loading">Loading the settings page…</p>
+              <p class="preview-loading">正在加载设置页…</p>
             </div>
           </div>
         </div>
