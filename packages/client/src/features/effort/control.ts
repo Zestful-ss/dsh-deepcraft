@@ -3,7 +3,6 @@ import { MODEL_EFFORT_DEFAULT, MODEL_EFFORT_FASTER, MODEL_EFFORT_LABEL, MODEL_EF
 import { orderEffortIds } from './ladder'
 import { createEffortMatrix } from './matrix'
 import { buildElement, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
-import { inPagePixels } from '../../shared/page-zoom'
 import type { ModelCatalog } from '../model/catalog'
 import { copy } from './copy'
 
@@ -278,9 +277,8 @@ export function createEffortControl(opts: {
   /** Where the pointer sits along the track, in knob-travel units. */
   function pointerTravel(clientX: number) {
     const box = geometry()
-    // The distance the pointer covers, in the pixels the travel is written in;
-    // the knob's own size already is (shared/page-zoom.ts).
-    const raw = inPagePixels(clientX - track.getBoundingClientRect().left) - box.size / 2
+    // The distance the pointer covers, against the knob's own size.
+    const raw = clientX - track.getBoundingClientRect().left - box.size / 2
     return Math.max(0, Math.min(box.span, raw))
   }
 

@@ -57,8 +57,7 @@ interface SwapState {
   written: boolean
   /**
    * The sizer's width as the last layout took it, null before its first. A
-   * resize observer answers in the pixels a written width is read in, whatever
-   * the page's own scale (shared/page-zoom.ts).
+   * resize observer answers in the pixels a written width is read in.
    */
   sizerWidth: number | null
   /** The sizer's size subscription on the observation bus. */

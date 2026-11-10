@@ -10,7 +10,6 @@ import type manifest from './effort-picker.manifest'
 import type { ModelCatalog } from '../model/catalog'
 import { setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { POPOVER_CLOSE_DELAY, POPOVER_OPEN_DELAY, closeOtherPopovers, createHoverIntent, positionAnchoredPopover, pressKeepsPopoverOpen, registerPopover, removeStrayNodes, setMenuPopoverOpen, unregisterPopover } from '../../shared/popover'
-import { inPageBox } from '../../shared/page-zoom'
 import { EFFORT_ROW_SELECTOR, releaseEffortRoom, reserveEffortRoom } from './room'
 import { copy } from './copy'
 
@@ -228,7 +227,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     // getBoundingClientRect after the write would force a reflow for the same
     // numbers every pass. The box arrives in the pixels the style writes
     // below are read in, the same ones the trigger's size is given in.
-    const shifted = inPageBox(measured ?? (marginChanged ? modelBtn.getBoundingClientRect() : box))
+    const shifted = measured ?? (marginChanged ? modelBtn.getBoundingClientRect() : box)
     // A row too narrow for its controls leaves the model trigger's box outside
     // the card, and this trigger is not clipped by the card: pinned from that
     // box it would paint over whatever stands beside the composer, the sidebar

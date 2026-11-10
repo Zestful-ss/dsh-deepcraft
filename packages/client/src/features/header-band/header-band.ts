@@ -13,7 +13,6 @@ import { desktopBand } from '@dsh-deepcraft/engine/desktop-band'
 import { findRightbarToggle, findWindowsMenu, registerSlotEntry } from '@dsh-deepcraft/engine/host'
 import { createStamp, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { PAGE_LOOK_ATTR, PAGE_LOOK_FLOAT } from '../../constants'
-import { inPageBox, inPagePixels } from '../../shared/page-zoom'
 import type { FeatureUi } from '../../core/feature'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type manifest from './header-band.manifest'
@@ -203,7 +202,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
 
   function rect(element: Element | null) {
     if (element === null) return null
-    const box = inPageBox(element.getBoundingClientRect())
+    const box = element.getBoundingClientRect()
     return box.width === 0 && box.height === 0 ? null : box
   }
 
@@ -218,17 +217,15 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
 
   /**
    * The caption strip's own sizes, in the pixels the placement numbers are read
-   * in: the shell publishes them in the viewport's while every `left`, `top` and
-   * width this pass writes is read in the page's, which the reader's page zoom
-   * scales (shared/page-zoom.ts).
+   * in.
    */
   function pageBand(band: NonNullable<ReturnType<typeof desktopBand>>) {
-    return { ...band, height: inPagePixels(band.height), controls: { ...band.controls, size: inPagePixels(band.controls.size) } }
+    return { ...band, height: band.height, controls: { ...band.controls, size: band.controls.size } }
   }
 
   /** The window's width, in the pixels the placement numbers are read in. */
   function pageWidth() {
-    return inPagePixels(document.documentElement.clientWidth)
+    return document.documentElement.clientWidth
   }
 
   /** Write one placement number, and nothing when it is already the one there. */

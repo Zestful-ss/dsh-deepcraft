@@ -3,7 +3,6 @@ import { observeSize } from '@dsh-deepcraft/engine/bus'
 import { readPrefs } from '../../core/prefs'
 import { setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { POPOVER_CLOSE_DELAY, POPOVER_OPEN_DELAY, createHoverIntent, isProgrammaticPress, pressKeepsPopoverOpen, programmaticPress } from '../../shared/popover'
-import { inPageBox, pageViewport } from '../../shared/page-zoom'
 import { CONTEXT_PANEL_ALIGNED_ATTR, CONTEXT_PANEL_ATTR, contextPanel, contextTrigger, findContextMeter } from './stats-panel'
 import { copy } from './copy'
 
@@ -189,15 +188,13 @@ export function createContextStatsBinding() {
   function alignContextPanel(panel: HTMLElement) {
     const meter = findContextMeter()
     if (meter === null) return
-    // The meter's box and the window arrive in the pixels the panel's own
-    // laid-out width is given in (shared/page-zoom.ts).
-    const anchor = inPageBox(meter.getBoundingClientRect())
+    const anchor = meter.getBoundingClientRect()
     // The panel's own entrance scales it (the cards' 0.98), and a TRANSFORMED
     // rect is two percent narrower than the box that settles: read the
     // layout width, which is the one the panel ends up with.
     const width = panel.offsetWidth
     if (width === 0) return
-    const widest = pageViewport().width - width - CONTEXT_PANEL_MARGIN
+    const widest = window.innerWidth - width - CONTEXT_PANEL_MARGIN
     const left = Math.round(Math.min(Math.max(anchor.right - width, CONTEXT_PANEL_MARGIN), widest))
     panel.style.setProperty(CONTEXT_PANEL_LEFT, `${left}px`)
     panel.setAttribute(CONTEXT_PANEL_ALIGNED_ATTR, '')

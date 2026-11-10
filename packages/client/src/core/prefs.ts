@@ -1,4 +1,4 @@
-import { COMPOSER_ATTR, MASCOT_PETDEX, DOCK_LOOK_ATTR, DOCK_LOOK_CARD, DOCK_LOOK_FLUSH, FOOTER_ATTR, MASCOT_ATTR, MASCOT_BRAND, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, ONGOING_INDICATOR_ATTR, PAGE_ZOOM_ATTR, PAGE_ZOOM_SYSTEM, PAGE_LOOK_ATTR, PACKAGE_NAME, PALETTE_ATTR, SEARCH_STYLE_ATTR, SETTINGS_ENTRY_FALLBACK, SIDEBAR_LAYOUT_ATTR, STATS_POSITION_ATTR, STATUS_MOTION_ATTR, TYPEFACE_ATTR } from '../constants'
+import { COMPOSER_ATTR, MASCOT_PETDEX, DOCK_LOOK_ATTR, DOCK_LOOK_CARD, DOCK_LOOK_FLUSH, FOOTER_ATTR, MASCOT_ATTR, MASCOT_BRAND, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, ONGOING_INDICATOR_ATTR, PAGE_LOOK_ATTR, PACKAGE_NAME, PALETTE_ATTR, SEARCH_STYLE_ATTR, SETTINGS_ENTRY_FALLBACK, SIDEBAR_LAYOUT_ATTR, STATS_POSITION_ATTR, STATUS_MOTION_ATTR, TYPEFACE_ATTR } from '../constants'
 import type { PrefKey, Prefs } from '../constants'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import { clampPrefs } from '@dsh-deepcraft/contracts/prefs'
@@ -100,9 +100,6 @@ const MIRRORS = [
   { key: 'ongoingIndicator', attr: ONGOING_INDICATOR_ATTR, value: (prefs: Prefs) => prefs.ongoingIndicator },
   { key: 'statsPosition', attr: STATS_POSITION_ATTR, value: (prefs: Prefs) => prefs.statsPosition },
   { key: 'statusMotion', attr: STATUS_MOTION_ATTR, value: (prefs: Prefs) => prefs.statusMotion },
-  // Following the system writes no attribute at all: every zoom rule hangs off
-  // a factor, so the page keeps the size the system and the host give it.
-  { key: 'pageZoom', attr: PAGE_ZOOM_ATTR, value: (prefs: Prefs) => prefs.pageZoom === PAGE_ZOOM_SYSTEM ? false : prefs.pageZoom },
   { key: 'collapseFooter', attr: FOOTER_ATTR, value: (prefs: Prefs) => prefs.collapseFooter && !footerTakeoverRetired },
 ] as const satisfies readonly PrefMirror[]
 

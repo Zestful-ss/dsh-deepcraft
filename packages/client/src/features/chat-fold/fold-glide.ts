@@ -6,7 +6,6 @@ import { beginChatFoldToggle, endChatFoldToggle, isChatFoldToggle } from './fold
 import { CHAT_FLOW_SELECTOR, PROCESS_GROUP_SELECTOR, THINK_ROW_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { joinScrollOwner } from '@dsh-deepcraft/engine/scroll-owner'
 import { motionEase } from '../../shared/motion'
-import { inPageBox, inPagePixels } from '../../shared/page-zoom'
 
 /** Margin past the roll's own duration for the backstop that unlocks the click. */
 const FOLD_ROLL_BACKSTOP_MS = 200
@@ -148,7 +147,7 @@ export function installChatFoldGlide() {
    */
   const rollOpen = (target: HTMLElement, from: number) => {
     markChatFoldBusy()
-    const height = inPagePixels(target.getBoundingClientRect().height)
+    const height = target.getBoundingClientRect().height
     if (height <= from) return null
     const travel = Math.max(from, foldVisibleReach(target))
     const restore = foldBeginHeightClip(target)
@@ -189,7 +188,7 @@ export function installChatFoldGlide() {
    */
   const rollShut = (fold: { target: HTMLElement, floor: number, collapsed: () => boolean, control: HTMLElement, own: boolean, watch: FoldWatch }) => {
     markChatFoldBusy()
-    const height = inPagePixels(fold.target.getBoundingClientRect().height)
+    const height = fold.target.getBoundingClientRect().height
     // A backstop: if onfinish never arrives for any reason, the click must not stay locked.
     const release = window.setTimeout(() => {
       glideShutting = false
@@ -301,7 +300,7 @@ export function installChatFoldGlide() {
         control,
         groupBody,
         groupRoot,
-        collapsedHeight: groupRoot === null ? 0 : inPagePixels(groupRoot.getBoundingClientRect().height),
+        collapsedHeight: groupRoot === null ? 0 : groupRoot.getBoundingClientRect().height,
         watch: foldWatchReader(foldControlAtBottom(control)),
         takenAt: Date.now(),
       }
@@ -323,8 +322,8 @@ export function installChatFoldGlide() {
       // it on collapse, so that padding travels with the body rather than the floor.
       floor: groupRoot === null
         ? 0
-        : Math.max(0, inPageBox(groupRoot.getBoundingClientRect()).height
-          - inPageBox(body.getBoundingClientRect()).height
+        : Math.max(0, groupRoot.getBoundingClientRect().height
+          - body.getBoundingClientRect().height
           - Number.parseFloat(getComputedStyle(control).paddingBottom)),
       collapsed,
       control,

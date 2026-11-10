@@ -16,7 +16,7 @@ module.exports = {
     const settings = r.settings || {}
     check('the settings section registers with the settings dialog', settings.registered === true, JSON.stringify(settings.registered))
     const expected = {
-      general: ['username', 'pageZoom', 'autoPopover'],
+      general: ['username', 'autoPopover'],
       appearance: ['palette', 'brandAccent', 'typeface', 'pageLook', 'homeLayout', 'homeRipple', 'mascot', 'chatPet', 'mascotScope', 'brandName', 'brandMark', 'brandWordmark', 'brandInk'],
       composer: ['composerScope', 'modelPicker', 'modelDescriptions', 'quickProviders', 'subagentModelPicker', 'peakrate', 'permissionsControl', 'subagentModelChoice'],
       sidebar: ['collapseFooter', 'sidebarSearch', 'searchStyle', 'workspaceView', 'dockCards', 'sidebarLayout'],
@@ -60,15 +60,6 @@ module.exports = {
       !!hero.composer && JSON.stringify(hero.composer.disabled) === '[]' &&
         !!hero.conversation && JSON.stringify(hero.conversation.disabled) === '["statsPosition","headerBand"]',
       JSON.stringify(hero))
-    const pageZoom = settings.pageZoom || {}
-    const zoomed = pageZoom.zoomed || {}
-    const shrunk = pageZoom.shrunk || {}
-    const following = pageZoom.following || {}
-    check('page zoom reaches the document and the page is drawn at it above and below its own size; following the system writes neither',
-      zoomed.attr === '1.5' && zoomed.zoom === '1.5' &&
-        shrunk.attr === '0.8' && shrunk.zoom === '0.8' &&
-        following.attr === null && following.zoom === '1',
-      JSON.stringify(pageZoom))
     const link = settings.link || {}
     const mark = settings.mark || {}
     check('the heading carries the plugin\'s repository link, opening in a new tab with an accessible name',

@@ -3,7 +3,6 @@ import { cacheFirstMatch } from '@dsh-deepcraft/engine/host'
 import { createStamp } from '@dsh-deepcraft/engine/dom'
 import { VIEW_SWITCH_CLASS } from '../../shared/segment-control'
 import { createSlidingPill } from '../../shared/sliding-pill'
-import { inPageBox } from '../../shared/page-zoom'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './view-tabs.manifest'
@@ -111,8 +110,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
 
   function rect(el: Element | null | undefined) {
     if (el === null || el === undefined) return null
-    // In the pixels the strip's own shift is read in (shared/page-zoom.ts).
-    const box = inPageBox(el.getBoundingClientRect())
+    const box = el.getBoundingClientRect()
     if (box.width === 0 && box.height === 0) return null
     return box
   }

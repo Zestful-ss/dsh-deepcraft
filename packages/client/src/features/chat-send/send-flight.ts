@@ -10,7 +10,6 @@ import { snapshotComposer } from './send-snapshot'
 import { CHAT_FLOW_SELECTOR, COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, FLOW_KIND_ATTRIBUTE, SUBMISSION_ECHO_SELECTOR, USER_ROW_KIND } from '@dsh-deepcraft/contracts/dom'
 import { CHAT_USER_ROW_SELECTOR, userBubble } from '@dsh-deepcraft/engine/chat-dom'
 import { motionEase } from '../../shared/motion'
-import { inPageBox, pageViewport } from '../../shared/page-zoom'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureHandle } from '@dsh-deepcraft/engine/scheduler'
 import type { FeatureUi } from '../../core/feature'
@@ -403,12 +402,10 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     settle()
     const bubble = userBubble(echo)
     if (bubble === null) return
-    // Both ends of the flight, and the window they have to share, in the page's
-    // own pixels: that is the space the stand-in's styles are read in
-    // (shared/page-zoom.ts).
-    const box = inPageBox(bubble.getBoundingClientRect())
+    // Both ends of the flight, and the window they have to share.
+    const box = bubble.getBoundingClientRect()
     const card = draft.snapshot.box
-    const viewport = pageViewport()
+    const viewport = { width: window.innerWidth, height: window.innerHeight }
     const onSameScreen = sameScreen(card.left, box.left, viewport.width)
       && sameScreen(card.top, box.top, viewport.height)
     if (!onSameScreen) return
@@ -567,7 +564,7 @@ export function followTarget(value: Flight, snap = false) {
   const held = value.hidden === null ? null : userBubble(value.hidden)
   if (held !== null && bubble !== held) bubble = held
   if (bubble === null) return
-  let box = inPageBox(bubble.getBoundingClientRect())
+  let box = bubble.getBoundingClientRect()
   // The row the flight holds can leave the document while the stand-in still
   // flies (the echo becoming the real row), and a node off the document measures
   // a zero box. Holding still there leaves the stand-in hundreds of pixels off a
@@ -579,7 +576,7 @@ export function followTarget(value: Flight, snap = false) {
     const fresh = row === null ? null : userBubble(row)
     if (fresh === null || fresh === bubble) return
     bubble = fresh
-    box = inPageBox(bubble.getBoundingClientRect())
+    box = bubble.getBoundingClientRect()
     if (box.width === 0) return
   }
   if (bubble !== value.bubble) {

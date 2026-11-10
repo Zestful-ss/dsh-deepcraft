@@ -1,5 +1,4 @@
 import { buildElement, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
-import { inPageBox, pageViewport } from './page-zoom'
 
 /**
  * The skin's popovers: one card shell, one dwell and grace, one card on screen
@@ -41,13 +40,11 @@ export interface AnchorSpace {
 }
 
 /**
- * The trigger's box and the window's size in the page's own pixels: a bounding
- * rect is measured in the viewport's, while a card's laid-out size and every
- * `left`/`top` written for it are read in the page's, which the reader's page
- * zoom scales (shared/page-zoom.ts).
+ * The trigger's box and the window's size: a card's laid-out size and every
+ * `left`/`top` written for it are read in the same pixels.
  */
 export function anchorSpace(trigger: Element): AnchorSpace {
-  return { rect: inPageBox(trigger.getBoundingClientRect()), viewport: pageViewport() }
+  return { rect: trigger.getBoundingClientRect(), viewport: { width: window.innerWidth, height: window.innerHeight } }
 }
 
 /**

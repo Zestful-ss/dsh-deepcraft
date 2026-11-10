@@ -1,4 +1,3 @@
-import { inPageBox } from '../../shared/page-zoom'
 
 /**
  * Where a heat cell's tip pill stands.
@@ -48,16 +47,13 @@ export interface HeatTipPlacement {
  *
  * The pill's box is its used box plus the padding the stylesheet gives it, since
  * the `width` and `height` a computed style reports are the content box alone.
- * Those are in the pixels the page's own styles read, and a measured box is in
- * the viewport's, so the boxes are brought over before the two are compared
- * (shared/page-zoom.ts).
  */
 export function placeHeatTip(cell: HTMLElement, grid: HTMLElement): HeatTipPlacement {
   const pill = window.getComputedStyle(cell, '::after')
   const width = parseFloat(pill.width) + parseFloat(pill.paddingLeft) + parseFloat(pill.paddingRight)
   const height = parseFloat(pill.height) + parseFloat(pill.paddingTop) + parseFloat(pill.paddingBottom)
-  const gridBox = inPageBox(grid.getBoundingClientRect())
-  const cellBox = inPageBox(cell.getBoundingClientRect())
+  const gridBox = grid.getBoundingClientRect()
+  const cellBox = cell.getBoundingClientRect()
   const centre = cellBox.left + cellBox.width / 2
   // A pill whose box could not be read — no tip on this cell, or a page that
   // has not generated it — answers NaN here, and a comparison against NaN is

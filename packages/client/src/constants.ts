@@ -103,15 +103,6 @@ export const STATS_POSITION_ATTR = 'data-dsh-deepcraft-stats-position'
 /** The conversation arrangement selected by the reader. */
 export const CHAT_STYLE_ATTR = 'data-dsh-deepcraft-chat-style'
 /**
- * The page zoom in force, as the factor the stylesheet scales the page by
- * (theme/chrome.css). Absent while the page follows the system; the scale every
- * geometry that converts a measured box into the page's own pixels divides by
- * reads it back (shared/page-zoom.ts).
- */
-export const PAGE_ZOOM_ATTR = 'data-dsh-deepcraft-page-zoom'
-
-
-/**
  * Present while the ported chat-area follow is installed
  * (packages/client/src/features/chat-follow/). The rules hanging off it are that
  * feature's own: a capped process group's body scrolls vertically alone, so the

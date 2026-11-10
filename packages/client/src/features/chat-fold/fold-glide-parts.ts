@@ -3,7 +3,6 @@ import { CHAT_ROLLING_ATTR } from '../../constants'
 import { CONVERSATION_SCROLL_SELECTOR, DISCLOSURE_HEADER_SELECTOR, DISCLOSURE_ROW_SELECTOR, FOLLOW_THRESHOLD_PX, PROCESS_BODY_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { handBackFollow, readerMovedSince } from '@dsh-deepcraft/engine/scroll-owner'
 import { motionMs } from '../../shared/motion'
-import { inPagePixels } from '../../shared/page-zoom'
 
 /**
  * The measuring and bookkeeping half of the fold glide (fold-glide.ts): what
@@ -91,7 +90,7 @@ export function foldVisibleReach(element: Element) {
     if (style.overflowX === 'visible' && style.overflowY === 'visible') continue
     bottom = Math.min(bottom, ancestor.getBoundingClientRect().bottom)
   }
-  return inPagePixels(Math.max(0, Math.min(rect.height, bottom - rect.top)))
+  return Math.max(0, Math.min(rect.height, bottom - rect.top))
 }
 
 /**

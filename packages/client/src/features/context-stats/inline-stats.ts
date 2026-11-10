@@ -2,7 +2,6 @@ import { QUIET_ATTR } from '../../constants'
 import { buildElement, writeTextInPlace } from '@dsh-deepcraft/engine/dom'
 import { findComposerCard, findComposerStats } from '@dsh-deepcraft/engine/host'
 import { formatCompactTokens } from '../../shared/format'
-import { inPageBox, inPagePixels } from '../../shared/page-zoom'
 import { createStatsCount } from './stats-count'
 import { CACHE_HIT_STOPS, rampPosition, writeRamp } from './stats-ramp'
 import { sessionStatsCacheHit, sessionStatsGrouped, sessionStatsSpeed } from './stats-format'
@@ -311,12 +310,10 @@ export function createInlineStats(read: StatsValueReader, chatText: () => HostTe
    * the other the wider of the two does.
    */
   function neededWidth(shown: Line, width: number) {
-    // Both boxes and the width against them in the pixels the card's own width
-    // is given in (shared/page-zoom.ts).
-    const lineBox = inPageBox(shown.root.getBoundingClientRect())
+    const lineBox = shown.root.getBoundingClientRect()
     const hostMeter = meter()
     if (hostMeter === null) return width
-    const meterBox = inPageBox(hostMeter.getBoundingClientRect())
+    const meterBox = hostMeter.getBoundingClientRect()
     const beside = Math.abs(meterBox.top - lineBox.top) < lineBox.height
     return beside ? width + meterBox.right - lineBox.right : Math.max(width, meterBox.width)
   }
@@ -378,7 +375,7 @@ export function createInlineStats(read: StatsValueReader, chatText: () => HostTe
     writeLine(twin, at, chat, reading.stats, reading.usage)
     tightenMeter(at)
     shown.root.before(twin.root)
-    const needed = neededWidth(shown, inPagePixels(twin.root.getBoundingClientRect().width))
+    const needed = neededWidth(shown, twin.root.getBoundingClientRect().width)
     twin.root.remove()
     tightenMeter(level)
     return needed

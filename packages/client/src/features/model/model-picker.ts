@@ -8,7 +8,6 @@ import { createModelCatalog } from './catalog'
 import { byModelId, createModelRows } from './rows'
 import { buildElement, closestFrom, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import { POPOVER_MARGIN, POPOVER_OPEN_DELAY, closeOtherPopovers, createHoverIntent, positionAnchoredPopover, pressKeepsPopoverOpen, registerPopover, removeStrayNodes, setMenuPopoverOpen, unregisterPopover } from '../../shared/popover'
-import { pageViewport } from '../../shared/page-zoom'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureHandle } from '@dsh-deepcraft/engine/scheduler'
 import type { FeatureUi } from '../../core/feature'
@@ -414,9 +413,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       const w2 = modelSubPop.offsetWidth
       const h2 = modelSubPop.offsetHeight
       const h1 = modelPop.offsetHeight
-      // The window in the same pixels as the two cards' sizes and the
-      // position the first level just took (shared/page-zoom.ts).
-      const viewport = pageViewport()
+      // The window the first level has to fit in.
+      const viewport = { width: window.innerWidth, height: window.innerHeight }
       // Beside the first level; flip to its left when the viewport is tight.
       let x2 = pos.x + modelPop.offsetWidth + 2
       if (x2 + w2 > viewport.width - POPOVER_MARGIN) x2 = Math.max(POPOVER_MARGIN, pos.x - 4 - w2)

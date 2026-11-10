@@ -7,7 +7,6 @@ import type { TurnItem } from './turn-nav-host'
 import { CHAT_TURN_ATTRIBUTE, FOREGROUND_SELECTOR, PEER_SHEET_SELECTOR, TURN_RAIL_CURRENT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { buildElement, closestFrom } from '@dsh-deepcraft/engine/dom'
 import { POPOVER_CLOSE_DELAY, closeOtherPopovers, createHoverIntent, registerPopover, unregisterPopover } from '../../shared/popover'
-import { inPageBox } from '../../shared/page-zoom'
 import { easeScrollFor, holdReader, scrollPositionFor, writeScroll } from '@dsh-deepcraft/engine/scroll-owner'
 import { motionMs } from '../../shared/motion'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
@@ -312,8 +311,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const list = card.querySelector<HTMLElement>(':scope > .dsh-deepcraft-turn-nav-list')!
     const slot = rail.parentElement!
     if (card.parentElement !== slot) slot.appendChild(card)
-    const frame = inPageBox(slot.getBoundingClientRect())
-    const box = inPageBox(rail.getBoundingClientRect())
+    const frame = slot.getBoundingClientRect()
+    const box = rail.getBoundingClientRect()
     const cardStyle = getComputedStyle(card)
     const row = list.firstElementChild
     const rowInset = row === null ? 0 : parseFloat(getComputedStyle(row).paddingRight)

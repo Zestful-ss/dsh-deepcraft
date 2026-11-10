@@ -4,7 +4,6 @@ import { requestFrame } from '@dsh-deepcraft/engine/frame'
 import { readPrefs, subscribePrefs } from '../../core/prefs'
 import { caretClipToField, caretMeasurePlain, caretMeasureRich, noteFacesLoaded } from './caret-measure'
 import type { CaretBox, CaretReading } from './caret-measure'
-import { inPagePixels } from '../../shared/page-zoom'
 import { COMPOSER_INPUT_SELECTOR, COMPOSER_TEXTAREA_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
@@ -298,22 +297,20 @@ export function createCaretMotion(read: () => string) {
   const drawCaret = (layer: CaretLayer, box: CaretBox, hostRect: DOMRect | null) => {
     // Absolute positioning goes by the container's padding box and follows
     // its own scroll: the border comes off the difference and the scrolled
-    // distance goes back on. The measurement is in the viewport's pixels and
-    // the layer is placed in the page's own, which the reader's page zoom
-    // scales (shared/page-zoom.ts).
+    // distance goes back on.
     const rect = hostRect ?? layer.host.getBoundingClientRect()
     // Snapped to whole pixels. The native caret sits on the pixel grid, and a
     // box landing on a fraction gets antialiased into a grey fringe that reads
     // as a different caret. The cost is up to half a pixel, which is invisible.
-    const left = Math.round(inPagePixels(box.left - rect.left) - layer.host.clientLeft + layer.host.scrollLeft)
-    const top = Math.round(inPagePixels(box.top - rect.top) - layer.host.clientTop + layer.host.scrollTop)
+    const left = Math.round(box.left - rect.left - layer.host.clientLeft + layer.host.scrollLeft)
+    const top = Math.round(box.top - rect.top - layer.host.clientTop + layer.host.scrollTop)
 
     // The frame that lands without a transition has to arrive instantly; the
     // transition comes back on the next one.
     const fresh = !layer.visible
     if (fresh) layer.caret.style.transitionProperty = 'none'
     layer.caret.style.transform = 'translate(' + left + 'px, ' + top + 'px)'
-    layer.caret.style.height = inPagePixels(box.height) + 'px'
+    layer.caret.style.height = box.height + 'px'
     if (fresh) {
       if (cancelTransitionFrame !== null) cancelTransitionFrame()
       cancelTransitionFrame = requestFrame({

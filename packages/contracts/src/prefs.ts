@@ -139,19 +139,6 @@ export const AUTO_POPOVER_ACCOUNT = 'account'
 export const AUTO_POPOVER_ALL = 'all'
 export const AUTO_POPOVER_SCOPES = [AUTO_POPOVER_OFF, AUTO_POPOVER_ACCOUNT, AUTO_POPOVER_ALL] as const
 
-/**
- * How large the page is drawn: `system` leaves it at the size the system gives
- * it, and every other value scales the whole page by that factor (the stylesheet
- * writes it as a `zoom`, so the page lays out in a smaller space and every
- * control, line and picture grows with it).
- */
-export const PAGE_ZOOM_SYSTEM = 'system'
-export const PAGE_ZOOM_08 = '0.8'
-export const PAGE_ZOOM_1 = '1'
-export const PAGE_ZOOM_125 = '1.25'
-export const PAGE_ZOOM_15 = '1.5'
-export const PAGE_ZOOMS = [PAGE_ZOOM_SYSTEM, PAGE_ZOOM_08, PAGE_ZOOM_1, PAGE_ZOOM_125, PAGE_ZOOM_15] as const
-
 /** Longest accepted custom username. */
 export const USERNAME_MAX = 64
 /** Most quick-provider ids kept, and the longest id accepted. */
@@ -213,7 +200,6 @@ export const PREFS = {
    */
   quickProviders: { type: 'list', default: [], max: QUICK_PROVIDERS_MAX, entryMax: PROVIDER_ID_MAX, drop: [OFFICIAL_MODEL_GROUP] },
   username: { type: 'text', default: '', max: USERNAME_MAX },
-  pageZoom: { type: 'choice', values: PAGE_ZOOMS, default: PAGE_ZOOM_SYSTEM },
   pageLook: { type: 'choice', values: PAGE_LOOKS, default: PAGE_LOOK_FLOAT },
   homeLayout: { type: 'choice', values: HOME_LAYOUTS, default: HOME_LAYOUT_FLOAT },
   homeRipple: { type: 'boolean', default: false },
