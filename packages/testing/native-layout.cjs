@@ -28,26 +28,26 @@ const SEATS = [
   ['conversation', '[data-conversation-scroll]'],
 ]
 
-/** The computed shape that has to survive the sheet coming and going. */
-const SHAPE = [
-  'display', 'position', 'flexDirection', 'alignItems', 'justifyContent',
-  'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
-  'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
-  'rowGap', 'columnGap',
-  'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth',
-  'borderTopStyle', 'borderRightStyle', 'borderBottomStyle', 'borderLeftStyle',
-  'borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomLeftRadius', 'borderBottomRightRadius',
-]
-
 /** Read one seat's computed shape and box, in the page. */
 function readSeats(seats) {
+  // Kept inside the function: `page.evaluate` serialises this source, so a
+  // module constant beside it would not travel with it.
+  const shapeProperties = [
+    'display', 'position', 'flexDirection', 'alignItems', 'justifyContent',
+    'marginTop', 'marginRight', 'marginBottom', 'marginLeft',
+    'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft',
+    'rowGap', 'columnGap',
+    'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth',
+    'borderTopStyle', 'borderRightStyle', 'borderBottomStyle', 'borderLeftStyle',
+    'borderTopLeftRadius', 'borderTopRightRadius', 'borderBottomLeftRadius', 'borderBottomRightRadius',
+  ]
   return seats.map(([name, selector]) => {
     const element = document.querySelector(selector)
     if (element === null) return { name, missing: true }
     const style = getComputedStyle(element)
     const box = element.getBoundingClientRect()
     const shape = {}
-    for (const property of SHAPE) shape[property] = style[property]
+    for (const property of shapeProperties) shape[property] = style[property]
     return {
       name,
       shape,

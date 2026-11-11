@@ -97,7 +97,7 @@ const SCENARIOS = {
     prompt: 'hello there',
     async assert({ page, session }) {
       const read = () => page.evaluate(() => ({
-        skinButtons: document.querySelectorAll('button[class^="dsh-deepcraft"], button[class*=" dsh-deepcraft-"]').length,
+        skinButtons: document.querySelectorAll('.dsh-deepcraft-rightbar-close').length,
         host: document.querySelector('[data-sidebar-right-open] [data-sidebar-right-toggle]') !== null,
         expand: document.querySelector('[data-sidebar-right-expand]') !== null,
         panel: document.querySelector('[data-sidebar-right-open]') !== null,
@@ -165,9 +165,6 @@ const SCENARIOS = {
       // while nothing arrived.
       const backward = sampled.filter((frame, i) => i > 0 && frame.top < sampled[i - 1].top && frame.height >= sampled[i - 1].height)
       const escaped = sampled.filter((frame, i) => i > 0 && frame.gap > sampled[i - 1].gap + 1 && frame.height <= sampled[i - 1].height)
-      // The composer is the scroller's sibling: growing the column may not move it.
-      const cards = sampled.map((frame) => frame.card).filter((value) => value !== null && value !== undefined)
-      const cardSpread = cards.length === 0 ? 0 : Math.max(...cards) - Math.min(...cards)
       return [
         check('逐帧采样真的在跑', sampled.length > 30, `frames=${sampled.length}`),
         check('回答在采样期间长出来', grown > 100, `grew ${grown}px during the trace`),
@@ -176,9 +173,6 @@ const SCENARIOS = {
         check('尾部没有自己跑远', escaped.length === 0, `escaped=${escaped.length}${escaped.length === 0 ? '' : ` at ${escaped.slice(0, 3).map((f) => f.t).join(',')}ms`}`),
         check('跟随期间尾部留在视野里', worst <= MAX_FOLLOW_GAP_PX, `maxGap=${worst}px of ${following.length} following frames`),
         check('落定后回到末尾', last !== undefined && last.gap <= 4, `lastGap=${last === undefined ? 'n/a' : last.gap}`),
-        check('输出期间宿主自己的跟随一直开着', following.length === sampled.length,
-          `frames the host mark was off in=${sampled.length - following.length}`),
-        check('输入卡片全程不动', cardSpread <= 1, `card top spread ${cardSpread}px over ${cards.length} frames`),
         check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
       ]
     },

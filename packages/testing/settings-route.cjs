@@ -21,24 +21,46 @@ const SETTINGS_WAIT_MS = bound('settingsRouteDialogWaitMs')
 /**
  * Open the skin's settings page in the host's shell.
  *
+ * The page registers into the host's settings dialog, so the dialog has to be
+ * open first. The host offers two entries and which one exists depends on the
+ * shell: a settings button in the sidebar footer, or the settings row of the
+ * account menu (the desktop keeps it there). The direct shortcut opens the
+ * dialog itself on some shell versions; it is tried first and the entries are
+ * the fallback, exactly the path the skin's own Ctrl+, drive presses.
+ *
  * @param page - the Playwright page on the host.
  */
 async function openSkinSettings(page) {
-  await page.keyboard.press('Control+Alt+Comma')
-  // The shortcut opens the dialog itself on the current shell. On the older
-  // one it opens the account menu instead, and the dialog waits one entry in.
-  // The entry is dispatched rather than clicked: opening the dialog detaches
-  // the menu under the pointer, and a real click would lose that race.
   const settings = page.locator(SETTINGS_PAGE).first()
-  const direct = await settings.waitFor({ state: 'visible', timeout: 6000 }).then(() => true, () => false)
-  if (!direct) {
-    const entry = page.locator('[role="menu"] [role="menuitem"]').first()
-    if (await entry.count() > 0) {
-      await entry.dispatchEvent('click')
-      await page.waitForTimeout(800)
+  const visible = () => settings.isVisible().catch(() => false)
+  await page.keyboard.press('Control+Alt+Comma')
+  if (!await settings.waitFor({ state: 'visible', timeout: 3000 }).then(() => true, () => false)) {
+    // The footer's settings button opens the dialog directly where the host
+    // has one; the desktop keeps that entry inside the account menu instead.
+    const button = page.locator('[data-dsh-deepcraft-part~="settings-area"] button[aria-haspopup="dialog"]').first()
+    if (await button.count() > 0) {
+      await button.click()
+      await page.waitForTimeout(600)
     }
   }
-  await page.getByText('DeepCraft', { exact: true }).first().click({ force: true })
+  if (!await visible()) {
+    const trigger = page.locator('[aria-haspopup="menu"][data-signed-out]').first()
+    if (await trigger.count() > 0) {
+      await trigger.click()
+      await page.waitForTimeout(400)
+      // The settings row is the one the host marks with its keyboard shortcut;
+      // its label follows the interface language and is never read.
+      const row = page.locator('[role="menu"] [role="menuitem"][aria-keyshortcuts]').first()
+      if (await row.count() > 0) {
+        // Dispatched rather than clicked: opening the dialog detaches the menu
+        // under the pointer, and a real click would lose that race.
+        await row.dispatchEvent('click')
+        await page.waitForTimeout(800)
+      }
+    }
+  }
+  const entry = page.getByText('DeepCraft', { exact: true }).first()
+  await entry.click({ force: true })
   await settings.waitFor({ timeout: SETTINGS_WAIT_MS })
 }
 
