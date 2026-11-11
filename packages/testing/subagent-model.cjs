@@ -440,7 +440,8 @@ function subagentModelScenario({ check }) {
       // session's single pick is still its own.
       await page.setViewportSize({ width: 1280, height: 900 })
       await page.evaluate(() => { document.body.removeAttribute('data-ds-dark-theme') })
-      await page.click('button[data-dsh-deepcraft-part~="new-session"]')
+      // The host's own New session row; the skin no longer marks it (D81).
+      await page.locator('button[class*="_newSession"]').first().click()
       // The shell swaps the composer for the new-session page's own: typing
       // into the one it replaces lands in a node that is about to leave, and
       // the press then submits nothing.

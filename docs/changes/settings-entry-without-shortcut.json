@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 10,
+  "at": "2026-11-12",
+  "external": false,
+  "zh": "修复宿主账号菜单不再标记设置行快捷键时 Ctrl+, 打不开设置的问题：菜单里没有该标记时改按设置行进入。",
+  "en": "Fix Ctrl+, failing to open settings when the host's account menu no longer marks its settings row with the shortcut: the row is found by name when the mark is absent."
+}

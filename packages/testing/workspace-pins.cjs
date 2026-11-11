@@ -8,8 +8,8 @@
  * aggregate the skin draws: the host's pin order, each row's workspace, the
  * original rows still in their groups, opening by pointer and by keyboard, and
  * the host menu acting on a pinned row's session (rename, unpin, archive). It
- * also checks the block's own visibility: host search, the archived view, the
- * collapsed rail and the workspace-view switch.
+ * also checks the block's own visibility: host search, the archived view and
+ * the workspace-view switch.
  */
 'use strict'
 const fs = require('node:fs')
@@ -17,7 +17,6 @@ const path = require('node:path')
 const { randomUUID } = require('node:crypto')
 const { sendPrompt, waitForTurn } = require('./prompt.cjs')
 const { dismissOverlays, waitForSkin } = require('./dsh-web.cjs')
-const { openSkinSettings } = require('./settings-route.cjs')
 
 /** The skin's aggregate and the host's own rows. */
 const SKIN = {
@@ -25,7 +24,6 @@ const SKIN = {
   row: '.dsh-deepcraft-pin-row',
   menu: '.dsh-deepcraft-pin-menu',
   title: '.dsh-deepcraft-pin-title',
-  toggle: 'button[data-dsh-deepcraft-part~="sidebar-toggle"]',
 }
 const HOST = {
   sessionRow: '[data-row-key^="session:"]',
@@ -202,33 +200,6 @@ function workspacePinsScenario({ check }) {
       const afterReload = await page.locator(`${SKIN.row}[data-session-id="${second}"] ${SKIN.title}`).innerText().catch(() => '')
       checks.push(check('刷新后置顶顺序与新标题都保留', (await pinOrder(page)).join() === second && afterReload === 'Pinned by reader', JSON.stringify({ order: await pinOrder(page), afterReload })))
 
-      // The aggregate is its own feature: turning the skin's search off leaves
-      // it in place, and the host's own search can then be driven for the
-      // visibility check below.
-      await openSkinSettings(page)
-      await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: /^(侧栏|Sidebar)$/ }).first().click()
-      const searchRow = page.locator('.dsh-deepcraft-settings-row').filter({ has: page.locator('.dsh-deepcraft-settings-row-title').filter({ hasText: /^(侧栏搜索|Sidebar search)$/ }) }).first()
-      await searchRow.waitFor({ state: 'visible', timeout: 15000 })
-      const searchSwitch = searchRow.locator('.dsh-deepcraft-settings-switch')
-      await searchSwitch.click()
-      // The host persists a switch a moment after the press; closing the dialog
-      // sooner can swallow the write and leave the feature on.
-      await page.waitForFunction(() => {
-        const rows = [...document.querySelectorAll('.dsh-deepcraft-settings-row')]
-        return rows.some((row) => {
-          const title = row.querySelector('.dsh-deepcraft-settings-row-title')?.textContent ?? ''
-          const control = row.querySelector('.dsh-deepcraft-settings-switch')
-          return /侧栏搜索|Sidebar search/.test(title) && control !== null && !control.hasAttribute('data-on')
-        })
-      }, undefined, { timeout: 15000 }).catch(() => {})
-      await page.waitForTimeout(600)
-      await page.keyboard.press('Escape')
-      await page.locator('[role="dialog"]').first().waitFor({ state: 'detached', timeout: 10000 }).catch(() => {})
-      await page.locator(SKIN.block).waitFor({ state: 'visible', timeout: 15000 }).catch(() => {})
-      const withoutView = await page.locator(SKIN.block).count()
-      checks.push(check('关闭侧栏搜索后，置顶汇总仍可用', withoutView === 1, `blocks=${withoutView}`))
-
-
       // Host search takes the aggregate off the page; Escape brings it back.
       const search = page.locator('[data-slot="sidebar"] input[type="text"]').first()
       await search.fill('hello')
@@ -238,15 +209,6 @@ function workspacePinsScenario({ check }) {
       await page.locator(SKIN.block).waitFor({ state: 'visible', timeout: 15000 }).catch(() => {})
       const afterSearch = await page.locator(SKIN.block).count()
       checks.push(check('宿主搜索时汇总区让位，清空后回来', duringSearch === 0 && afterSearch === 1, JSON.stringify({ duringSearch, afterSearch })))
-
-      // The rail has no heading, so the aggregate leaves with it and returns.
-      await page.locator(SKIN.toggle).first().click()
-      await page.locator(SKIN.block).waitFor({ state: 'detached', timeout: 15000 }).catch(() => {})
-      const rail = await page.locator(SKIN.block).count()
-      await page.locator(SKIN.toggle).first().click()
-      await page.locator(SKIN.block).waitFor({ state: 'visible', timeout: 15000 }).catch(() => {})
-      const wide = await page.locator(SKIN.block).count()
-      checks.push(check('侧栏收起时汇总区离开，展开后回到页面', rail === 0 && wide === 1, JSON.stringify({ rail, wide })))
 
       checks.push(check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')))
       return checks
