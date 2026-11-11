@@ -510,7 +510,8 @@ function subagentModelScenario({ check }) {
         /未选择|none selected/i.test(zero.label) && /1/.test(atOne?.label ?? '') && /4/.test(atFour?.label ?? ''),
         JSON.stringify({ zero: zero.label, one: atOne?.label, four: atFour?.label })))
 
-      // The two menus stay independent: opening one folds the other.
+      // The host's own model menu and this card are independent: the host
+      // keeps its list open while this one opens beside it.
       await page.keyboard.press('Escape')
       await page.click('[data-slot="conversation.input.model"] button')
       await page.waitForSelector('[role="menu"]', { timeout: 5000 }).catch(() => {})
@@ -520,7 +521,7 @@ function subagentModelScenario({ check }) {
         model: document.querySelector(selectors.model) !== null,
         subagent: document.querySelector(selectors.card) !== null,
       }), { model: '[role="menu"]', card: `${CARD}[data-open="true"]` })
-      checks.push(check('打开子代理面板会收起宿主的模型菜单，两个入口都可打开', menus.subagent && !menus.model, JSON.stringify(menus)))
+      checks.push(check('宿主的模型菜单与子代理面板互不干扰，两个入口都可打开', menus.subagent && menus.model, JSON.stringify(menus)))
       await page.keyboard.press('Escape')
 
       // A reload keeps the count, and each session draws its own.
