@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.31.1] - 2026-11-11
 
-<h3 id="cn-unreleased">问题修复</h3>
+[中文](#cn-0.31.1) | [English](#en-0.31.1)
+
+<h3 id="cn-0.31.1">问题修复</h3>
 
 - 修复宿主账号菜单不再标记设置行快捷键时 Ctrl+, 打不开设置的问题：菜单里没有该标记时改按设置行进入。
 
-<h3 id="en-unreleased">Bug Fixes</h3>
+<h3 id="en-0.31.1">Bug Fixes</h3>
 
 - Fix Ctrl+, failing to open settings when the host's account menu no longer marks its settings row with the shortcut: the row is found by name when the mark is absent.
 
