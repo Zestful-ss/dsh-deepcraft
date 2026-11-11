@@ -213,7 +213,7 @@ function readCapsule(page) {
       parentDisplay: parent === null ? null : getComputedStyle(parent).display,
       gap: parent === null ? null : getComputedStyle(parent).gap,
     }
-  }, { capsule: '[data-dsh-deepcraft-model-capsule]', attr: 'data-dsh-deepcraft-model-capsule', trigger: TRIGGER, model: '.dsh-deepcraft-model-visual' })
+  }, { capsule: '[data-dsh-deepcraft-model-capsule]', attr: 'data-dsh-deepcraft-model-capsule', trigger: TRIGGER, model: '[data-dsh-deepcraft-model-capsule-part="model"]' })
 }
 
 /** Wait until the capsule carries `value`; the write follows the host's answer. */
@@ -512,15 +512,15 @@ function subagentModelScenario({ check }) {
 
       // The two menus stay independent: opening one folds the other.
       await page.keyboard.press('Escape')
-      await page.click('.dsh-deepcraft-model-visual')
-      await page.waitForSelector('.dsh-deepcraft-model-popover:not(.dsh-deepcraft-model-popover-sub)[data-open="true"]', { timeout: 5000 }).catch(() => {})
+      await page.click('[data-dsh-deepcraft-model-capsule-part="model"]')
+      await page.waitForSelector('[role="menu"]', { timeout: 5000 }).catch(() => {})
       await page.click(TRIGGER)
       await page.waitForSelector(`${CARD}[data-open="true"]`, { timeout: 5000 }).catch(() => {})
       const menus = await page.evaluate((selectors) => ({
         model: document.querySelector(selectors.model) !== null,
         subagent: document.querySelector(selectors.card) !== null,
-      }), { model: '.dsh-deepcraft-model-popover:not(.dsh-deepcraft-model-popover-sub)[data-open="true"]', card: `${CARD}[data-open="true"]` })
-      checks.push(check('打开子代理面板会收起主模型面板，两个入口都可打开', menus.subagent && !menus.model, JSON.stringify(menus)))
+      }), { model: '[role="menu"]', card: `${CARD}[data-open="true"]` })
+      checks.push(check('打开子代理面板会收起宿主的模型菜单，两个入口都可打开', menus.subagent && !menus.model, JSON.stringify(menus)))
       await page.keyboard.press('Escape')
 
       // A reload keeps the count, and each session draws its own.
