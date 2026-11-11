@@ -16,7 +16,7 @@
  */
 
 /** The end-to-end lane's scenarios; the lane checks its own names against these. */
-export const E2E_SCENARIOS = ['conversation', 'conversationStyles', 'conversationLegacyConsole', 'hostVisibility', 'narrow', 'tool', 'fileMerge', 'scroll', 'readerScroll', 'doorPin', 'streamPace', 'motion', 'processSummary', 'reasoningStream', 'waitLine', 'longSession', 'statsPosition', 'statsOverlay', 'sidebarRail', 'rightbar', 'contract', 'importance', 'remoteSettings', 'customBrand', 'deepcraft', 'petdex', 'palette', 'paletteLegacyClaude', 'paletteLegacyDeepseek', 'dsBot', 'subagentModel', 'workspacePins', 'modelSlot', 'shots', 'desktopHeader'] as const
+export const E2E_SCENARIOS = ['conversation', 'hostVisibility', 'tool', 'fileMerge', 'scroll', 'readerScroll', 'doorPin', 'streamPace', 'motion', 'processSummary', 'reasoningStream', 'waitLine', 'longSession', 'statsPosition', 'statsOverlay', 'sidebarRail', 'rightbar', 'contract', 'importance', 'remoteSettings', 'customBrand', 'deepcraft', 'petdex', 'palette', 'paletteLegacyClaude', 'paletteLegacyDeepseek', 'dsBot', 'subagentModel', 'workspacePins', 'shots', 'desktopHeader'] as const
 
 /** One timing assumption, and how it is held. */
 interface HostTimingEntry {
