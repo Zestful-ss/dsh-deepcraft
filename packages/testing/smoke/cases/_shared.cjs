@@ -1,8 +1,5 @@
 'use strict'
-const { MARKUP, SKIN_FACE, SKIN_HAT, same, check } = require('../shared.cjs')
-
-/** The host's highlight band, read as its window's animation and then its copy's (shared/motion.css). */
-const BAND_ANIMATION = 'dsh-deepcraft-sweep-window, dsh-deepcraft-sweep-glyphs'
+const { MARKUP, same, check } = require('../shared.cjs')
 
 /** WCAG contrast ratio between two colour readings: `rgb(r, g, b)` or `#rrggbb`. */
 function contrast(a, b) {
@@ -34,9 +31,6 @@ function basicChecks(r) {
 function commonChecks(r) {
   check('nothing the skin runs leaves an uncaught error or an unhandled rejection',
     Array.isArray(r.uncaught) && r.uncaught.length === 0, (r.uncaught || []).join(' | ').slice(0, 600))
-  check("the body's stats-position attribute follows the preference",
-    r.statsPositionAttr === r.statsPositionExpected,
-    JSON.stringify({ attribute: r.statsPositionAttr, expected: r.statsPositionExpected }))
   check("the host's solid hover chip keeps its label readable on its fill",
     r.chipInk !== null && r.chipFill !== null && contrast(r.chipInk, r.chipFill) >= 4.5,
     JSON.stringify({ ink: r.chipInk, fill: r.chipFill }))
@@ -44,18 +38,10 @@ function commonChecks(r) {
     r.topUpInk !== null && r.topUpFill !== null && r.topUpInk !== r.topUpFill &&
       contrast(r.topUpInk, r.topUpFill) >= 3,
     JSON.stringify({ ink: r.topUpInk, fill: r.topUpFill }))
-  check('the idle session seat draws the status circle through the slot outlet',
-    r.seatIdle !== null && r.seatIdle.content !== 'none' && r.seatIdle.width === '6px',
-    JSON.stringify(r.seatIdle))
-  check('a seat carrying the running status dot draws no circle',
-    r.seatRunning !== null && r.seatRunning.content === 'none' && r.seatRunning.svgs > 0,
-    JSON.stringify(r.seatRunning))
   check('scheduler idle once settled (0 passes in 1 s)', r.idlePasses === 0,
     `${r.idlePasses} passes${(r.idlePassTimes ?? []).length === 0 ? '' : ` at ${r.idlePassTimes.join('ms, ')}ms`}`, 'timing')
   check('a closed popover card claims no menu role for the host\'s keyboard arbitration',
     r.closedMenuCards === 0, `${r.closedMenuCards} closed cards carry role=menu`)
-  check('no Windows titlebar marker: no element carries data-dsh-titlebar-tabs',
-    r.titlebarTabs === false, JSON.stringify(r.titlebarTabs))
   check('teardown registered with the host', r.teardownRegistered)
   check("the sheet carries this package's own module-system tags, so no sibling's bookkeeping can take it away",
     r.sheetPlugin === 'dsh-deepcraft' && r.sheetPluginCss === 'dsh-deepcraft/client.css' && r.sheetClaimable === false,
@@ -71,10 +57,6 @@ function commonChecks(r) {
     r.leftNodes === 0 && r.leftMarkers === 0 && r.leftAttrs.length === 0 && !r.leftStylesheet,
     `nodes ${r.leftNodes}, markers ${r.leftMarkers}, attrs ${JSON.stringify(r.leftAttrs)}, stylesheet ${r.leftStylesheet}`)
   check('no pass runs after teardown', r.passesAfterTeardown === 0, `${r.passesAfterTeardown} passes`)
-  check("the host's own account row is handed back visible and clickable",
-    !r.hostRowPresent || (r.hostRowEnd !== null && r.hostRowEnd.visibility === 'visible' &&
-      r.hostRowEnd.pointerEvents === 'auto' && r.hostRowEnd.display !== 'none' && r.hostRowEnd.width > 0),
-    JSON.stringify(r.hostRowEnd))
 }
 
-module.exports = { MARKUP, SKIN_FACE, SKIN_HAT, BAND_ANIMATION, same, check, contrast, basicChecks, commonChecks }
+module.exports = { MARKUP, same, check, contrast, basicChecks, commonChecks }

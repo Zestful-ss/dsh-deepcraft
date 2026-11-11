@@ -17,8 +17,6 @@ import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
 export { PACKAGE_NAME }
 
 export const STYLE_ID = 'dsh-deepcraft-style'
-/** The surface sheets' own element, which stays while ds-bot's surface has the page (D74). */
-export const SURFACE_STYLE_ID = 'dsh-deepcraft-surface'
 
 /**
  * Settings identity.
@@ -40,8 +38,6 @@ export const SETTINGS_ENTRY_FALLBACK = 'ui-skin-deepcraft'
  * claim sweep and every sibling package's removal off it (D9).
  */
 export const STYLE_PLUGIN_CSS = `${PACKAGE_NAME}/client.css`
-/** The surface sheets' key in the same bookkeeping. */
-export const SURFACE_PLUGIN_CSS = `${PACKAGE_NAME}/surface.css`
 /**
  * The tag this package gives a sibling's untagged stylesheet so the host's
  * claim sweep cannot attribute it to this package (D9). It carries a slash,
@@ -82,41 +78,6 @@ export const TYPEFACE_ATTR = 'data-dsh-deepcraft-typeface'
 export const MASCOT_ATTR = 'data-dsh-deepcraft-mascot'
 /** The mascot "follow the theme" resolves to: the reader's one Petdex package, shared by both places. */
 export const MASCOT_PETDEX = 'petdex'
-export const SEARCH_STYLE_ATTR = 'data-dsh-deepcraft-search-style'
-export const STATS_POSITION_ATTR = 'data-dsh-deepcraft-stats-position'
-/**
- * Present while the ported chat-area follow is installed
- * (packages/client/src/features/chat-follow/). The rules hanging off it are that
- * feature's own: a capped process group's body scrolls vertically alone, so the
- * catch-up measures the same distance the host's own smooth scroll does; the
- * host's back-to-end button is placed over the composer; and the waiting line is
- * pinned above it (packages/client/src/features/chat-wait/chat-wait.css).
- * Switched off, the chat area is handed back untouched.
- */
-export const CHAT_FOLLOW_ATTR = 'data-dsh-deepcraft-chat-follow'
-/**
- * On the flow column while a door rolls
- * (packages/client/src/features/chat-follow/chat-follow.ts). A door's height
- * change reads to the host as a reader who left the tail, and it takes its own
- * data-chat-following-tail away (D3) — the gate the waiting line's pin waits
- * for (packages/client/src/features/chat-wait/chat-wait.css). This mark stands
- * for that gate until the fold hands the follow back.
- */
-export const FOLLOW_HOLD_ATTR = 'data-dsh-deepcraft-follow-hold'
-/**
- * On a container the reader has taken over with his own scrolling
- * (packages/client/src/shared/scroll-owner.ts), until he comes back to its end. The
- * waiting line's pin (packages/client/src/features/chat-wait/chat-wait.css) reads it: a
- * pin stands only while the skin's own follow is the one moving the position,
- * never over content the reader scrolled back to.
- */
-export const READER_HOLD_ATTR = 'data-dsh-deepcraft-reader-hold'
-/**
- * On a user message the skin holds folded
- * (packages/client/src/features/chat-fold/message-fold.ts): the stylesheet
- * clamps the bubble to the fold's own cap and softens its bottom edge.
- */
-export const MESSAGE_FOLD_ATTR = 'data-dsh-deepcraft-message-fold'
 /**
  * On a node the skin owns purely for its own bookkeeping. The shared scheduler
  * ignores mutations against such a node (D40), so measuring or redrawing
@@ -142,68 +103,16 @@ export const PART_ATTR = 'data-dsh-deepcraft-part'
  */
 export const HOLDS_ATTR = 'data-dsh-deepcraft-holds'
 /**
- * On the element the fold glide is pressing right now (packages/client/src/features/chat-fold/
- * fold-glide.ts): while it stands, the elements inside lay out at their
- * natural height instead of being squeezed by flex (fold-motion.css).
- */
-export const CHAT_ROLLING_ATTR = 'data-dsh-deepcraft-rolling'
-/**
- * Present while the ported automatic folding is installed
- * (packages/client/src/features/chat-fold/): the stylesheet's header-summary rules hang off it,
- * and switching the feature off hands the chat area back whole.
- */
-export const CHAT_FOLD_ATTR = 'data-dsh-deepcraft-chat-fold'
-/** Present while the skin takes over the sidebar footer (settings area + account row). */
-export const FOOTER_ATTR = 'data-dsh-deepcraft-footer-takeover'
-/**
- * Present while the context statistics are installed
- * (packages/client/src/features/context-stats/context-stats.ts). The host's two stat
- * dialogs are hidden only under it: their numbers are read into the
- * context popover instead, and switched off the feature hands them back.
- */
-export const SESSION_STATS_ATTR = 'data-dsh-deepcraft-session-stats'
-/**
- * Stamped on the host's own account menu card while it is open (Desktop
- * 0.1.7+). That card is the host's shared Menu portal and its class names
- * are hashed, so packages/client/src/features/account/surface.ts stamps this attribute and
- * features/account/account-footer.css repaints the card, its rows and its
- * separators with the skin's popover language.
- */
-export const ACCOUNT_MENU_ATTR = 'data-dsh-deepcraft-account-menu'
-/**
- * Set on <body> from the moment the account row is hovered or pressed until
- * its menu closes. The card's own marker needs the menu's rows to identify
- * the card, so it lands two or three frames after the host has already
- * painted the card; an entry animation keyed on it therefore replayed from
- * transparent over a card that was already visible. This one is in place
- * before the host mounts the card, so the animation runs from its first
- * frame.
- */
-export const ACCOUNT_ARMED_ATTR = 'data-dsh-deepcraft-account-armed'
-/**
- * Stamped on the host's account card by packages/client/src/features/account/surface.ts once
- * the card carries the skin's rows and the host has finished placing it.
- *
- * The host mounts the card with its own rows and places it from that
- * geometry; the skin's container lands a frame later and the card grows, and
- * the host re-places it a frame after that. Revealing on the mount frame
- * fades the card in at a height and a place it is about to leave — it appears
- * low and jumps up mid-fade — so features/account/account-footer.css holds it
- * inside the armed window until this marker lands, and the entry animation
- * hangs on this marker.
- */
-export const ACCOUNT_READY_ATTR = 'data-dsh-deepcraft-account-ready'
-/**
  * The handoff marker: stamped on `body` while this build is live AND able
- * to give the page back (D74). Its presence is a capability another
+ * to give the page back (D81). Its presence is a capability another
  * package can read without running anything: a skin that lists this theme
  * as one of its looks has to know the page can come back, and a build from
- * before D74 does not stamp it.
+ * before D81 does not stamp it.
  */
 export const HANDOFF_ATTR = 'data-dsh-deepcraft-handoff'
 /**
  * The document attribute the skin center stamps while a skin is painting
- * (D74). It is read at boot and watched afterwards: the value is the skin
+ * (D81). It is read at boot and watched afterwards: the value is the skin
  * id, and the presence means the page belongs to a skin.
  */
 export const SKIN_STAMP_ATTR = 'data-dsh-skin'
@@ -213,11 +122,6 @@ export const SKIN_STAMP_ATTR = 'data-dsh-skin'
  * scrollbar's room there, so switching tabs never shifts the layout.
  */
 export const SETTINGS_SCROLLER_ATTR = 'data-dsh-deepcraft-settings-scroller'
-/**
- * On a user message's bubble (features/chat-fold/message-fold.ts): the
- * bubble's speech shape rounds every corner but the tail's.
- */
-export const USER_BUBBLE_ATTR = 'data-dsh-deepcraft-user-bubble'
 
 /**
  * The host half's private routes, under this half's own names. The paths are
@@ -228,16 +132,12 @@ export {
   BRAND_MARK_PATH as BRAND_MARK_ROUTE,
   BRAND_PATH as BRAND_ROUTE,
   BRAND_WORDMARK_PATH as BRAND_WORDMARK_ROUTE,
-  HDSL_PATH as HDSL_ROUTE,
-  HDSL_SKIN_PATH as HDSL_SKIN_ROUTE,
   PETS_ENSURE_PATH as PETS_ENSURE_ROUTE,
   PETS_IMAGE_PATH as PETS_IMAGE_ROUTE,
   PETS_IMPORT_PATH as PETS_IMPORT_ROUTE,
   PETS_IMPORT_URL_PATH as PETS_IMPORT_URL_ROUTE,
   PETS_PATH as PETS_ROUTE,
   SESSION_DELETE_PATH as SESSION_DELETE_ROUTE,
-  SESSION_SEARCH_PATH as SESSION_SEARCH_ROUTE,
   SUBAGENT_MODELS_PATH as SUBAGENT_MODELS_ROUTE,
   USAGE_PATH as USAGE_ROUTE,
-  USERNAME_PATH as USERNAME_ROUTE,
 } from '@dsh-deepcraft/contracts/routes'

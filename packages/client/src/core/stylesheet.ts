@@ -22,14 +22,10 @@ export function parkForeignSheets() {
 }
 
 /**
- * Mount one of the skin's stylesheets, once per generation: the theme's own by
- * default, or the surface sheets under their own id (D74).
+ * Mount the skin's stylesheet, once per generation (D81).
  *
- * @param id - the `<style>` element's id.
- * @param text - the sheet.
- * @param pluginCss - the sheet's key in the client module system's bookkeeping.
  * @returns this generation's stop function.
  */
-export function mountStylesheet(id = STYLE_ID, text = STYLESHEET, pluginCss = STYLE_PLUGIN_CSS) {
-  return mountSheet({ id, text, packageName: PACKAGE_NAME, pluginCss })
+export function mountStylesheet() {
+  return mountSheet({ id: STYLE_ID, text: STYLESHEET, packageName: PACKAGE_NAME, pluginCss: STYLE_PLUGIN_CSS })
 }

@@ -1,13 +1,11 @@
 /**
- * What the tables are built from: the two attributes the marking pass writes,
- * and the anchors two of the host's own menus stand in. They are the skin's, so
- * they arrive with the install (packages/engine/src/parts.ts, D73).
+ * What the tables are built from: the two attributes the marking pass writes.
+ * They are the skin's, so they arrive with the install
+ * (packages/engine/src/parts.ts, D73).
  */
 export interface PartsTableVocabulary {
   /** The attribute a marked node carries: the part names it stands for, space-separated. */
   part: string
-  /** The anchors the skin's own menus stand in, which the menu parts are read under. */
-  regions: { account: string }
 }
 
 /**
@@ -16,21 +14,15 @@ export interface PartsTableVocabulary {
  *
  * The host hashes its class names (`_2H3hWW_root`, `_root_38jqx_3`), so a
  * stylesheet cannot match one whole, and a substring match takes whatever else
- * holds that fragment — `title` also names `titleRow` and `subtitle`, `row`
- * also names `grow` and `arrow`, `rail` also names `trailing`, and another
- * plugin's class name can hold it too. core/parts.ts walks these tables and
- * writes the part names onto the element, so every rule matches one attribute
- * whole.
- *
- * Each entry is one exact local name. A local name that means different things
- * in different places is read in the region it belongs to: the composer's
- * `row` and the sidebar's `title` are their own regions' names.
+ * holds the fragment — `title` also names `titleRow` and `subtitle`, `row`
+ * also names `grow` and `arrow`. core/parts.ts walks these tables and writes the
+ * part names onto the element, so every rule matches one attribute whole (D81).
  *
  * This file is data only, so the build reads it directly (scripts/css.mjs, the
  * part gate) and holds every part a stylesheet reads to the table here. A host
  * rename is one line in this file.
  */
-import { CONVERSATION_HEADER_SLOT_SELECTOR, CONVERSATION_SCROLL_SELECTOR, RIGHTBAR_COLUMN_SELECTOR, ROOT_SLOT_SELECTOR, SIDEBAR_SLOT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { CONVERSATION_SCROLL_SELECTOR, RIGHTBAR_COLUMN_SELECTOR, ROOT_SLOT_SELECTOR, SIDEBAR_SLOT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 
 /** Host CSS-module local name → the skin's part name. */
 export type PartTable = Record<string, string>
@@ -44,31 +36,16 @@ export const FRAME_PARTS: PartTable = {
 
 /** The sidebar, from its slot anchor down. */
 export const SIDEBAR_PARTS: PartTable = {
-  logoRow: 'logo-row',
   brand: 'brand-button',
   brandIdentity: 'brand-identity',
   brandMark: 'brand-mark',
   brandName: 'brand-name',
   railMark: 'rail-mark',
-  toggle: 'sidebar-toggle',
-  panelIcon: 'panel-icon',
-  newSession: 'new-session',
-  newSessionLabelMask: 'new-session-mask',
-  newSessionContent: 'new-session-content',
-  newSessionShortcut: 'new-session-shortcut',
-  separator: 'key-separator',
-  panelList: 'panel-list',
-  panelRow: 'panel-row',
-  panelGlyph: 'panel-glyph',
-  regionArea: 'region-area',
   footArea: 'foot-area',
   footerActions: 'footer-actions',
-  footerButtons: 'footer-buttons',
   settingsArea: 'settings-area',
   sectionHeader: 'section-header',
   sectionLabel: 'section-label',
-  sectionActions: 'section-actions',
-  headerActionsHidden: 'section-actions-hidden',
   treeBody: 'tree-body',
   groupSection: 'group-section',
   projectRow: 'project-row',
@@ -76,187 +53,39 @@ export const SIDEBAR_PARTS: PartTable = {
   title: 'row-title',
   projectText: 'row-project-text',
   time: 'row-time',
-  rowActions: 'row-actions',
-  iconButton: 'row-icon-button',
-  slot: 'row-slot',
-  folder: 'row-folder',
-  folderActive: 'row-folder-active',
-  chevron: 'row-chevron',
-  arrow: 'row-arrow',
-  active: 'row-active',
-  selected: 'row-selected',
-  menuOpen: 'row-menu-open',
-  searchSlot: 'search-slot',
-  searchButton: 'search-button',
-  triggerRow: 'settings-trigger',
   list: 'list',
   listArea: 'list-area',
 }
 
-/** The conversation's header, from its slot anchor down. */
-export const HEADER_PARTS: PartTable = {
-  header: 'conversation-header',
-  headerLeading: 'header-leading',
-  titleRow: 'title-row',
-  titleCluster: 'title-cluster',
-  crumbs: 'header-title',
-  crumbSeg: 'header-crumb',
-  headerActions: 'header-actions',
-  headerUtilities: 'header-utilities',
-  headerCorner: 'header-corner',
-  tabs: 'view-tabs',
-  // The tablist the host wraps the buttons in (0.2.1-rc.3): the strip's shell
-  // hugs this list, while the row above it keeps the host's full width.
-  viewTabs: 'view-tabs-list',
-  tab: 'view-tab',
-  tabActive: 'view-tab-active',
-  label: 'header-label',
-}
-
-/**
- * The conversation's scrolling body: the transcript and the composer seat under
- * it, so the composer's own parts are read here too.
- */
+/** The composer seat's own parts, read inside the conversation column. */
 export const CONVERSATION_PARTS: PartTable = {
-  viewArea: 'view-area',
-  scrollBody: 'scroll-body',
-  composerSeat: 'composer-seat',
   composerStack: 'composer-stack',
-  runningIcon: 'running-icon',
-  runningContent: 'running-content',
-  callRow: 'call-row',
-  scroll: 'input-scroll',
-  grow: 'input-grow',
-  row: 'row',
-  rows: 'rows',
-  tools: 'tools',
-  trailing: 'trailing',
-  modes: 'modes',
-  dock: 'composer-dock',
-  overlayAnchor: 'composer-overlay-anchor',
-  standardControls: 'composer-controls',
-  activity: 'composer-activity',
-  primary: 'composer-primary',
-  trigger: 'trigger',
-  chevron: 'trigger-chevron',
-  rail: 'attachment-rail',
-  image: 'attachment-image',
-  preview: 'attachment-preview',
-  close: 'attachment-remove',
-  delete: 'attachment-remove',
-  remove: 'attachment-remove',
-  badge: 'badge',
-  tag: 'tag',
-  kindTag: 'kind-tag',
-  kindTagIcon: 'kind-tag-icon',
-  kindTagLabel: 'kind-tag-label',
-  rowTag: 'row-tag',
-  optionLine: 'option-line',
-  attemptBadge: 'attempt-badge',
-  keyBadge: 'key-badge',
-  cardWorkspaceTrigger: 'card-workspace-trigger',
-  composerHero: 'composer-hero',
-  heroWorkspaceRow: 'hero-workspace-row',
-  headline: 'hero-headline',
-  titleGroup: 'hero-title-group',
   fishHitbox: 'hero-mark',
-  previewBadge: 'hero-preview-badge',
-  // The host's turn rail, which the skin stands in for (features/turn-nav reads
-  // these before its own stamp lands, so the host name is the only anchor).
-  frame: 'rail-frame',
-  scroller: 'rail-scroller',
-  // The attachment tiles and the composer's own parts the features read by name.
-  imageItem: 'attachment-image-item',
-  thumbnail: 'attachment-thumbnail',
-  item: 'attachment-item',
-  card: 'composer-card-box',
-  workspaceLabel: 'workspace-chip-label',
-  clearButton: 'clear-button',
 }
 
 /** The right sidebar's docked panels. */
 export const RIGHTBAR_PARTS: PartTable = {
   guide: 'panel-guide',
   panel: 'panel',
-  divider: 'dock-divider',
 }
 
 /**
- * The rows of a host menu card. The host portals its menus to `<body>` with no
- * marker of its own, so the region is the skin's own stamp on the card: only
- * the feature that recognises it (features/account) writes
- * one, and the rows are read the moment it lands.
- */
-export const MENU_PARTS: PartTable = {
-  itemWrap: 'menu-item',
-  itemIcon: 'menu-item-icon',
-  itemLabel: 'menu-item-label',
-  itemName: 'menu-item-name',
-  itemDesc: 'menu-item-desc',
-  check: 'menu-check',
-  viewport: 'menu-viewport',
-  footer: 'menu-footer',
-  submenu: 'menu-submenu',
-  selected: 'menu-item-selected',
-  divider: 'menu-divider',
-}
-
-/**
- * Names read on the whole page: the host's own text and badge roles, which its
- * sheets and the skin's both style wherever they stand. Read on `<body>` down,
- * so a heading inside a sidebar panel and one inside the transcript read alike,
- * and a badge inside a dialog reads like one in a chat row.
- *
- * These are the names the skin's typography and badge rules name; several the
- * host declared once and no longer renders (`mono`, `codeBlock`, `tagSystem`,
- * …) stay here, so a rule is exact today and one line restores it if the host
- * brings the name back.
+ * Names read on the whole page: the host's own text roles the skin's typography
+ * reads wherever they stand, and the settings dialog's rail, which is an
+ * overlay outside the conversation's box.
  */
 export const PAGE_PARTS: PartTable = {
-  // The host renders its markdown renderer's own names wherever a transcript,
-  // a search hit or a preview shows one, so they are read page-wide (D3).
   markdown: 'markdown',
-  tableScroll: 'table-scroll',
-  fileMention: 'file-mention',
-  fileLink: 'file-link',
-  // The host's own `root` of whatever component an element belongs to: the hero
-  // page's root sits in the centre column, the composer's and the model seat's
-  // sit in the conversation, so the name is read page-wide and a rule that wants
-  // one of them qualifies it with that component's own marker.
-  root: 'host-root',
-  title: 'text-title',
-  headline: 'text-headline',
-  caption: 'text-caption',
   sectionLabel: 'section-label',
   triggerLabel: 'trigger-label',
   selectLabel: 'text-select-label',
   monoLabel: 'text-mono-label',
   mono: 'text-mono',
   codeBlock: 'text-code',
-  linkIcon: 'link-icon',
-  linkButton: 'link-button',
   panel: 'panel',
   overlay: 'overlay',
   navIcon: 'nav-icon',
-  // The settings dialog's section rail, which the skin reads to mark its own
-  // tab. The dialog is an overlay outside the conversation's box, so this name
-  // is page-wide.
   navList: 'nav-list',
-  mask: 'mask',
-  tagSystem: 'tag-system',
-  tagUser: 'tag-user',
-  tagContext: 'tag-context',
-  tagMessage: 'tag-message',
-  tagTool: 'tag-tool',
-  tagSubtool: 'tag-subtool',
-  kindTag: 'kind-tag',
-  kindTagIcon: 'kind-tag-icon',
-  kindTagLabel: 'kind-tag-label',
-  rowTag: 'row-tag',
-  optionLine: 'option-line',
-  badge: 'badge',
-  attemptBadge: 'attempt-badge',
-  keyBadge: 'key-badge',
 }
 
 /** One region: the host subtree its parts are read in, and the parts themselves. */
@@ -266,14 +95,13 @@ export interface PartRegion {
   parts: PartTable
   /**
    * Parts read on the anchor's own element children alone — where the host puts
-   * a slot's content. A local name as common as `root` cannot be read anywhere
-   * inside the region: rows and tooltips have a `_root` of their own.
+   * a slot's content.
    */
   rootParts?: PartTable
 }
 
 /** Every region, in the order the walk enters them. */
-export function partRegions(vocabulary: PartsTableVocabulary): PartRegion[] {
+export function partRegions(): PartRegion[] {
   return [
     { within: 'body', parts: PAGE_PARTS },
     {
@@ -284,25 +112,22 @@ export function partRegions(vocabulary: PartsTableVocabulary): PartRegion[] {
     {
     within: SIDEBAR_SLOT_SELECTOR,
     parts: SIDEBAR_PARTS,
-    rootParts: { root: 'sidebar-root', collapsed: 'sidebar-collapsed', quietBars: 'sidebar-quiet', fading: 'sidebar-fading' },
+    rootParts: { root: 'sidebar-root' },
     },
-    { within: CONVERSATION_HEADER_SLOT_SELECTOR, parts: HEADER_PARTS },
     { within: CONVERSATION_SCROLL_SELECTOR, parts: CONVERSATION_PARTS },
     { within: RIGHTBAR_COLUMN_SELECTOR, parts: RIGHTBAR_PARTS },
-    { within: `[${vocabulary.regions.account}]`, parts: MENU_PARTS },
   ]
 }
 
 /** Every part name the tables define, sorted: the whole vocabulary a sheet may read. */
-export function partNames(vocabulary: PartsTableVocabulary): string[] {
+export function partNames(): string[] {
   const names = new Set<string>()
-  for (const region of partRegions(vocabulary)) {
+  for (const region of partRegions()) {
     for (const part of Object.values(region.parts)) names.add(part)
     for (const part of Object.values(region.rootParts ?? {})) names.add(part)
   }
   return [...names].sort()
 }
-
 
 /**
  * The structural relations a stylesheet reads as a hold: a rule naming an
@@ -312,11 +137,10 @@ export function partNames(vocabulary: PartsTableVocabulary): string[] {
  *
  * `holder` names the element that takes the mark; `*` marks whichever ancestor
  * holds the node, which is what a rule styling an unnamed wrapper needs.
- * `scope` keeps the mark inside one box: nothing at or above the scope is
- * marked. `direct` is the `>` in `:has(> B)`: only the held node's own parent
- * counts. `attributes` are the names whose change can move this mark, so the
- * marking pass watches them; a part-based side needs no attribute because the
- * pass already watches class names.
+ * `direct` is the `>` in `:has(> B)`: only the held node's own parent counts.
+ * `attributes` are the names whose change can move this mark, so the marking
+ * pass watches them; a part-based side needs no attribute because the pass
+ * already watches class names.
  */
 export interface HoldRelation {
   /** The word a stylesheet reads in `[data-dsh-deepcraft-holds~="…"]`. */
@@ -338,31 +162,10 @@ export function holdRelations(vocabulary: PartsTableVocabulary): HoldRelation[] 
   /** The selector for one part name, so the relations below spell their sides in this vocabulary. */
   const part = (name: string) => `[${vocabulary.part}~="${name}"]`
   return [
-    // theme/chrome.css, theme/wallpaper.css: the frame paints to the window's top
-    // only where its own first column is the sidebar.
+    // theme/wallpaper.css: the frame's sidebar column is the one that carries the
+    // shell's fill, so the mask's stand-down is scoped to the frame that holds it.
     { name: 'sidebar-column', holder: part('layout-frame'), held: part('sidebar-column'), direct: true, attributes: [] },
-  // theme/chrome.css, theme/wallpaper.css, features/view-tabs/view-tabs.css: the
-  // header owns the tab strip, and only that header loses its bottom edge.
-  { name: 'view-tabs', holder: part('conversation-header'), held: part('view-tabs'), attributes: [] },
-  // theme/hero.css: the headline takes the display cut where it carries the mark.
-  { name: 'hero-mark', holder: part('hero-headline'), held: part('hero-mark'), attributes: [] },
-  // theme/wallpaper.css: the phase box holding the transcript paints the canvas.
-  { name: 'conversation-scroll', holder: '[data-phase]', held: '[data-conversation-scroll]', attributes: ['data-phase', 'data-conversation-scroll'] },
-  // features/context-stats/context-stats.css: the host's own statistics dialogs stand down.
-  {
-    name: 'host-stats',
-    holder: '[role="dialog"]',
-    held: '[data-session-stats-details], [data-session-stats-usage]',
-    attributes: ['data-session-stats-details', 'data-session-stats-usage'],
-  },
-  // features/account/account-footer.css, footer-takeover.css: only the footer
-  // boxes around the host's own account row keep their size.
-  {
-    name: 'account-row',
-    holder: '*',
-    held: '[data-dsh-deepcraft-account-host-row]',
-    scope: part('foot-area'),
-    attributes: ['data-dsh-deepcraft-account-host-row'],
-  },
+    // theme/wallpaper.css: the phase box holding the transcript paints the canvas.
+    { name: 'conversation-scroll', holder: '[data-phase]', held: '[data-conversation-scroll]', attributes: ['data-phase', 'data-conversation-scroll'] },
   ]
 }

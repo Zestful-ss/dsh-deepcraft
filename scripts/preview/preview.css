@@ -230,7 +230,7 @@ button, select { font: inherit; color: inherit; }
 
 .preview-new-session ._newSessionShortcut_x_1 { color: var(--preview-muted); font-size: 10px; }
 
-.preview-section-header { padding: 4px 8px 0; }
+.preview-section-header { display: flex; align-items: center; justify-content: space-between; padding: 4px 8px 0; }
 .preview-section-header ._sectionLabel_x_1 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--preview-muted); }
 
 .preview-tree {
@@ -269,6 +269,19 @@ button, select { font: inherit; color: inherit; }
 }
 
 .preview-footer-actions { display: flex; align-items: center; gap: 6px; }
+.preview-account-row { display: flex; padding-top: 4px; }
+.preview-account {
+  width: 100%;
+  border: 0;
+  padding: 6px 8px;
+  border-radius: 7px;
+  text-align: left;
+  background: transparent;
+  color: var(--preview-ink);
+  font-size: 12px;
+  cursor: pointer;
+}
+.preview-account:hover { background: var(--dsw-alias-interactive-bg-hover, rgba(0, 0, 0, 0.06)); }
 .preview-trigger-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
 .preview-trigger-row [data-slot="settings.launcher"] button {
   border: 0;
@@ -291,15 +304,29 @@ button, select { font: inherit; color: inherit; }
 
 .preview-header {
   display: flex;
-  align-items: center;
-  height: 46px;
+  flex-direction: column;
   flex: none;
-  padding: 0 24px;
   border-bottom: 1px solid var(--preview-line);
 }
 
-.preview-title-row { display: flex; align-items: center; gap: 10px; }
+.preview-title-row { display: flex; align-items: center; height: 46px; padding: 0 24px; }
 .preview-crumbs { font-size: 13px; font-weight: 600; }
+
+/* The host's own view tabs: the skin paints colours and type only (D81). */
+.preview-view-tabs { display: flex; gap: 2px; padding: 0 18px 8px; }
+.preview-view-tabs button {
+  border: 0;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--preview-muted);
+  font-size: 12px;
+  cursor: pointer;
+}
+.preview-view-tabs button[aria-selected="true"] {
+  background: var(--dsw-alias-interactive-bg-hover, rgba(0, 0, 0, 0.06));
+  color: var(--preview-ink);
+}
 
 .preview-scroll {
   display: flex;
@@ -437,27 +464,6 @@ button, select { font: inherit; color: inherit; }
   cursor: pointer;
 }
 
-.preview-dock {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 7px 4px 0;
-  font-size: 10.5px;
-  color: var(--preview-muted);
-}
-
-.preview-meter {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: auto;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-}
-.preview-meter svg { fill: none; stroke: currentColor; stroke-width: 1.5; }
-.preview-meter svg circle:last-child { stroke: var(--preview-accent); }
 
 /* ---------- settings dialog ---------- */
 

@@ -4,7 +4,7 @@ import { observeMatches, observeSize, subscribeMutations } from './bus'
 
 /** The skin's own vocabulary, as this test hands it over. */
 const QUIET_ATTR = 'data-test-quiet'
-adoptSkin({ packageName: 'dsh-test-skin', quiet: QUIET_ATTR, readerHold: 'data-test-reader-hold', motionReduced: () => false })
+adoptSkin({ packageName: 'dsh-test-skin', quiet: QUIET_ATTR, motionReduced: () => false })
 
 const settle = () => new Promise(resolve => setTimeout(resolve, 0))
 const nextFrame = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
@@ -125,23 +125,6 @@ test('a size subscription hears the current size first, a second one on the same
   expect(second[0]).toBe(100)
   expect(first.at(-1)).toBe(140)
   expect(second.at(-1)).toBe(140)
-})
-
-test('an afterHost subscription runs after a resize observer made before it', async () => {
-  const root = host()
-  root.style.height = '10px'
-  const calls: string[] = []
-  // The skin's early observer exists from install; the host makes its own at a column's mount.
-  cleanups.push(observeSize(root, () => calls.push('early')))
-  const hostObserver = new ResizeObserver(() => calls.push('host'))
-  hostObserver.observe(root)
-  cleanups.push(() => hostObserver.disconnect())
-  cleanups.push(observeSize(root, () => calls.push('after host'), { afterHost: true }))
-  await nextFrame()
-  calls.length = 0
-  root.style.height = '30px'
-  await nextFrame()
-  expect(calls).toEqual(['early', 'host', 'after host'])
 })
 
 test('a subscription over several elements hears one batch per frame, holding only its own elements', async () => {

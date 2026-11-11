@@ -1,4 +1,4 @@
-import { FOOTER_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_PETDEX, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PACKAGE_NAME, PALETTE_ATTR, SEARCH_STYLE_ATTR, SETTINGS_ENTRY_FALLBACK, STATS_POSITION_ATTR, TYPEFACE_ATTR } from '../constants'
+import { MASCOT_ATTR, MASCOT_BRAND, MASCOT_PETDEX, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PACKAGE_NAME, PALETTE_ATTR, SETTINGS_ENTRY_FALLBACK, TYPEFACE_ATTR } from '../constants'
 import type { PrefKey, Prefs } from '../constants'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import { clampPrefs } from '@dsh-deepcraft/contracts/prefs'
@@ -38,20 +38,6 @@ export function loadPrefs() {
   binding.read()
 }
 
-/**
- * Runtime override that outranks the page: a footer takeover retired after
- * failing hands the sidebar footer back to the host, because the takeover
- * hides host controls and a takeover whose replacement is gone would leave
- * nothing in their place.
- */
-let footerTakeoverRetired = false
-
-/** Give the sidebar footer back to the host for the rest of this generation. */
-export function retireFooterTakeover() {
-  footerTakeoverRetired = true
-  document.body.removeAttribute(FOOTER_ATTR)
-}
-
 /** The current preferences (live object; treat as read-only). */
 export function readPrefs() {
   return prefs
@@ -68,28 +54,22 @@ export function subscribePrefs(listener: (prefs: Prefs) => void) {
 /**
  * The document mirror: one entry per preference the stylesheet switches on,
  * with the attribute it rides and the resolver that turns the preference into
- * what the rules test (the resolved mascot). The footer mark is not a
- * preference — the takeover is unconditional until the feature retires — so
- * it rides the list under a null key. One list is the whole contract with
- * the stylesheets: `adoptPrefs` writes these and `clearPrefsAttributes`
- * takes the same names back (entry.ts). Its entries are literals so the
- * build can hold every attribute a stylesheet reads to a name written
- * here (D9).
+ * what the rules test (the resolved mascot). One list is the whole contract
+ * with the stylesheets: `adoptPrefs` writes these and `clearPrefsAttributes`
+ * takes the same names back (entry.ts). Its entries are literals so the build
+ * can hold every attribute a stylesheet reads to a name written here (D9).
  */
 interface PrefMirror {
-  key: PrefKey | null
+  key: PrefKey
   attr: string
-  /** The value to write; a `false` takes the attribute off. */
-  value(prefs: Prefs): string | boolean
+  /** The value to write. */
+  value(prefs: Prefs): string
 }
 
 const MIRRORS = [
   { key: 'palette', attr: PALETTE_ATTR, value: (prefs: Prefs) => prefs.palette },
   { key: 'typeface', attr: TYPEFACE_ATTR, value: (prefs: Prefs) => prefs.typeface },
   { key: 'mascot', attr: MASCOT_ATTR, value: resolveMascot },
-  { key: 'searchStyle', attr: SEARCH_STYLE_ATTR, value: (prefs: Prefs) => prefs.searchStyle },
-  { key: 'statsPosition', attr: STATS_POSITION_ATTR, value: (prefs: Prefs) => prefs.statsPosition },
-  { key: null, attr: FOOTER_ATTR, value: () => !footerTakeoverRetired },
 ] as const satisfies readonly PrefMirror[]
 
 /** Every attribute the mirror writes, plus the animation answer `writeMotionAttribute` resolves. */
@@ -97,7 +77,7 @@ const MIRROR_ATTRS: readonly string[] = [...MIRRORS.map(mirror => mirror.attr), 
 
 /**
  * Adopt a preference set: mirror it onto the document, then notify. A page a
- * skin or ds-bot owns carries none of this theme's attributes (D74): the set is
+ * skin or ds-bot owns carries none of this theme's attributes (D81): the set is
  * kept, and taking the page back mirrors it (entry.ts). The form answers
  * whenever it answers, and the settings section installs whenever its chunk
  * arrives (D72), so a yielded page hears adoptions too.
@@ -105,11 +85,7 @@ const MIRROR_ATTRS: readonly string[] = [...MIRRORS.map(mirror => mirror.attr), 
 export function adoptPrefs(next: Prefs) {
   prefs = next
   if (pageOwner() === null) {
-    for (const mirror of MIRRORS) {
-      const value = mirror.value(next)
-      if (value === false) document.body.removeAttribute(mirror.attr)
-      else document.body.setAttribute(mirror.attr, String(value))
-    }
+    for (const mirror of MIRRORS) document.body.setAttribute(mirror.attr, mirror.value(next))
     writeMotionAttribute(next.motion)
   }
   notifyAll(prefsListeners, next)
@@ -144,15 +120,6 @@ export function refreshMotionAttribute() {
   const before = document.body.getAttribute(MOTION_ATTR)
   writeMotionAttribute(prefs.motion)
   if (document.body.getAttribute(MOTION_ATTR) !== before) notifyAll(prefsListeners, prefs)
-}
-
-/**
- * Re-run everything that asked to hear about the environment without the
- * stored preferences having changed: the other chat plugin appearing or
- * leaving (packages/client/src/shared/peer-plugin.ts, D74).
- */
-export function notifyEnvironmentChange() {
-  notifyAll(prefsListeners, prefs)
 }
 
 /**

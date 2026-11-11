@@ -476,7 +476,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
 
   return () => {
     // The seat's entry goes with this feature: a generation retired for another
-    // plugin's page (D74) must not leave its control behind.
+    // plugin's page (D81) must not leave its control behind.
     if (seatFiber !== null && typeof seatFiber.dispose === 'function') seatFiber.dispose()
     document.removeEventListener('pointerdown', onDocumentPress, true)
     document.removeEventListener('keydown', onDocumentKey, true)

@@ -1,7 +1,5 @@
 /**
- * The page is left to settle, then the readings every case draws on: the idle
- * pass count, the host's hidden statistics figures and the session list's
- * leading seats.
+ * The page is left to settle, then the idle pass count every case draws on.
  */
 (function () {
   var probe = window.__dshSmokeProbe
@@ -34,27 +32,5 @@
         .filter(function (t) { return t >= mark })
         .map(function (t) { return Math.round(t - mark) })
     }
-    // The host's statistics are hidden outright, in both of its shapes: the
-    // figures stay in the document as the read's own click targets, and their
-    // dialogs are read into the context popover instead (the 'default' case
-    // below). The host marks each figure since its 2026-09 update and marked the
-    // container around them before, so both marks are checked.
-    var statsFigures = Array.prototype.slice.call(document.querySelectorAll('[data-composer-stat], [data-composer-stats]'))
-    r.statsHidden = statsFigures.length > 0 && statsFigures.every(function (el) { return getComputedStyle(el).display === 'none' })
-    r.statsStrayCards = document.querySelectorAll('.dsh-deepcraft-stats-popover').length
-    // The session list's leading seat. The host's newer rows render it through a
-    // slot outlet, so an idle row's seat is not :empty — the circle has to hang
-    // on the empty outlet anchor. A seat carrying the running status dot keeps
-    // its own paint and gets no circle.
-    var seats = document.querySelectorAll('[data-dsh-deepcraft-part~="session-row"] [data-dsh-deepcraft-part~="row-slot"]')
-    function seatState(seat) {
-      if (!seat) return null
-      var outlet = seat.querySelector(':scope > [data-slot]')
-      var target = outlet !== null ? outlet : seat
-      var after = getComputedStyle(target, '::after')
-      return { content: after.content, width: after.width, border: after.borderTopWidth, svgs: seat.querySelectorAll('svg').length }
-    }
-    r.seatIdle = seatState(seats[0])
-    r.seatRunning = seatState(seats[1])
   })
 })()

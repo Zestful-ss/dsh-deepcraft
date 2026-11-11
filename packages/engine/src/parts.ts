@@ -54,8 +54,8 @@ function vocabulary(): PartsVocabulary {
 }
 
 /** Every region's lookup, compiled from the skin's own anchors. */
-function buildLookups(vocabulary: PartsTableVocabulary): RegionLookup[] {
-  return partRegions(vocabulary).map((region) => ({
+function buildLookups(): RegionLookup[] {
+  return partRegions().map((region) => ({
     within: region.within,
     parts: new Map(Object.entries(region.parts)),
     rootParts: region.rootParts === undefined ? null : new Map(Object.entries(region.rootParts)),
@@ -350,8 +350,8 @@ export function markParts(root: Element) {
  */
 export function installParts(next: PartsVocabulary, onMarked?: () => void) {
   adopted = next
-  LOOKUPS = buildLookups(next)
-  ANCHOR_SELECTOR = partRegions(next).map((region) => region.within).join(', ')
+  LOOKUPS = buildLookups()
+  ANCHOR_SELECTOR = partRegions().map((region) => region.within).join(', ')
   HOLD_STATES = holdRelations(next).map((spec) => ({ spec, held: new Map() }))
   HELD_SELECTOR = holdRelations(next).map((relation) => relation.held).join(', ')
   HOLD_ATTRIBUTES = new Set(holdRelations(next).flatMap((relation) => relation.attributes))
@@ -361,12 +361,10 @@ export function installParts(next: PartsVocabulary, onMarked?: () => void) {
     childList: true,
     subtree: true,
     attributes: true,
-    // A class rewrite moves an element's parts, and a menu stamp turns the card
-    // under it into a region. Nothing else a class or a stamp means here. The
-    // relations' own attributes are watched too: the node they belong to can
-    // take one after it was mounted, and the mark answers what the subtree
-    // holds from there on.
-    attributeFilter: ['class', ...Object.values(next.regions), ...HOLD_ATTRIBUTES],
+    // A class rewrite moves an element's parts. The relations' own attributes
+    // are watched too: the node they belong to can take one after it was
+    // mounted, and the mark answers what the subtree holds from there on.
+    attributeFilter: ['class', ...HOLD_ATTRIBUTES],
     skipQuiet: true,
   }, (records) => {
     let changed = false

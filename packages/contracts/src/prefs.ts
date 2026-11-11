@@ -57,34 +57,6 @@ export const MASCOT_SCOPE_HOME = 'home'
 export const MASCOT_SCOPE_ALL = 'all'
 export const MASCOT_SCOPES = [MASCOT_SCOPE_HOME, MASCOT_SCOPE_ALL] as const
 
-/** Where the skin's search box stands, and how much of the host's own sidebar search it leaves in place. */
-export const SEARCH_STYLE_ICON = 'icon'
-export const SEARCH_STYLE_OVERLAY = 'overlay'
-export const SEARCH_STYLE_STANDALONE = 'standalone'
-export const SEARCH_STYLES = [SEARCH_STYLE_ICON, SEARCH_STYLE_OVERLAY, SEARCH_STYLE_STANDALONE] as const
-
-/**
- * The mark a conversation still running carries in the sidebar: a light
- * breathing in place over the idle seat's hollow circle, or the ring turning
- * that the skin drew before the light.
- */
-
-/** The chat area's animation switch: on plays the ported set (features/chat-*), off leaves the area to the host. */
-export const CHAT_ANIMATIONS_OFF = 'off'
-
-/** Where the session's numbers show: in the context popover the meter opens, or on a line of their own under the input card. */
-export const STATS_POSITION_INLINE = 'inline'
-export const STATS_POSITION_CONTEXT = 'context'
-export const STATS_POSITIONS = [STATS_POSITION_INLINE, STATS_POSITION_CONTEXT] as const
-
-/** How eagerly the skin's popovers open on hover: click only, the account popover alone, or every popover the skin owns. */
-export const AUTO_POPOVER_OFF = 'off'
-export const AUTO_POPOVER_ACCOUNT = 'account'
-export const AUTO_POPOVER_ALL = 'all'
-export const AUTO_POPOVER_SCOPES = [AUTO_POPOVER_OFF, AUTO_POPOVER_ACCOUNT, AUTO_POPOVER_ALL] as const
-
-/** Longest accepted custom username. */
-export const USERNAME_MAX = 64
 /** Longest accepted pet id: a package directory name the official player can open. */
 export const PET_ID_MAX = 63
 
@@ -118,16 +90,10 @@ export const PREFS = {
   brandInk: { type: 'choice', values: BRAND_INKS, default: BRAND_INK_ORIGINAL },
   brandAccent: { type: 'color', default: '' },
   motion: { type: 'choice', values: MOTION_MODES, default: MOTION_SYSTEM },
-  /** An earlier build stored the two words; `precise` is what the switch being on means. */
-  statusDetail: { type: 'boolean', default: true, legacy: { precise: true, simple: false } },
-  /** It was a boolean before it grew its choices. */
-  autoPopover: { type: 'choice', values: AUTO_POPOVER_SCOPES, default: AUTO_POPOVER_ALL, legacy: { true: AUTO_POPOVER_ALL, false: AUTO_POPOVER_OFF } },
   /** The session must name a subagent model rather than inherit the parent route. */
   subagentModelChoice: { type: 'boolean', default: false },
   /** The composer's own entry for the routes one session delegates on. */
   subagentModelPicker: { type: 'boolean', default: true },
-  username: { type: 'text', default: '', max: USERNAME_MAX },
-  homeRipple: { type: 'boolean', default: false },
   palette: { type: 'choice', values: PALETTES, default: PALETTE_OCEAN },
   typeface: { type: 'choice', values: TYPEFACES, default: TYPEFACE_CLAUDE },
   /** The mascot on the composer; the resolved one rides the document. */
@@ -135,15 +101,6 @@ export const PREFS = {
   mascotScope: { type: 'choice', values: MASCOT_SCOPES, default: MASCOT_SCOPE_ALL },
   /** The chat pet, by package directory id; it follows neither the palette nor the brand (D80). */
   chatPet: { type: 'text', default: 'whaledou', max: PET_ID_MAX },
-  statsPosition: { type: 'choice', values: STATS_POSITIONS, default: STATS_POSITION_CONTEXT },
-  sidebarSearch: { type: 'boolean', default: true },
-  searchStyle: { type: 'choice', values: SEARCH_STYLES, default: SEARCH_STYLE_OVERLAY },
-  turnNav: { type: 'boolean', default: true },
-  viewTabs: { type: 'boolean', default: true },
-  headerBand: { type: 'boolean', default: true },
-  /** It held a choice before it became a switch again; every retired choice meant on bar `off`. */
-  chatAnimations: { type: 'boolean', default: true, legacy: { [CHAT_ANIMATIONS_OFF]: false, enhanced: true, redraw: true } },
-  chatWait: { type: 'boolean', default: true },
 } as const satisfies Record<string, PrefSpec>
 
 /** One preference's key. */
@@ -155,14 +112,6 @@ export type PrefKey = keyof typeof PREFS
  * this list is read by its feature at the moment it acts.
  */
 export const LIVE_PREFS = [
-  'homeRipple',
-  'statsPosition',
-  'sidebarSearch',
-  'turnNav',
-  'viewTabs',
-  'headerBand',
-  'chatAnimations',
-  'chatWait',
   'mascot',
   'subagentModelPicker',
 ] as const satisfies readonly PrefKey[]

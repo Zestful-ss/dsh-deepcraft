@@ -1,36 +1,15 @@
-/* ---------- Third-party repair: dsh-agy-link run_code fallback card ---------- */
-/* The agy-link bridge replaces the host run_code tool card with its own keyed
-   toolview; its non-mirror fallback ships an unstyled header (two bare spans,
-   not even a gap) and a bare pre. Give the header the tool-row rhythm, the
-   tool name the skin's technical-meta mono voice (overriding the editorial
-   serif the host's title rule lends it), the variant label a real
-   pill, and the code preview card padding. */
-body[data-dsh-deepcraft] .agy-tv-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 24px;
-}
+/* ---------- Third-party: dsh-agy-link run_code fallback card ---------- */
+/* The agy-link bridge replaces the host's run_code tool card with its own keyed
+   toolview. The skin states only its own vocabulary there — the technical-meta
+   code face and the label colour — so the card keeps whatever geometry the
+   plugin and the host's own rules give it (D81). */
 body[data-dsh-deepcraft] .agy-tv-title {
   font-family: var(--dsh-deepcraft-font-code);
-  font-weight: 500;
-  font-size: 12px;
-  letter-spacing: 0;
-  line-height: 24px;
   color: var(--dsw-alias-label-secondary);
 }
 body[data-dsh-deepcraft] .agy-tv-badge {
   font-family: var(--dsh-deepcraft-font-code);
-  font-size: 11px;
-  line-height: 16px;
-  padding: 0 6px;
-  border-radius: 9999px;
-  background: var(--dsw-alias-interactive-bg-hover);
   color: var(--dsw-alias-label-tertiary);
-}
-body[data-dsh-deepcraft] .agy-tv-pre {
-  padding: 10px 12px;
-  overflow-x: auto;
 }
 
 

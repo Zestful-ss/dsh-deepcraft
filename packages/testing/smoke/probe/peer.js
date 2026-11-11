@@ -1,7 +1,6 @@
 /**
- * The cases about the other plugins on the page: the chat-behaviour plugin whose
- * arrival stands the ported features down and greys their settings rows, and a
- * skin that owns the page — arriving before the theme or after it.
+ * The cases about the other owners of the page: a skin that owns it from the
+ * first frame, and one arriving after the theme took it (D81).
  */
 (function () {
   var probe = window.__dshSmokeProbe
@@ -10,101 +9,6 @@
   var r = probe.report
 
   probe.step(async function () {
-    // The other chat-behaviour plugin installed (packages/client/src/shared/peer-plugin.ts): the
-    // ported features stand down whole, and the settings page shows their
-    // switches off and disabled with the reason.
-    await probe.onlyFor(['peer-chat-ux'], async function () {
-      // A chat area and a focused composer: live features would mark or fold
-      // it within a pass or two.
-      var peerChat = document.createElement('div')
-      peerChat.innerHTML = '<div data-chat-flow><div data-streaming><p>streaming text</p></div>' +
-        '<div data-variant="think" data-state="running"><button type="button">Thinking</button></div>' +
-        '<div data-step-process><button type="button" data-process-activity><span data-shimmer>Working</span></button>' +
-        '<div data-step-process-body hidden="until-found"><div data-step-process-content>x</div></div></div></div>'
-      document.body.appendChild(peerChat)
-      await sleep(300)
-      r.peer = {
-        marks: {
-          follow: document.body.hasAttribute('data-dsh-deepcraft-chat-follow'),
-          fold: document.body.hasAttribute('data-dsh-deepcraft-chat-fold'),
-        },
-        seats: (window.__slots || []).filter(function (entry) { return entry.key === 'tool.call.toolview' }).length,
-        thinkExpanded: document.querySelector('[data-variant="think"]').hasAttribute('data-expanded'),
-        groupOpen: !document.querySelector('[data-step-process-body]').hasAttribute('hidden'),
-      }
-      // The settings page, through the same React-tree walk the settings case
-      // uses: the rows of the tabs the ported controls and the motion row are
-      // registered on — which of them refuse input, which carry the line
-      // naming the owner, and what answer each control shows.
-      var PeerSection = (window.__slotComponents || {})['deepcraft']
-      var PEER_TABS = ['conversation', 'appearance']
-      var peerWalk = function (node, visit) {
-        if (node === null || node === undefined || typeof node !== 'object') return
-        if (Array.isArray(node)) { node.forEach(function (child) { peerWalk(child, visit) }); return }
-        visit(node)
-        peerWalk(node.props && node.props.children, visit)
-      }
-      var peerTexts = function (node, out) {
-        if (typeof node === 'string') { out.push(node); return }
-        if (node === null || node === undefined || typeof node !== 'object') return
-        if (Array.isArray(node)) { node.forEach(function (child) { peerTexts(child, out) }); return }
-        peerTexts(node.props && node.props.children, out)
-      }
-      var peerDisabled = function (node) {
-        var found = false
-        peerWalk(node, function (child) { if ((child.props || {}).disabled === true) found = true })
-        return found
-      }
-      var peerManages = function (node) {
-        var found = false
-        peerWalk(node, function (child) {
-          var className = (child.props || {}).className
-          if (typeof className === 'string' && className.split(' ').indexOf('dsh-deepcraft-settings-row-note') >= 0) found = true
-        })
-        return found
-      }
-      // What the row's control shows: a switch's state, or the pressed option of
-      // a segmented control. The reader's own stored answer, not a forced off.
-      // A control that renders a subtree of its own (the new-text fade's preview
-      // cards carry a clock) is not in this element tree, so the answer it shows
-      // is read from the preference it was handed.
-      var peerAnswer = function (node, key) {
-        var answer = { on: false, option: null, options: [] }
-        peerWalk(node, function (child) {
-          var props = child.props || {}
-          if (props['data-on'] === '') answer.on = true
-          if (typeof props.className === 'string' && props.className.split(' ').indexOf('dsh-deepcraft-segment') !== -1) answer.options.push(props.key)
-          if (props['aria-pressed'] === 'true') answer.option = props.key
-          var prefs = props.prefs
-          if (typeof prefs === 'object' && prefs !== null && typeof prefs[key] === 'string') answer.option = prefs[key]
-        })
-        return answer
-      }
-      r.peer.settings = { registered: typeof PeerSection === 'function', tabs: {}, texts: [] }
-      if (r.peer.settings.registered) {
-        var peerReact = window.__react
-        peerReact.rendering = true
-        PEER_TABS.forEach(function (tab) {
-          peerReact.states = { general: tab }
-          var peerTree = PeerSection({})
-          var page = { rows: [], refusing: [], managed: [], answers: {} }
-          peerWalk(peerTree, function (node) {
-            var props = node.props || {}
-            if (typeof props.className === 'string' && /(^| )dsh-deepcraft-settings-row( |$)/.test(props.className)) {
-              page.rows.push(props.key)
-              if (peerDisabled(props.children)) page.refusing.push(props.key)
-              if (peerManages(props.children)) page.managed.push(props.key)
-              page.answers[props.key] = peerAnswer(props.children, props.key)
-            }
-          })
-          r.peer.settings.tabs[tab] = page
-          peerTexts(peerTree, r.peer.settings.texts)
-        })
-        peerReact.rendering = false
-        peerReact.states = null
-      }
-      peerChat.remove()
-    })
     // The two seats the settings page registers: the settings dialog's section
     // and the plugin page's configuration entry (settings.ts). The stand-in's
     // registry splices an entry when its feature comes down, so this answers
@@ -123,7 +27,7 @@
       while (settingsSeats() !== wanted && Date.now() < until) await sleep(50)
       return settingsSeats()
     }
-    // The other owner of the page, a skin, from the first frame (D74): the theme
+    // The other owner of the page, a skin, from the first frame (D81): the theme
     // stands its whole visual down, settings page included, then takes the page
     // back when the skin leaves.
     await probe.onlyFor(['skin-center-handoff'], async function () {
@@ -158,7 +62,7 @@
       }
       r.owner = owner
     })
-    // The other owner arriving after the theme took the page (D74): the watch
+    // The other owner arriving after the theme took the page (D81): the watch
     // follows a flip whichever way the page booted.
     await probe.onlyFor(['skin-center-arrival'], async function () {
       await sleep(400)

@@ -5,7 +5,7 @@ export default {
   handle: 'settingsNav',
   order: 260,
   load: 'deferred',
-  contracts: ['shell.dark-theme', 'shell.windows-titlebar'],
+  contracts: ['shell.account-trigger', 'shell.dark-theme', 'shell.foot-area', 'shell.menu', 'shell.settings-button'],
   ungated: '设置页本身，以及随它一起装上的主题翻转抑制',
   stylesheets: [
     { file: 'settings.css', rank: 310 },

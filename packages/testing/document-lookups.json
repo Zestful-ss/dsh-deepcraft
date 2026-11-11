@@ -1,41 +1,4 @@
 {
-  "note": "The whole-document lookups the browser half still makes outside the modules that own them, one entry per file: what it counts, when those reads happen where that is known, and which of them are debt. A lookup in a refresh pass or a frame callback costs the page's own size on every frame of a long conversation, so the sanctioned readers are the engine host.ts's accessors (cacheFirstMatch caches a match and a miss until the page's structure changes), the engine bus.ts's observeMatches registry, the engine stylesheet.ts's own sheet, and the engine chat-dom.ts's two per-frame answers; every other site is recorded here and the list only shrinks. A read by an element's id is not counted: the browser answers it from its own index rather than by walking the tree, which is how the fold controls reach the body their aria-controls names. scripts/lint.mjs counts the sites the way this file records them: a file whose count rises is refused, a file whose count falls has to be written down again, and an entry whose count reaches zero is taken out.",
-  "files": {
-    "packages/client/src/features/search/search.ts": {
-      "count": 1,
-      "reason": "The host search box's clear button, read when the search box takes focus."
-    },
-    "packages/client/src/features/account/account-footer.ts": {
-      "count": 3,
-      "reason": "The footer's own sweeps at teardown, and the sweep for a copy a client reload stranded."
-    },
-    "packages/client/src/features/chat-fold/process-summary.ts": {
-      "count": 3,
-      "reason": "The process groups, read once at install and again when the shell language changes, and the summary marks swept at teardown."
-    },
-    "packages/client/src/features/context-stats/stats-panel.ts": {
-      "count": 3,
-      "reason": "The context block and panel marks, swept once when the statistics are installed, and the stray-sweep for a copy a client reload stranded."
-    },
-    "packages/client/src/features/context-stats/session-stats.ts": {
-      "count": 2,
-      "reason": "The context statistics' own block and panel marks, swept at teardown."
-    },
-    "packages/client/src/features/chat-fold/process-fold.ts": {
-      "count": 1,
-      "reason": "The process groups already on the page, settled once right after install."
-    },
-    "packages/client/src/features/chat-fold/reasoning-fold.ts": {
-      "count": 1,
-      "reason": "The thinking rows already on the page, settled once right after install."
-    },
-    "packages/client/src/features/chat-wait/chat-wait.ts": {
-      "count": 1,
-      "reason": "The waiting line's own marks, swept at teardown."
-    },
-    "packages/client/src/features/turn-nav/turn-nav.ts": {
-      "count": 1,
-      "reason": "The dialog or menu in front, read when a turn-navigation key is pressed."
-    }
-  }
+  "note": "The whole-document lookups the browser half still makes outside the modules that own them, one entry per file: what it counts, when those reads happen where that is known, and which of them are debt. A lookup in a refresh pass or a frame callback costs the page's own size on every frame of a long conversation, so the sanctioned readers are the engine host.ts's accessors (cacheFirstMatch caches a match and a miss until the page's structure changes), the engine bus.ts's observeMatches registry and the engine stylesheet.ts's own sheet; every other site is recorded here and the list only shrinks. A read by an element's id is not counted: the browser answers it from its own index rather than by walking the tree. An entry whose count reaches zero comes out of the file. A unit test stands outside the rule: its document runs in the test browser and costs no reader anything.",
+  "files": {}
 }

@@ -1,0 +1,8 @@
+{
+  "group": "removals",
+  "order": 10,
+  "at": "2026-11-11",
+  "external": false,
+  "zh": "移除对话视图标签条、Windows 标题带、侧栏搜索与账号区域、会话统计、轮次导航与首页水波纹背景，标签、搜索、账号菜单和右侧面板改由宿主自己的控件承担。",
+  "en": "Remove the conversation view-tab strip, the Windows title band, the sidebar search and account area, the session statistics, the turn navigator and the home ripple background; the host's own controls carry the tabs, search, account menu and right panel."
+}

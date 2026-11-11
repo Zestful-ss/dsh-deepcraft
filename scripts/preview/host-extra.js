@@ -17,9 +17,6 @@
   var stored = null
   try { stored = JSON.parse(window.localStorage.getItem(PREFS_KEY) || 'null') } catch (error) { /* private mode */ }
   if (stored !== null && typeof stored === 'object') Object.assign(host.formValue, stored)
-  // The stand-in's own default name is the English fixture's; the preview reads
-  // Chinese until the reader writes a name of their own.
-  if (stored === null || stored.username === undefined) host.formValue.username = '预览用户'
 
   var formListeners = host.formListeners
   var extraListeners = []
@@ -52,16 +49,11 @@
   // cases; this one is always present and always Chinese.
   var hostText = {
     'chat.deepDiving': '深度思考中',
-    'chat.turnNavigation.jump': '跳到第 {turn} 轮',
-    'chat.turnNavigation.turn': '第 {turn} 轮',
     'duration.compactSeconds': '{seconds} 秒',
     'duration.compactMinutes': '{minutes} 分 {seconds} 秒',
     'duration.secondUnit': '秒',
     'duration.minuteUnit': '分 ',
     'duration.hourUnit': '小时 ',
-    'message.turnUsage.cacheHit': '缓存命中',
-    'stats.counts': '{turns} 轮 {steps} 步',
-    'stats.cacheHit': '缓存命中 {percent}%',
   }
   var permissionText = {
     'preset.readOnly': '仅可查看',

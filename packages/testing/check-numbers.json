@@ -21,26 +21,12 @@
       "动画设为减弱时鲸鱼停在静帧，点一下仍有反应": [
         0
       ],
-      "账号菜单仍是普通菜单：没有暂停页入口，名字一行不带按钮角色": [
-        0
-      ],
       "控制台没有异常": [
         0
       ]
     },
     "packages/testing/desktop-header.cjs": {
-      "桌面浮层的会话模式完整显示在卡片内": [
-        0
-      ],
-      "控制台没有异常": [
-        0
-      ]
-    },
-    "packages/testing/door-pin.cjs": {
-      "门滚动的每一帧状态行都钉着": [
-        0
-      ],
-      "从按下到门落定，状态行停在同一处，连半个像素也不动": [
+      "页眉里没有插件画的标题或标签": [
         0
       ],
       "控制台没有异常": [
@@ -48,71 +34,11 @@
       ]
     },
     "packages/testing/ds-bot.cjs": {
-      "聊天一侧本主题的样式表、body 标记与界面元素全部离开": [
+      "Bot 一侧本主题的样式表、body 标记与界面元素全部离开，插件不画切换": [
         0
       ],
-      "在聊天一侧刷新，本主题一帧也没有画出": [
+      "在 Bot 一侧刷新，本主题一帧也没有画出": [
         0
-      ],
-      "桌面端切换离开侧栏行、进入窗口顶端那一行并贴在侧栏列的右沿以内 12px": [
-        0,
-        12,
-        40
-      ],
-      "控制台没有异常": [
-        0
-      ]
-    },
-    "packages/testing/file-merge.cjs": {
-      "同一个文件的六次调用在页面上只留一行可见": [
-        1
-      ],
-      "其余五行整行离开页面，不占高度": [
-        0,
-        1
-      ],
-      "轮次进行中数字随每次改动长大，这个文件始终不多于一行可见": [
-        0,
-        1
-      ],
-      "数字变化时旧数字向下转出、新数字自上方转入": [
-        1
-      ],
-      "行首的操作跟着最后一次调用走：改动时是编辑，最后一次读取后回到读取": [
-        0,
-        1
-      ],
-      "操作换新时旧标题离开、新标题进入": [
-        1
-      ],
-      "换新时旧标题与新标题叠在同一格，旁边的路径不动": [
-        0,
-        1,
-        2
-      ],
-      "一行只画一个写着字的操作标题": [
-        0,
-        1
-      ],
-      "换新时两个图标也叠在同一格": [
-        0,
-        1,
-        2
-      ],
-      "行首的操作标题与同一行的路径同字号、同一条基线，空的标题槽不占位": [
-        1.5
-      ],
-      "写入后再读一次的文件也只剩一行，行尾仍是它的改动": [
-        1,
-        2
-      ],
-      "只被写一次的文件单独成行，没有被卷进合并": [
-        0,
-        1
-      ],
-      "只被读取的文件两行合一，行尾没有数字": [
-        1,
-        2
       ],
       "控制台没有异常": [
         0
@@ -174,6 +100,17 @@
         0
       ]
     },
+    "packages/testing/native-layout.cjs": {
+      "the skin adds no layout to the host: header, sidebar, conversation and window keep their display, position, spacing and border shapes with its sheet off": [
+        0
+      ],
+      "the host's own view tabs switch the view": [
+        2
+      ],
+      "控制台没有异常": [
+        0
+      ]
+    },
     "packages/testing/palette.cjs": {
       "控制台没有异常": [
         0
@@ -196,68 +133,6 @@
       "选中的包画在首页：72×78，同一张原图": [
         72,
         78
-      ]
-    },
-    "packages/testing/process-summary.cjs": {
-      "every process group's header says what it holds, the host's words out of sight": [
-        2
-      ],
-      "the sentence stands in a header with room for it, naming the thoughts and the tool calls": [
-        0
-      ],
-      "控制台没有异常": [
-        0
-      ]
-    },
-    "packages/testing/reader-scroll.cjs": {
-      "逐帧采样真的在跑": [
-        30
-      ],
-      "读者的滚动发生在状态行钉住时": [
-        2
-      ],
-      "读者滚动期间状态行不再钉住": [
-        0
-      ],
-      "滚动之后状态行随内容走": [
-        10
-      ],
-      "状态行不再浮在内容上": [
-        0
-      ],
-      "控制台没有异常": [
-        0
-      ]
-    },
-    "packages/testing/reasoning-stream.cjs": {
-      "思考行自动收起时门真的滚动": [
-        0,
-        1,
-        20
-      ],
-      "窗口跟着推理文本长高，长到推理能到的最大高度就停住": [
-        0,
-        1
-      ],
-      "窗口还没长满时，文本铺满窗口、没有遮罩、也没有位移": [
-        0
-      ],
-      "窗口里的文本按两行一步往上走，从不停在整步上（过渡真的在跑）": [
-        0,
-        1
-      ],
-      "两步之间隔着一整段停留，文本不会每个计时器周期都往上走": [
-        0
-      ],
-      "走到的位置不超过内容的末尾，每一步都走到最新一行": [
-        0,
-        0.5
-      ],
-      "推理结束后窗口撤下，整段文本原样站着，不再被裁也不再位移": [
-        0
-      ],
-      "控制台没有异常": [
-        0
       ]
     },
     "packages/testing/remote-settings.cjs": {
@@ -290,17 +165,13 @@
       "控制台没有异常": [
         0
       ],
-      "收起时那枚按钮不占位置，宿主自己的打开按钮在": [
-        0,
-        1
-      ],
-      "面板打开后它出现在头部那一行，面板里宿主自己那枚让位": [
-        1
-      ],
-      "按下它面板收起，宿主的打开按钮回到原处": [
+      "收起时宿主的打开按钮在，插件不画自己的按钮": [
         0
       ],
-      "控制台没有异常 (line 154)": [
+      "面板打开后宿主自己的收起按钮就在面板里": [
+        0
+      ],
+      "控制台没有异常 (line 124)": [
         0
       ],
       "工具调用单独成行": [
@@ -312,7 +183,7 @@
       "过程组收住了整轮": [
         1
       ],
-      "控制台没有异常 (line 169)": [
+      "控制台没有异常 (line 139)": [
         0
       ],
       "逐帧采样真的在跑": [
@@ -333,41 +204,31 @@
       "落定后回到末尾": [
         4
       ],
-      "输出期间宿主自己的跟随一直开着": [
-        0
+      "输入卡片全程不动": [
+        1
       ],
-      "满屏之后宿主的状态行不再随内容移动，连半个像素也不动": [
-        0,
-        10
-      ],
-      "控制台没有异常 (line 216)": [
+      "控制台没有异常 (line 182)": [
         0
       ],
       "没有页面形态的条目已逐条列出": [
         0
       ],
-      "控制台没有异常 (line 282)": [
+      "控制台没有异常 (line 238)": [
         0
       ],
       "脚本回答已渲染": [
         0
       ],
-      "控制台没有异常 (line 334)": [
+      "控制台没有异常 (line 281)": [
         0
       ]
     },
     "packages/testing/sidebar-rail.cjs": {
-      "侧栏已收起，新会话那一格是宿主自己的 36 像素图标按钮": [
+      "折叠后宿主自己的新建会话按钮收成 36px 图标按钮，图标仍然可见": [
         36
       ],
-      "圆片落在收起按钮与各面板图标同一条中线上": [
+      "侧栏里没有插件画的节点，宿主自己的行照旧在": [
         0
-      ],
-      "座位若放回这一行仍会占住宽度，这条中线因此不是巧合": [
-        8
-      ],
-      "圆片与中线都在收起的栏内": [
-        2
       ],
       "控制台没有异常": [
         0
@@ -386,9 +247,6 @@
       "a filled host anchor keeps its own ink instead of the link colour": [
         3
       ],
-      "a seat carrying the running status dot draws no circle": [
-        0
-      ],
       "scheduler idle once settled (0 passes in 1 s)": [
         0
       ],
@@ -400,24 +258,11 @@
       ],
       "no pass runs after teardown": [
         0
-      ],
-      "the host's own account row is handed back visible and clickable": [
-        0
       ]
     },
     "packages/testing/smoke/cases/agent.cjs": {
-      "the launcher's atlas is cropped into the head the launcher itself draws": [
-        64
-      ],
-      "the crop is the face, inset, with the hat layer over the whole box": [
-        0
-      ],
       "no injected markup executed": [
         0
-      ],
-      "only the account footer was switched off": [
-        0,
-        1
       ],
       "a chunk arriving after its generation ended installs nothing": [
         0
@@ -427,215 +272,9 @@
       ],
       "nothing the skin runs leaves an uncaught error or an unhandled rejection": [
         0
-      ],
-      "the footer's own entries stay in place with their own boxes and no skin mark, the plugin's inline box included": [
-        0,
-        3
-      ],
-      "the account row's hover plate is the row itself, with the name centred in it": [
-        0.5,
-        32
-      ],
-      "the card stays unpainted until the skin's rows are in it and the host has placed it": [
-        0
-      ],
-      "closing the host menu leaves no injected container behind": [
-        0
-      ],
-      "closing the host menu clears the skin marker": [
-        0
-      ],
-      "Ctrl+, opens the host dialog": [
-        1
-      ],
-      "the first account frame reads the profile exactly once": [
-        1
-      ],
-      "a repeated same-state frame reads nothing more": [
-        1
-      ],
-      "no feature reported a failure (line 149)": [
-        0
-      ],
-      "the skin's rail stands in the host rail's slot, one mark per turn, the host's rail hidden but laid out": [
-        4,
-        5
-      ],
-      "every turn of the outline is a row, the loaded prompt wins, a turn without a prompt reads in the host's words": [
-        1
-      ],
-      "the row of the turn being read is marked and sits exactly on its mark, dash on dash": [
-        0
-      ],
-      "switching it off hands the host its rail back; on stands the skin's in again, live": [
-        0,
-        1
-      ]
-    },
-    "packages/testing/smoke/cases/chat.cjs": {
-      "a structural moment hands the scroll back: the position was 60px off the end and lands at it": [
-        60
-      ],
-      "a reader who scrolled away himself is left where he is": [
-        60
-      ],
-      "the capped body walks to its end instead of jumping: the recording starts far off, every frame closes on it, and the last one is at the end": [
-        0,
-        1
-      ],
-      "the stream slide puts the growth the host's pin pushed up back down and slides it to rest: the recording starts well above rest, every frame closes on it, and the last one is at rest": [
-        0,
-        1
-      ],
-      "the slide writes no position: the host's pin stands at the end on every frame, and the live turn's row stands still over it": [
-        0
-      ],
-      "a message the reader just sent does not slide: the host's jump to it stands": [
-        0
-      ],
-      "a burst is slid from the stretch a slide carries instead of jumping whole": [
-        0,
-        1
-      ],
-      "a run of small growths leaves the sliding column no further off the pin than the growth just taken": [
-        1,
-        4
-      ],
-      "a tier that does not cap its body is never pressed": [
-        0
-      ],
-      "a reasoning shorter than the cap stands in a window exactly as tall as the text, with nothing faded": [
-        0,
-        2,
-        3,
-        4,
-        400
-      ],
-      "a reasoning over the cap holds the window at the height it may reach, masked at both edges": [
-        0,
-        400
-      ],
-      "the text steps up towards the newest line and stops there, never past it": [
-        0.5
-      ],
-      "once the reasoning stops the window is off and the text stands at the host's own height": [
-        0,
-        400
-      ],
-      "the window comes off the row without the row changing height": [
-        0,
-        1
-      ],
-      "the window a reasoning outgrew comes off with the row unchanged as well": [
-        0,
-        1
-      ],
-      "a press on a folding row is intercepted and handed to the real element when the door lands": [
-        0,
-        1
-      ],
-      "the wrapped row's door is handed back when it lands": [
-        0,
-        1
-      ],
-      "switching it off takes the mark and the fade, and lets the press land at once with nothing rolling": [
-        1
-      ],
-      "the three file operations are claimed from the tool view seat": [
-        3
-      ],
-      "the edit seat comes first, at priority -1": [
-        0,
-        1
-      ],
-      "the write seat follows": [
-        1
-      ],
-      "the read seat follows, at the same priority": [
-        1,
-        2
-      ],
-      "expanded, the hunks the result metadata reported go into the diff card": [
-        1
-      ],
-      "the diff card is capped at the chat line count and carries the skin's class": [
-        9
-      ],
-      "it keeps the host's IN/OUT card, with no output row": [
-        1
-      ],
-      "a read draws no +n -m tail: it changed nothing": [
-        0
-      ],
-      "expanded, a read shows the file's own window, read back out of its result": [
-        2
-      ],
-      "switching the file rows off hands all three seat keys back": [
-        0
-      ],
-      "switching them back takes all three again, without a reload": [
-        3
-      ],
-      "the other plugin arriving mid-session takes the seat keys down": [
-        0
-      ],
-      "the other plugin leaving hands the seat keys back": [
-        3
-      ],
-      "the old wording leaves upward with a blur: the leave pose is set, its opacity falls and its glyphs blur": [
-        0,
-        0.1,
-        0.5,
-        1,
-        2
-      ],
-      "the two halves overlap: both copies stand in the box across the leaving one's whole fade, and the band keeps sweeping throughout": [
-        0.3,
-        2
-      ],
-      "the wording arriving rises from below through a blur, its opacity climbing to rest": [
-        0,
-        0.01,
-        0.05,
-        0.5,
-        0.9,
-        0.95,
-        1
-      ],
-      "the box the swap runs in never reads as empty, holds its height, and moves the clock only where the words themselves changed": [
-        0,
-        1,
-        4
-      ],
-      "the box takes its new width in one move, so the clock slides with it instead of jumping": [
-        2,
-        3,
-        4
-      ],
-      "the new wording is the one left standing once the copy that left is taken down": [
-        0,
-        1
-      ],
-      "reasoning the line can take words from says the model's own clause": [
-        1
-      ],
-      "a wording with no room is carried whole and clipped where the row ends, and the clock stays on the row": [
-        1
-      ],
-      "with the animation choice set to Reduced the new wording is written at once, with no swap": [
-        1
-      ],
-      "句子不带自己的从句时，站着的那句在该选择下也留在原处": [
-        1
-      ],
-      "words that settle shorter take the box down with them, so the clock sits right after them": [
-        10
       ]
     },
     "packages/testing/smoke/cases/peer.cjs": {
-      "the file change rows leave the host its two seat keys": [
-        0
-      ],
       "the theme claims no body attribute while yielded": [
         0
       ],
@@ -664,107 +303,10 @@
     "packages/testing/smoke/cases/settings.cjs": {
       "the heading carries the plugin's repository link, opening in a new tab with an accessible name": [
         0
-      ],
-      "every switched feature is on by default": [
-        2
-      ],
-      "a feature switched off before the page loads never installs": [
-        0,
-        2
-      ],
-      "switching them on installs every one, live": [
-        0
       ]
     },
     "packages/testing/smoke/cases/shell.cjs": {
       "teardown takes the custom brand's values off <body>": [
-        0
-      ],
-      "the tab row keeps the host's width, so every view fits in the row the host counts from": [
-        0.9,
-        4
-      ],
-      "the view tabs draw their pill under the active tab without sliding in": [
-        0
-      ],
-      "a view switch slides the pill to the newly active tab": [
-        1
-      ],
-      "the pill slides whatever the system motion setting: no reduced-motion rule reaches it": [
-        0
-      ],
-      "the title is handed the room left between its own edge and the controls once the strip's width is reserved, and the row it left tucks under it": [
-        1,
-        28
-      ],
-      "the Standalone box is exactly as wide as the rows under it": [
-        0
-      ],
-      "the Icon style draws no box of the skin's, puts the host's own search slot back in the header, and takes its click over": [
-        0,
-        10
-      ],
-      "the New session row wears the search box's own key caps, and the `+` between them is gone": [
-        1,
-        2
-      ],
-      "teardown takes the search box, its row mark and its root away": [
-        0
-      ],
-      "synthetic path injects nothing into a host menu": [
-        0
-      ],
-      "a pointer crossing the drawer's trigger opens nothing before the dwell elapses": [
-        0
-      ],
-      "a pointer that stays the dwell out opens the drawer": [
-        1
-      ],
-      "with the hover preference on, a press on the open drawer keeps it open": [
-        1
-      ],
-      "leaving every trigger leaves no card up": [
-        0
-      ]
-    },
-    "packages/testing/smoke/cases/stats.cjs": {
-      "the host's stats row is hidden, its pills left as the data's own surface": [
-        0
-      ],
-      "with no projection frame yet the block holds the numbers' place under the real headings": [
-        8,
-        37
-      ],
-      "the first projection frame replaces the place with the numbers read from the projections": [
-        3
-      ],
-      "the compact row is hidden too, and no card of the skin's own is left": [
-        0
-      ],
-      "with no projection frame yet the place is the compact one: four items in a 2x2 grid, no section headings": [
-        4,
-        37
-      ],
-      "the line stands under the card, in the host's own placement, with the meter at its end": [
-        0
-      ],
-      "the figures are the host's own words around the host's own numbers": [
-        0,
-        1
-      ],
-      "the figures are text a count rewrites in place, with no character carrying a span or an entrance of its own": [
-        0
-      ],
-      "a new reading counts to its value: part way through the count the figures have moved without having arrived, and they settle on the reading": [
-        6
-      ],
-      "asking the numbers back into the popover takes the line away, live": [
-        0
-      ],
-      "the figures stand apart by the line's own gap: no separator glyph between them": [
-        0
-      ],
-      "the line is the panel's second trigger: pressing it opens the host's panel with the session's rows, and pressing it again closes it": [
         0
       ]
     },
@@ -788,58 +330,6 @@
       ],
       "按下某个档位后写入带 reasoningEffort 的路由，并声明新版写入契约": [
         2
-      ]
-    },
-    "packages/testing/stats-overlay.cjs": {
-      "the dock stands on the toolbar row's own line, measured off the row rather than assumed": [
-        0
-      ],
-      "a card leaving no gap under that row still keeps the meter on the row's line": [
-        0
-      ],
-      "a card leaving a wider gap under that row keeps the meter on the row's line": [
-        12
-      ],
-      "the room covers the pill itself: a trigger reaching outside the node it is parked in keeps 8px clear of the row's text": [
-        7
-      ],
-      "控制台没有异常": [
-        0
-      ]
-    },
-    "packages/testing/stats-position.cjs": {
-      "the host's own figures stand on a line under the card, with none of the row's glyphs": [
-        0,
-        6
-      ],
-      "the figures are text a count rewrites in place, with no character carrying a span or an entrance of its own": [
-        0
-      ],
-      "the popover keeps none of the numbers here": [
-        0
-      ],
-      "the figures stand apart by their own gap alone: no separator glyph between them": [
-        0
-      ],
-      "the line opens the host's panel, which carries the same session's rows, and closes it again": [
-        0
-      ],
-      "控制台没有异常": [
-        0
-      ]
-    },
-    "packages/testing/stream-pace.cjs": {
-      "逐帧采样真的在跑": [
-        1
-      ],
-      "输入卡片的盒子在整个回合里不动": [
-        0
-      ],
-      "消息列没有一帧被留在输入区上方超过滑动能带走的一段": [
-        0
-      ],
-      "控制台没有异常": [
-        0
       ]
     },
     "packages/testing/subagent-model.cjs": {
@@ -885,17 +375,6 @@
       "390 与 330 像素宽时胶囊仍在窗口内且两半相接": [
         0,
         1
-      ]
-    },
-    "packages/testing/wait-line.cjs": {
-      "从句在下一次意图到达之前一直站着，中间不退回等待词": [
-        0
-      ],
-      "一个说法锁住一秒：状态换得再快，这一行也只一秒换一次": [
-        0
-      ],
-      "控制台没有异常": [
-        0
       ]
     },
     "packages/testing/workspace-pins.cjs": {

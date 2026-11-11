@@ -216,22 +216,6 @@ function checkTiming() {
 }
 
 /**
- * Refuse a module other than the scroll owner importing the spring: the chat
- * area's positions have one writer (D40), and a direct ease would bypass its
- * arbitration.
- *
- * @param metafile - esbuild's metafile for the bundle.
- */
-export function checkScrollOwner(metafile) {
-  for (const [file, input] of Object.entries(metafile.inputs)) {
-    if (file === 'packages/client/src/shared/scroll-owner.ts') continue
-    if (input.imports.some((item) => item.path === 'packages/client/src/shared/scroll-ease.ts')) {
-      throw new Error(`build: ${file} imports shared/scroll-ease.ts; positions go through shared/scroll-owner.ts (D40)`)
-    }
-  }
-}
-
-/**
  * Refuse an easing curve written as a literal in the browser half (D9): a curve
  * is a token, so a Web Animations call names one through
  * packages/client/src/shared/motion.ts and a curve changed in the token table reaches

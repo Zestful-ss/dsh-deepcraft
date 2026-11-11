@@ -13,29 +13,14 @@ interface Navigator {
 }
 
 interface Window {
-  /** The host's boot manifest: every client entry the loader will evaluate (D74's peer check reads it). */
+  /** The host's boot manifest: every client entry the loader will evaluate (the page-owner verdict reads ds-bot's entry here, D81). */
   readonly __DSH_BOOT__?: { entries?: unknown }
-  /** ds-bot's registry, present while its browser half runs (D74 reads only its presence). */
+  /** ds-bot's registry, present while its browser half runs (the page-owner verdict reads only its presence, D81). */
   readonly dshBot?: unknown
 }
 
 /** Additions this skin puts on the global scope. */
 declare var __dshStepDisplay: { set: (mode: 'compact' | 'standard' | 'detailed' | 'verbose') => Promise<boolean>, read: () => string } | undefined
-
-/**
- * Marks the skin keeps on nodes it binds, so a later pass or a later
- * generation can tell its own binding apart from one it must redo.
- */
-interface Element {
-  /** The context meter, panel and line of numbers bound by this generation (features/context-stats). */
-  __dshContextMeterToken?: object
-  __dshContextPanelToken?: object
-  __dshContextLineToken?: object
-  /** The host's account row bound by this generation (features/account). */
-  __dshHostRowToken?: object
-  /** The account stream the body follows (features/account/profile). */
-  __dshAccountStream?: unknown
-}
 
 interface HTMLScriptElement {
   /**

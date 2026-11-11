@@ -2,13 +2,13 @@
  * One page's stand-in markup: the host's footer and composer markup, then the
  * stand-in host, the built bundle and the probe. Both page scripts are plain
  * browser scripts, each read as the parts below in this order; what they need
- * from Node — the page name, the cases this load runs, the run's tier, the
- * markup payload, the launcher's pixel — is set on `window` before them.
+ * from Node — the page name, the cases this load runs, the run's tier and the
+ * markup payload — is set on `window` before them.
  */
 'use strict'
 const fs = require('fs')
 const path = require('path')
-const { MARKUP, PNG_1PX } = require('./shared.cjs')
+const { MARKUP } = require('./shared.cjs')
 /**
  * The stand-in host's parts, in the order they run: the counters, then the host
  * faces the bundle reads.
@@ -16,24 +16,15 @@ const { MARKUP, PNG_1PX } = require('./shared.cjs')
 const STAND_IN_PARTS = [
   'prelude.js',
   'host-palette.js',
-  'account-menu.js',
   'settings-form.js',
-  'account-stream.js',
   'host-fetch.js',
-  'account-service.js',
-  'turn-fixture.js',
-  'locale-fixture.js',
   'empty-sessions.js',
-  'turn-nav.js',
   'mascot.js',
-  'stats-projections.js',
   'sessions.js',
   'model-directory.js',
   'config-forms.js',
   'slots.js',
   'ctx.js',
-  'stats-dialogs.js',
-  'context-panel.js',
   'react.js',
   'sibling-sheet.js',
 ]
@@ -44,22 +35,13 @@ const STAND_IN_PARTS = [
 const PROBE_PARTS = [
   'prelude.js',
   'shell-startup.js',
-  'agent-desktop.js',
   'settle.js',
+  'sheets.js',
   'shell-pages.js',
-  'shell-band.js',
-  'shell-context.js',
-  'account-reads.js',
-  'shell-switches.js',
-  'agent-turn-nav.js',
   'shell-palette.js',
   'brand.js',
   'mascot.js',
   'petdex.js',
-  'chat-follow.js',
-  'chat-fold.js',
-  'chat-files.js',
-  'chat-wait.js',
   'peer.js',
   'subagent-model.js',
   'teardown.js',
@@ -77,261 +59,70 @@ const PROBE = readParts('probe', PROBE_PARTS)
 
 /** The stand-in page for one load: host footer, host composer, then the bundle. */
 function page(name, tier, cases) {
-  // The desktop footer mirrors 0.1.7's: the account menu lives in the
-  // `settings.launcher` slot inside the host's `triggerRow`, and the settings
-  // button the web-style footer has is gone. Every other case keeps the
-  // web-style footer unchanged.
-  //
-  // Two shapes a real footer carries are reproduced here. The action slot's
-  // first entry writes its own box inline (the chat-import plugin's footer
-  // button does), which is what the takeover's weight has to stand over. And a
-  // plugin mounts a card of its own straight into the foot area above the
-  // settings area (the usage plugin's `data-dsh-usage-foot-card`), outside the
-  // slot: the takeover collects whatever the footer holds.
-  var footerActions = '<div class="_footerActions_x_1"><div data-slot="sidebar.footer.action"><button id="plugin-action" aria-label="Cost meter" data-cordis-badge="3" style="box-sizing:border-box;display:flex;align-items:center;width:100%;height:42px;padding:0 10px;background:transparent;border:none"><svg viewBox="0 0 8 8"><circle cx="4" cy="4" r="3"></circle></svg></button><div class="_balance_p_1" role="group"><span>Balance 10.07</span><div role="progressbar" aria-valuenow="40"></div></div></div></div>'
-  var footCard = '<div data-dsh-usage-foot-card=""><div class="_usageCard_u_1"><button type="button" aria-label="Open usage settings"><svg viewBox="0 0 16 16"><path d="M2.5 12.5h11"></path></svg><span>Today 3.49M tokens</span></button></div></div>'
-  var footer = name === 'desktop'
-    ? '<div class="_footArea_x_1">' + footerActions + footCard +
-        '<div class="_settingsArea_x_1"><div data-slot="sidebar.settings"><div class="_triggerRow_s_1">' +
-          '<div data-slot="settings.launcher"><div class="_root_a_1"><span>' +
-            // data-signed-out is the host's own mark on the account trigger (ui-shell's
-            // AccountMenu), read off a live desktop instance.
-            '<button id="host-account" data-signed-out="false" aria-label="Account menu" aria-haspopup="menu" aria-expanded="false">Ada</button>' +
-          '</span></div></div>' +
-          '<button aria-label="Retry update">Retry update</button>' +
-        '</div></div></div>' +
-      '</div>'
-    : '<div class="_footArea_x_1">\n' +
-        '  ' + footCard + '\n' +
-        '  <div class="_settingsArea_x_1"><button aria-haspopup="dialog">Settings</button></div>\n' +
-        '  ' + footerActions + '\n' +
-      '</div>'
-  // The host's statistics in the composer stack (ui-chat StatsPills), which the
-  // host marks per figure. Detailed wraps each figure in
-  // an anchor span and makes the dialog-carrying ones buttons; compact renders
-  // bare reading spans with no trigger. The skin hides both marks outright and
-  // reads the two dialogs into the context popover, so the row is the dock's
-  // first child here, the way the host parks it, with the context meter beside it.
-  var stats = name === 'stats-compact'
-    ? '<span class="_pill_p_1" data-composer-stat="time"><svg viewBox="0 0 16 16" width="14" height="14"></svg>20 tok/s</span>' +
-        '<span class="_pill_p_1" data-composer-stat="usage"><svg viewBox="0 0 16 16" width="14" height="14"></svg>Cache hit 90%</span>'
-    : '<span class="_anchor_a_1" data-composer-stat="time"><button type="button" class="_pill_p_1" aria-haspopup="dialog" aria-expanded="false" aria-label="1 turns 1 steps">' +
-          '<svg viewBox="0 0 16 16" width="14" height="14"></svg><span class="_label_l_1">1 turns 1 steps</span></button></span>' +
-        '<span class="_anchor_a_1" data-composer-stat="usage"><button type="button" class="_pill_p_1" aria-haspopup="dialog" aria-expanded="false" aria-label="105 tok · Cache hit 90%">' +
-          '<svg viewBox="0 0 16 16" width="14" height="14"></svg><span class="_label_l_1">105 tok · Cache hit 90%</span></button></span>'
-  // The host's dock line: the stats row plus the context meter (ui-conversation
-  // ContextMeter), whose trigger draws a ring of two circles beside the
-  // occupancy reading — that ring is what identifies the meter
-  // (features/context-stats); the stats pills draw none.
-  var dock = '<div class="_dock_x_1">' + stats +
-      '<span class="_meter_m_1"><button type="button" id="context-meter" class="_trigger_m_1" aria-haspopup="dialog" aria-expanded="false" aria-label="Context used 84%">' +
-        // The host gives the filled arc a dash array and leaves its track bare
-        // (packages/contracts/src/dom.ts, composer.meter-fill), which is how the skin
-        // tells the two apart when it paints the reading's colour onto it.
-        '<svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5.5"></circle><circle cx="7" cy="7" r="5.5" stroke-dasharray="29 5.56"></circle></svg><span>84%</span></button></span>' +
+  // The host's footer as the web profile draws it: a plugin's own action in the
+  // action slot, and the settings launcher that opens its dialog. The skin
+  // neither redraws nor takes over any of it (D81).
+  var footerActions = '<div class="_footerActions_x_1"><div data-slot="sidebar.footer.action">' +
+    '<button id="plugin-action" aria-label="Cost meter" data-cordis-badge="3" style="box-sizing:border-box;display:flex;align-items:center;width:100%;height:42px;padding:0 10px;background:transparent;border:none">' +
+    '<svg viewBox="0 0 8 8"><circle cx="4" cy="4" r="3"></circle></svg></button></div></div>'
+  var footer = '<div class="_footArea_x_1">' +
+    '<div class="_settingsArea_x_1"><button aria-haspopup="dialog">Settings</button></div>' +
+    footerActions +
     '</div>'
-  // The hero row stands as the host's own: its pickers answer to the host's own
-  // clicks now, so the stand-in has nothing to wire for them.
   // Two of the host's own controls, painted the way the host paints them: the
   // chat's "load earlier" chip (secondary ink on the solid hover fill) and a
-  // filled anchor button (AccountSection's "充值", `_linkButton _primary`). The
-  // skin supplies the tokens both read; the host supplies the foreground token
-  // for a filled control, which the skin leaves alone.
+  // filled anchor button. The skin supplies the tokens both read; the host
+  // supplies the foreground token for a filled control (D80).
   var hostControls = '<style>' +
-      'body { --dsw-alias-label-primary-foreground: #ffffff; }' +
-      'body[data-ds-dark-theme] { --dsw-alias-label-primary-foreground: #0f1115; }' +
-      '._older_h_1 button { border: none; border-radius: 4px; padding: 4px 12px; font-size: 12px;' +
-        ' color: var(--dsw-alias-label-secondary); background: var(--dsw-alias-interactive-bg-hover-solid); }' +
-      '._linkButton_h_1 { color: var(--dsw-alias-label-primary); background: transparent; }' +
-      '._primary_h_1 { color: var(--dsw-alias-label-primary-foreground);' +
-        ' background: var(--dsw-alias-button-primary-fill); }' +
+    'body { --dsw-alias-label-primary-foreground: #ffffff; }' +
+    'body[data-ds-dark-theme] { --dsw-alias-label-primary-foreground: #0f1115; }' +
+    '._older_h_1 button { border: none; border-radius: 4px; padding: 4px 12px; font-size: 12px;' +
+    ' color: var(--dsw-alias-label-secondary); background: var(--dsw-alias-interactive-bg-hover-solid); }' +
+    '._linkButton_h_1 { color: var(--dsw-alias-label-primary); background: transparent; }' +
+    '._primary_h_1 { color: var(--dsw-alias-label-primary-foreground);' +
+    ' background: var(--dsw-alias-button-primary-fill); }' +
     '</style>' +
     '<div class="_older_h_1"><button type="button">Load earlier</button></div>' +
     '<div class="_balance_h_1"><a class="_linkButton_h_1 _primary_h_1" href="#">Top up</a></div>'
-  // The chat area the chat-follow case drives: the host's scroll frame around a
-  // scrollable column, the "back to the end" slot beside that frame, and one
-  // capped process group next to one that is fully expanded.
-  var chatArea = name === 'chat-follow'
-    ? '<style>' +
-        '#debugScroller { height: 240px; overflow-y: auto; }' +
-        '[data-step-process-body] { max-height: 120px; overflow-y: auto; }' +
-        // The host's own wrapper around the column, which carries its follow
-        // mark and clips: an offset on the column never reaches the scroll height.
-        '#debugFollowing { overflow: clip; }' +
-      '</style>' +
-      '<div id="debugFrame"><div id="debugScroller" data-conversation-scroll><div id="debugFollowing"><div data-chat-flow>' +
-        '<div data-chat-flow-key="a" style="height:600px">a</div>' +
-        '<div data-chat-flow-key="b" style="height:600px">b</div>' +
-      '</div></div></div>' +
-      // The host renders its own button beside the frame two levels above the
-      // column, which is the shape handBackFollow in shared/scroll-owner.ts reads.
-      '<div id="debugTail"><button type="button">Back to the end</button></div></div>' +
-      '<div data-step-process><div data-step-process-body><div data-step-process-content style="height:400px">capped</div></div></div>' +
-      '<div data-step-process data-group-expanded-mode="detailed"><div data-step-process-body><div data-step-process-content style="height:400px">expanded</div></div></div>'
-    : ''
-  // The fold case drives the two surfaces the ported folding acts on: a thinking
-  // row (opened and folded back by its own control) and process groups — one
-  // running and capped, holding a thought and a tool call, and one in a tier
-  // that does not cap its body. The host's own behaviour is modelled in the
-  // script: the row's control flips data-expanded, a group's header flips its
-  // body's hidden. A header is the host's: a decorative icon span, then its words.
-  // A thinking row carries its reasoning body the way the pinned host renders it:
-  // a wrapper with the Markdown inside, no slot of its own. The chat flow holds a
-  // DisclosureRow in both of the host's shapes: the row with its body beside it,
-  // and — first in the flow, so the other's body stays the flow's last child —
-  // the row wrapped in a header beside its accessory, the expanded content inside
-  // that same wrapper.
-  var foldReasoning = ''
-  for (var line = 1; line <= 12; line += 1) foldReasoning += '思考第 ' + line + ' 行。' + (line < 12 ? '<br>' : '')
-  // The reasoning's window takes the text's height up to the cap reasoning may
-  // reach (reasoning-stream.ts). Both rows mirror the host's own capped body in
-  // the Standard tier — the same 400px the window stops at — and the probe grows
-  // the first past that cap so the window is read on both sides of it.
-  var longReasoning = ''
-  for (var long = 1; long <= 36; long += 1) longReasoning += '想得久一点第 ' + long + ' 行。' + (long < 36 ? '<br>' : '')
-  var foldArea = name === 'chat-fold'
-    ? '<style>[data-step-process-body][hidden] { display: none; } #debugGroupHeader { display: flex; gap: 6px; padding: 0; max-width: 100%; } #debugThinkText, #debugGrowText { line-height: 24px; } #debugThinkBody, #debugGrowBody { max-height: 400px; overflow: hidden; }</style>' +
-      '<div data-variant="think" data-state="running" id="debugThink"><button type="button" id="debugThinkRow">Thinking</button>' +
-        '<div id="debugThinkBody">' +
-          '<div data-markdown-variant="compact" id="debugThinkText">' + foldReasoning + '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div data-variant="think" data-state="running" data-expanded id="debugGrow"><button type="button" id="debugGrowRow">Thinking</button>' +
-        '<div id="debugGrowBody">' +
-          '<div data-markdown-variant="compact" id="debugGrowText">' + longReasoning + '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div data-step-process id="debugGroup">' +
-        '<button type="button" data-process-activity id="debugGroupHeader"><span aria-hidden="true">icon</span><span data-shimmer id="debugGroupWords">Working · building</span></button>' +
-        '<div data-step-process-body hidden="until-found" id="debugGroupBody"><div data-step-process-content id="debugGroupContent">' +
-          '<div data-chat-flow-kind="assistant-step" data-chat-group-part="reasoning">thought</div>' +
-          '<div data-chat-flow-kind="tool-call">call</div>' +
-        '</div></div>' +
-      '</div>' +
-      '<div data-chat-flow id="debugFlow">' +
-        '<div id="debugWrapped" data-open>' +
-          '<div data-disclosure-header>' +
-            '<div data-disclosure-row role="button" tabindex="0" aria-expanded="true" id="debugWrappedRow">Wrapped row</div>' +
-            '<span id="debugWrappedAccessory">accessory</span>' +
-          '</div>' +
-          '<div id="debugWrappedBody" style="height:120px">wrapped body</div>' +
-        '</div>' +
-        '<button type="button" data-disclosure-row id="debugDisclosure">Row</button>' +
-        '<div id="debugDisclosureBody" style="height:600px">row body</div>' +
-      '</div>' +
-      '<div data-step-process data-group-expanded-mode="detailed" id="debugExpanded">' +
-        '<button type="button" data-process-activity id="debugExpandedHeader"><span data-shimmer>Expanded</span></button>' +
-        '<div data-step-process-body id="debugExpandedBody"><div data-step-process-content>open</div></div>' +
-      '</div>' +
-      '<script>' +
-      '(function () {' +
-      '  window.__foldClicks = { think: 0, group: 0, expanded: 0 };' +
-      '  window.__disclosureClicks = 0;' +
-      '  var think = document.getElementById("debugThink");' +
-      '  think.querySelector("button").addEventListener("click", function () {' +
-      '    window.__foldClicks.think += 1;' +
-      '    if (think.hasAttribute("data-expanded")) think.removeAttribute("data-expanded");' +
-      '    else think.setAttribute("data-expanded", "");' +
-      '  });' +
-      '  var body = document.getElementById("debugGroupBody");' +
-      '  document.getElementById("debugGroupHeader").addEventListener("click", function () {' +
-      '    window.__foldClicks.group += 1;' +
-      '    if (body.hasAttribute("hidden")) body.removeAttribute("hidden");' +
-      '    else body.setAttribute("hidden", "until-found");' +
-      '  });' +
-      '  var flow = document.getElementById("debugFlow");' +
-      '  document.addEventListener("click", function (event) {' +
-      '    if (!(event.target instanceof Element)) return;' +
-      '    if (event.target.closest("#debugDisclosure") === null) return;' +
-      '    window.__disclosureClicks += 1;' +
-      '    var current = document.getElementById("debugDisclosureBody");' +
-      '    if (current !== null) { current.remove(); return; }' +
-      '    var restored = document.createElement("div");' +
-      '    restored.id = "debugDisclosureBody";' +
-      '    restored.style.height = "600px";' +
-      '    restored.textContent = "row body";' +
-      '    flow.appendChild(restored);' +
-      '  });' +
-      '  window.__wrappedClicks = 0;' +
-      '  var wrapped = document.getElementById("debugWrapped");' +
-      '  var wrappedRow = document.getElementById("debugWrappedRow");' +
-      '  wrappedRow.addEventListener("click", function () {' +
-      '    window.__wrappedClicks += 1;' +
-      '    var current = document.getElementById("debugWrappedBody");' +
-      '    wrappedRow.setAttribute("aria-expanded", current === null ? "true" : "false");' +
-      '    if (current !== null) { current.remove(); return; }' +
-      '    var restored = document.createElement("div");' +
-      '    restored.id = "debugWrappedBody";' +
-      '    restored.style.height = "120px";' +
-      '    restored.textContent = "wrapped body";' +
-      '    wrapped.appendChild(restored);' +
-      '  });' +
-      '  var expandedBody = document.getElementById("debugExpandedBody");' +
-      '  document.getElementById("debugExpandedHeader").addEventListener("click", function () {' +
-      '    window.__foldClicks.expanded += 1;' +
-      '    if (expandedBody.hasAttribute("hidden")) expandedBody.removeAttribute("hidden");' +
-      '    else expandedBody.setAttribute("hidden", "until-found");' +
-      '  });' +
-      '})();' +
-      '</script>'
-    : ''
-  // The composer as the host wires it: Enter in the editor submits, and the
-  // host answers the submission with its echo. The chat area's own case drives
-  // this.
-  var chatSubmit = name === 'chat-follow'
-    ? '<div data-echo-holder id="debugEchoHolder"></div>'
-    : ''
-  // The other chat-behaviour plugin, installed: the host's own startup picture
-  // names every client entry before any of them runs, which is the signal
-  // packages/client/src/shared/peer-plugin.ts reads first (the style element is the other one).
-  var boot = name === 'peer-chat-ux'
-    ? '<script>window.__DSH_BOOT__ = { entries: [{ id: "ui-skin-deepcraft", rev: "smoke" }, { id: "@alm-allen/dsh-chat-ux", rev: "smoke" }] }</script>'
-    : ''
   // A skin owns the page from the first frame: the skin center injects this
   // attribute into the served document, before any bundle is evaluated, which
-  // is what lets the theme answer before it paints (D74).
+  // is what lets the theme answer before it paints (D81).
   var skinOwner = name === 'skin-center-handoff'
     ? '<script>document.documentElement.setAttribute("data-dsh-skin", "blue-fantasy")</script>'
     : ''
   return `<!doctype html>
 <html><head><meta charset="utf-8"><title>dsh-deepcraft smoke: ${name}</title></head>
 <body>
-${boot}
 ${skinOwner}
 <div data-slot="root">
 <div data-slot="sidebar">
   <div class="_root_x_1">
     <div class="_regionArea_x_1">
 ${footer}
-<div class="_treeBody_x_1" role="tree">
-  <div class="_sessionRow_x_1" role="treeitem"><span class="_slot_x_1"><div data-slot="sidebar.session.row.leading" style="display:contents"></div></span><span class="_title_x_1">idle session</span></div>
-  <div class="_sessionRow_x_1" role="treeitem"><span class="_slot_x_1"><svg data-state="ongoing" viewBox="0 0 16 16" width="10" height="10"></svg></span><span class="_title_x_1">running session</span></div>
-</div>
     </div>
   </div>
 </div>
-${chatArea}
-<!-- The host keeps the composer inside its conversation scroller (the conversation's parts are marked within it, packages/engine/src/parts-table.ts), and the scroller's box reaches above the card: the transcript stands there. The stand-in has no transcript, so the padding stands for the room it takes. Without it the scroller's overflow clips the crab perched on the card's top edge, and a real press cannot reach it. -->
+<!-- The host keeps the composer inside its conversation scroller, and the
+     scroller's box reaches above the card: the transcript stands there. The
+     stand-in has no transcript, so the padding stands for the room it takes.
+     Without it the scroller's overflow clips the mascot perched on the card's
+     top edge, and a real press cannot reach it. -->
 <div data-conversation-scroll style="padding-top: 80px">
 <div class="_composerStack_h_1">
 <div data-composer-card>
-  <div data-composer-input contenteditable="true" id="editor">/comp</div>
+  <div data-composer-input contenteditable="true" id="editor"></div>
   <div class="_row_x_1">
     <div class="_tools_x_1">
       <button class="_add_x_1" aria-label="Add files or run commands" aria-haspopup="listbox" id="commands"><svg viewBox="0 0 16 16" width="14" height="14"><path d="M8 2v12M2 8h12"/></svg></button>
-      <div class="_modes_x_1"><div data-slot="conversation.input.permission" style="display:contents"><button aria-label="Access mode, current: Edit">Edit</button></div></div>
     </div>
     <div class="_trailing_x_1"><button class="_primary_x_1" aria-label="Send message" id="send"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M8 1v14"/></svg></button></div>
   </div>
 </div>
-${dock}
 </div>
 </div>
 ${hostControls}
-${chatSubmit}
-${foldArea}
 </div>
-<script>window.SMOKE_CASE = ${JSON.stringify(name)}; window.SMOKE_GROUPS = ${JSON.stringify(cases)}; window.SMOKE_TIER = ${JSON.stringify(tier)}; window.SMOKE_MARKUP = ${JSON.stringify(MARKUP)}; window.SMOKE_PNG = ${JSON.stringify(PNG_1PX)}</script>
+<script>window.SMOKE_CASE = ${JSON.stringify(name)}; window.SMOKE_GROUPS = ${JSON.stringify(cases)}; window.SMOKE_TIER = ${JSON.stringify(tier)}; window.SMOKE_MARKUP = ${JSON.stringify(MARKUP)}</script>
 <script>${STAND_IN}</script>
 <script src="/client.js"></script>
 <script>${PROBE}</script>

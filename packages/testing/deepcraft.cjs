@@ -7,8 +7,7 @@
  * own settings page, drives every hand gesture on the home card, samples the
  * states the live turn asks for, keeps her on the home page and back, holds her
  * still under reduced motion, and writes the ocean home and conversation
- * captures. It also proves the account row is a plain row: the hold-screen
- * easter egg is gone, so a press opens no page.
+ * captures.
  *
  * Every setting is written by pressing the real control; nothing here sets a
  * body attribute to imitate a preference.
@@ -29,9 +28,6 @@ const SKIN = {
   whale: '.dsh-deepcraft-deepy',
   whaleHit: '.dsh-deepcraft-deepy-hit',
   whaleStrip: '.dsh-deepcraft-deepy-strip',
-  accountBtn: '.dsh-deepcraft-account-btn',
-  accountRow: '.dsh-deepcraft-account-popover-row',
-  menuTrigger: '[aria-haspopup="menu"][data-signed-out]',
 }
 
 /** The preferences this walk writes, each by its own row title in either language. */
@@ -76,14 +72,6 @@ async function closeSettings(page) {
   await page.keyboard.press('Escape')
   await page.waitForSelector(SKIN.page, { state: 'detached', timeout: WHALE_WAIT_MS }).catch(() => {})
   await page.waitForTimeout(300)
-}
-
-/** Open the account menu: the skin's own row, or the host's trigger it takes over. */
-async function openAccountMenu(page) {
-  const own = page.locator(SKIN.accountBtn).first()
-  if (await own.count() > 0) await own.click()
-  else await page.locator(SKIN.menuTrigger).first().click()
-  await page.waitForTimeout(400)
 }
 
 /** Wait for the whale to be on the page, or to be gone. */
@@ -151,7 +139,6 @@ function deepcraftScenario({ check }) {
     script: 'greeting',
     prompt: 'hello there',
     delayMs: 600,
-    account: true,
     viewport: { width: 1440, height: 900 },
     async beforeSend(context) {
       const { page, out } = context
@@ -249,17 +236,6 @@ function deepcraftScenario({ check }) {
       await pickIn(page, ROWS.motion, labelRe(notes.before.motionPick))
       await closeSettings(page)
 
-      // The account menu is a plain menu: no hold-screen entry, and the row is
-      // not a button (D80).
-      await openAccountMenu(page)
-      notes.account = {
-        rows: await page.locator(SKIN.accountRow).count(),
-        holdRows: await page.locator('[data-dsh-deepcraft-ban-row]').count(),
-        role: await page.locator(SKIN.accountRow).first().getAttribute('role').catch(() => null),
-      }
-      await page.keyboard.press('Escape')
-      await page.waitForTimeout(300)
-
       // The theme's own identity: no brand attribute, and the whale mask the
       // sidebar and the hero paint is the one the body defines.
       notes.identity = await page.evaluate(() => ({
@@ -298,9 +274,6 @@ function deepcraftScenario({ check }) {
         check('动画设为减弱时鲸鱼停在静帧，点一下仍有反应',
           states.reducedAnimated === 0 && states.reducedPoke === 'poke-left',
           JSON.stringify({ animations: states.reducedAnimated, poke: states.reducedPoke })),
-        check('账号菜单仍是普通菜单：没有暂停页入口，名字一行不带按钮角色',
-          notes.account.holdRows === 0 && notes.account.rows > 0 && notes.account.role === null,
-          JSON.stringify(notes.account)),
         check('页面不带旧品牌属性，侧栏标志画的是皮肤自己的鲸鱼',
           notes.identity.brandAttr === false && /^url\(/.test(notes.identity.maskToken || ''),
           JSON.stringify(notes.identity)),

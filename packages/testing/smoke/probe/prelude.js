@@ -172,13 +172,14 @@
     until: until,
     attrs: attrs,
     pillState: pillState,
-    report: { applyError: window.__applyError, teardownRegistered: typeof window.__dispose === 'function' },
+    report: {
+      applyError: window.__applyError,
+      teardownRegistered: typeof window.__dispose === 'function',
+      skinApplied: document.body.hasAttribute('data-dsh-deepcraft'),
+    },
     steps: [],
-    // The view-tab strip and the search root the shell cases build, and the
-    // sibling's sheet the page carried before the bundle ran: the teardown step
-    // reads all three back.
-    viewStrip: null,
-    searchRoot: null,
+    // The sibling's sheet the page carried before the bundle ran: the teardown
+    // step reads it back.
     siblingSheet: null,
     /** Register one step; the parts run in the order page.cjs injects them. */
     step: function (body) { probe.steps.push(body) },

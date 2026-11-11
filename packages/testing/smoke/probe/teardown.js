@@ -1,7 +1,7 @@
 /**
  * The run's tail: the host's own controls read as the host painted them, the
- * keymap and the console records collected, and the teardown — dispose with a
- * pass pending, then every mark, node and sheet the skin must have handed back.
+ * console records collected, and the teardown — dispose with a pass pending,
+ * then every mark, node and sheet the skin must have handed back.
  */
 (function () {
   var probe = window.__dshSmokeProbe
@@ -9,15 +9,18 @@
   var r = probe.report
 
   probe.step(async function () {
-    // The host's own account row, when the host has one: the skin marks it and
-    // repaints it as a Claude row, so the teardown has to hand it back exactly as
-    // the host rendered it (D12).
-    r.hostRowPresent = document.getElementById('host-account') !== null
-    var hostRowAtRest = document.getElementById('host-account')
-    r.hostRowMarked = !!(hostRowAtRest && hostRowAtRest.hasAttribute('data-dsh-deepcraft-account-host-row'))
+    // The plugin's own footer entry, as the host rendered it: the skin must
+    // neither rewrite it nor take its box away.
+    var action = document.getElementById('plugin-action')
+    r.footerPluginAction = action === null ? null : {
+      label: action.getAttribute('aria-label'),
+      badge: action.getAttribute('data-cordis-badge'),
+      display: getComputedStyle(action).display,
+      visible: typeof action.checkVisibility === 'function' ? action.checkVisibility() : action.getBoundingClientRect().width > 0,
+    }
     // The two host controls the skin's own colour rules must leave readable: the
     // chat's solid hover chip, and a filled anchor button whose ink comes from
-    // the host's foreground token rather than from the link colour.
+    // the host's foreground token.
     var chip = document.querySelector('._older_h_1 button')
     var chipCS = chip ? getComputedStyle(chip) : null
     r.chipInk = chipCS ? chipCS.color : null
@@ -29,7 +32,7 @@
     // A closed popover card must not answer the host's menu role: the host's
     // keyboard arbitration queries every [role=menu] in the document as a menu
     // that owns the foreground, so a hidden card silently disarms the shortcuts
-    // behind it (the Esc-Esc stop, the close-page and dialog commands).
+    // behind it.
     r.closedMenuCards = document.querySelectorAll('.dsh-deepcraft-popover-card[role="menu"]:not([data-open="true"])').length
     await sleep(50)
     r.pwned = window.__pwned
@@ -47,23 +50,11 @@
       await sleep(200)
       r.passesAfterTeardown = window.__passes - before
       r.leftNodes = document.querySelectorAll(':is([class^="dsh-deepcraft-"], [class*=" dsh-deepcraft-"])').length
-      r.leftMarkers = document.querySelectorAll('[data-dsh-deepcraft-host-settings-trigger], [data-dsh-deepcraft-footer-entry], [data-dsh-deepcraft-footer-hidden], [data-dsh-deepcraft-footer-overlay], [data-dsh-deepcraft-model-host], [data-dsh-deepcraft-account-host-row], [data-dsh-deepcraft-context-stats], [data-dsh-deepcraft-motion], [data-dsh-deepcraft-wait], [data-dsh-deepcraft-deepy-anchor], [data-dsh-deepcraft-crab-anchor]').length
-      r.leftAttrs = Array.prototype.filter.call(document.body.attributes, function (a) { return /^data-dsh-(claude|window)/.test(a.name) }).map(function (a) { return a.name })
+      r.leftMarkers = document.querySelectorAll('[data-dsh-deepcraft-part], [data-dsh-deepcraft-holds], [data-dsh-deepcraft-model-host], [data-dsh-deepcraft-deepy-anchor], [data-dsh-deepcraft-crab-anchor]').length
+      r.leftAttrs = Array.prototype.filter.call(document.body.attributes, function (a) { return /^data-dsh-deepcraft/.test(a.name) }).map(function (a) { return a.name })
       // The custom brand's values ride <body>'s own style (features/brand/brand.ts).
       r.leftBrandProperties = Array.prototype.filter.call(document.body.style, function (name) { return name.indexOf('--dsh-deepcraft-custom-') === 0 })
       r.leftStylesheet = !!document.getElementById('dsh-deepcraft-style')
-      if (probe.viewStrip) r.viewPill.left = probe.viewStrip.hasAttribute('data-dsh-deepcraft-pill') || probe.viewStrip.hasAttribute('data-dsh-view-tabs') || probe.viewStrip.style.length > 0
-      if (r.search) {
-        r.search.left = document.querySelectorAll('[data-dsh-deepcraft-search-row], .dsh-deepcraft-search-trigger, .dsh-deepcraft-search-bar').length
-        r.search.rootUnmounted = !!probe.searchRoot && probe.searchRoot.unmounted
-      }
-      var hostRowEnd = document.getElementById('host-account')
-      r.hostRowEnd = hostRowEnd === null ? null : {
-        visibility: getComputedStyle(hostRowEnd).visibility,
-        pointerEvents: getComputedStyle(hostRowEnd).pointerEvents,
-        display: getComputedStyle(hostRowEnd).display,
-        width: hostRowEnd.getBoundingClientRect().width,
-      }
       // The host removes every tag carrying this package's id when the package
       // reloads (client-modules' `removeOwnedStyles`); the sibling's sheet must
       // not be among them, whether that step runs before or after the teardown.

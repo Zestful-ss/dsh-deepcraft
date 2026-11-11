@@ -2,7 +2,7 @@
 
 # DeepCraft
 
-**Customizable branding, color palettes and interactions for the DeepSeek Harness Web GUI.**
+**Customizable branding, color palettes and typefaces for the DeepSeek Harness Web GUI.**
 
 > **Ocean blue by default, with Warm ember and Forest green beside it; the mark, name, accent and pet can all be your own.**
 
@@ -60,7 +60,7 @@ The settings page switches between three palettes; light and dark follow the sys
 
 ### Layout
 
-- The plugin no longer rearranges the page: the conversation keeps the host's centred reading column and composer, and the home keeps the host's hero page; the host's message, tool and composer controls stay in place, and the host's connection, update and plugin controls in the sidebar footer stay visible and operable — the plugin only adds visual effects.
+- The plugin changes colours and typefaces alone: the conversation's reading column and composer, the home's hero page, the conversation header and view tabs, the sidebar's search and account rows, and the tool-call rows are drawn and operated by the host; the plugin neither moves, redraws nor rewrites them.
 - The sidebar gathers every pinned conversation above the workspaces, most recently pinned first; each row names its workspace and opens, renames, unpins or archives through the host's own session menu, while the host's row stays in its workspace.
 
 ### Pets
@@ -100,9 +100,7 @@ To enable them, install the `.ttf` files on your system, or copy them into `$DSH
 
 ## Acknowledgements
 
-- The conversation navigator follows SherUnlocked-4869's [dsh-plugin-msg-nav](https://github.com/SherUnlocked-4869/dsh-plugin-msg-nav) (MIT).
 - The animation frames of Deepy the pixel whale come from the Deepy whale theme pack drawn by calmly-eating-bugs ([@wp3171216237](https://github.com/wp3171216237)), and ship with the plugin by the author's permission; GIFs of all 20 animations are in [docs/gifs/](docs/gifs/).
-- The enhanced animations in the chat area are modified from [dsh-chat-ux](https://github.com/alm-allen/dsh-chat-ux) (MIT).
 - Clawd is a character of Anthropic. Its frames are not covered by the MIT license (see [LICENSE](LICENSE)). This plugin is an unofficial fan work, not affiliated with or endorsed by Anthropic.
 
 ## Related projects

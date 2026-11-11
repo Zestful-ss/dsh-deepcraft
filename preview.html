@@ -13,7 +13,6 @@
   window.SMOKE_GROUPS = []
   window.SMOKE_TIER = 'full'
   window.SMOKE_MARKUP = ''
-  window.SMOKE_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
 </script>
 </head>
 <body>
@@ -67,6 +66,7 @@
             </button>
             <div class="_sectionHeader_x_1 preview-section-header">
               <span class="_sectionLabel_x_1">今天</span>
+              <button type="button" class="preview-icon-button" aria-label="搜索会话" data-slot="sidebar.search">⌕</button>
             </div>
             <div class="_treeBody_x_1 preview-tree" role="tree">
               <div class="_sessionRow_x_1 _selected_x_1 preview-session-row preview-session-row-on" role="treeitem" aria-selected="true">
@@ -92,14 +92,10 @@
               </div>
             </div>
             <div class="_settingsArea_x_1 preview-settings-trigger">
-              <div data-slot="sidebar.settings">
-                <div class="_triggerRow_s_1 preview-trigger-row">
-                  <div data-slot="settings.launcher">
-                    <button type="button" id="host-account" data-signed-out="false" aria-label="账号菜单" aria-haspopup="menu" aria-expanded="false">预览用户</button>
-                  </div>
-                  <button type="button" aria-haspopup="dialog" aria-label="设置" class="preview-icon-button">⚙</button>
-                </div>
-              </div>
+              <button type="button" aria-haspopup="dialog" aria-label="设置" class="preview-icon-button">⚙</button>
+            </div>
+            <div class="preview-account-row">
+              <button type="button" id="host-account" data-signed-out="false" aria-label="账号菜单" aria-haspopup="menu" aria-expanded="false" class="preview-account">预览用户</button>
             </div>
           </div>
         </div>
@@ -111,6 +107,11 @@
             <div class="_titleCluster_x_1">
               <span class="_crumbs_x_1 preview-crumbs">配色一览</span>
             </div>
+          </div>
+          <div class="preview-view-tabs" role="tablist" aria-label="视图">
+            <button type="button" role="tab" aria-selected="true">对话</button>
+            <button type="button" role="tab" aria-selected="false">轨迹</button>
+            <button type="button" role="tab" aria-selected="false">上下文</button>
           </div>
         </div>
 
@@ -166,14 +167,6 @@
                   <button type="button" id="send" class="preview-send _primary_x_1" aria-label="发送消息">↑</button>
                 </div>
               </div>
-            </div>
-            <div class="preview-dock _dock_x_1">
-              <span class="preview-stat" data-composer-stat="time">1 轮 2 步</span>
-              <span class="preview-stat" data-composer-stat="usage">105 tok · 缓存命中 90%</span>
-              <button type="button" class="preview-meter" id="context-meter" aria-haspopup="dialog" aria-expanded="false" aria-label="上下文占用 84%">
-                <svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5.5"></circle><circle cx="7" cy="7" r="5.5" stroke-dasharray="29 5.56"></circle></svg>
-                <span>84%</span>
-              </button>
             </div>
           </div>
         </div>

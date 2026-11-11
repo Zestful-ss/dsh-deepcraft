@@ -40,12 +40,10 @@ const DRIVER_MESSAGE = /^\[\.WebGL-[^\]]*\]GL Driver Message/
 /**
  * What a first-run overlay never is. A phone-width page puts the shell's own
  * navigation in a dialog — the drawer carries `data-shortcut-modal="sidebar"` —
- * and the skin's search palette is the shell's modal wearing the skin's class,
- * so both wear `role="dialog"` without being anything to answer: pressing the
- * drawer's buttons opens a session and the palette instead of closing a form,
- * and the palette then reads as an overlay that never goes away.
+ * and pressing its buttons opens a session instead of closing a form, so the
+ * drawer reads as an overlay that never goes away.
  */
-const NOT_FIRST_RUN = ':not([data-shortcut-modal]):not(.dsh-deepcraft-search-dialog):not(:has(.dsh-deepcraft-search-dialog))'
+const NOT_FIRST_RUN = ':not([data-shortcut-modal])'
 
 /**
  * Give the home a workspace of the lane's own when it has none.

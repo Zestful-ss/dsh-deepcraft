@@ -1,16 +1,14 @@
 import * as React from 'react'
-import { BUNDLE_CONFIG_SLOT, PACKAGE_NAME, REPOSITORY_URL, SETTINGS_SCROLLER_ATTR, SETTINGS_SECTION_SLOT, USERNAME_MAX } from '../../constants'
+import { BUNDLE_CONFIG_SLOT, PACKAGE_NAME, REPOSITORY_URL, SETTINGS_SCROLLER_ATTR, SETTINGS_SECTION_SLOT } from '../../constants'
 import { SEGMENT_CLASS } from '../../shared/segment-control'
 import { loadModelCopy, onModelCopyLoaded } from '../../shared/model-copy'
-import { createHostAccountMenu } from '../account/host-menu'
+import { createHostSettings } from './host-settings'
 import { adoptSettingsForm, motionReduced, readPrefs, savePrefs, subscribePrefs } from '../../core/prefs'
 import { cacheFirstMatch, hostSlots } from '@dsh-deepcraft/engine/host'
 import { motionMs } from '../../shared/motion'
 import { ClaudeStyleSegmentGroup, createSettingsControls, tabRows } from './settings-controls'
 import { createSettingsAppearanceTab } from './settings-tab-appearance'
-import { createSettingsConversationTab } from './settings-tab-conversation'
 import { createSettingsGeneralTab } from './settings-tab-general'
-import { createSettingsSidebarTab } from './settings-tab-sidebar'
 import { installThemeFlip } from './theme-flip'
 import type { Prefs } from '../../constants'
 import type { SettingsTabId } from '../../core/feature'
@@ -21,8 +19,6 @@ import type manifest from './settings.manifest'
 import type { SettingsTab, SettingsView } from './settings-controls'
 import { copy } from './copy'
 
-/** Pause after the last keystroke before the username is written to the settings store. */
-const USERNAME_SAVE_DEBOUNCE_MS = 600
 /** On the open tab's rows: the way it arrived, which the stylesheet slides it in from. */
 const PAGE_ENTER_ATTR = 'data-dsh-deepcraft-page-enter'
 /** On the still copy of the tab being replaced: the way it leaves. */
@@ -67,8 +63,6 @@ export const SETTINGS_SECTION_ID = 'deepcraft'
 export const SETTINGS_TABS: SettingsTab[] = [
   createSettingsGeneralTab(),
   createSettingsAppearanceTab(),
-  createSettingsSidebarTab(),
-  createSettingsConversationTab(),
 ]
 export const SETTINGS_CONTROLS = createSettingsControls()
 
@@ -122,15 +116,11 @@ export function ClaudeStyleSettingsSection(props: { embed?: boolean }) {
   const errorState = React.useState<string | null>(null)
   const error = errorState[0]
   const setError = errorState[1]
-  const usernameState = React.useState(prefs.username)
-  const username = usernameState[0]
-  const setUsername = usernameState[1]
   const tabState = React.useState(SETTINGS_TABS[0].id)
   const activeTab = tabState[0]
   const setActiveTab = tabState[1]
   /** Which way the open tab arrived, or null for the tab the page opened on. */
   const enterState = React.useState<PageDirection | null>(null)
-  const usernameTimer = React.useRef<number | null>(null)
   const pageRef = React.useRef<HTMLDivElement>(null)
   const rowsRef = React.useRef<HTMLFieldSetElement>(null)
   const leavingRef = React.useRef<HTMLDivElement>(null)
@@ -180,10 +170,7 @@ export function ClaudeStyleSettingsSection(props: { embed?: boolean }) {
     syncSettingsNav()
     let alive = true
     const unsubscribe = subscribePrefs(next => {
-      if (alive) {
-        setPrefs(next)
-        setUsername(next.username)
-      }
+      if (alive) setPrefs(next)
     })
     const unsubscribeCopy = onModelCopyLoaded(() => {
       if (alive) setPrefs(p => Object.assign({}, p))
@@ -192,7 +179,6 @@ export function ClaudeStyleSettingsSection(props: { embed?: boolean }) {
       alive = false
       unsubscribe()
       if (unsubscribeCopy) unsubscribeCopy()
-      if (usernameTimer.current) clearTimeout(usernameTimer.current)
     }
   }, [])
 
@@ -208,54 +194,10 @@ export function ClaudeStyleSettingsSection(props: { embed?: boolean }) {
     })
   }
 
-  const saveUsernameNow = (value: string) => {
-    const next = value.trim().slice(0, USERNAME_MAX)
-    if (next === readPrefs().username) return
-    setError(null)
-    setPrefs(Object.assign({}, readPrefs(), { username: next }))
-    savePrefs({ username: next }).then(result => {
-      if (result === null) setError(copy('unavailable'))
-    })
-  }
-
-  const queueUsernameSave = (value: string) => {
-    if (usernameTimer.current) clearTimeout(usernameTimer.current)
-    usernameTimer.current = setTimeout(() => {
-      usernameTimer.current = null
-      saveUsernameNow(value)
-    }, USERNAME_SAVE_DEBOUNCE_MS)
-  }
-
-  const commitUsername = () => {
-    if (usernameTimer.current) {
-      clearTimeout(usernameTimer.current)
-      usernameTimer.current = null
-    }
-    saveUsernameNow(username)
-  }
-
   const view: SettingsView = {
     prefs,
     write,
     controls: SETTINGS_CONTROLS,
-    username: {
-      value: username,
-      onChange(e) {
-        setUsername(e.target.value)
-        queueUsernameSave(e.target.value)
-      },
-      onBlur: commitUsername,
-      onKeyDown(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault()
-          commitUsername()
-          if (e.currentTarget && e.currentTarget.blur) e.currentTarget.blur()
-        } else if (e.key === 'Escape') {
-          setUsername(prefs.username)
-          if (e.currentTarget && e.currentTarget.blur) e.currentTarget.blur()
-        }
-      },
-    },
   }
   // activeTab only ever holds an id from SETTINGS_TABS.
   const tab = SETTINGS_TABS.find(item => item.id === activeTab)!
@@ -352,23 +294,21 @@ export function settingsSectionIndex() {
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   loadModelCopy()
   // The flip's transition suppression rides this page: both exist exactly
-  // while this theme paints the page (D74).
+  // while this theme paints the page (D81).
   const stopThemeFlip = installThemeFlip()
   // The settings services are up by now even when they were not at apply
   // time, so retry the official-form binding before choosing a seat. It is
   // idempotent.
   adoptSettingsForm(ctx)
-  // The host's settings drive behind Ctrl+,: it presses the host's own entry,
-  // which outlives the account area's switch, and it has no drawer to fold.
-  const hostSettings = createHostAccountMenu({ close() {} })
+  // The host's settings drive behind Ctrl+,: it presses the host's own entry.
+  const hostSettings = createHostSettings()
   if (ui) {
     ui.settingsNav = {
       sync: syncSettingsNav,
       /** A pointer press anywhere: the nav's class changes are outside the
        * observer's attributeFilter, so no pass would fire for them. */
       onPointerDown() { syncSettingsNav() },
-      /** Ctrl+, opens settings, and the key goes no further. It rides this
-       * page rather than the account area, whose switch can take that away. */
+      /** Ctrl+, opens settings, and the key goes no further. */
       onKey(e: KeyboardEvent) {
         if (!(e.ctrlKey || e.metaKey) || e.key !== ',') return
         e.preventDefault()

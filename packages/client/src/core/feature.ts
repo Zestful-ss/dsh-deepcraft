@@ -1,6 +1,5 @@
 import type * as React from 'react'
 import type { Prefs } from '../constants'
-import { peerPresent } from '../shared/peer-plugin'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { CopyEntries } from './i18n'
 import type { SchedulerCalls } from '@dsh-deepcraft/engine/scheduler'
@@ -42,16 +41,8 @@ export type FeatureIdentity =
   | { id: 'settings', handle: HandleName }
 
 export interface FeatureFields {
-  /**
-   * The other features' handles this feature's modules read off `ui`
-   * (D72). Its modules see `ui` as FeatureUi of this manifest, so a read
-   * the manifest does not declare fails the type check.
-   */
-  reads?: HandleName[]
   /** Install order, and with it the scheduler's pass order: ascending, unique. */
   order: number
-  /** The plugin implementing the same behaviour: while it is on the page the feature stays uninstalled (D74). */
-  yieldsTo?: PeerPlugin
   /**
    * `'deferred'`: the feature's own modules leave the bundle for a chunk of
    * their own, fetched once the page is taken and installed when it arrives
@@ -76,9 +67,6 @@ export interface FeatureFields {
   contracts: string[]
 }
 
-/** The other plugins a feature can yield to. */
-export type PeerPlugin = 'dsh-chat-ux'
-
 /** A written stylesheet. */
 export type FeatureStylesheet = FeatureStylesheetFile
 
@@ -86,12 +74,6 @@ export interface FeatureStylesheetFile {
   file: string
   /** Position in the concatenated stylesheet, shared with the theme's sheets (scripts/build.mjs). Unique. */
   rank: number
-  /**
-   * `'surface'`: the sheet is scoped to `body[data-dsh-deepcraft-surface]` and
-   * ships apart from the theme's sheet, so it stays while ds-bot's surface has
-   * the page (D74).
-   */
-  scope?: 'surface'
 }
 
 /** A line of copy in the settings page's own copy file, before it moves to its feature (D72). */
@@ -103,7 +85,7 @@ export interface SettingsCopyLine {
 /**
  * The settings tabs, by id (packages/client/src/features/settings/settings-tab-*.ts).
  */
-export type SettingsTabId = 'general' | 'appearance' | 'sidebar' | 'conversation'
+export type SettingsTabId = 'general' | 'appearance'
 
 /**
  * One settings row a feature owns (D72). The control follows the preference's
@@ -136,40 +118,12 @@ export interface FeatureSettingsRow {
    * all — a requirement of its own unmet, or an owner that yields the page.
    */
   parent?: keyof Prefs
-  /** The preference the row's control only works under (D72). */
-  requires?: FeatureRowRequirement
-  /**
-   * The row acts on the Windows desktop window alone: on any other page it
-   * keeps the stored choice on show, refuses input and says where it acts
-   * (core/desktop-band.ts).
-   */
-  windowsOnly?: boolean
-  /**
-   * The row's cards show a motion: while the animation choice resolves to
-   * reduced they stand as stills that still tell the choices apart, the row
-   * says so, and the choice stays editable.
-   */
-  stillWhenReduced?: boolean
   /**
    * The feature's own module that draws this row's control, beside its main
    * module: a preview card, a picker or an editor the generic switch cannot
    * draw. The build collects these modules for the settings page (D72).
    */
   control?: string
-  /** The row carries the host's experimental tag beside its title: the feature is on show but not settled. */
-  experimental?: boolean
-}
-
-/**
- * Another preference a row's control only works under: while that preference
- * holds none of `values` the row keeps the stored choice on show, refuses input
- * and says why with `note` under its description.
- */
-export interface FeatureRowRequirement {
-  pref: keyof Prefs
-  values: readonly string[]
-  /** The line the row shows while the requirement is unmet, by key in the feature's own copy. */
-  note: string
 }
 
 /**
@@ -200,7 +154,7 @@ export type RowControlNames<M> = M extends { settingsRows: readonly (infer R)[] 
 export type SettingsControlsOf<M> = Record<RowControlNames<M>, React.ComponentType<SettingsRowView>>
 
 /** The manifest fields the browser half reads. */
-export type FeatureRuntime = FeatureIdentity & Pick<FeatureFields, 'order' | 'yieldsTo' | 'settingsRows'> & {
+export type FeatureRuntime = FeatureIdentity & Pick<FeatureFields, 'order' | 'settingsRows'> & {
   pref?: keyof Prefs
   prefValues?: string[]
   ungated?: string
@@ -229,15 +183,12 @@ export function handleName(feature: FeatureIdentity): HandleName {
 /** The handle a manifest's feature registers under. */
 type OwnHandle<M> = M extends { handle: infer H extends HandleName } ? H : M extends { id: infer I extends HandleName } ? I : never
 
-/** The handles a manifest says its feature reads. */
-type ReadHandles<M> = M extends { reads: readonly (infer R extends HandleName)[] } ? R : never
-
 /**
- * What one feature's modules see of `ui`: the two calls, the feature's own
- * handle and the handles its manifest `reads` (D72). Its install takes `ui` as
- * `FeatureUi<typeof manifest>`, with the manifest imported as a type.
+ * What one feature's modules see of `ui`: the two calls and the feature's own
+ * handle (D72). Its install takes `ui` as `FeatureUi<typeof manifest>`, with
+ * the manifest imported as a type.
  */
-export type FeatureUi<M> = SchedulerCalls & { [K in OwnHandle<M> | ReadHandles<M>]?: Handles[K] }
+export type FeatureUi<M> = SchedulerCalls & { [K in OwnHandle<M>]?: Handles[K] }
 
 /** The registry the entry installs from, kept for readers outside the install loop (the settings page). */
 let registry: readonly Feature[] = []
@@ -255,7 +206,4 @@ export function settingsRowsOf(tab: SettingsTabId) {
   return out
 }
 
-/** Whether a feature reading this preference stands down right now for a plugin it yields to. */
-export function prefYielded(pref: keyof Prefs) {
-  return registry.some(feature => feature.pref === pref && feature.yieldsTo !== undefined && peerPresent(feature.yieldsTo))
-}
+

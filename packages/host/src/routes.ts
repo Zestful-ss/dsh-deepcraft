@@ -1,10 +1,9 @@
 /**
  * The plugin's host routes: everything the browser half cannot reach itself.
  *
- * These are the surfaces D75 describes — the model copy document, the webfonts,
- * the OS user, the HDSL account, the routed assets, session deletion, the
- * usage and search roll-ups, the peak rate catalog and the reader's brand
- * images (packages/host/src/brand.ts) — each registered on the
+ * These are the surfaces D75 describes — the model copy document, the
+ * webfonts, the routed assets, session deletion, the usage roll-up and the
+ * reader's brand images (packages/host/src/brand.ts) — each registered on the
  * host's web server under this plugin's route prefix. Every route is
  * registered on its own: one path the web server refuses is reported, and the
  * other routes still register.
@@ -12,9 +11,8 @@
  * The paths are the shared contract (`@dsh-deepcraft/contracts/routes`, * D73): the browser half addresses the same names.
  */
 import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
-import { HDSL_PATH, HDSL_SKIN_PATH, ROUTE_PREFIX, SESSION_DELETE_PATH, SESSION_SEARCH_PATH, USAGE_PATH, USERNAME_PATH } from '@dsh-deepcraft/contracts/routes'
-import { existsSync, readFileSync, readdirSync, realpathSync, rmSync, statSync } from 'node:fs'
-import { userInfo } from 'node:os'
+import { ROUTE_PREFIX, SESSION_DELETE_PATH, USAGE_PATH } from '@dsh-deepcraft/contracts/routes'
+import { existsSync, readdirSync, realpathSync, rmSync, statSync } from 'node:fs'
 import { dirname, join, resolve, sep } from 'node:path'
 import { brandRoutes } from './brand.js'
 import type { DshContext, DshRequest, DshResponse, DshRoute, DshScope } from '@dsh-deepcraft/engine/node/dsh'
@@ -22,10 +20,7 @@ import { harnessPath } from '@dsh-deepcraft/engine/node/harness-home'
 import { pluginPath } from './harness-home.js'
 import { fenceRefused, methodRefused, readRequestBody, refusalOf, sendJson } from '@dsh-deepcraft/engine/node/http'
 import { createStaticFiles } from '@dsh-deepcraft/engine/node/static-files'
-import { createHdslAccount } from './hdsl.js'
-import type { HdslReading } from './hdsl.js'
 import { packageRoot } from './package-root.js'
-import { QUERY_MAX, createSessionSearch } from './search.js'
 import { petRoutes } from './pets/routes.js'
 import { subagentModelRoutes } from './subagent-models/route.js'
 import type { SubagentModelStore } from './subagent-models/store.js'
@@ -268,8 +263,6 @@ export function registerRoutes(ctx: DshContext, scope: DshScope, models: Subagen
       return
     }
     const usage = createUsage(ctx)
-    const hdsl = createHdslAccount(ctx)
-    const sessionSearch = createSessionSearch(ctx)
 
     const register = (label: string, route: DshRoute) => {
       try {
@@ -280,15 +273,6 @@ export function registerRoutes(ctx: DshContext, scope: DshScope, models: Subagen
       } catch (error) {
         report(`${label} route unavailable`, error)
       }
-    }
-
-    /** Answer with a promise's payload spread under `ok: true`; a rejection is a 500 carrying its message. */
-    const sendPayload = (res: DshResponse, answer: Promise<object>) => {
-      void answer.then((value: object) => {
-        sendJson(res, 200, { ok: true, ...value })
-      }, (error: unknown) => {
-        sendJson(res, 500, { ok: false, error: String((error as { message?: string } | null)?.message ?? String(error)) })
-      })
     }
 
     register('model copy', {
@@ -329,70 +313,6 @@ export function registerRoutes(ctx: DshContext, scope: DshScope, models: Subagen
         }
         res.writeHead(404)
         res.end()
-      },
-    })
-
-    register('username', {
-      kind: 'exact',
-      path: USERNAME_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
-        // One-shot OS user resolution for the browser half; it caches the
-        // response and never polls. The exact route wins over the prefix above.
-        if (methodRefused(req, res, ['GET', 'HEAD'])) return
-        if (fenceRefused(ctx, req, res)) return
-        const username = userInfo().username || ''
-        const body = Buffer.from(JSON.stringify({ ok: true, username }))
-        res.writeHead(200, {
-          'content-type': 'application/json; charset=utf-8',
-          'content-length': String(body.byteLength),
-          'cache-control': 'no-cache',
-        })
-        res.end(req.method === 'HEAD' ? undefined : body)
-      },
-    })
-
-    register('HDSL account', {
-      kind: 'exact',
-      path: HDSL_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
-        // Read-only and same-origin only; the player's avatar path is dropped
-        // here: the browser half needs a picture, not the home directory it
-        // lives in.
-        if (methodRefused(req, res, ['GET', 'HEAD'])) return
-        if (fenceRefused(ctx, req, res)) return
-        sendPayload(res, hdsl.read().then((profile: HdslReading) => {
-          const { skinFile, ...account } = profile
-          return account
-        }))
-      },
-    })
-
-    register('HDSL skin', {
-      kind: 'exact',
-      path: HDSL_SKIN_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
-        // The player's own avatar. The path comes from the environment and
-        // never from the request, so this route cannot be pointed anywhere; a
-        // missing file is a 404 and the browser half falls back to the brand
-        // mark.
-        if (methodRefused(req, res, ['GET', 'HEAD'])) return
-        if (fenceRefused(ctx, req, res)) return
-        // A failed read propagates to the web server, which logs it and answers.
-        return hdsl.read().then((profile: HdslReading) => {
-          // A file removed under the launcher is a 404 like no file at all.
-          if (typeof profile.skinFile !== 'string' || !existsSync(profile.skinFile)) {
-            res.writeHead(404, { 'cache-control': 'no-store' })
-            res.end()
-            return
-          }
-          const body = readFileSync(profile.skinFile)
-          res.writeHead(200, {
-            'content-type': 'image/png',
-            'content-length': String(body.byteLength),
-            'cache-control': 'no-cache',
-          })
-          res.end(req.method === 'HEAD' ? undefined : body)
-        })
       },
     })
 
@@ -439,31 +359,12 @@ export function registerRoutes(ctx: DshContext, scope: DshScope, models: Subagen
       },
     })
 
-    register('session search', {
-      kind: 'exact',
-      path: SESSION_SEARCH_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
-        // Read-only, behind the same fence as the usage route: the answer
-        // quotes the user's own conversations. Without `?q=` it only brings the
-        // message cache up to date, which the palette asks for as it opens so
-        // the first real query is quick (packages/host/src/search.ts).
-        if (methodRefused(req, res, ['GET'])) return
-        if (fenceRefused(ctx, req, res)) return
-        const query = (new URL(req.url ?? '/', 'http://local').searchParams.get('q') ?? '').trim().slice(0, QUERY_MAX)
-        const answer = query === ''
-          ? sessionSearch.warm().then(() => ({ sessions: [] }))
-          : sessionSearch.search(query)
-        sendPayload(res, answer)
-      },
-    })
-
     for (const { label, route } of brandRoutes(ctx)) register(label, route)
     for (const { label, route } of petRoutes(ctx)) register(label, route)
     for (const { label, route } of subagentModelRoutes(ctx, models)) register(label, route)
 
     return () => {
       usage.dispose()
-      sessionSearch.dispose()
       // One route's disposer failing must not keep the others registered
       // (D12); the failure is reported.
       for (const dispose of disposers) {

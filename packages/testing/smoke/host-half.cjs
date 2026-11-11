@@ -10,7 +10,7 @@ const path = require('path')
 const { Readable } = require('stream')
 const { pathToFileURL } = require('url')
 const { brotliDecompressSync } = require('zlib')
-const { ROOT, HOST, SKIN_FIXTURE, same, check } = require('./shared.cjs')
+const { ROOT, HOST, same, check } = require('./shared.cjs')
 const { subagentChoiceChecks } = require('./host-half-subagent.cjs')
 const { subagentStoreChecks } = require('./host-half-subagent-models.cjs')
 const { hostUsage } = require('./host-half-usage.cjs')
@@ -36,23 +36,10 @@ const { hostUsage } = require('./host-half-usage.cjs')
  *   every call.
  */
 function fakeHost(mod, options = {}) {
-  const { fenced, home, live = [], events, launch, stored, reads, releases, lists, listCalls, registry, tails, queryShapes } = options
+  const { fenced, home, live = [], events, stored, reads, releases, lists, listCalls, registry, tails, queryShapes } = options
   const shapes = queryShapes ?? ['readSession', 'observeSession', 'readTitleSnapshots']
   const routes = {}
   const settings = { configure: () => () => {} }
-  // The harness's launch environment, as its own snapshot behaves: the canonical
-  // order is process, project-env, user-env, and a layer left out of the asked
-  // list stays unreachable.
-  const launchEnvironment = launch === undefined ? undefined : {
-    getFrom(name, sources) {
-      for (const source of ['process', 'project-env', 'user-env']) {
-        if (!sources.includes(source)) continue
-        const values = launch[source]
-        if (values !== undefined && Object.prototype.hasOwnProperty.call(values, name)) return { value: values[name], source }
-      }
-      return undefined
-    },
-  }
   // Modelled on the host's connection.requestRejection(): the Host/Origin fence
   // (loopback, no cross-site marker, Origin naming the Host), then the cookie.
   const connection = {
@@ -85,7 +72,6 @@ function fakeHost(mod, options = {}) {
           },
         })),
       }
-      if (name === 'launchEnvironment') return launchEnvironment
       if (name === 'sessionPersistence' && stored !== undefined) {
         return { list: async () => { if (lists !== undefined) lists.push(stored.length); return stored } }
       }
@@ -190,7 +176,6 @@ async function hostHalf() {
   await subagentChoiceChecks()
   await subagentStoreChecks()
   const PREFS = '/dsh-deepcraft/prefs'
-  const USER = '/dsh-deepcraft/username'
   const browser = { host: '127.0.0.1:43120', origin: 'http://127.0.0.1:43120', 'sec-fetch-site': 'same-origin', cookie: 'dsh-auth-x=1' }
   const crossSite = { host: '127.0.0.1:43120', origin: 'https://attacker.example', 'sec-fetch-site': 'cross-site' }
   const lanPeer = { host: '192.168.1.23:43120' }
@@ -220,87 +205,13 @@ async function hostHalf() {
           return { ok: false, detail: `refused: ${error.message}` }
         }
       }
-      for (const config of [{ chatAnimations: 'enhanced' }, { chatAnimations: 'redraw' }, { chatAnimations: 'off' }, { chatAnimations: false }, { autoPopover: false }, { autoPopover: 'all' }, { brand: 'off' }, { brand: 'claude' }, { chatPetClaude: 'crab-buddy' }, { chatPetDeepseek: 'whaledou' }, { palette: 'claude' }, { palette: 'forest' }, { chatPet: 'my-pet' }]) {
+      for (const config of [{ brand: 'off' }, { brand: 'claude' }, { chatPetClaude: 'crab-buddy' }, { chatPetDeepseek: 'whaledou' }, { palette: 'claude' }, { palette: 'forest' }, { chatPet: 'my-pet' }]) {
         const { ok, detail } = resolved(config)
         check(`the Config takes a stored ${JSON.stringify(config)}`, typeof mod.Config === 'function' && ok, detail)
       }
     }
     check('the preferences route is gone', host.routes[PREFS] === undefined)
     check('the session delete route is registered', host.routes[DELETE] !== undefined)
-    for (const [label, headers] of [['cross-site page', crossSite], ['LAN peer', lanPeer], ['DNS-rebound page', rebound]]) {
-      const r = await request(host, USER, 'GET', '', headers)
-      check(`${label}: username read refused`, r.status === 401 || r.status === 403, `HTTP ${r.status}`)
-    }
-    if (!fenced) {
-      // The stand-in's own fence on the request the Host header cannot decide:
-      // the headers claim a loopback page, the connection comes from the LAN.
-      const spoofed = await request(host, USER, 'GET', '', browser, '192.168.1.23')
-      check('LAN connection claiming a loopback Host: username read refused', spoofed.status === 403, `HTTP ${spoofed.status}`)
-    }
-    const r = await request(host, USER, 'GET', '', browser)
-    check('browser username read answered', r.status === 200 && JSON.parse(r.body).ok === true, `HTTP ${r.status}`)
-
-    // The launcher's account contract. Its two layers are the only ones allowed
-    // to say who the player is, and the picture's absolute path stays here.
-    const HDSL = '/dsh-deepcraft/hdsl'
-    const SKIN = '/dsh-deepcraft/hdsl-skin.png'
-    const contract = {
-      HDSL_ACCOUNT_CONTRACT: '1',
-      HDSL_ACCOUNT_NAME: 'HDSLPlayer',
-      HDSL_ACCOUNT_VENDOR: 'deepseek',
-      HDSL_ACCOUNT_KIND: 'official',
-      HDSL_ACCOUNT_SKIN: 'local',
-      HDSL_ACCOUNT_SKIN_MODEL: 'default',
-      HDSL_ACCOUNT_SKIN_FILE: SKIN_FIXTURE,
-    }
-    const withContract = (patch) => fakeHost(mod, {
-      fenced, home: scratchHome, launch: { process: Object.assign({}, contract, patch) },
-    })
-    const who = JSON.parse((await request(withContract(), HDSL, 'GET', '', browser)).body)
-    check('the launcher contract reached the browser half',
-      who.ok === true && who.contract === true && who.name === 'HDSLPlayer' && who.vendor === 'deepseek' &&
-        who.kind === 'official' && who.hasSkinImage === true,
-      JSON.stringify(who))
-    check('the skin path never reaches the browser', JSON.stringify(who).indexOf(SKIN_FIXTURE) === -1)
-    const skin = await request(withContract(), SKIN, 'GET', '', browser)
-    check("the skin route serves the launcher's atlas",
-      skin.status === 200 && Buffer.compare(skin.raw, fs.readFileSync(SKIN_FIXTURE)) === 0, `HTTP ${skin.status}`)
-    for (const [label, headers] of [['cross-site page', crossSite], ['LAN peer', lanPeer], ['DNS-rebound page', rebound]]) {
-      const refused = await request(withContract(), SKIN, 'GET', '', headers)
-      check(`${label}: skin read refused`, refused.status === 401 || refused.status === 403, `HTTP ${refused.status}`)
-      const meta = await request(withContract(), HDSL, 'GET', '', headers)
-      check(`${label}: account read refused`, meta.status === 401 || meta.status === 403, `HTTP ${meta.status}`)
-    }
-    // An offline account still has a name and, on the launcher's own patch, a
-    // vendor of `offline`: the kind is what says it has no provider.
-    const offline = JSON.parse((await request(withContract({ HDSL_ACCOUNT_KIND: 'offline', HDSL_ACCOUNT_VENDOR: 'offline' }), HDSL, 'GET', '', browser)).body)
-    check('an offline account still names the instance and reports its kind',
-      offline.name === 'HDSLPlayer' && offline.kind === 'offline', JSON.stringify(offline))
-    // The project directory's `.env` travels with a cloned repository: it may
-    // not name the player, nor point the picture route at a file of its choosing.
-    const spoofed = fakeHost(mod, {
-      fenced,
-      home: scratchHome,
-      launch: {
-        process: { HDSL_ACCOUNT_CONTRACT: '1' },
-        'project-env': { HDSL_ACCOUNT_NAME: 'Mallory', HDSL_ACCOUNT_SKIN: 'local', HDSL_ACCOUNT_SKIN_FILE: SKIN_FIXTURE },
-      },
-    })
-    const spoofedWho = JSON.parse((await request(spoofed, HDSL, 'GET', '', browser)).body)
-    check('the project directory cannot name the player', spoofedWho.name === null, JSON.stringify(spoofedWho))
-    check('the project directory cannot supply a picture',
-      spoofedWho.hasSkinImage === false && (await request(spoofed, SKIN, 'GET', '', browser)).status === 404)
-    check('without a contract the route says so',
-      (await request(fakeHost(mod, { fenced, home: scratchHome }), HDSL, 'GET', '', browser)).body.indexOf('"contract":false') !== -1)
-    // A picture the launcher points at but can no longer read. The contract
-    // advertises that the player chose one (the declaration is what the
-    // launcher wrote); the route is the truth, and it is what the browser half
-    // falls back from (the `hdsl-broken` case).
-    const gone = withContract({ HDSL_ACCOUNT_SKIN_FILE: path.join(scratchHome, 'deleted.png') })
-    check('a picture that is gone answers 404 although the contract names one',
-      (await request(gone, SKIN, 'GET', '', browser)).status === 404 &&
-        JSON.parse((await request(gone, HDSL, 'GET', '', browser)).body).hasSkinImage === true)
-
     fs.rmSync(scratchHome, { recursive: true, force: true })
     fs.mkdirSync(path.join(scratchCwd, scratchId), { recursive: true })
     fs.writeFileSync(path.join(scratchCwd, scratchId, 'session.v4.jsonl.zstd'), 'x')
@@ -383,100 +294,6 @@ async function hostHalf() {
   // injected context, tool-call arguments and subagent children stay out, and a
   // stored session is read again only when the palette's prewarm re-lists a
   // moved revision.
-  console.log('\nhost half — message content search')
-  const SEARCH = '/dsh-deepcraft/session-search'
-  // The stored listing's own throttle (packages/host/src/search.ts LIST_INTERVAL_MS).
-  const STORE_LIST_WAIT_MS = 2100
-  const said = (seq, time, text, kind = 'user') => ({
-    seq, time, type: 'user/message', data: { content: [{ type: 'text', text }], source: { kind } },
-  })
-  const answered = (seq, time, content) => ({ seq, time, type: 'assistant/message', data: { message: { content } } })
-  const searchEvents = {
-    'session-a': [said(1, 1000, '我们能获得一个这样的搜索框吗？'), answered(2, 2000, [{ type: 'text', text: 'Yes.' }])],
-    'session-b': [said(1, 3000, 'Open the SEARCH\n   box, please'),
-      answered(2, 4000, [{ type: 'text', text: 'Done.' }, { type: 'tool-call', name: 'edit', arguments: '{"text":"搜索框"}' }]),
-      // Injected context is a `user/message` too: its words are not the
-      // reader's, so it must not become a hit (nor push the real one aside).
-      said(3, 4500, 'injected: the SEARCH box lives in the sidebar', 'runtime-context')],
-    'session-child': [said(1, 5000, '搜索框')],
-  }
-  const stored = [
-    { header: { id: 'session-a' }, revision: 'a1' },
-    { header: { id: 'session-b' }, revision: 'b1' },
-    { header: { id: 'session-child', origin: 'subagent' }, revision: 'c1' },
-  ]
-  const reads = []
-  const lists = []
-  const listings = []
-  const releases = []
-  // The corpus cache lives under the harness home, so the fake host gets the
-  // scratch one: a real home would take this lane's sessions and leave files in it.
-  const searchHost = fakeHost(mod, { fenced: true, home: scratchHome, events: searchEvents, stored, reads, lists, listCalls: listings, releases })
-  const ask = async (query, headers = browser) => {
-    const answer = await request(searchHost, `${SEARCH}?q=${encodeURIComponent(query)}`, 'GET', '', headers)
-    return { status: answer.status, body: answer.status === 200 ? JSON.parse(answer.body) : null }
-  }
-  const refusedSearch = await ask('搜索框', crossSite)
-  check('cross-site page: content search refused', refusedSearch.status === 401 || refusedSearch.status === 403, `HTTP ${refusedSearch.status}`)
-  const chinese = await ask('搜索框')
-  const hit = chinese.body?.sessions?.[0] ?? {}
-  check('a phrase inside a Chinese sentence matches, and the excerpt marks it',
-    chinese.status === 200 && chinese.body.sessions.length === 1 && hit.sessionId === 'session-a' && hit.role === 'user' &&
-      hit.snippet.slice(hit.match[0], hit.match[1]) === '搜索框',
-    JSON.stringify(chinese))
-  const english = await ask('search box')
-  check('case and runs of whitespace do not matter; injected context, tool-call arguments and subagent children stay out',
-    english.status === 200 && english.body.sessions.length === 1 && english.body.sessions[0].sessionId === 'session-b' &&
-      english.body.sessions[0].snippet === 'Open the SEARCH box, please',
-    JSON.stringify(english))
-  check('each stored top-level session is read once while its revision holds',
-    same(reads.slice().sort(), ['session-a', 'session-b']), JSON.stringify(reads))
-  stored[1] = { header: { id: 'session-b' }, revision: 'b2' }
-  // The listing is throttled and the palette's own prewarm is what pays it; a
-  // content query reads the corpus as it stands.
-  await new Promise((resolve) => setTimeout(resolve, STORE_LIST_WAIT_MS))
-  await ask('')
-  await ask('search box')
-  check('a moved revision is read again by the prewarm, and only it',
-    same(reads.slice().sort(), ['session-a', 'session-b', 'session-b']), JSON.stringify(reads))
-  // Each stale session is read by id, without walking the stored corpus. The
-  // panel's own revision listing is a separate, throttled pass and is not
-  // counted here.
-  check('the catch-up folds its stale sessions without a stored-corpus listing',
-    same(listings, []), JSON.stringify(listings))
-  check('every log the corpus search reads releases its observation',
-    same(releases.slice().sort(), reads.slice().sort()), JSON.stringify({ reads, releases }))
-  check('folding the corpus never preflights a session with a store listing',
-    same(lists, [3, 3]), JSON.stringify(lists))
-  // An open session is read again only when its log grows.
-  const liveReads = []
-  const liveLists = []
-  // An open session contributes its growth through the live log's own tail. Its
-  // own home, so the corpus is built here rather than read back from the pass above.
-  const liveHome = path.join(ROOT, '.debug', 'smoke-home-live')
-  fs.rmSync(liveHome, { recursive: true, force: true })
-  const liveTails = []
-  const liveEvents = { ...searchEvents, 'session-a': searchEvents['session-a'].slice() }
-  const liveSearch = fakeHost(mod, { fenced: true, home: liveHome, events: liveEvents, stored, reads: liveReads, lists: liveLists, live: ['session-a'], tails: liveTails })
-  const liveAsk = () => request(liveSearch, `${SEARCH}?q=${encodeURIComponent('搜索框')}`, 'GET', '', browser)
-  await liveAsk()
-  await liveAsk()
-  const liveHeld = liveReads.filter((id) => id === 'session-a').length
-  liveEvents['session-a'].push(said(3, 6000, '再看一次搜索框'))
-  const grown = JSON.parse((await liveAsk()).body)
-  check('an open session is read in full once, and its growth arrives through the live tail',
-    liveHeld === 1 && liveReads.filter((id) => id === 'session-a').length === 1 &&
-      liveTails.length === 1 && liveTails[0][0] === 'session-a' && liveTails[0][1] === 3 &&
-      grown.sessions[0]?.seq === 3 && grown.sessions[0]?.snippet === '再看一次搜索框',
-    JSON.stringify({ liveReads, liveTails, grown }))
-  check("reading an open session's log costs the store one listing, the prewarm's own",
-    same(liveLists, [3]), JSON.stringify(liveLists))
-  fs.rmSync(liveHome, { recursive: true, force: true })
-
-
-  // The routed assets, on the public prefix route: the manifest the
-  // build wrote decides what exists, a text asset is stored brotli-compressed,
-  // and nothing else answers however the name is spelled.
   console.log('\nhost half — public assets')
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'lib', 'assets', 'manifest.json'), 'utf8')).assets
   const [assetName, asset] = Object.entries(manifest)[0] ?? []

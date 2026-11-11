@@ -20,18 +20,15 @@
  *      treatment; a missing file simply 404s and the stack falls back to a
  *      system-installed copy, then to the look-alike faces this package does
  *      ship (Inter, Noto Serif, JetBrains Mono — SIL OFL).
- *   3. Resolve the OS user once for the browser half. The username route answers
- *      a single GET and the browser caches it; it runs the host's own request
- *      fence first — see refusalOf() in routes.ts.
- *   4. Serve Deepy's animation sheets. The DeepSeek brand's pixel whale plays
+ *   3. Serve Deepy's animation sheets. The DeepSeek brand's pixel whale plays
  *      more sprite sheets than are worth inlining into the bundle, so they ship
  *      as files beside it and the browser fetches each one the first time its
  *      animation plays.
- *   5. Deny a `subagent` call that omits its model pair, or names one outside
+ *   4. Deny a `subagent` call that omits its model pair, or names one outside
  *      the routes the reader picked for the session (or the one the
  *      `subagentModelChoice` preference made mandatory); the rule is in
  *      subagent-choice.ts.
- *   6. Keep those picks: one row per session in the plugin's own storage
+ *   5. Keep those picks: one row per session in the plugin's own storage
  *      domain, read and written through the plugin's own route so the page
  *      never guesses what the host's policy allows (subagent-models/).
  *
@@ -41,9 +38,8 @@
  * the module graph and the whole skin with it. The browser half falls back to
  * its defaults when either surface is missing.
  *
- * The routes live in routes.ts, the HDSL account contract in hdsl.ts, the
- * settings surface in settings.ts, and the subagent rule in subagent-choice.ts;
- * this file only mounts them.
+ * The routes live in routes.ts, the settings surface in settings.ts, and the
+ * subagent rule in subagent-choice.ts; this file only mounts them.
  */
 import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
 import { createSubagentModelStore } from './subagent-models/store.js'

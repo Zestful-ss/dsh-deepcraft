@@ -2,7 +2,7 @@
 
 # DeepCraft
 
-**为 DeepSeek Harness 提供可自定义品牌、多套配色与界面交互的外观插件。**
+**为 DeepSeek Harness 提供可自定义品牌、多套配色与字体的外观插件。**
 
 > **默认深海蓝，另有暖橙与森林绿；标志、名称、强调色与宠物都可以换成你自己的。**
 
@@ -60,7 +60,7 @@
 
 ### 版面
 
-- 插件不再改动页面布局：对话页保留宿主居中的阅读栏与输入框，首页保留宿主的欢迎页；宿主的消息、工具调用和输入框控件在原位，侧栏页脚里宿主提供的断线提示、更新提示与插件入口照常显示和操作，插件只加视觉效果。
+- 插件只改颜色与字体：对话页的阅读栏与输入框、首页的欢迎页、对话页眉与视图标签、侧栏的搜索与账号行，以及工具调用行都由宿主自己绘制和操作，插件不移动、不重绘也不改写它们。
 - 侧栏把已置顶会话汇总在所有工作区上方，按最近置顶的顺序列出；行内写明所属工作区，并用宿主自己的会话菜单打开、重命名、取消置顶或归档，工作区里的原行仍保留在原位。
 
 ### 宠物
@@ -101,9 +101,7 @@ dsh plugin --profile desktop add <本地目录>                                 
 
 ## 鸣谢
 
-- 对话导航参考 SherUnlocked-4869 的 [dsh-plugin-msg-nav](https://github.com/SherUnlocked-4869/dsh-plugin-msg-nav)（MIT）。
 - Deepy 的动画帧图来自 calmly-eating-bugs（[@wp3171216237](https://github.com/wp3171216237)）绘制的 Deepy 小鲸鱼主题包。
-- 聊天区的增强动效改自 [dsh-chat-ux](https://github.com/alm-allen/dsh-chat-ux)（MIT）。
 - Clawd是 Anthropic 的角色形象。帧图不适用 MIT 许可（见 [LICENSE](LICENSE)）。本插件是非官方爱好者作品，与 Anthropic 没有关联。
 
 ## 友链

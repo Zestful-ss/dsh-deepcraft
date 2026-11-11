@@ -6,8 +6,6 @@
  * postcss-selector-parser:
  *
  *   scope        every selector holds `body[data-dsh-deepcraft]` (outside :not());
- *                a sheet whose manifest entry says `scope: 'surface'` holds
- *                `body[data-dsh-deepcraft-surface]` instead and ships apart (D74)
  *   :has()       only in its selector's last compound, at every nesting level (D9)
  *   token gates  a rule writing a host token carries a palette gate or the
  *                typeface gate, and every private token a palette defines has
@@ -42,12 +40,6 @@ const SCOPE_TAG = 'body'
 const DOCUMENT_TAG = 'html'
 const SCOPE_ATTRIBUTE = 'data-dsh-deepcraft'
 const SCOPE = `${SCOPE_TAG}[${SCOPE_ATTRIBUTE}]`
-/**
- * The scope of the sheets that stay on the page while ds-bot's surface has it
- * (D74): the theme's own scope is gone then, and these rules are the surface
- * switch's whole look.
- */
-const SURFACE_SCOPE_ATTRIBUTE = 'data-dsh-deepcraft-surface'
 /**
  * A z-index a sheet may write as it is: an order among siblings inside one
  * box (D9). Anything that stacks against the host's own surfaces is a layer
@@ -290,8 +282,7 @@ function sheetLabel(sheet) {
 function processSheet(sheet, text, gates, names, read, parts, relations, keyframes) {
   const label = sheetLabel(sheet)
   const root = postcss.parse(text, { from: label })
-  const surface = sheet.scope === 'surface'
-  const scopeAttribute = surface ? SURFACE_SCOPE_ATTRIBUTE : SCOPE_ATTRIBUTE
+  const scopeAttribute = SCOPE_ATTRIBUTE
   root.walkRules((rule) => {
     if (rule.parent.type === 'atrule' && /keyframes$/i.test(rule.parent.name)) return
     const where = `${label}:${rule.source.start.line}`
@@ -396,14 +387,14 @@ function checkParts(parts) {
  * (packages/client/src/core/parts.ts, D73).
  */
 function partsVocabulary() {
-  const { ACCOUNT_MENU_ATTR, HERO_MENU_ATTR, PART_ATTR } = loadModule('packages/client/src/constants.ts')
-  return { part: PART_ATTR, regions: { account: ACCOUNT_MENU_ATTR, hero: HERO_MENU_ATTR } }
+  const { PART_ATTR } = loadModule('packages/client/src/constants.ts')
+  return { part: PART_ATTR }
 }
 
 /** Every part name the tables define, sorted. */
 function partNames() {
   const { partNames } = loadModule('packages/engine/src/parts-table.ts')
-  return partNames(partsVocabulary())
+  return partNames()
 }
 
 /** Every relation a stylesheet reads. */
@@ -454,8 +445,8 @@ function checkHolds(relations) {
  * @param options.tokenDoc - packages/client/src/theme/tokens.json (loadTokens).
  * @param options.gates - `{ palette: { attribute, ids, host }, typeface: { attribute, claude, host } }`.
  * @param options.images - brand mark name → its address, for the token sheet.
- * @returns `{ main, surface }`: the theme's sheet and the surface sheets (D74),
- *     each minified once every check has read every sheet.
+ * @returns `{ main }`: the theme's sheet, minified once every check has read
+ *     every sheet.
  */
 export function buildStylesheet({ sheets, srcDir, sources, tokenDoc, gates, images }) {
   const names = { skin: new Set(), host: new Set() }
@@ -469,7 +460,7 @@ export function buildStylesheet({ sheets, srcDir, sources, tokenDoc, gates, imag
       : fs.readFileSync(path.join(srcDir, sheet.file), 'utf8').replace(/\r\n/g, '\n')
     return { sheet, text: processSheet(sheet, source, gates, names, read, parts, relations, keyframes).replace(/\n+$/, '') }
   })
-  const joined = (surface) => processed.filter((item) => (item.sheet.scope === 'surface') === surface).map((item) => item.text).join('\n\n')
+  const joined = () => processed.map((item) => item.text).join('\n\n')
   for (const name of names.skin) {
     if (!names.host.has(name)) throw new Error(`build: ${name} is defined under a skin palette or typeface but has no alias under the host's`)
   }
@@ -483,9 +474,9 @@ export function buildStylesheet({ sheets, srcDir, sources, tokenDoc, gates, imag
     ...tokenDoc.motion.map((item) => item.value),
   ].join('\n')
   checkTokensRead(tokenDoc, readers, sources)
-  const main = minifyCss(joined(false))
+  const main = minifyCss(joined())
   checkImportance(main, srcDir)
-  return { main, surface: minifyCss(joined(true)) }
+  return { main }
 }
 
 /**

@@ -1,19 +1,16 @@
 /**
- * The identity routes and the OS-user probe, answered inside the page: the probe
- * for every case, the launcher's contract only for the case that models an HDSL
- * launch, and the launcher's atlas bytes. Three different names — the custom
- * nickname Tester, the account's Ada, the launcher's HDSLPlayer — are what make
- * the fallback order observable.
+ * The plugin's own routes, answered inside the page: the Petdex catalog the
+ * mascot reads, the subagent selection the composer's entry reads and writes,
+ * and the reader's brand images.
  */
 (function () {
   var host = window.__dshSmokeHost
   var CASE = host.CASE
-  var LAUNCHER = host.LAUNCHER
 
   var realFetch = window.fetch
   // The two Petdex cases hold one installed package each; every other case has
-  // no library, so the new theme default downloads nothing and the chat guest
-  // stays away where the case expects the original characters or none.
+  // no library, so the shipped pet downloads nothing and the chat guest stays
+  // away where the case expects the original characters or none.
   var PETDEX = CASE === 'petdex-claude' || CASE === 'petdex-deepseek'
   function petDescriptor(id) {
     return {
@@ -31,15 +28,11 @@
   function petdexPet() {
     return petDescriptor(CASE === 'petdex-deepseek' ? 'whaledou' : 'crab-buddy')
   }
-  var PNG_1PX = Uint8Array.from(
-    atob(window.SMOKE_PNG),
-    function (c) { return c.charCodeAt(0) })
   function jsonResponse(payload) {
     return new Response(JSON.stringify(payload), { headers: { 'content-type': 'application/json' } })
   }
   window.fetch = function (input, init) {
     var url = typeof input === 'string' ? input : (input && input.url) || ''
-    if (url === '/dsh-deepcraft/username') return Promise.resolve(jsonResponse({ ok: true, username: 'Tester' }))
     if (url === '/dsh-deepcraft/pets') {
       return Promise.resolve(jsonResponse(PETDEX ? { ok: true, pets: [petdexPet()], invalid: [] } : { ok: true, pets: [], invalid: [] }))
     }
@@ -90,24 +83,6 @@
       return Promise.resolve(jsonResponse(CASE === 'custom-brand'
         ? { ok: true, mark: { type: 'image/png', version: '1-1' }, wordmark: { type: 'image/svg+xml', version: '1-1' } }
         : { ok: true, mark: null, wordmark: null }))
-    }
-    if (url === '/dsh-deepcraft/hdsl') {
-      // Three launcher cases: the player's own atlas, a built-in figure (no
-      // picture at all), and an atlas the player deleted before the page
-      // loaded — the two fallbacks the account row has to survive.
-      return Promise.resolve(jsonResponse(LAUNCHER[CASE] !== undefined
-        ? {
-            ok: true, contract: true, name: 'HDSLPlayer', vendor: 'deepseek', kind: 'official',
-            skin: 'local', skinModel: 'default', hasSkinImage: LAUNCHER[CASE].hasSkinImage,
-          }
-        : { ok: true, contract: false }))
-    }
-    if (url === '/dsh-deepcraft/hdsl-skin.png') {
-      // An <img> or a canvas source loads this outside the fetch stub, so the
-      // HTTP stand-in serves the bytes; this branch only keeps a stray request
-      // from reaching the real network.
-      if (CASE !== 'hdsl') return Promise.resolve(new Response(null, { status: 404 }))
-      return Promise.resolve(new Response(PNG_1PX, { headers: { 'content-type': 'image/png' } }))
     }
     return realFetch.apply(window, arguments)
   }

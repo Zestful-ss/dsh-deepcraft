@@ -1,13 +1,11 @@
 /**
- * The usage payload the plugin's two halves exchange .
+ * The usage payload the plugin's two halves exchange.
  *
  * `packages/host/src/usage.ts` answers `GET /dsh-deepcraft/usage` with this shape; the
  * session list's own roll-up (`sessions.list`, a host service) answers a narrower version
- * of the same entries, which is why several fields below are optional. `SearchAnswer` and
- * `ContentHit` are the host half's message-content search, read by the search feature
- * (`packages/client/src/features/search/sources.ts`). These types are
+ * of the same entries, which is why several fields below are optional. These types are
  * the plugin's own contract rather than the host's, so they live beside the code
- * that produces them; D73 moves them into the shared contracts package.
+ * that produces them (D73).
  */
 
 /** One day of a roll-up: the four buckets, the settled calls, and the day's models. */
@@ -92,25 +90,3 @@ export interface UsageAnswer {
   computing?: boolean
   error?: string
 }
-
-/**
- * The answer of the plugin's own content search (`packages/host/src/search.ts`,
- * `GET /dsh-deepcraft/session-search`): the hits, each naming its session
- * and the match inside the excerpt.
- */
-export interface SearchAnswer {
-  ok?: boolean
-  error?: string
-  sessions?: ContentHit[]
-}
-
-/** One content hit: the session it belongs to, the message that matched, and the excerpt with its range. */
-export interface ContentHit {
-  sessionId: string
-  /** The event sequence of the message that matched: what the jump lands on */
-  seq: number
-  snippet: string
-  /** The matched span of `snippet`, as `[start, end]`. */
-  match: [number, number]
-}
-

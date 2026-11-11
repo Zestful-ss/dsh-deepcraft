@@ -4,7 +4,7 @@
  * DSH instance is needed.
  *
  * Host half, in Node: `lib/host/index.js` is applied to a fake cordis context and the
- * username and session-delete routes get the request shapes that matter
+ * session-delete route gets the request shapes that matter
  * (D75) — a cross-site page, a LAN peer and the browser's
  * own same-origin fetch, plus the deletion route's own guards (POST only, a
  * path-shaped id, an id carrying the escape itself, an open session) and a real
@@ -18,24 +18,14 @@
  * Browser half, in headless Chrome/Edge through Playwright (packages/testing/browser.cjs):
  * `lib/client.js` is loaded into
  * a page that stands in for the host (module loader, ctx, a sidebar footer with
- * an account menu and two plugin entries, a composer whose editor handles Enter
- * the way the host's keymap does), and checked for:
+ * a plugin entry, a composer whose editor handles Enter the way the host's
+ * keymap does), and checked for:
  *   - boot       apply() installs every feature and registers its teardown;
  *   - idle       once settled, no scheduler pass runs — a pass that mutates the
  *                DOM schedules the next one, and then the page never idles;
  *   - enter      Enter on an open composer menu reaches the host, never "Send";
- *   - popovers   the shared popover rule: a pointer crossing a trigger opens
- *                nothing before the dwell elapses, and whichever card opens last
- *                folds the one before it — the skin's own cards and the host's
- *                hero menu alike;
- *   - desktop    the 0.1.7 desktop footer: the host's own account row is the
- *                entry, its own entries stay in place with their own boxes, and
- *                our container is injected into its account menu — first child,
- *                self-healing across a host re-render, and gone when the menu
- *                closes;
- *   - markup     strings from settings, the account service and plugins render
- *                as text, never as markup, and a plugin's own footer entry is
- *                left to the host;
+ *   - markup     strings from settings and plugins render as text, never as
+ *                markup, and a plugin's own footer entry is left to the host;
  *   - isolation  a host API that breaks one feature — at install or at sync —
  *                retires only that feature and hands its surface back (D12);
  *   - deepy      the original pixel whale: it stands on the home card and on
@@ -71,7 +61,7 @@ const http = require('http')
 const { availableParallelism } = require('os')
 const path = require('path')
 const { findChrome, openBrowser } = require('./browser.cjs')
-const { ROOT, CLIENT, PNG_1PX, SKIN_FIXTURE, SKIN_CASES, check, failures, skips, setTier, tierName, TIMING_CASES, FEATURE_CASES, pagesFor } = require('./smoke/shared.cjs')
+const { ROOT, CLIENT, check, failures, skips, setTier, tierName, TIMING_CASES, FEATURE_CASES, pagesFor } = require('./smoke/shared.cjs')
 const { hostHalf } = require('./smoke/host-half.cjs')
 const { page } = require('./smoke/page.cjs')
 const { petdexAtlas } = require('./smoke/petdex-fixture.cjs')
@@ -83,6 +73,9 @@ const { withLock } = require('../../scripts/shared/verify-lock.cjs')
  * their storage The page's own server answers from it exactly as the
  * host half does.
  */
+/** One transparent pixel: the custom-brand case's mark image. */
+const PNG_1PX = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+
 const ASSETS = (() => {
   const manifest = path.join(ROOT, 'lib', 'assets', 'manifest.json')
   if (!fs.existsSync(manifest)) throw new Error('smoke: lib/assets/manifest.json is missing; run npm run build')
@@ -259,21 +252,10 @@ async function browserHalf(planned, jobs) {
     if (name === 'client.js') {
       res.writeHead(200, { 'content-type': 'text/javascript; charset=utf-8' })
       res.end(fs.readFileSync(CLIENT))
-    } else if (name === 'dsh-deepcraft/hdsl-skin.png') {
-      // The launcher's atlas, which the skin loads outside `fetch`, so the
-      // page-side stand-in cannot answer it. `hdsl-broken` models a file the
-      // player removed after the launcher wrote the contract.
-      if (SKIN_CASES.indexOf(fromPage(req)) === -1) {
-        res.writeHead(404, { 'cache-control': 'no-store' })
-        res.end()
-        return
-      }
-      res.writeHead(200, { 'content-type': 'image/png' })
-      res.end(fs.readFileSync(SKIN_FIXTURE))
     } else if (name === 'dsh-deepcraft/brand/mark' || name === 'dsh-deepcraft/brand/wordmark') {
-      // The custom-brand case's images, loaded outside `fetch` like the
-      // launcher's atlas: a one-pixel mark, and a wordmark whose only size is
-      // a 4:1 viewBox, so the measured proportions are observable.
+      // The custom-brand case's images, loaded outside `fetch`: a one-pixel
+      // mark, and a wordmark whose only size is a 4:1 viewBox, so the measured
+      // proportions are observable.
       if (fromPage(req) !== 'custom-brand') {
         res.writeHead(404, { 'cache-control': 'no-store' })
         res.end()

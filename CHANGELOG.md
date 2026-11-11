@@ -4,6 +4,28 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">体验优化</h3>
+
+- 插件只改颜色与字体：宿主控件的位置、间距、边框形状、动效与滚动跟随都保持宿主自己的实现，设置页只保留通用与外观两个标签。
+
+### 移除
+
+- 移除对话视图标签条、Windows 标题带、侧栏搜索与账号区域、会话统计、轮次导航与首页水波纹背景，标签、搜索、账号菜单和右侧面板改由宿主自己的控件承担。
+- 移除对话区的折叠与动画、滚动跟随、等待状态行、过程摘要、文件操作行重绘与页眉渐隐，聊天区行为回到宿主自己的实现。
+- 页面让位改为整页交出：ds-bot 接管页面时不再保留插件的「聊天 / 代码」切换按钮，返回入口由 ds-bot 自己提供。
+
+<h3 id="en-unreleased">Improvements</h3>
+
+- The skin changes colours and typefaces only: host controls keep their own position, spacing, border shapes, motion and scroll behaviour, and the settings page keeps the General and Appearance tabs alone.
+
+### Removals
+
+- Remove the conversation view-tab strip, the Windows title band, the sidebar search and account area, the session statistics, the turn navigator and the home ripple background; the host's own controls carry the tabs, search, account menu and right panel.
+- Remove the chat area's folding and animations, scroll follow, waiting line, process summary, file-row redraw and header fade; the chat area behaves as the host implements it.
+- Yield the page whole: while ds-bot owns it the plugin keeps no Chat / Code switch, and ds-bot's own entry is the way back.
+
 ## [0.30.0] - 2026-11-11
 
 [中文](#cn-0.30.0) | [English](#en-0.30.0)

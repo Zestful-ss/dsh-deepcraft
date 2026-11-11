@@ -1,7 +1,8 @@
 /**
  * The settings store and the value each case starts it on: the plugin action
- * patched with the markup payload, the launcher contract three cases model, the
- * identity name, and the settings the case seeds before the bundle.
+ * patched with the markup payload, and the preferences the case seeds before
+ * the bundle. The late-forms case's store answers only after the namespace is
+ * served, so the shipped default holds until then.
  */
 (function () {
   var host = window.__dshSmokeHost
@@ -13,36 +14,17 @@
     action.setAttribute('aria-label', MARKUP)
     action.setAttribute('data-cordis-badge', MARKUP)
   }
-  // The launcher cases leave the custom nickname empty on purpose: the name
-  // they show is the one the launcher published.
-  var LAUNCHER = {
-    hdsl: { hasSkinImage: true },
-    'hdsl-noskin': { hasSkinImage: false },
-    'hdsl-broken': { hasSkinImage: true },
-  }
-  var launcherCase = LAUNCHER[CASE] !== undefined
-  var username = CASE === 'markup' ? MARKUP : CASE === 'desktop' || launcherCase ? '' : 'Tester'
   var formListeners = []
-  var formValue = { username: username }
-  // The default identity's pet is whaledou; the crab case below picks the crab.
+  var formValue = {}
+  // The default identity's pet is whaledou; the Petdex case below picks its own.
   if (CASE === 'petdex-claude') Object.assign(formValue, { palette: 'ember', chatPet: 'crab-buddy' })
   // The crab-states case picks the crab, whose states it walks through.
-  if (CASE === 'crab-states' || CASE === 'shell') formValue.mascot = 'crab'
+  if (CASE === 'crab-states' || CASE === 'hero') formValue.mascot = 'crab'
   if (CASE === 'deepy') formValue.mascot = 'deepy'
-  // The stats-inline case drives the line of their own, which is the shipped
-  // default; the two popover cases ask the numbers back into the panel.
-  if (CASE === 'stats-inline') formValue.statsPosition = 'inline'
-  if (CASE === 'context-stats' || CASE === 'stats-compact') formValue.statsPosition = 'context'
-  // The switches-off case starts with every feature switch off.
-  // The late-forms case's store answers after the namespace is served: the
-  // shipped default holds until then, and the served value is the panel one.
-  if (CASE === 'late-forms') formValue.statsPosition = 'context'
-  if (CASE === 'switches-off') {
-    Object.assign(formValue, { sidebarSearch: false, viewTabs: false, chatAnimations: false })
-  }
+  // The late-forms case is served the forest palette after apply; the shipped
+  // ocean palette stands until the namespace arrives.
+  if (CASE === 'late-forms') formValue.palette = 'forest'
   var form = {
-    // The deepy case stores the DeepSeek brand under the value earlier builds
-    // wrote for it ("off"), which has to read as the DeepSeek brand.
     getSnapshot: function () { return { status: 'ready', value: formValue } },
     subscribe: function (listener) {
       formListeners.push(listener)
@@ -56,8 +38,6 @@
     Object.assign(formValue, patch)
     for (var i = 0; i < formListeners.length; i++) formListeners[i]()
   }
-  host.LAUNCHER = LAUNCHER
-  host.launcherCase = launcherCase
   host.form = form
   host.formValue = formValue
   host.formListeners = formListeners

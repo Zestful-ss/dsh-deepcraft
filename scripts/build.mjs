@@ -53,7 +53,7 @@ import { buildHostHalf } from '../packages/host/build.mjs'
 import { buildFonts, checkClaimed, planAssets, routeText, writeAssets } from '../packages/assets/assets.mjs'
 import { renderWhaleIcon, renderWhaleSheet } from '../packages/assets/whale.mjs'
 import { openBuildCache } from './build-cache.mjs'
-import { checkContracts, checkCycles, checkDependencies, checkListed, checkManifests, checkMotionSources, checkScrollOwner, checkTypes } from './build-checks.mjs'
+import { checkContracts, checkCycles, checkDependencies, checkListed, checkManifests, checkMotionSources, checkTypes } from './build-checks.mjs'
 import { chunkFiles, chunkModules, ownModuleIds, splitChunks } from './chunks.mjs'
 import { buildStylesheet } from './css.mjs'
 import { TOKEN_SHEET, loadTokens, writeLayerTable, writeMotionTable, writeTokenTable } from './shared/design-tokens.mjs'
@@ -105,9 +105,7 @@ const THEME_SHEETS = [
   { file: 'theme/typography.css', rank: 20 },
   // Shared parts before every feature: a feature's own rule comes later and
   // wins where the two meet at the same specificity.
-  { file: 'shared/motion.css', rank: 25 },
   { file: 'shared/popover.css', rank: 30 },
-  { file: 'shared/swapping-text.css', rank: 35 },
   { file: 'shared/segment-control.css', rank: 38 },
   { file: 'shared/sliding-pill.css', rank: 40 },
   { file: 'shared/masked.css', rank: 45 },
@@ -368,8 +366,6 @@ async function main() {
   // carries the ones its own modules read.
   const generated = generatedModule({
     STYLESHEET: css.main,
-    // The surface sheets apart: they stay mounted while ds-bot's surface has the page (D74).
-    SURFACE_STYLESHEET: css.surface,
     // Vendor lockups: one markup table plus the word each lockup stands in for.
     COMBINE_SVGS: Object.fromEntries(Object.entries(combines).map(([id, item]) => [id, item.svg])),
     COMBINE_WORDS: Object.fromEntries(Object.entries(combines).map(([id, item]) => [id, item.word])),
@@ -433,7 +429,6 @@ async function main() {
   const chunkInputs = []
   for (const [id, { result: chunk }] of split.chunks) {
     checkCycles(chunk.metafile)
-    checkScrollOwner(chunk.metafile)
     chunkInputs.push(...chunkModules(chunk))
     const files = chunkFiles(chunk)
     chunkUrls[id] = routeText(plan, { file: `chunks/${id}.js`, name: files.name, type: 'text/javascript; charset=utf-8', text: files.code }).url
@@ -442,7 +437,6 @@ async function main() {
 
   const result = await esbuild.build(clientOptions(chunkUrls, split.shared))
   checkCycles(result.metafile)
-  checkScrollOwner(result.metafile)
   // The metafile keys paths the way esbuild saw them: repository-relative. Both
   // sides of the comparison are the repository's own modules, generated ones
   // included: a second copy of a generated module ships its values twice (D72).

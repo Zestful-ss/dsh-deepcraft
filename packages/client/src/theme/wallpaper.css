@@ -7,8 +7,8 @@
    Under a skin palette the shell paints no fill and one fixed mask in the
    canvas colour (`body::after`, z-index -1, after the plugin's layers in
    document order) lies over the wallpaper, so every region reads on the same
-   ground. The canvas rules in `tokens.css`, `typography.css` and `chrome.css`
-   carry the same `:not([data-we-wallpaper])` gate. `--dsw-alias-bg-base` keeps
+   ground. The canvas rules in `tokens.css` carry the same
+   `:not([data-we-wallpaper])` gate. `--dsw-alias-bg-base` keeps
    the canvas colour against the plugin's clearing, so host dialogs and cards
    stay opaque. "Follow the host" lays no mask (D80). Theme layering from the
    host would let the shell stand aside by layer. */
@@ -44,18 +44,17 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
   background: transparent;
 }
 
-/* The composer's seat and the two fades at the transcript's ends paint the full
-   canvas across the column, which over the mask shows as brighter bands. They
-   stand down, and the transcript passing under the dock row is covered by a
-   tray in the canvas colour: the composer card's own width, from under the
-   card's top edge to the window's bottom, so the dock row and the figures under
-   the card sit on the card's ground. The seat is sticky, so the tray goes with it. */
+/* The composer's seat paints the full canvas across the column, which over the
+   mask shows as a brighter band. It stands down, and the transcript passing
+   under the dock row is covered by a tray in the canvas colour: the composer
+   card's own width, from under the card's top edge to the window's bottom, so
+   the dock row and the figures under the card sit on the card's ground. The
+   seat is sticky, so the tray goes with it. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-we-wallpaper] :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat] {
   background: transparent;
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-we-wallpaper] :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat]::before,
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-we-wallpaper] [data-dsh-deepcraft-part~="conversation-header"][data-dsh-deepcraft-holds~="view-tabs"]::after {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-we-wallpaper] :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat]::before {
   display: none;
 }
 

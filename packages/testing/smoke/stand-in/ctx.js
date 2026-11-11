@@ -7,37 +7,28 @@
   var host = window.__dshSmokeHost
   var CASE = host.CASE
   var forms = host.forms
-  var account = host.account
-  var remote = host.remote
   var sessions = host.sessions
   var deepy = host.deepy
-  var turnNav = host.turnNav
-  var waitChat = host.waitChat
-  var localeService = host.localeService
   var slotRegistry = host.slotRegistry
 
   window.__ctx = {
     fiber: { entry: { id: 'ui-skin-deepcraft' } },
     get: function (name) {
       if (name === 'configForms') return forms
-      if (name === 'remote.account') return account
-      if (name === 'remote') return CASE === 'desktop' ? remote : undefined
       if (name === 'sessions') return sessions
       if (name === 'modelDirectories') return host.modelDirectories
-      if (name === 'uiConversation') return deepy !== undefined ? deepy.conversation : turnNav !== undefined ? turnNav.conversation : waitChat
+      if (name === 'uiConversation') return deepy !== undefined ? deepy.conversation : undefined
       if (name === 'uiSession') return deepy !== undefined ? deepy.uiSession : undefined
-      if (name === 'locale') return localeService
+      if (name === 'locale') return host.localeService
       if (name === 'slots') return slotRegistry
       return undefined
     },
     effect: function (fn) { window.__dispose = fn() },
   }
-  // The desktop account service mounts after this plugin does, so the skin waits
-  // for it through ctx.inject; the chunk-late case waits for the settings
-  // section's seats the same way. The other cases keep no inject, which is what
-  // makes them read synchronously at install (the install-fault case depends
-  // on that read throwing).
-  if (CASE === 'desktop' || CASE === 'settings' || CASE === 'chunk-late' || CASE === 'chat-files' || CASE === 'peer-chat-ux' || CASE === 'skin-center-handoff' || CASE === 'skin-center-arrival' || CASE === 'subagent-model') {
+  // The chunk-late case waits for the settings seats the same way; the other
+  // cases keep no inject, which is what makes them read synchronously at install
+  // (the install-fault case depends on that read throwing).
+  if (CASE === 'settings' || CASE === 'chunk-late' || CASE === 'skin-center-handoff' || CASE === 'skin-center-arrival' || CASE === 'subagent-model') {
     window.__ctx.inject = function (deps, cb) {
       var disposers = []
       cb({

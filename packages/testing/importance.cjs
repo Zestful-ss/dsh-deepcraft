@@ -53,11 +53,8 @@ const LEDGER = JSON.parse(fs.readFileSync(LEDGER_FILE, 'utf8'))
 const evidenceKey = (item) => `${item.ruleKey}|${item.prop}`
 /* ---------- the lane's scenario ---------- */
 
-/** The skin's own triggers, each opening the surface its rules paint. */
-const SURFACES = [
-  ['account card', '.dsh-deepcraft-account-btn'],
-  ['search panel', '.dsh-deepcraft-search-trigger'],
-]
+/** The skin's own triggers, each opening the surface its rules paint: its cards open from the composer and the sidebar. */
+const SURFACES = []
 
 /**
  * The marks the skin puts on `<body>` for its preferences and for what the
@@ -69,12 +66,6 @@ const SURFACES = [
 const MARKS = [
   ['motion reduced', 'data-dsh-deepcraft-motion', 'reduced'],
   ['motion full', 'data-dsh-deepcraft-motion', 'full'],
-  ['search style icon', 'data-dsh-deepcraft-search-style', 'icon'],
-  ['search style overlay', 'data-dsh-deepcraft-search-style', 'overlay'],
-  ['search style standalone', 'data-dsh-deepcraft-search-style', 'standalone'],
-  ['stats inline', 'data-dsh-deepcraft-stats-position', 'inline'],
-  ['stats context', 'data-dsh-deepcraft-stats-position', 'context'],
-  ['footer takeover', 'data-dsh-deepcraft-footer-takeover', ''],
   ['mascot crab', 'data-dsh-deepcraft-mascot', 'crab'],
   ['mascot deepy', 'data-dsh-deepcraft-mascot', 'deepy'],
   ['custom brand mark', 'data-dsh-deepcraft-custom-mark', ''],

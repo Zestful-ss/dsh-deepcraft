@@ -27,7 +27,6 @@
         sidebar: hostProbe('<div data-pane="sidebar">s</div>'),
         conversation: hostProbe('<div data-pane="conversation">c</div>'),
         popover: hostProbe('<div class="dsh-deepcraft-popover-card" data-open="true">p</div>'),
-        search: hostProbe('<div class="dsh-deepcraft-search-dialog">q</div>'),
         heading: hostProbe('<h1>h</h1>'),
         code: hostProbe('<pre><code>c</code></pre>'),
       }
@@ -52,9 +51,6 @@
           conversation: getComputedStyle(hostNodes.conversation).backgroundColor,
           popover: getComputedStyle(hostNodes.popover).backgroundColor,
           popoverBlur: getComputedStyle(hostNodes.popover).backdropFilter,
-          // The account drawer the footer feature built (it sweeps any other copy).
-          account: getComputedStyle(document.querySelector('.dsh-deepcraft-account-popover')).backgroundColor,
-          search: getComputedStyle(hostNodes.search).backgroundColor,
           heading: getComputedStyle(hostNodes.heading).fontFamily,
           code: getComputedStyle(hostNodes.code.firstChild).fontFamily,
         }
@@ -118,7 +114,7 @@
       }
       r.settings = { registered: typeof Section === 'function', pages: {} }
       if (r.settings.registered) {
-        var tabIds = ['general', 'appearance', 'sidebar', 'conversation']
+        var tabIds = ['general', 'appearance']
         for (var ti = 0; ti < tabIds.length; ti++) r.settings.pages[tabIds[ti]] = renderTab(tabIds[ti])
         r.settings.link = r.settings.pages.general.link
         // The heading's mark: the build inlines the asset into the token sheet
@@ -134,14 +130,9 @@
           ink: markStyle.backgroundColor,
         }
         linkNode.remove()
-        window.__pushForm({ mascot: 'off', sidebarSearch: false, palette: 'host' })
-        r.settings.parentsOff = { appearance: renderTab('appearance'), sidebar: renderTab('sidebar') }
-        window.__pushForm({ mascot: 'brand', sidebarSearch: true, palette: 'ocean' })
-        // On the Windows window the title-bar row takes input; everywhere else
-        // it stays greyed with its note.
-        document.documentElement.setAttribute('data-windows-titlebar', '')
-        r.settings.onWindows = renderTab('conversation')
-        document.documentElement.removeAttribute('data-windows-titlebar')
+        window.__pushForm({ mascot: 'off', palette: 'host' })
+        r.settings.parentsOff = { appearance: renderTab('appearance') }
+        window.__pushForm({ mascot: 'brand', palette: 'ocean' })
       }
     })
   })

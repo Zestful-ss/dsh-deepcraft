@@ -14,24 +14,6 @@ const CLIENT = path.join(ROOT, 'lib', 'client.js')
 // The host half as the package ships it (D73): the build writes it to lib/host.
 const HOST = path.join(ROOT, 'lib', 'host', 'index.js')
 const MARKUP = '<img src=x onerror="window.__pwned=(window.__pwned||0)+1">'
-/** One transparent pixel: the launcher's avatar the HDSL case serves. */
-const PNG_1PX = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
-/**
- * A 64×64 skin atlas with three landmarks, so a wrong crop cannot pass: the
- * head's front face (8,8–16,16) is red, the hat layer (40,8–48,16) is clear
- * except two green pixels that land at the box's opposite corners, and the
- * rest of the atlas is grey. What the launcher serves is this sheet, not a
- * finished avatar.
- */
-const SKIN_FIXTURE = path.join(__dirname, 'fixtures', 'skin-64.png')
-const SKIN_FACE = [255, 0, 0, 255]
-const SKIN_HAT = [0, 255, 0, 255]
-/**
- * The cases whose launcher serves that atlas. `hdsl-broken` deliberately does
- * not: its contract names a picture the player has already deleted, which the
- * picture route answers with a 404.
- */
-const SKIN_CASES = ['hdsl']
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 const same = (a, b) => JSON.stringify(a) === JSON.stringify(b)
@@ -51,7 +33,7 @@ const tierName = () => tier
  * follow an animation, a glide or a dwell over time. The quick tier skips them
  * whole, and says so in its log.
  */
-const TIMING_CASES = ['chat-follow', 'chat-fold', 'crab-states', 'deepy', 'petdex-claude', 'petdex-deepseek', 'popovers']
+const TIMING_CASES = ['crab-states', 'deepy', 'petdex-claude', 'petdex-deepseek']
 
 /**
  * Which cases cover which directory under `packages/client/src/features/`, gathered from the
@@ -103,15 +85,8 @@ function deferredWanted(values) {
  * runs every selected case it carries, so cases that read the same stand-in
  * configuration and the same markup cost one page load between them instead of
  * one each. A case named in no page here is a page of its own.
- *
- * `header-band` stands alone: the feature lifts the first tab strip in the
- * document, and the case's own header has to carry that strip, while the
- * `view-tabs` case mounts a strip of its own for the pill it reads. On one page
- * the two contest the same seat.
  */
-const PAGES = {
-    shell: ['palette', 'hero', 'view-tabs', 'search', 'account'],
-}
+const PAGES = {}
 
 /**
  * The pages a run needs, each with the selected cases it serves: the table's
@@ -156,6 +131,6 @@ const failures = () => failed
 const skips = () => skipped
 
 module.exports = {
-    ROOT, CLIENT, HOST, MARKUP, PNG_1PX, SKIN_FIXTURE, SKIN_FACE, SKIN_HAT, SKIN_CASES,
+    ROOT, CLIENT, HOST, MARKUP,
     sleep, same, check, failures, skips, setTier, tierName, TIMING_CASES, FEATURE_CASES, DEFERRED_FEATURES, SHIPPED_PREFS, deferredWanted, PAGES, pagesFor,
 }

@@ -88,52 +88,15 @@ const SCRIPTS = {
    * and a note with another tool, then the answer. The process groups on both
    * sides of the intermediate note carry thinking and a tool call each.
    */
-  process: {
-    conversation: [
-      { holdMs: 11500, thinking: ['先看清工作区再动手。'], tool: { name: 'glob', input: { pattern: '*.json' } } },
-      { thinking: ['列举结果回来了，先记一句中间结论。'], text: ['先记一句中间结论。\n\n'], tool: { name: 'glob', input: { pattern: '*.md' } } },
-      { thinking: ['信息够了，可以收尾。'], text: ['这是最终答案。\n\n', '- 第一点\n', '- 第二点\n'] },
-    ],
-    auxiliary: { text: ['Scripted process'] },
-  },
   /**
    * A long reasoning, delivered a couple of steps at a time: the thinking row's
    * window grows with it and steps it up once it fills the height reasoning may
-   * reach (packages/client/src/features/chat-fold/reasoning-stream.ts), and the
+   * reach, and the
    * reader never loses its last line. Each step is long enough to fill more than
    * a couple of lines even where the host's body renders the whole reasoning as
    * one wrapped paragraph, and the whole script runs well past the host's cap on
    * that body — the lane's own scenario reads the window on both sides of it.
    */
-  think: {
-    conversation: [
-      {
-        thinking: [
-          '先把这个问题拆成几步：这一步要先看清工作区里到底有什么文件，再把与问题相关的几个挑出来，顺序上先宽后窄，避免一上来就钻进细节里出不来。\n\n',
-          '接下来确认这些文件彼此的依赖关系，谁引用了谁、谁的改动会波及到入口，这一步要顺着引用链看两跳，只看到一跳容易漏掉间接的调用方，而间接的调用方恰恰是最容易在改动之后才炸出来的那一批。\n\n',
-          '然后检查测试覆盖到哪里，哪些行为有测试守着、哪些只能靠手工核对，手工核对的部分要记下来留给读者判断，核对过的东西也要写清楚看到的是哪一版，免得后面换了版本还拿旧结论说话。\n\n',
-          '再估计改动的规模，把文件按大小和风险排一下，先动那些改起来最小、验证最快的地方，把大的留到后面，大改动排在前面会把整条链路都拖进未完成的状态里，回滚起来也麻烦。\n\n',
-          '中间要记下需要向读者确认的地方，比如名称怎么取、默认值取哪一个、要不要同时改文档，这些都不该自己拍板，一次问清楚比来回猜三次省时间，也让读者知道自己的判断被用在了哪里。\n\n',
-          '还要想清楚哪些东西这次不动，范围划得住才算改得完，边界外的文件只读不改，遇到顺手能修的小毛病也先记下来，不混进这一次的改动里，免得审阅的人分不清主次。\n\n',
-          '剩下的是收尾的顺序：先改实现，再补测试，最后同步文档，文档里凡是写死了数量、路径和默认值的地方都要跟着改，改完再通读一遍，看有没有前后矛盾的地方。\n\n',
-          '另外要留意兼容：旧版本存下来的值仍然要能读，新加的字段要有默认值，读不到就按默认走，不抛错也不静默改写读者已经存过的选择，这一条在任何一次改动里都成立。\n\n',
-          '性能上也要过一遍：新增的监听与测量都挂在需要的节点上，能合成每帧一次的就不要每次变动都读布局，读者看不见的东西不做，做完这一步再看一遍有没有白花的计算。\n\n',
-          '最后回头看一遍有没有漏掉的约束，把要改的文件按顺序排好，把结论整理成一句话，再开始动手，动手之前把要跑的命令和要看的页面也一并列出来。\n\n',
-          '再补一句自己的判断：这一版先照最小可用的改法走，把能验证的部分验证到位，剩下的等读者看过之后再说，不把没有把握的东西写成已经确定的样子。\n\n',
-          '想到这里可以先停一下，把上面这些整理成一份清单，按文件分组，每组写清楚改什么、为什么改、改完怎么验证，清单本身就是这一轮的答案。\n\n',
-          '清单之外还要留一段给不确定的地方：哪些结论是看代码得出的、哪些是猜的、哪些需要跑一遍才知道，三种分开写，读者才知道该信到哪一步。\n\n',
-          '再看一遍命名：新增的东西按它做的事取名，缩写一律不用，与仓库里已有的叫法保持一致，改完名字之后再全文搜一次，别留下半新半旧的两套写法。\n\n',
-          '接口的边界也要写清楚：谁调用谁、传什么、返回什么、失败的时候是什么样子，错误就地抛出还是往上交，看这一层有没有能力处理它再决定。\n\n',
-          '测试要挑有信息量的例子：边界值、空输入、两个东西同时变化的情形，能说明行为的那几个先写，重复验证同一件事的例子再多也不增加把握。\n\n',
-          '跑完测试还要真的用一遍：把页面打开，按读者的顺序走一遍，看动效有没有卡顿、文字有没有跳动、开合之后高度有没有对齐，量到的数字要记下来。\n\n',
-          '如果哪一步的结果与预期不一样，先弄清楚是预期错了还是实现错了，两个方向都要查，改完之后把结论写进提交说明里，不留没解释的差异。\n\n',
-          '收尾时把临时的脚本、截图与调试用的标记清干净，仓库里只留该留下的东西，确认没有把本机的路径与个人信息带进去，再请读者过目。\n\n',
-        ],
-        text: ['理清楚了，可以回答。\n'],
-      },
-    ],
-    auxiliary: { text: ['Scripted reasoning'] },
-  },
   /** Enough streamed lines to push the column past the viewport edge. */
   long: {
     conversation: [
@@ -153,16 +116,6 @@ const SCRIPTS = {
    * lines of their own grows taller in the frame that lays them out than
    * between two frames once they are, so it is never paced.
    */
-  burst: {
-    conversation: [
-      {
-        thinking: ['The whole answer in one flush.'],
-        text: [`# Burst answer\n\n- held: the burst scripted for the lane's own pace\n${Array.from({ length: 90 }, (_, index) => `- ${index + 1}: held\n`).join('')}`],
-        pieceDelayMs: 0,
-      },
-    ],
-    auxiliary: { text: ['Scripted burst answer'] },
-  },
   /**
    * A screenful of answer, then a process group that reasons at the tail: the
    * first reply fills the column past the viewport and calls a tool, and the
@@ -170,32 +123,6 @@ const SCRIPTS = {
    * seconds, inside the group the tool call opened. The reasoning keeps the turn
    * streaming while the lane rolls a door over that group.
    */
-  tailReasoning: {
-    conversation: [
-      {
-        thinking: ['Fill the screen before the work starts.'],
-        text: ['# Long answer\n\n', ...LONG_PIECES],
-        tool: { name: 'glob', input: { pattern: '*.json' } },
-      },
-      {
-        thinking: [
-          '列举的结果回来了，先看清这些文件各自管什么，再决定从哪一个开始读，顺序上先宽后窄。\n\n',
-          '入口文件引用了两个模块，其中一个只在启动时读一次配置，另一个在每次请求里都会被调用。\n\n',
-          '每次请求都调用的那个更值得先看，它的改动会直接落到读者能看到的地方，风险也更高。\n\n',
-          '配置那一边只要确认默认值和旧版本存下来的值都还能读，就可以先放一放，留到最后一起核对。\n\n',
-          '接下来把要改的地方按文件排好，每个文件写清楚改什么、为什么改、改完之后用什么办法验证。\n\n',
-          '验证要挑有信息量的例子：空输入、边界值、两个东西同时变化的情形，重复验证同一件事的不算。\n\n',
-          '跑完测试还要在页面上按读者的顺序走一遍，看文字有没有跳动、开合之后高度有没有变化。\n\n',
-          '最后把临时的脚本和调试用的标记清干净，再把结论整理成一句话写在答案的开头。\n\n',
-          '想到这里已经够了，可以开始回答。\n\n',
-          '回答之前再确认一遍文件名都写对了。\n\n',
-        ],
-        tool: { name: 'glob', input: { pattern: '*.md' } },
-      },
-      { thinking: ['Both listings are in.'], text: ['The files are listed above.\n'] },
-    ],
-    auxiliary: { text: ['Scripted tail reasoning'] },
-  },
   /**
    * One `run_code` program touching four files, for the file rows: `app.js` is
    * read, changed four times and read again; `notes.md` is written and then
@@ -210,40 +137,6 @@ const SCRIPTS = {
    * backslashes doubled: inside a program's own source a single backslash is an
    * escape.
    */
-  fileEdits: {
-    conversation: [
-      {
-        thinking: ['一个程序里改这个文件、读它、再碰另外三个文件。'],
-        tool: {
-          name: 'run_code',
-          input: {
-            description: 'Read, change and read one file, and touch three others',
-            code: [
-              "const { setTimeout: delay } = await import('node:timers/promises')",
-              "await tools.read({ file_path: '{{workspaceCode}}/app.js' })",
-              "await tools.edit({ file_path: '{{workspaceCode}}/app.js', old_string: 'const first = 1', new_string: 'const first = 2' })",
-              "await delay(300)",
-              "await tools.edit({ file_path: '{{workspaceCode}}/app.js', old_string: 'const second = 1', new_string: 'const second = 2' })",
-              "await delay(300)",
-              "await tools.edit({ file_path: '{{workspaceCode}}/app.js', old_string: 'const third = 1', new_string: 'const third = 2' })",
-              "await delay(300)",
-              "await tools.edit({ file_path: '{{workspaceCode}}/app.js', old_string: 'const fourth = 1', new_string: 'const fourth = 2' })",
-              "await tools.read({ file_path: '{{workspaceCode}}/app.js' })",
-              "await tools.write({ file_path: '{{workspaceCode}}/notes.md', content: '# Notes\\n\\n- one\\n- two\\n' })",
-              "await tools.read({ file_path: '{{workspaceCode}}/notes.md' })",
-              "await tools.write({ file_path: '{{workspaceCode}}/only.md', content: '# Only\\n' })",
-              "await tools.read({ file_path: '{{workspaceCode}}/plain.md' })",
-              "await delay(200)",
-              "await tools.read({ file_path: '{{workspaceCode}}/plain.md' })",
-              "return 'four changes to app.js, a write and a read of notes.md, one write to only.md, two reads of plain.md'",
-            ].join('\n'),
-          },
-        },
-      },
-      { thinking: ['做完了，说明一下。'], text: ['四个文件的调用都落好了。\n'] },
-    ],
-    auxiliary: { text: ['Scripted file edits'] },
-  },
   /**
    * The waiting line's own words: the model reasons in an English clause it is
    * on ("I am checking the file is true"), then in a sentence carrying no clause
@@ -254,16 +147,6 @@ const SCRIPTS = {
    * pause between them is the lane's own, so every state stands long enough for
    * the scenario to sample it.
    */
-  waitLine: {
-    conversation: [
-      {
-        thinking: ['Let me look at the file. ', 'I am checking the file is true. ', 'The user asked about the row. ', 'I am reading the row model. '],
-        tool: { name: 'read', input: { file_path: '{{workspaceCode}}/app.js' } },
-      },
-      { thinking: ['The read came back, so I can answer. '], text: ['看过了，答案如下。\n'] },
-    ],
-    auxiliary: { text: ['Scripted waiting line'] },
-  },
   /**
    * The Markdown tour the README's conversation shot shows: a heading, the
    * inline formats, both list shapes, a table, a code block and a quote, in the
@@ -272,28 +155,6 @@ const SCRIPTS = {
    * title request, and it names the session with the stand-in the shot's guard
    * accepts.
    */
-  markdownTour: {
-    conversation: [
-      {
-        thinking: ['读者要的是格式示例，', '按常用写法给一遍，每一类给一小段。'],
-        text: [
-          '下面用一个小例子把常用格式都过一遍。\n\n',
-          '## 文本与链接\n\n',
-          '正文里可以混排**粗体**、*斜体*、~~删除线~~和 `行内代码`，也可以放一个[链接](https://example.com)。\n\n',
-          '## 列表与任务\n\n',
-          '1. 先读配置\n2. 再渲染界面\n   - 亮色与暗色各一套\n\n',
-          '- [x] 接入配色令牌\n- [ ] 补全文档\n\n',
-          '## 表格\n\n',
-          '| 格式 | 写法 | 用途 |\n| --- | --- | --- |\n',
-          '| 粗体 | `**文字**` | 强调重点 |\n| 代码 | `code` | 标出标识符 |\n| 引用 | `> 文字` | 摘录原文 |\n\n',
-          '## 代码块\n\n',
-          '```ts\nexport function greet(name: string): string {\n  return `Hello, ${name}!`\n}\n```\n\n',
-          '> 排版清楚的回答，读起来更轻松。\n',
-        ],
-      },
-    ],
-    auxiliary: { text: ['Markdown rendering tour'] },
-  },
 }
 
 /** The `{{name}}` slots of a scripted value, filled from the lane's own values. */

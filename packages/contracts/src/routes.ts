@@ -7,19 +7,6 @@
 /** Route prefix this plugin owns. */
 export const ROUTE_PREFIX = '/dsh-deepcraft'
 
-/** One-shot host OS user route; the browser half caches the response and never polls. */
-export const USERNAME_PATH = `${ROUTE_PREFIX}/username`
-
-/**
- * The HDSL launcher's account metadata. The browser half cannot read a process
- * environment, so the `HDSL_`-prefixed variables the launcher publishes are
- * forwarded from here; the player's avatar bytes ride HDSL_SKIN_PATH.
- */
-export const HDSL_PATH = `${ROUTE_PREFIX}/hdsl`
-
-/** The player's own avatar PNG, forwarded; the absolute path never leaves the host half. */
-export const HDSL_SKIN_PATH = `${ROUTE_PREFIX}/hdsl-skin.png`
-
 /**
  * Session deletion. The harness gives the browser half no deletion API of its
  * own, so the archived row's delete button posts one session id here and the
@@ -35,12 +22,6 @@ export const SESSION_DELETE_PATH = `${ROUTE_PREFIX}/session-delete`
  * document.
  */
 export const USAGE_PATH = `${ROUTE_PREFIX}/usage`
-
-/**
- * Message-content search for the search palette; `?q=` is the query, and
- * without one the route only brings its message cache up to date.
- */
-export const SESSION_SEARCH_PATH = `${ROUTE_PREFIX}/session-search`
 
 /**
  * The reader's own brand images (D80): `GET` answers which of them are in

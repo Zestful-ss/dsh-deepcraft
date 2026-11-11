@@ -1,7 +1,7 @@
 {
   "id": "deepcraft",
   "name": "DeepCraft",
-  "tagline": "自定义品牌与多套配色",
+  "tagline": "自定义品牌、配色与字体",
   "accent": "#5368c9",
   "bodyAttr": "data-dsh-deepcraft",
   "package": "dsh-deepcraft",

@@ -1,7 +1,0 @@
-{
-  "contextTotalTime": { "zh": "总用时", "en": "Total time" },
-  "statsLineLabel": { "zh": "对话统计信息", "en": "Conversation statistics" },
-  "statsPositionTitle": { "zh": "对话统计信息位置", "en": "Conversation statistics position" },
-  "statsPositionInline": { "zh": "独立成行", "en": "On its own line" },
-  "statsPositionContext": { "zh": "收进上下文", "en": "Inside the context popover" }
-}

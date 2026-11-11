@@ -1,11 +1,8 @@
 import { installScheduler as installEngineScheduler } from '@dsh-deepcraft/engine/scheduler'
 import type { FeatureHandle, SchedulerCalls } from '@dsh-deepcraft/engine/scheduler'
-import { onHdslLoaded, onUsernameLoaded } from '../shared/identity'
 import { onModelCopyLoaded } from '../shared/model-copy'
 import { loadPrefs, refreshMotionAttribute, subscribePrefs } from './prefs'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
-import type { FooterHandle } from '../features/account/account-footer'
-import type { ChatFoldHandle } from '../features/chat-fold/chat-fold'
 
 /**
  * Every feature's handle, under the name it registers on `ui` (its manifest's
@@ -14,22 +11,10 @@ import type { ChatFoldHandle } from '../features/chat-fold/chat-fold'
  */
 export interface Handles {
   brand: FeatureHandle
-  homeRipple: FeatureHandle
   mascot: FeatureHandle
-  contextStats: FeatureHandle
   subagentModel: FeatureHandle
-  footer: FooterHandle
   workspacePins: FeatureHandle
-  search: FeatureHandle
-  turnNav: FeatureHandle
-  chatFollow: FeatureHandle
-  chatFold: ChatFoldHandle
-  chatWait: FeatureHandle
-  chatFiles: FeatureHandle
-  viewTabs: FeatureHandle
-  headerBand: FeatureHandle
   settingsNav: FeatureHandle
-  surface: FeatureHandle
 }
 
 export type HandleName = keyof Handles
@@ -54,7 +39,6 @@ export type Ui = SchedulerCalls & { [K in HandleName]?: Handles[K] }
 export function installScheduler(ctx: HostContext, ui: Ui, features: HandleName[]) {
   return installEngineScheduler<HandleName>(ctx, ui, features, {
     copyChange: [subscribePrefs, onModelCopyLoaded],
-    refresh: [onUsernameLoaded, onHdslLoaded],
     start: loadPrefs,
     systemMotionChanged: refreshMotionAttribute,
   })

@@ -1,27 +1,20 @@
 /**
  * The settings case declares the settings dialog's section slot and the plugin
  * page's config slot, so the probe can render the page; the component is kept
- * so the probe can render it the way the seat would. The peer case declares
- * those two plus the tool seat, so the probe can see both the page it greys
- * out and the seat keys the file rows must leave alone. The chunk-late case
- * declares the settings seats too: a settings section installed after its
- * generation ended would register there.
+ * so the probe can render it the way the seat would. The subagent-model case
+ * declares the composer's right seat instead. The chunk-late and skin-center
+ * cases declare the settings seats too: a settings section installed after its
+ * generation ended, or on a page another owner has, would register there.
  */
 (function () {
   var host = window.__dshSmokeHost
   var CASE = host.CASE
 
-  var slotRegistry = CASE === 'settings' || CASE === 'chunk-late' || CASE === 'chat-files' || CASE === 'peer-chat-ux' || CASE === 'skin-center-handoff' || CASE === 'skin-center-arrival' || CASE === 'subagent-model' ? {
+  var slotRegistry = CASE === 'settings' || CASE === 'chunk-late' || CASE === 'skin-center-handoff' || CASE === 'skin-center-arrival' || CASE === 'subagent-model' ? {
     inject: function (key, callback) {
       var declared = CASE === 'subagent-model'
         ? key === 'conversation.input.right'
-        : CASE === 'chat-files'
-          ? key === 'tool.call.toolview'
-          : CASE === 'skin-center-handoff' || CASE === 'skin-center-arrival'
-            ? key === 'settings.section' || key === 'plugins.bundle.config'
-          : CASE === 'peer-chat-ux'
-            ? key === 'tool.call.toolview' || key === 'settings.section' || key === 'plugins.bundle.config'
-            : key === 'settings.section' || key === 'plugins.bundle.config'
+        : key === 'settings.section' || key === 'plugins.bundle.config'
       return declared ? callback() : function () {}
     },
     register: function (spec, component) {

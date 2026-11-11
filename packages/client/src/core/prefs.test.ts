@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, CHAT_ANIMATIONS_OFF, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, MASCOT_PETDEX, PREF_DEFAULTS, USERNAME_MAX } from '../constants'
+import { BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, MASCOT_PETDEX, PREF_DEFAULTS } from '../constants'
 import { resolveMascot } from './prefs'
 import { clampPrefs as normalizePrefs } from '@dsh-deepcraft/contracts/prefs'
 
@@ -10,18 +10,15 @@ test('an empty or unreadable value reads as the defaults', () => {
 })
 
 test('a switch stays on unless stored as false', () => {
-  expect(normalizePrefs({ turnNav: false }).turnNav).toBe(false)
-  expect(normalizePrefs({ turnNav: 0 }).turnNav).toBe(true)
-  expect(normalizePrefs({ turnNav: 'false' }).turnNav).toBe(true)
+  expect(normalizePrefs({ subagentModelPicker: false }).subagentModelPicker).toBe(false)
+  expect(normalizePrefs({ subagentModelPicker: 0 }).subagentModelPicker).toBe(true)
+  expect(normalizePrefs({ subagentModelPicker: 'false' }).subagentModelPicker).toBe(true)
 })
 
 test('a choice outside its set reads as its default', () => {
   expect(normalizePrefs({ motion: 'reduced' }).motion).toBe('reduced')
   expect(normalizePrefs({ motion: 'sometimes' }).motion).toBe(PREF_DEFAULTS.motion)
   expect(normalizePrefs({ motion: 1 }).motion).toBe(PREF_DEFAULTS.motion)
-  expect(normalizePrefs({ statusDetail: 'simple' }).statusDetail).toBe(false)
-  expect(normalizePrefs({ statusDetail: 'precise' }).statusDetail).toBe(true)
-  expect(normalizePrefs({ statusDetail: 'verbose' }).statusDetail).toBe(PREF_DEFAULTS.statusDetail)
 })
 
 test('the older brand and palette choices land on one independent palette (D80)', () => {
@@ -34,30 +31,6 @@ test('the older brand and palette choices land on one independent palette (D80)'
   expect(normalizePrefs({ palette: 'forest' }).palette).toBe('forest')
   expect(normalizePrefs({}).palette).toBe('ocean')
 })
-
-test('the hover-open preference takes its earlier boolean shape', () => {
-  expect(normalizePrefs({ autoPopover: true }).autoPopover).toBe('all')
-  expect(normalizePrefs({ autoPopover: false }).autoPopover).toBe('off')
-  expect(normalizePrefs({ autoPopover: 'account' }).autoPopover).toBe('account')
-  expect(normalizePrefs({ autoPopover: 'often' }).autoPopover).toBe(PREF_DEFAULTS.autoPopover)
-})
-
-test('the chat-area animation switch keeps its boolean shape, and a value an earlier build stored under the retired choice reads as on', () => {
-  expect(normalizePrefs({ chatAnimations: true }).chatAnimations).toBe(true)
-  expect(normalizePrefs({ chatAnimations: false }).chatAnimations).toBe(false)
-  expect(normalizePrefs({ chatAnimations: CHAT_ANIMATIONS_OFF }).chatAnimations).toBe(false)
-  expect(normalizePrefs({ chatAnimations: 'enhanced' }).chatAnimations).toBe(true)
-  expect(normalizePrefs({ chatAnimations: 'redraw' }).chatAnimations).toBe(true)
-  expect(normalizePrefs({ chatAnimations: 7 }).chatAnimations).toBe(PREF_DEFAULTS.chatAnimations)
-})
-
-
-test('the username is trimmed and cut to its limit', () => {
-  expect(normalizePrefs({ username: '  Ada  ' }).username).toBe('Ada')
-  expect(normalizePrefs({ username: 'y'.repeat(USERNAME_MAX + 10) }).username).toHaveLength(USERNAME_MAX)
-  expect(normalizePrefs({ username: 42 }).username).toBe('')
-})
-
 test('the brand name is trimmed and cut to its limit', () => {
   expect(normalizePrefs({ brandName: '  Acme  ' }).brandName).toBe('Acme')
   expect(normalizePrefs({ brandName: 'n'.repeat(BRAND_NAME_MAX + 10) }).brandName).toHaveLength(BRAND_NAME_MAX)

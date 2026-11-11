@@ -7,15 +7,13 @@
  */
 'use strict'
 const shell = require('./cases/shell.cjs')
-const stats = require('./cases/stats.cjs')
 const settings = require('./cases/settings.cjs')
 const agent = require('./cases/agent.cjs')
-const chat = require('./cases/chat.cjs')
 const mascot = require('./cases/mascot.cjs')
 const subagentModel = require('./cases/subagent-model.cjs')
 const peer = require('./cases/peer.cjs')
 
-const CASES = { ...shell, ...stats, ...settings, ...agent, ...chat, ...mascot, ...subagentModel, ...peer }
+const CASES = { ...shell, ...settings, ...agent, ...mascot, ...subagentModel, ...peer }
 
 
 module.exports = { CASES }

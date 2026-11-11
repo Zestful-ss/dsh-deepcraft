@@ -1,13 +1,10 @@
 import * as React from 'react'
-import { Tag } from '@deepseek-ai/dsh-client-ui-primitives'
 import { PREFS } from '@dsh-deepcraft/contracts/prefs'
 import { ROW_CONTROLS } from 'virtual:dsh-deepcraft/settings-controls'
 import { SEGMENTS_CLASS, SEGMENT_CLASS } from '../../shared/segment-control'
-import { windowsDesktop } from '@dsh-deepcraft/engine/desktop-band'
-import { prefYielded, settingsRowsOf } from '../../core/feature'
+import { settingsRowsOf } from '../../core/feature'
 import { featureCopy } from '../../core/i18n'
-import { motionReduced } from '../../core/prefs'
-import { copy, sharedLine } from './copy'
+import { sharedLine } from './copy'
 import { createSlidingPill } from '../../shared/sliding-pill'
 import type { Feature, FeatureSettingsRow } from '../../core/feature'
 import type { Prefs } from '../../constants'
@@ -41,12 +38,6 @@ export interface SettingsView {
   prefs: Prefs
   write(patch: Partial<Prefs>): void
   controls: SettingsControls
-  username: {
-    value: string
-    onChange(e: React.ChangeEvent<HTMLInputElement>): void
-    onBlur(): void
-    onKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void
-  }
 }
 
 /** One row of a tab, with its place among the tab's rows and the switch rows the manifests add (D72). */
@@ -93,12 +84,10 @@ function rowLine(feature: Feature, key: string) {
  * is an on/off switch, a choice a segmented control over the values the table
  * carries, each labelled by the row's own copy.
  *
- * A row refuses input and says why where it cannot act: a preference its
- * feature yields for (dsh-chat-ux on the page, managedDesc), one that only
- * works under another preference's values (`requires`), one standing under a row
+ * A row refuses input and says why where it cannot act: one that only works
+ * under another preference's values (`requires`), or one standing under a row
  * that cannot act either (`parent`: the switch above it is off, or that row is
- * itself waiting), and one acting on the Windows desktop window alone
- * (`windowsOnly`) on every page that is not that window.
+ * itself waiting).
  */
 function featureRows(tab: SettingsTabId, view: SettingsView): SettingsRow[] {
   const controls = view.controls
@@ -121,8 +110,6 @@ function featureRows(tab: SettingsTabId, view: SettingsView): SettingsRow[] {
    */
   function blocked(row: FeatureSettingsRow, seen: ReadonlySet<string>): boolean {
     if (isOff(row.pref)) return true
-    if (row.requires !== undefined && !row.requires.values.includes(String(prefs[row.requires.pref]))) return true
-    if (row.windowsOnly === true && !windowsDesktop()) return true
     if (row.parent !== undefined && !seen.has(row.parent)) {
       const parent = rowsByPref.get(row.parent)
       if (parent !== undefined && blocked(parent, new Set([...seen, row.parent]))) return true
@@ -133,21 +120,15 @@ function featureRows(tab: SettingsTabId, view: SettingsView): SettingsRow[] {
   return entries.map(({ feature, row }) => {
     const pref = row.pref
     const spec = PREFS[pref]
-    const yielded = prefYielded(pref)
     const title = row.title === undefined ? null : rowLine(feature, row.title)
     const desc = row.desc === undefined ? '' : rowLine(feature, row.desc)
-    const requires = row.requires
-    const waits = requires !== undefined && !requires.values.includes(String(view.prefs[requires.pref]))
-      ? rowLine(feature, requires.note)
-      : null
-    const offWindows = row.windowsOnly === true && !windowsDesktop()
     const above = row.parent === undefined ? undefined : rowsByPref.get(row.parent)
     const parentBlocked = above !== undefined && blocked(above, new Set([row.parent as string]))
     const stored = view.prefs[pref]
     // The row's key and its values are the table's data: the clamp holds them.
     const write = (value: string | boolean) => { view.write({ [pref]: value } as Partial<Prefs>) }
     // The row's own value never disables it: that is what the reader changes.
-    const off = yielded || waits !== null || offWindows || parentBlocked
+    const off = parentBlocked
     // A row the feature draws itself renders its own control (D72); every other
     // row follows the preference's own type.
     const own = row.control === undefined ? undefined : ROW_CONTROLS[feature.id]?.[row.control]
@@ -161,13 +142,7 @@ function featureRows(tab: SettingsTabId, view: SettingsView): SettingsRow[] {
           write,
           off,
         )
-    const still = row.stillWhenReduced === true && motionReduced()
-    const note = waits ?? (offWindows ? sharedLine('windowsOnlyNote') : still ? sharedLine('motionStillNote') : null)
-    // A yielded row says who manages it even when it carries no description of
-    // its own: the switch rows over the preview cards have none.
-    const description = yielded
-      ? managedDesc(desc, true)
-      : (row.desc === undefined && note === null ? null : noteDesc(desc, note))
+    const description = row.desc === undefined ? null : desc
     const key = row.key ?? pref
     const node = row.parent === undefined
       ? controls.row(key, title, description, control, {
@@ -175,16 +150,10 @@ function featureRows(tab: SettingsTabId, view: SettingsView): SettingsRow[] {
         // A feature's own control is a grid of preview cards: it takes the
         // line under the row's text (or the whole row when it has none).
         block: own !== undefined,
-        experimental: row.experimental === true,
       })
-      : controls.subRow(key, title ?? '', description, control, !off, row.experimental === true)
+      : controls.subRow(key, title ?? '', description, control, !off)
     return { rank: row.rank, node }
   })
-}
-
-/** A row's description, with the line naming the plugin that manages it while one does. */
-export function managedDesc(text: string, managed: boolean): React.ReactNode {
-  return noteDesc(text, managed ? copy('chatUxManaged') : null)
 }
 
 /**
@@ -290,17 +259,11 @@ export function createSettingsControls() {
   }
 
   /** A row's text half: the title over the description; a row whose control is the explanation (a preview card) carries no description. */
-  function rowText(title: string, description: React.ReactNode, experimental?: boolean) {
+  function rowText(title: string, description: React.ReactNode) {
     return React.createElement(
       'div',
       { className: 'dsh-deepcraft-settings-row-text' },
-      title === '' ? null : React.createElement(
-        'div',
-        { className: 'dsh-deepcraft-settings-row-title', 'data-experimental': experimental === true ? '' : undefined },
-        title,
-        // The tag is the host's own control, the one its plugin page marks an experimental package with.
-        experimental === true ? React.createElement(Tag, { tone: 'info', className: 'dsh-deepcraft-settings-row-tag' }, sharedLine('experimental')) : null,
-      ),
+      title === '' ? null : React.createElement('div', { className: 'dsh-deepcraft-settings-row-title' }, title),
       description === null ? null : React.createElement('div', { className: 'dsh-deepcraft-settings-row-desc' }, description),
     )
   }
@@ -321,7 +284,7 @@ export function createSettingsControls() {
    * marks a titled row that belongs to the row above it the same way, so the
    * group keeps no hairline between its members.
    */
-  function row(key: string, title: string | null, description: React.ReactNode, control: React.ReactNode, options?: { block?: boolean, disabled?: boolean, sub?: boolean, experimental?: boolean }) {
+  function row(key: string, title: string | null, description: React.ReactNode, control: React.ReactNode, options?: { block?: boolean, disabled?: boolean, sub?: boolean }) {
     const classes = ['dsh-deepcraft-settings-row']
     if (options?.block) classes.push('dsh-deepcraft-settings-row-block')
     else if (React.isValidElement(control) && control.type === ClaudeStyleSegmentGroup) classes.push('dsh-deepcraft-settings-row-segment')
@@ -338,7 +301,7 @@ export function createSettingsControls() {
     return React.createElement(
       'div',
       { className: classes.join(' '), key, 'aria-disabled': disabled ? 'true' : undefined, 'data-disabled': disabled ? '' : undefined },
-      title === null && description === null ? null : rowText(title ?? '', description, options?.experimental),
+      title === null && description === null ? null : rowText(title ?? '', description),
       named,
     )
   }
@@ -348,7 +311,7 @@ export function createSettingsControls() {
    * disabled while the parent is off. The control is built by the caller
    * with the same `disabled` flag, so it also refuses the keyboard.
    */
-  function subRow(key: string, title: string, description: React.ReactNode, control: React.ReactNode, enabled: boolean, experimental?: boolean) {
+  function subRow(key: string, title: string, description: React.ReactNode, control: React.ReactNode, enabled: boolean) {
     const named = React.isValidElement(control) && control.type === ClaudeStyleSwitch
       ? React.cloneElement(control as React.ReactElement<{ label?: string }>, { label: title })
       : control
@@ -360,7 +323,7 @@ export function createSettingsControls() {
         'aria-disabled': enabled ? undefined : 'true',
         'data-disabled': enabled ? undefined : '',
       },
-      rowText(title, description, experimental),
+      rowText(title, description),
       named,
     )
   }

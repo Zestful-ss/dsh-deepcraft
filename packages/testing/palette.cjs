@@ -49,12 +49,10 @@ const readPage = (page) => page.evaluate(() => {
     accentInk: style.getPropertyValue('--dsw-alias-brand-text').trim(),
     hover: style.getPropertyValue('--dsw-alias-button-primary-hover').trim(),
     prose: style.getPropertyValue('--dsh-deepcraft-link').trim(),
-    wave: style.getPropertyValue('--dsh-deepcraft-ripple-wave').trim(),
     bubble: style.getPropertyValue('--dsw-specific-bubble').trim(),
     selector: style.getPropertyValue('--dsw-specific-selector').trim(),
     mark: art('[data-dsh-deepcraft-part~="brand-mark"]', '::before'),
     word: art('[data-dsh-deepcraft-part~="brand-identity"] > [data-dsh-deepcraft-part~="brand-name"]', '::before'),
-    avatar: art('.dsh-deepcraft-account-avatar', null),
   }
 })
 
@@ -187,9 +185,9 @@ function paletteScenario({ check }) {
     async assert({ session }) {
       const palettes = read.palettes
       const expected = {
-        ocean: { accent: '#5368c9', prose: '#3e5bd6', wave: '#5f73d9', darkCanvas: 'rgb(32, 36, 39)' },
-        ember: { accent: '#d97757', prose: '#3d5f86', wave: '#c6613f', darkCanvas: 'rgb(20, 20, 19)' },
-        forest: { accent: '#397657', prose: '#286649', wave: '#286649', darkCanvas: 'rgb(20, 20, 19)' },
+        ocean: { accent: '#5368c9', prose: '#3e5bd6', darkCanvas: 'rgb(32, 36, 39)' },
+        ember: { accent: '#d97757', prose: '#3d5f86', darkCanvas: 'rgb(20, 20, 19)' },
+        forest: { accent: '#397657', prose: '#286649', darkCanvas: 'rgb(20, 20, 19)' },
       }
       const checks = []
       for (const [id, want] of Object.entries(expected)) {
@@ -200,9 +198,8 @@ function paletteScenario({ check }) {
           light.palette === id && light.accent === want.accent && light.prose === want.prose &&
             dark.accent === want.accent && dark.canvas === want.darkCanvas,
           JSON.stringify({ light, dark })))
-        checks.push(check(`${id}：选中、悬停、气泡与涟漪都跟着这套配色`,
-          light.wave === want.wave &&
-            /^(#|rgba?\()/.test(light.bubble || '') && /^(#|rgba?\()/.test(light.selector || '') && /^(#|rgba?\()/.test(light.hover || ''),
+        checks.push(check(`${id}：选中、悬停与气泡的底色都跟着这套配色`,
+          /^(#|rgba?\()/.test(light.bubble || '') && /^(#|rgba?\()/.test(light.selector || '') && /^(#|rgba?\()/.test(light.hover || ''),
           JSON.stringify({ bubble: light.bubble, selector: light.selector, hover: light.hover })))
         checks.push(check(`${id}：主体文字、按钮文字与正文链接在画布上的对比度不低于 4.5:1`,
           contrast(light.ink, light.canvas) >= 4.5 && contrast(dark.ink, dark.canvas) >= 4.5 &&
@@ -217,16 +214,15 @@ function paletteScenario({ check }) {
           })))
       }
       const tinted = read.tinted || {}
-      const kept = (page) => page !== undefined && page.accent === '#1a7f5a' && page.wave === '#1a7f5a'
-      checks.push(check('自定义强调色在三套内置配色下都覆盖强调与涟漪',
+      const kept = (page) => page !== undefined && page.accent === '#1a7f5a'
+      checks.push(check('自定义强调色在三套内置配色下都覆盖强调',
         kept(tinted.ocean) && kept(tinted.ember) && kept(tinted.forest), JSON.stringify(tinted)))
       checks.push(check('切到跟随宿主时不覆盖宿主颜色，强调色控件禁用',
         tinted.host?.palette === 'host' && read.hostAccentDisabled === true, JSON.stringify({ host: tinted.host, disabled: read.hostAccentDisabled })))
       checks.push(check('切回内置配色后自定义强调色立即恢复，清除后回到本套配色的强调色',
         kept(tinted.back) && read.reset?.accent === '#5368c9', JSON.stringify({ back: tinted.back, reset: read.reset })))
       const identity = (page) => page !== undefined && /brand\/mark/.test(page.mark?.image || '') &&
-        /brand\/wordmark/.test(page.word?.image || '') &&
-        (page.avatar === null || /brand\/mark/.test(page.avatar?.image || ''))
+        /brand\/wordmark/.test(page.word?.image || '')
       checks.push(check('名称、标志与字标在每套配色下都画同一份读者上传的图',
         identity(palettes.ocean?.light) && identity(palettes.ember?.light) && identity(palettes.forest?.light),
         JSON.stringify({ ocean: palettes.ocean?.light?.mark, ember: palettes.ember?.light?.mark })))

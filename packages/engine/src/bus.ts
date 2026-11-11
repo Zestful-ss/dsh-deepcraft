@@ -13,11 +13,8 @@ import { skin } from './skin'
  * while a subscription exists, so the head is watched only while someone asks
  * (the other chat plugin's sheet, D9's foreign sheets).
  *
- * Sizes: one ResizeObserver for every element, and a second, `afterHost`,
- * made anew each time a subscription joins it. Resize callbacks run in the
- * order the observers were made, and the host makes its own when it mounts a
- * message column; a subscription made after the mount therefore runs after
- * the host's in the same frame (D74's follow takes the host's pin back * before it paints).
+ * Sizes: one ResizeObserver for every element, and one subscription list, so
+ * every subscription hears a batch in the order it was made.
  */
 
 export interface MutationOptions {
@@ -288,8 +285,7 @@ interface SizeRegistry {
   watchers: Map<Element, number>
 }
 
-const early: SizeRegistry = { observer: null, subscriptions: [], watchers: new Map() }
-const afterHost: SizeRegistry = { observer: null, subscriptions: [], watchers: new Map() }
+const sizes: SizeRegistry = { observer: null, subscriptions: [], watchers: new Map() }
 
 /** Each subscription hears its own elements' entries of a batch, once per batch, in subscription order. */
 function makeSizeObserver(registry: SizeRegistry) {
@@ -307,28 +303,19 @@ function makeSizeObserver(registry: SizeRegistry) {
 /**
  * Hear the sizes of `targets`, one call per resize batch with their entries.
  * Like a ResizeObserver of its own, the subscription first hears the sizes as
- * they are now. `afterHost` places it after every resize observer the host
- * made before this call.
+ * they are now.
  * @returns unsubscribe.
  */
-export function observeSize(targets: Element | Element[], callback: (entries: ResizeObserverEntry[]) => void, options?: { afterHost?: boolean }) {
-  const registry = options?.afterHost === true ? afterHost : early
+export function observeSize(targets: Element | Element[], callback: (entries: ResizeObserverEntry[]) => void) {
+  const registry = sizes
   const subscription = { targets: Array.isArray(targets) ? [...targets] : [targets], callback }
   registry.subscriptions.push(subscription)
   for (const target of subscription.targets) registry.watchers.set(target, (registry.watchers.get(target) ?? 0) + 1)
-  if (registry === afterHost) {
-    // Made anew, so it is younger than the host's; every element is watched
-    // again and reports its size once more, which a size callback takes as no change.
-    registry.observer?.disconnect()
-    registry.observer = makeSizeObserver(registry)
-    for (const element of registry.watchers.keys()) registry.observer.observe(element)
-  } else {
-    if (registry.observer === null) registry.observer = makeSizeObserver(registry)
-    for (const target of subscription.targets) {
-      // Watched again, so the new subscription hears the current size first.
-      if (registry.watchers.get(target)! > 1) registry.observer.unobserve(target)
-      registry.observer.observe(target)
-    }
+  if (registry.observer === null) registry.observer = makeSizeObserver(registry)
+  for (const target of subscription.targets) {
+    // Watched again, so the new subscription hears the current size first.
+    if (registry.watchers.get(target)! > 1) registry.observer.unobserve(target)
+    registry.observer.observe(target)
   }
   return () => {
     const at = registry.subscriptions.indexOf(subscription)

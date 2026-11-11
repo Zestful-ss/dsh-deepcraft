@@ -1,4 +1,4 @@
-import { CHAT_FLOW_SELECTOR, COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, COMPOSER_SELECTOR, COMPOSER_STACK_SELECTOR, COMPOSER_STATS_SELECTOR, COMPOSER_STAT_SELECTOR, CONVERSATION_SCROLL_SELECTOR, CONVERSATION_SESSION_ATTRIBUTE, CONVERSATION_SESSION_SELECTOR, DIALOG_TRIGGER_SELECTOR, FOOT_AREA_SELECTOR, MENU_ROLE_SELECTOR, PHASE_ATTRIBUTE, RIGHTBAR_TOGGLE_SELECTOR, SIDEBAR_BRAND_SELECTOR, SIDEBAR_ROOT_SELECTOR, SIDEBAR_TOGGLE_SELECTOR, WINDOWS_MENU_SELECTOR, WORKSPACE_LIST_AREA_SELECTOR, WORKSPACE_SECTION_LABEL_SELECTOR, WORKSPACE_TREE_ROW_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, COMPOSER_SELECTOR, COMPOSER_STACK_SELECTOR, CONVERSATION_SCROLL_SELECTOR, CONVERSATION_SESSION_ATTRIBUTE, CONVERSATION_SESSION_SELECTOR, FOOT_AREA_SELECTOR, MENU_ROLE_SELECTOR, PHASE_ATTRIBUTE, SIDEBAR_ROOT_SELECTOR, WORKSPACE_LIST_AREA_SELECTOR, WORKSPACE_SECTION_LABEL_SELECTOR, WORKSPACE_TREE_ROW_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { MODEL_SLOT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import type { HostAccountService, HostAssistantStep, HostChatSnapshot, HostChatTarget, HostConfigFormsService, HostContextMenusService, HostConversationService, HostLocaleService, HostModelCatalogSnapshot, HostModelDirectoriesService, HostModelDirectory, HostServiceLookup, HostOutlineTurn, HostRunningCall, HostSession, HostSessionsService, HostShortcutsService, HostSlotOptions, HostSlotsService, HostTurn, HostUiConversationService, HostUiSessionService, HostWorkspacesService } from '@dsh-deepcraft/contracts/services'
 import { observeMatches, subscribeMutations } from './bus'
@@ -186,25 +186,6 @@ export function watchWorkspaceRegion(): HostWorkspaceRegion {
 }
 
 /**
- * The sidebar's brand row and its collapse toggle, and the desktop window's own
- * menu button beside them: the seats the surface switch and the header band are
- * placed against (features/surface, features/header-band). Each is absent on
- * most pages — no desktop window in a browser, no toggle in the collapsed rail —
- * so the answer is kept rather than queried per pass.
- */
-export const findSidebarBrand = cacheFirst<HTMLElement>(SIDEBAR_BRAND_SELECTOR)
-export const findSidebarToggle = cacheFirst<HTMLElement>(SIDEBAR_TOGGLE_SELECTOR)
-export const findWindowsMenu = cacheFirst<HTMLElement>(WINDOWS_MENU_SELECTOR)
-
-/**
- * The right panel's own collapse control, while that panel is open. It hangs
- * from a transformed, clipped subtree, so the skin draws its own control in the
- * header's row and presses this one; the same read answers whether the panel is
- * open at all.
- */
-export const findRightbarToggle = cacheFirst<HTMLElement>(RIGHTBAR_TOGGLE_SELECTOR)
-
-/**
  * The open host menu card: the host portals its menus to `<body>`, and every
  * card the skin builds itself carries a `dsh-deepcraft-` class (D3). The account
  * row and the hero menu ask this same question on every pass, so it is read
@@ -215,53 +196,12 @@ export const findHostMenu = cacheFirst<HTMLElement>(`${MENU_ROLE_SELECTOR}:not([
 /** The host's composer card: every reader goes through these, so the selector lives once. */
 const COMPOSER_CARD = COMPOSER_CARD_SELECTOR
 
-/** The composer cards, kept current by the bus instead of queried every pass (D40). */
-export function observeComposerCards() {
-  return observeMatches<HTMLElement>(COMPOSER_CARD)
-}
-
 export const findComposerCard = cacheFirst<HTMLElement>(COMPOSER_CARD)
 
 /** The composer card `node` sits in, or null. */
 export function closestComposerCard(node: EventTarget | null | undefined) {
   return closestFrom(node, COMPOSER_CARD)
 }
-/**
- * The host's statistics in the composer stack: the container an older client
- * marked around them, else the element the marked figures share. Null when the
- * host draws none, which every reader tolerates.
- */
-export function findComposerStats() {
-  const bar = document.querySelector<HTMLElement>(COMPOSER_STATS_SELECTOR)
-  if (bar !== null) return bar
-  const figure = document.querySelector<HTMLElement>(COMPOSER_STAT_SELECTOR)
-  return figure === null ? null : figure.parentElement
-}
-
-/**
- * The host's context meter inside `card`'s dock line, or null when the page
- * carries none.
- *
- * The dock is the card's next sibling (a notice line, when there is one, sits
- * before it), and the meter is the dialog trigger in it that draws a ring of
- * `<circle>`s — the statistics pills draw none. The composer pass marks the
- * node it finds, and the statistics feature reads the meter while that pass is
- * not installed, so the answer is taken here rather than in either of them.
- */
-export function findDockedContextMeter(card: Element | null) {
-  const dock = card === null ? null : card.nextElementSibling
-  if (dock === null) return null
-  const triggers = dock.querySelectorAll<HTMLElement>(DIALOG_TRIGGER_SELECTOR)
-  for (let i = 0; i < triggers.length; i++) {
-    const trigger = triggers[i]
-    if (trigger.querySelector(':scope > svg > circle') === null) continue
-    let node: HTMLElement = trigger
-    while (node.parentElement !== null && node.parentElement !== dock) node = node.parentElement
-    return node
-  }
-  return null
-}
-
 /**
  * The composer seat around `scope`: a pointer or key inside it is the reader
  * typing, which the scroll owner reads as intent that is not a scroll (D40).
@@ -273,11 +213,6 @@ export function findComposerSeat(scope: ParentNode = document) {
 /** The session scroller: the element the host hangs its own follow off (D40). */
 export const findConversationScroller = cacheFirst<HTMLElement>(CONVERSATION_SCROLL_SELECTOR)
 
-/** The chat columns on the page: the root every chat-area behaviour scopes to. */
-export function findChatFlows() {
-  return document.querySelectorAll<HTMLElement>(CHAT_FLOW_SELECTOR)
-}
-
 /** The shown conversation: the element carrying its session id, and the id itself. */
 const CONVERSATION_SESSION_ATTR = CONVERSATION_SESSION_ATTRIBUTE
 const CONVERSATION_SESSION = `[${CONVERSATION_SESSION_ATTR}]`
@@ -288,10 +223,6 @@ const CONVERSATION_SESSION = `[${CONVERSATION_SESSION_ATTR}]`
  * kept element as a fresh query would answer with it.
  */
 export const findConversationSession = cacheFirst<HTMLElement>(CONVERSATION_SESSION_SELECTOR)
-
-export function closestConversationSession(node: EventTarget | null | undefined) {
-  return closestFrom(node, CONVERSATION_SESSION)
-}
 
 export function conversationSessionId(host: Element | null | undefined) {
   if (host === null || host === undefined) return null
@@ -316,16 +247,6 @@ export function currentSessionId(ctx: HostContext, sessions: HostSessionsService
   const value = uiSession?.current?.value
   if (typeof value?.key === 'string') return value.key
   return sessions.list.getSnapshot().current
-}
-
-export function currentSession(ctx: HostContext): HostSession | null {
-  const sessions = ctx.get('sessions') as HostSessionsService | undefined
-  if (sessions === undefined || sessions === null) return null
-  const id = currentSessionId(ctx, sessions)
-  if (id === undefined || id === null) return null
-  const binding = sessions.binding(id)
-  if (binding === undefined || binding === null) return null
-  return binding.session === undefined ? null : binding.session
 }
 
 /**
@@ -369,57 +290,6 @@ export function readTurnActivity(snapshot: HostChatSnapshot, turn: HostTurn): Tu
 /** What an open turn is doing (readTurnActivity). */
 export type TurnActivity = { kind: 'assistant', assistant: HostAssistantStep, newest: string | null } | { kind: 'tools', call: HostRunningCall }
 
-export function currentPreset(session: HostSession): string | null {
-  const snapshot = session.projections?.faceOf('permissions').getSnapshot()
-  if (snapshot === undefined || snapshot === null) return null
-  // dsh 0.2+ projection faces hand back the bare value; older hosts wrapped it.
-  if (typeof snapshot === 'object' && 'currentValue' in snapshot) return (snapshot as { currentValue: string }).currentValue
-  return typeof snapshot === 'string' ? snapshot : null
-}
-
-/**
- * One session's whole-log turn outline (the host's `turnOutline` projection):
- * `{ turn, seq, prompt, response }` per started turn, or undefined where the
- * assembly does not mount that projection. `seq` is the turn's `turn/start`
- * event, which is what the host's own jump pages history through
- */
-export function sessionOutline(ctx: HostContext, sessionId: string): HostOutlineTurn[] | undefined {
-  const face = ctx.get('sessions')?.binding(sessionId)?.session?.projections?.faceOf('turnOutline')
-  return typeof face?.getSnapshot === 'function' ? face.getSnapshot() : undefined
-}
-
-/**
- * The turn holding one event seq: the latest outline entry at or before it. An
- * outline that does not reach that far answers null, and the caller leaves the
- * reading position where it is.
- */
-export function turnForSeq(outline: HostOutlineTurn[] | undefined, seq: number): number | null {
-  if (!Array.isArray(outline)) return null
-  let found: number | null = null
-  for (const entry of outline) {
-    if (entry === null || typeof entry !== 'object') continue
-    if (!Number.isSafeInteger(entry.turn) || !Number.isSafeInteger(entry.seq)) continue
-    if (entry.seq > seq) continue
-    if (found === null || entry.turn > found) found = entry.turn
-  }
-  return found
-}
-
-/**
- * The event seq a turn started at, off the same whole-log outline: what the
- * host's own jump pages history through when that turn is outside the loaded
- * window. An outline that does not hold the turn answers null.
- */
-export function outlineSeq(outline: HostOutlineTurn[] | undefined, turn: number): number | null {
-  if (!Array.isArray(outline)) return null
-  for (const entry of outline) {
-    if (entry === null || typeof entry !== 'object') continue
-    if (entry.turn !== turn || !Number.isSafeInteger(entry.seq)) continue
-    return entry.seq
-  }
-  return null
-}
-
 /**
  * The host's client services, each read here once (D3).
  *
@@ -443,7 +313,7 @@ export function hostUiSession(lookup: HostServiceLookup | null | undefined): Hos
 }
 
 /** One session's model directory: the catalog, its load and the pick. */
-export function hostModelDirectories(lookup: HostServiceLookup | null | undefined): HostModelDirectoriesService | null {
+function hostModelDirectories(lookup: HostServiceLookup | null | undefined): HostModelDirectoriesService | null {
   const directories = lookup?.get('modelDirectories') as HostModelDirectoriesService | undefined
   return directories ?? null
 }
@@ -478,18 +348,6 @@ export function hostLocale(lookup: HostServiceLookup | null | undefined): HostLo
   return locale ?? null
 }
 
-/** One session's conversation service, the chat target's own reader. */
-export function hostConversation(lookup: HostServiceLookup | null | undefined): HostConversationService | null {
-  const conversation = lookup?.get('conversation') as HostConversationService | undefined
-  return conversation ?? null
-}
-
-/** The reader's own keyboard shortcuts. */
-export function hostShortcuts(lookup: HostServiceLookup | null | undefined): HostShortcutsService | null {
-  const shortcuts = lookup?.get('shortcuts') as HostShortcutsService | undefined
-  return shortcuts ?? null
-}
-
 /** The slot registry, read from the scope that injected it (D75). */
 export function hostSlots(lookup: HostServiceLookup): HostSlotsService | null {
   const slots = lookup.get('slots') as HostSlotsService | undefined
@@ -507,7 +365,7 @@ export function hostSlots(lookup: HostServiceLookup): HostSlotsService | null {
  * The fiber handed back belongs to the inline registration, not to the
  * feature that asked for it: a feature that comes down while the page stays
  * (a yield to another plugin, a switch turned off) must dispose it, or its
- * control outlives the feature on a page the skin no longer owns (D74).
+ * control outlives the feature on a page the skin no longer owns (D81).
  *
  * @param ctx - the feature's host context.
  * @param label - what the host's log calls this registration.
@@ -531,27 +389,6 @@ export function registerSlotEntry(
   })
 }
 
-/** The client remote: the endpoint every service behind it is reached through. */
-export function hostRemote(lookup: HostServiceLookup | null | undefined): HostValue {
-  return lookup?.get('remote')
-}
-
-/** The account service behind the remote. */
-export function hostRemoteAccount(lookup: HostServiceLookup | null | undefined): HostAccountService | null {
-  const account = lookup?.get('remote.account') as HostAccountService | undefined
-  return account ?? null
-}
-
-/** The session service behind the remote: the list, and the shown session. */
-export function hostRemoteSession(lookup: HostServiceLookup | null | undefined): HostValue {
-  return lookup?.get('remote.session')
-}
-
-/** The permission presets the host serves, behind the remote. */
-export function hostRemotePermissionPresets(lookup: HostServiceLookup | null | undefined): HostValue {
-  return lookup?.get('remote.permissionPresets')
-}
-
 /** The workspace list, archived and live. */
 export function hostWorkspaces(lookup: HostServiceLookup | null | undefined): HostWorkspacesService | null {
   const workspaces = lookup?.get('workspaces') as HostWorkspacesService | undefined
@@ -567,31 +404,6 @@ export function hostUiWorkspace(lookup: HostServiceLookup | null | undefined): H
 export function hostContextMenus(lookup: HostServiceLookup | null | undefined): HostContextMenusService | null {
   const menus = lookup?.get('contextMenus') as HostContextMenusService | undefined
   return menus ?? null
-}
-
-/** The shell's plugin page navigation. */
-export function hostPluginNavigation(lookup: HostServiceLookup | null | undefined): HostValue {
-  return lookup?.get('pluginNavigation')
-}
-
-/** The shell's panel layout. */
-export function hostLayout(lookup: HostServiceLookup | null | undefined): HostValue {
-  return lookup?.get('layout')
-}
-
-/** The installed plugin inventory, behind the remote. */
-export function hostRemotePluginInventory(lookup: HostServiceLookup | null | undefined): HostValue {
-  return lookup?.get('remote.pluginInventory')
-}
-
-/** The plugin manager behind the remote. */
-export function hostRemotePluginManager(lookup: HostServiceLookup | null | undefined): HostValue {
-  return lookup?.get('remote.pluginManager')
-}
-
-/** The skill catalog behind the remote. */
-export function hostRemoteSkills(lookup: HostServiceLookup | null | undefined): HostValue {
-  return lookup?.get('remote.skills')
 }
 
 /** The host's settings-form service (`configForms`, D75); null where the host serves no namespaces to the browser. */

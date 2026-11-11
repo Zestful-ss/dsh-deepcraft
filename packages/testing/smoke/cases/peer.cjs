@@ -1,58 +1,9 @@
 'use strict'
-const { MARKUP, SKIN_FACE, SKIN_HAT, same, check, contrast, basicChecks, commonChecks } = require('./_shared.cjs')
+const { check, basicChecks } = require('./_shared.cjs')
 
 module.exports = {
-  // The other chat-behaviour plugin on the page: the ported features must hand
-  // their behaviour over whole (packages/client/src/shared/peer-plugin.ts, D74).
-  'peer-chat-ux'(r) {
-    basicChecks(r)
-    const peer = r.peer || {}
-    const marks = peer.marks || {}
-    check('a streaming chat area gets none of the ported chat effects',
-      marks.follow === false && marks.fold === false, JSON.stringify(marks))
-    check('the file change rows leave the host its two seat keys',
-      peer.seats === 0, JSON.stringify(peer.seats))
-    check('a running thinking row is left as the host rendered it', peer.thinkExpanded === false, JSON.stringify(peer.thinkExpanded))
-    check('a running process group is left as the host rendered it', peer.groupOpen === false, JSON.stringify(peer.groupOpen))
-    const settings = peer.settings || {}
-    const tabs = settings.tabs || {}
-    const page = (tab) => tabs[tab] || {}
-    // The rows the ported features own, each on the tab its manifest registers it
-    // on (D74, D72). headerBand carries a note of its own on a page that is not
-    // the Windows desktop, so its note says nothing about the peer plugin.
-    const ported = { conversation: ['chatAnimations', 'chatWait'] }
-    const answers = (tab) => page(tab).answers || {}
-    // The reader's own answer stays on show (both switches on) while the control
-    // refuses input and the accent line names the plugin that owns the behaviour.
-    const showsOwnAnswer = {
-      chatAnimations: (answer) => answer.on === true,
-      chatWait: (answer) => answer.on === true,
-    }
-    const refusingIn = (tab) => page(tab).refusing || []
-    const managedIn = (tab) => page(tab).managed || []
-    const carried = (tab, key) => (page(tab).rows || []).includes(key)
-    check('each ported control is registered on its own tab',
-      settings.registered === true && Object.keys(ported).every(tab => ported[tab].every(key => carried(tab, key))),
-      JSON.stringify(Object.keys(tabs).map(tab => `${tab}: ${(page(tab).rows || []).join(', ')}`)))
-    check('the chat-area animation row is a switch, with no segmented control on it',
-      (answers('conversation').chatAnimations || {}).on === true && JSON.stringify((answers('conversation').chatAnimations || {}).options) === '[]',
-      JSON.stringify(answers('conversation').chatAnimations))
-    check('each ported control is greyed out and marked as managed by the other plugin',
-      Object.keys(ported).every(tab => ported[tab].every(key => refusingIn(tab).includes(key) && managedIn(tab).includes(key))),
-      JSON.stringify(Object.keys(ported).map(tab => `${tab} refusing=${refusingIn(tab).join(',')} managed=${managedIn(tab).join(',')}`)))
-    check('each ported control keeps showing the reader\'s own answer',
-      Object.keys(ported).every(tab => ported[tab].every(key => showsOwnAnswer[key](answers(tab)[key] || {}))),
-      JSON.stringify({ chatAnimations: answers('conversation').chatAnimations, chatWait: answers('conversation').chatWait }))
-    check('the accent line names dsh-chat-ux',
-      (settings.texts || []).some(text => text.includes('dsh-chat-ux')), JSON.stringify(settings.texts))
-    check('the rows the other plugin does not own keep answering',
-      [['conversation', 'turnNav'], ['conversation', 'viewTabs'], ['appearance', 'motion']]
-        .every(([tab, key]) => refusingIn(tab).includes(key) === false),
-      JSON.stringify(Object.keys(ported).map(tab => `${tab} refusing=${refusingIn(tab).join(',')}`)))
-    commonChecks(r)
-  },
   // Another plugin owns the page from the first frame (packages/client/src/shared/visual-owner.ts,
-  // D74): the theme paints nothing, keeps no page of its own, and takes the
+  // D81): the theme paints nothing, keeps no page of its own, and takes the
   // page back the moment the owner leaves.
   'skin-center-handoff'(r) {
     basicChecks(r)
@@ -81,7 +32,7 @@ module.exports = {
     // this case's page is the other owner's until the last check hands it back.
   },
   // A skin arriving after the theme took the page (packages/client/src/shared/visual-owner.ts,
-  // D74): the theme stands down then, and takes the page back when it leaves.
+  // D81): the theme stands down then, and takes the page back when it leaves.
   'skin-center-arrival'(r) {
     basicChecks(r)
     const arrival = r.arrival || {}

@@ -98,9 +98,9 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-custom-mark] [data-dsh-deepcraft-par
    the one colour (D80): the fill steps as the colour itself, the hover and link
    step mixed toward the theme's ink so it moves the way the palettes' own
    accents do, the active plate at 30%, the hover wash at 10%, the selection,
-   chip and business beds at 8% over the canvas, the reader's bubble at 12%, the
-   ink on a fill the canvas colour brand.ts picked for contrast, and the house
-   tokens that wear the accent — the ripple's front and the prose link. The shared
+   chip and business beds at 8% over the canvas, the reader's bubble at 12%,
+   the ink on a fill the canvas colour brand.ts picked for contrast, and the
+   house tokens that wear the accent. The shared
    gate names the palette attribute and excludes the host's value, so every one
    of the skin's palettes takes the colour and "follow the host" takes none
    (D80). */
@@ -119,7 +119,6 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
   --dsw-specific-bubble: color-mix(in srgb, var(--dsh-deepcraft-custom-accent) 12%, var(--dsh-deepcraft-canvas));
   --dsw-alias-brand-text: var(--dsh-deepcraft-custom-accent-ink);
   --dsw-alias-label-primary-foreground: var(--dsh-deepcraft-custom-accent-ink);
-  --dsh-deepcraft-ripple-wave: var(--dsh-deepcraft-custom-accent);
   --dsh-deepcraft-logo-ink: var(--dsh-deepcraft-custom-accent);
 }
 

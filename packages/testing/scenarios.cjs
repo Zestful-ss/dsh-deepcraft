@@ -1,17 +1,7 @@
 /**
  * scenarios.cjs — the end-to-end lane's scenario table (D66). The runner
- * (packages/testing/e2e.cjs) boots an instance per scenario, sends its prompt
- * and calls its hooks; a scenario carrying its own reader is a module beside
- * this one (a `*Scenario` export), registered in the table below.
- *
- * A scenario is `{ script, prompt, delayMs?, viewport?, patch?, profilePatch?,
- * hostArgs?, browserArgs?, plugins?, prepareHome?, initScript?, beforeSend?,
- * duringTurn?, afterTurn?, assert }`: `script` names the model's answer
- * (packages/testing/mock-llm.cjs), `patch` adds a loader overlay, and
- * `profilePatch` supplies the writable user layer. `hostArgs` and `browserArgs`
- * reach the host's and browser's command lines; `plugins` installs other plugins
- * from the registry into a home the scenario boots alone, `initScript` runs in
- * the page before its scripts, and `assert` returns the checks.
+ * (packages/testing/e2e.cjs) boots one instance per scenario; each entry here
+ * says what to send and what the settled page must show.
  */
 'use strict'
 const path = require('node:path')
@@ -19,16 +9,8 @@ const { HOST, readFlow, check, observe } = require('./lane.cjs')
 const { recordProbes } = require('./contract-probe.cjs')
 const { sendPrompt, waitForTurn } = require('./prompt.cjs')
 const { importanceScenario } = require('./importance.cjs')
-const { readerScrollScenario } = require('./reader-scroll.cjs')
-const { doorPinScenario } = require('./door-pin.cjs')
-const { streamPaceScenario } = require('./stream-pace.cjs')
 const { motionScenario } = require('./motion.cjs')
-const { processSummaryScenario } = require('./process-summary.cjs')
-const { fileMergeScenario } = require('./file-merge.cjs')
-const { reasoningStreamScenario } = require('./reasoning-stream.cjs')
-const { waitLineScenario } = require('./wait-line.cjs')
 const { longSessionScenario } = require('./long-session.cjs')
-const { statsScenarios } = require('./stats-position.cjs')
 const { sidebarRailScenario } = require('./sidebar-rail.cjs')
 const { remoteSettingsScenario } = require('./remote-settings.cjs')
 const { hostVisibilityScenario } = require('./host-visibility.cjs')
@@ -40,13 +22,15 @@ const { subagentModelScenario } = require('./subagent-model.cjs')
 const { workspacePinsScenario } = require('./workspace-pins.cjs')
 const { dsBotScenario } = require('./ds-bot.cjs')
 const { desktopHeaderScenario } = require('./desktop-header.cjs')
+const { nativeLayoutScenario } = require('./native-layout.cjs')
 const { CANVAS } = require('./shoot.cjs')
 const { sanitizePage } = require('../../scripts/shared/privacy.cjs')
 const { bound } = require('./bounds.cjs')
 
 /**
- * How far behind the tail the scroller may lag while the reader follows it: the
- * value and the reason it holds it are in packages/testing/bounds.json.
+ * How far behind the tail the host's own follow may lag while it keeps the
+ * scroller at the end: the value and the reason it holds it are in
+ * packages/testing/bounds.json.
  */
 const MAX_FOLLOW_GAP_PX = bound('laneFollowMaxGapPx')
 
@@ -81,12 +65,13 @@ async function captureBothSchemes(context) {
   return { checks, files }
 }
 
-
 /** The scenarios: each boots its own instance, sends its prompt, and asserts. */
 const SCENARIOS = {
   desktopHeader: desktopHeaderScenario({ check }),
   /** The host's own footer controls under the skin: the Cordis action and the outage button. */
   hostVisibility: hostVisibilityScenario({ check }),
+  /** The host's own layout with the skin's sheet on and off, and its controls pressed (native-layout.cjs, D81). */
+  nativeLayout: nativeLayoutScenario({ check }),
   /** A scripted answer: the reader's message, the thought, the markdown. */
   conversation: {
     script: 'greeting',
@@ -103,53 +88,38 @@ const SCENARIOS = {
     },
   },
   /**
-   * The right panel's own collapse control: the skin's button stands in the
-   * header's row while that panel is open — its own copy hangs from a
-   * transformed, clipped subtree and cannot be placed there — and pressing the
-   * skin's button closes the panel, the host's own open button taking its place
-   * again.
+   * The right panel's own collapse control: the skin keeps no button of its
+   * own, the host's expand button opens the panel, and the host's own control
+   * closes it again (D81).
    */
   rightbar: {
     script: 'greeting',
     prompt: 'hello there',
     async assert({ page, session }) {
-      const read = () => page.evaluate(() => {
-        const mine = [...document.querySelectorAll('.dsh-deepcraft-rightbar-close')]
-        const shown = mine.filter((el) => getComputedStyle(el).display !== 'none')
-        const host = document.querySelector('[data-sidebar-right-open] [data-sidebar-right-toggle]')
-        const expand = document.querySelector('[data-sidebar-right-expand]')
-        const box = shown.length === 0 ? null : (() => {
-          const rect = shown[0].getBoundingClientRect()
-          return { left: Math.round(rect.left), right: Math.round(rect.right), top: Math.round(rect.top) }
-        })()
-        return {
-          buttons: mine.length,
-          shown: shown.length,
-          box,
-          host: host !== null,
-          hostHidden: host !== null && getComputedStyle(host).display === 'none',
-          expand: expand !== null,
-          panel: document.querySelector('[data-sidebar-right-open]') !== null,
-        }
-      })
+      const read = () => page.evaluate(() => ({
+        skinButtons: document.querySelectorAll('button[class^="dsh-deepcraft"], button[class*=" dsh-deepcraft-"]').length,
+        host: document.querySelector('[data-sidebar-right-open] [data-sidebar-right-toggle]') !== null,
+        expand: document.querySelector('[data-sidebar-right-expand]') !== null,
+        panel: document.querySelector('[data-sidebar-right-open]') !== null,
+      }))
       const before = await read()
       await page.locator('[data-sidebar-right-expand]').first().click()
       await page.waitForFunction(() => document.querySelector('[data-sidebar-right-open]') !== null, undefined, { timeout: 15000 })
-      await page.waitForTimeout(500)
+      await page.waitForTimeout(300)
       const open = await read()
-      await page.locator('.dsh-deepcraft-rightbar-close').first().click()
+      await page.locator('[data-sidebar-right-toggle]').first().click()
       await page.waitForFunction(() => document.querySelector('[data-sidebar-right-open]') === null, undefined, { timeout: 15000 })
-      await page.waitForTimeout(500)
+      await page.waitForTimeout(300)
       const closed = await read()
       return [
-        check('收起时那枚按钮不占位置，宿主自己的打开按钮在',
-          before.buttons === 1 && before.shown === 0 && before.expand === true && before.panel === false,
+        check('收起时宿主的打开按钮在，插件不画自己的按钮',
+          before.expand === true && before.panel === false && before.skinButtons === 0,
           JSON.stringify(before)),
-        check('面板打开后它出现在头部那一行，面板里宿主自己那枚让位',
-          open.shown === 1 && open.box !== null && open.host === true && open.hostHidden === true,
+        check('面板打开后宿主自己的收起按钮就在面板里',
+          open.panel === true && open.host === true && open.skinButtons === 0,
           JSON.stringify(open)),
-        check('按下它面板收起，宿主的打开按钮回到原处',
-          closed.panel === false && closed.expand === true && closed.shown === 0 && closed.host === false,
+        check('按下宿主的按钮面板收起，打开按钮回到原处',
+          closed.panel === false && closed.expand === true && closed.host === false,
           JSON.stringify(closed)),
         check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
       ]
@@ -170,8 +140,12 @@ const SCENARIOS = {
       ]
     },
   },
-  /** The frame trace: the tail stays pinned and the position never slides back. */
-  scroll: {    script: 'long',
+  /**
+   * The host's own follow through a long answer: the tail stays at the end
+   * with no frame sliding back, and the composer stands still (D81).
+   */
+  scroll: {
+    script: 'long',
     prompt: 'write a long answer',
     delayMs: 300,
     // A short viewport, so the streamed answer outgrows it and the tail has to follow.
@@ -186,23 +160,14 @@ const SCENARIOS = {
       const last = sampled[sampled.length - 1]
       const grown = first === undefined || last === undefined ? 0 : last.height - first.height
       const moved = sampled.filter((frame, i) => i > 0 && frame.top !== sampled[i - 1].top).length
-      // What the reader sees: a frame that slides back has the position moving up
-      // while the content it shows stays or grows; one that runs away has the gap
-      // to the tail opening while nothing arrived.
+      // A frame that slides back has the position moving up while the content it
+      // shows stays or grows; one that runs away has the gap to the tail opening
+      // while nothing arrived.
       const backward = sampled.filter((frame, i) => i > 0 && frame.top < sampled[i - 1].top && frame.height >= sampled[i - 1].height)
       const escaped = sampled.filter((frame, i) => i > 0 && frame.gap > sampled[i - 1].gap + 1 && frame.height <= sampled[i - 1].height)
-      // The live turn's own status line, pinned by the skin while the reader is
-      // at the tail. Measured once the transcript is taller than the viewport
-      // (`clientHeight = height - gap - top`): with less than a screenful the row
-      // legitimately rides the content's end, and with the follow off the pin is
-      // not on the page.
-      const overflowing = (frame) => frame.height - frame.gap - frame.top < frame.height
-      const live = sampled.filter((frame) => frame.running !== null && frame.running !== undefined && frame.following && overflowing(frame))
-      const tops = live.map((frame) => frame.running)
-      const spread = tops.length === 0 ? 0 : Math.max(...tops) - Math.min(...tops)
-      // The skin writes no position while the answer streams (D71), so nothing reads to the host as a
-      // reader leaving the tail: its own mark stays on in every frame the live turn's row is pinned in.
-      const dropped = sampled.filter((frame) => frame.running !== null && frame.running !== undefined && frame.following === false && overflowing(frame))
+      // The composer is the scroller's sibling: growing the column may not move it.
+      const cards = sampled.map((frame) => frame.card).filter((value) => value !== null && value !== undefined)
+      const cardSpread = cards.length === 0 ? 0 : Math.max(...cards) - Math.min(...cards)
       return [
         check('逐帧采样真的在跑', sampled.length > 30, `frames=${sampled.length}`),
         check('回答在采样期间长出来', grown > 100, `grew ${grown}px during the trace`),
@@ -211,22 +176,14 @@ const SCENARIOS = {
         check('尾部没有自己跑远', escaped.length === 0, `escaped=${escaped.length}${escaped.length === 0 ? '' : ` at ${escaped.slice(0, 3).map((f) => f.t).join(',')}ms`}`),
         check('跟随期间尾部留在视野里', worst <= MAX_FOLLOW_GAP_PX, `maxGap=${worst}px of ${following.length} following frames`),
         check('落定后回到末尾', last !== undefined && last.gap <= 4, `lastGap=${last === undefined ? 'n/a' : last.gap}`),
-        check('输出期间宿主自己的跟随一直开着', dropped.length === 0, `frames the host mark was off in=${dropped.length}${dropped.length === 0 ? '' : ` at ${dropped.slice(0, 3).map((f) => f.t).join(',')}ms`}`),
-        check('满屏之后宿主的状态行不再随内容移动，连半个像素也不动', live.length > 10 && spread === 0, `overflowing frames with the row=${live.length}, top ${tops.length === 0 ? 'n/a' : `${Math.min(...tops)}..${Math.max(...tops)}`}`),
+        check('输出期间宿主自己的跟随一直开着', following.length === sampled.length,
+          `frames the host mark was off in=${sampled.length - following.length}`),
+        check('输入卡片全程不动', cardSpread <= 1, `card top spread ${cardSpread}px over ${cards.length} frames`),
         check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
       ]
     },
   },
-  /**
-   * The reader's own scrolling during a live turn: the status line's pin stands
-   * only while the skin's follow moves the position (D40, D74).
-   */
-  readerScroll: readerScrollScenario({ check }),
-  /** A door rolling at the tail mid-stream leaves the status line pinned where it stood (door-pin.cjs, D40). */
-  doorPin: doorPinScenario({ check }),
-  /** An answer arriving faster than a slide carries it: the composer stands still and the column stays on the pin (stream-pace.cjs, D71). */
-  streamPace: streamPaceScenario({ check }),
-  /** The transitions.dev surfaces where they move: greeting, panel, switch, tab, badge, menu (motion.cjs, D9). */
+  /** The transitions.dev surfaces where they move: the settings switch and a tab change (motion.cjs, D9). */
   motion: motionScenario({ check }),
   /** The host contract table, entry by entry, in the page state each one lives in (D3). */
   contract: {
@@ -255,8 +212,7 @@ const SCENARIOS = {
       await second
       await waitForTurn(context.page)
       await recordProbes(context, 'conversation')
-      // Any host menu does: the account menu the skin keys on is not mounted by
-      // this build, and every menu shares the role, the list and the foreground.
+      // Any host menu does: every menu shares the role, the list and the foreground.
       const trigger = context.page.locator('[aria-haspopup="menu"]:not(:is([class^="dsh-deepcraft"], [class*=" dsh-deepcraft"])):visible').first()
       if (await trigger.count() > 0) {
         await trigger.click()
@@ -284,17 +240,8 @@ const SCENARIOS = {
       ]
     },
   },
-  ...statsScenarios({ check }),
-  /** The collapsed rail as one icon column, its chip centred on it (sidebar-rail.cjs). */
+  /** The collapsed rail as the host draws it, its own control where the host puts it (sidebar-rail.cjs). */
   sidebarRail: sidebarRailScenario({ check }),
-  /** The waiting line and the counted process headers (process-summary.cjs, D74). */
-  processSummary: processSummaryScenario({ check }),
-  /** The file-change rows of one file read as one row (file-merge.cjs). */
-  fileMerge: fileMergeScenario({ check }),
-  /** The reasoning's streamed window while the model thinks (reasoning-stream.cjs, D74). */
-  reasoningStream: reasoningStreamScenario({ check }),
-  /** The waiting line's own words: the model's clause and the file a call works on (wait-line.cjs, D74). */
-  waitLine: waitLineScenario({ check }),
   /** What a frame costs in a transcript that is already long (long-session.cjs, D40). */
   longSession: longSessionScenario({ check }),
   /** Every `!important` the skin writes is needed on the real page (packages/testing/importance.cjs, D9). */
@@ -312,7 +259,7 @@ const SCENARIOS = {
   /** An older profile's brand and per-theme pet migrate to one palette and one pet (palette.cjs, D80). */
   paletteLegacyClaude: legacyScenario('claude', { check }),
   paletteLegacyDeepseek: legacyScenario('deepseek', { check }),
-  /** The Chat / Code switch beside ds-bot's published browser half (packages/testing/ds-bot.cjs, D74). */
+  /** The page yielded whole to ds-bot's published browser half, and taken back through ds-bot's own entry (packages/testing/ds-bot.cjs, D81). */
   dsBot: dsBotScenario({ check }),
   /** The composer's subagent model entry: one pick, its record, and its reload (packages/testing/subagent-model.cjs). */
   subagentModel: subagentModelScenario({ check }),

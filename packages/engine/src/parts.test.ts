@@ -23,20 +23,6 @@ const holds = (element: Element | null) => element === null ? null : element.get
 /** The part mark on an element, or null. */
 const partOf = (selector: string) => document.querySelector(selector)?.getAttribute(PART_ATTR) ?? null
 
-test('a header holding the tab strip reads the mark, and loses it with the strip', async () => {
-  document.body.innerHTML =
-    '<div data-slot="conversation.header"><div class="_header_ab"><div class="_titleRow_ab"></div><div class="_tabs_ab"></div></div></div>'
-  cleanups.push(installParts(TEST_VOCABULARY))
-  const header = document.querySelector('[data-test-part~="conversation-header"]')
-  expect(holds(header)).toBe('view-tabs')
-  const strip = partOf('[data-test-part~="view-tabs"]')
-  expect(strip).toBe('view-tabs')
-
-  document.querySelector('[data-test-part~="view-tabs"]')!.remove()
-  await settle()
-  expect(holds(header)).toBeNull()
-})
-
 test('a hold as its own child counts the direct child alone', async () => {
   document.body.innerHTML =
     '<div data-slot="root"><div class="_frame_ab"><div class="_sidebarCol_ab"></div><div class="_centerCol_ab"></div></div></div>'
@@ -65,33 +51,6 @@ test('a holder that takes its attribute after the node it holds still marks it',
   expect(holds(phase)).toBe('conversation-scroll')
 })
 
-test('a dialog holding the host\'s statistics reads the mark, and one outside the relation does not', async () => {
-  document.body.innerHTML =
-    '<div role="dialog"><div class="_stats_ab" data-session-stats-details=""></div></div>' +
-    '<div role="dialog"><div class="_rows_ab"></div></div>'
-  cleanups.push(installParts(TEST_VOCABULARY))
-  const dialogs = document.querySelectorAll('[role="dialog"]')
-  expect(holds(dialogs[0])).toBe('host-stats')
-  expect(holds(dialogs[1])).toBeNull()
-})
-
-test('the foot area marks its boxes around the host row, and nothing above the scope', async () => {
-  document.body.innerHTML =
-    '<div data-slot="sidebar"><div class="_root_ab"><div class="_footArea_ab"><div class="_settingsArea_ab">' +
-    '<div class="_triggerRow_ab"><button data-dsh-deepcraft-account-host-row=""></button></div></div></div></div></div>'
-  cleanups.push(installParts(TEST_VOCABULARY))
-  expect(holds(document.querySelector('[data-test-part~="settings-trigger"]'))).toBe('account-row')
-  expect(holds(document.querySelector('[data-test-part~="settings-area"]'))).toBe('account-row')
-  const root = document.querySelector('[data-test-part~="sidebar-root"]')
-  expect(holds(root)).toBeNull()
-  const foot = document.querySelector('[data-test-part~="foot-area"]')
-  expect(holds(foot)).toBeNull()
-
-  document.querySelector('[data-dsh-deepcraft-account-host-row]')!.remove()
-  await settle()
-  expect(holds(document.querySelector('[data-test-part~="settings-trigger"]'))).toBeNull()
-})
-
 test('the settings dialog marks its section rail outside the conversation box', async () => {
   document.body.innerHTML =
     '<div class="_overlay_ab"><div role="dialog"><div class="_navList_ab"><button class="_navCell_ab"></button></div></div></div>'
@@ -101,9 +60,9 @@ test('the settings dialog marks its section rail outside the conversation box', 
 
 test('the teardown takes every hold mark off with the parts', async () => {
   document.body.innerHTML =
-    '<div data-slot="conversation.header"><div class="_header_ab"><div class="_tabs_ab"></div></div></div>'
+    '<div data-slot="root"><div class="_frame_ab"><div class="_sidebarCol_ab"></div></div></div>'
   const dispose = installParts(TEST_VOCABULARY)
-  expect(holds(document.querySelector('[data-test-part~="conversation-header"]'))).toBe('view-tabs')
+  expect(holds(document.querySelector('[data-test-part~="layout-frame"]'))).toBe('sidebar-column')
   dispose()
   expect(document.querySelectorAll(`[${HOLDS_ATTR}]`).length).toBe(0)
   expect(document.querySelectorAll(`[${PART_ATTR}]`).length).toBe(0)

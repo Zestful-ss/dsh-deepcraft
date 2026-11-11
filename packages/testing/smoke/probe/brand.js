@@ -1,9 +1,9 @@
 /**
  * The custom-brand case (D80): the host half's status names a mark and a 4:1
  * wordmark, and the page paints them over the brand's own art — the sidebar's
- * mark and wordmark, the hero's mark and the account row's fallback picture —
- * then inks them in the text colour and takes a custom accent once the
- * preferences ask for it, and hands the accent back when it is cleared.
+ * mark and wordmark and the hero's mark — then inks them in the text colour and
+ * takes a custom accent once the preferences ask for it, and hands the accent
+ * back when it is cleared.
  */
 (function () {
   var probe = window.__dshSmokeProbe
@@ -40,7 +40,6 @@
         var markArt = getComputedStyle(mark, '::before')
         var wordArt = getComputedStyle(name, '::before')
         var heroArt = getComputedStyle(hero, '::before')
-        var avatar = document.querySelector('.dsh-deepcraft-account-avatar')
         var primaryBtn = document.querySelector('._primary_h_1')
         return {
           markAttr: document.body.getAttribute('data-dsh-deepcraft-custom-mark'),
@@ -51,10 +50,8 @@
           mark: { image: markArt.backgroundImage, mask: markArt.maskImage, width: markArt.width, fill: markArt.backgroundColor },
           word: { image: wordArt.backgroundImage, width: wordArt.width, height: wordArt.height },
           hero: { image: heroArt.backgroundImage, width: heroArt.width },
-          avatar: avatar === null ? null : getComputedStyle(avatar).backgroundImage,
           accent: body.getPropertyValue('--dsw-alias-brand-primary').trim(),
           accentInk: body.getPropertyValue('--dsw-alias-label-primary-foreground').trim(),
-          wave: body.getPropertyValue('--dsh-deepcraft-ripple-wave').trim(),
           buttonFill: primaryBtn === null ? '' : getComputedStyle(primaryBtn).backgroundColor,
         }
       }

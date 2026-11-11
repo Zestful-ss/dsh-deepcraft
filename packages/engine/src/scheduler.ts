@@ -75,8 +75,6 @@ export type ChangeSource = (listener: () => void) => () => void
 export interface SchedulerSources {
   /** Changes that rebuild a feature's copy and ask for a pass: the preferences, the model copy. */
   copyChange: ChangeSource[]
-  /** Changes that only ask for a pass: the account's name, the launcher's contract. */
-  refresh: ChangeSource[]
   /**
    * Read the stored preferences. A form that is already served answers
    * synchronously, so it runs once the sources above are subscribed.
@@ -229,7 +227,6 @@ export function installScheduler<Name extends string>(ctx: HostContext, ui: Sche
 
   // The account's name and the launcher's contract land after the first pass
   // too: they ask for a pass and nothing more.
-  const refreshUnsubscribes = sources.refresh.map((source) => source(() => { schedule() }))
 
   let observedCard: HTMLElement | null = null
   /** Stops watching the observed card's size. */
@@ -399,7 +396,6 @@ export function installScheduler<Name extends string>(ctx: HostContext, ui: Sche
     if (localeUnsubscribe !== null) localeUnsubscribe()
     for (const stop of copyUnsubscribes) stop()
     motionQuery.removeEventListener('change', onSystemMotionChange)
-    for (const stop of refreshUnsubscribes) stop()
     stopMutations()
     if (stopCardSize !== null) stopCardSize()
     stopCardSize = null

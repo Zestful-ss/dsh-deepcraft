@@ -5,7 +5,7 @@ export default {
   id: 'mascot',
   order: 40,
   load: 'deferred',
-  contracts: ['chat.think-running', 'composer.fallback-panel', 'composer.seat', 'composer.stack', 'conversation.session', 'conversation.session-attribute', 'shell.phase'],
+  contracts: ['composer.card', 'composer.fallback-panel', 'composer.seat', 'composer.stack', 'conversation.session', 'conversation.session-attribute', 'shell.phase'],
   pref: 'mascot',
   prefValues: [MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY],
   stylesheets: [

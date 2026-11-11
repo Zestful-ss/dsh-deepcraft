@@ -207,8 +207,8 @@ if (copies.status !== 0) {
 // regressions behind that cost was one such call. A query by an element's id is
 // not counted: the browser answers it from its own index rather than by walking
 // the tree. The sanctioned readers are the accessors and registries that cache
-// their answer — the engine's host.ts, bus.ts and chat-dom.ts, and the sheet the
-// engine's stylesheet.ts mounts itself. Every other site is recorded in
+// their answer — the engine's host.ts and bus.ts, and the sheet the engine's
+// stylesheet.ts mounts itself. Every other site is recorded in
 // packages/testing/document-lookups.json with the reason it is still there: a
 // file's count has to match its entry, and an entry whose count reaches zero
 // comes out of the file. That the record's total never rises is held against
@@ -225,9 +225,9 @@ const recordedLookups = JSON.parse(fs.readFileSync(path.join(ROOT, 'packages', '
 let lookups = 0
 for (const file of sources) {
   if (!file.endsWith('.ts') || /\.test\.ts$/.test(file) || relative(file).includes('packages/testing/')) continue
-  if (LOOKUP_OWNERS.has(relative(file))) continue
   const count = (fs.readFileSync(file, 'utf8').match(LOOKUP) ?? []).length
   lookups += count
+  if (LOOKUP_OWNERS.has(relative(file))) continue
   const entry = recordedLookups[relative(file)]
   if (count === 0) {
     if (entry !== undefined) problems.push(`packages/testing/document-lookups.json: ${relative(file)} records ${entry.count} whole-document lookups and the file has none — take the entry out`)

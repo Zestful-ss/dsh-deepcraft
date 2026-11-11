@@ -32,7 +32,7 @@ import { motionMs } from '../../shared/motion'
  * aria-label/aria-selected (D9), and this flag must not feed it.
  *
  * It lives with the settings page, and both exist exactly while this theme
- * paints the page (D74). A skin arriving in the same task as a flip still
+ * paints the page (D81). A skin arriving in the same task as a flip still
  * reaches the sweep, which is why it asks for the stamp first.
  */
 export const THEME_FLIP_ATTR = 'data-dsh-theme-transitioning'
@@ -85,7 +85,7 @@ export function installThemeFlip() {
 
   function onThemeFlip() {
     // A skin arriving in the same task as this flip has already taken the
-    // page: its transitions are not this one's to cancel (D74).
+    // page: its transitions are not this one's to cancel (D81).
     if (!body.hasAttribute('data-dsh-deepcraft')) return
     setFlag(true)
     // Force the flip's style recalc right now — inside this microtask,

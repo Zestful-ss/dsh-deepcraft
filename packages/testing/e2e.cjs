@@ -85,14 +85,11 @@ function workerHomes(base, jobs, total) {
 }
 
 /**
- * The scenarios the default walk leaves out: the two that read the host's own
- * statistics surfaces on a page the reader has moved (stats-position.cjs,
- * stats-overlay.cjs). This list is the only place a scenario is parked — the
- * default walk is every other entry of the table, derived in main() — so a
- * scenario added to the table runs by default, and a name here that the table
- * no longer holds stops the run.
+ * The scenarios the default walk leaves out: none. This list is the only place a
+ * scenario may be parked, so a scenario added to the table runs by default, and
+ * a name here that the table no longer holds stops the run.
  */
-const PARKED = new Set(['statsPosition', 'statsOverlay'])
+const PARKED = new Set()
 
 /**
  * What the page looked like when a scenario failed: a picture, the console
@@ -149,7 +146,6 @@ async function startTrace(page) {
         frame.height = Math.round(scroller.scrollHeight)
         frame.gap = Math.round(scroller.scrollHeight - scroller.clientHeight - scroller.scrollTop)
         frame.following = document.querySelector(host.followingTail) !== null
-        frame.hold = document.querySelector(host.hold) !== null
       }
       // The live turn's own status line at the end of the flow: the skin pins it
       // while the reader is at the tail, so its screen position is the check.

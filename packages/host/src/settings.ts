@@ -72,8 +72,7 @@ const UNDEFAULTED: Readonly<Record<string, true>> = { palette: true, chatPet: tr
  * One Config field for one preference, permissive on purpose: it takes the
  * shapes a stored value may have carried — a string, a boolean or an array of
  * strings — and keeps the table's default (packages/contracts/src/prefs.ts,
- * D73). A value an older build stored (`autoPopover` was a boolean,
- * `chatAnimations` held a choice) therefore never fails the host's own
+ * D73). A value an older build stored therefore never fails the host's own
  * validation and never keeps the package from starting: the host checks a
  * profile entry's config against this Config before it starts the plugin, and a
  * refused value starts nothing of this package at all. The browser half clamps

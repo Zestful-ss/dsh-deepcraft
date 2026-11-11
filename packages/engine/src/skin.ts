@@ -18,11 +18,6 @@ export interface SkinSeam {
    * change to such a node is not a page change and wakes no subscriber.
    */
   quiet: string
-  /**
-   * The attribute a container carries while the reader has taken its scrolling
-   * over, until he comes back to its end.
-   */
-  readerHold: string
   /** Whether the skin must hold its animations still right now. */
   motionReduced(): boolean
 }

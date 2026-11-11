@@ -6,9 +6,10 @@
 'use strict'
 
 /**
- * The host's page markers this lane reads. Each one is a D3 entry in
- * `packages/contracts/src/dom.ts`, which the skin reads for the same reason; a marker
- * that changes breaks both, and the contract test names it there.
+ * The host's page markers this lane reads: the ones the skin's own contract
+ * names, and the ones the lane needs to tell a settled turn from a streaming
+ * one. A marker the skin reads is a D3 entry in
+ * `packages/contracts/src/dom.ts`; the rest are the lane's own.
  */
 const HOST = {
   composer: '[data-composer-input]', // COMPOSER_INPUT_SELECTOR
@@ -18,21 +19,13 @@ const HOST = {
   streaming: '[data-streaming]', // STREAMING_SELECTOR
   turnProcess: 'button[data-turn-process]', // the host's own process control, which the skin leaves alone
   scroller: '[data-conversation-scroll]', // CONVERSATION_SCROLL_SELECTOR
-  followingTail: '[data-chat-following-tail]', // FOLLOWING_TAIL_SELECTOR
+  followingTail: '[data-chat-following-tail]', // the host's own follow mark
   running: '[data-chat-running]', // CHAT_RUNNING_SELECTOR
   accountTrigger: '[aria-haspopup="menu"][data-signed-out]', // ACCOUNT_TRIGGER_SELECTOR
 }
 
-/**
- * The skin's own marks (packages/client/src/constants.ts): the attribute the
- * scroll pin reads while a door rolls (FOLLOW_HOLD_ATTR).
- */
-const SKIN = {
-  hold: '[data-dsh-deepcraft-follow-hold]', // FOLLOW_HOLD_ATTR
-}
-
-/** Both tables, for the sampler that runs inside the page. */
-const MARKS = { ...HOST, ...SKIN }
+/** The table the sampler that runs inside the page reads. */
+const MARKS = { ...HOST }
 
 /** What the page shows once a turn has settled. */
 async function readFlow(page) {
@@ -162,4 +155,4 @@ function recordUntil(page, read, reached, arg, limitMs, what) {
   }), { readSource: read.toString(), reachedSource: reached.toString(), arg, limit: limitMs, label: what })
 }
 
-module.exports = { HOST, SKIN, MARKS, readFlow, check, observe, measureFrameMs, watchPage, settlePage, recordUntil }
+module.exports = { HOST, MARKS, readFlow, check, observe, measureFrameMs, watchPage, settlePage, recordUntil }

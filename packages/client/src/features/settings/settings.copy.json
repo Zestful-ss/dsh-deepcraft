@@ -1,68 +1,206 @@
 {
-  "chatWaitThinking": { "zh": "正在思考", "en": "Thinking…" },
-  "chatWaitTools": { "zh": "正在调用工具", "en": "Running tools…" },
-  "repository": { "zh": "在 GitHub 上打开本插件", "en": "Open the plugin on GitHub" },
-  "autoPopoverTitle": { "zh": "悬停展开弹层", "en": "Open popovers on hover" },
-  "autoPopoverOff": { "zh": "关闭", "en": "Off" },
-  "autoPopoverAccount": { "zh": "仅账号区", "en": "Account only" },
-  "autoPopoverAll": { "zh": "全部", "en": "All" },
-  "usernameTitle": { "zh": "用户名", "en": "Username" },
-  "usernameDesc": { "zh": "用户名显示在欢迎语与账号行里。", "en": "The name shown in the greeting and the account row." },
-  "usernamePlaceholder": { "zh": "自动获取", "en": "Auto-detect account or host user" },
-  "brandNameTitle": { "zh": "品牌名称", "en": "Brand name" },
-  "brandNameDesc": { "zh": "替换侧栏顶部的品牌文字。", "en": "Replaces the brand text at the top of the sidebar." },
-  "brandNamePlaceholder": { "zh": "DeepSeek", "en": "DeepSeek" },
-  "brandMarkTitle": { "zh": "标志图片", "en": "Brand mark" },
-  "brandMarkDesc": { "zh": "替换各处的品牌标志。PNG、SVG 或 WebP，不超过 2 MB。", "en": "Replaces the brand mark across the shell. PNG, SVG or WebP, up to 2 MB." },
-  "brandWordmarkTitle": { "zh": "文字标志", "en": "Wordmark" },
-  "brandWordmarkDesc": { "zh": "标志旁的品牌名称，优先于品牌文字。PNG、SVG 或 WebP。", "en": "The name beside the mark, ahead of the brand text. PNG, SVG or WebP." },
-  "brandImageUpload": { "zh": "上传", "en": "Upload" },
-  "brandImageReplace": { "zh": "更换", "en": "Replace" },
-  "brandImageRemove": { "zh": "移除", "en": "Remove" },
-  "brandImageType": { "zh": "只接受 PNG、SVG 或 WebP 图片。", "en": "Only PNG, SVG or WebP images are accepted." },
-  "brandImageSize": { "zh": "图片超过 2 MB。", "en": "The image is larger than 2 MB." },
-  "brandImageFailed": { "zh": "保存失败：{detail}", "en": "Saving failed: {detail}" },
-  "brandInkTitle": { "zh": "图片颜色", "en": "Image colours" },
-  "brandInkDesc": { "zh": "「文字色」把图片当作形状，按所在位置的文字颜色上色。", "en": "Text colour fills each image with the colour of the text where it stands." },
-  "brandInkOriginal": { "zh": "原色", "en": "Original" },
-  "brandInkText": { "zh": "文字色", "en": "Text colour" },
-  "brandAccentTitle": { "zh": "强调色", "en": "Accent colour" },
-  "brandAccentDesc": { "zh": "按钮、选中标记、链接与焦点环的颜色。", "en": "The colour of buttons, selected marks, links and focus rings." },
-  "brandAccentUnset": { "zh": "跟随配色", "en": "Use palette accent" },
-  "brandAccentReset": { "zh": "恢复配色强调色", "en": "Use palette accent" },
-  "motionTitle": { "zh": "动画效果", "en": "Animation" },
-  "motionSystem": { "zh": "随系统", "en": "Follow the system" },
-  "motionReduced": { "zh": "减弱", "en": "Reduced" },
-  "motionFull": { "zh": "总是", "en": "Always" },
-  "tabGeneral": { "zh": "通用", "en": "General" },
-  "tabAppearance": { "zh": "外观", "en": "Appearance" },
-  "tabSidebar": { "zh": "侧栏", "en": "Sidebar" },
-  "tabConversation": { "zh": "对话", "en": "Conversation" },
-  "paletteTitle": { "zh": "配色", "en": "Colours" },
-  "paletteDesc": { "zh": "内置配色或跟随宿主；切换配色只换颜色，不改标识与宠物。", "en": "A built-in palette or the host's colours; switching changes colours alone, not the brand or the pet." },
-  "paletteOcean": { "zh": "深海蓝", "en": "Ocean blue" },
-  "paletteEmber": { "zh": "暖橙", "en": "Warm ember" },
-  "paletteForest": { "zh": "森林绿", "en": "Forest green" },
-  "paletteHost": { "zh": "跟随宿主", "en": "Follow the host" },
-  "typefaceTitle": { "zh": "主题字体", "en": "Theme typefaces" },
-  "typefaceDesc": { "zh": "插件自带的字体，或跟随宿主。", "en": "The skin's own faces, or the host's." },
-  "typefaceClaude": { "zh": "主题", "en": "Theme" },
-  "typefaceHost": { "zh": "跟随宿主", "en": "Follow the host" },
-  "chatUxManaged": { "zh": "该选项由插件 dsh-chat-ux 管理", "en": "Managed by dsh-chat-ux" },
-  "windowsOnlyNote": { "zh": "只在 Windows 桌面端的窗口里生效。", "en": "Takes effect in the Windows desktop window only." },
-  "motionStillNote": { "zh": "动画设为「减弱」时这一项不生效，卡片只显示定格画面。", "en": "No effect while Animation is Reduced; the cards show stills." },
-  "experimental": { "zh": "实验性", "en": "Experimental" },
-  "unavailable": { "zh": "ERROR : 设置存储服务异常，改动不会被保存。", "en": "The settings store is unavailable, so changes will not be saved." },
-  "title": { "zh": "DeepCraft", "en": "DeepCraft" },
-  "subagentModelChoiceTitle": { "zh": "子代理必须选择模型", "en": "Require a subagent model" },
-  "subagentModelChoiceDesc": { "zh": "调用 subagent 时必须同时写上 provider 和 model。与主模型相同也可以。省略会被拒绝。官方「允许 Agent 为子智能体选择模型」未开启，或当前会话没有允许列表时，这个开关不起作用。", "en": "A subagent call must include provider and model together. The parent's own route is allowed. Omitting either field is rejected. This switch does nothing while the official Allow the agent to choose a subagent model switch is off, or while the session has no allowed list." },
-  "petChatTitle": { "zh": "聊天框宠物包", "en": "Chat pet package" },
-  "petChatDesc": { "zh": "输入框右上角的小伙伴，不随配色或标识变化。可导入包含 pet.json 与图集的完整包：文件夹、ZIP 或 Petdex 链接均可，原文件字节不改动。", "en": "The companion at the input area's upper right, changed by neither palette nor brand. A complete package holding pet.json and its atlas can be imported from a folder, a ZIP or a Petdex link; the original bytes are kept." },
-  "petImportZip": { "zh": "选择 ZIP", "en": "Choose a ZIP" },
-  "petImportFolder": { "zh": "选择文件夹", "en": "Choose a folder" },
-  "petImportUrlPlaceholder": { "zh": "https://petdex.dev/pets/…", "en": "https://petdex.dev/pets/…" },
-  "petImportLink": { "zh": "导入链接", "en": "Import link" },
-  "petImportDone": { "zh": "已导入 {name}，并选用为当前主题的聊天框宠物。", "en": "Imported {name} and chose it for the current theme's chat pet." },
-  "petImportFailed": { "zh": "导入失败：{detail}", "en": "Import failed: {detail}" },
-  "petImportBroken": { "zh": "有 {count} 个已安装的包无法读取，其余包不受影响。", "en": "{count} installed packages cannot be read; the rest of the library is unaffected." }
+  "repository": {
+    "zh": "在 GitHub 上打开本插件",
+    "en": "Open the plugin on GitHub"
+  },
+  "brandNameTitle": {
+    "zh": "品牌名称",
+    "en": "Brand name"
+  },
+  "brandNameDesc": {
+    "zh": "替换侧栏顶部的品牌文字。",
+    "en": "Replaces the brand text at the top of the sidebar."
+  },
+  "brandNamePlaceholder": {
+    "zh": "DeepSeek",
+    "en": "DeepSeek"
+  },
+  "brandMarkTitle": {
+    "zh": "标志图片",
+    "en": "Brand mark"
+  },
+  "brandMarkDesc": {
+    "zh": "替换各处的品牌标志。PNG、SVG 或 WebP，不超过 2 MB。",
+    "en": "Replaces the brand mark across the shell. PNG, SVG or WebP, up to 2 MB."
+  },
+  "brandWordmarkTitle": {
+    "zh": "文字标志",
+    "en": "Wordmark"
+  },
+  "brandWordmarkDesc": {
+    "zh": "标志旁的品牌名称，优先于品牌文字。PNG、SVG 或 WebP。",
+    "en": "The name beside the mark, ahead of the brand text. PNG, SVG or WebP."
+  },
+  "brandImageUpload": {
+    "zh": "上传",
+    "en": "Upload"
+  },
+  "brandImageReplace": {
+    "zh": "更换",
+    "en": "Replace"
+  },
+  "brandImageRemove": {
+    "zh": "移除",
+    "en": "Remove"
+  },
+  "brandImageType": {
+    "zh": "只接受 PNG、SVG 或 WebP 图片。",
+    "en": "Only PNG, SVG or WebP images are accepted."
+  },
+  "brandImageSize": {
+    "zh": "图片超过 2 MB。",
+    "en": "The image is larger than 2 MB."
+  },
+  "brandImageFailed": {
+    "zh": "保存失败：{detail}",
+    "en": "Saving failed: {detail}"
+  },
+  "brandInkTitle": {
+    "zh": "图片颜色",
+    "en": "Image colours"
+  },
+  "brandInkDesc": {
+    "zh": "「文字色」把图片当作形状，按所在位置的文字颜色上色。",
+    "en": "Text colour fills each image with the colour of the text where it stands."
+  },
+  "brandInkOriginal": {
+    "zh": "原色",
+    "en": "Original"
+  },
+  "brandInkText": {
+    "zh": "文字色",
+    "en": "Text colour"
+  },
+  "brandAccentTitle": {
+    "zh": "强调色",
+    "en": "Accent colour"
+  },
+  "brandAccentDesc": {
+    "zh": "按钮、选中标记、链接与焦点环的颜色。",
+    "en": "The colour of buttons, selected marks, links and focus rings."
+  },
+  "brandAccentUnset": {
+    "zh": "跟随配色",
+    "en": "Use palette accent"
+  },
+  "brandAccentReset": {
+    "zh": "恢复配色强调色",
+    "en": "Use palette accent"
+  },
+  "motionTitle": {
+    "zh": "动画效果",
+    "en": "Animation"
+  },
+  "motionSystem": {
+    "zh": "随系统",
+    "en": "Follow the system"
+  },
+  "motionReduced": {
+    "zh": "减弱",
+    "en": "Reduced"
+  },
+  "motionFull": {
+    "zh": "总是",
+    "en": "Always"
+  },
+  "tabGeneral": {
+    "zh": "通用",
+    "en": "General"
+  },
+  "tabAppearance": {
+    "zh": "外观",
+    "en": "Appearance"
+  },
+  "paletteTitle": {
+    "zh": "配色",
+    "en": "Colours"
+  },
+  "paletteDesc": {
+    "zh": "内置配色或跟随宿主；切换配色只换颜色，不改标识与宠物。",
+    "en": "A built-in palette or the host's colours; switching changes colours alone, not the brand or the pet."
+  },
+  "paletteOcean": {
+    "zh": "深海蓝",
+    "en": "Ocean blue"
+  },
+  "paletteEmber": {
+    "zh": "暖橙",
+    "en": "Warm ember"
+  },
+  "paletteForest": {
+    "zh": "森林绿",
+    "en": "Forest green"
+  },
+  "paletteHost": {
+    "zh": "跟随宿主",
+    "en": "Follow the host"
+  },
+  "typefaceTitle": {
+    "zh": "主题字体",
+    "en": "Theme typefaces"
+  },
+  "typefaceDesc": {
+    "zh": "插件自带的字体，或跟随宿主。",
+    "en": "The skin's own faces, or the host's."
+  },
+  "typefaceClaude": {
+    "zh": "主题",
+    "en": "Theme"
+  },
+  "typefaceHost": {
+    "zh": "跟随宿主",
+    "en": "Follow the host"
+  },
+  "unavailable": {
+    "zh": "ERROR : 设置存储服务异常，改动不会被保存。",
+    "en": "The settings store is unavailable, so changes will not be saved."
+  },
+  "title": {
+    "zh": "DeepCraft",
+    "en": "DeepCraft"
+  },
+  "subagentModelChoiceTitle": {
+    "zh": "子代理必须选择模型",
+    "en": "Require a subagent model"
+  },
+  "subagentModelChoiceDesc": {
+    "zh": "调用 subagent 时必须同时写上 provider 和 model。与主模型相同也可以。省略会被拒绝。官方「允许 Agent 为子智能体选择模型」未开启，或当前会话没有允许列表时，这个开关不起作用。",
+    "en": "A subagent call must include provider and model together. The parent's own route is allowed. Omitting either field is rejected. This switch does nothing while the official Allow the agent to choose a subagent model switch is off, or while the session has no allowed list."
+  },
+  "petChatTitle": {
+    "zh": "聊天框宠物包",
+    "en": "Chat pet package"
+  },
+  "petChatDesc": {
+    "zh": "输入框右上角的小伙伴，不随配色或标识变化。可导入包含 pet.json 与图集的完整包：文件夹、ZIP 或 Petdex 链接均可，原文件字节不改动。",
+    "en": "The companion at the input area's upper right, changed by neither palette nor brand. A complete package holding pet.json and its atlas can be imported from a folder, a ZIP or a Petdex link; the original bytes are kept."
+  },
+  "petImportZip": {
+    "zh": "选择 ZIP",
+    "en": "Choose a ZIP"
+  },
+  "petImportFolder": {
+    "zh": "选择文件夹",
+    "en": "Choose a folder"
+  },
+  "petImportUrlPlaceholder": {
+    "zh": "https://petdex.dev/pets/…",
+    "en": "https://petdex.dev/pets/…"
+  },
+  "petImportLink": {
+    "zh": "导入链接",
+    "en": "Import link"
+  },
+  "petImportDone": {
+    "zh": "已导入 {name}，并选用为当前主题的聊天框宠物。",
+    "en": "Imported {name} and chose it for the current theme's chat pet."
+  },
+  "petImportFailed": {
+    "zh": "导入失败：{detail}",
+    "en": "Import failed: {detail}"
+  },
+  "petImportBroken": {
+    "zh": "有 {count} 个已安装的包无法读取，其余包不受影响。",
+    "en": "{count} installed packages cannot be read; the rest of the library is unaffected."
+  }
 }
