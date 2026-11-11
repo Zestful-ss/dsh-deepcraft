@@ -83,12 +83,14 @@ export function createHostSettings(): HostSettings {
   }
 
   /**
-   * The settings row of an open account menu: the host marks it with the
-   * keyboard shortcut. The visible label follows the interface language;
-   * `aria-keyshortcuts` does not.
+   * The settings row of an open account menu. A host build that lists the
+   * shortcut marks the row with `aria-keyshortcuts`; one that does not keeps
+   * Settings as the menu's first row. The visible label follows the interface
+   * language and is never read.
    */
   function settingsRowOf(menu: Element) {
     return menu.querySelector<HTMLElement>('[role="menuitem"][aria-keyshortcuts]')
+      ?? menu.querySelector<HTMLElement>('[role="menuitem"]')
   }
 
   /** Open the host's settings through whichever entry the host provides. */

@@ -48,9 +48,12 @@ async function openSkinSettings(page) {
     if (await trigger.count() > 0) {
       await trigger.click()
       await page.waitForTimeout(400)
-      // The settings row is the one the host marks with its keyboard shortcut;
-      // its label follows the interface language and is never read.
-      const row = page.locator('[role="menu"] [role="menuitem"][aria-keyshortcuts]').first()
+      // The settings row is marked with its keyboard shortcut on one host build
+      // and stands first on another; the label is read here, where the interface
+      // language is known, and only the shortcut path is label-free.
+      const marked = page.locator('[role="menu"] [role="menuitem"][aria-keyshortcuts]').first()
+      const named = page.locator('[role="menu"] [role="menuitem"]').filter({ hasText: /^(Settings|设置)$/ }).first()
+      const row = await marked.count() > 0 ? marked : named
       if (await row.count() > 0) {
         // Dispatched rather than clicked: opening the dialog detaches the menu
         // under the pointer, and a real click would lose that race.
