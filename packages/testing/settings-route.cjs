@@ -24,35 +24,31 @@ const SETTINGS_WAIT_MS = bound('settingsRouteDialogWaitMs')
  * The page registers into the host's settings dialog, so the dialog has to be
  * open first. The host offers two entries and which one exists depends on the
  * shell: a settings button in the sidebar footer, or the settings row of the
- * account menu (the desktop keeps it there). The direct shortcut opens the
- * dialog itself on some shell versions; it is tried first and the entries are
- * the fallback, exactly the path the skin's own Ctrl+, drive presses.
+ * account menu (the desktop keeps it there). The route presses the entry, the
+ * same path the skin's own Ctrl+, drive presses.
  *
  * @param page - the Playwright page on the host.
  */
 async function openSkinSettings(page) {
   const settings = page.locator(SETTINGS_PAGE).first()
   const visible = () => settings.isVisible().catch(() => false)
-  await page.keyboard.press('Control+Alt+Comma')
-  if (!await settings.waitFor({ state: 'visible', timeout: 3000 }).then(() => true, () => false)) {
-    // The footer's settings button opens the dialog directly where the host
-    // has one; the desktop keeps that entry inside the account menu instead.
-    const button = page.locator('[data-dsh-deepcraft-part~="settings-area"] button[aria-haspopup="dialog"]').first()
-    if (await button.count() > 0) {
-      await button.click()
-      await page.waitForTimeout(600)
-    }
+  // The footer's settings button opens the dialog directly where the host has
+  // one; the desktop keeps that entry inside the account menu instead.
+  const button = page.locator('[data-dsh-deepcraft-part~="settings-area"] button[aria-haspopup="dialog"]:visible').first()
+  if (await button.count() > 0) {
+    await button.click()
+    await page.waitForTimeout(600)
   }
   if (!await visible()) {
     const trigger = page.locator('[aria-haspopup="menu"][data-signed-out]').first()
     if (await trigger.count() > 0) {
-      await trigger.click()
+      if (await trigger.getAttribute('aria-expanded') !== 'true') await trigger.click()
       await page.waitForTimeout(400)
       // The settings row is marked with its keyboard shortcut on one host build
       // and stands first on another; the label is read here, where the interface
       // language is known, and only the shortcut path is label-free.
       const marked = page.locator('[role="menu"] [role="menuitem"][aria-keyshortcuts]').first()
-      const named = page.locator('[role="menu"] [role="menuitem"]').filter({ hasText: /^(Settings|设置)$/ }).first()
+      const named = page.locator('[role="menu"] [role="menuitem"]').filter({ hasText: /(Settings|设置)/ }).first()
       const row = await marked.count() > 0 ? marked : named
       if (await row.count() > 0) {
         // Dispatched rather than clicked: opening the dialog detaches the menu
