@@ -213,7 +213,7 @@ function readCapsule(page) {
       parentDisplay: parent === null ? null : getComputedStyle(parent).display,
       gap: parent === null ? null : getComputedStyle(parent).gap,
     }
-  }, { capsule: '[data-dsh-deepcraft-model-capsule]', attr: 'data-dsh-deepcraft-model-capsule', trigger: TRIGGER, model: '[data-dsh-deepcraft-model-capsule-part="model"]' })
+  }, { capsule: '[data-dsh-deepcraft-model-capsule]', attr: 'data-dsh-deepcraft-model-capsule', trigger: TRIGGER, model: '[data-slot="conversation.input.model"] button' })
 }
 
 /** Wait until the capsule carries `value`; the write follows the host's answer. */
@@ -512,7 +512,7 @@ function subagentModelScenario({ check }) {
 
       // The two menus stay independent: opening one folds the other.
       await page.keyboard.press('Escape')
-      await page.click('[data-dsh-deepcraft-model-capsule-part="model"]')
+      await page.click('[data-slot="conversation.input.model"] button')
       await page.waitForSelector('[role="menu"]', { timeout: 5000 }).catch(() => {})
       await page.click(TRIGGER)
       await page.waitForSelector(`${CARD}[data-open="true"]`, { timeout: 5000 }).catch(() => {})
