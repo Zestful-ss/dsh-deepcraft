@@ -46,17 +46,13 @@ Rules:
 rather than the accent: warm ember's a warm-compatible slate, ocean's the
 periwinkle of its blue family, forest's the green of its own family. The
 underline derives from the link in force; a prose link keeps that hue under the
-pointer while an interface link's hover follows the accent. The usage panel's
-heat grid mixes one data ink into its cells — warm ember's ember, ocean's
-periwinkle, forest's green — so each palette gets a continuous ramp in its own
-primary colour. The models chart's ranks are categories rather than steps of
-that ink: rank 0 takes the accent in force, ranks 1 to 6 carry the palette's own
-six hues, and the last rank is the neutral every model past the list shares.
-Under the host palette the ink is the host's accent and the ranks are that
-accent mixed toward the host's canvas, since another theme's hues are not the
-skin's to name. A custom accent retunes the accent, the prose link, the heat ink
-and the low-alpha beds together; the categorical hues stay each palette's own
-(D80).
+pointer while an interface link's hover follows the accent. The skin also
+carries a private run of data hues — a continuous ramp ink and six categorical
+steps after the accent plus a neutral — in each palette, with the host palette
+deriving them from the host's accent mixed toward its canvas, since another
+theme's hues are not the skin's to name. A custom accent retunes the accent,
+the prose link, the data ink and the low-alpha beds together; the categorical
+hues stay each palette's own (D80).
 
 The table below is generated from `packages/client/src/theme/tokens.json` by `npm run build`;
 edit the JSON, not the table. Each palette states its own light and dark values,
@@ -110,14 +106,8 @@ unset.
 | `--dsw-alias-brand-primary-new-colorprimary-new-color` | `#5368c9` | `#5368c9` | `#d97757` | `#d97757` | `#397657` | `#397657` | host's own |  |
 | `--dsh-deepcraft-canvas` | `#fcfcfb` | `#202427` | `#fcfcfb` | `#141413` | `#fcfcfb` | `#141413` | `var(--dsw-alias-bg-base)` | the page canvas, the search box |
 | `--dsh-deepcraft-sidebar-canvas` | `#f2f2ef` | `#1d2124` | `#fbfbf9` | `#141413` | `#fbfbf9` | `#141413` | `var(--dsw-specific-sidebar-fill)` | the sidebar |
-| `--dsh-deepcraft-float-frame` | `#eef0f4` | `#1d2124` | `#f1efe8` | `#141413` | `#f1efe8` | `#141413` | `var(--dsw-specific-sidebar-fill)` | the outer window frame and sidebar under the floating page look |
-| `--dsh-deepcraft-float-card` | `#fcfcfb` | `#252a30` | `#fcfcfb` | `#1c1b19` | `#fcfcfb` | `#1c1b19` | `var(--dsw-alias-bg-base)` | the floating conversation card and raised sidebar pills |
-| `--dsh-deepcraft-float-surface` | `#f2f3f7` | `#2b3038` | `#f4f3ee` | `#24231f` | `#f4f3ee` | `#24231f` | `var(--dsw-alias-bg-layer-2)` | recessed chips, suggestion cards and code blocks on the floating card |
-| `--dsh-deepcraft-float-surface-strong` | `#e5e8f0` | `#333a4a` | `#eceae3` | `#2d2c28` | `#eceae3` | `#2d2c28` | `var(--dsw-alias-bg-layer-3)` | filled model pill and user bubble on the floating card |
 | `--dsh-deepcraft-raised` | `#fcfcfb` | `#2b3038` | `var(--dsw-alias-bg-overlay)` | `#1e1e1d` | `var(--dsw-alias-bg-overlay)` | `#1e1e1d` | `var(--dsw-alias-bg-overlay)` | popovers and menus raised above the dark canvas |
 | `--dsh-deepcraft-card` | `#fcfcfb` | `#2b3038` | `#fcfcfb` | `#1e1e1d` | `#fcfcfb` | `#1e1e1d` | `var(--dsw-alias-bg-overlay)` | cards on the canvas in light and raised in dark: the account popover, the search palette |
-| `--dsh-deepcraft-inverse-fill` | `#202124` | `#eef0f3` | `#141413` | `#faf9f5` | `#141413` | `#faf9f5` | `var(--dsw-alias-interactive-bg-hover)` | the model picker's group label fill: an inverted chip under the skin's palettes, a hover-plate chip under the host |
-| `--dsh-deepcraft-inverse-ink` | `#fcfcfb` | `#202124` | `#faf9f5` | `#141413` | `#faf9f5` | `#141413` | `var(--dsw-alias-label-primary)` | the model picker's group label ink |
 | `--dsh-deepcraft-ink-strong` | `#202124` | `#eef0f3` | `var(--dsw-alias-label-primary)` | `#f5f4ef` | `var(--dsw-alias-label-primary)` | `#f5f4ef` | `var(--dsw-alias-label-primary)` | active row ink |
 | `--dsh-deepcraft-session-ink` | `#61646b` | `#adb2bb` | `var(--dsw-alias-label-secondary)` | `#8c8983` | `var(--dsw-alias-label-secondary)` | `#8c8983` | `var(--dsw-alias-label-secondary)` | session title at rest |
 | `--dsh-deepcraft-table-head` | `#f2f2ef` | `#2b3038` | `#f0f0ef` | `#242320` | `#f0f0ef` | `#242320` | `var(--dsw-alias-bg-layer-2)` | table header row |
@@ -126,20 +116,10 @@ unset.
 | `--dsh-deepcraft-scrollbar` | `rgba(185, 189, 197, 0.8)` | `rgba(80, 88, 99, 0.9)` | `rgba(208, 205, 193, 0.9)` | `rgba(58, 56, 51, 0.9)` | `rgba(208, 205, 193, 0.9)` | `rgba(58, 56, 51, 0.9)` | `var(--dsw-alias-border-l2)` | scrollbar thumb |
 | `--dsh-deepcraft-scrollbar-hover` | `rgba(139, 143, 151, 0.9)` | `rgba(107, 116, 130, 0.9)` | `rgba(143, 138, 126, 0.8)` | `rgba(107, 106, 101, 0.9)` | `rgba(143, 138, 126, 0.8)` | `rgba(107, 106, 101, 0.9)` | `var(--dsw-alias-label-caption)` | scrollbar thumb under the pointer |
 | `--dsh-deepcraft-link-hover` | `color-mix(in oklab, var(--dsw-alias-link) 84%, var(--dsw-alias-label-primary))` | `color-mix(in oklab, var(--dsw-alias-link) 84%, var(--dsw-alias-label-primary))` | `color-mix(in oklab, var(--dsw-alias-link) 84%, var(--dsw-alias-label-primary))` | `color-mix(in oklab, var(--dsw-alias-link) 84%, var(--dsw-alias-label-primary))` | `color-mix(in oklab, var(--dsw-alias-link) 84%, var(--dsw-alias-label-primary))` | `color-mix(in oklab, var(--dsw-alias-link) 84%, var(--dsw-alias-label-primary))` | `color-mix(in oklab, var(--dsw-alias-link) 84%, var(--dsw-alias-label-primary))` | text link under the pointer |
-| `--dsh-deepcraft-data-ink` | `#4a5fc4` | `#8ea2f2` | `#b9542f` | `#e8967a` | `#286649` | `#86c5a2` | `var(--dsw-alias-brand-primary)` | the usage heat grid's ink: the strongest step of its continuous ramp |
-| `--dsh-deepcraft-data-1` | `#3b8f8f` | `#6fc0bd` | `#b8863f` | `#d6a45c` | `#3b8f8f` | `#6fc0bd` | `color-mix(in oklab, var(--dsw-alias-brand-primary) 78%, var(--dsw-alias-bg-base))` | the models chart's rank 1: the first auxiliary hue after the brand accent |
-| `--dsh-deepcraft-data-2` | `#7b6fc0` | `#a99ee0` | `#79906f` | `#9db98d` | `#7b6fc0` | `#a99ee0` | `color-mix(in oklab, var(--dsw-alias-brand-primary) 64%, var(--dsw-alias-bg-base))` | the models chart's rank 2 |
-| `--dsh-deepcraft-data-3` | `#b08a45` | `#d2ab63` | `#6b879f` | `#93aec8` | `#b08a45` | `#d2ab63` | `color-mix(in oklab, var(--dsw-alias-brand-primary) 52%, var(--dsw-alias-bg-base))` | the models chart's rank 3 |
-| `--dsh-deepcraft-data-4` | `#b57a8a` | `#d09aa8` | `#a292c2` | `#bcaedd` | `#b57a8a` | `#d09aa8` | `color-mix(in oklab, var(--dsw-alias-brand-primary) 42%, var(--dsw-alias-bg-base))` | the models chart's rank 4 |
-| `--dsh-deepcraft-data-5` | `#5f9e6a` | `#8fc296` | `#b17986` | `#d09aa5` | `#6b879f` | `#93aec8` | `color-mix(in oklab, var(--dsw-alias-brand-primary) 30%, var(--dsw-alias-bg-base))` | the models chart's rank 5 |
-| `--dsh-deepcraft-data-6` | `#b36b5f` | `#d08a7c` | `#5f9488` | `#85b8ac` | `#b36b5f` | `#d08a7c` | `color-mix(in oklab, var(--dsw-alias-brand-primary) 20%, var(--dsw-alias-bg-base))` | the models chart's rank 6 |
-| `--dsh-deepcraft-data-7` | `#b9bdc5` | `#8b9099` | `#b9b5ac` | `#a8a49b` | `#b9b5ac` | `#a8a49b` | `color-mix(in oklab, var(--dsw-alias-label-secondary) 55%, var(--dsw-alias-bg-base))` | the models chart's last rank: every model past the list |
 | `--dsh-deepcraft-logo-ink` | `#202124` | `#eef0f3` | `#141413` | `#faf9f5` | `#141413` | `#faf9f5` | `var(--dsw-alias-label-primary)` | sidebar brand art: the whale and the wordmark |
 | `--dsw-specific-menu` | `#fcfcfb` | `#2b3038` | `#ffffff` | `var(--dsh-deepcraft-raised)` | `#ffffff` | `var(--dsh-deepcraft-raised)` | host's own |  |
 | `--dsw-specific-bubble` | `#e3e8fc` | `#303c55` | `#f0f0ef` | `rgba(255, 255, 255, 0.06)` | `#e6f1e8` | `#293e33` | host's own | user message bubble |
 | `--dsh-deepcraft-chip` | `#eef0fa` | `#333a4a` | `#f6f6f4` | `var(--dsw-specific-selector)` | `#eef4ef` | `#263a2e` | `var(--dsw-specific-selector)` | segmented control and switch at rest |
-| `--dsh-deepcraft-meter-peak` | `#9a5a1a` | `#e5ae67` | `#a4621d` | `#e2a45f` | `#a4621d` | `#e2a45f` | `var(--dsw-alias-state-warn-label)` | the peak rate badge: the expensive end of a provider's own billing clock |
-| `--dsh-deepcraft-meter-valley` | `#2e7554` | `#7cc2a0` | `#3d7550` | `#8cbf96` | `#3d7550` | `#8cbf96` | `var(--dsw-alias-state-success-primary)` | the off-peak rate badge, and the dated promotions priced below it |
 | `--dsw-alias-label-primary-foreground` | `#fcfcfb` | `#fcfcfb` | `#141413` | `#141413` | `#141413` | `#141413` | host's own | the ink on a filled primary button: light on the accent in both palettes |
 <!-- /generated:tokens -->
 
@@ -186,8 +166,7 @@ reads it as **Theme**.
 
 The reasoning slider's violet top rung (`--dsh-deepcraft-apex*`) stays under
 every palette. Translucent neutral hover tints stay literal; they read on any
-canvas. The usage panel's data colours read tokens of their own (the data
-palette above). Every other colour that paints a surface, a text, a border or
+canvas. Every other colour that paints a surface, a text, a border or
 an accent reads a token. A custom accent colour sits over the skin's palettes
 and rebuilds the accent, the low-alpha beds and the prose link from the one
 colour; under the host's palette the row is disabled and the stored colour kept.
@@ -215,18 +194,13 @@ hairline.
 
 The card hangs on what paints the column: a docked tab's pane
 (`[data-dockkit-host="dock"] > [data-dockkit-pane]`) or the column's own empty
-host (`[data-dockkit-empty]`), which the pane inside it leaves transparent. A
-panel pulled out of the sidebar becomes the host's own floating window
-(`[data-dockkit-host="float"]`) and keeps that window's frame; a split column
-gives each pane its own card, with the drag divider left on the seam between
-them.
+host (`[data-dockkit-empty]`), which the pane inside it leaves transparent.
 
-**Float docked panels** (the Sidebar tab) chooses it: on is the card above;
-off drops every rule that draws one, so the pane stands in the host's own fill,
-flush with the column on all four sides, and a split's two panes meet at the
-dock's own resting line. Every card rule is gated on
-`<body data-dsh-claude-dock-look="card">`, so off is the host's own panel look
-with nothing added.
+The card is the only look: every rule above stands unconditionally, and the
+dock's own resting look is not offered. A panel pulled out of the sidebar keeps
+the host's own floating-window frame (`[data-dockkit-host="float"]`); a split
+column gives each pane its own card, with the drag divider left on the seam
+between them.
 
 **The start page.** The host centers its stack of entries in a box that never
 grows, so a list taller than the pane was clipped at both ends, its first rows
@@ -248,17 +222,7 @@ and scrolls to its end.
 - Radius: 4 / 8 / 16 px; 12px for a popover card and 6px for its rows (the
   popover table below); pills for CTAs (`9999px`). A shape copied from a host
   control keeps that control's own geometry rather than the scale above: the
-  composer card's 18px (the host's 22px less 4), the inline composer's 14px and
-  11px, the permission and workspace segments' 7px, the view tabs' 5px, the
-  peak-rate and file pills' 999px.
-- The floating page look (Settings › Appearance "Page look", the default) states
-  its own set: the conversation column is a 14px card standing 8px inside the
-  frame with the sidebar's hairline dropped, the hero composer card and the tray
-  under it are one 24px capsule, the in-conversation input box is a 20px capsule
-  with its own elevation, the user bubble rounds to `20px 20px 6px 20px` with a
-  6px tail corner, sidebar rows take 10px, and every control on the capsule — the
-  model pill, the permission tier, the send and stop plates — is a `9999px`
-  pill. `flat` writes none of it: the page keeps the geometry above.
+  workspace segments' 7px, the view tabs' 5px and the file pills' 999px.
 - A host control whose layout the host itself measures keeps that measurement's
   input: the conversation's view tabs are counted from the tab row's own width
   (120px a view), so the row keeps the width the host gives it and only the
@@ -268,31 +232,13 @@ and scrolls to its end.
   tokens are one translucent white at `.09` / `.18` / `.30`, so a card, a panel,
   a code block or a keycap reads as a chamfer catching the top light over
   whatever fill it sits on rather than as a contour whose colour has to be
-  re-picked per surface. The light rungs stay the warm opaque ladder. A copy of a
-  host control keeps that control's own stroke: the inline composer's 1.6px stop
-  square.
+  re-picked per surface. The light rungs stay the warm opaque ladder.
 - Hairline: 0.5px, for the split between the sidebar and the conversation
   (`theme/chrome.css`, one device pixel on a retina display and the width the
   product itself states), the Markdown table frame and the trajectory chip
   (`theme/typography.css`, `features/chat-files`). Every other single-direction
   rule stays 1px.
 - Spacing: 4 px rhythm.
-- Bottom edge: the transcript never fades behind the composer by shadow. The
-  composer seat paints an opaque `var(--dsw-alias-bg-base)` bar across its own
-  box (so the bar's height *is* the composer's height) and one
-  `--dsh-composer-fade-h` (40px) gradient band above it, running to transparent.
-  The same token is the transcript's bottom clearance, so the last turn rests
-  exactly at the band's top edge. Never re-add background-coloured halo shadows
-  to the card to hide the transcript: they have to be restated in every
-  light / dark / focus / attachment rule, and every rule that resets the card's
-  `box-shadow` inherits the job.
-- Focus: the composer field lights up — its hairline takes the input box's own
-  shadow colour (espresso `#141413` in light) with a 1px halo in the same tone
-  and a deeper drop shadow. Dark inverts the face: on the near-black canvas a
-  black edge carries no cue, so the hairline and halo become bright ivory —
-  the field visibly lights up instead of deepening. The footer tray below
-  follows the same hairline so the two tiers stay one outline. Accent is never
-  used for focus strokes.
 
 ## Motion
 
@@ -335,10 +281,10 @@ edit the JSON, not the table.
 | `--dsh-deepcraft-duration-swap` | `150ms` | each half of a wording swap: the old words leaving, the new ones arriving |
 | `--dsh-deepcraft-duration-swap-gap` | `50ms` | the offset the words arriving start after the words leaving, so the two halves of a wording swap travel together |
 | `--dsh-deepcraft-duration-roll` | `160ms` | a figure's characters rolling over to new digits |
-| `--dsh-deepcraft-duration-move` | `200ms` | something travelling along its own track: a fold's door, the reasoning slider's knob and fill |
+| `--dsh-deepcraft-duration-move` | `200ms` | something travelling along its own track: a fold's door |
 | `--dsh-deepcraft-duration-count` | `220ms` | a session number counting to its new reading |
 | `--dsh-deepcraft-duration-slide` | `240ms` | the segmented controls' sliding highlight, a sidebar icon's quarter turn, the wording box taking the width of the words arriving, and streamed content sliding up from the bottom edge |
-| `--dsh-deepcraft-duration-fade` | `300ms` | a slow cross-fade: the theme flip, the titlebar tabs' hover reveal, the reasoning knob's glow, a placeholder handing its place to what it stood for |
+| `--dsh-deepcraft-duration-fade` | `300ms` | a slow cross-fade: the theme flip, the titlebar tabs' hover reveal, a placeholder handing its place to what it stood for |
 | `--dsh-deepcraft-duration-bounce` | `350ms` | a switch's knob travelling across with its double bounce |
 | `--dsh-deepcraft-duration-step` | `500ms` | one step of the reasoning window's text rising two lines |
 | `--dsh-deepcraft-duration-pop` | `500ms` | something popping into place: the overtime badge's own pill |
@@ -348,14 +294,13 @@ edit the JSON, not the table.
 | `--dsh-deepcraft-period-host-sweep` | `1500ms` | one pass of the highlight band across the waiting line's words and a running process group's header |
 | `--dsh-deepcraft-duration-host-sweep-delay` | `300ms` | how long the highlight band waits after its words appear before its first pass |
 | `--dsh-deepcraft-period-pulse` | `1600ms` | a placeholder breathing while its numbers are computed |
-| `--dsh-deepcraft-period-flash` | `1450ms` | one flash of the reasoning slider's top-rung matrix |
 | `--dsh-deepcraft-period-breathe` | `2400ms` | one breath of the sidebar's ongoing-conversation light |
 | `--dsh-deepcraft-period-landed` | `1400ms` | the mark on the turn the conversation navigator landed on |
 | `--dsh-deepcraft-period-hold` | `840ms` | how long the reasoning window's text stands between two steps |
 | `--dsh-deepcraft-ease-standard` | `ease` | feedback and surfaces: the default curve |
 | `--dsh-deepcraft-ease-out` | `ease-out` | something arriving and settling: a fold's door, content entering the chat area, the landing mark |
 | `--dsh-deepcraft-ease-in-out` | `ease-in-out` | something that leaves and returns, or swaps in place: wording swaps, pulses, flashes |
-| `--dsh-deepcraft-ease-glide` | `cubic-bezier(0.22, 0.61, 0.36, 1)` | travel along a track: the sliding highlight, the reasoning slider, the search dialog's entrance, the reasoning window's step, the wording box's width, the stream's slide |
+| `--dsh-deepcraft-ease-glide` | `cubic-bezier(0.22, 0.61, 0.36, 1)` | travel along a track: the sliding highlight, the search dialog's entrance, the reasoning window's step, the wording box's width, the stream's slide |
 | `--dsh-deepcraft-ease-roll` | `cubic-bezier(0.4, 0, 0.2, 1)` | digits rolling over: the file rows' tail and the process group header's counts |
 | `--dsh-deepcraft-ease-spring` | `cubic-bezier(0.34, 1.45, 0.64, 1)` | a small overshoot as something lands: the overtime badge popping in, a switch's knob bouncing past its end |
 | `--dsh-deepcraft-ease-settle` | `cubic-bezier(0.22, 1, 0.36, 1)` | a surface or a page settling into place out of its anchor: menus and dialogs opening and closing, a settings page sliding, the overtime badge sliding onto its line, the greeting's lines rising |
@@ -376,9 +321,9 @@ edit the JSON, not the table.
 
 A z-index the skin writes is one of two kinds (D9). Inside one box, siblings
 are ordered with a literal from -1 to 9: a fill painted under its own content,
-a label over its sliding pill, the composer's rows over one another. Anything
-that has to clear what the host draws around it — the composer's own controls,
-the window's title row, a floating card, a surface over the whole window —
+a label over its sliding pill. Anything that has to clear what the host draws
+around it — a control standing beside the composer's own, the window's title
+row, a floating card, a surface over the whole window —
 stands on a layer token, and the build refuses any other number.
 
 The table below is generated from `packages/client/src/theme/tokens.json` by `npm run build`;
@@ -387,10 +332,8 @@ edit the JSON, not the table.
 <!-- generated:layers (packages/client/src/theme/tokens.json) -->
 | Token | Value | Use |
 |---|---|---|
-| `--dsh-deepcraft-layer-control` | `10` | a control kept over the composer card's own stacked rows: the send and stop buttons, the reasoning picker's trigger |
-| `--dsh-deepcraft-layer-picker` | `20` | a picker that hangs its card from inside the composer: the permission picker, whose card has to stand over the controls beside it |
 | `--dsh-deepcraft-layer-chrome` | `30` | the window's title row the skin draws into: the header band's title and actions, the titlebar's view tabs, over the host's own header |
-| `--dsh-deepcraft-layer-float` | `99999` | a floating card or menu over everything the host draws: the popover cards, the hero menu |
+| `--dsh-deepcraft-layer-float` | `99999` | a floating card or menu over everything the host draws: the popover cards |
 <!-- /generated:layers -->
 
 ## Text selection
@@ -408,9 +351,9 @@ Both are solid (never translucent) and `!important`, so they override whatever
 colour the text underneath carries — links, inline code, syntax tokens. CSS
 cannot read window focus: Chromium reaches the inactive paint through its own
 internal `-internal-inactive-selection-*` properties, which a stylesheet cannot
-address. `packages/client/src/features/composer/selection-mirror.ts` therefore mirrors `document.hasFocus()`
-onto `data-dsh-window-blur` and the stylesheet switches on that attribute; the
-selection itself survives the blur.
+address. A feature-owned mirror therefore copies `document.hasFocus()` onto
+`data-dsh-deepcraft-window-blur` and the stylesheet switches on that attribute;
+the selection itself survives the blur.
 
 ## Markdown material
 
@@ -444,27 +387,24 @@ start clipping descenders. The fill, hairline, radius and size are unchanged.
 
 ## Popovers · 多选一弹层
 
-Every single-choice popover in the skin — the permission menu, the model picker,
-the account drawer, and the host's own menu primitive under the hero row's
-workspace and preset pickers — is meant to start from one recipe. New popovers
-take it rather than inventing a card.
+Every single-choice popover in the skin — the subagent model card, the account
+drawer, the turn navigator's card and the search palette — is meant to start
+from one recipe. New popovers take it rather than inventing a card.
 
 Two rules hold across all of them, both owned by `shared/popover.ts`. A
 pointer opens a card only after a **100 ms dwell** — long enough that crossing a
 28px trigger on the way somewhere else unfolds nothing — and the card closes
-100 ms after the pointer leaves. One card keeps its own number with the reason
-written where it is used: the model picker's levels close after 150 ms (the
-pointer has to cross level 1 to reach level 2). And **only one card is on screen
+100 ms after the pointer leaves. And **only one card is on screen
 at a time**: each popover registers its close path with `registerPopover(name,
 close)` and calls `closeOtherPopovers(name)` on the way open, so opening the
-model picker folds the permission menu, the account drawer and the host's hero
-menu.
+subagent card folds the account drawer, and either folds the context panel.
 
 The context meter's popover is the host's own panel (it portals it, places it,
 and dismisses it), so the skin drives its trigger on hover and paints nothing of
 the shell itself. What it carries is described under "Context popover" below.
 
-The subagent model entry uses a 28px icon button beside the model control. An
+The subagent model entry uses a 28px concentric-circles icon button beside the
+model control. An
 accent dot marks a saved selection; the button's tooltip names it and the
 selection card wraps model and provider names onto as many lines as needed.
 
@@ -517,18 +457,6 @@ takes the longest stable piece of whichever family it targets — `_itemWrap_`,
 `_itemLabel_`, `_viewport_` on one side, `_itemName`, `_itemDesc` on the other —
 never the bare local name.
 
-The hero row's two pickers are that primitive, portaled to `<body>` with no
-marker of their own. `packages/client/src/features/hero-menu/hero-menu.ts` stamps the open card with
-`data-dsh-claude-hero-menu` and `features/hero-menu/hero-menu.css` restyles it; the
-host's other menus (sidebar row menus, the settings permission row, submenus)
-keep the host's own design on purpose. What that replaces: a 20px radius card
-with 4px padding, 40px rows at 10px radius, and 14px text.
-
-The stamp's value names the picker (`workspace` or `preset`), because the two
-cards differ. The preset card keeps the popover table's 32px rows for its
-two-line entries. The workspace card is Claude Code's folder menu: a 180px-min
-card with 4px padding, 26px plain-text rows (no folder glyph in front of each
-folder, no `＋` on the pinned add row) and the accent check on the current one.
 
 **The account card** is that primitive too, and it carries the skin's rows
 inside it. The host mounts it with nothing but its own three entries and places
@@ -560,9 +488,8 @@ leaves the panel against the window's right margin instead of under the ring.
 `features/context-stats/stats-binding.ts` reads the meter's right edge and the
 panel's own layout width — `offsetWidth`, not its rect: the entrance scales the
 box, and a transformed rect is two per cent narrower than the one that settles —
-and writes `--dsh-claude-context-panel-left` with the mark that turns it on;
-`features/composer/inline-bar.css` reads it with `!important`, which outranks the
-host's inline value. The reading is re-taken when the panel's box changes (a size
+and writes `--dsh-deepcraft-context-panel-left` on the panel itself, which
+outranks the host's inline value. The reading is re-taken when the panel's box changes (a size
 subscription on the observation bus) and when the viewport moves (`reposition('viewport')`).
 
 What the skin appends to it is the session's numbers
@@ -597,21 +524,9 @@ solid hover fill, pulsing over 1.6s (still under the reduced animation choice).
 The place is given up after 2s, so a host that serves no such projection ends at
 the panel it drew itself rather than keeping placeholder bars.
 
-**All five are aligned**: the account drawer was the outlier
+**The cards stay aligned**: the account drawer was the outlier
 (8px row radius, 2px and 4px card gap, 8px padding, 220 / 260px min-width,
-z-index 1000 and 100000) and now follows the table above. The hero row's pickers are the host's own menu primitive, which differs in
-two ways that CSS cannot change: it mounts instead of toggling a `data-open`
-attribute, so it takes the same fade/scale as a one-shot `0.15s` animation; and
-the host places it *below* its trigger, which is where the composer sits — so
-`packages/client/src/features/hero-menu/hero-menu.ts` re-places it on the trigger the way the
-skin's own composer pickers sit: right-aligned with the trigger and opening
-upward by the same 6px air, flipping below only when the viewport leaves no room
-above, and clamped to the 8px viewport margin (`POPOVER_MARGIN`). The host
-re-runs its own placement from its anchor geometry on every frame while the card
-is open, so the position is handed over in two custom properties on the card
-(`--dsh-claude-hero-menu-x` / `--dsh-claude-hero-menu-y`, written by the same
-pass that stamps it) which `features/hero-menu/hero-menu.css` reads with
-`!important`; that declaration outranks the host's plain inline value.
+z-index 1000 and 100000) and now follows the table above.
 
 ## Context meter · 上下文计量
 
@@ -686,11 +601,10 @@ together over 0.14s before the modal unmounts.
 
 ## Conversation layout · 对话布局
 
-The reading column is the only arrangement: a centered 680px measure, a 20px
-lead above each turn's first user row, and a floating, rounded 720px composer.
-The host's message, tool and composer controls stay where the host draws them.
-The existing home-layout and composer restyle settings continue to govern their
-respective parts of the page.
+The page keeps the host's own arrangement: its reading column, its composer and
+its controls stay where the host draws them, and the skin only recolours,
+reshapes and animates them. The layout settings that used to restyle these
+parts are gone.
 
 ## Chat / Code switch · 聊天 / 代码切换
 
@@ -731,153 +645,18 @@ below; under Reduced motion the band is left out
 and the wording is written at once.
 
 With the chat area's own follow on, the row is pinned while the conversation
-follows its tail, at the place that follow's glide comes to rest — the
-composer's own height, the fade band above it and the host's 16px transcript
+follows its tail, at the place that follow's glide comes to rest — a height
+read off the composer's own box plus the host's transcript
 padding — the canvas painted behind it, since the transcript's tail would
 otherwise show through. The pin stands only while the host reports the tail (or
 the stream glide holds the position) and steps aside for the reader's own
 scrolling.
 
-## Home layouts · 首页版面
-
-The new-conversation page has three arrangements. `homeLayout` (settings: Home
-layout) writes `data-dsh-claude-home-layout` onto `<body>` and
-`packages/client/src/features/home/home-panel.css` branches on it. All three are the host's own
-hero markup — the greeting, the workspace row, the dock and the composer card
-inside `…_composerStack …_composerHero` — so only the arrangement differs.
-
-| | Classic | Studio |
-|---|---|---|
-| greeting | centred, 44.2px serif, brand mark on its line | top left, one fixed line naming the user ("What's up next, …?") in the 20px sans UI face, a 21px brand mark on its line |
-| composer card | vertically centred in the scroll body | the conversation's single-line inline form, resting on the window's bottom edge (16px foot) |
-| between them | — | the usage panel |
-| permission control | the segment group | the conversation's trigger and its card |
-| workspace / preset row | the card's footer tray | hairline chips directly above the card |
-| column width | the hero's centred box | a 720px composer column; the greeting and the panel form a 480px block against its left edge |
-
-**The floating form.** The third arrangement puts the suggestion deck under the
-capsule (`features/home/float-deck.ts`): the greeting, the capsule and the deck
-travel as one block, centred by the stack's auto margins so a short window
-scrolls it rather than clipping its top. The deck keeps the capsule's side
-clearance, so its cards and the recent chips line up with the card and the tray
-instead of overhanging them. The week's roll-up is the deck's header row,
-right-aligned over the cards rather than a pill in the window's corner. The card
-and the tray keep the capsule's silhouette — the card gives up its bottom
-corners, the tray closes them — and a pet standing on the card's top edge hangs
-over its right corner, clear of the greeting's last word.
-
-The studio composer is stamped `data-composer-variant="inline"` (composer.ts's
-pass reads the same preference), so the home card is drawn by the conversation's
-single-line stylesheet. The classic tray rules in `features/composer/card.css` are scoped
-away from studio with `:not([data-dsh-claude-home-layout="studio"])`. That is
-deliberate: they set `order: 1` / `order: 2` on the same boxes, and a competing
-rule would have to be out-specified rather than merely reordered — scoping them
-removes the contest.
-
-**The usage panel.** It is a `conversation.input.dock` entry (the host's list
-seat between the greeting and the card; a list seat keys its entries by `id`),
-and it renders only in the hero phase — the host mounts that same seat inside a
-conversation, where the todo, queue and goal bars hang on it. The seat is scoped
-to a session, so the cold start screen (no session yet, the card waiting for a
-workspace) has none; there the skin mounts the same component on a
-`display: contents` element of its own (`.dsh-claude-home-seat`) and drops it
-once the host's dock arrives. A window too short for the whole panel shrinks the
-panel, never the page: the greeting keeps the top edge, the chips and the card
-keep the bottom, and the panel scrolls between them with a 32px fade over its
-bottom edge that lifts over the last 32px of travel.
-
-The cold start card waits for a workspace: the host marks it with a dashed ring
-and makes every control on it inert, so a press anywhere opens the workspace
-picker. In the studio form the ring sits on the single-line input box itself
-(the host's dashed stroke and colours, flat, no drop shadow), and the permission
-trigger fills the card's empty mode strip on the preset a new session starts in
-— disabled, like the rest of the card's controls.
-
-The panel is Claude Code's dashboard shape: a flat warm-gray wash (a
-`color-mix` of the label tone at 4% over the card tone, which flips with the
-theme on its own), an Overview/Models tab pair on the left of its head, and the
-All/30d/7d range pills on the right. The active tab and range pill are a gray
-chip one step below that wash — half the radius the 20px control would round to,
-so it reads as a rounded rectangle rather than a full pill. Overview carries six
-stat cells in a 3×2 grid under Claude Code's names (Sessions, Messages, Total
-tokens, Active days, Peak hour, Favorite model) whose tiles sit one clear step
-deeper than the panel (15% of the label tone) and set a 12px label over a 13px
-bold figure — the figure stays barely above its own label, which is also what
-lets a long model id such as deepseek-v4.1-flash sit on one line; the favourite
-model is a name, not a figure, and keeps the regular weight. Messages are the
-settled calls. Once the picked range's total passes one
-book, the yardstick line appears under the grid: sixty-five books from Tao Te
-Ching (7.6k tokens) to In Search of Lost Time (1.6M), the public-domain ones
-measured by feeding their full text to the o200k_base tokenizer (the English
-original or the standard English translation; Faust in German) and the rest
-estimated (1.3 tokens a word for English, 0.96 tokens a character for modern
-Chinese prose). The line states the rounded multiple as a share of the book
-("~2× the tokens in Moby-Dick"), never as an excess over it.
-The book is drawn afresh each time the page comes back to the new-conversation
-hero, and a range that has not reached it steps down to the longest book it has
-passed, so the range pills keep the same book whenever the totals allow. The heat
-grid takes one
-equal column per week (twenty-six weeks), square cells from a 3px gutter, in a
-continuous ramp of the palette's data ink (`--dsh-deepcraft-data-ink`: Ocean
-blue's periwinkle, Warm ember's ember, Forest green's green) mixed in at the shares
-`HOME_HEAT_RAMP` in `packages/client/src/constants.ts` lists, over the neutral
-empty cell; because the columns are fractions of the panel's own width, the
-newest week can never fall past the edge. Hovering a cell shows Claude Code's day tip at
-once: a solid pill in the label ink with the canvas tone for text (so it inverts
-with the theme), 13px medium, reading the day in the shell's language and the
-tokens that day spent ("Sep 9 — 15.9k tokens"), the same figure the cell's heat
-is bucketed from; the pill is centred on its cell except where its own width
-would carry it past the panel's edge, and there it lines up with that cell's
-outer edge so it stays inside the panel, and it stands above its cell except
-where the cell holds more room below it, and there it hangs under the cell so it
-never reaches over the grid's top edge across the stat cells; the pill's own
-width and height are read off the cell the
-pointer is on (`packages/client/src/features/home/heat-tip.ts`).
-Models is Claude Code's own shape: one column
-per day of the chart's thirty-day window, stacked from the axis up with each
-model's slice in its rank's colour — rank 0 the accent in force, the six after
-it the brand's categorical data hues, and `--dsh-deepcraft-data-7` the neutral
-every model past the list shares — four gridlines with their token labels in a
-34px left gutter and every
-third column's date under it in the shell's language ("Aug 26"), and beneath it
-the ranked list — swatch, model name, the input/output split, and the share of
-the models shown — folding past six rows behind one "show more" row, which turns
-into "show less" once the list is open. The chart
-and the list write counts Claude Code's way: one decimal at most, no trailing
-".0", a lowercase k ("109M", "963.6k"). The list reads the roll-up's per-model
-buckets; the chart reads its per-day per-model map, so a day with nothing
-attributed to a model draws no stack. Each column is sized to its day's total
-against the axis top and each slice to its share of the day, so the column's
-rounding sits on the top of the stack. A range window filters the
-tiles (the peak hour included), the yardstick line and the model list; the heat
-grid and the chart keep their own windows.
-
-Two sources, in this order: the host half's usage route, then the session list's
-own projection block (`tokenUsage`, `modelSelection`, `sessionListMetadata`).
-The second answers in a few milliseconds and carries per-model totals without the
-four buckets, which is what the list falls back to when the first cannot answer.
-The first reads the cost-meter ledger for the days it knows — its
-`<provider>:<model>` split becomes the per-model cells, one model across providers
-merged into one — takes the dates past the ledger's newest day from the accurate
-per-event fold, and keeps the two apart by date rather than adding them; the
-sessions behind the ledger's days and the logs written on the folded ones are one
-union. Both carry each day's session ids, which a range window unions into one
-distinct session count. Only the fold knows the settlement hours: it keeps one
-hour histogram per day, which a range window sums into its own peak hour, and the
-ledger's own days carry none — the ledger's figures land first, and the peak hour
-of the folded days lands a moment later. The panel names
-which one it drew from, and a figure neither can answer is a dash.
-
-The skeleton keeps the frame's geometry — six fixed-size stat cells, a heat grid
-of a fixed cell count, and on the models tab the chart's frame with three
-stand-in rows — and the heat grid's empty cell **is** the zero step, so "no data"
-and "a day with no usage" stay different things: a missing value draws a
-placeholder, a zero day draws the grid's own base tone.
 
 ## The composer crab · 输入卡片上的螃蟹
 
 The pixel crab is one of the mascots the Mascot row offers. It stands where Deepy does — the composer card's top edge on
-both home layouts, the input area or the panel that replaces its card in a
+the home page, the input area or the panel that replaces it in a
 conversation (unless Where it appears keeps it to the home page) — and follows
 the same states with the same keys. It is drawn on a 52×36 grid of cells at 2px
 a cell, crisp (`pixelated`, 104×72px): feet on the bottom row, on the edge of
@@ -915,7 +694,7 @@ The art is stepped pixel art on an integer grid, drawn with `image-rendering: pi
 so downscales keep crisp pixel edges. The body is pale blue `#CED9FF` with a deep-blue
 `#3F5297` outline, a white-tinted belly `#EEF2FF`, shade and pectoral fin `#9EB2EB`,
 and a dark eye `#243460`. Its box sits 8px in from the right end of the card it stands over.
-On the home page that is the composer card (both layouts); in a conversation it is the whole
+On the home page that is the composer card; in a conversation it is the whole
 input area, and the panel that replaces the card while the reader is asked for something
 (those panels start 6–8px above their card). Every frame lasts 50ms. Only the resting body
 (columns 10–42, rows 32–50, hit box 64×36px) takes the pointer. With the animation choice

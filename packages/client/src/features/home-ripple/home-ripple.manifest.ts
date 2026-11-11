@@ -10,7 +10,6 @@ export default {
     tab: 'appearance',
     rank: 26,
     pref: 'homeRipple',
-    parent: 'homeLayout',
     title: 'homeRippleTitle',
     desc: 'homeRippleDesc',
     experimental: true,

@@ -12,7 +12,7 @@
  * The paths are the shared contract (`@dsh-deepcraft/contracts/routes`, * D73): the browser half addresses the same names.
  */
 import { PACKAGE_NAME } from '@dsh-deepcraft/contracts/package'
-import { HDSL_PATH, HDSL_SKIN_PATH, PEAKRATE_PATH, ROUTE_PREFIX, SESSION_DELETE_PATH, SESSION_SEARCH_PATH, USAGE_PATH, USERNAME_PATH } from '@dsh-deepcraft/contracts/routes'
+import { HDSL_PATH, HDSL_SKIN_PATH, ROUTE_PREFIX, SESSION_DELETE_PATH, SESSION_SEARCH_PATH, USAGE_PATH, USERNAME_PATH } from '@dsh-deepcraft/contracts/routes'
 import { existsSync, readFileSync, readdirSync, realpathSync, rmSync, statSync } from 'node:fs'
 import { userInfo } from 'node:os'
 import { dirname, join, resolve, sep } from 'node:path'
@@ -25,7 +25,6 @@ import { createStaticFiles } from '@dsh-deepcraft/engine/node/static-files'
 import { createHdslAccount } from './hdsl.js'
 import type { HdslReading } from './hdsl.js'
 import { packageRoot } from './package-root.js'
-import { createPeakRate } from './peakrate.js'
 import { QUERY_MAX, createSessionSearch } from './search.js'
 import { petRoutes } from './pets/routes.js'
 import { subagentModelRoutes } from './subagent-models/route.js'
@@ -271,7 +270,6 @@ export function registerRoutes(ctx: DshContext, scope: DshScope, models: Subagen
     const usage = createUsage(ctx)
     const hdsl = createHdslAccount(ctx)
     const sessionSearch = createSessionSearch(ctx)
-    const peakrate = createPeakRate(ctx)
 
     const register = (label: string, route: DshRoute) => {
       try {
@@ -459,30 +457,12 @@ export function registerRoutes(ctx: DshContext, scope: DshScope, models: Subagen
       },
     })
 
-    register('peak rate', {
-      kind: 'exact',
-      path: PEAKRATE_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
-        // The catalog is public data, and the browser half is the only client:
-        // the route runs the same fence as the rest of the plugin's routes so
-        // that only this page can make the host reach the source. `POST` is the
-        // browser half asking for a fresh copy, because it cannot name the
-        // source itself.
-        if (methodRefused(req, res, ['GET', 'POST'])) return
-        if (fenceRefused(ctx, req, res)) return
-        peakrate.ensure()
-        const answer = req.method === 'POST' ? peakrate.refresh().then(() => peakrate.payload()) : Promise.resolve(peakrate.payload())
-        sendPayload(res, answer)
-      },
-    })
-
     for (const { label, route } of brandRoutes(ctx)) register(label, route)
     for (const { label, route } of petRoutes(ctx)) register(label, route)
     for (const { label, route } of subagentModelRoutes(ctx, models)) register(label, route)
 
     return () => {
       usage.dispose()
-      peakrate.dispose()
       sessionSearch.dispose()
       // One route's disposer failing must not keep the others registered
       // (D12); the failure is reported.

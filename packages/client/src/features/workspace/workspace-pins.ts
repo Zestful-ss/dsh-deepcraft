@@ -21,11 +21,10 @@ import { copy } from './copy'
  * host's own services. The host's rows stay where they are — they carry other
  * plugins' seats and count toward the host's per-group row limit.
  *
- * It reads the two client lists the archived list reads (`workspaces.list` and
- * `sessions.list`), the live status map and the selection; each tick asks the
- * scheduler for a pass. Archived conversations and subagent children do not
- * belong here, and the block leaves while the section shows archived rows, the
- * host's search results, or the collapsed rail.
+ * It reads the two client lists (`workspaces.list` and `sessions.list`), the
+ * live status map and the selection; each tick asks the scheduler for a pass.
+ * Archived conversations and subagent children do not belong here, and the
+ * block leaves while the host's search results or the collapsed rail show.
  */
 
 /** The host's translate seat for the workspace namespace. */
@@ -291,12 +290,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       drop()
       return
     }
-    // Archived rows and the host's search results replace the tree's subject;
-    // the aggregate speaks for the live grouped list alone.
-    if (section.getAttribute('data-dsh-deepcraft-ws-view') === 'archived') {
-      drop()
-      return
-    }
+    // The host's search results replace the tree's subject; the aggregate
+    // speaks for the live grouped list alone.
     if ((header.querySelector('input')?.value ?? '').trim() !== '') {
       drop()
       return

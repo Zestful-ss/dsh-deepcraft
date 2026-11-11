@@ -12,7 +12,6 @@ import { createSlidingPill } from '../../shared/sliding-pill'
 import type { Feature, FeatureSettingsRow } from '../../core/feature'
 import type { Prefs } from '../../constants'
 import type { SettingsTabId } from '../../core/feature'
-import type { QuickProvidersHandle } from './quick-providers'
 
 /**
  * The settings page's controls: the segmented control, the switch, the row
@@ -21,7 +20,7 @@ import type { QuickProvidersHandle } from './quick-providers'
  *
  * The segmented controls reuse the shared `.dsh-deepcraft-segments` /
  * `.dsh-deepcraft-segment` classes and sliding highlight — the same control the
- * composer's permission picker uses — so the two read as one design instead
+ * skin's other pickers use — so the surfaces read as one design instead
  * of two lookalikes.
  */
 
@@ -42,8 +41,6 @@ export interface SettingsView {
   prefs: Prefs
   write(patch: Partial<Prefs>): void
   controls: SettingsControls
-  quickTrigger: React.RefObject<HTMLButtonElement | null>
-  quickProviderApi(): QuickProvidersHandle | null
   username: {
     value: string
     onChange(e: React.ChangeEvent<HTMLInputElement>): void

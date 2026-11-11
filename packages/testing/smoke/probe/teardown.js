@@ -31,10 +31,6 @@
     // that owns the foreground, so a hidden card silently disarms the shortcuts
     // behind it (the Esc-Esc stop, the close-page and dialog commands).
     r.closedMenuCards = document.querySelectorAll('.dsh-deepcraft-popover-card[role="menu"]:not([data-open="true"])').length
-    var editor = document.getElementById('editor')
-    editor.focus()
-    editor.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }))
-    r.keys = window.__keys.slice()
     await sleep(50)
     r.pwned = window.__pwned
     r.errors = window.__errors.slice()
@@ -61,8 +57,6 @@
         r.search.left = document.querySelectorAll('[data-dsh-deepcraft-search-row], .dsh-deepcraft-search-trigger, .dsh-deepcraft-search-bar').length
         r.search.rootUnmounted = !!probe.searchRoot && probe.searchRoot.unmounted
       }
-      r.leftDraftMarks = document.querySelectorAll('[data-dsh-deepcraft-draft-empty]').length
-      r.leftControlMarks = document.querySelectorAll('[data-dsh-deepcraft-control]').length
       var hostRowEnd = document.getElementById('host-account')
       r.hostRowEnd = hostRowEnd === null ? null : {
         visibility: getComputedStyle(hostRowEnd).visibility,

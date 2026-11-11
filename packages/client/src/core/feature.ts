@@ -79,27 +79,19 @@ export interface FeatureFields {
 /** The other plugins a feature can yield to. */
 export type PeerPlugin = 'dsh-chat-ux'
 
-/** A written stylesheet, or one the build writes from constants.ts. */
-export type FeatureStylesheet = FeatureStylesheetFile | FeatureStylesheetGenerated
+/** A written stylesheet. */
+export type FeatureStylesheet = FeatureStylesheetFile
 
 export interface FeatureStylesheetFile {
   file: string
   /** Position in the concatenated stylesheet, shared with the theme's sheets (scripts/build.mjs). Unique. */
   rank: number
-  /** The composer rules are gated (D9). */
-  gate?: boolean
   /**
    * `'surface'`: the sheet is scoped to `body[data-dsh-deepcraft-surface]` and
    * ships apart from the theme's sheet, so it stays while ds-bot's surface has
    * the page (D74).
    */
   scope?: 'surface'
-}
-
-/** A sheet of one rule per entry of a table the code reads too: its generator's name in scripts/feature-sheets.mjs. */
-export interface FeatureStylesheetGenerated {
-  generated: string
-  rank: number
 }
 
 /** A line of copy in the settings page's own copy file, before it moves to its feature (D72). */
@@ -111,7 +103,7 @@ export interface SettingsCopyLine {
 /**
  * The settings tabs, by id (packages/client/src/features/settings/settings-tab-*.ts).
  */
-export type SettingsTabId = 'general' | 'appearance' | 'composer' | 'sidebar' | 'conversation'
+export type SettingsTabId = 'general' | 'appearance' | 'sidebar' | 'conversation'
 
 /**
  * One settings row a feature owns (D72). The control follows the preference's

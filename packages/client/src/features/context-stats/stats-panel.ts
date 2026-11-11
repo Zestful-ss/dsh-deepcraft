@@ -28,16 +28,20 @@ const HOST_STATS_DIALOGS = '[data-session-stats-details], [data-session-stats-us
 /** The dialog registry, taken on the first read of the panel and released with the feature. */
 let dialogs: MatchList<HTMLElement> | null = null
 
+/** The mark this feature puts on the host's context meter while installed. */
+export const CONTEXT_METER_ATTR = 'data-dsh-deepcraft-context-meter'
+
 /**
- * The host's context meter: the node the composer pass marks
- * (features/composer/composer.ts), else the host's own docked meter — that
- * pass is gone while the composer's scope preference is off, and the numbers
- * this feature writes into the panel are read either way.
+ * The host's context meter: the node this feature marks, else the host's own
+ * docked meter — the mark lands on it the same pass, so the stylesheet's
+ * rules and this cache agree from the next read on.
  */
-const markedMeter = cacheFirstMatch<HTMLElement>('[data-dsh-deepcraft-context-meter]')
+const markedMeter = cacheFirstMatch<HTMLElement>(`[${CONTEXT_METER_ATTR}]`)
 
 export function findContextMeter() {
-  return markedMeter() ?? findDockedContextMeter(findComposerCard())
+  const meter = markedMeter() ?? findDockedContextMeter(findComposerCard())
+  if (meter !== null) meter.setAttribute(CONTEXT_METER_ATTR, '')
+  return meter
 }
 
 /**
@@ -117,6 +121,9 @@ export function clearStrayContextNodes() {
     marked[i].removeAttribute(CONTEXT_PANEL_ATTR)
     marked[i].removeAttribute(CONTEXT_PANEL_ALIGNED_ATTR)
   }
+  // A prior generation's meter mark goes too; the pass re-stamps its own.
+  const meters = document.querySelectorAll(`[${CONTEXT_METER_ATTR}]`)
+  for (let i = 0; i < meters.length; i++) meters[i].removeAttribute(CONTEXT_METER_ATTR)
 }
 
 /**

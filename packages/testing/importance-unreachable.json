@@ -2,70 +2,6 @@
   "note": "The selectors the importance scenario's walk cannot match an element with, each under the reason it is out of reach. A selector the sheet writes that is neither matched in a page state nor recorded here fails the scenario, and a recorded one that starts matching fails it too: the list is a debt, and it only shrinks. A group may carry \"either\": true when the walk's own answer depends on the moment or on the machine it runs on — a rule that paints inside one animation frame, a row the host renders on some platforms only. Such a record counts whether the walk catches it or not, so the check never asks for it to be struck. Regenerate the rest from importance-verdicts.json's sweep.dead after a run, and review every line.",
   "groups": [
     {
-      "reason": "首页用量面板：临时宿主里没有用量数据，面板画的是空状态",
-      "selectors": [
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort[data-apex] .dsh-deepcraft-effort-matrix",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort-matrix-sq[data-tone=\"0\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort-matrix-sq[data-tone=\"1\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort-matrix-sq[data-tone=\"2\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort-matrix-sq[data-tone=\"3\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort-matrix-sq[data-tone=\"4\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort-matrix-sq[data-tone=\"5\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort-matrix-sq[data-tone=\"6\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort-matrix-sq[data-tone=\"7\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort[data-apex] .dsh-deepcraft-effort-fill",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort[data-apex] .dsh-deepcraft-effort-ticks",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort[data-apex] .dsh-deepcraft-effort-knob",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort[data-apex] .dsh-deepcraft-effort-value",
-        "body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-effort[data-apex] .dsh-deepcraft-effort-knob",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-models-more",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-panel[data-computing] .dsh-deepcraft-home-stat[data-skeleton] .dsh-deepcraft-home-stat-value",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-panel[data-computing] .dsh-deepcraft-home-models[data-skeleton] .dsh-deepcraft-home-model-swatch",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-heat[data-skeleton] .dsh-deepcraft-home-heat-cell",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-fun",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-stat[data-skeleton] .dsh-deepcraft-home-stat-value",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-heat-cell[data-level=\"1\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-heat-cell[data-level=\"2\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-heat-cell[data-level=\"3\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-heat-cell[data-level=\"4\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-plot",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-tick",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-bars",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-col",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-axis",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-label",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank=\"0\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank=\"0\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank=\"1\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank=\"1\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank=\"2\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank=\"2\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank=\"3\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank=\"3\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank=\"4\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank=\"4\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank=\"5\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank=\"5\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank=\"6\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank=\"6\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-chart-seg[data-rank=\"7\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch[data-rank=\"7\"]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-models",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-model",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-model-swatch",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-model-name",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-model-split",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-model-share",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-models-empty",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-models[data-skeleton] .dsh-deepcraft-home-model-name",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-models[data-skeleton] .dsh-deepcraft-home-model-split",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-models[data-skeleton] .dsh-deepcraft-home-model-share",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-models[data-skeleton] .dsh-deepcraft-home-model-swatch"
-      ]
-    },
-    {
       "reason": "脚本回答里没有文件操作：走查那一轮不读写文件",
       "selectors": [
         "body[data-dsh-deepcraft] .dsh-deepcraft-file-root",
@@ -146,9 +82,7 @@
         "body[data-dsh-deepcraft] hr",
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=text-mono-label]",
         "body[data-dsh-deepcraft] [data-chat-flow] code:not(pre code)",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-window-blur] [data-chat-flow] code:not(pre code)",
-        "body[data-dsh-deepcraft]:not([data-ds-dark-theme]) [data-chat-flow] code:not(pre code)",
-        "body[data-dsh-deepcraft]:not([data-ds-dark-theme])[data-dsh-deepcraft-window-blur] [data-chat-flow] code:not(pre code)"
+        "body[data-dsh-deepcraft]:not([data-ds-dark-theme]) [data-chat-flow] code:not(pre code)"
       ]
     },
     {
@@ -180,7 +114,6 @@
     {
       "reason": "账户菜单的个别状态：准备窗口的第一帧、暗色下的菜单、菜单底栏与选中项，走查的页面不出现这些形态",
       "selectors": [
-        "body[data-dsh-deepcraft][data-ds-dark-theme] :is([data-dsh-deepcraft-account-menu],[data-dsh-deepcraft-hero-menu])",
         "body[data-dsh-deepcraft][data-dsh-deepcraft-account-armed] div[role=menu][data-menu-material]:not([data-dsh-deepcraft-account-ready])",
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] [data-dsh-deepcraft-part~=menu-footer]",
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-account-menu] [data-dsh-deepcraft-part~=menu-item-selected]"
@@ -203,7 +136,6 @@
       "reason": "搜索面板里没有结果：走查的查询词在临时宿主里搜不到东西",
       "selectors": [
         "body[data-dsh-deepcraft][data-dsh-deepcraft-search-style=standalone] .dsh-deepcraft-search-bar",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-search-style=standalone][data-dsh-deepcraft-sidebar-layout=compact] .dsh-deepcraft-search-bar",
         "html[data-platform=darwin] body[data-dsh-deepcraft] [data-dsh-deepcraft-search-row]",
         "body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-search-dialog",
         "body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-search-filters[data-dsh-deepcraft-pill]",
@@ -223,34 +155,6 @@
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-rows[data-dsh-deepcraft-page-leave=back]",
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-rows[data-dsh-deepcraft-page-enter=back]",
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-rows[data-dsh-deepcraft-page-leave=forward]"
-      ]
-    },
-    {
-      "reason": "归档视图：走查没有打开它",
-      "selectors": [
-        "body[data-dsh-deepcraft] .dsh-deepcraft-archive-row",
-        "body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-archive-row",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-archive-row:is(,)",
-        "body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-archive-row:is(,)",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-archive-title",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-archive-time",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-archive-row .dsh-deepcraft-archive-time",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-archive-action",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-archive-row .dsh-deepcraft-archive-action",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-archive-delete",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-archive-restore"
-      ]
-    },
-    {
-      "reason": "模型选择器的分组与规则：临时宿主的目录里没有分组",
-      "selectors": [
-        "body[data-dsh-deepcraft] .dsh-deepcraft-model-group-section",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-model-group-row",
-        "body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-model-group-row",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-model-group",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-model-option[data-brand=claude] .dsh-deepcraft-model-name",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-model-rule",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-model-rule-name"
       ]
     },
     {
@@ -291,7 +195,6 @@
       "selectors": [
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=text-select-label]",
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=group-section]+[data-dsh-deepcraft-part~=group-section]",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-sidebar-layout=compact] [data-dsh-deepcraft-part~=group-section]+[data-dsh-deepcraft-part~=group-section]",
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=session-row][data-dsh-deepcraft-part~=row-menu-open]",
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=project-row][data-dsh-deepcraft-part~=row-menu-open]",
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=project-row][data-dsh-deepcraft-part~=row-selected]",
@@ -306,17 +209,6 @@
         "body[data-dsh-deepcraft] .dsh-deepcraft-turn-rail[data-fade-top][data-fade-bottom]",
         "body[data-dsh-deepcraft] .dsh-deepcraft-turn-rail-mark[data-unloaded]",
         "body[data-dsh-deepcraft] .dsh-deepcraft-turn-nav-row[data-unloaded] .dsh-deepcraft-turn-nav-dash"
-      ]
-    },
-    {
-      "reason": "推理强度选择器：走查没有拖动它，也没有停在顶档",
-      "selectors": [
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort-matrix-cell",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort-matrix-sq",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort[data-dragging] .dsh-deepcraft-effort-knob",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort[data-dragging] .dsh-deepcraft-effort-fill",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort[data-empty] .dsh-deepcraft-effort-track",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-effort[data-empty] .dsh-deepcraft-effort-value"
       ]
     },
     {
@@ -384,36 +276,9 @@
       ]
     },
     {
-      "reason": "高峰费率表：宿主拿到费率档时才画这颗标，画的是哪个时段随时机而变",
-      "either": true,
-      "selectors": [
-        "body[data-dsh-deepcraft] .dsh-deepcraft-peakrate[data-period=peak]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-peakrate[data-period=campaign]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-peakrate[data-period=offPeak]"
-      ]
-    },
-    {
       "reason": "宿主会话行的标签：脚本回答里没有这一类行",
       "selectors": [
         "body[data-dsh-deepcraft] :is([data-dsh-deepcraft-part~=tag-system],[data-dsh-deepcraft-part~=tag-user],[data-dsh-deepcraft-part~=tag-context],[data-dsh-deepcraft-part~=tag-message],[data-dsh-deepcraft-part~=tag-tool],[data-dsh-deepcraft-part~=tag-subtool],[data-dsh-deepcraft-part~=kind-tag]:not([data-dsh-deepcraft-part~=kind-tag-icon],[data-dsh-deepcraft-part~=kind-tag-label]),[data-dsh-deepcraft-part~=row-tag],[data-dsh-deepcraft-part~=option-line]>[data-dsh-deepcraft-part~=badge],[data-dsh-deepcraft-part~=attempt-badge],[data-dsh-deepcraft-part~=key-badge])"
-      ]
-    },
-    {
-      "reason": "工作区视图：走查没有打开它",
-      "selectors": [
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-ws-view=archived] [data-dsh-deepcraft-ws-tree]"
-      ]
-    },
-    {
-      "reason": "快速服务商的弹出层：走查没有打开它",
-      "selectors": [
-        "body[data-dsh-deepcraft] .dsh-deepcraft-quick-popover"
-      ]
-    },
-    {
-      "reason": "停靠卡座：走查没有打开它",
-      "selectors": [
-        "body[data-dsh-deepcraft] .dsh-deepcraft-home-seat"
       ]
     },
     {

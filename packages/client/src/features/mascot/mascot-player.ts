@@ -1,11 +1,12 @@
 import { COMPOSER_STACK, conversationSessionId, findComposerCard, findComposerSeat, findConversationSession, findHeroRoot } from '@dsh-deepcraft/engine/host'
+import { CHAIN_OVERLAY_FALLBACK_ATTRIBUTE, PHASE_ATTRIBUTE } from '@dsh-deepcraft/contracts/dom'
 import { motionReduced } from '../../core/prefs'
 import { createMascotSignals } from './mascot-signals'
 import type { PetdexState } from '@dsh-deepcraft/contracts/pets'
 import type { MascotMoment } from './mascot-signals'
 import { decideStage, finishStage, freshStage, nextDecisionAt, switchSettles, takeMoment } from './mascot-stage'
 import type { MascotPick, PlayMode } from './mascot-stage'
-import { buildElement, createStamp, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
+import { buildElement, closestFrom, createStamp, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './mascot.manifest'
@@ -72,7 +73,7 @@ export interface MascotCharacter {
  * keeps playing until the new one is ready, so a switch never blinks. A host
  * placement slot or activity service retires the host reads here.
  *
- * @param ui - shared handle table (`ui.composer`).
+ * @param ui - shared handle table.
  * @param character - `{ name, sheets, frameMs, gutter, extras, createSheets }`:
  *     `name` prefixes the class names, the custom properties and the anchor
  *     mark (`dsh-deepcraft-<name>`); `sheets` is the animation table
@@ -163,22 +164,25 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
    * when neither is on screen.
    */
   function findStand(conversation: boolean): { element: Element, session: string | null, place: string } | null {
-    // The composer pass answers with the card it read; with that feature off
-    // the page (its scope preference) the hero root and the page's first card
-    // are the same answer.
-    const heroCard = ui.composer
-      ? ui.composer.heroCard()
-      : findHeroRoot() === null ? null : findComposerCard()
+    const heroCard = findHeroRoot() === null ? null : findComposerCard()
     if (heroCard !== null) return { element: heroCard, session: null, place: 'card' }
     if (!conversation) return null
-    if (ui.composer !== undefined && ui.composer.isChatHidden()) return null
+    // The composer stands on every conversation tab (the host mounts the seat
+    // inside the root whichever view is up), so the mascot leaves when a tab
+    // other than the chat is selected: the chat view registers at order 0,
+    // which makes it the tablist's first tab, and its aria-selected is
+    // locale-independent. No tab bar means the chat surface is all there is.
+    const phaseRoot = closestFrom(findComposerSeat(), `[${PHASE_ATTRIBUTE}]`)
+    const tablist = phaseRoot === null ? null : phaseRoot.querySelector('[role="tablist"]')
+    const firstTab = tablist === null ? null : tablist.querySelector('[role="tab"]')
+    if (firstTab !== null && firstTab.getAttribute('aria-selected') !== 'true') return null
     const content = findConversationSession()
     const seat = content === null ? null : findComposerSeat(content)
     if (seat === null) return null
     const session = conversationSessionId(content)
     // The composer chain's own wrapper (ui-renderer): the host hides it
     // inline when a panel is elected, and mounts that panel right after it.
-    const fallback = seat.querySelector<HTMLElement>('[data-chain-overlay-fallback="conversation.composer"]')
+    const fallback = seat.querySelector<HTMLElement>(`[${CHAIN_OVERLAY_FALLBACK_ATTRIBUTE}="conversation.composer"]`)
     if (fallback !== null && fallback.style.display === 'none') {
       const panel = fallback.nextElementSibling
       return panel === null ? null : { element: panel, session, place: 'panel' }

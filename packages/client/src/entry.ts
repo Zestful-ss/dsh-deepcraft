@@ -1,4 +1,4 @@
-import { ACCOUNT_MENU_ATTR, HANDOFF_ATTR, HERO_MENU_ATTR, HOLDS_ATTR, LIVE_PREFS, PACKAGE_NAME, PART_ATTR, QUIET_ATTR, READER_HOLD_ATTR } from './constants'
+import { ACCOUNT_MENU_ATTR, HANDOFF_ATTR, HOLDS_ATTR, LIVE_PREFS, PACKAGE_NAME, PART_ATTR, QUIET_ATTR, READER_HOLD_ATTR } from './constants'
 import type { LivePref } from './constants'
 import { installParts } from '@dsh-deepcraft/engine/parts'
 import { adoptSkin } from '@dsh-deepcraft/engine/skin'
@@ -6,8 +6,8 @@ import { motionReduced } from './core/prefs'
 import { setHostContext } from './core/host-context'
 import { loadHdsl, loadUsername } from './shared/identity'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
-import { loadModelCopy } from './features/model/model-copy'
-import { adoptPrefs, adoptSettingsForm, clearPrefsAttributes, disposePrefsBinding, prefs, readPrefs, retireComposerRestyle, retireFooterTakeover, subscribePrefs } from './core/prefs'
+import { loadModelCopy } from './shared/model-copy'
+import { adoptPrefs, adoptSettingsForm, clearPrefsAttributes, disposePrefsBinding, prefs, readPrefs, retireFooterTakeover, subscribePrefs } from './core/prefs'
 import { reportFeatureFailure } from '@dsh-deepcraft/engine/scheduler'
 import { installScheduler } from './core/scheduler'
 import type { HandleName, Ui } from './core/scheduler'
@@ -169,11 +169,9 @@ export function apply(ctx: HostContext) {
   /**
    * Switch one feature off for the rest of this generation: run its own
    * teardown, and give back the host surface it had taken over. The footer
-   * takeover and the composer restyle HIDE host controls (their gates are
-   * body attributes the preferences and the composer pass write), so with
-   * the feature gone they must stop hiding them. The permission control's
-   * own hiding rules key on the attribute its teardown removes, so it needs
-   * no branch here. The scheduler calls this for a sync that keeps failing.
+   * takeover hides host controls behind a body attribute the preferences
+   * write, so with the feature gone it must stop hiding them. The scheduler
+   * calls this for a sync that keeps failing.
    *
    * `name` may be the feature's id or its handle name. The scheduler retires
    * a failing sync through the handle; a handle that differs from the install
@@ -196,7 +194,6 @@ export function apply(ctx: HostContext) {
       try { stop() } catch (error) { reportError(error) }
     }
     if (name === 'footer') retireFooterTakeover()
-    if (name === 'composer') retireComposerRestyle()
   }
 
   /**
@@ -353,7 +350,7 @@ export function apply(ctx: HostContext) {
       stopParts = installParts({
     part: PART_ATTR,
     holds: HOLDS_ATTR,
-    regions: { account: ACCOUNT_MENU_ATTR, hero: HERO_MENU_ATTR },
+    regions: { account: ACCOUNT_MENU_ATTR },
   }, () => {
         if (typeof ui.schedule === 'function') ui.schedule()
       })

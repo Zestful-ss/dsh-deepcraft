@@ -144,11 +144,6 @@ function handle(req, res) {
   if (pathname === '/client.js') return file(res, CLIENT, '.js')
   if (VENDOR[pathname] !== undefined) return file(res, VENDOR[pathname], '.js')
   if (pathname === '/dsh-deepcraft/model-descriptions.json') return file(res, MODEL_COPY, '.json')
-  // The peak-rate catalog is the host half's; the preview carries none, and an
-  // empty answer keeps the page's console clean.
-  if (pathname === '/dsh-deepcraft/peakrate') {
-    return send(res, 200, { 'content-type': TYPES['.json'] }, JSON.stringify({ ok: true, profiles: [], invalid: [] }))
-  }
   if (pathname === '/api/preview/build') {
     return send(res, 200, { 'content-type': TYPES['.json'] }, JSON.stringify({ client: buildStamp() }))
   }

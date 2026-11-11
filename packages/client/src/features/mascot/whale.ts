@@ -16,7 +16,7 @@ import type manifest from './mascot.manifest'
  * each is fetched from the host half the first time its animation is wanted
  * (whale-sheets.ts).
  *
- * @param ui - shared handle table (`ui.composer`).
+ * @param ui - shared handle table.
  * @returns `{ sync, release, onActivity, dispose }`.
  */
 export function createMascotWhale(ctx: HostContext, ui: FeatureUi<typeof manifest>) {

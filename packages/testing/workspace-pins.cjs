@@ -25,9 +25,6 @@ const SKIN = {
   row: '.dsh-deepcraft-pin-row',
   menu: '.dsh-deepcraft-pin-menu',
   title: '.dsh-deepcraft-pin-title',
-  segments: '.dsh-deepcraft-ws-segments',
-  archiveRow: '.dsh-deepcraft-archive-row',
-  restore: '.dsh-deepcraft-archive-restore',
   toggle: 'button[data-dsh-deepcraft-part~="sidebar-toggle"]',
 }
 const HOST = {
@@ -205,40 +202,11 @@ function workspacePinsScenario({ check }) {
       const afterReload = await page.locator(`${SKIN.row}[data-session-id="${second}"] ${SKIN.title}`).innerText().catch(() => '')
       checks.push(check('刷新后置顶顺序与新标题都保留', (await pinOrder(page)).join() === second && afterReload === 'Pinned by reader', JSON.stringify({ order: await pinOrder(page), afterReload })))
 
-      // Archive from the pinned row: it leaves the aggregate and reaches the archived list.
-      await openPinMenu(page, second)
-      await pressMenuItem(page, /^(归档会话|Archive session)/i)
-      await page.waitForFunction(({ block, ids }) => {
-        const rows = [...document.querySelectorAll(`${block} .dsh-deepcraft-pin-row`)]
-        return rows.length === ids.length && rows.every((row, at) => row.getAttribute('data-session-id') === ids[at])
-      }, { block: SKIN.block, ids: [] }, { timeout: 20000 }).catch(() => {})
-      await page.locator('[data-dsh-deepcraft-part~="section-header"]').first().hover()
-      await page.locator(`${SKIN.segments} [data-view="archived"]`).click()
-      await page.locator(`${SKIN.archiveRow}[data-session-id="${second}"]`).waitFor({ state: 'visible', timeout: 20000 })
-      const archived = await page.locator(`${SKIN.archiveRow}[data-session-id="${second}"]`).count()
-      checks.push(check('归档后它离开置顶区，并出现在已归档视图', archived === 1 && (await page.locator(SKIN.block).count()) === 0, `archived=${archived}`))
-
-      // Restore it, pin it again from the host row and confirm the pin persisted.
-      const archivedRow = page.locator(`${SKIN.archiveRow}[data-session-id="${second}"]`)
-      await archivedRow.hover()
-      await archivedRow.locator(SKIN.restore).click()
-      await page.locator('[data-dsh-deepcraft-part~="section-header"]').first().hover()
-      await page.locator(`${SKIN.segments} [data-view="active"]`).click()
-      await expandWorkspace(page, 'workspace-b')
-      await openRowMenu(page, second)
-      await pressMenuItem(page, /^(置顶会话|Pin session|Pin conversation|Pin)/i)
-      await waitForPins(page, [second])
-      checks.push(check('恢复后重新置顶，汇总区再次列出它', (await pinOrder(page)).join() === second, JSON.stringify(await pinOrder(page))))
-
-      // The aggregate is its own feature: turning the two-state view and the
-      // skin's search off leaves it in place, and the host's own search can
-      // then be driven for the visibility check below.
+      // The aggregate is its own feature: turning the skin's search off leaves
+      // it in place, and the host's own search can then be driven for the
+      // visibility check below.
       await openSkinSettings(page)
       await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: /^(侧栏|Sidebar)$/ }).first().click()
-      const viewRow = page.locator('.dsh-deepcraft-settings-row').filter({ has: page.locator('.dsh-deepcraft-settings-row-title').filter({ hasText: /工作区分栏视图|In progress \/ Archived view/ }) }).first()
-      await viewRow.waitFor({ state: 'visible', timeout: 15000 })
-      const viewSwitch = viewRow.locator('.dsh-deepcraft-settings-switch')
-      await viewSwitch.click()
       const searchRow = page.locator('.dsh-deepcraft-settings-row').filter({ has: page.locator('.dsh-deepcraft-settings-row-title').filter({ hasText: /^(侧栏搜索|Sidebar search)$/ }) }).first()
       await searchRow.waitFor({ state: 'visible', timeout: 15000 })
       const searchSwitch = searchRow.locator('.dsh-deepcraft-settings-switch')
@@ -247,19 +215,19 @@ function workspacePinsScenario({ check }) {
       // sooner can swallow the write and leave the feature on.
       await page.waitForFunction(() => {
         const rows = [...document.querySelectorAll('.dsh-deepcraft-settings-row')]
-        const off = (pattern) => rows.some((row) => {
+        return rows.some((row) => {
           const title = row.querySelector('.dsh-deepcraft-settings-row-title')?.textContent ?? ''
           const control = row.querySelector('.dsh-deepcraft-settings-switch')
-          return pattern.test(title) && control !== null && !control.hasAttribute('data-on')
+          return /侧栏搜索|Sidebar search/.test(title) && control !== null && !control.hasAttribute('data-on')
         })
-        return off(/工作区分栏视图|In progress \/ Archived view/) && off(/侧栏搜索|Sidebar search/)
       }, undefined, { timeout: 15000 }).catch(() => {})
       await page.waitForTimeout(600)
       await page.keyboard.press('Escape')
       await page.locator('[role="dialog"]').first().waitFor({ state: 'detached', timeout: 10000 }).catch(() => {})
       await page.locator(SKIN.block).waitFor({ state: 'visible', timeout: 15000 }).catch(() => {})
       const withoutView = await page.locator(SKIN.block).count()
-      checks.push(check('关闭工作区分栏视图后，置顶汇总仍可用', withoutView === 1, `blocks=${withoutView}`))
+      checks.push(check('关闭侧栏搜索后，置顶汇总仍可用', withoutView === 1, `blocks=${withoutView}`))
+
 
       // Host search takes the aggregate off the page; Escape brings it back.
       const search = page.locator('[data-slot="sidebar"] input[type="text"]').first()

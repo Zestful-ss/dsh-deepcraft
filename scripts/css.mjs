@@ -12,8 +12,6 @@
  *   token gates  a rule writing a host token carries a palette gate or the
  *                typeface gate, and every private token a palette defines has
  *                an alias under the host's (D80)
- *   composer     the rules below a sheet's `@composer-gate` comment get the
- *                composer gate stamped onto their scope compound (D9)
  *   attributes   every `data-dsh-*` attribute a selector reads is one the
  *                browser half writes, read off its syntax tree (scripts/source-tree.mjs)
  *   motion       a time or an easing curve is written only in the token
@@ -33,7 +31,6 @@ import fs from 'node:fs'
 import path from 'node:path'
 import postcss from 'postcss'
 import selectorParser from 'postcss-selector-parser'
-import { featureSheet } from './feature-sheets.mjs'
 import { TOKEN_SHEET, tokenSheet } from './shared/design-tokens.mjs'
 import { minifyCss } from './shared/minify-css.cjs'
 import { loadModule } from './shared/ts-module.cjs'
@@ -51,8 +48,6 @@ const SCOPE = `${SCOPE_TAG}[${SCOPE_ATTRIBUTE}]`
  * switch's whole look.
  */
 const SURFACE_SCOPE_ATTRIBUTE = 'data-dsh-deepcraft-surface'
-/** The comment in a gated sheet below which every rule follows the composer preference. */
-const COMPOSER_GATE_MARKER = '@composer-gate'
 /**
  * A z-index a sheet may write as it is: an order among siblings inside one
  * box (D9). Anything that stacks against the host's own surfaces is a layer
@@ -279,18 +274,13 @@ function collectKeyframes(label, root, seen) {
   })
 }
 
-/** Where a sheet's rules are reported: its file, or the generator that wrote it (scripts/feature-sheets.mjs). */
+/** Where a sheet's rules are reported: its file under packages/client/src. */
 function sheetLabel(sheet) {
-  return sheet.generated === undefined ? `packages/client/src/${sheet.file}` : `scripts/feature-sheets.mjs (${sheet.generated})`
+  return `packages/client/src/${sheet.file}`
 }
 
 /**
- * Parse one stylesheet, check every rule, and stamp the composer
- * gate below the marker of a gated sheet (D9). The composer preference decides
- * per page which composer surface the skin repaints, so the gate is one
- * attribute on `<body>` stamped onto the scope compound of every rule below
- * the marker; a gated sheet without the marker, or with no rule below it,
- * fails the build.
+ * Parse one stylesheet and check every rule.
  *
  * @param read - collects the skin attributes the sheet's selectors read, each with where.
  * @param keyframes - signature → where, across the sheets, for the repeat check (D9).
@@ -302,15 +292,6 @@ function processSheet(sheet, text, gates, names, read, parts, relations, keyfram
   const root = postcss.parse(text, { from: label })
   const surface = sheet.scope === 'surface'
   const scopeAttribute = surface ? SURFACE_SCOPE_ATTRIBUTE : SCOPE_ATTRIBUTE
-  // The composer gate is an attribute of the theme's own scope, which a surface sheet outlives.
-  if (surface && sheet.gate === true) throw new Error(`build: ${label} is a surface sheet and cannot be composer-gated`)
-  let markerEnd = null
-  if (sheet.gate === true) {
-    const marker = root.nodes.find((node) => node.type === 'comment' && node.text === COMPOSER_GATE_MARKER)
-    if (marker === undefined) throw new Error(`build: ${label} is missing the /* ${COMPOSER_GATE_MARKER} */ marker`)
-    markerEnd = marker.source.end.offset
-  }
-  let stamped = 0
   root.walkRules((rule) => {
     if (rule.parent.type === 'atrule' && /keyframes$/i.test(rule.parent.name)) return
     const where = `${label}:${rule.source.start.line}`
@@ -323,24 +304,17 @@ function processSheet(sheet, text, gates, names, read, parts, relations, keyfram
       if (attribute.attribute !== PART_ATTRIBUTE || attribute.operator !== '~=') return
       if (typeof attribute.value === 'string' && !parts.has(attribute.value)) parts.set(attribute.value, where)
     })
-    const stamp = markerEnd !== null && rule.source.start.offset > markerEnd
     for (const selector of selectors.nodes) {
       const scopes = scopeCompounds(selector, scopeAttribute)
       if (scopes.length === 0) throw new Error(`build: ${where} selector "${selector.toString().trim()}" is not under ${SCOPE_TAG}[${scopeAttribute}]`)
       checkHasPlacement(where, selector)
       checkHasMarks(where, selector)
-      if (!stamp) continue
-      for (const { attribute } of scopes) attribute.parent.insertAfter(attribute, selectorParser.attribute({ attribute: gates.composer }))
     }
     checkTokenGates(label, rule, selectors.nodes, gates, names)
     checkMotionLiterals(sheet, label, rule)
     checkLayerLiterals(sheet, label, rule)
-    if (!stamp) return
-    rule.selector = selectors.toString()
-    stamped += 1
   })
   collectKeyframes(label, root, keyframes)
-  if (markerEnd !== null && stamped === 0) throw new Error(`build: ${label} has no rules below /* ${COMPOSER_GATE_MARKER} */`)
   return root.toString()
 }
 
@@ -474,17 +448,16 @@ function checkHolds(relations) {
 /**
  * Every sheet in cascade order, checked, gated and joined.
  *
- * @param options.sheets - `{ file, rank, gate?, scope? }` or `{ generated, rank }` in cascade order (TOKEN_SHEET generated).
+ * @param options.sheets - `{ file, rank, scope? }` in cascade order (TOKEN_SHEET generated).
  * @param options.srcDir - the source directory.
  * @param options.sources - the browser half on its syntax tree (scripts/source-tree.mjs).
  * @param options.tokenDoc - packages/client/src/theme/tokens.json (loadTokens).
- * @param options.gates - `{ composer, palette: { attribute, ids, host }, typeface: { attribute, claude, host } }`.
+ * @param options.gates - `{ palette: { attribute, ids, host }, typeface: { attribute, claude, host } }`.
  * @param options.images - brand mark name → its address, for the token sheet.
- * @param options.featureConstants - what the generated feature sheets are written from (scripts/feature-sheets.mjs).
  * @returns `{ main, surface }`: the theme's sheet and the surface sheets (D74),
  *     each minified once every check has read every sheet.
  */
-export function buildStylesheet({ sheets, srcDir, sources, tokenDoc, gates, images, featureConstants }) {
+export function buildStylesheet({ sheets, srcDir, sources, tokenDoc, gates, images }) {
   const names = { skin: new Set(), host: new Set() }
   const read = new Map()
   const parts = new Map()
@@ -493,9 +466,7 @@ export function buildStylesheet({ sheets, srcDir, sources, tokenDoc, gates, imag
   const processed = sheets.map((sheet) => {
     const source = sheet.file === TOKEN_SHEET
       ? tokenSheet(tokenDoc, gates, images, SCOPE)
-      : sheet.generated !== undefined
-        ? featureSheet(sheet.generated, featureConstants)
-        : fs.readFileSync(path.join(srcDir, sheet.file), 'utf8').replace(/\r\n/g, '\n')
+      : fs.readFileSync(path.join(srcDir, sheet.file), 'utf8').replace(/\r\n/g, '\n')
     return { sheet, text: processSheet(sheet, source, gates, names, read, parts, relations, keyframes).replace(/\n+$/, '') }
   })
   const joined = (surface) => processed.filter((item) => (item.sheet.scope === 'surface') === surface).map((item) => item.text).join('\n\n')

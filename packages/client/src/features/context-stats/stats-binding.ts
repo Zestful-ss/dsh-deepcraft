@@ -180,7 +180,7 @@ export function createContextStatsBinding() {
    * viewport, which for a trigger at the composer's right end parks the
    * panel against the window's right margin, past the ring. The skin reads
    * the two boxes and hands the stylesheet one left value
-   * (features/composer/inline-bar.css), the hand-over the hero menu makes
+   * (context-stats.css), the hand-over the hero menu makes
    * for the menu the host places below its own trigger. The property and
    * the mark are written together, so the rule never runs on a reading
    * that has gone.

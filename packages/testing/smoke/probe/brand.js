@@ -54,7 +54,6 @@
           avatar: avatar === null ? null : getComputedStyle(avatar).backgroundImage,
           accent: body.getPropertyValue('--dsw-alias-brand-primary').trim(),
           accentInk: body.getPropertyValue('--dsw-alias-label-primary-foreground').trim(),
-          dataInk: body.getPropertyValue('--dsh-deepcraft-data-ink').trim(),
           wave: body.getPropertyValue('--dsh-deepcraft-ripple-wave').trim(),
           buttonFill: primaryBtn === null ? '' : getComputedStyle(primaryBtn).backgroundColor,
         }

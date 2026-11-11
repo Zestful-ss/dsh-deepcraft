@@ -76,12 +76,3 @@ body[data-dsh-deepcraft] .dsh-deepcraft-petdex-hit {
   touch-action: none;
 }
 
-/* Under the floating page look the card is rounded, so a Petdex pet steps in by
-   the corner's own 20px. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] :is([data-dsh-deepcraft-petdex-anchor="stack"], [data-dsh-deepcraft-petdex-anchor="panel"]) > .dsh-deepcraft-petdex {
-  right: calc(var(--dsh-deepcraft-petdex-edge, 0px) + 20px);
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-petdex-anchor="card"] > .dsh-deepcraft-petdex {
-  right: 20px;
-}

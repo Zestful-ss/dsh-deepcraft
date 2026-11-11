@@ -20,9 +20,6 @@ export const STYLE_ID = 'dsh-deepcraft-style'
 /** The surface sheets' own element, which stays while ds-bot's surface has the page (D74). */
 export const SURFACE_STYLE_ID = 'dsh-deepcraft-surface'
 
-/** The visual class used when a live control is copied into a non-interactive snapshot. */
-export const STATIC_COPY_ATTR = 'data-dsh-deepcraft-static-copy'
-
 /**
  * Settings identity.
  *
@@ -86,10 +83,7 @@ export const MASCOT_ATTR = 'data-dsh-deepcraft-mascot'
 /** The mascot "follow the theme" resolves to: the reader's one Petdex package, shared by both places. */
 export const MASCOT_PETDEX = 'petdex'
 export const SEARCH_STYLE_ATTR = 'data-dsh-deepcraft-search-style'
-export const SIDEBAR_LAYOUT_ATTR = 'data-dsh-deepcraft-sidebar-layout'
 export const STATS_POSITION_ATTR = 'data-dsh-deepcraft-stats-position'
-/** The conversation arrangement selected by the reader. */
-export const CHAT_STYLE_ATTR = 'data-dsh-deepcraft-chat-style'
 /**
  * Present while the ported chat-area follow is installed
  * (packages/client/src/features/chat-follow/). The rules hanging off it are that
@@ -161,30 +155,6 @@ export const CHAT_ROLLING_ATTR = 'data-dsh-deepcraft-rolling'
 export const CHAT_FOLD_ATTR = 'data-dsh-deepcraft-chat-fold'
 /** Present while the skin takes over the sidebar footer (settings area + account row). */
 export const FOOTER_ATTR = 'data-dsh-deepcraft-footer-takeover'
-/** Present while the composer restyle applies to the page currently shown. */
-export const COMPOSER_ATTR = 'data-dsh-deepcraft-composer-active'
-/**
- * Present while the composer restyle applies and a conversation tab other
- * than the chat is up: the composer is chat-view-only, so the stylesheet
- * drops the whole bottom area (packages/client/src/features/composer/composer.ts).
- */
-export const COMPOSER_HIDDEN_ATTR = 'data-dsh-deepcraft-composer-hidden'
-/**
- * Present while a mobile remote plugin's portrait layer owns the page
- * (packages/contracts/src/dom.ts, MOBILE_PORTRAIT_SELECTOR). That layer floats the
- * composer's controls with transforms of its own, and the skin's placement of
- * the send and stop buttons stands aside from them under this mark
- * (packages/client/src/features/composer/inline.css).
- */
-export const MOBILE_PORTRAIT_ATTR = 'data-dsh-deepcraft-mobile-portrait'
-/**
- * Present while the permission control is installed. The composer restyle
- * hides the host's access-mode button because this feature replaces it,
- * and that rule also requires this attribute: a permission control that is
- * switched off hands the button back while the rest of the composer
- * restyle keeps running.
- */
-export const PERMISSIONS_ATTR = 'data-dsh-deepcraft-permissions'
 /**
  * Present while the context statistics are installed
  * (packages/client/src/features/context-stats/context-stats.ts). The host's two stat
@@ -224,23 +194,6 @@ export const ACCOUNT_ARMED_ATTR = 'data-dsh-deepcraft-account-armed'
  */
 export const ACCOUNT_READY_ATTR = 'data-dsh-deepcraft-account-ready'
 /**
- * Stamped on the host's shared menu card while it is the hero row's picker
- * (the workspace chip or the agent-preset seat opened it). The host portals
- * that card to <body> with no marker of its own, so the stylesheet cannot
- * tell it from the host's other menus; packages/client/src/features/hero-menu/hero-menu.ts stamps it
- * and features/hero-menu/hero-menu.css switches on this attribute.
- */
-export const HERO_MENU_ATTR = 'data-dsh-deepcraft-hero-menu'
-/**
- * Present while the browser window does NOT hold focus.
- *
- * The window's focus state is the only thing that separates the two text
- * selection paints (gray on black unfocused, blue on white focused), and no
- * selector can read it — so packages/client/src/features/composer/selection-mirror.ts mirrors it onto the
- * document and the stylesheet switches on this attribute.
- */
-export const WINDOW_BLUR_ATTR = 'data-dsh-deepcraft-window-blur'
-/**
  * The handoff marker: stamped on `body` while this build is live AND able
  * to give the page back (D74). Its presence is a capability another
  * package can read without running anything: a skin that lists this theme
@@ -261,55 +214,10 @@ export const SKIN_STAMP_ATTR = 'data-dsh-skin'
  */
 export const SETTINGS_SCROLLER_ATTR = 'data-dsh-deepcraft-settings-scroller'
 /**
- * Which home layout is in force. The stylesheet branches on it, and the two
- * layouts differ only in arrangement — the hero's own markup is the host's
- * either way, so the switch is one attribute plus the panel registration.
- */
-export const HOME_LAYOUT_ATTR = 'data-dsh-deepcraft-home-layout'
-/**
- * Present while the studio layout owns the page shown: the studio layout is
- * in force and the page is the new-conversation hero. Every studio rule keys
- * on it, so the host's hero-phase marker is read once per pass in JS rather
- * than repeated across the stylesheet.
- */
-export const HOME_HERO_ATTR = 'data-dsh-deepcraft-home-hero'
-/**
- * Present on the hero root while the float layout owns the page shown: the
- * floating deck's rules hang off it, so a page in another layout carries no
- * trace of the deck.
- */
-export const HOME_FLOAT_HERO_ATTR = 'data-dsh-deepcraft-home-float'
-/**
- * Which page look is in force. The stylesheet branches on it: `float` lifts
- * the conversation column, the controls and the home deck off a warm frame,
- * while `flat` leaves every box in the host's own arrangement.
- */
-export const PAGE_LOOK_ATTR = 'data-dsh-deepcraft-page-look'
-/**
  * On a user message's bubble (features/chat-fold/message-fold.ts): the
- * floating page look rounds it into a speech shape whose tail corner alone
- * stays tight.
+ * bubble's speech shape rounds every corner but the tail's.
  */
 export const USER_BUBBLE_ATTR = 'data-dsh-deepcraft-user-bubble'
-/**
- * The heat grid's ramp: how much of the heat ink each level paints, in
- * percent, faintest first. Its length is the number of levels a day's tokens
- * are bucketed into (features/home/data.ts); the build writes one rule per
- * level from it (scripts/feature-sheets.mjs). Not even steps: the low levels
- * stay apart from each other and from the empty cell.
- */
-export const HOME_HEAT_RAMP = [20, 40, 65, 100] as const
-/**
- * How the right sidebar's docked panels are drawn: `card` floats each one 8px
- * inside the column with a hairline, a 16px radius and the host's elevation
- * (packages/client/src/theme/chrome.css), while `flush` fills the column and
- * hugs its edges. The choice rides <body> as DOCK_LOOK_ATTR, and every rule
- * that draws a card is gated on the `card` value, so the flush state is the
- * host's own panel look.
- */
-export const DOCK_LOOK_CARD = 'card'
-export const DOCK_LOOK_FLUSH = 'flush'
-export const DOCK_LOOK_ATTR = 'data-dsh-deepcraft-dock-look'
 
 /**
  * The host half's private routes, under this half's own names. The paths are
@@ -322,7 +230,6 @@ export {
   BRAND_WORDMARK_PATH as BRAND_WORDMARK_ROUTE,
   HDSL_PATH as HDSL_ROUTE,
   HDSL_SKIN_PATH as HDSL_SKIN_ROUTE,
-  PEAKRATE_PATH as PEAKRATE_ROUTE,
   PETS_ENSURE_PATH as PETS_ENSURE_ROUTE,
   PETS_IMAGE_PATH as PETS_IMAGE_ROUTE,
   PETS_IMPORT_PATH as PETS_IMPORT_ROUTE,

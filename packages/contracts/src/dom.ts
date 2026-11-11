@@ -79,8 +79,6 @@ export const WORKSPACE_SECTION_LABEL_SELECTOR = '[data-dsh-deepcraft-part~="sect
 export const WORKSPACE_LIST_AREA_SELECTOR = '[data-dsh-deepcraft-part~="list-area"]'
 /** The workspace tree's rows: the host's own row key, or either row part. */
 export const WORKSPACE_TREE_ROW_SELECTOR = '[data-row-key], [data-dsh-deepcraft-part~="session-row"], [data-dsh-deepcraft-part~="project-row"]'
-/** The draft's own scroll area inside that card. */
-export const COMPOSER_SCROLL_SELECTOR = '[data-input-scroll]'
 /** The echo bubble the host mounts the moment a submission goes through. */
 export const SUBMISSION_ECHO_SELECTOR = '[data-submission-echo]'
 /** The host puts this on every process group. */
@@ -176,8 +174,6 @@ export const CONVERSATION_SESSION_ATTRIBUTE = 'data-conversation-session'
 export const PHASE_ATTRIBUTE = 'data-phase'
 /** The composer card and the stack of cards above it. */
 export const COMPOSER_STACK_SELECTOR = '[data-dsh-deepcraft-part~="composer-stack"]'
-/** The placeholder the host's own editor draws inside the draft. */
-export const COMPOSER_PLACEHOLDER_SELECTOR = '[data-composer-placeholder]'
 /**
  * The statistics in the composer stack. Both markers are read (D3), because an
  * older host build writes only the container; the context panel repeats the
@@ -186,35 +182,11 @@ export const COMPOSER_PLACEHOLDER_SELECTOR = '[data-composer-placeholder]'
 export const COMPOSER_STATS_SELECTOR = '[data-composer-stats]'
 export const COMPOSER_STAT_SELECTOR = '[data-composer-stat]'
 /**
- * The statistics strip a mobile plugin draws in the same band as the host's dock
- * (dsh-pocket marks its own strip `data-mobile-nav="stats"`). It is not the
- * host's, so no rule in this package hides it: the composer pass measures it and
- * lifts the dock's line above the band it took.
- */
-export const MOBILE_STATS_SELECTOR = '[data-mobile-nav="stats"]'
-/**
- * The portrait adaptation a mobile remote plugin applies to the desktop GUI
- * (dsh-remote-web-ui marks the body `dsh-remote-portrait`). Not the host's
- * either: its rules float the composer's controls with transforms of their
- * own, so the composer pass reads this mark and hands it to the stylesheet as
- * the skin's own attribute, and the phone rules that place those controls
- * stand aside from it.
- */
-export const MOBILE_PORTRAIT_SELECTOR = 'body.dsh-remote-portrait'
-/**
  * The filled arc of the context meter: the circle the host gives a dash array
  * (its track circle carries none). The skin paints it with the colour the
  * occupancy fell on
  */
 export const CONTEXT_METER_FILL_SELECTOR = '[data-dsh-deepcraft-context-meter] circle[stroke-dasharray]'
-/** The composer variant the host puts on the card (`hero` / `default`). */
-export const COMPOSER_VARIANT_ATTRIBUTE = 'data-composer-variant'
-/**
- * The host's own access-mode trigger inside its permission slot, skipping the
- * skin's own control: the skin's elements carry the `dsh-deepcraft-` namespace as
- * whole class tokens, so no substring match is involved (D3).
- */
-export const PERMISSION_TRIGGER_SELECTOR = '[data-slot="conversation.input.permission"] button:not([class^="dsh-deepcraft-"], [class*=" dsh-deepcraft-"])'
 /** A host button that opens a dialog: the model and effort pickers in the composer stack. */
 export const DIALOG_TRIGGER_SELECTOR = 'button[aria-haspopup="dialog"]'
 /** The sidebar footer block; the skin's account entry lives inside it. */
@@ -257,8 +229,6 @@ export const ACCOUNT_TRIGGER_SELECTOR = '[aria-haspopup="menu"][data-signed-out]
 export const SETTINGS_BUTTON_SELECTOR = '[data-dsh-deepcraft-part~="settings-area"] button[aria-haspopup="menu"][data-signed-out], ' +
   '[data-dsh-deepcraft-part~="settings-area"] [data-slot="settings.launcher"] button[aria-haspopup="dialog"], ' +
   '[data-dsh-deepcraft-part~="settings-area"] > button[aria-haspopup="dialog"]'
-/** A slot anchor; its children are the host's real entries. */
-export const SLOT_ANCHOR_SELECTOR = '[data-slot]'
 /**
  * The three slot anchors the skin's part walk reads as regions (D3): each names
  * a host subtree the skin restyles, and the walk enters a region where its

@@ -21,7 +21,7 @@
 'use strict'
 const { bound } = require('./bounds.cjs')
 
-/** The host's own classes this scenario reads, the seat the skin keeps out of the row, and the skin's own control, which the rail has no heading to lay over. */
+/** The host's own classes this scenario reads, and the seat the skin keeps out of the row. */
 const RAIL = {
   frame: '[data-dsh-deepcraft-part~="layout-frame"]',
   column: '[data-dsh-deepcraft-part~="sidebar-column"]',
@@ -30,7 +30,6 @@ const RAIL = {
   glyph: '[data-dsh-deepcraft-part~="panel-glyph"]',
   newSession: 'button[data-dsh-deepcraft-part~="new-session"]',
   seat: '[data-dsh-deepcraft-part~="new-session-mask"]',
-  segments: '.dsh-deepcraft-ws-segments',
 }
 
 /** How far a control's centre may stand from the column's own line and still read as on it. */
@@ -110,7 +109,6 @@ const readRail = (page) => page.evaluate((rail) => {
     toggle: box(column === null ? null : column.querySelector(rail.toggle)),
     glyphs: [...document.querySelectorAll(`${rail.panelRow} ${rail.glyph}`)].map(box).filter((entry) => entry !== null),
     column: box(column),
-    segments: box(document.querySelector(rail.segments)),
   }
 }, RAIL)
 
@@ -124,17 +122,10 @@ function onTheLine(rail) {
 }
 
 function sidebarRailScenario({ check }) {
-  /**
-   * How many of the skin's workspace controls stand in the sidebar while it is
-   * still wide. The rail's reading means something only beside it: a check that
-   * finds no control passes on a page where none was ever built.
-   */
-  let wideSegments = 0
   return {
     script: 'greeting',
     prompt: 'hello there',
     async beforeSend({ page }) {
-      wideSegments = await page.evaluate((rail) => document.querySelectorAll(rail.segments).length, RAIL)
       await collapseRail(page)
     },
     async assert({ page, session }) {
@@ -160,11 +151,6 @@ function sidebarRailScenario({ check }) {
             rail.chipCentre - rail.chipWidth / 2 >= rail.column.left &&
             rail.chipCentre + rail.chipWidth / 2 <= rail.column.right,
           JSON.stringify(rail === null ? null : { column: rail.column, chipCentre: rail.chipCentre, chipWidth: rail.chipWidth })),
-        check('展开时侧栏里有一件皮肤自己的两档控件',
-          wideSegments > 0, JSON.stringify({ wide: wideSegments })),
-        check('收起成图标栏后这件控件整件离开页面，宿主自己的分区按钮不再被它压住',
-          rail !== null && rail.segments === null,
-          JSON.stringify(rail === null ? null : { segments: rail.segments })),
         check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
       ]
     },

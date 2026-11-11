@@ -1,0 +1,334 @@
+/* ---------- the session statistics' values ---------- */
+/* The colour band a reading takes (stats-ramp.ts): the band is semantic, so
+   its values are the skin's own and not the host's tokens. Each tone keeps its
+   hue and lightness at about three fifths of its hue's chroma, so the band
+   stays with the skin's palette. Declared on the document so every surface —
+   the meter's ring, its pie, the inline figures — mixes from the same stops. */
+body[data-dsh-deepcraft] {
+  --dsh-deepcraft-tone-red: #d5746a;
+  --dsh-deepcraft-tone-red-orange: #d38469;
+  --dsh-deepcraft-tone-orange: #cb936c;
+  --dsh-deepcraft-tone-yellow: #c09f66;
+  --dsh-deepcraft-tone-lime: #b0c988;
+  --dsh-deepcraft-tone-green-light: #a2dda4;
+  --dsh-deepcraft-tone-green: #6faf73;
+  /* The plate the meter's pie has not taken (context-meter-pie.ts): the quiet
+     end of the same band, in the label ink so it follows whoever paints the
+     host's neutrals. */
+  --dsh-deepcraft-pie-rest: color-mix(in srgb, var(--dsw-alias-label-primary) 18%, transparent);
+}
+
+body[data-dsh-deepcraft]:not([data-ds-dark-theme]) {
+  --dsh-deepcraft-tone-red: #af514d;
+  --dsh-deepcraft-tone-red-orange: #af6045;
+  --dsh-deepcraft-tone-orange: #af784e;
+  --dsh-deepcraft-tone-yellow: #8b6d42;
+  --dsh-deepcraft-tone-lime: #779756;
+  --dsh-deepcraft-tone-green-light: #6da173;
+  --dsh-deepcraft-tone-green: #46784e;
+  --dsh-deepcraft-pie-rest: color-mix(in srgb, var(--dsw-alias-label-primary) 14%, transparent);
+}
+
+/* ---------- the host's stats row: hidden, its numbers moved elsewhere ---------- */
+/* The host ships two figures here (turns and steps · tok/s, total tokens ·
+   cache hits) with its own icons and spacing; it marks each figure since its
+   2026-09 update and marked the container around them before, so both marks
+   are hidden. The row STAYS in the document: its structure still tells the
+   detailed form from the compact one, and the session's numbers are read from
+   the host's projections (session-stats.ts) into whichever surface the
+   position names — the context popover, or the line of their own below. */
+body[data-dsh-deepcraft] [data-composer-stats],
+body[data-dsh-deepcraft] [data-composer-stat] {
+  display: none;
+}
+
+/* ---------- one type for the composer's bottom line ---------- */
+/* The ring and the hidden stats row brought their own type: the stats
+   12px/400 tertiary, the ring the host's secondary content size. They share
+   one line now, so they read as one family — same face, same size, same
+   weight, same tone. The ring's trigger is targeted explicitly because the
+   host sets its own colour and size on that button. */
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter],
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter] button,
+body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="composer-stack"] [data-composer-stats] {
+  font-family: var(--dsw-font-family);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: normal;
+  color: var(--dsw-alias-label-secondary);
+}
+
+/* The host renders two separate stat dialogs; hide them — their numbers are
+   read into the context popover instead — for as long as the context
+   statistics, which own that read, are installed. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-session-stats] [role="dialog"][data-dsh-deepcraft-holds~="host-stats"] {
+  display: none !important;
+}
+
+/* ---------- session statistics inside the context popover ---------- */
+/* Skin-owned nodes appended to the host's own panel (session-stats.ts): the
+   host's context rows above, the session's numbers below, one hairline
+   between them.
+
+   The panel itself is the host's, and the host mounts it with no entrance of
+   its own. The feature stamps the panel, and it takes the cards' own short
+   rise (the shared keyframe), so hovering either control opens the same way. */
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-panel] {
+  animation: dsh-deepcraft-surface-in var(--dsh-deepcraft-timing-surface);
+}
+/* The host places the panel from the anchor's LEFT edge and only then clamps
+   it into the viewport, which at the end of the composer row parks it against
+   the window's right margin, past the ring. stats-binding.ts reads the two
+   boxes and writes the left value that lines the panel's right edge up with
+   the meter's. The mark is written together with the value, so this
+   declaration never runs on a reading that has gone. */
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-panel][data-dsh-deepcraft-context-aligned] {
+  left: var(--dsh-deepcraft-context-panel-left) !important;
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--dsh-deepcraft-edge-soft, rgba(0, 0, 0, 0.08));
+  min-width: 0;
+  font-family: var(--dsw-font-family);
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 10px;
+  min-width: 0;
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-section {
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-label {
+  color: var(--dsw-alias-label-tertiary);
+  font-size: 12px;
+  line-height: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-value {
+  color: var(--dsw-alias-label-primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- the numbers on a line of their own under the card ---------- */
+/* The `inline` position: the host's row stays hidden and this line takes its
+   place beside the meter the host draws at that line's end, which is where
+   the host's own row sat. The figures are the host's words and the host's
+   numbers (inline-stats.ts), with none of the host's glyphs.
+
+   Nothing here squeezes: a figure keeps the width its characters need
+   (`flex: none`), so a line with more figures than the card holds is
+   shortened by that writer's own ladder instead of drawing its figures over
+   one another and over the meter's reading. The line and the conversation
+   share one scroller: a figure the card cannot hold is clipped here rather
+   than painted past the composer's bottom edge. The figures stand apart by
+   this gap alone: no separator glyph sits between them, so the gap carries
+   what the glyph used to. The line is the button that opens the panel holding
+   the same session's rows (stats-binding.ts), and the shared focus ring marks
+   it where the reader tabs to it. */
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-stats {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  overflow: clip;
+  color: var(--dsw-alias-label-secondary);
+  font-family: var(--dsw-font-family);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  cursor: pointer;
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-seg,
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-figure {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex: none;
+}
+/* A segment the session has no figure for yet, or one the ladder has given
+   up: hidden rather than drawn empty. Named with the line in front of it so
+   it outranks the display above. */
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-stats .dsh-deepcraft-inline-seg[hidden] {
+  display: none;
+}
+/* The line's measuring twin: laid out beside the line for one reading and
+   taken off before anything paints. Out of flow, so the dock keeps its
+   layout. */
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-stats[data-dsh-deepcraft-inline-probe] {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-arrow {
+  color: var(--dsw-alias-label-tertiary);
+}
+/* The ladder's third step: the meter keeps its ring and gives up the number
+   beside it (inline-stats.ts). That number is the trigger's height — the bare
+   ring is shorter — and the trigger is the tallest thing on the composer's
+   bottom line: a trigger that loses its line here moves every message, so the
+   step gives up the number's width alone and the trigger keeps the one 20px
+   line the type above sets inside the host's own 1px padding. */
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter][data-dsh-deepcraft-meter-tight] button {
+  min-height: 22px;
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter][data-dsh-deepcraft-meter-tight] button > span {
+  display: none;
+}
+
+/* ---------- the line's figures ---------- */
+/* A figure is its words laid out in a row, on the line's baseline
+   (inline-stats.ts builds one). */
+body[data-dsh-deepcraft] .dsh-deepcraft-digit-group {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+/* ---------- the colour band a reading takes ---------- */
+/* After dsh-chat-ux's design: one band of seven tones, a reading placed
+   between two of them and the browser mixing the two in OKLCH (stats-ramp.ts
+   names the segment and where inside it the reading sits). */
+/* The cache share: red below 90%, orange, yellow and lime through the
+   nineties, dark green from 99% on. */
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="low"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-red);
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="0"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-red);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-orange);
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="1"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-orange);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-yellow);
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="2"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-yellow);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-lime);
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="3"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-lime);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-green-light);
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="4"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-green-light);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-green);
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="cache"][data-dsh-deepcraft-ramp-span="high"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-green);
+}
+/* The context occupancy: green below 40%, through light green, yellow and
+   orange, to red from 80% on. */
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="low"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-green);
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="0"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-green);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-green-light);
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="1"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-green-light);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-yellow);
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="2"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-yellow);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-orange);
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="3"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-orange);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-red-orange);
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="4"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-red-orange);
+  --dsh-deepcraft-ramp-to: var(--dsh-deepcraft-tone-red);
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-ramp="context"][data-dsh-deepcraft-ramp-span="high"] {
+  --dsh-deepcraft-ramp-from: var(--dsh-deepcraft-tone-red);
+}
+/* The reading takes the mixed colour, the ring the same two ends while it
+   stands in for a reading that could not be taken, and the pie samples the
+   reading's own colour, so the three can never disagree. The cache share's
+   band is written on the segment its figure and percent sign stand in, and
+   reaches those two alone: the label before them keeps the line's tone. */
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-stats [data-dsh-deepcraft-ramp="cache"] {
+  --dsh-deepcraft-ramp-ink: color-mix(in oklch, var(--dsh-deepcraft-ramp-from), var(--dsh-deepcraft-ramp-to, var(--dsh-deepcraft-ramp-from)) var(--dsh-deepcraft-ramp-position, 0%));
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-stats [data-dsh-deepcraft-ramp="cache"] > .dsh-deepcraft-digit-group,
+body[data-dsh-deepcraft] .dsh-deepcraft-inline-stats [data-dsh-deepcraft-ramp="cache"] > .dsh-deepcraft-inline-tail {
+  color: var(--dsh-deepcraft-ramp-ink);
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter][data-dsh-deepcraft-ramp="context"] button > span {
+  color: color-mix(in oklch, var(--dsh-deepcraft-ramp-from), var(--dsh-deepcraft-ramp-to, var(--dsh-deepcraft-ramp-from)) var(--dsh-deepcraft-ramp-position, 0%));
+}
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter][data-dsh-deepcraft-ramp="context"] circle[stroke-dasharray] {
+  stroke: color-mix(in oklch, var(--dsh-deepcraft-ramp-from), var(--dsh-deepcraft-ramp-to, var(--dsh-deepcraft-ramp-from)) var(--dsh-deepcraft-ramp-position, 0%));
+}
+
+/* ---------- the meter's pie ---------- */
+/* The reading drawn as a pie (context-meter-pie.ts): the host's ring keeps
+   its cell — the trigger's own layout and the room the row keeps for it stay
+   the host's — while the pie is the trigger's background image. Nothing is
+   drawn until the browser half has painted one, so a reading it cannot take
+   leaves the ring the host drew. */
+body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter][data-dsh-deepcraft-meter-pie] button > svg {
+  visibility: hidden;
+}
+
+/* ---------- the block while the numbers are still on their way ---------- */
+/* The two sections at the size the numbers will take, drawn as bars under the
+   real headings: a row keeps a real row's 37px (16 + 1 + 20), so the panel
+   opens at its final height and nothing grows under the pointer. It shows
+   only while the session's projections have answered nothing AND within the
+   short deadline the feature allows — a host that serves no such projection
+   falls back to the panel the host drew, rather than keeping placeholder
+   bars. */
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats[data-dsh-deepcraft-context-skeleton] .dsh-deepcraft-context-stats-item {
+  min-height: 37px !important;
+  justify-content: center !important;
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-skeleton-label,
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-skeleton-value {
+  display: block !important;
+  border-radius: 3px !important;
+  background: var(--dsw-alias-interactive-bg-hover-solid, rgba(0, 0, 0, 0.06)) !important;
+  animation: dsh-deepcraft-pulse var(--dsh-deepcraft-period-pulse) var(--dsh-deepcraft-ease-in-out) infinite !important;
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-skeleton-label {
+  width: 68% !important;
+  height: 12px !important;
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-context-stats-skeleton-value {
+  width: 46% !important;
+  height: 14px !important;
+}
+
+/* ---------- a phone-width composer ---------- */
+/* The card is narrower than the sums the desktop reserves for it. The context
+   meter keeps the ring that carries the reading, the number beside it being
+   what does not fit — the numbers stand on their own line under the card, so
+   the ring repeats none of them in either position. */
+@media (max-width: 480px) {
+  body[data-dsh-deepcraft] [data-dsh-deepcraft-context-meter] button > span {
+    display: none;
+  }
+}

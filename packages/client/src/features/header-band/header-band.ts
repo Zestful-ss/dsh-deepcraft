@@ -12,7 +12,6 @@ import { observeMatches, observeSize } from '@dsh-deepcraft/engine/bus'
 import { desktopBand } from '@dsh-deepcraft/engine/desktop-band'
 import { findRightbarToggle, findWindowsMenu, registerSlotEntry } from '@dsh-deepcraft/engine/host'
 import { createStamp, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
-import { PAGE_LOOK_ATTR, PAGE_LOOK_FLOAT } from '../../constants'
 import type { FeatureUi } from '../../core/feature'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type manifest from './header-band.manifest'
@@ -206,15 +205,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     return box.width === 0 && box.height === 0 ? null : box
   }
 
-  /** The floating card's clipping edge, in page pixels. */
-  function floatingCardTop(element: HTMLElement) {
-    if (document.body.getAttribute(PAGE_LOOK_ATTR) !== PAGE_LOOK_FLOAT || document.body.hasAttribute('data-we-wallpaper')) return -Infinity
-    const card = element.closest<HTMLElement>('[data-dsh-deepcraft-part~="center-column"]')
-    if (card === null) return -Infinity
-    const box = rect(card)
-    return box === null ? -Infinity : box.top + card.clientTop
-  }
-
   /**
    * The caption strip's own sizes, in the pixels the placement numbers are read
    * in.
@@ -314,7 +304,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       corner,
       stripEl,
       rowBox: rect(row),
-      clipTop: floatingCardTop(row),
+      clipTop: -Infinity,
       stripBox: rect(stripEl),
       menuBox: rect(findWindowsMenu()),
       utilitiesBox: rect(utilities),
@@ -388,7 +378,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const liftTitle = title !== null && room >= MIN_TITLE
     // The title is not in the caption row on the first pass, so its destination
     // is calculated. Undo the current offset before computing the next rise.
-    // The controls stay inside the floating card, with air above their row.
     const titleHeight = titleBox === null ? 0 : titleBox.height
     const titleCentre = band.height / 2 + TITLE_NUDGE
     const applied = rowStamp.current() === row ? parseFloat(row.style.getPropertyValue(ROW_LIFT)) : 0

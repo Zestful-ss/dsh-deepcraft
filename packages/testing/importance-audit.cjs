@@ -66,15 +66,14 @@ const READABLE_PSEUDO = new Set(['::before', '::after', '::marker', '::placehold
  * happened to catch the element called the weight removable and the next run,
  * which did not, called it unmatched. Each entry is a contract, not a
  * convenience: the skin's own marks that go on and come off within one
- * animation (`fold-motion.css`'s rolling door, `inline.css`'s active-composer
- * controls, the wait badge's leave, the reveal of a panel, the
- * reasoning window whose markdown variant the walk's turn sometimes carries), a
- * state a pointer holds (a dragged effort knob, a file row swapping its
- * operation), and the host's own mark for a theme transition. The hover walk
- * still covers the rules whose own trigger it can point at.
+ * animation (the rolling door, the wait badge's leave, the reveal of a panel,
+ * the reasoning window whose markdown variant the walk's turn sometimes
+ * carries), a state a pointer holds (a file row swapping its operation), and
+ * the host's own mark for a theme transition. The hover walk still covers the
+ * rules whose own trigger it can point at.
  */
 const TRANSIENT_SELECTORS = [
-  '[data-dsh-deepcraft-rolling]', '[data-dsh-deepcraft-composer-active]',
+  '[data-dsh-deepcraft-rolling]',
   '[data-dsh-deepcraft-revealing]', '[data-dsh-deepcraft-page-enter]', '[data-dsh-deepcraft-page-leave]',
   '[data-dsh-deepcraft-search-closing]', '[data-dsh-deepcraft-turn-nav-landed]',
   '[data-dsh-deepcraft-follow-tail]', '[data-dsh-deepcraft-follow-hold]',

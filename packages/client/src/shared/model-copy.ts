@@ -1,6 +1,18 @@
-import { MODEL_COPY_FALLBACK_LOCALE, MODEL_COPY_ROUTE } from './copy-fallbacks'
 import { createHostResource } from '@dsh-deepcraft/engine/resource'
 import type { HostAnswer } from '@dsh-deepcraft/engine/resource'
+
+/**
+ * Model & settings localized copy.
+ *
+ * The copy itself is NOT here. It ships as `model-descriptions.json` beside
+ * the bundle, and the browser half fetches it at runtime (the host half
+ * serves it under MODEL_COPY_ROUTE), so the model table grows without a
+ * rebuild and no copy enters the bundle. The language comes from the shell's
+ * own `locale` service — one line per row, in the language the rest of the
+ * UI is in — never two languages stacked.
+ */
+const MODEL_COPY_ROUTE = '/dsh-deepcraft/model-descriptions.json'
+const MODEL_COPY_FALLBACK_LOCALE = 'en'
 
 /** One `{ locale: text }` pair of the copy document. */
 export type CopyPair = Record<string, string>
@@ -21,12 +33,9 @@ export interface ModelCopyIndex {
 }
 
 /**
- * Model & settings localized copy.
- *
- * The copy document ships as `model-descriptions.json` beside the bundle.
- * Both the model picker (packages/client/src/features/model/model-picker.ts) and the settings section
- * (packages/client/src/features/settings/settings.ts) consume this copy, so the state lives in the shared context.
- * where both zones can reach it.
+ * The copy document the host half serves, indexed once. Both the model
+ * surfaces and the settings section (packages/client/src/features/settings/settings.ts)
+ * consume this copy, so the state lives in shared/.
  */
 export let modelCopy: ModelCopyIndex | null = null
 
@@ -63,7 +72,7 @@ function indexModelCopy(doc: HostAnswer): ModelCopyIndex | null {
   // The build validated the document's shape before it shipped (D5); a block
   // that is missing reads as empty.
   const table = <T>(value: unknown) => (value && typeof value === 'object' ? value : {}) as Record<string, T>
-  const brands = table<any>(doc.brands)
+  const brands = table<unknown>(doc.brands)
   const index: ModelCopyIndex = {
     fallback: typeof doc.fallback === 'string' && doc.fallback ? doc.fallback : MODEL_COPY_FALLBACK_LOCALE,
     families: [],
@@ -71,13 +80,14 @@ function indexModelCopy(doc: HostAnswer): ModelCopyIndex | null {
     providerBrands: table(brands.providers),
     brandRules: [],
   }
-  const compile = (rules: any) => {
+  const compile = (rules: unknown) => {
     const out: CopyRule[] = []
-    for (let i = 0; i < (rules || []).length; i++) {
-      const rule = rules[i]
-      if (!rule || typeof rule.match !== 'string') continue
+    const list = Array.isArray(rules) ? rules : []
+    for (let i = 0; i < list.length; i++) {
+      const rule = list[i]
+      if (rule === null || typeof rule !== 'object' || !('match' in rule) || typeof rule.match !== 'string') continue
       // The build compiles every rule before it ships the document.
-      out.push({ re: new RegExp(rule.match, 'i'), text: rule.text })
+      out.push({ re: new RegExp(rule.match, 'i'), text: 'text' in rule ? rule.text as CopyPair | undefined : undefined })
     }
     return out
   }
@@ -86,9 +96,11 @@ function indexModelCopy(doc: HostAnswer): ModelCopyIndex | null {
   // Brand rules carry no copy, only the mark's id; the build has already
   // checked every id against the vendored marks.
   const brandRules: ModelCopyIndex['brandRules'] = []
-  for (let b = 0; b < (brands.models || []).length; b++) {
-    const brandRule = brands.models[b]
-    if (!brandRule || typeof brandRule.match !== 'string' || typeof brandRule.brand !== 'string') continue
+  const models = Array.isArray(brands.models) ? brands.models : []
+  for (let b = 0; b < models.length; b++) {
+    const brandRule = models[b]
+    if (brandRule === null || typeof brandRule !== 'object' || !('match' in brandRule) || !('brand' in brandRule)) continue
+    if (typeof brandRule.match !== 'string' || typeof brandRule.brand !== 'string') continue
     brandRules.push({ re: new RegExp(brandRule.match, 'i'), brand: brandRule.brand })
   }
   index.brandRules = brandRules

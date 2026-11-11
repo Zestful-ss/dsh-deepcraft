@@ -5,7 +5,7 @@ import { setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
  * is placed between two stops and the browser mixes the colour between them in
  * OKLCH, so one reading of a session is one colour out of a continuous band
  * rather than one of a few buckets. The values themselves live in the
- * stylesheet (features/composer/inline-bar.css); this module only says which
+ * stylesheet (context-stats.css); this module only says which
  * segment a reading fell in and where inside it.
  */
 

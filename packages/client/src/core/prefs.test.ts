@@ -1,6 +1,5 @@
 import { expect, test } from 'vitest'
-import { BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, CHAT_ANIMATIONS_OFF, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, MASCOT_PETDEX, PREF_DEFAULTS, PROVIDER_ID_MAX, QUICK_PROVIDERS_MAX, USERNAME_MAX } from '../constants'
-import { MODEL_OFFICIAL_GROUP } from '../features/model/copy-fallbacks'
+import { BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, CHAT_ANIMATIONS_OFF, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, MASCOT_PETDEX, PREF_DEFAULTS, USERNAME_MAX } from '../constants'
 import { resolveMascot } from './prefs'
 import { clampPrefs as normalizePrefs } from '@dsh-deepcraft/contracts/prefs'
 
@@ -23,10 +22,6 @@ test('a choice outside its set reads as its default', () => {
   expect(normalizePrefs({ statusDetail: 'simple' }).statusDetail).toBe(false)
   expect(normalizePrefs({ statusDetail: 'precise' }).statusDetail).toBe(true)
   expect(normalizePrefs({ statusDetail: 'verbose' }).statusDetail).toBe(PREF_DEFAULTS.statusDetail)
-  expect(normalizePrefs({ pageLook: 'flat' }).pageLook).toBe('flat')
-  expect(normalizePrefs({ pageLook: 'invalid' }).pageLook).toBe(PREF_DEFAULTS.pageLook)
-  expect(normalizePrefs({ homeLayout: 'float' }).homeLayout).toBe('float')
-  expect(normalizePrefs({ homeLayout: 'dashboard' }).homeLayout).toBe(PREF_DEFAULTS.homeLayout)
 })
 
 test('the older brand and palette choices land on one independent palette (D80)', () => {
@@ -56,13 +51,6 @@ test('the chat-area animation switch keeps its boolean shape, and a value an ear
   expect(normalizePrefs({ chatAnimations: 7 }).chatAnimations).toBe(PREF_DEFAULTS.chatAnimations)
 })
 
-test('quick providers keep distinct ids in order, without the official group, within both limits', () => {
-  const long = 'x'.repeat(PROVIDER_ID_MAX + 1)
-  expect(normalizePrefs({ quickProviders: ['a', 'b', 'a', '', 3, long, MODEL_OFFICIAL_GROUP, 'c'] }).quickProviders).toEqual(['a', 'b', 'c'])
-  expect(normalizePrefs({ quickProviders: 'a' }).quickProviders).toEqual([])
-  const many = Array.from({ length: QUICK_PROVIDERS_MAX + 5 }, (_, index) => `p${index}`)
-  expect(normalizePrefs({ quickProviders: many }).quickProviders).toHaveLength(QUICK_PROVIDERS_MAX)
-})
 
 test('the username is trimmed and cut to its limit', () => {
   expect(normalizePrefs({ username: '  Ada  ' }).username).toBe('Ada')

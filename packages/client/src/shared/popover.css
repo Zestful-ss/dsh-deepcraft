@@ -60,10 +60,9 @@ body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-popover-card {
   border-color: var(--dsw-alias-border-l1);
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.45);
 }
-/* The host-mounted menu cards of the account footer and the hero row's pickers
-   (features/account, features/hero-menu) take the same raised dark card; the
-   `!important`s outrank the host menu's own rules. */
-body[data-dsh-deepcraft][data-ds-dark-theme] :is([data-dsh-deepcraft-account-menu], [data-dsh-deepcraft-hero-menu]) {
+/* The account footer's host-mounted menu card takes the same raised dark card;
+   the `!important`s outrank the host menu's own rules. */
+body[data-dsh-deepcraft][data-ds-dark-theme] [data-dsh-deepcraft-account-menu] {
   background: var(--dsh-deepcraft-raised) !important;
   border-color: var(--dsw-alias-border-l1) !important;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65), 0 2px 8px rgba(0, 0, 0, 0.45) !important;
@@ -96,10 +95,10 @@ body[data-dsh-deepcraft] .dsh-deepcraft-popover-status {
    (Menu.module.css). It is drawn as a top border on a zero-height box rather
    than as the background of a half-pixel box, so the line belongs to the layout
    and does not change thickness with the card's opening scale. Every card the
-   shell governs is covered here — the skin's own cards and the two host menus it
+   shell governs is covered here — the skin's own cards and the host menu it
    repaints — so one declaration decides the line everywhere; a surface that
    wants its own insets states only its margin beside this. */
-body[data-dsh-deepcraft] :is(.dsh-deepcraft-popover-card, [data-dsh-deepcraft-account-menu], [data-dsh-deepcraft-hero-menu]) [role="separator"] {
+body[data-dsh-deepcraft] :is(.dsh-deepcraft-popover-card, [data-dsh-deepcraft-account-menu]) [role="separator"] {
   height: 0;
   border-top: 0.5px solid var(--dsw-alias-border-l2, #dedcd2);
   background: transparent;

@@ -57,11 +57,9 @@ import { checkContracts, checkCycles, checkDependencies, checkListed, checkManif
 import { chunkFiles, chunkModules, ownModuleIds, splitChunks } from './chunks.mjs'
 import { buildStylesheet } from './css.mjs'
 import { TOKEN_SHEET, loadTokens, writeLayerTable, writeMotionTable, writeTokenTable } from './shared/design-tokens.mjs'
-import { FEATURE_SHEET_CONSTANTS } from './feature-sheets.mjs'
 import { motionValues } from './shared/motion-tokens.mjs'
 import { readSourceTree } from './source-tree.mjs'
 import { MODEL_COPY, validateModelCopy } from './model-copy.mjs'
-import { PEAKRATE_CATALOG, validatePeakCatalog } from './peakrate-catalog.mjs'
 import manifestReader from './shared/read-manifests.cjs'
 import { withLock } from './shared/verify-lock.cjs'
 import { loadModule } from './shared/ts-module.cjs'
@@ -132,11 +130,10 @@ const THEME_SHEETS = [
 function styleFiles(manifests) {
   const sheets = [
     ...THEME_SHEETS,
-    // A generated sheet has no file of its own; it is written from constants.ts (scripts/feature-sheets.mjs).
-    ...manifests.flatMap((manifest) => manifest.stylesheets.map((sheet) => (sheet.generated === undefined ? { ...sheet, file: `features/${manifest.dir}/${sheet.file}` } : sheet))),
+    ...manifests.flatMap((manifest) => manifest.stylesheets.map((sheet) => ({ ...sheet, file: `features/${manifest.dir}/${sheet.file}` }))),
   ].sort((a, b) => a.rank - b.rank)
   for (let i = 1; i < sheets.length; i++) {
-    if (sheets[i].rank === sheets[i - 1].rank) throw new Error(`build: ${sheets[i - 1].file ?? sheets[i - 1].generated} and ${sheets[i].file ?? sheets[i].generated} share the stylesheet rank ${sheets[i].rank}`)
+    if (sheets[i].rank === sheets[i - 1].rank) throw new Error(`build: ${sheets[i - 1].file} and ${sheets[i].file} share the stylesheet rank ${sheets[i].rank}`)
   }
   return sheets
 }
@@ -217,18 +214,16 @@ const CONSTANTS = (() => {
     if (module[name] === undefined) throw new Error(`build: ${file} exports no ${name}`)
     return [name, module[name]]
   }))
-  const { COMPOSER_ATTR, PALETTE_ATTR, PALETTE_HOST, SKIN_PALETTES, TYPEFACE_ATTR, TYPEFACE_CLAUDE, TYPEFACE_HOST } = pick(constants, constantsFile, ['COMPOSER_ATTR', 'PALETTE_ATTR', 'PALETTE_HOST', 'SKIN_PALETTES', 'TYPEFACE_ATTR', 'TYPEFACE_CLAUDE', 'TYPEFACE_HOST'])
+  const { PALETTE_ATTR, PALETTE_HOST, SKIN_PALETTES, TYPEFACE_ATTR, TYPEFACE_CLAUDE, TYPEFACE_HOST } = pick(constants, constantsFile, ['PALETTE_ATTR', 'PALETTE_HOST', 'SKIN_PALETTES', 'TYPEFACE_ATTR', 'TYPEFACE_CLAUDE', 'TYPEFACE_HOST'])
   return {
-    // The gate attributes scripts/css.mjs checks, stamps and writes the token
+    // The gate attributes scripts/css.mjs checks and writes the token
     // blocks under: which palette paints the colours and which typeface sets
-    // the type (D80), and the composer preference (D9).
+    // the type (D80).
     gates: {
-      composer: COMPOSER_ATTR,
       palette: { attribute: PALETTE_ATTR, ids: [...SKIN_PALETTES], host: PALETTE_HOST },
       typeface: { attribute: TYPEFACE_ATTR, claude: TYPEFACE_CLAUDE, host: TYPEFACE_HOST },
     },
     ...pick(sheets, sheetsFile, ['CRAB_SHEETS', 'DEEPY_SHEETS', 'DEEPY_GUTTER']),
-    featureSheets: pick(constants, constantsFile, FEATURE_SHEET_CONSTANTS),
   }
 })()
 
@@ -364,7 +359,7 @@ async function main() {
   checkClaimed(plan, claimed)
 
   const tokenDoc = loadTokens(SRC)
-  const css = buildStylesheet({ sheets, srcDir: SRC, sources, tokenDoc, gates: CONSTANTS.gates, images, featureConstants: CONSTANTS.featureSheets })
+  const css = buildStylesheet({ sheets, srcDir: SRC, sources, tokenDoc, gates: CONSTANTS.gates, images })
   if (writeTokenTable(STYLE_GUIDE, tokenDoc, CONSTANTS.gates.palette.ids)) console.log('built docs/STYLE.md token table from packages/client/src/theme/tokens.json')
   if (writeMotionTable(STYLE_GUIDE, tokenDoc)) console.log('built docs/STYLE.md motion table from packages/client/src/theme/tokens.json')
   if (writeLayerTable(STYLE_GUIDE, tokenDoc)) console.log('built docs/STYLE.md layer table from packages/client/src/theme/tokens.json')
@@ -483,12 +478,6 @@ async function main() {
   const copy = JSON.parse(fs.readFileSync(path.join(DATA, MODEL_COPY), 'utf8'))
   const familyRules = validateModelCopy(copy, combines)
   const copyText = JSON.stringify(copy, null, 2) + '\n'
-  // The peak rate catalog is the data source's own document, shipped as the
-  // copy a machine with no reach judges by; the host half's parser is the same
-  // one the build checks it with
-  const catalogPath = path.join(HOST_DATA, PEAKRATE_CATALOG)
-  const catalogText = fs.readFileSync(catalogPath, 'utf8')
-  const catalogProfiles = validatePeakCatalog(JSON.parse(catalogText), catalogPath)
   const iconEntry = plan.entries.get(`brand/${ICON_FILE}`)
   if (iconEntry === undefined) throw new Error(`build: the generated brand/${ICON_FILE} is missing from the asset plan`)
   if (iconEntry.bytes.byteLength > 256 * 1024) throw new Error(`build: ${ICON_FILE} is larger than the plugin manifest's 256 KiB icon limit`)
@@ -498,9 +487,6 @@ async function main() {
 
   fs.writeFileSync(path.join(LIB, MODEL_COPY), copyText)
   console.log(`built lib/${MODEL_COPY} (${familyRules} family rules, ${copy.tiers.length} tier rules)`)
-
-  fs.writeFileSync(path.join(LIB, PEAKRATE_CATALOG), catalogText)
-  console.log(`built lib/${PEAKRATE_CATALOG} (${catalogProfiles} profiles) from packages/host/data/${PEAKRATE_CATALOG}`)
 
   fs.writeFileSync(iconTarget, iconEntry.bytes)
   console.log(`built lib/${ICON_FILE} (${fs.statSync(iconTarget).size} bytes) from packages/assets/whale.mjs`)

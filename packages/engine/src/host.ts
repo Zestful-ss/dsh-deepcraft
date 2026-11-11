@@ -1,4 +1,4 @@
-import { CHAT_FLOW_SELECTOR, COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, COMPOSER_PLACEHOLDER_SELECTOR, COMPOSER_SELECTOR, COMPOSER_STACK_SELECTOR, COMPOSER_STATS_SELECTOR, COMPOSER_STAT_SELECTOR, COMPOSER_VARIANT_ATTRIBUTE, CONVERSATION_SCROLL_SELECTOR, CONVERSATION_SESSION_ATTRIBUTE, CONVERSATION_SESSION_SELECTOR, DIALOG_TRIGGER_SELECTOR, FOOT_AREA_SELECTOR, MENU_ROLE_SELECTOR, PERMISSION_TRIGGER_SELECTOR, PHASE_ATTRIBUTE, RIGHTBAR_TOGGLE_SELECTOR, SIDEBAR_BRAND_SELECTOR, SIDEBAR_ROOT_SELECTOR, SIDEBAR_TOGGLE_SELECTOR, WINDOWS_MENU_SELECTOR, WORKSPACE_LIST_AREA_SELECTOR, WORKSPACE_SECTION_LABEL_SELECTOR, WORKSPACE_TREE_ROW_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { CHAT_FLOW_SELECTOR, COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, COMPOSER_SELECTOR, COMPOSER_STACK_SELECTOR, COMPOSER_STATS_SELECTOR, COMPOSER_STAT_SELECTOR, CONVERSATION_SCROLL_SELECTOR, CONVERSATION_SESSION_ATTRIBUTE, CONVERSATION_SESSION_SELECTOR, DIALOG_TRIGGER_SELECTOR, FOOT_AREA_SELECTOR, MENU_ROLE_SELECTOR, PHASE_ATTRIBUTE, RIGHTBAR_TOGGLE_SELECTOR, SIDEBAR_BRAND_SELECTOR, SIDEBAR_ROOT_SELECTOR, SIDEBAR_TOGGLE_SELECTOR, WINDOWS_MENU_SELECTOR, WORKSPACE_LIST_AREA_SELECTOR, WORKSPACE_SECTION_LABEL_SELECTOR, WORKSPACE_TREE_ROW_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { MODEL_SLOT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import type { HostAccountService, HostAssistantStep, HostChatSnapshot, HostChatTarget, HostConfigFormsService, HostContextMenusService, HostConversationService, HostLocaleService, HostModelCatalogSnapshot, HostModelDirectoriesService, HostModelDirectory, HostServiceLookup, HostOutlineTurn, HostRunningCall, HostSession, HostSessionsService, HostShortcutsService, HostSlotOptions, HostSlotsService, HostTurn, HostUiConversationService, HostUiSessionService, HostWorkspacesService } from '@dsh-deepcraft/contracts/services'
 import { observeMatches, subscribeMutations } from './bus'
@@ -95,12 +95,6 @@ function cacheFirst<T extends Element>(selector: string) {
   return cacheFirstMatch<T>(selector)
 }
 
-/**
- * The host's access-mode trigger: the button its permission slot renders.
- * Every slot render site carries a `[data-slot="<key>"]` wrapper (D3), and
- * the skin inserts its own buttons inside that wrapper, so those are skipped.
- */
-export const findAccessTrigger = cacheFirst<HTMLButtonElement>(PERMISSION_TRIGGER_SELECTOR)
 /** The first composer's model slot, cached while the host keeps it mounted. */
 const firstModelSlot = cacheFirst<HTMLElement>(MODEL_SLOT_SELECTOR)
 
@@ -218,37 +212,20 @@ export const findRightbarToggle = cacheFirst<HTMLElement>(RIGHTBAR_TOGGLE_SELECT
  * closing is a node arriving or leaving (D40).
  */
 export const findHostMenu = cacheFirst<HTMLElement>(`${MENU_ROLE_SELECTOR}:not([class*="dsh-deepcraft-"])`)
-
-/**
- * The host's composer card — the element the skin's composer rules hang on —
- * and the placeholder its editor draws. The card's variant is the skin's own
- * marking (D9); every reader goes through these, so the selectors live once.
- */
+/** The host's composer card: every reader goes through these, so the selector lives once. */
 const COMPOSER_CARD = COMPOSER_CARD_SELECTOR
-const COMPOSER_PLACEHOLDER = COMPOSER_PLACEHOLDER_SELECTOR
 
 /** The composer cards, kept current by the bus instead of queried every pass (D40). */
 export function observeComposerCards() {
   return observeMatches<HTMLElement>(COMPOSER_CARD)
 }
 
-/** The composer placeholders, kept current by the bus (D40); the skin's synthetic one is a match too. */
-export function observeComposerPlaceholders() {
-  return observeMatches<HTMLElement>(COMPOSER_PLACEHOLDER)
-}
-
 export const findComposerCard = cacheFirst<HTMLElement>(COMPOSER_CARD)
 
-/** The composer card `node` sits in, or null; `variant` narrows it to one variant. */
-export function closestComposerCard(node: EventTarget | null | undefined, variant?: string) {
-  if (variant === undefined) return closestFrom(node, COMPOSER_CARD)
-  return closestFrom(node, `${COMPOSER_CARD}[${COMPOSER_VARIANT_ATTRIBUTE}="${variant}"]`)
+/** The composer card `node` sits in, or null. */
+export function closestComposerCard(node: EventTarget | null | undefined) {
+  return closestFrom(node, COMPOSER_CARD)
 }
-
-export function findComposerPlaceholder(card: Element) {
-  return card.querySelector<HTMLElement>(COMPOSER_PLACEHOLDER)
-}
-
 /**
  * The host's statistics in the composer stack: the container an older client
  * marked around them, else the element the marked figures share. Null when the
@@ -283,11 +260,6 @@ export function findDockedContextMeter(card: Element | null) {
     return node
   }
   return null
-}
-
-/** The editable draft inside `scope`: the element the placeholder hint mirrors. */
-export function findComposerInput(scope: ParentNode = document) {
-  return scope.querySelector<HTMLElement>(COMPOSER_INPUT_SELECTOR)
 }
 
 /**

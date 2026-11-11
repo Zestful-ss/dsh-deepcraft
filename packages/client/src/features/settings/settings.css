@@ -29,9 +29,9 @@ body[data-dsh-deepcraft]:not([data-ds-dark-theme]) button[data-dsh-section="deep
 
 /* ---------- Claude Code layout: settings page ---------- */
 /* The skin's own page in the settings dialog and on the plugin page. Its
-   segmented controls reuse the composer permission picker's classes
-   (`.dsh-deepcraft-segments` / `.dsh-deepcraft-segment`), so the two are literally one
-   control rather than two lookalikes; the switch and the brand cards are new
+   segmented controls reuse the shared `.dsh-deepcraft-segments` /
+   `.dsh-deepcraft-segment` classes, so they read as one control rather than
+   lookalikes; the switch and the brand cards are new
    here. The rows follow the host's own settings rows (ui-chat's PreferenceRow):
    full width, 16px above and below, a hairline between two rows.
    No side padding of its own: the host's options column already carries 24px
@@ -399,11 +399,10 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-switch[data-moved]:not([data-on
   80%, 100% { translate: 0 0; }
 }
 
-/* The row's three bordered controls — the username input, the quick-provider
-   trigger and the custom brand rows' buttons — share one plate; each rule
-   below adds only its own sizing and cursor. */
+/* The row's two bordered controls — the username input and the custom brand
+   rows' buttons — share one plate; each rule below adds only its own sizing
+   and cursor. */
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-input,
-body[data-dsh-deepcraft] .dsh-deepcraft-settings-picker,
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-button {
   box-sizing: border-box;
   border: 1px solid var(--dsw-alias-border-l1);
@@ -433,25 +432,9 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-input::placeholder {
   color: var(--dsw-alias-label-caption);
 }
 
-/* The quick-provider trigger belongs to the same control family as the username
-   input: one bordered plate that opens a picker. Its card is the shared popover
-   card (features/permissions/permissions.css), so only the trigger is styled here. */
-body[data-dsh-deepcraft] .dsh-deepcraft-settings-picker {
-  flex: none;
-  min-width: 140px;
-  max-width: 45%;
-  text-align: left;
-  cursor: pointer;
-}
-body[data-dsh-deepcraft] .dsh-deepcraft-settings-picker:hover {
-  border-color: var(--dsw-alias-border-l2);
-}
-body[data-dsh-deepcraft] .dsh-deepcraft-settings-picker[aria-expanded="true"] {
-  border-color: var(--dsw-alias-brand-primary, #d97757);
-}
 
 /* The custom brand rows' buttons (settings-brand.ts) are plates of the same
-   family as the input and the picker trigger, sized to their label. */
+   family as the input, sized to their label. */
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-button {
   flex: none;
   white-space: nowrap;
@@ -545,23 +528,10 @@ body[data-dsh-deepcraft] .dsh-deepcraft-brand-accent-note {
   color: var(--dsw-alias-label-tertiary);
 }
 
-/* The quick-provider picker's card (packages/client/src/features/settings/quick-providers.ts):
-   the shared popover card, anchored above the trigger and right-aligned with it
-   (positionAnchoredPopover), so it grows from the corner nearest the trigger —
-   the bottom right, as the model picker's card does. */
-body[data-dsh-deepcraft] .dsh-deepcraft-quick-popover {
-  position: fixed !important;
-  min-width: 248px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 6px !important;
-  transform-origin: bottom right !important;
-}
-
 /* ── Pets (D80) ──────────────────────────────────────────────────────────────
    The chat pet's package picker and its action preview, and the importer's
    three ways in. The preview shows the atlas cell itself, at the same cell
-   geometry the composer uses. */
+   geometry the input area uses. */
 
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-control {
   display: flex;

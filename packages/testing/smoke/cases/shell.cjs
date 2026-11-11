@@ -7,20 +7,15 @@ const EMBER_FILLS = [['body', 'rgb(252, 252, 251)'], ['sidebar', 'rgb(251, 251, 
 
 module.exports = {
   // The skin's three palettes (D80): each one's canvases, accents, computed
-  // primary button fills, prose links, inline file mentions, data ink, and
-  // categorical multi-colour chart separation.
+  // primary button fills, prose links, inline file mentions, and the ripple wave.
   palette(r) {
     basicChecks(r)
     const palettes = r.palettes || {}
     const EXPECTED = [
-      ['ocean', { light: 'rgb(252, 252, 251)', dark: 'rgb(32, 36, 39)', accent: '#5368c9', button: 'rgb(83, 104, 201)', prose: 'rgb(62, 91, 214)', darkProse: 'rgb(142, 162, 242)', dataInk: '#4a5fc4', wave: '#5f73d9', darkDataInk: '#8ea2f2', darkWave: '#8ea2f2', raised: '#2b3038' }],
-      ['ember', { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)', accent: '#d97757', button: 'rgb(217, 119, 87)', prose: 'rgb(61, 95, 134)', darkProse: 'rgb(169, 194, 223)', dataInk: '#b9542f', wave: '#c6613f', darkDataInk: '#e8967a', darkWave: '#e08a6d', raised: '#1e1e1d' }],
-      ['forest', { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)', accent: '#397657', button: 'rgb(57, 118, 87)', prose: 'rgb(40, 102, 73)', darkProse: 'rgb(134, 197, 162)', dataInk: '#286649', wave: '#286649', darkDataInk: '#86c5a2', darkWave: '#86c5a2', raised: '#1e1e1d' }],
+      ['ocean', { light: 'rgb(252, 252, 251)', dark: 'rgb(32, 36, 39)', accent: '#5368c9', button: 'rgb(83, 104, 201)', prose: 'rgb(62, 91, 214)', darkProse: 'rgb(142, 162, 242)', wave: '#5f73d9', darkWave: '#8ea2f2', raised: '#2b3038' }],
+      ['ember', { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)', accent: '#d97757', button: 'rgb(217, 119, 87)', prose: 'rgb(61, 95, 134)', darkProse: 'rgb(169, 194, 223)', wave: '#c6613f', darkWave: '#e08a6d', raised: '#1e1e1d' }],
+      ['forest', { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)', accent: '#397657', button: 'rgb(57, 118, 87)', prose: 'rgb(40, 102, 73)', darkProse: 'rgb(134, 197, 162)', wave: '#286649', darkWave: '#86c5a2', raised: '#1e1e1d' }],
     ]
-    const validRanks = (tier) =>
-      !!tier && Array.isArray(tier.ranks) && tier.ranks.length === 7 &&
-      tier.ranks.every((v) => typeof v === 'string' && v.trim().length > 0) &&
-      new Set(tier.ranks.slice(0, 6)).size === 6 && !tier.ranks.slice(0, 6).includes(tier.accent)
     for (const [id, want] of EXPECTED) {
       const palette = palettes[id] || {}
       const dark = palette.dark || {}
@@ -32,10 +27,9 @@ module.exports = {
         palette.proseLink === want.prose && palette.mention === palette.proseLink &&
           dark.proseLink === want.darkProse && dark.mention === dark.proseLink,
         JSON.stringify({ light: { prose: palette.proseLink, mention: palette.mention }, dark: { prose: dark.proseLink, mention: dark.mention } }))
-      check(`${id}: data ink and the ripple follow the palette, and ranks 1..6 stay distinct categories`,
-        palette.dataInk === want.dataInk && palette.wave === want.wave &&
-          dark.dataInk === want.darkDataInk && dark.wave === want.darkWave && [palette, dark].every(validRanks),
-        JSON.stringify({ light: { dataInk: palette.dataInk, wave: palette.wave, ranks: palette.ranks }, dark: { dataInk: dark.dataInk, wave: dark.wave, ranks: dark.ranks } }))
+      check(`${id}: the ripple wave follows the palette`,
+        palette.wave === want.wave && dark.wave === want.darkWave,
+        JSON.stringify({ light: { wave: palette.wave }, dark: { wave: dark.wave } }))
       check(`${id}: the dark canvas keeps the palette's own raised surface`, dark.raised === want.raised, JSON.stringify(dark))
     }
     commonChecks(r)
@@ -65,37 +59,26 @@ module.exports = {
         tinted.mark.fill !== 'rgba(0, 0, 0, 0)' && tinted.wordAttr === 'image',
       JSON.stringify(tinted))
     check('a custom accent takes the accent tokens, with the light ink on a dark fill',
-      tinted.accent === '#1a7f5a' && tinted.accentInk === '#faf9f5' &&
-        tinted.dataInk === '#1a7f5a' && tinted.wave === '#1a7f5a',
-      JSON.stringify({ accent: tinted.accent, ink: tinted.accentInk, dataInk: tinted.dataInk, wave: tinted.wave }))
+      tinted.accent === '#1a7f5a' && tinted.accentInk === '#faf9f5' && tinted.wave === '#1a7f5a',
+      JSON.stringify({ accent: tinted.accent, ink: tinted.accentInk, wave: tinted.wave }))
     const forestTinted = brand.forestTinted || {}
     check('a custom accent remains in force when switching to another skin palette',
-      forestTinted.accent === '#1a7f5a' && forestTinted.dataInk === '#1a7f5a' &&
-        forestTinted.wave === '#1a7f5a' && forestTinted.buttonFill === 'rgb(26, 127, 90)',
+      forestTinted.accent === '#1a7f5a' && forestTinted.wave === '#1a7f5a' && forestTinted.buttonFill === 'rgb(26, 127, 90)',
       JSON.stringify(forestTinted))
     const cleared = brand.cleared || {}
     check('clearing the accent hands the brand\'s own accent back, and the images return to their own colours',
       cleared.accent === '#d97757' && cleared.tintAttr === null && cleared.mark.image.includes(markUrl) &&
-        cleared.dataInk === '#b9542f' && cleared.wave === '#c6613f',
+        cleared.wave === '#c6613f',
       JSON.stringify(cleared))
     check('teardown takes the custom brand\'s values off <body>',
       Array.isArray(r.leftBrandProperties) && r.leftBrandProperties.length === 0, JSON.stringify(r.leftBrandProperties))
     commonChecks(r)
   },
-  // The classic hero: the welcome is drawn on arrival and held between passes,
-  // and the crab stands on that page's card too.
+  // The hero page's own extras: the crab on its card, and the glyph field its
+  // switch mounts under the hero root's content.
   hero(r) {
     basicChecks(r)
-    const greeting = r.greeting || {}
-    check('the classic hero draws its welcome on arrival and keeps it between passes',
-      typeof greeting.low === 'string' && greeting.low !== 'Host greeting' && greeting.low !== '' &&
-        greeting.held === greeting.low && typeof greeting.high === 'string' && greeting.high !== 'Host greeting' &&
-        greeting.high !== greeting.low,
-      JSON.stringify(greeting))
-    check('the classic hero draws the permission segments in the card\'s mode strip',
-      JSON.stringify(r.classicSegments) === JSON.stringify(['Read', 'Edit', 'Auto', 'Yolo']) && r.classicPermTrigger === false,
-      JSON.stringify({ segments: r.classicSegments, trigger: r.classicPermTrigger }))
-    check('the classic hero page carries the crab too', r.classicCrab === true, JSON.stringify(r.classicCrab))
+    check('the hero page carries the crab', r.classicCrab === true, JSON.stringify(r.classicCrab))
     const ripple = r.ripple || {}
     check('the glyph field is off until its switch turns it on', ripple.off === true, JSON.stringify(ripple.off))
     check('the hero root carries the glyph field\'s canvas, under its content and taking no press',
@@ -187,25 +170,6 @@ module.exports = {
       JSON.stringify(left))
     commonChecks(r)
   },
-  // The composer's host controls, marked by structure, the marks their teardown
-  // leaves behind, and the host's own Enter on an open menu.
-  composer(r) {
-    basicChecks(r)
-    const controls = r.controls || {}
-    check('the composer\'s host controls are marked by structure: commands, access, send',
-      controls.commands === 'commands' && controls.access === 'access' && controls.send === 'send', JSON.stringify(controls))
-    check('the submit button\'s mark follows its glyph to stop and back',
-      controls.stopping === 'stop' && controls.back === 'send', JSON.stringify(controls))
-    const glyph = r.stopGlyph || {}
-    check('the stop mark is drawn by the skin: a whole-pixel square filled with the button\'s ink under a 16px ring, the host\'s scaled glyph unpainted',
-      glyph.hostGlyph === 'none' && glyph.ring === '16px' && glyph.squareWidth === '4px' &&
-        glyph.squareHeight === '4px' && glyph.fill === glyph.ink,
-      JSON.stringify(glyph))
-    check('teardown takes the draft marks off the composer cards', r.leftDraftMarks === 0, `${r.leftDraftMarks} left`)
-    check('teardown takes the control marks off the host controls', r.leftControlMarks === 0, `${r.leftControlMarks} left`)
-    check('Enter on an open composer menu reaches the host', same(r.keys, ['host picked the menu item']), JSON.stringify(r.keys))
-    commonChecks(r)
-  },
   // The sidebar's search box: placed by the style preference — in the brand
   // row resting hidden, in a row of its own below it, or not drawn at all
   // while the host's own button stands — and opening the host's modal through
@@ -265,97 +229,19 @@ module.exports = {
     check('the closed drawer takes its parked rows out of the paint tree',
       r.syntheticVisibility === 'hidden' && r.syntheticRowVisibility === 'hidden',
       JSON.stringify({ panel: r.syntheticVisibility, row: r.syntheticRowVisibility }))
-    // The account area's switch is live: its teardown takes the row and the
-    // drawer away and hands the host's own footer back.
-    const footerSwitch = r.footerSwitch || {}
-    check('switching the sidebar account area off takes its row and drawer off the page, and on builds them again',
-      footerSwitch.before !== undefined && footerSwitch.before.row === true && footerSwitch.before.drawer === true &&
-        footerSwitch.before.takeover === true && footerSwitch.off !== undefined &&
-        footerSwitch.off.row === false && footerSwitch.off.drawer === false && footerSwitch.off.takeover === false &&
-        footerSwitch.back !== undefined && footerSwitch.back.row === true && footerSwitch.back.drawer === true,
-      JSON.stringify(footerSwitch))
-    commonChecks(r)
-  },
-  // The permission control's ladder: the catalog in the skin order, with the
-  // Auto review tier offered while the catalog carries that preset.
-  permissions(r) {
-    basicChecks(r)
-    check('the permission ladder is the catalog, in the skin order',
-      same(r.permRows.map(function (row) { return row.preset }), ['read-only', 'workspace-write', 'auto', 'danger-full-access']),
-      JSON.stringify(r.permRows))
-    check('the Auto review tier is offered while the catalog carries the preset',
-      r.permAutoRowDisplay !== null && r.permAutoRowDisplay !== 'none' &&
-        r.permRows[2].text.indexOf('Auto review') === 0,
-      JSON.stringify({ popoverRow: r.permAutoRowDisplay, row: r.permRows[2] }))
     commonChecks(r)
   },
   popovers(r) {
     basicChecks(r)
-    check('a pointer crossing a trigger opens nothing before the dwell elapses',
-      r.permOpenAtDwell === 0, `${r.permOpenAtDwell} open at 50 ms`)
-    check('a pointer that stays the dwell out opens the card',
-      r.permOpenPastDwell === 1, `${r.permOpenPastDwell} open past the dwell`)
-    check('an open card answers the host\'s menu role',
-      r.permCardRole === 'menu', JSON.stringify(r.permCardRole))
-    check('opening the account drawer folds the permission card',
-      r.drawerUp === 1 && r.permFoldedByDrawer === 0,
-      JSON.stringify({ drawer: r.drawerUp, permission: r.permFoldedByDrawer }))
+    check('a pointer crossing the drawer\'s trigger opens nothing before the dwell elapses',
+      r.drawerOpenAtDwell === 0, `${r.drawerOpenAtDwell} open at 50 ms`)
+    check('a pointer that stays the dwell out opens the drawer',
+      r.drawerOpenPastDwell === 1, `${r.drawerOpenPastDwell} open past the dwell`)
     check('with the hover preference on, a press on the open drawer keeps it open',
       r.drawerAfterPress === 1 && r.drawerOpenAttrAfterPress === 'true',
       JSON.stringify({ open: r.drawerAfterPress, marker: r.drawerOpenAttrAfterPress }))
-    check("opening the hero row's host menu folds the drawer",
-      r.heroUp === true && r.drawerFoldedByHero === 0,
-      JSON.stringify({ hero: r.heroUp, drawer: r.drawerFoldedByHero }))
-    check('opening the permission card folds the hero menu',
-      r.permReopened === 1 && r.heroFoldedByPerm === false,
-      JSON.stringify({ permission: r.permReopened, hero: r.heroFoldedByPerm }))
-    check('with the hover preference on, a press on the open permission card keeps it up',
-      r.permUpAfterPress === 1, JSON.stringify(r.permUpAfterPress))
-    check('with the hover preference on, a press on the open hero menu keeps it up and the leave closes it',
-      r.heroUpBeforePress === true && r.heroUpAfterPress === true && r.heroLeftAfterPress === 0,
-      JSON.stringify({ before: r.heroUpBeforePress, after: r.heroUpAfterPress, left: r.heroLeftAfterPress }))
-    check("the row's other picker opens over the permission card and folds it",
-      r.presetUp === true && r.permFoldedByPreset === 0,
-      JSON.stringify({ preset: r.presetUp, permission: r.permFoldedByPreset }))
-    check('crossing to the row\'s other trigger folds the picker left behind',
-      r.workspaceUpAfterCrossing === true && r.presetFoldedBySibling === false && r.heroCardsUp === 1,
-      JSON.stringify({ workspace: r.workspaceUpAfterCrossing, preset: r.presetFoldedBySibling, cards: r.heroCardsUp }))
-    check('the preset card is stamped as the preset picker and keeps its row glyph',
-      r.presetCard !== null && r.presetCard.kind === 'preset' && r.presetCard.iconsShown === 1 && r.presetCard.rowHeight === 32,
-      JSON.stringify(r.presetCard))
-    check('the workspace card is drawn as a folder menu: plain text rows, the add row included, set closer together',
-      r.workspaceCard !== null && r.workspaceCard.kind === 'workspace' && r.workspaceCard.iconsShown === 0 &&
-        r.workspaceCard.rowHeight === 26,
-      JSON.stringify(r.workspaceCard))
-    check('the hero card opens above its trigger, right-aligned with it, by the skin\'s 6px air',
-      r.workspacePlacement !== null && r.workspacePlacement.side === 'above' &&
-        r.workspacePlacement.airAbove === 6 && Math.abs(r.workspacePlacement.rightDelta) <= 1,
-      JSON.stringify(r.workspacePlacement))
-    check('with no room above, the hero card flips below its trigger',
-      r.workspacePlacementTight !== null && r.workspacePlacementTight.side === 'below' &&
-        r.workspacePlacementTight.airBelow === 6,
-      JSON.stringify(r.workspacePlacementTight))
-    check('leaving the row leaves no hero picker up',
-      r.heroMenusLeft === 0, `${r.heroMenusLeft} open`)
     check('leaving every trigger leaves no card up',
       r.cardsLeftAfterLeave === 0, `${r.cardsLeftAfterLeave} open`)
-    commonChecks(r)
-  },
-  'sidebar-layout'(r) {
-    basicChecks(r)
-    const layout = r.sidebarLayout || {}
-    const relaxed = layout.relaxed || {}
-    const compact = layout.compact || {}
-    const back = layout.back || {}
-    check('the sidebar-layout choice resolves onto the document, relaxed by default',
-      relaxed.attr === 'relaxed' && relaxed.rowHeight === 28 && relaxed.footPadding === '8px 6px',
-      JSON.stringify(relaxed))
-    check('Compact takes the conversation rows\' height and the footer\'s padding down',
-      compact.attr === 'compact' && compact.rowHeight === 24 && compact.rowMin === '24px' &&
-        compact.footPadding === '4px 3px',
-      JSON.stringify(compact))
-    check('switching back to Relaxed restores every value without a reload',
-      back.attr === 'relaxed' && same(back, relaxed), JSON.stringify(back))
     commonChecks(r)
   },
   'host-palette'(r) {
@@ -372,8 +258,6 @@ module.exports = {
       host.popover === 'rgb(240, 241, 250)' && host.account === 'rgb(240, 241, 250)' && host.search === 'rgb(240, 241, 250)' &&
         /blur\(16px\)/.test(host.popoverBlur || ''),
       JSON.stringify(host))
-    check('the inverted chip becomes the host\'s hover plate with its primary ink',
-      host.group === 'rgba(10, 20, 30, 0.08)' && host.groupInk === 'rgb(17, 18, 19)', JSON.stringify(host))
     check('the skin\'s display and code faces fall back to the host\'s',
       host.heading === '"Host Sans", sans-serif' && host.code === '"Host Mono", monospace', JSON.stringify(host))
     const wall = hp.wallpaper || {}

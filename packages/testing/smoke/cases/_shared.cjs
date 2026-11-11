@@ -34,13 +34,9 @@ function basicChecks(r) {
 function commonChecks(r) {
   check('nothing the skin runs leaves an uncaught error or an unhandled rejection',
     Array.isArray(r.uncaught) && r.uncaught.length === 0, (r.uncaught || []).join(' | ').slice(0, 600))
-  check("the model trigger rule reaches the host's trigger alone: a menu nested in the seat stays a block, the marked seat root stays hidden",
-    !r.modelSeat || r.modelSeat.active !== true ||
-      (r.modelSeat.trigger === 'inline-flex' && r.modelSeat.nestedMenu === 'block' && r.modelSeat.markedRoot === 'none'),
-    JSON.stringify(r.modelSeat))
-  check('the home layout attribute follows the preference',
-    r.homeLayoutAttr === r.homeLayoutExpected,
-    JSON.stringify({ attribute: r.homeLayoutAttr, expected: r.homeLayoutExpected }))
+  check("the body's stats-position attribute follows the preference",
+    r.statsPositionAttr === r.statsPositionExpected,
+    JSON.stringify({ attribute: r.statsPositionAttr, expected: r.statsPositionExpected }))
   check("the host's solid hover chip keeps its label readable on its fill",
     r.chipInk !== null && r.chipFill !== null && contrast(r.chipInk, r.chipFill) >= 4.5,
     JSON.stringify({ ink: r.chipInk, fill: r.chipFill }))

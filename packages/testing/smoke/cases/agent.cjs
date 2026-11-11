@@ -3,78 +3,6 @@ const { MARKUP, SKIN_FACE, SKIN_HAT, same, check, contrast, basicChecks, commonC
 const { deferredWanted, SHIPPED_PREFS } = require('../shared.cjs')
 
 module.exports = {
-  // The auto mode cases: the ladder follows the host catalog, so a third-party
-  // permission tier is a first-class row.
-  automode(r) {
-    basicChecks(r)
-    check('the ladder takes the catalog, the third-party tier included',
-      same(r.permRows.map(function (row) { return row.preset }), ['read-only', 'workspace-write', 'auto-mode', 'danger-full-access']),
-      JSON.stringify(r.permRows))
-    check('a tier the catalog does not carry is absent, not hidden',
-      r.permRows.every(function (row) { return row.preset !== 'auto' }) && r.permAutoRowDisplay === null,
-      JSON.stringify(r.permRows))
-    check('the tier reads as a Claude name, not as its machine id',
-      r.permRows[2].text.indexOf('Auto mode') === 0 && r.permRows[2].text.indexOf('分类器') !== -1 &&
-        r.permRows[2].text.indexOf('auto-mode') === -1,
-      JSON.stringify(r.permRows[2].text))
-    check('the ladder stays one text list: no row draws a glyph',
-      r.permRows.every(function (row) { return row.glyphs === 0 }),
-      JSON.stringify(r.permRows.map(function (row) { return row.glyphs })))
-    check('the running preset reads as its Claude name',
-      r.permLabel === 'Accept edits', JSON.stringify(r.permLabel))
-    check('picking the tier switches through the host permission command',
-      same(r.permissionCommands, ['/permission auto-mode']), JSON.stringify(r.permissionCommands))
-    commonChecks(r)
-  },
-  'automode-current'(r) {
-    basicChecks(r)
-    check('a session running the third-party tier names it instead of its id',
-      r.permLabel === 'Auto mode', JSON.stringify(r.permLabel))
-    check('the running tier is marked in the popover',
-      r.permRows[2].active === true && r.permRows[0].active === false,
-      JSON.stringify(r.permRows.map(function (row) { return [row.preset, row.active] })))
-    check("a glyph the deployment declares is left out with the rest of them",
-      r.permRows[2].preset === 'auto-mode' && r.permRows[2].glyphs === 0,
-      JSON.stringify(r.permRows[2]))
-    commonChecks(r)
-  },
-  // The interface language decides the tier names: a Chinese page reads the
-  // host's own dictionary, a tier that dictionary leaves in English takes the
-  // skin's Chinese name, and a switch repaints the rows and the trigger.
-  'permissions-locale'(r) {
-    basicChecks(r)
-    check('the Chinese page names the tiers with the host\'s own Chinese words, and the untranslated tier with the skin\'s',
-      same(r.permNamesZh, ['仅可查看', '工作区内修改', '自动审查', '完全权限']) && r.permTriggerZh === '完全权限',
-      JSON.stringify({ names: r.permNamesZh, trigger: r.permTriggerZh }))
-    check('switching the interface language repaints the rows and the trigger under the skin\'s own names',
-      same(r.permNamesEn, ['Read only', 'Accept edits', 'Auto review', 'Full access']) && r.permTriggerEn === 'Full access',
-      JSON.stringify({ names: r.permNamesEn, trigger: r.permTriggerEn }))
-    commonChecks(r)
-  },
-  'automode-hero'(r) {
-    basicChecks(r)
-    check('the Auto slot binds to the tier the deployment offers',
-      same(r.permSegments.map(function (s) { return s.preset }), ['read-only', 'workspace-write', 'auto-mode', 'danger-full-access']),
-      JSON.stringify(r.permSegments))
-    check('the slot keeps its Claude label while carrying that tier',
-      r.permSegments[2].text === 'Auto' && r.permSegments[2].active === true,
-      JSON.stringify(r.permSegments[2]))
-    check('the built-in review tier stays out of the slot while the deployment has its own',
-      r.permSegments.every(function (s) { return s.preset !== 'auto' }) && r.permAutoSegmentDisplay === null,
-      JSON.stringify(r.permSegments))
-    commonChecks(r)
-  },
-  'automode-roundtrip'(r) {
-    var ladder = ['read-only', 'workspace-write', 'auto-mode', 'danger-full-access']
-    basicChecks(r)
-    check('the ladder is drawn in the conversation view', same(r.rowsBeforeHome, ladder), JSON.stringify(r.rowsBeforeHome))
-    check('the home view shows it as segments and leaves no popover behind',
-      same(r.segmentsInHome, ladder) && r.popoversInHome === 0,
-      JSON.stringify({ segments: r.segmentsInHome, popovers: r.popoversInHome }))
-    check('returning to the conversation draws the ladder again',
-      same(r.rowsAfterReturn, ladder), JSON.stringify(r.rowsAfterReturn))
-    commonChecks(r)
-  },
   hdsl(r) {
     basicChecks(r)
     check("the launcher's account name outranks the OS-user probe", r.accountUser === 'HDSLPlayer', JSON.stringify(r.accountUser))
@@ -126,7 +54,7 @@ module.exports = {
     check('apply() completes although the account API is broken', r.applyError === null, r.applyError)
     check('only the account footer was switched off', r.errors.length === 1 && r.errors[0].includes('"footer"'), r.errors.join(' | '))
     check("the host's own footer is handed back", !r.footerTakeover && r.accountUser === null, JSON.stringify({ takeover: r.footerTakeover, row: r.accountUser }))
-    check('the rest of the skin keeps running', r.composerRestyle && same(r.keys, ['host picked the menu item']))
+    check('the rest of the skin keeps running', r.skinApplied === true, JSON.stringify(r.skinApplied))
     commonChecks(r)
   },
   'chunk-fault'(r) {
@@ -137,7 +65,7 @@ module.exports = {
     check('each deferred feature the page wants was switched off once, and nothing else',
       same(switchedOff, [...deferredWanted(SHIPPED_PREFS)].sort()), r.errors.join(' | '))
     check('each report names the chunk that did not load', r.errors.every((line) => line.includes('/dsh-deepcraft/assets/') && line.includes('failed to load')), r.errors.join(' | '))
-    check('the features in the bundle keep running', r.composerRestyle === true && r.accountUser === 'Tester', JSON.stringify({ restyle: r.composerRestyle, account: r.accountUser }))
+    check('the features in the bundle keep running', r.skinApplied === true && r.accountUser === 'Tester', JSON.stringify({ applied: r.skinApplied, account: r.accountUser }))
     commonChecks(r)
   },
   'chunk-late'(r) {
@@ -150,24 +78,9 @@ module.exports = {
   },
   'sync-fault'(r) {
     check('apply() completes', r.applyError === null, r.applyError)
-    check('only the permission control retires when the session list is unavailable',
-      r.errors.length === 1 && r.errors[0].includes('"permissions"'), r.errors.join(' | '))
-    check("the host's own access button is handed back", r.hostAccessVisible === true, JSON.stringify(r.hostAccessVisible))
-    check('the composer restyle keeps running', r.composerRestyle === true, JSON.stringify(r.composerRestyle))
-    check('the rest of the skin keeps running', r.accountUser === 'Tester', JSON.stringify(r.accountUser))
-    commonChecks(r)
-  },
-  'no-auto-review'(r) {
-    basicChecks(r)
-    check("the permission control stands in for the host's access button", r.composerRestyle && !r.hostAccessVisible,
-      JSON.stringify({ restyle: r.composerRestyle, hostAccess: r.hostAccessVisible }))
-    check('a preset the catalog does not carry is not drawn at all',
-      r.permAutoRowDisplay === null &&
-        same(r.permRows.map(function (row) { return row.preset }), ['read-only', 'workspace-write', 'danger-full-access']),
-      JSON.stringify(r.permRows))
-    check('the rows the catalog does carry stay offered',
-      r.permRows.every(function (row) { return row.display !== 'none' }),
-      JSON.stringify(r.permRows))
+    check('the skin still stands with the session list unavailable', r.skinApplied === true, JSON.stringify(r.skinApplied))
+    check('the skin\'s own rows stay drawn or fail clean',
+      r.accountUser === 'Tester' || r.accountUser === null, JSON.stringify(r.accountUser))
     commonChecks(r)
   },
   desktop(r) {
@@ -227,11 +140,7 @@ module.exports = {
       JSON.stringify({ containers: r.injectAfterClose, menus: r.hostMenuAfterClose }))
     check('closing the host menu clears the skin marker',
       r.accountMenuMarkAfterClose === 0, JSON.stringify(r.accountMenuMarkAfterClose))
-    check('with the account area switched off, its takeover mark and the host row\'s go, and the switch brings them back',
-      !!r.areaOff && r.areaOff.takeover === false && r.areaOff.marked === false &&
-        !!r.areaBack && r.areaBack.takeover === true && r.areaBack.marked === true,
-      JSON.stringify({ off: r.areaOff, back: r.areaBack }))
-    check('Ctrl+, opens the host dialog while the account area is off',
+    check('Ctrl+, opens the host dialog',
       r.dialogAfterShortcut === 1, JSON.stringify(r.dialogAfterShortcut))
     check('the first account frame reads the profile exactly once',
       r.profileReadsAfterFirst === 1, JSON.stringify(r.profileReadsAfterFirst))

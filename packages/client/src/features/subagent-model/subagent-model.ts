@@ -17,7 +17,7 @@ import * as React from 'react'
 import { SUBAGENT_MODELS_ROUTE } from '../../constants'
 import { COMPOSER_RIGHT_SLOT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { buildElement, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
-import { currentSessionId, hostSessions, registerSlotEntry, sessionModelCatalog, sessionModelDirectory } from '@dsh-deepcraft/engine/host'
+import { currentSessionId, findModelSlot, hostSessions, registerSlotEntry, sessionModelCatalog, sessionModelDirectory } from '@dsh-deepcraft/engine/host'
 import { closeOtherPopovers, positionAnchoredPopover, registerPopover, setMenuPopoverOpen, unregisterPopover } from '../../shared/popover'
 import { SUBAGENT_MODELS_CONTRACT, readSubagentRoutes } from '@dsh-deepcraft/contracts/subagent'
 import { buildCardContent, seatActs, seatShown, triggerTitle } from './card'
@@ -148,8 +148,10 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * the mark away and leaves every control to its own layout.
    */
   function markCapsule() {
-    const modelBtn = ui.model?.trigger() ?? null
-    const modelSlot = ui.model?.seat() ?? null
+    // The host's own model seat and the button it carries: there is no model
+    // picker of ours to ask any more.
+    const modelSlot = findModelSlot()
+    const modelBtn = modelSlot === null ? null : modelSlot.querySelector<HTMLButtonElement>('button')
     const button = seatNode
     if (button === null || !button.isConnected || modelBtn === null || !modelBtn.isConnected || modelSlot === null || modelBtn.parentElement !== modelSlot) {
       clearCapsule()

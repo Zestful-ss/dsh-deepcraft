@@ -4,7 +4,7 @@ import { requestFrame } from '@dsh-deepcraft/engine/frame'
 import { motionMs } from '../../shared/motion'
 
 /**
- * The skin's own 0.12s border/box-shadow transitions (composer card, input
+ * The skin's own 0.12s border/box-shadow transitions (input area card, input
  * scroll, attachment rail, hero tray) are worth keeping for hover/focus, but
  * a theme flip re-runs them: the canvas repaints in one recalc (CSS
  * variables swap with the attribute) while the borders and halos ease in
@@ -66,7 +66,7 @@ export function installThemeFlip() {
   let cancelSweep: (() => void) | null = null
 
   // The flag lives on <html> AND <body> so the suppression selector can
-  // out-specify the gated composer rules it can (html[flag] body[skin][flag] *).
+  // out-specify the gated skin rules it can (html[flag] body[skin][flag] *).
   function setFlag(on: boolean) {
     root.toggleAttribute(THEME_FLIP_ATTR, on)
     body.toggleAttribute(THEME_FLIP_ATTR, on)

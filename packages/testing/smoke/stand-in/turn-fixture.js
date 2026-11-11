@@ -1,18 +1,12 @@
 /**
  * The chat fixture the waiting line's case reads: one bound session whose
- * snapshot has a failed first turn and a running second one, the wording the
- * host's own pills use, and the command log the permission control's pick is
- * read from.
+ * snapshot has a failed first turn and a running second one, and the wording
+ * the host's own pills use.
  */
 (function () {
   var host = window.__dshSmokeHost
   var CASE = host.CASE
 
-  // Host API drift at sync time: a session list that throws, which the
-  // permission control and the model picker read on every pass. The auto mode cases carry a real
-  // session instead: the control reads the running preset from its projection
-  // and switches through the host permission command; the case asserts both.
-  var permissionCommands = []
   /** The cases that carry this chat fixture: the waiting line's case and the two feature-switch cases. */
   var waitFixtureCase = CASE === 'chat-wait' || CASE === 'switches' || CASE === 'switches-off'
   // The waiting line's case: one bound session whose chat snapshot (ui-chat's
@@ -50,7 +44,6 @@
       binding: function () { return { target: function () { return { getSnapshot: function () { return snapshot } } } } },
     }
   })() : undefined
-  host.permissionCommands = permissionCommands
   host.waitFixtureCase = waitFixtureCase
   host.waitChat = waitChat
 })()

@@ -1,10 +1,11 @@
 /**
  * The usage payload the plugin's two halves exchange .
  *
- * `packages/host/src/usage.ts` answers `GET /dsh-deepcraft/usage` with this shape and the
- * browser half reads it in `packages/client/src/features/home/data.ts`; the session list's own
- * roll-up (`sessions.list`, a host service) answers a narrower version of the
- * same entries, which is why several fields below are optional. These types are
+ * `packages/host/src/usage.ts` answers `GET /dsh-deepcraft/usage` with this shape; the
+ * session list's own roll-up (`sessions.list`, a host service) answers a narrower version
+ * of the same entries, which is why several fields below are optional. `SearchAnswer` and
+ * `ContentHit` are the host half's message-content search, read by the search feature
+ * (`packages/client/src/features/search/sources.ts`). These types are
  * the plugin's own contract rather than the host's, so they live beside the code
  * that produces them; D73 moves them into the shared contracts package.
  */

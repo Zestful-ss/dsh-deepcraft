@@ -55,9 +55,6 @@ const evidenceKey = (item) => `${item.ruleKey}|${item.prop}`
 
 /** The skin's own triggers, each opening the surface its rules paint. */
 const SURFACES = [
-  ['model picker', '.dsh-deepcraft-model-btn'],
-  ['effort picker', '.dsh-deepcraft-effort-btn'],
-  ['permission picker', '.dsh-deepcraft-perm-btn'],
   ['account card', '.dsh-deepcraft-account-btn'],
   ['search panel', '.dsh-deepcraft-search-trigger'],
 ]
@@ -75,16 +72,9 @@ const MARKS = [
   ['search style icon', 'data-dsh-deepcraft-search-style', 'icon'],
   ['search style overlay', 'data-dsh-deepcraft-search-style', 'overlay'],
   ['search style standalone', 'data-dsh-deepcraft-search-style', 'standalone'],
-  ['sidebar relaxed', 'data-dsh-deepcraft-sidebar-layout', 'relaxed'],
-  ['sidebar compact', 'data-dsh-deepcraft-sidebar-layout', 'compact'],
   ['stats inline', 'data-dsh-deepcraft-stats-position', 'inline'],
   ['stats context', 'data-dsh-deepcraft-stats-position', 'context'],
   ['footer takeover', 'data-dsh-deepcraft-footer-takeover', ''],
-  ['dock look card', 'data-dsh-deepcraft-dock-look', 'card'],
-  ['dock look flush', 'data-dsh-deepcraft-dock-look', 'flush'],
-  ['page look float', 'data-dsh-deepcraft-page-look', 'float'],
-  ['page look flat', 'data-dsh-deepcraft-page-look', 'flat'],
-  ['home layout float', 'data-dsh-deepcraft-home-layout', 'float'],
   ['mascot crab', 'data-dsh-deepcraft-mascot', 'crab'],
   ['mascot deepy', 'data-dsh-deepcraft-mascot', 'deepy'],
   ['custom brand mark', 'data-dsh-deepcraft-custom-mark', ''],
@@ -92,10 +82,6 @@ const MARKS = [
   ['custom brand word image', 'data-dsh-deepcraft-custom-word', 'image'],
   ['custom brand tint', 'data-dsh-deepcraft-custom-tint', ''],
   ['custom brand accent', 'data-dsh-deepcraft-accent', '#d97757'],
-  // The window's focus state, which the skin mirrors onto the page for the
-  // selection paints: a browser the lane drives keeps the focus, so the state
-  // is set as the mirror writes it.
-  ['window blurred', 'data-dsh-deepcraft-window-blur', ''],
 ]
 
 /**
@@ -159,11 +145,11 @@ function importanceScenario(lane) {
   const HOST_TRIGGERS = '[aria-haspopup="menu"]:not(:is([class^="dsh-deepcraft"], [class*=" dsh-deepcraft"])), button[aria-haspopup="dialog"]:not(:is([class^="dsh-deepcraft"], [class*=" dsh-deepcraft"]))'
   /**
    * Every control the open settings tab offers, one state each: a preference
-   * that renders the skin's own markup (the studio home panel, the mascot, the
-   * ban screen, a search style's own box, the quick-provider menu) only puts its
-   * elements on the page once the preference is on, and this is where the walk
-   * turns them on. The image buttons are left alone — they open a file picker
-   * rather than turn a preference on — and so are the fields that take typing.
+   * that renders the skin's own markup (the mascot, the workspace pin block, a
+   * search style's own box) only puts its elements on the page once the
+   * preference is on, and this is where the walk turns them on. The image
+   * buttons are left alone — they open a file picker rather than turn a
+   * preference on — and so are the fields that take typing.
    */
   const withControls = async (page, audit, tab) => {
     const controls = page.locator('.dsh-deepcraft-settings-rows button:not([disabled]):not(.dsh-deepcraft-settings-button)')
@@ -310,8 +296,8 @@ function importanceScenario(lane) {
       }
       await withSettings(page, audit)
       // The preferences the controls set render their own markup on the empty
-      // page — the studio panel, the mascot, the hero menu — so the walk goes
-      // back to it and audits what they put there.
+      // page — the mascot above all — so the walk goes back to it and audits
+      // what they put there.
       const home = page.locator('button[data-dsh-deepcraft-part~="new-session"]').first()
       if (await home.count() > 0 && await home.isVisible()) {
         await home.click({ force: true })

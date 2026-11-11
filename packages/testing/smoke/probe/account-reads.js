@@ -1,8 +1,8 @@
 /**
  * The shared reads off the page the shell features built: the account drawer and
  * the synthetic popover, the row's avatar and its served skin sheet, this
- * package's own stylesheet tags beside a sibling's, the body marks, the slot
- * registrations and the model seat inside an inline card.
+ * package's own stylesheet tags beside a sibling's, the body marks, and the
+ * slot registrations.
  */
 (function () {
   var probe = window.__dshSmokeProbe
@@ -99,71 +99,13 @@
     // skin must mark no header with it and keep its measured placement.
     r.titlebarTabs = document.querySelector('[data-dsh-titlebar-tabs]') !== null
     r.footerTakeover = document.body.hasAttribute('data-dsh-deepcraft-footer-takeover')
-    r.homeLayoutAttr = document.body.getAttribute('data-dsh-deepcraft-home-layout')
-    r.homeLayoutExpected = window.SMOKE_CASE === 'studio' ? 'studio' : null
+    r.statsPositionAttr = document.body.getAttribute('data-dsh-deepcraft-stats-position')
+    r.statsPositionExpected = 'context'
     // A copy, not the live list: the teardown at the end of this run hands every
     // registration back, and what this check is about is what was registered
     // while the page was up.
     r.slotRegistrations = window.__slots ? window.__slots.map(function (entry) { return Object.assign({}, entry) }) : null
-    r.composerRestyle = document.body.hasAttribute('data-dsh-deepcraft-composer-active')
-    // The host's model seat inside an inline card, with a menu another plugin
-    // nests in it (its hashed class says "model"). The trigger rule reads the
-    // host's part, so the seat stands inside the conversation anchor long
-    // enough for the skin's marking pass to see it (D3); the trigger rule must
-    // reach the host's trigger, leave the nested menu its block layout, and
-    // leave the seat root hidden once the picker marks it.
-    var modelHolder = document.createElement('div')
-    modelHolder.setAttribute('data-conversation-scroll', '')
-    var modelCard = document.createElement('div')
-    modelCard.setAttribute('data-composer-card', '')
-    modelCard.setAttribute('data-composer-variant', 'inline')
-    modelCard.innerHTML = '<div class="_trailing_x_2"><div data-slot="conversation.input.model" style="display:contents">' +
-      '<div class="_root_m_1"><button type="button" class="_trigger_m_1">model-a</button>' +
-      '<div class="_menu_m_1"><div class="_providerModelMenu_p_1"></div></div></div></div></div>'
-    modelHolder.appendChild(modelCard)
-    document.body.appendChild(modelHolder)
-    // The parts land on the pass after the subtree arrives, and the rule they
-    // unlock is what this reads: wait for the trigger's own display (D3). The
-    // card's variant is held at the inline one the rule names: the skin rewrites
-    // every composer card for the page it is on, so on the hero page this card
-    // would otherwise be read as the hero's and the rule would not apply.
-    var modelTrigger = modelCard.querySelector('._trigger_m_1')
-    for (var seatWait = 0; seatWait < 400 && getComputedStyle(modelTrigger).display !== 'inline-flex'; seatWait++) {
-      if (modelCard.getAttribute('data-composer-variant') !== 'inline') modelCard.setAttribute('data-composer-variant', 'inline')
-      await sleep(50)
-    }
-    var modelSeatRoot = modelCard.querySelector('._root_m_1')
-    r.modelSeat = {
-      // The rule that seats the trigger is composer-gated, so it is read — and
-      // asserted — only while the restyle is on (the shared checks gate on it).
-      active: document.body.hasAttribute('data-dsh-deepcraft-composer-active'),
-      trigger: getComputedStyle(modelTrigger).display,
-      nestedMenu: getComputedStyle(modelCard.querySelector('._providerModelMenu_p_1')).display,
-    }
-    modelSeatRoot.setAttribute('data-dsh-deepcraft-model-host', '')
-    r.modelSeat.markedRoot = getComputedStyle(modelSeatRoot).display
-    modelHolder.remove()
+    r.skinApplied = document.body.hasAttribute('data-dsh-deepcraft')
   })
 
-  // The account area's own switch is live: off runs the footer's teardown, which
-  // takes the self-built row and its drawer away and gives the host's footer
-  // back; on builds both again.
-  probe.step(async function () {
-    await probe.onlyFor(['account'], async function () {
-      var read = function () {
-        return {
-          takeover: document.body.hasAttribute('data-dsh-deepcraft-footer-takeover'),
-          drawer: document.querySelector('.dsh-deepcraft-account-popover') !== null,
-          row: document.querySelector('.dsh-deepcraft-account-btn') !== null,
-        }
-      }
-      var before = read()
-      window.__pushForm({ collapseFooter: false })
-      await sleep(500)
-      var off = read()
-      window.__pushForm({ collapseFooter: true })
-      await sleep(500)
-      r.footerSwitch = { before: before, off: off, back: read() }
-    })
-  })
 })()

@@ -60,23 +60,17 @@ The settings page switches between three palettes; light and dark follow the sys
 
 ### Layout
 
-- The conversation page keeps a centred reading column and a floating rounded composer; the host's message, tool and composer controls stay in place, and the host's connection, update and plugin controls in the sidebar footer stay visible and operable.
-- The Appearance tab's "Page look" sets the page's shape: "Floating" lifts the conversation area into a rounded card, and the composer, the sidebar rows and the view tabs take pill shapes with it; "Flat" hands the page back to the host's own arrangement.
-- The home layout's "Floating" form draws a deck under the composer: this week's usage with its trend, the conversation to continue, the one before it, the month's usage leading into the Studio panel, and the recent conversations.
+- The plugin no longer rearranges the page: the conversation keeps the host's centred reading column and composer, and the home keeps the host's hero page; the host's message, tool and composer controls stay in place, and the host's connection, update and plugin controls in the sidebar footer stay visible and operable — the plugin only adds visual effects.
 - The sidebar gathers every pinned conversation above the workspaces, most recently pinned first; each row names its workspace and opens, renames, unpins or archives through the host's own session menu, while the host's row stays in its workspace.
 
 ### Pets
 
-- The composer pet is one choice, changed by neither palette nor brand: Whaledou by default, or Crab Buddy, the original pixel crab or the pixel whale.
+- The pet standing on the input area is one choice, changed by neither palette nor brand: Whaledou by default, or Crab Buddy, the original pixel crab or the pixel whale — and it can be kept to the home page.
 - "Chat pet package" in the settings page takes a complete package — a folder, a ZIP or a Petdex link holding `pet.json` and an atlas — keeping the original bytes. The pet art belongs to Petdex and each package's author and is not shipped with this plugin.
-
-### Model selection
-
-The model picker follows the control provided by the host composer and leaves the slot when a surface such as Research Workbench hides it. The model button remains available while a message is being sent. If the model directory is unavailable or fails to load, the menu explains the problem; close and reopen it to retry.
 
 ### Subagent models
 
-After enabling the host's subagent model selection and creating a session, use the subagent icon beside the composer to choose models. The panel shows complete names, and the subagent entry and the model button draw as one capsule whose outline changes colour with the number of routes the session has selected. Each picked route can also carry its own reasoning effort, which later subagent calls then pass along.
+After enabling the host's subagent model selection and creating a session, the concentric-circle icon beside the model control on the composer opens the subagent route panel. The panel names each route in full and can pick one or several routes for the session; each picked route can also carry its own reasoning effort, which later subagent calls then pass along.
 
 ## Installation
 

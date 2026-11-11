@@ -1,7 +1,0 @@
-{
-  "composerTitle": { "zh": "重绘对话框", "en": "Composer restyle" },
-  "scopeOff": { "zh": "关闭", "en": "Off" },
-  "scopeHero": { "zh": "仅首页", "en": "Home only" },
-  "scopeConversation": { "zh": "仅对话", "en": "Conversation only" },
-  "scopeAll": { "zh": "全部", "en": "All" }
-}

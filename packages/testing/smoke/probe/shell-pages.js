@@ -1,8 +1,8 @@
 /**
- * The shell cases' page reads: the three palettes, the classic hero's welcome,
- * the conversation view tabs' pill, the composer's marked host controls and the
- * sidebar's search row. The strip the view-tabs case builds and the root the
- * search case mounts are handed to the probe for the teardown step.
+ * The shell cases' page reads: the three palettes, the hero's ripple field,
+ * the conversation view tabs' pill, and the sidebar's search row. The strip
+ * the view-tabs case builds and the root the search case mounts are handed to
+ * the probe for the teardown step.
  */
 (function () {
   var probe = window.__dshSmokeProbe
@@ -36,17 +36,7 @@
           proseLink: proseLink === null ? '' : getComputedStyle(proseLink).color,
           mention: mention === null ? '' : getComputedStyle(mention).color,
           codeFg: code === null ? '' : getComputedStyle(code).color,
-          dataInk: body.getPropertyValue('--dsh-deepcraft-data-ink').trim(),
           wave: body.getPropertyValue('--dsh-deepcraft-ripple-wave').trim(),
-          ranks: [
-            body.getPropertyValue('--dsh-deepcraft-data-1').trim(),
-            body.getPropertyValue('--dsh-deepcraft-data-2').trim(),
-            body.getPropertyValue('--dsh-deepcraft-data-3').trim(),
-            body.getPropertyValue('--dsh-deepcraft-data-4').trim(),
-            body.getPropertyValue('--dsh-deepcraft-data-5').trim(),
-            body.getPropertyValue('--dsh-deepcraft-data-6').trim(),
-            body.getPropertyValue('--dsh-deepcraft-data-7').trim(),
-          ],
         }
       }
 
@@ -67,40 +57,18 @@
       linkHolder.remove()
     })
     await probe.onlyFor(['hero'], async function () {
-      // The classic hero's welcome is drawn on arrival and holds between
-      // passes: the draw pinned to either end of its pool gives two different
-      // lines, and a further pass leaves the drawn one alone.
-      // The classic hero's welcome sits in the host's conversation anchor, the
-      // subtree the skin reads its hero parts inside (D3).
-      var greetHolder = document.createElement('div')
-      greetHolder.setAttribute('data-conversation-scroll', '')
+      // The glyph field stands in the hero root, under its content, and takes
+      // no press; its switch, off as the page opens, mounts it and takes it
+      // back off. The classic home page's card carries the crab too.
       var greetRoot = document.createElement('div')
       greetRoot.className = '_root_x_1'
       greetRoot.setAttribute('data-phase', 'hero')
-      var greetGroup = document.createElement('div')
-      greetGroup.className = '_titleGroup_x_1'
-      var greetSpan = document.createElement('span')
-      greetSpan.textContent = 'Host greeting'
-      greetGroup.appendChild(greetSpan)
-      greetRoot.appendChild(greetGroup)
+      var greetHolder = document.createElement('div')
+      greetHolder.setAttribute('data-conversation-scroll', '')
       greetHolder.appendChild(greetRoot)
-      var greetRandom = Math.random
-      var arrive = async function (draw) {
-        Math.random = function () { return draw }
-        document.body.appendChild(greetHolder)
-        await sleep(150)
-        Math.random = greetRandom
-        return greetSpan.textContent
-      }
-      r.greeting = { low: await arrive(0) }
-      // The classic hero's permission control is the segment group; the studio
-      // hero's is the conversation's trigger
-      // (packages/client/src/features/permissions/permissions.ts).
-      var heroModes = document.querySelector('[data-composer-card] [data-dsh-deepcraft-part~="modes"]')
-      r.classicSegments = heroModes === null ? null
-        : Array.prototype.map.call(heroModes.querySelectorAll('.dsh-deepcraft-segments > .dsh-deepcraft-segment'), function (item) { return item.textContent })
-      r.classicPermTrigger = heroModes !== null && heroModes.querySelector('.dsh-deepcraft-perm-btn') !== null
-      // The crab stands on the classic home page's card too, as Deepy does.
+      document.body.appendChild(greetHolder)
+      await sleep(150)
+      // The crab stands on the page's host composer card too, as Deepy does.
       r.classicCrab = document.querySelector('[data-composer-card] > .dsh-deepcraft-crab') !== null
       // The glyph field stands in the hero root, under its content, and takes no
       // press; its switch, off as the page opens, mounts it and takes it back off.
@@ -118,13 +86,6 @@
       window.__pushForm({ homeRipple: true })
       await sleep(150)
       r.ripple.back = greetRoot.hasAttribute('data-dsh-deepcraft-ripple') && greetRoot.querySelector(':scope > .dsh-deepcraft-ripple-canvas') !== null
-      document.body.appendChild(document.createElement('i'))
-      await sleep(150)
-      r.greeting.held = greetSpan.textContent
-      greetHolder.remove()
-      await sleep(150)
-      r.greeting.high = await arrive(0.999)
-      greetHolder.remove()
       await sleep(150)
     })
     await probe.onlyFor(['view-tabs'], async function () {
@@ -179,38 +140,6 @@
             mediaRule.cssText.indexOf('data-dsh-deepcraft-pill') !== -1) r.viewPill.reducedMotionRules++
         }
       }
-    })
-    await probe.onlyFor(['composer'], async function () {
-      // The composer's host controls are marked by what they are, read from
-      // the host's structure; the submit button turning into stop (its glyph
-      // becomes a rect) moves its mark with it.
-      var controlOf = function (id) { var el = document.getElementById(id); return el && el.getAttribute('data-dsh-deepcraft-control') }
-      // The host's own access button, skipping the skin's controls by their own
-      // class namespace, read as whole class tokens.
-      var accessButton = document.querySelector('[data-slot="conversation.input.permission"] button:not([class^="dsh-deepcraft-"], [class*=" dsh-deepcraft-"])')
-      r.controls = { commands: controlOf('commands'), send: controlOf('send'), access: accessButton && accessButton.getAttribute('data-dsh-deepcraft-control') }
-      var sendButton = document.getElementById('send')
-      var sendSvg = sendButton.querySelector('svg')
-      var sendGlyph = sendSvg.innerHTML
-      sendSvg.innerHTML = '<rect x="3" y="3" width="10" height="10"></rect>'
-      await sleep(60)
-      r.controls.stopping = controlOf('send')
-      // The stop glyph is the skin's own: the host's square is a scaled SVG glyph
-      // whose rasterization lands on a subpixel phase of its own, so the ring and
-      // the square are drawn as two boxes the browser snaps alike.
-      var ring = getComputedStyle(sendButton, '::before')
-      var square = getComputedStyle(sendButton, '::after')
-      r.stopGlyph = {
-        hostGlyph: getComputedStyle(sendSvg).display,
-        ring: ring.width,
-        squareWidth: square.width,
-        squareHeight: square.height,
-        fill: square.backgroundColor,
-        ink: getComputedStyle(sendButton).color,
-      }
-      sendSvg.innerHTML = sendGlyph
-      await sleep(60)
-      r.controls.back = controlOf('send')
     })
     await probe.onlyFor(['search'], async function () {
       // The sidebar's brand row (ui-sidebar SidebarRoot): the search box goes in

@@ -5,14 +5,12 @@
  * Registered in the lane's scenario table (packages/testing/scenarios.cjs).
  *
  * Each surface is read where it moves, by the animation or the transition it
- * plays and the state it comes to rest in: the home greeting rising, the usage
- * panel's numbers taking over from its placeholders, a settings switch that
- * bounces only once pressed, a settings tab sliding in while a still copy of the
- * one it replaced slides out, the overtime badge popping onto the waiting line
- * and playing its exit before it hides, and a menu card growing out of its
- * trigger and dipping only a little as it closes. The `process` script keeps the
- * model silent past the overtime mark, so the badge comes and goes in one turn.
- * The page runs the studio home, which draws the usage panel.
+ * plays and the state it comes to rest in: the home greeting rising, a settings
+ * switch that bounces only once pressed, a settings tab sliding in while a
+ * still copy of the one it replaced slides out, and the overtime badge popping
+ * onto the waiting line and playing its exit before it hides. The `process`
+ * script keeps the model silent past the overtime mark, so the badge comes
+ * and goes in one turn.
  */
 'use strict'
 const { waitForSkin } = require('./dsh-web.cjs')
@@ -27,8 +25,6 @@ const HOST = {
 
 /** The skin's own marks (the stylesheets and modules each names). */
 const SKIN = {
-  revealing: 'data-dsh-deepcraft-revealing', // home-layout.ts
-  statValue: '.dsh-deepcraft-home-stat-value',
   page: '.dsh-deepcraft-settings',
   switch: 'fieldset.dsh-deepcraft-settings-rows .dsh-deepcraft-settings-switch:not(:disabled)',
   tab: '.dsh-deepcraft-settings-tabs [role="tab"]',
@@ -36,22 +32,8 @@ const SKIN = {
   leaving: '.dsh-deepcraft-settings-leaving',
   badge: '.dsh-deepcraft-chat-wait-badge',
   badgeLeaving: 'data-dsh-deepcraft-wait-badge-leaving', // chat-wait.ts
-  modelButton: '.dsh-deepcraft-model-btn',
-  modelCard: '.dsh-deepcraft-model-popover:not(.dsh-deepcraft-model-popover-sub)',
 }
 
-/** Record every hand-over the usage panel plays, from the page's first frame. */
-function watchReveal(marks) {
-  window.__motionReveal = []
-  new MutationObserver((records) => {
-    for (const record of records) {
-      const panel = record.target
-      if (!(panel instanceof Element) || !panel.hasAttribute(marks.revealing)) continue
-      const value = panel.querySelector(marks.statValue)
-      window.__motionReveal.push({ words: value === null ? null : getComputedStyle(value).animationName })
-    }
-  }).observe(document, { subtree: true, attributes: true, attributeFilter: [marks.revealing] })
-}
 
 /** The animation an element plays, its delay, and nothing when it is not there. */
 const animationOf = (page, selector) => page.evaluate((target) => {
@@ -131,62 +113,20 @@ async function readTabSlide(page, tab) {
   return { during: frames.filter((frame) => frame.leaving > 0), after: frames[frames.length - 1].leaving }
 }
 
-/** The model card, read inside the page, with whether its own motion is still running. */
-function cardInPage(marks) {
-  const element = document.querySelector(marks.modelCard)
-  if (element === null) return null
-  const style = getComputedStyle(element)
-  return {
-    open: element.getAttribute('data-open'),
-    scale: style.scale,
-    transform: style.transform,
-    opacity: style.opacity,
-    visibility: style.visibility,
-    running: element.getAnimations().some((animation) => (animation.playState === 'running' || animation.playState === 'pending') && animation.effect?.getComputedTiming().iterations !== Infinity),
-  }
-}
-
-/**
- * The model card open, or closed, once the motion the press started has run
- * and landed; each runs in the page, so neither carries a closure.
- */
-const cardOpened = (frames) => frames.some((frame) => frame !== null && frame.running) &&
-  frames[frames.length - 1] !== null && frames[frames.length - 1].open === 'true' && !frames[frames.length - 1].running
-const cardClosed = (frames) => frames.some((frame) => frame !== null && frame.running) &&
-  frames[frames.length - 1] !== null && frames[frames.length - 1].open === 'false' && !frames[frames.length - 1].running
-
-/** The model card: open and landed, then closed and landed. */
-async function readMenu(page) {
-  await page.locator(SKIN.modelButton).first().click()
-  const opening = await recordUntil(page, cardInPage, cardOpened, SKIN, 8000, 'the model card opening')
-  // A press on the trigger keeps a card the hover opened; Escape closes it.
-  await page.keyboard.press('Escape')
-  const closing = await recordUntil(page, cardInPage, cardClosed, SKIN, 8000, 'the model card closing')
-  return { opened: opening[opening.length - 1], closed: closing[closing.length - 1] }
-}
 
 function motionScenario({ check }) {
   return {
     script: 'process',
     prompt: 'take your time, then answer',
     viewport: { width: 1280, height: 900 },
-    patch: [
-      '- id: ui-skin-deepcraft',
-      '  config:',
-      '    homeLayout: studio',
-    ],
-    initScript: { content: `(${watchReveal.toString()})(${JSON.stringify(SKIN)})` },
-    /** The home page before the turn: the greeting, the panel, the settings page. */
+    /** The home page before the turn: the greeting and the settings page. */
     async beforeSend(context) {
       const { page, notes } = context
       await waitForSkin(page)
       notes.mark = await animationOf(page, HOST.brandMark)
       notes.greeting = await animationOf(page, HOST.greeting)
-      await page.waitForFunction(() => (window.__motionReveal ?? []).length > 0, undefined, { timeout: 30000 }).catch(() => {})
-      notes.reveal = await page.evaluate(() => window.__motionReveal ?? [])
       await openSkinSettings(page)
       notes.slide = await readTabSlide(page, 1)
-      // The composer tab carries switches of its own; the general tab has none.
       await readTabSlide(page, 2)
       notes.switch = await readSwitch(page)
       await page.keyboard.press('Escape')
@@ -210,21 +150,13 @@ function motionScenario({ check }) {
       await page.waitForFunction((marks) => document.querySelector(marks.badge).hidden, SKIN, { timeout: 30000 })
       notes.badgeSteps = await page.evaluate(() => window.__motionBadge)
     },
-    async afterTurn(context) {
-      context.notes.menu = await readMenu(context.page)
-    },
     async assert({ session, notes }) {
-      const reveal = notes.reveal ?? []
       const sw = notes.switch ?? {}
       const slide = notes.slide ?? {}
-      const menu = notes.menu ?? {}
-      const closedScale = Number.parseFloat(menu.closed?.scale ?? 'NaN')
       return [
         check('首页标题的标志与问候语错开升起',
           notes.mark?.name === 'dsh-deepcraft-hero-rise' && notes.greeting?.name === 'dsh-deepcraft-hero-rise' && notes.greeting?.delay !== '0s' && notes.mark?.delay === '0s',
           JSON.stringify({ mark: notes.mark, greeting: notes.greeting })),
-        check('用量面板的数字到达时从占位里显出来',
-          reveal.length > 0 && reveal[0].words === 'dsh-deepcraft-home-reveal-words', JSON.stringify(reveal)),
         check('开关打开页面时静止，按下的那一刻才弹跳着过去，最后留下原来的值',
           sw.before?.moved === false && sw.before?.animation === 'none' &&
             sw.pressed?.[0]?.moved === true && sw.pressed[0].on !== sw.before?.on &&
@@ -239,11 +171,6 @@ function motionScenario({ check }) {
           notes.badgeIn?.name === 'dsh-deepcraft-wait-badge-in' &&
             JSON.stringify(notes.badgeSteps) === JSON.stringify([{ leaving: true, hidden: false }, { leaving: false, hidden: true }]),
           JSON.stringify({ in: notes.badgeIn, steps: notes.badgeSteps })),
-        check('菜单卡片展开后停在原尺寸，收起后回到从触发点长出的起始比例',
-          menu.opened?.open === 'true' && menu.opened?.scale === '1' && menu.opened?.transform === 'none' && menu.opened?.opacity === '1' &&
-            menu.closed?.open === 'false' && menu.closed?.visibility === 'hidden' && Math.abs(closedScale * 0.99 - 0.97) < 0.001 &&
-            /^matrix\(0\.99, 0, 0, 0\.99,/.test(menu.closed?.transform ?? ''),
-          JSON.stringify(menu)),
         check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
       ]
     },

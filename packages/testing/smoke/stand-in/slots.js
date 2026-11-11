@@ -1,25 +1,20 @@
 /**
- * The studio case needs the slot registry: the home panel is an entry in the
- * dock list seat (a list seat, so it carries an id), and the registration is the
- * whole wiring — the seat's own rendering is the host's. The component is kept
- * so the probe can render it the way the seat would. The settings case declares
- * the settings dialog's section slot and the plugin page's config slot instead,
- * so the probe can render the page. The peer case declares those two plus the
- * tool seat, so the probe can see both the page it greys out and the seat keys
- * the file rows must leave alone. The chunk-late case declares the settings
- * seats too: a settings section installed after its generation ended would
- * register there.
+ * The settings case declares the settings dialog's section slot and the plugin
+ * page's config slot, so the probe can render the page; the component is kept
+ * so the probe can render it the way the seat would. The peer case declares
+ * those two plus the tool seat, so the probe can see both the page it greys
+ * out and the seat keys the file rows must leave alone. The chunk-late case
+ * declares the settings seats too: a settings section installed after its
+ * generation ended would register there.
  */
 (function () {
   var host = window.__dshSmokeHost
   var CASE = host.CASE
 
-  var slotRegistry = CASE === 'studio' || CASE === 'settings' || CASE === 'chunk-late' || CASE === 'chat-files' || CASE === 'peer-chat-ux' || CASE === 'skin-center-handoff' || CASE === 'skin-center-arrival' || CASE === 'subagent-model' ? {
+  var slotRegistry = CASE === 'settings' || CASE === 'chunk-late' || CASE === 'chat-files' || CASE === 'peer-chat-ux' || CASE === 'skin-center-handoff' || CASE === 'skin-center-arrival' || CASE === 'subagent-model' ? {
     inject: function (key, callback) {
-      var declared = CASE === 'studio'
-        ? key === 'conversation.input.dock'
-        : CASE === 'subagent-model'
-          ? key === 'conversation.input.right'
+      var declared = CASE === 'subagent-model'
+        ? key === 'conversation.input.right'
         : CASE === 'chat-files'
           ? key === 'tool.call.toolview'
           : CASE === 'skin-center-handoff' || CASE === 'skin-center-arrival'

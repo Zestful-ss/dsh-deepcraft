@@ -8,7 +8,7 @@ import { createInlineStats } from './inline-stats'
 import { createStatsBlock } from './stats-block'
 import { createStreamEstimate } from './stream-estimate'
 import { paintContextPie, readPieColours, releaseContextPie } from './context-meter-pie'
-import { CONTEXT_STATS_ATTR, CONTEXT_PANEL_ATTR, clearStrayContextNodes, contextPanel, findContextMeter, meterOccupancy, releaseDialogWatch } from './stats-panel'
+import { CONTEXT_METER_ATTR, CONTEXT_STATS_ATTR, CONTEXT_PANEL_ATTR, clearStrayContextNodes, contextPanel, findContextMeter, meterOccupancy, releaseDialogWatch } from './stats-panel'
 import { CONTEXT_STOPS, rampPosition, writeRamp } from './stats-ramp'
 import type { HostContext, HostText } from '@dsh-deepcraft/engine/host'
 import type { HostSnapshotSource, HostTokenUsageProjection } from '@dsh-deepcraft/contracts/services'
@@ -19,7 +19,7 @@ import type { PieColours } from './context-meter-pie'
  *
  * Where they show follows the `statsPosition` choice: `context` hides the
  * composer's statistics row and moves the numbers into the popover the context
- * meter owns (features/composer/inline-bar.css), while `inline` leaves the host
+ * meter owns (context-stats.css), while `inline` leaves the host
  * row hidden too and writes them onto a line of its own under the card, with
  * the meter at that line's end. The choice is read on every pass, so switching
  * it moves the numbers without a reload. The panel carries the rows in both
@@ -268,6 +268,7 @@ export function createSessionStats(ctx: HostContext) {
         writeRamp(meter, 'context', null)
         // The host's ring comes back with the stylesheet the pie replaced.
         releaseContextPie(meter)
+        meter.removeAttribute(CONTEXT_METER_ATTR)
       }
       const blocks = document.querySelectorAll(`[${CONTEXT_STATS_ATTR}]`)
       for (let i = 0; i < blocks.length; i++) {

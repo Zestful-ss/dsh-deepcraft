@@ -1,5 +1,4 @@
 import { SUBAGENT_ROUTES_MAX, subagentRouteKey } from '@dsh-deepcraft/contracts/subagent'
-import { orderEffortIds } from '../effort/ladder'
 import type { SubagentModelRoute, SubagentRouteEfforts } from '@dsh-deepcraft/contracts/subagent'
 import type { HostModelCatalogSnapshot } from '@dsh-deepcraft/contracts/services'
 
@@ -117,6 +116,49 @@ export function routeLadder(
     return { state: resolved.state, efforts: resolved.efforts, defaultEffort: resolved.defaultEffort }
   }
   return { state: 'unknown', efforts: [] }
+}
+
+/**
+ * Effort id to strength, larger being stronger. `none` and `off` are the
+ * switch-off level and rank lowest.
+ *
+ * The ids are the ones the host's adapters and the OpenAI protocol both use,
+ * plus the provider-private names seen on this machine: `light` (TRAE's
+ * weakest) and `on` (Raccoon's "thinking on", which carries no strength of
+ * its own and therefore ranks with `high`).
+ */
+const EFFORT_STRENGTH: Readonly<Record<string, number>> = Object.freeze({
+  none: 0,
+  off: 0,
+  minimal: 1,
+  light: 2,
+  low: 3,
+  medium: 4,
+  high: 5,
+  on: 5,
+  xhigh: 6,
+  max: 7,
+  ultra: 8,
+})
+
+/**
+ * Order one model's levels by strength. The host promises the ids "from least
+ * to greatest selectable reasoning effort", but adapters in the wild do not
+ * all keep it; a level the table cannot rank keeps the slot the adapter gave
+ * it, and `undefined` — the model's own default level — leads.
+ */
+function orderEffortIds(ids: readonly (string | undefined)[]): (string | undefined)[] {
+  const known = (id: string | undefined): id is string =>
+    id !== undefined && Object.prototype.hasOwnProperty.call(EFFORT_STRENGTH, id)
+  const ranked = ids.filter(known)
+  ranked.sort((left, right) => EFFORT_STRENGTH[left] - EFFORT_STRENGTH[right])
+  const levels: (string | undefined)[] = []
+  let next = 0
+  for (const id of ids) {
+    if (id === undefined) continue
+    levels.push(known(id) ? ranked[next++] : id)
+  }
+  return [...ids.filter(id => id === undefined), ...levels]
 }
 
 /** The ladder's ids in display order: unspecified leads, the declared levels follow by strength. */

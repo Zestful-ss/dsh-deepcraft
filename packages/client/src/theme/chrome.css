@@ -2,8 +2,7 @@
 /* The one fade the skin paints at a transcript edge: four stops from the
    canvas colour to transparent — a straight 100% -> 0% ramp reads as a haze
    band, and color-mix keeps the paint theme-aware (docs/STYLE.md "Bottom
-   edge"). The composer's seat band reads it `to top`
-   (features/composer/inline.css), the header band below `to bottom`. Not a
+   edge"). The conversation header below reads it `to bottom`. Not a
    tokens.json entry: the palette table states one colour per brand and theme,
    while this ramp resolves per palette through --dsw-alias-bg-base itself. */
 body[data-dsh-deepcraft] {
@@ -78,93 +77,6 @@ html[data-windows-titlebar] body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="
   height: var(--dsh-windows-titlebar-height);
   border-left: 0.5px solid var(--dsw-alias-border-l1);
   pointer-events: none;
-}
-
-/* ---------- the floating page look ---------- */
-/* Settings › Appearance "Page look". Under `float` the columns stop sharing one
-   canvas: the frame keeps a warm tone, the conversation column lifts off it as a
-   rounded card with a hairline and the host's elevation, and the sidebar paints
-   the frame, so the card is the one raised surface. A wallpaper keeps the host's
-   own painting (theme/wallpaper.css). Every rule hangs on the page-look
-   attribute, so `flat` leaves the page exactly as the host laid it out. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="layout-frame"] {
-  /* The Windows titlebar fills above read this token off the frame. */
-  --dsh-deepcraft-canvas: var(--dsh-deepcraft-float-frame);
-  background: var(--dsh-deepcraft-float-frame);
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) :is([data-dsh-deepcraft-part~="sidebar-column"], .dshDesktopSidebarSurface) {
-  --dsw-specific-sidebar-fill: var(--dsh-deepcraft-float-frame);
-  --dsh-deepcraft-sidebar-canvas: var(--dsh-deepcraft-float-frame);
-  background: var(--dsh-deepcraft-float-frame);
-}
-
-/* The card carries the canvas token for its own subtree: the host's markdown,
-   popovers and the composer read the fill they sit on from it. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="center-column"] {
-  --dsw-alias-bg-base: var(--dsh-deepcraft-float-card);
-  --dsh-deepcraft-canvas: var(--dsh-deepcraft-float-card);
-  background: var(--dsh-deepcraft-float-card);
-}
-
-/* The hairline between the columns is the card's edge now, so the sidebar keeps
-   none of its own — including the stub the Windows titlebar block draws. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) :is([data-dsh-deepcraft-part~="sidebar-column"], .dshDesktopSidebarSurface) {
-  border-right-color: transparent;
-}
-
-html[data-windows-titlebar] body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-part~="layout-frame"] > [data-side="sidebar"]::before {
-  border-left-color: transparent;
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="center-column"] {
-  margin: 10px;
-  border: 1px solid var(--dsw-alias-border-l1);
-  border-radius: 16px;
-  box-shadow: 0 1px 2px rgba(20, 20, 19, 0.05), 0 8px 24px rgba(20, 20, 19, 0.07), 0 24px 64px rgba(20, 20, 19, 0.08);
-  /* The card's own corners clip its scrollers, which the radius would otherwise
-     leave square. */
-  overflow: hidden;
-  /* The composer's seat and the header band fade to the fill the transcript sits
-     on, which is the card here rather than the page canvas. */
-  --dsh-deepcraft-fade-stops:
-    var(--dsh-deepcraft-float-card, var(--dsw-alias-bg-base, #FCFCFB)) 0%,
-    color-mix(in srgb, var(--dsh-deepcraft-float-card, var(--dsw-alias-bg-base, #FCFCFB)) 82%, transparent) 32%,
-    color-mix(in srgb, var(--dsh-deepcraft-float-card, var(--dsw-alias-bg-base, #FCFCFB)) 40%, transparent) 68%,
-    transparent 100%;
-}
-
-body[data-dsh-deepcraft][data-ds-dark-theme][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="center-column"] {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.40), 0 8px 24px rgba(0, 0, 0, 0.35), 0 24px 64px rgba(0, 0, 0, 0.40);
-}
-
-/* The Windows block fills the caption row by lifting the column's own colour
-   above its top edge; a card that stands below it would carry that rectangle out
-   of its rounded corners, so the card keeps the elevation alone — the light and
-   the dark stack, since the block below it names the palette rather than a
-   theme. */
-html[data-windows-titlebar] body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="layout-frame"] > [data-dsh-deepcraft-part~="center-column"] {
-  box-shadow: 0 1px 2px rgba(20, 20, 19, 0.05), 0 8px 24px rgba(20, 20, 19, 0.07), 0 24px 64px rgba(20, 20, 19, 0.08);
-}
-
-html[data-windows-titlebar] body[data-dsh-deepcraft][data-ds-dark-theme][data-dsh-deepcraft-page-look="float"]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~="layout-frame"] > [data-dsh-deepcraft-part~="center-column"] {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.40), 0 8px 24px rgba(0, 0, 0, 0.35), 0 24px 64px rgba(0, 0, 0, 0.40);
-}
-
-/* ---------- the right sidebar's panels as floating cards ---------- */
-/* A panel docked in the right column floats 8px inside the window: the skin's
-   hairline and the host's own panel elevation over the frame's canvas. It hangs on
-   what paints the column — a docked tab's pane, or the column's own empty host; a
-   panel pulled out into the host's floating window is left to that window. Every
-   card rule is gated on the dock-look attribute: with the settings page's
-   "Float docked panels" off, no rule of the skin touches the pane and it stands
-   in the host's own fill, flush with the column. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-dock-look="card"] [data-dsh-deepcraft-part~="rightbar-column"] :is([data-dockkit-empty], [data-dockkit-host="dock"] > [data-dockkit-pane]) {
-  margin: 8px;
-  overflow: hidden;
-  border: 1px solid var(--dsw-alias-border-l1);
-  border-radius: 16px;
-  box-shadow: var(--dsw-elevation-prominent);
 }
 
 /* The column's start page centers its stack in a box that never grows, so a list
@@ -281,23 +193,16 @@ body[data-dsh-deepcraft] ::-webkit-scrollbar-thumb:hover {
   background: var(--dsh-deepcraft-scrollbar-hover);
 }
 
-/* Text selection: white on blue, gray on black while the window is blurred.
-   !important and solid colours because the paint has to cover the ink the host
-   and this skin put under it (links, code, syntax tokens). The unfocused rule
-   comes after the focused one at the same weight, so the attribute decides.
-   The scope is the conversation's text blocks and the draft editor: a
-   document-wide `::selection` makes Blink compute selection style for every
-   element on each recalculation, which stalls session switches. Selection
-   styles inherit, so the blocks carry their inline descendants; elsewhere the
-   host's own wash shows. */
+/* Text selection: white on blue. !important and solid colours because the
+   paint has to cover the ink the host and this skin put under it (links,
+   code, syntax tokens). The scope is the conversation's text blocks and the
+   draft editor: a document-wide `::selection` makes Blink compute selection
+   style for every element on each recalculation, which stalls session
+   switches. Selection styles inherit, so the blocks carry their inline
+   descendants; elsewhere the host's own wash shows. */
 body[data-dsh-deepcraft] :is([data-chat-flow], [data-lexical-editor]) :is(p, li, td, th, blockquote, pre, h1, h2, h3, h4, h5, h6)::selection {
   background-color: #3366d0 !important;
   color: #ffffff !important;
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-window-blur] :is([data-chat-flow], [data-lexical-editor]) :is(p, li, td, th, blockquote, pre, h1, h2, h3, h4, h5, h6)::selection {
-  background-color: #c7c7c6 !important;
-  color: #000000 !important;
 }
 
 /* Inline-code chips: the chip's own background paints above the selection
@@ -305,19 +210,9 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-window-blur] :is([data-chat-flow], [
 body[data-dsh-deepcraft] [data-chat-flow] code:not(pre code)::selection {
   background-color: rgb(40, 94, 206) !important;
 }
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-window-blur] [data-chat-flow] code:not(pre code)::selection {
-  background-color: rgb(196, 196, 195) !important;
-}
-
 body[data-dsh-deepcraft]:not([data-ds-dark-theme]) [data-chat-flow] code:not(pre code)::selection {
   background-color: rgb(54, 107, 219) !important;
 }
-
-body[data-dsh-deepcraft]:not([data-ds-dark-theme])[data-dsh-deepcraft-window-blur] [data-chat-flow] code:not(pre code)::selection {
-  background-color: rgb(209, 209, 208) !important;
-}
-
 body[data-dsh-deepcraft] :is(button, input, textarea, select, [role="button"], [role="tab"], [role="treeitem"]) {
   outline: none;
 }
@@ -381,7 +276,7 @@ body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="conversation-header"][data-d
 
 /* The transcript's top fade: the header already covers the transcript, so the
    band hangs off the header's own bottom edge and follows it. One knob,
-   --dsh-transcript-fade-h, matching the composer's own fade. */
+   --dsh-transcript-fade-h, gives the fade its height. */
 body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="conversation-header"][data-dsh-deepcraft-holds~="view-tabs"]::after {
   content: "";
   position: absolute;

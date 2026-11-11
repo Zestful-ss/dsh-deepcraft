@@ -12,10 +12,10 @@ const settings = require('./cases/settings.cjs')
 const agent = require('./cases/agent.cjs')
 const chat = require('./cases/chat.cjs')
 const mascot = require('./cases/mascot.cjs')
-const model = require('./cases/model.cjs')
 const subagentModel = require('./cases/subagent-model.cjs')
 const peer = require('./cases/peer.cjs')
 
-const CASES = { ...shell, ...stats, ...settings, ...agent, ...chat, ...mascot, ...model, ...subagentModel, ...peer }
+const CASES = { ...shell, ...stats, ...settings, ...agent, ...chat, ...mascot, ...subagentModel, ...peer }
+
 
 module.exports = { CASES }

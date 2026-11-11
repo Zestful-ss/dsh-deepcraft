@@ -55,22 +55,6 @@ test('a hold as its own child counts the direct child alone', async () => {
   expect(holds(frame)).toBeNull()
 })
 
-test('an unnamed wrapper takes the mark for what it holds, the scope anchor does not', async () => {
-  document.body.innerHTML =
-    '<div data-conversation-scroll><div class="_composerHero_ab"><div class="_headSeat_ab">' +
-    '<div class="_headline_ab"><div class="_fishHitbox_ab"></div></div></div>' +
-    '<div class="_composerStack_ab"><div class="_tray_ab"><div class="_card_ab" data-composer-card=""></div></div></div>' +
-    '</div></div>'
-  cleanups.push(installParts(TEST_VOCABULARY))
-  const seat = document.querySelector('[class~="_headSeat_ab"]')
-  expect(holds(seat)).toBe('hero-headline')
-  expect(holds(document.querySelector('[data-test-part~="composer-hero"]'))).toBeNull()
-  expect(holds(document.querySelector('[data-test-part~="hero-headline"]'))).toBe('hero-mark')
-  expect(holds(document.querySelector('[class~="_tray_ab"]'))).toBe('composer-card')
-  expect(holds(document.querySelector('[data-test-part~="composer-stack"]'))).toBeNull()
-  expect(holds(document.querySelector('[data-composer-card]'))).toBeNull()
-})
-
 test('a holder that takes its attribute after the node it holds still marks it', async () => {
   document.body.innerHTML = '<div class="_phase_ab"><div data-conversation-scroll=""></div></div>'
   cleanups.push(installParts(TEST_VOCABULARY))

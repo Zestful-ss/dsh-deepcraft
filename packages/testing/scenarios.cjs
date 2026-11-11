@@ -31,7 +31,6 @@ const { longSessionScenario } = require('./long-session.cjs')
 const { statsScenarios } = require('./stats-position.cjs')
 const { sidebarRailScenario } = require('./sidebar-rail.cjs')
 const { remoteSettingsScenario } = require('./remote-settings.cjs')
-const { conversationStylesScenario } = require('./conversation-styles.cjs')
 const { hostVisibilityScenario } = require('./host-visibility.cjs')
 const { customBrandScenario } = require('./custom-brand.cjs')
 const { deepcraftScenario } = require('./deepcraft.cjs')
@@ -41,7 +40,6 @@ const { subagentModelScenario } = require('./subagent-model.cjs')
 const { workspacePinsScenario } = require('./workspace-pins.cjs')
 const { dsBotScenario } = require('./ds-bot.cjs')
 const { desktopHeaderScenario } = require('./desktop-header.cjs')
-const { modelSlotScenario } = require('./model-slot.cjs')
 const { CANVAS } = require('./shoot.cjs')
 const { sanitizePage } = require('../../scripts/shared/privacy.cjs')
 const { bound } = require('./bounds.cjs')
@@ -87,9 +85,6 @@ async function captureBothSchemes(context) {
 /** The scenarios: each boots its own instance, sends its prompt, and asserts. */
 const SCENARIOS = {
   desktopHeader: desktopHeaderScenario({ check }),
-  conversationStyles: conversationStylesScenario({ check, HOST }, 'spine'),
-  /** A build's stored terminal style: the reading layout still stands and no switch is left. */
-  conversationLegacyConsole: conversationStylesScenario({ check, HOST }, 'console'),
   /** The host's own footer controls under the skin: the Cordis action and the outage button. */
   hostVisibility: hostVisibilityScenario({ check }),
   /** A scripted answer: the reader's message, the thought, the markdown. */
@@ -103,86 +98,6 @@ const SCENARIOS = {
         check('脚本回答的标题与列表都在页面里', flow.text.includes('Hello') && flow.text.includes('first point'), flow.text.slice(0, 120)),
         check('思考过程归入一个过程组', flow.processGroups === 1 && flow.kinds.includes('turn-process'), `processGroups=${flow.processGroups} kinds=${flow.kinds.join(',')}`),
         check('流式标记已经收起', flow.streaming === 0, `streaming=${flow.streaming}`),
-        check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
-      ]
-    },
-  },
-  /**
-   * The composer at a phone's width: the bottom line carries the tier, the
-   * model, the effort level and the context ring on one row, and at 390px the
-   * row keeps them by dropping what it cannot show — the tier's arrow, the
-   * ring's number and a model name longer than the room left over — rather than
-   * running past the card. At 330px there is less room than the controls need,
-   * which is where the room the effort trigger reserves must come out of the
-   * model name instead of out of the card: nothing leaves the card and the row
-   * does not scroll sideways.
-   */
-  narrow: {
-    script: 'greeting',
-    prompt: 'hello there',
-    viewport: { width: 390, height: 844 },
-    async assert({ page, session }) {
-      const read = () => page.evaluate(() => {
-        const read = (selector) => document.querySelector(selector)
-        const box = (el) => {
-          if (el === null) return null
-          const rect = el.getBoundingClientRect()
-          return { left: Math.round(rect.left), right: Math.round(rect.right), width: Math.round(rect.width) }
-        }
-        const shown = (el) => el !== null && getComputedStyle(el).display !== 'none'
-        const cap = (el) => (el === null ? null : getComputedStyle(el).maxWidth)
-        const perm = read('.dsh-deepcraft-perm-btn')
-        const permLabel = read('.dsh-deepcraft-perm-label')
-        const model = read('.dsh-deepcraft-model-btn')
-        const modelLabel = read('.dsh-deepcraft-model-btn-label')
-        const meter = read('[data-dsh-deepcraft-context-meter]')
-        const card = read('[data-composer-card]')
-        const row = card?.querySelector('[data-dsh-deepcraft-part~="row"]') ?? null
-        return {
-          width: window.innerWidth,
-          card: box(card),
-          cardOver: card === null ? null : card.scrollWidth - card.clientWidth,
-          rowOver: row === null ? null : row.scrollWidth - row.clientWidth,
-          perm: box(perm),
-          permMax: cap(perm),
-          permEllipsis: permLabel === null ? null : getComputedStyle(permLabel).textOverflow,
-          chevron: shown(read('.dsh-deepcraft-perm-chevron')),
-          model: box(model),
-          modelMax: cap(model),
-          modelEllipsis: modelLabel === null ? null : getComputedStyle(modelLabel).textOverflow,
-          effort: box(read('.dsh-deepcraft-effort-btn')),
-          meter: box(meter),
-          ring: shown(meter === null ? null : meter.querySelector('svg')),
-          number: shown(meter === null ? null : meter.querySelector('button > span')),
-        }
-      })
-      const inside = (inner, outer) => inner === null || outer === null || (inner.left >= outer.left && inner.right <= outer.right)
-      const fits = (state) => inside(state.perm, state.card) && inside(state.model, state.card) && inside(state.meter, state.card) &&
-        inside(state.effort, state.card) && (state.effort === null || state.meter.left >= state.effort.right)
-      // The row is measured with the faces the reader sees: a cold runner's CJK
-      // face can land after the resize, and a read against the fallback's wider
-      // metrics pins the capped perm control for that one instant.
-      await page.evaluate(() => document.fonts.ready.then(() => undefined))
-      const narrow = await read()
-      await page.setViewportSize({ width: 330, height: 844 })
-      await new Promise(resolve => setTimeout(resolve, 500))
-      await page.evaluate(() => document.fonts.ready.then(() => undefined))
-      const tight = await read()
-      await page.setViewportSize({ width: 390, height: 844 })
-      return [
-        check('页面是手机的宽度', narrow.width === 390, `innerWidth=${narrow.width}`),
-        check('权限选择器收起了下三角', narrow.chevron === false, `chevron=${narrow.chevron}`),
-        check('窄屏下两个选择器的名称超出时以省略号收尾', narrow.permMax === '132px' &&
-          (narrow.modelMax === '280px' || narrow.modelMax === 'none') &&
-          narrow.permEllipsis === 'ellipsis' && narrow.modelEllipsis === 'ellipsis',
-          JSON.stringify({ permMax: narrow.permMax, modelMax: narrow.modelMax, perm: narrow.permEllipsis, model: narrow.modelEllipsis })),
-        check('上下文只留圆环，数字不再显示', narrow.ring === true && narrow.number === false,
-          JSON.stringify({ ring: narrow.ring, number: narrow.number })),
-        check('控件都留在输入卡片里，圆环也不与旁边的控件重叠', fits(narrow),
-          JSON.stringify({ card: narrow.card, perm: narrow.perm, model: narrow.model, effort: narrow.effort, meter: narrow.meter })),
-        check('再窄一些时控件仍留在卡片里，输入区也不再横向滚动',
-          fits(tight) && tight.cardOver !== null && tight.rowOver !== null && tight.cardOver <= 0 && tight.rowOver <= 0,
-          JSON.stringify({ width: tight.width, card: tight.card, cardOver: tight.cardOver, rowOver: tight.rowOver, model: tight.model, effort: tight.effort, meter: tight.meter })),
         check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
       ]
     },
@@ -403,8 +318,6 @@ const SCENARIOS = {
   subagentModel: subagentModelScenario({ check }),
   /** The pinned aggregate above every workspace, through the host's own menus (packages/testing/workspace-pins.cjs). */
   workspacePins: workspacePinsScenario({ check }),
-  /** The model picker follows the host slot when its control is removed and restored. */
-  modelSlot: modelSlotScenario({ check }),
   /** Both palettes captured to the run's out directory and swept for personal data. */
   shots: {
     script: 'greeting',

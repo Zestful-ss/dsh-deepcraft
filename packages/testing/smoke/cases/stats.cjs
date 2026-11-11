@@ -55,33 +55,6 @@ module.exports = {
     checkPanelEdge(r)
     check('leaving the meter closes the popover and takes the block with it',
       r.context.closedAfterLeave === true, JSON.stringify(r.context.closedAfterLeave))
-    check('the meter\'s room survives a reading taken with no box',
-      r.context.roomBefore !== '' && /^\d+px$/.test(r.context.roomAfter || ''),
-      JSON.stringify({ before: r.context.roomBefore, after: r.context.roomAfter }))
-    // A mobile plugin's statistics strip takes the dock's own band; the overlay's
-    // line gives that band up, and only that band (issue #47).
-    const withStrip = r.context.bandWith || {}
-    const removed = r.context.bandRemoved || {}
-    const restored = r.context.bandRestored || {}
-    check('a mobile plugin\'s statistics strip is measured, and the dock\'s line is lifted by its height alone',
-      withStrip.stripHeight > 0 && withStrip.lift === `${withStrip.stripHeight}px` &&
-        withStrip.lowestLine !== null && withStrip.lowestLine <= withStrip.stripBottom,
-      JSON.stringify(withStrip))
-    check('the strip leaving takes the lift with it, and the band comes back with it',
-      removed.gone === true && removed.lift === '' &&
-        restored.stripHeight === withStrip.stripHeight && restored.lift === withStrip.lift,
-      JSON.stringify({ removed: removed.lift, restored: restored.lift }))
-    // The composer's own switch is live, and the numbers outlive it: the meter
-    // is taken from the host's dock when the composer's mark is not there.
-    const composerOff = r.context.composerOff || {}
-    const composerBack = r.context.composerBack || {}
-    check('with the composer restyle switched off the numbers still read the host\'s docked meter',
-      composerOff.gate === false && composerOff.marked === false &&
-        composerOff.ramp === 'context' && composerOff.pie === true,
-      JSON.stringify(composerOff))
-    check('the composer restyle coming back marks the meter again',
-      composerBack.gate === true && composerBack.marked === true,
-      JSON.stringify(composerBack))
     commonChecks(r)
   },
   'stats-compact'(r) {
@@ -172,83 +145,6 @@ module.exports = {
         r.statsInline.backToRoom.input === true && r.statsInline.backToRoom.output === true &&
         r.statsInline.backToRoom.total === false && r.statsInline.backToRoom.meterNumber === true,
       JSON.stringify(r.statsInline.backToRoom))
-    commonChecks(r)
-  },
-  studio(r) {
-    basicChecks(r)
-    check('the usage panel registers into the dock list seat with an id',
-      Array.isArray(r.slotRegistrations) && r.slotRegistrations.length === 1 &&
-        r.slotRegistrations[0].key === 'conversation.input.dock' &&
-        r.slotRegistrations[0].id === 'deepcraft-usage' &&
-        r.slotRegistrations[0].component === 'function',
-      JSON.stringify(r.slotRegistrations))
-    const renders = r.panelRenders || {}
-    const drew = (tab, className) => renders[tab] !== undefined && renders[tab].error === null &&
-      renders[tab].classes.includes(className)
-    check('the usage panel renders its Overview tab: stat cells and heat grid',
-      drew('overview', 'dsh-deepcraft-home-stat') && drew('overview', 'dsh-deepcraft-home-heat'),
-      JSON.stringify(renders.overview))
-    // The heat grid's cells: 26 weeks of days, every one of them naming its
-    // own day's tokens, whichever source the panel drew from.
-    const tips = (renders.overview && renders.overview.tips) || []
-    check('every heat cell names the day\'s tokens',
-      tips.length > 150 && tips.every((tip) => / — [\d.]+[kMB]? tokens$/.test(tip)),
-      `${tips.length} tips: ${JSON.stringify(tips.slice(0, 3))}`)
-    const said = (tab, pattern) => renders[tab] !== undefined && renders[tab].texts.some((text) => pattern.test(text))
-    check('all time: the peak hour and the book line read the whole history (500k steps down to The Brothers Karamazov)',
-      said('overview', /^3 AM$/) && said('overview', /^You've used ~1× the tokens in The Brothers Karamazov\.$/),
-      JSON.stringify(renders.overview && renders.overview.texts))
-    check('7d: the peak hour and the book line follow the range window (250k steps down to Dracula)',
-      said('overview-7d', /^3 PM$/) && said('overview-7d', /^You've used ~1× the tokens in Dracula\.$/),
-      JSON.stringify(renders['overview-7d'] && renders['overview-7d'].texts))
-    check('the usage panel renders its Models tab: stacked chart and ranked list',
-      drew('models', 'dsh-deepcraft-home-chart-seg') && drew('models', 'dsh-deepcraft-home-model'),
-      JSON.stringify(renders.models))
-    const rows = (tab) => (renders[tab] === undefined ? 0
-      : renders[tab].classes.filter((name) => name === 'dsh-deepcraft-home-model').length)
-    check('the folded model list shows six rows and a "Show 2 more" row',
-      rows('models') === 6 && said('models', /^Show 2 more$/),
-      JSON.stringify({ rows: rows('models'), texts: renders.models && renders.models.texts.slice(-3) }))
-    const mascot = r.mascot || {}
-    check('the crab stands on the hero card idling, drawn from its inlined sheet and ink mask',
-      mascot.mounted === true && mascot.ready === true && mascot.animation === 'idle' && mascot.body === true && mascot.ink === true,
-      JSON.stringify(mascot))
-    check('a click on its left half reaches the crab and pokes it; the poke plays back to idle without waking a pass',
-      mascot.reachable === true && mascot.poked === 'poke-left' && mascot.afterPoke === 'idle' && mascot.passesDuring === 0,
-      JSON.stringify(mascot), 'timing')
-    check('with the animation choice on "reduced" it holds the idle still frame; a click still pokes it',
-      mascot.reducedAttr === 'reduced' && mascot.stillFrame === 'translate(0px, 0px)' && mascot.stillAnimations === 0 &&
-        mascot.reducedClick === 'poke-left',
-      JSON.stringify(mascot), 'timing')
-    check('the crab leaves with the hero page', mascot.afterHero === false, JSON.stringify(mascot))
-    check('the studio hero mark is on the document on the hero page and off it elsewhere, and the studio rules reach the stack',
-      r.homeHero !== undefined && r.homeHero.onHero === true && r.homeHero.offHero === false && r.homeHero.stackMaxWidth === '720px',
-      JSON.stringify(r.homeHero))
-    check('the floating home layout marks the hero root, reaches the document, and renders its deck\'s week roll-up and three cards',
-      r.floatHome !== undefined && r.floatHome.mark === true && r.floatHome.pageLook === 'float' &&
-        r.floatHome.layoutAttr === 'float' && r.floatHome.deck.error === null &&
-        r.floatHome.week === true && r.floatHome.cards === 3,
-      JSON.stringify(r.floatHome))
-    check('the studio hero draws the conversation\'s permission trigger in the card\'s mode strip, with no segment group',
-      r.heroPerm !== undefined && r.heroPerm.trigger === true && r.heroPerm.segments === 0 &&
-        r.heroPerm.label === 'Accept edits' && r.heroPerm.disabled === false,
-      JSON.stringify(r.heroPerm))
-    check('the usage panel draws under the hero stack only, so sending a message never shows it full width',
-      r.panelDisplay !== undefined && r.panelDisplay.hero === 'flex' && r.panelDisplay.coldStart === 'flex' &&
-        r.panelDisplay.conversation === 'none',
-      JSON.stringify(r.panelDisplay))
-    const cold = r.coldStart || {}
-    check('the cold start screen carries the usage panel on the skin\'s own seat, given back once the dock arrives',
-      cold.seat === true && cold.rendered === true && cold.seatAfterDock === false && cold.unmountedAfterDock === true,
-      JSON.stringify(cold))
-    check('the cold start screen shows the permission trigger on the new-session default, inert, and opens no card',
-      cold.trigger !== null && cold.trigger !== undefined && cold.segments === 0 &&
-        cold.trigger.label === 'Accept edits' && cold.trigger.disabled === true && cold.openCard === 0,
-      JSON.stringify({ segments: cold.segments, trigger: cold.trigger, open: cold.openCard }))
-    check('the open model list shows every row and a "Show less" row',
-      rows('models-open') === 8 && said('models-open', /^Show less$/) && !said('models-open', /^Show \d+ more$/),
-      JSON.stringify({ rows: rows('models-open'), texts: renders['models-open'] && renders['models-open'].texts.slice(-3) }))
-    check('the composer restyle keeps running', r.composerRestyle === true, JSON.stringify(r.composerRestyle))
     commonChecks(r)
   },
 }

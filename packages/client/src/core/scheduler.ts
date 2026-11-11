@@ -1,15 +1,11 @@
 import { installScheduler as installEngineScheduler } from '@dsh-deepcraft/engine/scheduler'
 import type { FeatureHandle, SchedulerCalls } from '@dsh-deepcraft/engine/scheduler'
 import { onHdslLoaded, onUsernameLoaded } from '../shared/identity'
-import { onModelCopyLoaded } from '../features/model/model-copy'
+import { onModelCopyLoaded } from '../shared/model-copy'
 import { loadPrefs, refreshMotionAttribute, subscribePrefs } from './prefs'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FooterHandle } from '../features/account/account-footer'
 import type { ChatFoldHandle } from '../features/chat-fold/chat-fold'
-import type { ComposerHandle } from '../features/composer/composer'
-import type { ModelHandle } from '../features/model/model-picker'
-import type { PeakRateHandle } from '../features/peakrate/peakrate'
-import type { QuickProvidersHandle } from '../features/settings/quick-providers'
 
 /**
  * Every feature's handle, under the name it registers on `ui` (its manifest's
@@ -18,24 +14,14 @@ import type { QuickProvidersHandle } from '../features/settings/quick-providers'
  */
 export interface Handles {
   brand: FeatureHandle
-  composer: ComposerHandle
-  homeLayout: FeatureHandle
   homeRipple: FeatureHandle
   mascot: FeatureHandle
-  permissions: FeatureHandle
   contextStats: FeatureHandle
-  model: ModelHandle
   subagentModel: FeatureHandle
-  peakrate: PeakRateHandle
-  effort: FeatureHandle
-  heroMenu: FeatureHandle
-  quickProviders: QuickProvidersHandle
   footer: FooterHandle
-  workspace: FeatureHandle
   workspacePins: FeatureHandle
   search: FeatureHandle
   turnNav: FeatureHandle
-  conversationStyle: FeatureHandle
   chatFollow: FeatureHandle
   chatFold: ChatFoldHandle
   chatWait: FeatureHandle

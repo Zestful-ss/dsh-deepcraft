@@ -11,18 +11,13 @@
 
   probe.step(async function () {
     await probe.onlyFor(['switches', 'switches-off'], async function () {
-      // The host surfaces the three sidebar and header features take over:
-      // the brand row (search), the workspace section with its tree
-      // (workspace view) and the conversation's view-tab strip.
+      // The host surfaces the two switched features take over: the sidebar's
+      // brand row (search) and the conversation's view-tab strip.
       var switchSidebar = document.createElement('div')
       switchSidebar.setAttribute('data-slot', 'sidebar')
       switchSidebar.innerHTML = '<div class="_root_n_1"><div class="_logoRow_n_1" data-window-drag="true">' +
         '<button type="button" class="_brand_n_1 _wide_n_1" aria-label="New session">brand</button>' +
-        '<button type="button" class="_iconButton_n_1 _toggle_n_1" aria-label="Collapse sidebar">toggle</button></div>' +
-        // One hash suffix for the section, its header, its label and its list
-        // area, the way the host's CSS modules name them.
-        '<div class="_root_w1_1"><div class="_sectionHeader_w1_1"><span class="_sectionLabel_w1_1 _wide_w1_1">Workspaces</span></div>' +
-        '<div role="tree" class="_listArea_w1_1"><div data-row-key="w1" class="_projectRow_w1_1">project</div></div></div></div>'
+        '<button type="button" class="_iconButton_n_1 _toggle_n_1" aria-label="Collapse sidebar">toggle</button></div></div>'
       document.body.appendChild(switchSidebar)
       var switchHeader = document.createElement('div')
       switchHeader.className = '_header_c_1'
@@ -35,17 +30,8 @@
       document.body.appendChild(switchHeader)
       var switchMarks = function () {
         return {
-          // The permission control's own two marks. The context statistics took
-          // the same switch over once; they answer to `statsPosition` now, and
-          // their own case drives that choice.
-          permissionsControl: document.querySelectorAll('.dsh-deepcraft-perm-container').length +
-            (document.body.hasAttribute('data-dsh-deepcraft-permissions') ? 1 : 0),
-          workspaceView: document.querySelectorAll('.dsh-deepcraft-ws-segments').length,
           sidebarSearch: document.querySelectorAll('[data-dsh-deepcraft-search-row], .dsh-deepcraft-search-trigger').length,
           viewTabs: document.querySelectorAll('[data-dsh-view-tabs]').length,
-          // The composer restyle's gate: the feature writes it on <body> and
-          // takes it off again when its scope choice is off.
-          composerScope: document.body.hasAttribute('data-dsh-deepcraft-composer-active') ? 1 : 0,
         }
       }
       var settleSwitch = async function (patch) {
@@ -54,23 +40,14 @@
         await sleep(300)
         return switchMarks()
       }
-      var switchKeys = ['permissionsControl', 'workspaceView', 'sidebarSearch', 'viewTabs', 'composerScope']
-      // The value each switch is off and on at: a boolean's false and true, and
-      // a choice's own off beside the value the feature runs under.
-      var switchValues = { composerScope: { off: 'off', on: 'all' } }
-      var offValue = function (key) {
-        var values = switchValues[key]
-        return values === undefined ? false : values.off
-      }
-      var onValue = function (key) {
-        var values = switchValues[key]
-        return values === undefined ? true : values.on
-      }
-      // The sixth switched feature, the file change rows, takes seat keys over
-      // rather than drawing marks on the page, so its switch is driven and
-      // checked in its own case ('chat-files': offSeats/backSeats). The header
-      // band needs the desktop caption row, which this page has not: its switch
-      // is driven in its own case too ('header-band': off/back).
+      var switchKeys = ['sidebarSearch', 'viewTabs']
+      var offValue = function () { return false }
+      var onValue = function () { return true }
+      // The file change rows take seat keys over rather than drawing marks on
+      // the page, so their switch is driven and checked in its own case
+      // ('chat-files': offSeats/backSeats). The header band needs the desktop
+      // caption row, which this page has not: its switch is driven in its own
+      // case too ('header-band': off/back).
       var allSwitches = function (value) {
         var patch = {}
         for (var ki = 0; ki < switchKeys.length; ki++) patch[switchKeys[ki]] = value ? onValue(switchKeys[ki]) : offValue(switchKeys[ki])
@@ -91,26 +68,6 @@
         r.switches.allOff = await settleSwitch(allSwitches(false))
       })
       r.switches.allOn = await settleSwitch(allSwitches(true))
-      // The collapsed rail: the host renders the section's heading only while
-      // the sidebar is wide, so the feature's control and archived list have to
-      // leave with the heading and come back with it.
-      var railMarks = function () {
-        return {
-          segments: document.querySelectorAll('.dsh-deepcraft-ws-segments').length,
-          list: document.querySelectorAll('.dsh-deepcraft-archive-list').length,
-        }
-      }
-      var sectionHeader = switchSidebar.querySelector('._sectionHeader_w1_1')
-      var sectionLabel = switchSidebar.querySelector('._sectionLabel_w1_1')
-      var wide = railMarks()
-      sectionHeader.removeChild(sectionLabel)
-      document.body.appendChild(document.createElement('i'))
-      await sleep(300)
-      var collapsed = railMarks()
-      sectionHeader.insertBefore(sectionLabel, sectionHeader.firstChild)
-      document.body.appendChild(document.createElement('i'))
-      await sleep(300)
-      r.switches.rail = { wide: wide, collapsed: collapsed, back: railMarks() }
     })
   })
 })()

@@ -1,14 +1,12 @@
 /**
  * The preferences: one declaration each, shared by both halves (D73).
  *
- * Every fact about a preference lives here once — its key, its type, the values
- * it accepts, its shipped default, the limit a text or a list keeps to, and the
- * shapes (or names) an earlier build stored. `Prefs`, the value constants the
- * browser half reads, the page attributes' defaults and the host half's Config
- * are derived from this table, so a preference is added by one entry here plus
- * the feature that reads it (its settings row follows the same table, D72).
+ * The host settings namespace holds the store; this table declares the key,
+ * the type and the default, and `clampPrefs` maps a stored value onto the
+ * declared shape so a preference is always in force. The browser half mirrors
+ * the set onto the document (packages/client/src/core/prefs.ts, D75), and the
+ * feature that reads it (its settings row follows the same table, D72).
  */
-import { OFFICIAL_MODEL_GROUP } from './services'
 
 /* ---------- the value vocabulary ---------- */
 
@@ -21,10 +19,10 @@ export const BRAND_NAME_MAX = 40
 
 /**
  * The animation choice: `system` follows the operating system's own
- * reduced-motion setting, `reduced` holds every animation still whatever the
- * system says, and `full` always plays them. The resolved answer rides <body>
- * as an attribute (`reduced` / `full`), so the mascots and the stylesheets read
- * one value instead of asking the system separately.
+ * reduced-motion request, `reduced` stills everything the skin animates,
+ * and `full` plays regardless. Only the resolved answer reaches the
+ * document: a stylesheet cannot rewrite its own media queries, so "always
+ * play" has to be a value the rules can test.
  */
 export const MOTION_SYSTEM = 'system'
 export const MOTION_REDUCED = 'reduced'
@@ -65,11 +63,6 @@ export const SEARCH_STYLE_OVERLAY = 'overlay'
 export const SEARCH_STYLE_STANDALONE = 'standalone'
 export const SEARCH_STYLES = [SEARCH_STYLE_ICON, SEARCH_STYLE_OVERLAY, SEARCH_STYLE_STANDALONE] as const
 
-/** How much air the sidebar keeps around its own rows. */
-export const SIDEBAR_LAYOUT_RELAXED = 'relaxed'
-export const SIDEBAR_LAYOUT_COMPACT = 'compact'
-export const SIDEBAR_LAYOUTS = [SIDEBAR_LAYOUT_RELAXED, SIDEBAR_LAYOUT_COMPACT] as const
-
 /**
  * The mark a conversation still running carries in the sidebar: a light
  * breathing in place over the idle seat's hollow circle, or the ring turning
@@ -84,28 +77,6 @@ export const STATS_POSITION_INLINE = 'inline'
 export const STATS_POSITION_CONTEXT = 'context'
 export const STATS_POSITIONS = [STATS_POSITION_INLINE, STATS_POSITION_CONTEXT] as const
 
-/**
- * How the page's boxes are set: `float` lifts the conversation column and the
- * controls off a warm frame, `flat` leaves every box flush in the host's own
- * arrangement.
- */
-export const PAGE_LOOK_FLOAT = 'float'
-export const PAGE_LOOK_FLAT = 'flat'
-export const PAGE_LOOKS = [PAGE_LOOK_FLOAT, PAGE_LOOK_FLAT] as const
-
-/** Home-page layouts. `float` is the deck under a card composer; `classic` is the centered hero; `studio` is the dashboard form, Claude Code's own home. */
-export const HOME_LAYOUT_FLOAT = 'float'
-export const HOME_LAYOUT_CLASSIC = 'classic'
-export const HOME_LAYOUT_STUDIO = 'studio'
-export const HOME_LAYOUTS = [HOME_LAYOUT_FLOAT, HOME_LAYOUT_CLASSIC, HOME_LAYOUT_STUDIO] as const
-
-/** Composer surfaces the restyle may cover, in settings order. */
-export const COMPOSER_SCOPE_OFF = 'off'
-export const COMPOSER_SCOPE_HERO = 'hero'
-export const COMPOSER_SCOPE_CONVERSATION = 'conversation'
-export const COMPOSER_SCOPE_ALL = 'all'
-export const COMPOSER_SCOPES = [COMPOSER_SCOPE_OFF, COMPOSER_SCOPE_HERO, COMPOSER_SCOPE_CONVERSATION, COMPOSER_SCOPE_ALL] as const
-
 /** How eagerly the skin's popovers open on hover: click only, the account popover alone, or every popover the skin owns. */
 export const AUTO_POPOVER_OFF = 'off'
 export const AUTO_POPOVER_ACCOUNT = 'account'
@@ -114,9 +85,6 @@ export const AUTO_POPOVER_SCOPES = [AUTO_POPOVER_OFF, AUTO_POPOVER_ACCOUNT, AUTO
 
 /** Longest accepted custom username. */
 export const USERNAME_MAX = 64
-/** Most quick-provider ids kept, and the longest id accepted. */
-export const QUICK_PROVIDERS_MAX = 64
-export const PROVIDER_ID_MAX = 128
 /** Longest accepted pet id: a package directory name the official player can open. */
 export const PET_ID_MAX = 63
 
@@ -135,10 +103,9 @@ interface BooleanSpec extends PrefSpecBase { readonly type: 'boolean', readonly 
 interface ChoiceSpec extends PrefSpecBase { readonly type: 'choice', readonly values: readonly string[], readonly default: string }
 interface TextSpec extends PrefSpecBase { readonly type: 'text', readonly default: string, readonly max: number }
 interface ColorSpec extends PrefSpecBase { readonly type: 'color', readonly default: string }
-interface ListSpec extends PrefSpecBase { readonly type: 'list', readonly default: readonly string[], readonly max: number, readonly entryMax: number, readonly drop: readonly string[] }
 
 /** One preference's declaration: its type, its default, and what its type adds to that. */
-export type PrefSpec = BooleanSpec | ChoiceSpec | TextSpec | ColorSpec | ListSpec
+export type PrefSpec = BooleanSpec | ChoiceSpec | TextSpec | ColorSpec
 
 /**
  * One declaration per preference (D73). A `choice`'s values are the set a stored
@@ -153,27 +120,13 @@ export const PREFS = {
   motion: { type: 'choice', values: MOTION_MODES, default: MOTION_SYSTEM },
   /** An earlier build stored the two words; `precise` is what the switch being on means. */
   statusDetail: { type: 'boolean', default: true, legacy: { precise: true, simple: false } },
-  collapseFooter: { type: 'boolean', default: true },
   /** It was a boolean before it grew its choices. */
   autoPopover: { type: 'choice', values: AUTO_POPOVER_SCOPES, default: AUTO_POPOVER_ALL, legacy: { true: AUTO_POPOVER_ALL, false: AUTO_POPOVER_OFF } },
-  composerScope: { type: 'choice', values: COMPOSER_SCOPES, default: COMPOSER_SCOPE_ALL },
-  modelPicker: { type: 'boolean', default: true },
-  modelDescriptions: { type: 'boolean', default: true },
   /** The session must name a subagent model rather than inherit the parent route. */
   subagentModelChoice: { type: 'boolean', default: false },
   /** The composer's own entry for the routes one session delegates on. */
   subagentModelPicker: { type: 'boolean', default: true },
-  peakrate: { type: 'boolean', default: true },
-  /**
-   * The provider ids the picker's first level carries: ids rather than names,
-   * so a catalog rename does not lose the stored selection. The official
-   * service is the picker's default rather than a choice, so a stored id for it
-   * is dropped.
-   */
-  quickProviders: { type: 'list', default: [], max: QUICK_PROVIDERS_MAX, entryMax: PROVIDER_ID_MAX, drop: [OFFICIAL_MODEL_GROUP] },
   username: { type: 'text', default: '', max: USERNAME_MAX },
-  pageLook: { type: 'choice', values: PAGE_LOOKS, default: PAGE_LOOK_FLOAT },
-  homeLayout: { type: 'choice', values: HOME_LAYOUTS, default: HOME_LAYOUT_FLOAT },
   homeRipple: { type: 'boolean', default: false },
   palette: { type: 'choice', values: PALETTES, default: PALETTE_OCEAN },
   typeface: { type: 'choice', values: TYPEFACES, default: TYPEFACE_CLAUDE },
@@ -182,13 +135,9 @@ export const PREFS = {
   mascotScope: { type: 'choice', values: MASCOT_SCOPES, default: MASCOT_SCOPE_ALL },
   /** The chat pet, by package directory id; it follows neither the palette nor the brand (D80). */
   chatPet: { type: 'text', default: 'whaledou', max: PET_ID_MAX },
-  permissionsControl: { type: 'boolean', default: true },
   statsPosition: { type: 'choice', values: STATS_POSITIONS, default: STATS_POSITION_CONTEXT },
-  workspaceView: { type: 'boolean', default: true },
-  dockCards: { type: 'boolean', default: true },
   sidebarSearch: { type: 'boolean', default: true },
   searchStyle: { type: 'choice', values: SEARCH_STYLES, default: SEARCH_STYLE_OVERLAY },
-  sidebarLayout: { type: 'choice', values: SIDEBAR_LAYOUTS, default: SIDEBAR_LAYOUT_RELAXED },
   turnNav: { type: 'boolean', default: true },
   viewTabs: { type: 'boolean', default: true },
   headerBand: { type: 'boolean', default: true },
@@ -207,21 +156,15 @@ export type PrefKey = keyof typeof PREFS
  */
 export const LIVE_PREFS = [
   'homeRipple',
-  'permissionsControl',
   'statsPosition',
-  'workspaceView',
   'sidebarSearch',
   'turnNav',
   'viewTabs',
   'headerBand',
   'chatAnimations',
   'chatWait',
-  'peakrate',
   'mascot',
-  'modelPicker',
   'subagentModelPicker',
-  'collapseFooter',
-  'composerScope',
 ] as const satisfies readonly PrefKey[]
 
 /** A preference a feature switch follows live. */
@@ -232,8 +175,7 @@ type SpecValue<S> =
   S extends { readonly type: 'boolean' } ? boolean :
     S extends { readonly type: 'choice', readonly values: readonly (infer V)[] } ? V :
       S extends { readonly type: 'text' | 'color' } ? string :
-        S extends { readonly type: 'list' } ? string[] :
-          never
+        never
 
 /**
  * The preference shape the browser half reads: one field per declaration above,
@@ -301,25 +243,13 @@ function clampPref(spec: PrefSpec, raw: unknown): unknown {
     case 'choice': return typeof raw === 'string' && spec.values.includes(raw) ? raw : spec.default
     case 'text': return typeof raw === 'string' ? raw.trim().slice(0, spec.max) : spec.default
     case 'color': return typeof raw === 'string' && COLOR_RE.test(raw) ? raw.toLowerCase() : spec.default
-    case 'list': {
-      if (!Array.isArray(raw)) return spec.default
-      const out: string[] = []
-      for (let i = 0; i < raw.length && out.length < spec.max; i++) {
-        const entry = raw[i]
-        if (typeof entry !== 'string' || entry === '' || entry.length > spec.entryMax) continue
-        if (spec.drop.includes(entry) || out.includes(entry)) continue
-        out.push(entry)
-      }
-      return out
-    }
   }
 }
 
 /**
  * Clamp one host value into the preference shape, field by field off the table:
  * a boolean stays on unless stored as `false`, a choice outside its set reads as
- * its default, a text is trimmed to its limit, a colour must be `#rrggbb`, and a
- * list keeps distinct ids within both limits.
+ * its default, a text is trimmed to its limit, and a colour must be `#rrggbb`.
  */
 export function clampPrefs(value: unknown): Prefs {
   const section: Record<string, unknown> = value !== null && typeof value === 'object' ? value as Record<string, unknown> : {}

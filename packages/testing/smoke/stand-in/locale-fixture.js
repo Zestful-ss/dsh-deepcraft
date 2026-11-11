@@ -34,20 +34,11 @@
     'stats.counts': '{turns} 轮 {steps} 步',
     'stats.cacheHit': '缓存命中 {percent}%',
   }
-  /** The host's permission tier names, as its own dictionary carries them. */
-  var permissionAccess = {
-    'preset.readOnly': '仅可查看',
-    'preset.workspaceWrite': '工作区内修改',
-    'preset.fullAccess': '完全权限',
-    'auto.label': 'Auto review',
-  }
   /** The cases whose session-statistics surface is driven: the two popover widths and the line of their own. */
   var statsFixtureCase = CASE === 'context-stats' || CASE === 'stats-compact' || CASE === 'stats-inline'
-  /** The case that switches the interface language while the page runs. */
-  var localeSwitchCase = CASE === 'permissions-locale'
-  var localeServed = waitFixtureCase || statsFixtureCase || CASE === 'turn-nav' || localeSwitchCase
+  var localeServed = waitFixtureCase || statsFixtureCase || CASE === 'turn-nav'
   /** The active locale id; the language cases start in the language they assert. */
-  var active = localeSwitchCase ? 'zh' : 'en'
+  var active = 'en'
   var listeners = []
   // The switch a probe drives: the host emits on an active-locale change, which
   // is what the skin's scheduler rebuilds its copy-carrying rows from.

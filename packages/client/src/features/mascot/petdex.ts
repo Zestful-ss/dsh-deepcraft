@@ -44,7 +44,7 @@ const DISPLAY_WIDTH = 72
  * The atlas URL stays the same for every action — actions are rows of one
  * image — and the image is decoded once before the mascot is put on show.
  *
- * @param ui - shared handle table (`ui.composer`).
+ * @param ui - shared handle table.
  * @param pet - the installed package, as the host half describes it.
  */
 export function createPetdexMascot(ctx: HostContext, ui: FeatureUi<typeof manifest>, pet: PetDescriptor) {

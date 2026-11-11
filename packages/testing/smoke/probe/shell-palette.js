@@ -28,7 +28,6 @@
         conversation: hostProbe('<div data-pane="conversation">c</div>'),
         popover: hostProbe('<div class="dsh-deepcraft-popover-card" data-open="true">p</div>'),
         search: hostProbe('<div class="dsh-deepcraft-search-dialog">q</div>'),
-        group: hostProbe('<span class="dsh-deepcraft-model-group">g</span>'),
         heading: hostProbe('<h1>h</h1>'),
         code: hostProbe('<pre><code>c</code></pre>'),
       }
@@ -56,8 +55,6 @@
           // The account drawer the footer feature built (it sweeps any other copy).
           account: getComputedStyle(document.querySelector('.dsh-deepcraft-account-popover')).backgroundColor,
           search: getComputedStyle(hostNodes.search).backgroundColor,
-          group: getComputedStyle(hostNodes.group).backgroundColor,
-          groupInk: getComputedStyle(hostNodes.group).color,
           heading: getComputedStyle(hostNodes.heading).fontFamily,
           code: getComputedStyle(hostNodes.code.firstChild).fontFamily,
         }
@@ -121,7 +118,7 @@
       }
       r.settings = { registered: typeof Section === 'function', pages: {} }
       if (r.settings.registered) {
-        var tabIds = ['general', 'appearance', 'composer', 'sidebar', 'conversation']
+        var tabIds = ['general', 'appearance', 'sidebar', 'conversation']
         for (var ti = 0; ti < tabIds.length; ti++) r.settings.pages[tabIds[ti]] = renderTab(tabIds[ti])
         r.settings.link = r.settings.pages.general.link
         // The heading's mark: the build inlines the asset into the token sheet
@@ -137,18 +134,9 @@
           ink: markStyle.backgroundColor,
         }
         linkNode.remove()
-        window.__pushForm({ modelPicker: false, mascot: 'off', sidebarSearch: false, palette: 'host' })
-        r.settings.parentsOff = { appearance: renderTab('appearance'), composer: renderTab('composer'), sidebar: renderTab('sidebar') }
-        window.__pushForm({ modelPicker: true, mascot: 'brand', sidebarSearch: true, palette: 'ocean' })
-        // The rows that wait for another setting: the composer restyle off greys
-        // the picker, its sub-rows, the permission control and the statistics'
-        // position; the footer takeover off greys the easter egg under it. Home
-        // only still leaves the statistics without a conversation to stand in.
-        window.__pushForm({ composerScope: 'off', collapseFooter: false })
-        r.settings.requirementsOff = { composer: renderTab('composer'), conversation: renderTab('conversation'), sidebar: renderTab('sidebar') }
-        window.__pushForm({ composerScope: 'hero', collapseFooter: true })
-        r.settings.heroOnly = { composer: renderTab('composer'), conversation: renderTab('conversation') }
-        window.__pushForm({ composerScope: 'all' })
+        window.__pushForm({ mascot: 'off', sidebarSearch: false, palette: 'host' })
+        r.settings.parentsOff = { appearance: renderTab('appearance'), sidebar: renderTab('sidebar') }
+        window.__pushForm({ mascot: 'brand', sidebarSearch: true, palette: 'ocean' })
         // On the Windows window the title-bar row takes input; everywhere else
         // it stays greyed with its note.
         document.documentElement.setAttribute('data-windows-titlebar', '')

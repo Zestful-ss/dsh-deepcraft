@@ -24,7 +24,7 @@
       }
     },
     "apex": {
-      "description": "The reasoning slider's top rung: the same violet under every palette.",
+      "description": "Colours independent of the palette choice: the same value under every palette. Empty while nothing is painted regardless of the reader's palette.",
       "type": "array",
       "items": {
         "type": "object",

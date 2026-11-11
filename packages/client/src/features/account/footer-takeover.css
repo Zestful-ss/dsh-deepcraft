@@ -3,11 +3,9 @@
    launcher steps aside: the account menu opens the same dialog. Every other
    control the host draws in that area — the connection state, the update pill,
    a plugin's entry — keeps its own node, its own box and its own behaviour.
-   The "Collapse the sidebar settings area" preference turns the takeover off,
-   so the rule below carries data-dsh-deepcraft-footer-takeover: the skin sets
-   it on <body> only while the takeover is on, and with it absent the host
-   footer renders exactly as shipped. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-footer-takeover] [data-dsh-deepcraft-host-settings-trigger] {
+   The mark on the trigger is account-footer.ts's stamp, released when the
+   feature stops, so the host footer comes back on teardown and on retire. */
+body[data-dsh-deepcraft] [data-dsh-deepcraft-host-settings-trigger] {
   display: none;
 }
 

@@ -33,8 +33,8 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     },
   }
 
-  // The composer restyle hides the host's stat dialogs only while this
-  // says their replacement is installed.
+  // The stylesheet hides the host's stat dialogs only while this says their
+  // replacement is installed.
   document.body.setAttribute(SESSION_STATS_ATTR, '')
 
   return () => {

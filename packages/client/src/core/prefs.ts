@@ -1,4 +1,4 @@
-import { COMPOSER_ATTR, MASCOT_PETDEX, DOCK_LOOK_ATTR, DOCK_LOOK_CARD, DOCK_LOOK_FLUSH, FOOTER_ATTR, MASCOT_ATTR, MASCOT_BRAND, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PAGE_LOOK_ATTR, PACKAGE_NAME, PALETTE_ATTR, SEARCH_STYLE_ATTR, SETTINGS_ENTRY_FALLBACK, SIDEBAR_LAYOUT_ATTR, STATS_POSITION_ATTR, TYPEFACE_ATTR } from '../constants'
+import { FOOTER_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_PETDEX, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PACKAGE_NAME, PALETTE_ATTR, SEARCH_STYLE_ATTR, SETTINGS_ENTRY_FALLBACK, STATS_POSITION_ATTR, TYPEFACE_ATTR } from '../constants'
 import type { PrefKey, Prefs } from '../constants'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import { clampPrefs } from '@dsh-deepcraft/contracts/prefs'
@@ -39,24 +39,17 @@ export function loadPrefs() {
 }
 
 /**
- * Runtime overrides that outrank the stored preferences: a feature retired
- * after failing hands its surface back to the host, because both of these
- * HIDE host controls and a takeover whose replacement is gone would leave
+ * Runtime override that outranks the page: a footer takeover retired after
+ * failing hands the sidebar footer back to the host, because the takeover
+ * hides host controls and a takeover whose replacement is gone would leave
  * nothing in their place.
  */
 let footerTakeoverRetired = false
-export let composerRestyleRetired = false
 
 /** Give the sidebar footer back to the host for the rest of this generation. */
 export function retireFooterTakeover() {
   footerTakeoverRetired = true
   document.body.removeAttribute(FOOTER_ATTR)
-}
-
-/** Give the composer back to the host for the rest of this generation. */
-export function retireComposerRestyle() {
-  composerRestyleRetired = true
-  document.body.removeAttribute(COMPOSER_ATTR)
 }
 
 /** The current preferences (live object; treat as read-only). */
@@ -72,18 +65,19 @@ export function subscribePrefs(listener: (prefs: Prefs) => void) {
     if (index !== -1) prefsListeners.splice(index, 1)
   }
 }
-
 /**
  * The document mirror: one entry per preference the stylesheet switches on,
  * with the attribute it rides and the resolver that turns the preference into
- * what the rules test (the resolved mascot, the dock's look, the footer's
- * presence). One list is the whole contract with the stylesheets: `adoptPrefs`
- * writes these and `clearPrefsAttributes` takes the same names back (entry.ts).
- * Its entries are literals so the build can hold every attribute a stylesheet
- * reads to a name written here (D9).
+ * what the rules test (the resolved mascot). The footer mark is not a
+ * preference — the takeover is unconditional until the feature retires — so
+ * it rides the list under a null key. One list is the whole contract with
+ * the stylesheets: `adoptPrefs` writes these and `clearPrefsAttributes`
+ * takes the same names back (entry.ts). Its entries are literals so the
+ * build can hold every attribute a stylesheet reads to a name written
+ * here (D9).
  */
 interface PrefMirror {
-  key: PrefKey
+  key: PrefKey | null
   attr: string
   /** The value to write; a `false` takes the attribute off. */
   value(prefs: Prefs): string | boolean
@@ -91,14 +85,11 @@ interface PrefMirror {
 
 const MIRRORS = [
   { key: 'palette', attr: PALETTE_ATTR, value: (prefs: Prefs) => prefs.palette },
-  { key: 'pageLook', attr: PAGE_LOOK_ATTR, value: (prefs: Prefs) => prefs.pageLook },
   { key: 'typeface', attr: TYPEFACE_ATTR, value: (prefs: Prefs) => prefs.typeface },
   { key: 'mascot', attr: MASCOT_ATTR, value: resolveMascot },
-  { key: 'dockCards', attr: DOCK_LOOK_ATTR, value: (prefs: Prefs) => prefs.dockCards ? DOCK_LOOK_CARD : DOCK_LOOK_FLUSH },
   { key: 'searchStyle', attr: SEARCH_STYLE_ATTR, value: (prefs: Prefs) => prefs.searchStyle },
-  { key: 'sidebarLayout', attr: SIDEBAR_LAYOUT_ATTR, value: (prefs: Prefs) => prefs.sidebarLayout },
   { key: 'statsPosition', attr: STATS_POSITION_ATTR, value: (prefs: Prefs) => prefs.statsPosition },
-  { key: 'collapseFooter', attr: FOOTER_ATTR, value: (prefs: Prefs) => prefs.collapseFooter && !footerTakeoverRetired },
+  { key: null, attr: FOOTER_ATTR, value: () => !footerTakeoverRetired },
 ] as const satisfies readonly PrefMirror[]
 
 /** Every attribute the mirror writes, plus the animation answer `writeMotionAttribute` resolves. */

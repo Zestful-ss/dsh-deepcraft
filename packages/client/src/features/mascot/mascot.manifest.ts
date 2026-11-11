@@ -5,8 +5,7 @@ export default {
   id: 'mascot',
   order: 40,
   load: 'deferred',
-  reads: ['composer'],
-  contracts: ['chat.think-running', 'composer.fallback-panel', 'composer.seat', 'composer.stack', 'conversation.session', 'conversation.session-attribute'],
+  contracts: ['chat.think-running', 'composer.fallback-panel', 'composer.seat', 'composer.stack', 'conversation.session', 'conversation.session-attribute', 'shell.phase'],
   pref: 'mascot',
   prefValues: [MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY],
   stylesheets: [
@@ -40,5 +39,5 @@ export default {
     title: 'mascotScopeTitle',
     choiceLabels: { home: 'mascotScopeHome', all: 'mascotScopeAll' },
   }],
-  cases: ['crab-states', 'deepy', 'petdex-claude', 'petdex-deepseek', 'hero', 'studio']
+  cases: ['crab-states', 'deepy', 'petdex-claude', 'petdex-deepseek', 'hero']
 } satisfies FeatureManifest

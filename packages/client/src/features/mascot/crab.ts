@@ -19,7 +19,7 @@ import type manifest from './mascot.manifest'
  * (the laptop, the thought bubble, letters, notes, the hat), so every
  * sheet is ready the moment it is wanted.
  *
- * @param ui - shared handle table (`ui.composer`).
+ * @param ui - shared handle table.
  * @returns `{ sync, release, onActivity, dispose }`.
  */
 export function createMascotCrab(ctx: HostContext, ui: FeatureUi<typeof manifest>) {

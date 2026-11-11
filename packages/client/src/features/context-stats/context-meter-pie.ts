@@ -27,7 +27,7 @@
 
 /** The mark on the meter while its ring has given way to the pie. */
 export const METER_PIE_ATTR = 'data-dsh-deepcraft-meter-pie'
-/** The unoccupied plate's colour, declared with the tone band (features/composer/vars.css). */
+/** The unoccupied plate's colour, declared with the tone band (context-stats.css). */
 const REST_VAR = '--dsh-deepcraft-pie-rest'
 /** The pie's box, and the icon cell it takes over. */
 const PIE_SIZE = 16
@@ -89,7 +89,7 @@ export function readPieColours(meter: HTMLElement): PieColours | null {
   const reading = trigger === null ? null : trigger.querySelector('span')
   if (!(trigger instanceof HTMLElement) || !(reading instanceof HTMLElement)) return null
   // The reading's own colour is the band's answer, mixed by the browser
-  // (features/composer/inline-bar.css), so the two can never disagree.
+  // (context-stats.css), so the two can never disagree.
   return {
     trigger,
     tone: getComputedStyle(reading).color,

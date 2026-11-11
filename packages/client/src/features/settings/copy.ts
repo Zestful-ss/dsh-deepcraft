@@ -15,7 +15,7 @@ export function copy(key: CopyKey, params?: CopyParams) {
 
 /**
  * A line two features' settings rows share, kept in this page's own copy (D72):
- * the note a row shows while the composer restyle is off, and the line a row
+ * the note a row shows while its requirement is unmet, and the line a row
  * acting on the Windows desktop window alone shows on every other page.
  */
 export function sharedLine(key: string, params?: CopyParams) {

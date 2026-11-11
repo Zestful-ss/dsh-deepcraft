@@ -3,6 +3,5 @@
   "statsLineLabel": { "zh": "对话统计信息", "en": "Conversation statistics" },
   "statsPositionTitle": { "zh": "对话统计信息位置", "en": "Conversation statistics position" },
   "statsPositionInline": { "zh": "独立成行", "en": "On its own line" },
-  "statsPositionContext": { "zh": "收进上下文", "en": "Inside the context popover" },
-  "statsComposerRequired": { "zh": "只在「重绘对话框」覆盖对话页时生效。", "en": "Takes effect only while Composer restyle covers the conversation." }
+  "statsPositionContext": { "zh": "收进上下文", "en": "Inside the context popover" }
 }

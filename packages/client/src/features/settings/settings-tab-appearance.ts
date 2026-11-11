@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { MOTION_FULL, MOTION_REDUCED, MOTION_SYSTEM, PAGE_LOOK_FLAT, PAGE_LOOK_FLOAT, PALETTE_EMBER, PALETTE_FOREST, PALETTE_HOST, PALETTE_OCEAN, TYPEFACE_CLAUDE, TYPEFACE_HOST } from '../../constants'
+import { MOTION_FULL, MOTION_REDUCED, MOTION_SYSTEM, PALETTE_EMBER, PALETTE_FOREST, PALETTE_HOST, PALETTE_OCEAN, TYPEFACE_CLAUDE, TYPEFACE_HOST } from '../../constants'
 import { accentRow, brandRows } from './settings-brand'
 import { copy } from './copy'
 import type { Prefs } from '../../constants'
@@ -8,9 +8,9 @@ import type { SegmentOption, SettingsTab, SettingsView } from './settings-contro
 /**
  * The settings page's Appearance tab: which palette paints the colours — with
  * the accent colour as that row's sub-row — who sets the type, how much motion
- * the skin runs, and the custom brand rows (settings-brand.ts). The home
- * layout, the mascot and where it stands are the features' own rows, placed
- * here by their manifests (D72).
+ * the skin runs, and the custom brand rows (settings-brand.ts). The mascot,
+ * where it stands and the chat pet are the features' own rows, placed here by
+ * their manifests (D72).
  */
 export function createSettingsAppearanceTab(): SettingsTab {
   function rows(view: SettingsView) {
@@ -26,10 +26,6 @@ export function createSettingsAppearanceTab(): SettingsTab {
     const typefaceOptions: SegmentOption<Prefs['typeface']>[] = [
       { value: TYPEFACE_CLAUDE, label: copy('typefaceClaude') },
       { value: TYPEFACE_HOST, label: copy('typefaceHost') },
-    ]
-    const pageLookOptions: SegmentOption<Prefs['pageLook']>[] = [
-      { value: PAGE_LOOK_FLOAT, label: copy('pageLookFloat') },
-      { value: PAGE_LOOK_FLAT, label: copy('pageLookFlat') },
     ]
     const motionOptions: SegmentOption<Prefs['motion']>[] = [
       { value: MOTION_SYSTEM, label: copy('motionSystem') },
@@ -59,15 +55,6 @@ export function createSettingsAppearanceTab(): SettingsTab {
           copy('typefaceTitle'),
           copy('typefaceDesc'),
           controls.segment(typefaceOptions, prefs.typeface, value => { write({ typeface: value }) }),
-        ),
-      },
-      {
-        rank: 22,
-        node: controls.row(
-          'pageLook',
-          copy('pageLookTitle'),
-          copy('pageLookDesc'),
-          controls.segment(pageLookOptions, prefs.pageLook, value => { write({ pageLook: value }) }),
         ),
       },
       {

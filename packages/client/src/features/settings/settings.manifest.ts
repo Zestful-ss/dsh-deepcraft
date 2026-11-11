@@ -5,7 +5,6 @@ export default {
   handle: 'settingsNav',
   order: 260,
   load: 'deferred',
-  reads: ['quickProviders'],
   contracts: ['shell.dark-theme', 'shell.windows-titlebar'],
   ungated: '设置页本身，以及随它一起装上的主题翻转抑制',
   stylesheets: [

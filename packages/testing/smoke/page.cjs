@@ -17,20 +17,16 @@ const STAND_IN_PARTS = [
   'prelude.js',
   'host-palette.js',
   'account-menu.js',
-  'hero-menus.js',
-  'composer-keys.js',
   'settings-form.js',
   'account-stream.js',
   'host-fetch.js',
   'account-service.js',
-  'permissions.js',
   'turn-fixture.js',
   'locale-fixture.js',
   'empty-sessions.js',
   'turn-nav.js',
   'mascot.js',
   'stats-projections.js',
-  'workspaces.js',
   'sessions.js',
   'model-directory.js',
   'config-forms.js',
@@ -54,8 +50,6 @@ const PROBE_PARTS = [
   'shell-band.js',
   'shell-context.js',
   'account-reads.js',
-  'shell-studio.js',
-  'agent-permissions.js',
   'shell-switches.js',
   'agent-turn-nav.js',
   'shell-palette.js',
@@ -66,9 +60,6 @@ const PROBE_PARTS = [
   'chat-fold.js',
   'chat-files.js',
   'chat-wait.js',
-  'dock-cards.js',
-  'sidebar-layout.js',
-  'model-meter.js',
   'peer.js',
   'subagent-model.js',
   'teardown.js',
@@ -131,52 +122,24 @@ function page(name, tier, cases) {
   // The host's dock line: the stats row plus the context meter (ui-conversation
   // ContextMeter), whose trigger draws a ring of two circles beside the
   // occupancy reading — that ring is what identifies the meter
-  // (features/composer/composer.ts); the stats pills draw none.
-  // Where the position is the context popover's, another plugin's statistics
-  // strip rides in the same dock: dsh-pocket marks its own strip
-  // `data-mobile-nav="stats"`, sizes it 28px and pins it to the dock's bottom,
-  // which is the band the skin's overlay is pinned to as well (issue #47). The
-  // composer pass measures it and lifts the overlay's line above it.
-  var mobileStats = name === 'context-stats' || name === 'stats-compact'
-    ? '<span class="_mobileStats_q_1" data-mobile-nav="stats"><span>12 轮</span><span>34 步</span><span>56 tok/s</span></span>'
-    : ''
-  var dock = '<div class="_dock_x_1">' + stats + mobileStats +
+  // (features/context-stats); the stats pills draw none.
+  var dock = '<div class="_dock_x_1">' + stats +
       '<span class="_meter_m_1"><button type="button" id="context-meter" class="_trigger_m_1" aria-haspopup="dialog" aria-expanded="false" aria-label="Context used 84%">' +
         // The host gives the filled arc a dash array and leaves its track bare
         // (packages/contracts/src/dom.ts, composer.meter-fill), which is how the skin
         // tells the two apart when it paints the reading's colour onto it.
         '<svg viewBox="0 0 14 14" width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5.5"></circle><circle cx="7" cy="7" r="5.5" stroke-dasharray="29 5.56"></circle></svg><span>84%</span></button></span>' +
     '</div>'
-  // The hero row's two pickers, only where the popovers case drives them: each is
-  // its own host menu, opened and closed by pressing its own trigger.
-  var heroRow = name === 'popovers'
-    ? '<div class="_heroWorkspaceRow_x_1">' +
-        '<button type="button" id="hero-workspace" aria-haspopup="menu" aria-expanded="false"><span class="_workspaceLabel_x_1">workspace</span></button>' +
-        '<button type="button" id="hero-preset" aria-haspopup="menu" aria-expanded="false">preset</button>' +
-      '</div>'
-    : ''
+  // The hero row stands as the host's own: its pickers answer to the host's own
+  // clicks now, so the stand-in has nothing to wire for them.
   // Two of the host's own controls, painted the way the host paints them: the
   // chat's "load earlier" chip (secondary ink on the solid hover fill) and a
   // filled anchor button (AccountSection's "充值", `_linkButton _primary`). The
   // skin supplies the tokens both read; the host supplies the foreground token
   // for a filled control, which the skin leaves alone.
-  // The popovers case drives the hero row's own host menus. In the real page the
-  // host portals them to <body> as fixed-position cards and places them from the
-  // trigger's geometry, and the row itself sits above the composer with the
-  // hero's empty space over it. Both are what the skin's placement pass reads.
-  var heroLayout = name === 'popovers'
-    ? '<style>' +
-        '._heroWorkspaceRow_x_1 { position: fixed; left: 45%; bottom: 120px; display: flex; gap: 8px; }' +
-        'body > [role="menu"] { position: fixed; }' +
-      '</style>'
-    : ''
   var hostControls = '<style>' +
       'body { --dsw-alias-label-primary-foreground: #ffffff; }' +
       'body[data-ds-dark-theme] { --dsw-alias-label-primary-foreground: #0f1115; }' +
-      // The plugin's own strip: absolutely positioned in the dock's band, its
-      // height fixed, as dsh-pocket's own sheet pins it.
-      '._mobileStats_q_1 { position: absolute; left: 0; right: 0; bottom: 0; height: 28px;' +
-        ' display: flex; align-items: center; gap: 8px; font-size: 12px; }' +
       '._older_h_1 button { border: none; border-radius: 4px; padding: 4px 12px; font-size: 12px;' +
         ' color: var(--dsw-alias-label-secondary); background: var(--dsw-alias-interactive-bg-hover-solid); }' +
       '._linkButton_h_1 { color: var(--dsw-alias-label-primary); background: transparent; }' +
@@ -205,28 +168,6 @@ function page(name, tier, cases) {
       '<div id="debugTail"><button type="button">Back to the end</button></div></div>' +
       '<div data-step-process><div data-step-process-body><div data-step-process-content style="height:400px">capped</div></div></div>' +
       '<div data-step-process data-group-expanded-mode="detailed"><div data-step-process-body><div data-step-process-content style="height:400px">expanded</div></div></div>'
-    : ''
-  // The right sidebar the dock-cards case drives: the column's own empty host,
-  // one docked pane and a split of two columns, each with the host's own
-  // divider line under it. The panes carry no styling of their own, so what the
-  // case reads is what the skin's card rules add and what the flush choice
-  // leaves; the elevation token is the host's, as it is on the real page.
-  var dockArea = name === 'dock-cards'
-    ? '<style>' +
-        '._rightbarCol_r_1 { width: 320px; }' +
-        'body { --dsw-elevation-prominent: 0 0 0 .5px rgba(0, 0, 0, .16), 0 3px 8px rgba(0, 0, 0, .06); }' +
-        '._divider_r_1 { position: relative; height: 8px; }' +
-        '._divider_r_1::before { content: ""; position: absolute; inset: 0; background: rgb(0, 0, 255); }' +
-      '</style>' +
-      '<div class="_rightbarCol_r_1" data-rightbar-col>' +
-        '<div data-dockkit-empty id="debugDockEmpty">empty host</div>' +
-        '<div data-dockkit-host="dock"><div data-dockkit-pane id="debugDockPane">docked pane</div></div>' +
-        '<div data-dockkit-split>' +
-          '<div data-dockkit-column="0" data-dockkit-host="dock"><div data-dockkit-pane id="debugSplitLeft">left pane</div></div>' +
-          '<div data-dockkit-column="1" data-dockkit-host="dock"><div data-dockkit-pane id="debugSplitRight">right pane</div></div>' +
-          '<div class="_divider_r_1"></div>' +
-        '</div>' +
-      '</div>'
     : ''
   // The fold case drives the two surfaces the ported folding acts on: a thinking
   // row (opened and folded back by its own control) and process groups — one
@@ -373,8 +314,7 @@ ${chatArea}
 <!-- The host keeps the composer inside its conversation scroller (the conversation's parts are marked within it, packages/engine/src/parts-table.ts), and the scroller's box reaches above the card: the transcript stands there. The stand-in has no transcript, so the padding stands for the room it takes. Without it the scroller's overflow clips the crab perched on the card's top edge, and a real press cannot reach it. -->
 <div data-conversation-scroll style="padding-top: 80px">
 <div class="_composerStack_h_1">
-<div data-composer-card${name === 'automode-hero' ? ' data-phase="hero"' : ''}>
-${heroRow}
+<div data-composer-card>
   <div data-composer-input contenteditable="true" id="editor">/comp</div>
   <div class="_row_x_1">
     <div class="_tools_x_1">
@@ -387,10 +327,8 @@ ${heroRow}
 ${dock}
 </div>
 </div>
-${heroLayout}
 ${hostControls}
 ${chatSubmit}
-${dockArea}
 ${foldArea}
 </div>
 <script>window.SMOKE_CASE = ${JSON.stringify(name)}; window.SMOKE_GROUPS = ${JSON.stringify(cases)}; window.SMOKE_TIER = ${JSON.stringify(tier)}; window.SMOKE_MARKUP = ${JSON.stringify(MARKUP)}; window.SMOKE_PNG = ${JSON.stringify(PNG_1PX)}</script>

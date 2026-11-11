@@ -571,19 +571,6 @@ function subagentModelScenario({ check }) {
       checks.push(check('自定义强调色接管最高档外框', accentReading.accent && accentReading.value === '3' && accentReading.edge === accentReading.expected,
         JSON.stringify({ accent: accentReading.accent, edge: accentReading.edge, expected: accentReading.expected })))
 
-      const pageLookRow = page.locator('.dsh-deepcraft-settings-row').filter({ has: page.locator('.dsh-deepcraft-settings-row-title').filter({ hasText: /^(界面层次|Page look)$/ }) }).first()
-      await pageLookRow.locator('button').filter({ hasText: /^(平铺|Flat)$/ }).click()
-      await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-page-look') === 'flat', undefined, { timeout: 15000 }).catch(() => {})
-      await waitForCapsule(page, '3')
-      const flat = await readCapsuleEdge(page, '[data-dsh-deepcraft-model-capsule]')
-      await pageLookRow.locator('button').filter({ hasText: /^(浮层|Floating)$/ }).click()
-      await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-page-look') === 'float', undefined, { timeout: 15000 }).catch(() => {})
-      await waitForCapsule(page, '3')
-      const float = await readCapsuleEdge(page, '[data-dsh-deepcraft-model-capsule]')
-      checks.push(check('浮层与平铺都保持胶囊，外框形状随页面层次变化，接缝两侧都是直角',
-        flat.value === '3' && float.value === '3' && flat.radius !== null && float.radius !== null && flat.radius !== float.radius &&
-          flat.seam === '0px' && flat.modelSeam === '0px' && float.seam === '0px' && float.modelSeam === '0px',
-        JSON.stringify({ flat: [flat.radius, flat.seam, flat.modelSeam], float: [float.radius, float.seam, float.modelSeam] })))
       await page.keyboard.press('Escape')
       await page.locator('[role="dialog"]').first().waitFor({ state: 'detached', timeout: 10000 }).catch(() => {})
 

@@ -80,16 +80,3 @@ body[data-dsh-deepcraft] .dsh-deepcraft-deepy-hit {
   touch-action: none;
 }
 
-/* Deepy's own inset under the floating page look: the rounded card's corner
-   takes 20px of the overhang. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-deepy-anchor="stack"] > .dsh-deepcraft-deepy {
-  right: calc(max(var(--dsh-composer-side-clearance, 16px), (100% - var(--dsh-composer-card-max-width, 100%)) / 2) + 20px);
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-deepy-anchor="panel"] > .dsh-deepcraft-deepy {
-  right: calc(max(var(--dsh-composer-side-clearance, 16px) + 16px, (100% - var(--dsh-chat-content-width, 100%)) / 2) + 20px);
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look="float"] [data-dsh-deepcraft-deepy-anchor="card"] > .dsh-deepcraft-deepy {
-  right: 20px;
-}

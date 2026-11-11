@@ -205,24 +205,11 @@
         }
         return false
       }).length
-      // Ctrl+, opens the host's settings dialog through the account menu. The
-      // shortcut rides the settings page, not the account area: switching that
-      // area off takes its row and drawer away and leaves the shortcut working.
-      window.__pushForm({ collapseFooter: false })
-      await sleep(400)
-      r.areaOff = {
-        takeover: document.body.hasAttribute('data-dsh-deepcraft-footer-takeover'),
-        marked: document.querySelector('[data-dsh-deepcraft-account-host-row]') !== null,
-      }
+      // Ctrl+, opens the host's settings dialog through the account menu's
+      // shortcut.
       document.dispatchEvent(new KeyboardEvent('keydown', { key: ',', ctrlKey: true, bubbles: true, cancelable: true }))
       await sleep(700)
       r.dialogAfterShortcut = document.querySelectorAll('[data-dsh-deepcraft-part~="settings-area"] [role="dialog"]').length
-      window.__pushForm({ collapseFooter: true })
-      await sleep(400)
-      r.areaBack = {
-        takeover: document.body.hasAttribute('data-dsh-deepcraft-footer-takeover'),
-        marked: document.querySelector('[data-dsh-deepcraft-account-host-row]') !== null,
-      }
     })
   })
 })()

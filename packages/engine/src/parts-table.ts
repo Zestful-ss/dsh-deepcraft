@@ -7,7 +7,7 @@ export interface PartsTableVocabulary {
   /** The attribute a marked node carries: the part names it stands for, space-separated. */
   part: string
   /** The anchors the skin's own menus stand in, which the menu parts are read under. */
-  regions: { account: string, hero: string }
+  regions: { account: string }
 }
 
 /**
@@ -184,7 +184,7 @@ export const RIGHTBAR_PARTS: PartTable = {
 /**
  * The rows of a host menu card. The host portals its menus to `<body>` with no
  * marker of its own, so the region is the skin's own stamp on the card: only
- * the feature that recognises it (features/account, features/hero-menu) writes
+ * the feature that recognises it (features/account) writes
  * one, and the rows are read the moment it lands.
  */
 export const MENU_PARTS: PartTable = {
@@ -289,7 +289,7 @@ export function partRegions(vocabulary: PartsTableVocabulary): PartRegion[] {
     { within: CONVERSATION_HEADER_SLOT_SELECTOR, parts: HEADER_PARTS },
     { within: CONVERSATION_SCROLL_SELECTOR, parts: CONVERSATION_PARTS },
     { within: RIGHTBAR_COLUMN_SELECTOR, parts: RIGHTBAR_PARTS },
-    { within: `[${vocabulary.regions.account}], [${vocabulary.regions.hero}]`, parts: MENU_PARTS },
+    { within: `[${vocabulary.regions.account}]`, parts: MENU_PARTS },
   ]
 }
 
@@ -346,14 +346,9 @@ export function holdRelations(vocabulary: PartsTableVocabulary): HoldRelation[] 
   { name: 'view-tabs', holder: part('conversation-header'), held: part('view-tabs'), attributes: [] },
   // theme/hero.css: the headline takes the display cut where it carries the mark.
   { name: 'hero-mark', holder: part('hero-headline'), held: part('hero-mark'), attributes: [] },
-  // features/home/home-panel.css: the boxes the host's `display: contents` slot
-  // anchors expose are the ones that sort the studio's greeting.
-  { name: 'hero-headline', holder: '*', held: part('hero-headline'), scope: part('composer-hero'), attributes: [] },
-  // features/composer/card.css: the classic tray sorts the boxes above the card.
-  { name: 'composer-card', holder: '*', held: '[data-composer-card]', scope: part('composer-stack'), attributes: ['data-composer-card'] },
   // theme/wallpaper.css: the phase box holding the transcript paints the canvas.
   { name: 'conversation-scroll', holder: '[data-phase]', held: '[data-conversation-scroll]', attributes: ['data-phase', 'data-conversation-scroll'] },
-  // features/composer/inline-bar.css: the host's own statistics dialogs stand down.
+  // features/context-stats/context-stats.css: the host's own statistics dialogs stand down.
   {
     name: 'host-stats',
     holder: '[role="dialog"]',

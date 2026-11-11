@@ -39,16 +39,11 @@ function desktopHeaderScenario({ check }) {
       await page.waitForSelector('[data-dsh-header-row]')
       await settlePage(page)
       const reading = await readHeader(page)
-      await page.evaluate(() => document.body.setAttribute('data-dsh-deepcraft-page-look', 'flat'))
-      await settlePage(page)
-      const flat = await readHeader(page)
       return [
         check('桌面浮层的会话模式完整显示在卡片内', reading !== null && reading.label.text.length > 0 && reading.label.width > 0 &&
           reading.label.top >= reading.card.top && reading.label.bottom <= reading.card.bottom && reading.labelVisible,
         JSON.stringify(reading)),
         check('会话标题与模式标签各占一行', reading !== null && reading.title.bottom <= reading.label.top, JSON.stringify(reading)),
-        check('平铺版面保留标题行的原有位置和可见模式', flat !== null && flat.row.top < flat.card.top && flat.labelVisible,
-          JSON.stringify(flat)),
         check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
       ]
     },

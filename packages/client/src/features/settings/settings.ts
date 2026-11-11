@@ -1,14 +1,13 @@
 import * as React from 'react'
 import { BUNDLE_CONFIG_SLOT, PACKAGE_NAME, REPOSITORY_URL, SETTINGS_SCROLLER_ATTR, SETTINGS_SECTION_SLOT, USERNAME_MAX } from '../../constants'
 import { SEGMENT_CLASS } from '../../shared/segment-control'
-import { loadModelCopy, onModelCopyLoaded } from '../model/model-copy'
+import { loadModelCopy, onModelCopyLoaded } from '../../shared/model-copy'
 import { createHostAccountMenu } from '../account/host-menu'
 import { adoptSettingsForm, motionReduced, readPrefs, savePrefs, subscribePrefs } from '../../core/prefs'
 import { cacheFirstMatch, hostSlots } from '@dsh-deepcraft/engine/host'
 import { motionMs } from '../../shared/motion'
 import { ClaudeStyleSegmentGroup, createSettingsControls, tabRows } from './settings-controls'
 import { createSettingsAppearanceTab } from './settings-tab-appearance'
-import { createSettingsComposerTab } from './settings-tab-composer'
 import { createSettingsConversationTab } from './settings-tab-conversation'
 import { createSettingsGeneralTab } from './settings-tab-general'
 import { createSettingsSidebarTab } from './settings-tab-sidebar'
@@ -20,7 +19,6 @@ import type { HostSlotsService } from '@dsh-deepcraft/contracts/services'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './settings.manifest'
 import type { SettingsTab, SettingsView } from './settings-controls'
-import type { QuickProvidersHandle } from './quick-providers'
 import { copy } from './copy'
 
 /** Pause after the last keystroke before the username is written to the settings store. */
@@ -55,16 +53,6 @@ type PageDirection = 'forward' | 'back'
  * preference change, not a remount.
  */
 /**
- * The quick-provider popover (packages/client/src/features/settings/quick-providers.ts). The settings
- * row is React-rendered while that card is imperative, so the row reaches the
- * popover through this handle. The handle is read through the live registry
- * (D72) rather than kept: a page yielded to another owner takes the
- * quick-provider install down and brings a fresh one back, while this page's
- * section stays mounted, and a stored handle would drive the dead one.
- */
-let quickProviderHandle: (() => QuickProvidersHandle | null) | null = null
-
-/**
  * The host's slot registry, kept from the settings-section registration so
  * the nav cell can be found later. The nav entry carries no key of its own
  * on the host's markup; the registry's entry list is the only place the
@@ -79,7 +67,6 @@ export const SETTINGS_SECTION_ID = 'deepcraft'
 export const SETTINGS_TABS: SettingsTab[] = [
   createSettingsGeneralTab(),
   createSettingsAppearanceTab(),
-  createSettingsComposerTab(),
   createSettingsSidebarTab(),
   createSettingsConversationTab(),
 ]
@@ -144,7 +131,6 @@ export function ClaudeStyleSettingsSection(props: { embed?: boolean }) {
   /** Which way the open tab arrived, or null for the tab the page opened on. */
   const enterState = React.useState<PageDirection | null>(null)
   const usernameTimer = React.useRef<number | null>(null)
-  const quickTrigger = React.useRef<HTMLButtonElement>(null)
   const pageRef = React.useRef<HTMLDivElement>(null)
   const rowsRef = React.useRef<HTMLFieldSetElement>(null)
   const leavingRef = React.useRef<HTMLDivElement>(null)
@@ -252,8 +238,6 @@ export function ClaudeStyleSettingsSection(props: { embed?: boolean }) {
     prefs,
     write,
     controls: SETTINGS_CONTROLS,
-    quickTrigger,
-    quickProviderApi: () => quickProviderHandle === null ? null : quickProviderHandle(),
     username: {
       value: username,
       onChange(e) {
@@ -391,7 +375,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
         hostSettings.openSettings()
       },
     }
-    quickProviderHandle = () => ui.quickProviders ?? null
   }
   if (typeof ctx.inject !== 'function') return stopThemeFlip
   const fiber = ctx.inject(['slots'], scope => {
@@ -434,7 +417,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     if (ui && ui.settingsNav) {
       delete ui.settingsNav
     }
-    quickProviderHandle = null
     slotsApi = null
     if (fiber && typeof fiber.dispose === 'function') fiber.dispose()
   }

@@ -54,13 +54,6 @@ export const BRAND_MARK_PATH = `${ROUTE_PREFIX}/brand/mark`
 /** The custom wordmark's bytes, answered the same three ways as the mark. */
 export const BRAND_WORDMARK_PATH = `${ROUTE_PREFIX}/brand/wordmark`
 
-/**
- * The model peak / off-peak catalog the host half keeps. `GET` answers the
- * document it holds; `POST` makes it fetch the source first, so the browser
- * half can ask for a fresh copy without knowing the source's address.
- */
-export const PEAKRATE_PATH = `${ROUTE_PREFIX}/peakrate`
-
 /** The installed pets, as descriptors; the host half owns the directories. */
 export const PETS_PATH = `${ROUTE_PREFIX}/pets`
 

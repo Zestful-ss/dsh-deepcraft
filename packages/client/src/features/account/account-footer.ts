@@ -568,10 +568,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const footArea = findFootArea()
     if (footArea === null) return
 
-    if (!readPrefs().collapseFooter) {
-      dropAccountFooter()
-      return
-    }
     surface.sync()
     if (surface.mode() === 'host') {
       dropSynthetic()

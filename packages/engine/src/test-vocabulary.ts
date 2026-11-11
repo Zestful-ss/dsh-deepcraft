@@ -10,5 +10,5 @@ export const HOLDS_ATTR = 'data-test-holds'
 export const TEST_VOCABULARY: PartsVocabulary = {
   part: PART_ATTR,
   holds: HOLDS_ATTR,
-  regions: { account: 'data-test-account-menu', hero: 'data-test-hero-menu' },
+  regions: { account: 'data-test-account-menu' },
 }

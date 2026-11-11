@@ -1,7 +1,7 @@
 /* ---------- the subagent model entry ---------- */
-/* The trigger stands in the host's own `conversation.input.right` seat, so it
-   carries its own shape rather than the composer's: with the restyle off it sits
-   in the host's plain toolbar and must still read as one quiet control. */
+/* The trigger stands in the host's own `conversation.input.right` seat beside
+   the host's model button, so it carries its own shape and reads as one
+   quiet control in the host's toolbar. */
 body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-btn {
   display: inline-flex;
   align-items: center;
@@ -200,15 +200,13 @@ body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-note {
   white-space: normal;
 }
 
-/* @composer-gate */
 /* ---------- the model + subagent capsule ---------- */
 /* The subagent entry and the model trigger are direct flex items of the
    composer's right-hand cluster (both slot anchors are `display: contents`).
-   While the subagent entry is alone in its seat and the skin's model trigger
+   While the subagent entry is alone in its seat and the host's model button
    stands beside it, the two draw as one capsule: no gap, one shared fill, and
    one 1px outline whose colour counts the routes the session delegates on.
-   The outline is an inset shadow rather than a border because the model
-   trigger's base rule pins `border: none !important`; each half draws only
+   The outline is an inset shadow rather than a border; each half draws only
    its own outer edges, so no seam runs between them. The marks are written by
    subagent-model.ts; a third entry, or a host shape this does not recognise,
    leaves the controls in their own layout. */
@@ -236,7 +234,7 @@ body[data-dsh-deepcraft] [data-dsh-deepcraft-model-capsule='3'] {
 body[data-dsh-deepcraft] [data-composer-card] [data-dsh-deepcraft-model-capsule-part] {
   height: 28px;
   box-sizing: border-box;
-  background: var(--dsh-deepcraft-float-surface-strong);
+  background: var(--dsh-deepcraft-card, var(--dsw-alias-bg-overlay, #fff));
   border-radius: 0;
   box-shadow: inset var(--dsh-deepcraft-capsule-side, 1px) 0 0 var(--dsh-deepcraft-capsule-edge, var(--dsw-alias-label-secondary)),
     inset 0 1px 0 var(--dsh-deepcraft-capsule-edge, var(--dsw-alias-label-secondary)),
@@ -255,16 +253,9 @@ body[data-dsh-deepcraft] [data-composer-card][data-composer-variant='inline'] [d
   border-radius: 0 7px 7px 0;
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look='float'] [data-composer-card] [data-dsh-deepcraft-model-capsule-part='subagent'] {
-  border-radius: 9999px 0 0 9999px;
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-page-look='float'] [data-composer-card][data-composer-variant='inline'] [data-slot="conversation.input.model"] > [data-dsh-deepcraft-model-capsule-part='model'] {
-  border-radius: 0 9999px 9999px 0;
-}
 
 body[data-dsh-deepcraft] [data-composer-card] [data-dsh-deepcraft-model-capsule-part]:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--dsh-deepcraft-float-surface-strong) 88%, var(--dsw-alias-label-primary));
+  background: color-mix(in srgb, var(--dsh-deepcraft-card, var(--dsw-alias-bg-overlay, #fff)) 88%, var(--dsw-alias-label-primary));
 }
 
 body[data-dsh-deepcraft] [data-composer-card] [data-dsh-deepcraft-model-capsule-part]:focus-visible {
