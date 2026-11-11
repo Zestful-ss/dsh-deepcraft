@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.30.0] - 2026-11-11
 
-<h3 id="cn-unreleased">移除</h3>
+[中文](#cn-0.30.0) | [English](#en-0.30.0)
+
+<h3 id="cn-0.30.0">移除</h3>
 
 - 界面回归宿主原版布局，移除输入区改造、首页版面、对话样式、界面层次、侧栏布局选项、模型选择与配套控件、权限控制和峰值速率；配色、字体、品牌、设置页、宠物、水波、导航、视图标签、顶栏、用量统计、置顶会话、搜索与聊天动效保留。
 
-<h3 id="en-unreleased">Removals</h3>
+<h3 id="en-0.30.0">Removals</h3>
 
 - Return the interface to the host's own layout and remove the composer restyle, the home layouts, the conversation styles, the page look, the sidebar layout options, the model picker and its companion controls, the permissions control and the peak-rate meter; palettes, typefaces, brand, the settings page, the mascot, the ripple, the navigator, the view tabs, the header band, the usage stats, the pinned conversations, search and the chat animations stay.
 
