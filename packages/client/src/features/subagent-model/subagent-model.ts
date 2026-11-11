@@ -148,12 +148,12 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
    * the mark away and leaves every control to its own layout.
    */
   function markCapsule() {
-    // The host's own model seat and the button it carries: there is no model
-    // picker of ours to ask any more.
+    // The host's own model seat and the control it carries: the first element
+    // under the slot, whether the host draws a button there or wraps one.
     const modelSlot = findModelSlot()
-    const modelBtn = modelSlot === null ? null : modelSlot.querySelector<HTMLButtonElement>('button')
+    const modelBtn = modelSlot === null || !(modelSlot.firstElementChild instanceof HTMLElement) ? null : modelSlot.firstElementChild
     const button = seatNode
-    if (button === null || !button.isConnected || modelBtn === null || !modelBtn.isConnected || modelSlot === null || modelBtn.parentElement !== modelSlot) {
+    if (button === null || !button.isConnected || modelBtn === null || !modelBtn.isConnected || modelSlot === null) {
       clearCapsule()
       return
     }

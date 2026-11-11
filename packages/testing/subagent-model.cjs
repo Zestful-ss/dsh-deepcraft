@@ -213,7 +213,7 @@ function readCapsule(page) {
       parentDisplay: parent === null ? null : getComputedStyle(parent).display,
       gap: parent === null ? null : getComputedStyle(parent).gap,
     }
-  }, { capsule: '[data-dsh-deepcraft-model-capsule]', attr: 'data-dsh-deepcraft-model-capsule', trigger: TRIGGER, model: '[data-slot="conversation.input.model"] button' })
+  }, { capsule: '[data-dsh-deepcraft-model-capsule]', attr: 'data-dsh-deepcraft-model-capsule', trigger: TRIGGER, model: '[data-dsh-deepcraft-model-capsule-part="model"]' })
 }
 
 /** Wait until the capsule carries `value`; the write follows the host's answer. */
