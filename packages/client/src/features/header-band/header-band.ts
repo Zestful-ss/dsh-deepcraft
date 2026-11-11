@@ -204,7 +204,13 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const box = element.getBoundingClientRect()
     return box.width === 0 && box.height === 0 ? null : box
   }
-
+  /** The center column's clipping edge, in page pixels: the row's lift may not cross it. */
+  function floatingCardTop(element: HTMLElement) {
+    const card = element.closest<HTMLElement>('[data-dsh-deepcraft-part~="center-column"]')
+    if (card === null) return -Infinity
+    const box = rect(card)
+    return box === null ? -Infinity : box.top + card.clientTop
+  }
   /**
    * The caption strip's own sizes, in the pixels the placement numbers are read
    * in.
@@ -304,7 +310,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       corner,
       stripEl,
       rowBox: rect(row),
-      clipTop: -Infinity,
+      clipTop: floatingCardTop(row),
       stripBox: rect(stripEl),
       menuBox: rect(findWindowsMenu()),
       utilitiesBox: rect(utilities),

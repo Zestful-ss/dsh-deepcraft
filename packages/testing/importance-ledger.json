@@ -272,16 +272,6 @@
       "prop": "color",
       "verdict": "unreadable pseudo-element"
     },
-    "body[data-dsh-deepcraft][data-dsh-deepcraft-window-blur] :is([data-chat-flow],[data-lexical-editor]) :is(p,li,td,th,blockquote,pre,h1,h2,h3,h4,h5,h6)::selection{background-color:#c7c7c6!;color:#000!}|background-color": {
-      "selector": "body[data-dsh-deepcraft][data-dsh-deepcraft-window-blur] :is([data-chat-flow],[data-lexical-editor]) :is(p,li,td,th,blockquote,pre,h1,h2,h3,h4,h5,h6)::selection",
-      "prop": "background-color",
-      "verdict": "unreadable pseudo-element"
-    },
-    "body[data-dsh-deepcraft][data-dsh-deepcraft-window-blur] :is([data-chat-flow],[data-lexical-editor]) :is(p,li,td,th,blockquote,pre,h1,h2,h3,h4,h5,h6)::selection{background-color:#c7c7c6!;color:#000!}|color": {
-      "selector": "body[data-dsh-deepcraft][data-dsh-deepcraft-window-blur] :is([data-chat-flow],[data-lexical-editor]) :is(p,li,td,th,blockquote,pre,h1,h2,h3,h4,h5,h6)::selection",
-      "prop": "color",
-      "verdict": "unreadable pseudo-element"
-    },
     "body[data-dsh-deepcraft] [data-chat-flow] code:not(pre code)::selection{background-color:#285ece!}|background-color": {
       "selector": "body[data-dsh-deepcraft] [data-chat-flow] code:not(pre code)::selection",
       "prop": "background-color",
