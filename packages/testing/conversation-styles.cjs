@@ -13,6 +13,9 @@ const { sanitizePage } = require('../../scripts/shared/privacy.cjs')
 const STYLE_ATTRIBUTE = 'data-dsh-deepcraft-chat-style'
 /** The conversation tab's rows, in the order it keeps them now. */
 const CONVERSATION_ROWS = [
+  /^(聊天区滚动动画|Chat-area scrolling animation)$/,
+  /^(状态行动画|Waiting-line animation)$/,
+  /^(精确状态行|Precise status line)$/,
   /^(对话导航|Conversation navigator)$/,
   /^(对话统计信息位置|Conversation statistics position)$/,
   /^(重绘标签条|Chat \/ Trajectory tabs)$/,
@@ -178,7 +181,7 @@ function conversationStylesScenario({ check, HOST }, legacyStyle) {
         Math.abs((item.effort.top + item.effort.bottom) - (item.model.top + item.model.bottom)) <= 2 &&
         item.effort.right <= item.meter.left + 1)
       return [
-        check(`旧配置中的 ${layout.legacyStyle} 仍使用阅读布局，对话设置只剩四项且没有样式行`,
+        check(`旧配置中的 ${layout.legacyStyle} 仍使用阅读布局，对话设置没有样式行`,
           layout.attribute === 'reader' && layout.rows.length === CONVERSATION_ROWS.length &&
           layout.rows.every((title, index) => CONVERSATION_ROWS[index].test(title)) &&
           !layout.rows.some((title) => STYLE_ROW.test(title)), JSON.stringify(layout)),

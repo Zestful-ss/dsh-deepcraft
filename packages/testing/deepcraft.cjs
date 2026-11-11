@@ -42,7 +42,6 @@ const ROWS = {
 }
 const TABS = {
   appearance: /^(外观|Appearance)$/,
-  motion: /^(动效|Motion)$/,
 }
 const MOTIONS = { system: /^(随系统|Follow the system)$/, reduced: /^(减弱|Reduced)$/, full: /^(总是|Always)$/ }
 const MASCOTS = { deepy: /^(原有像素鲸鱼|Original pixel whale)$/, off: /^(关闭|Off)$/ }
@@ -168,7 +167,6 @@ function deepcraftScenario({ check }) {
       }
       await pickIn(page, ROWS.scope, SCOPES.all)
       await pickIn(page, ROWS.mascot, MASCOTS.deepy)
-      await openTab(page, TABS.motion)
       notes.before.motionPick = await pickedIn(page, ROWS.motion)
       await pickIn(page, ROWS.motion, MOTIONS.full)
       await closeSettings(page)
@@ -239,7 +237,7 @@ function deepcraftScenario({ check }) {
       // Reduced motion: the sheet's still frame stands, and a press still reacts.
       await dismissOverlays(page)
       await openSkinSettings(page)
-      await openTab(page, TABS.motion)
+      await openTab(page, TABS.appearance)
       await pickIn(page, ROWS.motion, MOTIONS.reduced)
       await closeSettings(page)
       await page.waitForTimeout(400)
@@ -247,7 +245,7 @@ function deepcraftScenario({ check }) {
       notes.states.reducedPoke = await pressAt(page, 6)
       await dismissOverlays(page)
       await openSkinSettings(page)
-      await openTab(page, TABS.motion)
+      await openTab(page, TABS.appearance)
       await pickIn(page, ROWS.motion, labelRe(notes.before.motionPick))
       await closeSettings(page)
 
@@ -275,7 +273,6 @@ function deepcraftScenario({ check }) {
       await openTab(page, TABS.appearance)
       await pickIn(page, ROWS.mascot, labelRe(notes.before.mascotPick))
       await pickIn(page, ROWS.scope, labelRe(notes.before.scope))
-      await openTab(page, TABS.motion)
       await pickIn(page, ROWS.motion, labelRe(notes.before.motionPick))
       await closeSettings(page)
     },
