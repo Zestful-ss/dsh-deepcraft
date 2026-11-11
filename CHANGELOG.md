@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.31.0] - 2026-11-11
 
-<h3 id="cn-unreleased">体验优化</h3>
+[中文](#cn-0.31.0) | [English](#en-0.31.0)
+
+<h3 id="cn-0.31.0">体验优化</h3>
 
 - 插件只改颜色与字体：宿主控件的位置、间距、边框形状、动效与滚动跟随都保持宿主自己的实现，设置页只保留通用与外观两个标签。
 
@@ -16,7 +18,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 - 移除对话区的折叠与动画、滚动跟随、等待状态行、过程摘要、文件操作行重绘与页眉渐隐，聊天区行为回到宿主自己的实现。
 - 页面让位改为整页交出：ds-bot 接管页面时不再保留插件的「聊天 / 代码」切换按钮，返回入口由 ds-bot 自己提供。
 
-<h3 id="en-unreleased">Improvements</h3>
+<h3 id="en-0.31.0">Improvements</h3>
 
 - The skin changes colours and typefaces only: host controls keep their own position, spacing, border shapes, motion and scroll behaviour, and the settings page keeps the General and Appearance tabs alone.
 

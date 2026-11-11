@@ -1,8 +1,0 @@
-{
-  "group": "removals",
-  "order": 20,
-  "at": "2026-11-11",
-  "external": false,
-  "zh": "移除对话区的折叠与动画、滚动跟随、等待状态行、过程摘要、文件操作行重绘与页眉渐隐，聊天区行为回到宿主自己的实现。",
-  "en": "Remove the chat area's folding and animations, scroll follow, waiting line, process summary, file-row redraw and header fade; the chat area behaves as the host implements it."
-}

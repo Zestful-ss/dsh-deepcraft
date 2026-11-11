@@ -1,7 +1,7 @@
 {
   "name": "dsh-deepcraft",
   "description": "DeepCraft — customizable branding, color palettes and interactions for the DeepSeek Harness web GUI",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "type": "module",
   "main": "lib/host/index.js",
   "icon": "lib/deepcraft-mark.svg",

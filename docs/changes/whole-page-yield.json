@@ -1,8 +1,0 @@
-{
-  "group": "removals",
-  "order": 30,
-  "at": "2026-11-11",
-  "external": true,
-  "zh": "页面让位改为整页交出：ds-bot 接管页面时不再保留插件的「聊天 / 代码」切换按钮，返回入口由 ds-bot 自己提供。",
-  "en": "Yield the page whole: while ds-bot owns it the plugin keeps no Chat / Code switch, and ds-bot's own entry is the way back."
-}
