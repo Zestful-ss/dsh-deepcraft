@@ -1,13 +1,14 @@
 name: Release
 
 # A release starts from a tag the maintainer pushes: the version's CHANGELOG
-# section and the bumped package.json are already in that commit. The job runs
-# the gates the fast tier holds, then the end-to-end lane, and only then writes
-# the packed package to the `dist` branch so a git install needs no build (D47),
-# and opens the GitHub Release with the version's CHANGELOG section. The
-# promotion is the last step: the gates above it are the ones CI's own jobs run
-# (D66). The `dist` branch is this repository's only distribution channel; the
-# package is not published to npm.
+# section and the bumped package.json are already in that commit. Three lanes
+# run in parallel — the Windows smoke, the fast gates on Linux, and the
+# end-to-end lane as the same four shards CI runs — and `publish` waits on all
+# of them before it writes the packed package to the `dist` branch so a git
+# install needs no build (D47), and opens the GitHub Release with the
+# version's CHANGELOG section. The promotion is the last step: the gates above
+# it are the ones CI's own jobs run (D66). The `dist` branch is this
+# repository's only distribution channel; the package is not published to npm.
 
 on:
   # A release starts from a tag the maintainer pushes (the version's CHANGELOG
@@ -51,10 +52,75 @@ jobs:
       - run: node packages/testing/e2e.cjs --scenario petdex
         timeout-minutes: 15
 
+  # The gates that need no promotion: the lint rules, the decisions index, the
+  # changelog, AGENTS.md's command table, the check numbers, the build, the
+  # unit lane and the Linux smoke.
   release:
-    needs: smoke-windows
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run docs:check
+      - run: npm run changelog:check
+      - run: npm run agents:check
+      - run: npm run checks:numbers -- --check
+      - run: npm run build
+      - run: npm test
+      - run: npm run smoke
+
+  # The assembled host on the newest published version, walked over the
+  # scenario table's own default walk as the same four shards CI's e2e job
+  # runs: what a pull request runs is what the promotion waits on (D66). One
+  # scenario at a time inside a shard: the lane's frame readings are what a
+  # second page on the same runner disturbs.
+  e2e:
+    strategy:
+      # One shard's failure is evidence about that shard; the others finish and
+      # report their own.
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3]
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/cache@v6
+        with:
+          path: .debug/build-cache
+          key: build-cache-${{ runner.os }}-${{ github.sha }}
+      - run: npm run build
+        timeout-minutes: 15
+      # The lane boots the host's own CLI, which needs pnpm to install a
+      # profile's plugins.
+      - run: npm install --global pnpm@11 @deepseek-ai/dsh@$(node packages/testing/host-version.cjs)
+        timeout-minutes: 10
+      # A named scenario takes its own deadline; this is the shard's backstop.
+      - run: node packages/testing/e2e.cjs --shard ${{ matrix.shard }}:4
+        timeout-minutes: 25
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: release-e2e-traces-${{ matrix.shard }}
+          path: .debug/e2e/out
+          if-no-files-found: ignore
+
+  # The promotion proper: every gate above answers first, then the dist branch
+  # and the GitHub Release.
+  publish:
+    needs: [smoke-windows, release, e2e]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
         with:
@@ -73,26 +139,6 @@ jobs:
           fi
           echo "version=${version}" >> "$GITHUB_OUTPUT"
       - run: npm ci
-      - run: npm run lint
-      - run: npm run docs:check
-      - run: npm run changelog:check
-      - run: npm run agents:check
-      - run: npm run checks:numbers -- --check
-      - run: npm run build
-      - run: npm test
-      - run: npm run smoke
-      # The assembled host on the newest published version, walked over the scenario
-      # table's own default walk: what a pull request runs is what the promotion
-      # waits on (D66). One scenario at a time, as the shards already run it: the
-      # lane's frame readings are what a second page on the same runner disturbs.
-      - run: npm install --global pnpm@11 @deepseek-ai/dsh@$(node packages/testing/host-version.cjs)
-      - run: node packages/testing/e2e.cjs --jobs 1
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: release-e2e-traces
-          path: .debug/e2e/out
-          if-no-files-found: ignore
       # The dist branch carries the package's own contents, and the step builds
       # first: `lib/` is not in version control, so a fresh checkout has none and
       # packing alone would ship a `main` that is not in the package. A rerun of
