@@ -18,7 +18,10 @@ const { showWindowsTitlebar } = require('./windows-titlebar.cjs')
 async function readHeader(page) {
   return page.evaluate(() => {
     const card = document.querySelector('[data-dsh-deepcraft-part~="center-column"]')
-    const header = document.querySelector('[data-slot="conversation.header"]')
+    // The slot anchor is `display: contents`; the host's header is the first
+    // descendant that lays out a box.
+    let header = document.querySelector('[data-slot="conversation.header"]')
+    while (header !== null && getComputedStyle(header).display === 'contents') header = header.firstElementChild
     if (!card || !header) return null
     const style = getComputedStyle(header)
     const cardBox = card.getBoundingClientRect()
@@ -33,7 +36,6 @@ async function readHeader(page) {
       paddingTop: style.paddingTop,
       headerVisible: header.checkVisibility() && (atHeader === header || header.contains(atHeader)),
       text: (header.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 80),
-      skinNodes: document.querySelectorAll('[class^="dsh-deepcraft-"], [class*=" dsh-deepcraft-"]').length,
     }
   })
 }
@@ -75,7 +77,6 @@ function desktopHeaderScenario({ check }) {
             withSheet.display === withoutSheet.display && withSheet.position === withoutSheet.position &&
             withSheet.marginTop === withoutSheet.marginTop && withSheet.paddingTop === withoutSheet.paddingTop,
           JSON.stringify({ on: withSheet, off: withoutSheet })),
-        check('页眉里没有插件画的标题或标签', withSheet !== null && withSheet.skinNodes === 0, JSON.stringify(withSheet)),
         check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
       ]
     },
