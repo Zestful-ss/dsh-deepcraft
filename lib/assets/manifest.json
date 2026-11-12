@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "assets": {
+    "a860cf5f3d76.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24096
+    },
+    "8447935e9993.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 25737
+    },
+    "da80b3786757.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 25911
+    },
+    "e0f16e1a26d9.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 26511
+    },
+    "820934c5e490.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24979
+    },
+    "be9f0e92d0c8.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24765
+    },
+    "fe3412538850.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24016
+    },
+    "480ac517bfef.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 25083
+    },
+    "0b8ff9a259ff.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24983
+    },
+    "11089c6618c4.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24024
+    },
+    "d30472be85b2.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24686
+    },
+    "35abf74350e6.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24271
+    },
+    "b1f78cf9c05f.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 25777
+    },
+    "851607e11a3b.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 24975
+    },
+    "227fbb949a8e.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 22985
+    },
+    "e31662a367ce.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 23665
+    },
+    "ddd45a75849b.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 23876
+    },
+    "c175e1124c31.svg": {
+      "type": "image/svg+xml",
+      "encoding": "br",
+      "bytes": 23846
+    },
+    "f1909e235b0e.js": {
+      "type": "text/javascript; charset=utf-8",
+      "encoding": "br",
+      "bytes": 18781
+    },
+    "9faa127a4a40.js.map": {
+      "type": "application/json; charset=utf-8",
+      "encoding": "br",
+      "bytes": 89372
+    },
+    "3bd21facdc4c.js": {
+      "type": "text/javascript; charset=utf-8",
+      "encoding": "br",
+      "bytes": 28823
+    },
+    "a57e9bcc2f3d.js.map": {
+      "type": "application/json; charset=utf-8",
+      "encoding": "br",
+      "bytes": 119276
+    }
+  }
+}
