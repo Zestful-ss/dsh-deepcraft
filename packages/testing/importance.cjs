@@ -22,6 +22,8 @@ const path = require('node:path')
 const { createImportanceAudit, planImportance, dropImportance, ROOT } = require('./importance-audit.cjs')
 const { openSkinSettings } = require('./settings-route.cjs')
 const { readAppearance, compareAppearance, writeAppearance, HOST_DEPENDENT_STATES } = require('./appearance.cjs')
+const { SUBAGENT_PATCH } = require('./subagent-model.cjs')
+const { uploadPng } = require('./media-fixture.cjs')
 
 /**
  * The selectors this walk cannot reach, each under the reason it is out of
@@ -203,6 +205,9 @@ function importanceScenario(lane) {
     account: true,
     // A slow stream, so the second answer is still arriving while it is audited.
     delayMs: 400,
+    // The official subagent allow-list, so the host draws the model slot the
+    // skin's capsule stands beside and the capsule's own card can be audited.
+    patch: SUBAGENT_PATCH,
     async beforeSend(context) {
       const { page } = context
       const reference = process.env.DSH_IMPORTANCE_REFERENCE
@@ -280,6 +285,14 @@ function importanceScenario(lane) {
       await audit.state('forest light')
       await attribute(page, 'data-dsh-deepcraft-palette', 'ember')
       await audit.state('ember light')
+      // The second palette in the dark, and the reader's own accent in the dark:
+      // each is a rule of its own in the palette and accent sheets.
+      await attribute(page, 'data-ds-dark-theme', '')
+      await audit.state('ember dark')
+      await attribute(page, 'data-dsh-deepcraft-accent', '#d97757')
+      await audit.state('ember dark accent')
+      await attribute(page, 'data-dsh-deepcraft-accent', null)
+      await attribute(page, 'data-ds-dark-theme', null)
       const MATERIAL_ATTRS = [
         ['radius', 'data-dsh-deepcraft-material-radius'],
         ['shadow', 'data-dsh-deepcraft-material-shadow'],
@@ -327,7 +340,56 @@ function importanceScenario(lane) {
         await audit.state(name)
         await attribute(page, key, null)
       }
+      // A custom family list draws the input row's own field, so the settings
+      // page is audited with one on show too.
+      await page.evaluate(() => window.__pushForm({ fontUi: 'custom', fontProse: 'custom', fontCode: 'custom' }))
+      await page.waitForTimeout(400)
       await withSettings(page, audit)
+      await page.evaluate(() => window.__pushForm({ fontUi: 'anthropic', fontProse: 'anthropic-serif', fontCode: 'anthropic-mono' }))
+      await page.waitForTimeout(300)
+      // The subagent model entry: the capsule beside the host's model slot, its
+      // card open, a route taken and an effort rung pressed. The scenario's
+      // patch gives this scratch session the official allowed list, so the host
+      // renders the slot the capsule stands beside
+      // (packages/testing/subagent-model.cjs).
+      const capsule = page.locator('.dsh-deepcraft-subagent-model-btn')
+      if (await capsule.count() > 0 && await capsule.first().isVisible()) {
+        await capsule.first().click()
+        await page.waitForTimeout(600)
+        await audit.state('subagent card')
+        const entries = page.locator('.dsh-deepcraft-subagent-model-popover[data-open="true"] .dsh-deepcraft-subagent-model-entry')
+        if (await entries.count() > 0) {
+          await entries.first().click()
+          await page.waitForTimeout(600)
+          const effort = page.locator('.dsh-deepcraft-subagent-model-popover[data-open="true"] .dsh-deepcraft-subagent-model-effort-option')
+          if (await effort.count() > 0) {
+            await effort.first().click()
+            await page.waitForTimeout(500)
+            await audit.state('subagent effort')
+          }
+          await page.keyboard.press('Escape')
+          await page.waitForTimeout(400)
+          await audit.state('subagent chosen')
+        }
+      }
+      // The reader's own wallpaper: a file through the host half's route, then
+      // the source switched on, so the layer the shell stands down for is on the
+      // page. The file is removed again before the walk ends, leaving the
+      // scratch home as the next scenario expects it.
+      await page.evaluate(async () => {
+        const canvas = document.createElement('canvas')
+        canvas.width = 32
+        canvas.height = 32
+        canvas.getContext('2d').fillRect(0, 0, 32, 32)
+        const png = await new Promise((settle) => canvas.toBlob(settle, 'image/png'))
+        await fetch('/dsh-deepcraft/wallpaper/file', { method: 'PUT', headers: { 'content-type': 'image/png' }, body: png })
+      })
+      await page.evaluate(() => window.__pushForm({ wallpaperSource: 'custom' }))
+      await page.waitForTimeout(900)
+      await audit.state('own wallpaper layer')
+      await page.evaluate(() => window.__pushForm({ wallpaperSource: 'off' }))
+      await page.evaluate(async () => { await fetch('/dsh-deepcraft/wallpaper/file', { method: 'DELETE' }) })
+      await page.waitForTimeout(400)
       // The preferences the controls set render their own markup on the empty
       // page — the mascot above all — so the walk goes back to it and audits
       // what they put there.

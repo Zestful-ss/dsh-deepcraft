@@ -15,6 +15,7 @@
  * carries none.
  */
 'use strict'
+const { PNG_BASE64 } = require('./media-fixture.cjs')
 
 /** The routes under test (packages/contracts/src/routes.ts). */
 const ROUTES = {
@@ -27,17 +28,14 @@ const ROUTES = {
 const OVERSIZED_BYTES = 2 * 1024 * 1024 + 1
 
 /** Drive the routes from the page: uploads, refusals, and the status after each. */
-const driveRoutes = (page) => page.evaluate(async ({ routes, oversized }) => {
+const driveRoutes = (page) => page.evaluate(async ({ routes, oversized, base64 }) => {
   const send = async (url, method, type, body) => {
     const response = await fetch(url, { method, headers: type === null ? {} : { 'content-type': type }, body })
     return { status: response.status, answer: await response.json() }
   }
-  const canvas = document.createElement('canvas')
-  canvas.width = 32
-  canvas.height = 32
-  canvas.getContext('2d').fillRect(0, 0, 32, 32)
-  const png = await new Promise((settle) => canvas.toBlob(settle, 'image/png'))
   const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100"><rect width="400" height="100"/></svg>'
+  const bytes = Uint8Array.from(atob(base64), (character) => character.charCodeAt(0))
+  const png = new Blob([bytes], { type: 'image/png' })
   return {
     before: (await send(routes.status, 'GET', null)).answer,
     wrongType: (await send(routes.mark, 'PUT', 'image/gif', png)).status,
@@ -51,7 +49,7 @@ const driveRoutes = (page) => page.evaluate(async ({ routes, oversized }) => {
       policy: response.headers.get('content-security-policy'),
     })),
   }
-}, { routes: ROUTES, oversized: OVERSIZED_BYTES })
+}, { routes: ROUTES, oversized: OVERSIZED_BYTES, base64: PNG_BASE64 })
 
 /** Where the shell paints the images, once the brand feature has adopted them. */
 async function readPainted(page) {

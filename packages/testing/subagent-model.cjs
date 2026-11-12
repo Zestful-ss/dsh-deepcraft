@@ -604,4 +604,4 @@ function subagentModelScenario({ check }) {
   }
 }
 
-module.exports = { subagentModelScenario }
+module.exports = { subagentModelScenario, SUBAGENT_PATCH: PATCH }
