@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">新增功能</h3>
+
+- 新增与配色无关的材质层：外观页分别选择圆角档位、平铺阴影、动效节奏、玻璃侧栏与环境光，出厂即参考主题的取值，每一项都能单独退回宿主的样子；原 Cindy 配色与材质层的绑定随之移除，已存该配色迁移到暖橙。
+
+<h3 id="en-unreleased">New Features</h3>
+
+- Add a material layer independent of the palette: the Appearance tab chooses the corner scale, flat shadows, motion timing, glass sidebar and ambient light separately, shipped at the reference theme's values with each aspect able to fall back to the host's own; the former Cindy palette and its bundled material are removed, and a stored value migrates to warm ember.
+
 ## [0.36.0] - 2026-11-12
 
 [中文](#cn-0.36.0) | [English](#en-0.36.0)

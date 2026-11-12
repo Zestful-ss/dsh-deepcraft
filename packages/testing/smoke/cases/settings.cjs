@@ -18,7 +18,7 @@ module.exports = {
     const expected = {
       general: { rows: ['subagentModelPicker', 'subagentModelChoice'], disabled: [] },
       appearance: {
-        rows: ['palette', 'brandAccent', 'fontUi', 'fontProse', 'fontCode', 'motion', 'mascot', 'chatPet', 'mascotScope', 'brandName', 'brandMark', 'brandWordmark', 'brandInk', 'wallpaperSource', 'wallpaperVisibility', 'wallpaperBlur', 'wallpaperMotion', 'wallpaperLite'],
+        rows: ['palette', 'brandAccent', 'fontUi', 'fontProse', 'fontCode', 'motion', 'mascot', 'chatPet', 'mascotScope', 'materialRadius', 'materialShadow', 'materialMotion', 'materialGlass', 'materialAmbient', 'brandName', 'brandMark', 'brandWordmark', 'brandInk', 'wallpaperSource', 'wallpaperVisibility', 'wallpaperBlur', 'wallpaperMotion', 'wallpaperLite'],
         // The wallpaper children grey out until the source is `custom`.
         disabled: ['wallpaperVisibility', 'wallpaperBlur', 'wallpaperMotion', 'wallpaperLite'],
       },

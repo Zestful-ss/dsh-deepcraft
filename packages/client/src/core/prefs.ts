@@ -1,4 +1,4 @@
-import { FONT_CODE_ATTR, FONT_PROSE_ATTR, FONT_UI_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_PETDEX, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PACKAGE_NAME, PALETTE_ATTR, SETTINGS_ENTRY_FALLBACK, WALLPAPER_ATTR, WALLPAPER_LITE_ATTR } from '../constants'
+import { FONT_CODE_ATTR, FONT_PROSE_ATTR, FONT_UI_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_PETDEX, MATERIAL_AMBIENT_ATTR, MATERIAL_GLASS_ATTR, MATERIAL_MOTION_ATTR, MATERIAL_RADIUS_ATTR, MATERIAL_SHADOW_ATTR, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PACKAGE_NAME, PALETTE_ATTR, SETTINGS_ENTRY_FALLBACK, WALLPAPER_ATTR, WALLPAPER_LITE_ATTR } from '../constants'
 import { FONT_CUSTOM } from '@dsh-deepcraft/contracts/prefs'
 import { FONT_ROLES } from '../theme/fonts'
 import { customFontStack } from '../shared/fonts'
@@ -75,6 +75,11 @@ const MIRRORS = [
   { key: 'fontProse', attr: FONT_PROSE_ATTR, value: (prefs: Prefs) => prefs.fontProse },
   { key: 'fontCode', attr: FONT_CODE_ATTR, value: (prefs: Prefs) => prefs.fontCode },
   { key: 'mascot', attr: MASCOT_ATTR, value: resolveMascot },
+  { key: 'materialRadius', attr: MATERIAL_RADIUS_ATTR, value: (prefs: Prefs) => prefs.materialRadius },
+  { key: 'materialShadow', attr: MATERIAL_SHADOW_ATTR, value: (prefs: Prefs) => prefs.materialShadow },
+  { key: 'materialMotion', attr: MATERIAL_MOTION_ATTR, value: (prefs: Prefs) => prefs.materialMotion },
+  { key: 'materialGlass', attr: MATERIAL_GLASS_ATTR, value: (prefs: Prefs) => prefs.materialGlass ? '1' : '' },
+  { key: 'materialAmbient', attr: MATERIAL_AMBIENT_ATTR, value: (prefs: Prefs) => prefs.materialAmbient ? '1' : '' },
   { key: 'wallpaperSource', attr: WALLPAPER_ATTR, value: (prefs: Prefs) => prefs.wallpaperSource },
   { key: 'wallpaperLite', attr: WALLPAPER_LITE_ATTR, value: (prefs: Prefs) => prefs.wallpaperLite ? '1' : '' },
 ] as const satisfies readonly PrefMirror[]

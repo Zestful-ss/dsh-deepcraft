@@ -77,6 +77,17 @@ export const PALETTE_ATTR = 'data-dsh-deepcraft-palette'
 export { FONT_CODE_ATTR, FONT_PROSE_ATTR, FONT_UI_ATTR } from './theme/fonts'
 export const MASCOT_ATTR = 'data-dsh-deepcraft-mascot'
 /**
+ * The material layer's five answers, each its own attribute so an aspect can go
+ * back to the host's value without touching the others (theme/material.css,
+ * D84). The radius, shadow and motion attributes carry the choice's value; the
+ * glass and ambient ones are present (`1`) while they are on.
+ */
+export const MATERIAL_RADIUS_ATTR = 'data-dsh-deepcraft-material-radius'
+export const MATERIAL_SHADOW_ATTR = 'data-dsh-deepcraft-material-shadow'
+export const MATERIAL_MOTION_ATTR = 'data-dsh-deepcraft-material-motion'
+export const MATERIAL_GLASS_ATTR = 'data-dsh-deepcraft-material-glass'
+export const MATERIAL_AMBIENT_ATTR = 'data-dsh-deepcraft-material-ambient'
+/**
  * The reader's wallpaper choices the stylesheet keys on (theme/wallpaper.css):
  * WALLPAPER_ATTR carries `wallpaperSource` (`custom` while the layer stands,
  * `none` while it does not), and LITE_ATTR is present (value `1`) while the

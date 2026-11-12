@@ -71,6 +71,11 @@ const MARKS = [
   ['custom brand word image', 'data-dsh-deepcraft-custom-word', 'image'],
   ['custom brand tint', 'data-dsh-deepcraft-custom-tint', ''],
   ['custom brand accent', 'data-dsh-deepcraft-accent', '#d97757'],
+  ['material radius', 'data-dsh-deepcraft-material-radius', 'reference'],
+  ['material shadow', 'data-dsh-deepcraft-material-shadow', 'flat'],
+  ['material motion', 'data-dsh-deepcraft-material-motion', 'reference'],
+  ['material glass', 'data-dsh-deepcraft-material-glass', '1'],
+  ['material ambient', 'data-dsh-deepcraft-material-ambient', '1'],
   ['the wallpaper plugin', 'data-we-wallpaper', ''],
   ['own wallpaper', 'data-dsh-deepcraft-wallpaper', 'custom'],
   ['own wallpaper lite', 'data-dsh-deepcraft-wallpaper-lite', '1'],
@@ -275,11 +280,23 @@ function importanceScenario(lane) {
       await audit.state('forest light')
       await attribute(page, 'data-dsh-deepcraft-palette', 'ember')
       await audit.state('ember light')
-      await attribute(page, 'data-dsh-deepcraft-palette', 'cindy')
-      await audit.state('cindy light')
-      await attribute(page, 'data-ds-dark-theme', '')
-      await audit.state('cindy dark')
-      await attribute(page, 'data-ds-dark-theme', null)
+      const MATERIAL_ATTRS = [
+        ['radius', 'data-dsh-deepcraft-material-radius'],
+        ['shadow', 'data-dsh-deepcraft-material-shadow'],
+        ['motion', 'data-dsh-deepcraft-material-motion'],
+        ['glass', 'data-dsh-deepcraft-material-glass'],
+        ['ambient', 'data-dsh-deepcraft-material-ambient'],
+      ]
+      // The material layer every aspect off: the page as the host draws it, so
+      // the rules that stand in for the reference shape have a state to leave.
+      for (const [, key] of MATERIAL_ATTRS) await attribute(page, key, null)
+      await audit.state('host material')
+      for (const [label, key] of MATERIAL_ATTRS) {
+        await attribute(page, key, key === 'data-dsh-deepcraft-material-glass' || key === 'data-dsh-deepcraft-material-ambient'
+          ? '1'
+          : key === 'data-dsh-deepcraft-material-shadow' ? 'flat' : 'reference')
+        await audit.state(`material ${label}`)
+      }
       await attribute(page, 'data-dsh-deepcraft-palette', 'host')
       await attribute(page, 'data-dsh-deepcraft-font-ui', 'host')
       await attribute(page, 'data-dsh-deepcraft-font-prose', 'follow')

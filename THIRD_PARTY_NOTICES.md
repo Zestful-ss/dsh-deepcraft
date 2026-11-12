@@ -67,10 +67,10 @@ SOFTWARE.
 
 ## Cindy design values
 
-The `cindy` palette's colours, radii and material treatment adapt the visual
-system of Cindy (`makecindy/cindy`) as ported by `nothing688/dsh-cindy-skin`;
-both are Apache-2.0. The values are data in this package, not a copy of either
-project's code.
+The material layer's corner scale, flat shadows, durations, sidebar glass and
+ambient light adapt the visual system of Cindy (`makecindy/cindy`) as ported by
+`nothing688/dsh-cindy-skin`; both are Apache-2.0. The values are data in this
+package, not a copy of either project's code.
 
 Sources: <https://github.com/makecindy/cindy> · <https://github.com/nothing688/dsh-cindy-skin>
 

@@ -110,7 +110,7 @@ const THEME_SHEETS = [
   { file: 'shared/sliding-pill.css', rank: 40 },
   { file: 'shared/masked.css', rank: 45 },
   { file: 'theme/chrome.css', rank: 50 },
-  { file: 'theme/cindy.css', rank: 55 },
+  { file: 'theme/material.css', rank: 55 },
   { file: 'theme/hero.css', rank: 70 },
   { file: 'theme/sidebar.css', rank: 110 },
   { file: 'theme/third-party.css', rank: 300 },
@@ -211,12 +211,20 @@ const CONSTANTS = (() => {
     if (module[name] === undefined) throw new Error(`build: ${file} exports no ${name}`)
     return [name, module[name]]
   }))
-  const { PALETTE_ATTR, PALETTE_HOST, SKIN_PALETTES } = pick(constants, constantsFile, ['PALETTE_ATTR', 'PALETTE_HOST', 'SKIN_PALETTES'])
+  const { PALETTE_ATTR, PALETTE_HOST, SKIN_PALETTES, MATERIAL_RADIUS_ATTR, MATERIAL_SHADOW_ATTR, MATERIAL_MOTION_ATTR, MATERIAL_GLASS_ATTR, MATERIAL_AMBIENT_ATTR } = pick(constants, constantsFile, ['PALETTE_ATTR', 'PALETTE_HOST', 'SKIN_PALETTES', 'MATERIAL_RADIUS_ATTR', 'MATERIAL_SHADOW_ATTR', 'MATERIAL_MOTION_ATTR', 'MATERIAL_GLASS_ATTR', 'MATERIAL_AMBIENT_ATTR'])
   return {
     // The gate attribute scripts/css.mjs checks and writes the palette token
-    // blocks under (D80).
+    // blocks under (D80), and the material layer's own gates for the host tokens
+    // it writes whatever palette is in force (D84).
     gates: {
       palette: { attribute: PALETTE_ATTR, ids: [...SKIN_PALETTES], host: PALETTE_HOST },
+      material: [
+        { attribute: MATERIAL_RADIUS_ATTR, value: 'reference' },
+        { attribute: MATERIAL_SHADOW_ATTR, value: 'flat' },
+        { attribute: MATERIAL_MOTION_ATTR, value: 'reference' },
+        { attribute: MATERIAL_GLASS_ATTR, value: '1' },
+        { attribute: MATERIAL_AMBIENT_ATTR, value: '1' },
+      ],
     },
   }
 })()

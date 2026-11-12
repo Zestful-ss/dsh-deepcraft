@@ -3,7 +3,9 @@ import {
   FONT_CODE_ANTHROPIC, FONT_CODE_COMMIT, FONT_CODE_FIRA, FONT_CODE_GEIST, FONT_CODE_JETBRAINS,
   FONT_CUSTOM, FONT_FOLLOW, FONT_HOST, FONT_LIST_MAX, FONT_PROSE_ANTHROPIC, FONT_PROSE_LITERATA, FONT_PROSE_NOTO, FONT_PROSE_SOURCE,
   FONT_UI_ANTHROPIC, FONT_UI_ATKINSON, FONT_UI_FIXEL, FONT_UI_GEIST, FONT_UI_INTER,
-  MOTION_FULL, MOTION_REDUCED, MOTION_SYSTEM, PALETTE_CINDY, PALETTE_EMBER, PALETTE_FOREST, PALETTE_HOST, PALETTE_OCEAN,
+  MOTION_FULL, MOTION_REDUCED, MOTION_SYSTEM,
+  MATERIAL_HOST, MATERIAL_REFERENCE, MATERIAL_SHADOWS_FLAT,
+  PALETTE_EMBER, PALETTE_FOREST, PALETTE_HOST, PALETTE_OCEAN,
 } from '../../constants'
 import { accentRow, brandRows } from './settings-brand'
 import { copy } from './copy'
@@ -32,9 +34,10 @@ function FontCustomInput(props: { value: string, placeholder: string, onSave(val
 /**
  * The settings page's Appearance tab: which palette paints the colours — with
  * the accent colour as that row's sub-row — the three font roles, how much
- * motion the skin runs, and the custom brand rows (settings-brand.ts). The
- * mascot, where it stands and the chat pet are the features' own rows, placed
- * here by their manifests (D72).
+ * motion the skin runs, the material layer's five aspects (D84, independent of
+ * the palette), and the custom brand rows (settings-brand.ts). The mascot,
+ * where it stands and the chat pet are the features' own rows, placed here by
+ * their manifests (D72).
  */
 export function createSettingsAppearanceTab(): SettingsTab {
   function rows(view: SettingsView) {
@@ -45,13 +48,24 @@ export function createSettingsAppearanceTab(): SettingsTab {
       { value: PALETTE_OCEAN, label: copy('paletteOcean') },
       { value: PALETTE_EMBER, label: copy('paletteEmber') },
       { value: PALETTE_FOREST, label: copy('paletteForest') },
-      { value: PALETTE_CINDY, label: copy('paletteCindy') },
       { value: PALETTE_HOST, label: copy('paletteHost') },
     ]
     const motionOptions: SegmentOption<Prefs['motion']>[] = [
       { value: MOTION_SYSTEM, label: copy('motionSystem') },
       { value: MOTION_REDUCED, label: copy('motionReduced') },
       { value: MOTION_FULL, label: copy('motionFull') },
+    ]
+    const radiusOptions: SegmentOption<Prefs['materialRadius']>[] = [
+      { value: MATERIAL_REFERENCE, label: copy('materialRadiusReference') },
+      { value: MATERIAL_HOST, label: copy('materialHost') },
+    ]
+    const shadowOptions: SegmentOption<Prefs['materialShadow']>[] = [
+      { value: MATERIAL_SHADOWS_FLAT, label: copy('materialShadowFlat') },
+      { value: MATERIAL_HOST, label: copy('materialHost') },
+    ]
+    const materialMotionOptions: SegmentOption<Prefs['materialMotion']>[] = [
+      { value: MATERIAL_REFERENCE, label: copy('materialMotionReference') },
+      { value: MATERIAL_HOST, label: copy('materialHost') },
     ]
     const uiOptions: SegmentOption<Prefs['fontUi']>[] = [
       { value: FONT_HOST, label: copy('fontHost') },
@@ -135,6 +149,26 @@ export function createSettingsAppearanceTab(): SettingsTab {
           null,
           controls.segment(motionOptions, prefs.motion, value => { write({ motion: value }) }),
         ),
+      },
+      {
+        rank: 41,
+        node: controls.row('materialRadius', copy('materialRadiusTitle'), copy('materialRadiusDesc'), controls.segment(radiusOptions, prefs.materialRadius, value => { write({ materialRadius: value }) })),
+      },
+      {
+        rank: 42,
+        node: controls.row('materialShadow', copy('materialShadowTitle'), copy('materialShadowDesc'), controls.segment(shadowOptions, prefs.materialShadow, value => { write({ materialShadow: value }) })),
+      },
+      {
+        rank: 43,
+        node: controls.row('materialMotion', copy('materialMotionTitle'), copy('materialMotionDesc'), controls.segment(materialMotionOptions, prefs.materialMotion, value => { write({ materialMotion: value }) })),
+      },
+      {
+        rank: 44,
+        node: controls.row('materialGlass', copy('materialGlassTitle'), copy('materialGlassDesc'), controls.toggle(prefs.materialGlass, value => { write({ materialGlass: value }) })),
+      },
+      {
+        rank: 45,
+        node: controls.row('materialAmbient', copy('materialAmbientTitle'), copy('materialAmbientDesc'), controls.toggle(prefs.materialAmbient, value => { write({ materialAmbient: value }) })),
       },
       ...brandRows(view),
     ]

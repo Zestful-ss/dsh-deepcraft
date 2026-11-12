@@ -37,11 +37,22 @@ export const MOTION_MODES = [MOTION_SYSTEM, MOTION_REDUCED, MOTION_FULL] as cons
 export const PALETTE_OCEAN = 'ocean'
 export const PALETTE_EMBER = 'ember'
 export const PALETTE_FOREST = 'forest'
-export const PALETTE_CINDY = 'cindy'
 export const PALETTE_HOST = 'host'
 /** The skin's own palettes, in the settings page's order; `PALETTE_HOST` follows them. */
-export const SKIN_PALETTES = [PALETTE_OCEAN, PALETTE_EMBER, PALETTE_FOREST, PALETTE_CINDY] as const
+export const SKIN_PALETTES = [PALETTE_OCEAN, PALETTE_EMBER, PALETTE_FOREST] as const
 export const PALETTES = [...SKIN_PALETTES, PALETTE_HOST] as const
+
+/**
+ * The material layer's two answers per aspect (D84): the reference theme's
+ * value, or the host's own. It is orthogonal to the palette — any palette can
+ * carry the shape language, and the shipped default is the reference one.
+ */
+export const MATERIAL_REFERENCE = 'reference'
+export const MATERIAL_HOST = 'host'
+export const MATERIAL_RADII = [MATERIAL_REFERENCE, MATERIAL_HOST] as const
+export const MATERIAL_SHADOWS_FLAT = 'flat'
+export const MATERIAL_SHADOWS = [MATERIAL_SHADOWS_FLAT, MATERIAL_HOST] as const
+export const MATERIAL_MOTIONS = [MATERIAL_REFERENCE, MATERIAL_HOST] as const
 /** Who sets each type role: the host's own face, one of the skin's, or a family list the reader types. */
 export const FONT_HOST = 'host'
 export const FONT_FOLLOW = 'follow'
@@ -81,7 +92,7 @@ export const PET_ID_MAX = 63
 
 /**
  * Where the window's wallpaper comes from: `off` leaves the window bare
- * (each palette's own canvas and, for Cindy, its ambient light), `custom`
+ * (each palette's own canvas and the material layer's ambient light), `custom`
  * layers the reader's own image or video under the whole shell.
  */
 export const WALLPAPER_OFF = 'off'
@@ -136,6 +147,16 @@ export const PREFS = {
   brandInk: { type: 'choice', values: BRAND_INKS, default: BRAND_INK_ORIGINAL },
   brandAccent: { type: 'color', default: '' },
   motion: { type: 'choice', values: MOTION_MODES, default: MOTION_SYSTEM },
+  /** The material layer's corner scale: the reference theme's 4/8/12, or the host's own (D84). */
+  materialRadius: { type: 'choice', values: MATERIAL_RADII, default: MATERIAL_REFERENCE },
+  /** Its shadows: flat (levels off, elevation drawn as a stroke), or the host's. */
+  materialShadow: { type: 'choice', values: MATERIAL_SHADOWS, default: MATERIAL_SHADOWS_FLAT },
+  /** Its durations: the reference theme's 150/200/250ms, or the host's. */
+  materialMotion: { type: 'choice', values: MATERIAL_MOTIONS, default: MATERIAL_REFERENCE },
+  /** The sidebar's liquid glass: a translucent tint, a blur and an inner hairline. */
+  materialGlass: { type: 'boolean', default: true },
+  /** The ambient light behind the whole shell: three soft radial washes. */
+  materialAmbient: { type: 'boolean', default: true },
   /** The session must name a subagent model rather than inherit the parent route. */
   subagentModelChoice: { type: 'boolean', default: false },
   /** The composer's own entry for the routes one session delegates on. */
@@ -211,16 +232,19 @@ const COLOR_RE = /^#[0-9a-f]{6}$/i
 const LEGACY_BRAND_DEEPSEEK = 'deepseek'
 const LEGACY_BRAND_OFF = 'off'
 const LEGACY_PALETTE_CLAUDE = 'claude'
+const LEGACY_PALETTE_CINDY = 'cindy'
 
 /**
  * The colour palette a stored configuration means (D80). A value this build
- * knows wins; the host's palette stands; otherwise the old brand (or, without
- * one, the old palette) decides between the skin's blue and its warm palette.
+ * knows wins; the host's palette stands; a stored `cindy` keeps the warm palette
+ * its material now rides beside (D84); otherwise the old brand (or, without one,
+ * the old palette) decides between the skin's blue and its warm palette.
  */
 function migratePalette(section: Record<string, unknown>) {
   const raw = section.palette
   if (typeof raw === 'string' && (PALETTES as readonly string[]).includes(raw)) return raw
   if (raw === PALETTE_HOST) return PALETTE_HOST
+  if (raw === LEGACY_PALETTE_CINDY) return PALETTE_EMBER
   const brand = section.brand
   if (brand !== undefined) {
     return brand === LEGACY_BRAND_DEEPSEEK || brand === LEGACY_BRAND_OFF ? PALETTE_OCEAN : PALETTE_EMBER

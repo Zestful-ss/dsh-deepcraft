@@ -173,13 +173,23 @@ function paletteGated(selector, gates) {
 }
 
 /**
+ * Whether one selector stands under a material gate (D84): the material layer is
+ * orthogonal to the palette, so a host token it writes must be gated by the
+ * aspect that owns it rather than by a palette.
+ */
+function materialGated(selector, gates) {
+  return (gates.material ?? []).some(({ attribute, value }) => carries(selector, attribute, value))
+}
+
+/**
  * Hold every write of a host token to its gate (D80), and record the private
  * tokens a skin palette defines and the host palette aliases.
  *
  * A `--dsw-font-*` declaration belongs to the font catalogue and is exempt
  * from the palette gate; any other `--dsw-*` one must sit in a rule whose every
- * selector stands under a palette gate. A private colour token defined under
- * one of the skin's palettes needs a value under the host palette.
+ * selector stands under a palette gate or under the material layer's own gate
+ * (D84). A private colour token defined under one of the skin's palettes needs a
+ * value under the host palette.
  */
 function checkTokenGates(label, rule, selectors, gates, names) {
   const every = (predicate) => selectors.every(predicate)
@@ -189,7 +199,7 @@ function checkTokenGates(label, rule, selectors, gates, names) {
     const where = `${label}:${node.source.start.line}`
     if (name.startsWith('--dsw-font-')) continue
     if (name.startsWith('--dsw-')) {
-      if (!every((selector) => paletteGated(selector, gates))) throw new Error(`build: ${where} writes ${name} outside a palette gate`)
+      if (!every((selector) => paletteGated(selector, gates) || materialGated(selector, gates))) throw new Error(`build: ${where} writes ${name} outside a palette or material gate`)
     }
     if (!name.startsWith('--dsh-deepcraft-')) continue
     if (name.startsWith('--dsh-deepcraft-font-')) continue

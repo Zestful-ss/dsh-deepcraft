@@ -116,8 +116,8 @@
     "en": "Colours"
   },
   "paletteDesc": {
-    "zh": "内置配色或跟随宿主；Cindy 暖象牙另带材质层，其余配色只换颜色，标识与宠物不变。",
-    "en": "The skin's palettes or the host's; Cindy ivory also carries a material layer, while the others change colours alone. The mark and pet stay put."
+    "zh": "内置配色或跟随宿主；只换颜色，标识与宠物不变。形状、材质与动效在下面的材质层单独选择。",
+    "en": "The skin's palettes or the host's; colours only, leaving the mark and pet alone. Shape, material and motion are the material layer's own choice below."
   },
   "paletteOcean": {
     "zh": "深海蓝",
@@ -131,13 +131,73 @@
     "zh": "森林绿",
     "en": "Forest green"
   },
-  "paletteCindy": {
-    "zh": "Cindy 暖象牙",
-    "en": "Cindy ivory"
-  },
   "paletteHost": {
     "zh": "跟随宿主",
     "en": "Follow the host"
+  },
+  "materialTitle": {
+    "zh": "材质",
+    "en": "Material"
+  },
+  "materialDesc": {
+    "zh": "借鉴参考主题的形状与透光；每一项都可以单独退回宿主的样子。",
+    "en": "The reference theme's shape and translucency; each aspect can go back to the host's own look on its own."
+  },
+  "materialRadiusTitle": {
+    "zh": "圆角",
+    "en": "Corners"
+  },
+  "materialRadiusDesc": {
+    "zh": "4 / 8 / 12px 的圆角档位，或宿主自己的圆角。",
+    "en": "A 4 / 8 / 12px corner scale, or the host's own radii."
+  },
+  "materialRadiusReference": {
+    "zh": "参考档位",
+    "en": "Reference scale"
+  },
+  "materialShadowTitle": {
+    "zh": "阴影",
+    "en": "Shadows"
+  },
+  "materialShadowDesc": {
+    "zh": "平铺：去掉三层阴影，抬升改画描边；或宿主自己的阴影。",
+    "en": "Flat drops the three shadow levels and draws elevation as a stroke; or keep the host's shadows."
+  },
+  "materialShadowFlat": {
+    "zh": "平铺",
+    "en": "Flat"
+  },
+  "materialMotionTitle": {
+    "zh": "动效节奏",
+    "en": "Motion timing"
+  },
+  "materialMotionDesc": {
+    "zh": "150 / 200 / 250ms 的过渡时长，或宿主自己的时长。",
+    "en": "150 / 200 / 250ms transitions, or the host's own durations."
+  },
+  "materialMotionReference": {
+    "zh": "参考节奏",
+    "en": "Reference timing"
+  },
+  "materialHost": {
+    "zh": "跟随宿主",
+    "en": "Follow the host"
+  },
+  "materialGlassTitle": {
+    "zh": "玻璃侧栏",
+    "en": "Glass sidebar"
+  },
+  "materialGlassDesc": {
+    "zh": "半透明侧栏、42px 背景模糊与内描边。",
+    "en": "A translucent sidebar with a 42px backdrop blur and inner hairline."
+  },
+  "materialAmbientTitle": {
+    "zh": "环境光",
+    "en": "Ambient light"
+  },
+  "materialAmbientDesc": {
+    "zh": "整窗背景的三层柔和径向光，亮暗各有自己的强度。",
+    "en": "Three soft radial washes behind the whole window, each with its own light and dark strength."
   },
   "unavailable": {
     "zh": "ERROR : 设置存储服务异常，改动不会被保存。",

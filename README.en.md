@@ -15,7 +15,7 @@
 
 ## Preview
 
-The settings page switches between four palettes; light and dark follow the system. Ocean, ember and forest change colours alone; Cindy ivory also carries 12px radii, zero shadows, restrained motion and a glass sidebar. Switching never changes the mark, the name or the pet, and the Appearance tab also takes your own mark, wordmark, accent colour, pet and wallpaper — an image or video layered under the whole page, with visibility, blur and playback controls.
+The settings page switches between three palettes, light and dark following the system; a palette changes colours alone, never the mark, the name or the pet. The Appearance tab also carries a material layer of its own, independent of the palette: a 4 / 8 / 12px corner scale, flat shadows, 150 / 200 / 250ms motion timing, a glass sidebar and ambient light, shipped at the reference theme's values and each one able to fall back to the host's own look. The same tab takes your own mark, wordmark, accent colour, pet and wallpaper — an image or video layered under the whole page, with visibility, blur and playback controls.
 
 ### Ocean blue (default)
 

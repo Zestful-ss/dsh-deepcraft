@@ -19,8 +19,8 @@
         }
       }
       r.palettes = {}
-      for (var at = 0; at < ['ocean', 'ember', 'forest', 'cindy'].length; at++) {
-        var id = ['ocean', 'ember', 'forest', 'cindy'][at]
+      for (var at = 0; at < ['ocean', 'ember', 'forest'].length; at++) {
+        var id = ['ocean', 'ember', 'forest'][at]
         window.__pushForm({ palette: id })
         await sleep(150)
         var light = readTheme()
@@ -32,22 +32,29 @@
       }
       window.__pushForm({ palette: 'ocean' })
       await sleep(150)
-      window.__pushForm({ palette: 'cindy' })
-      await sleep(250)
-      var bodyStyle = getComputedStyle(document.body)
+      // The material layer's defaults, then every aspect back to the host's
+      // value on its own (D84). The column is a stand-in for the host's own
+      // sidebar part, so the glass rule paints its ::before.
       var column = document.createElement('div')
       column.setAttribute('data-dsh-deepcraft-part', 'sidebar-column')
       document.body.appendChild(column)
-      var glass = getComputedStyle(column, '::before').backdropFilter
-      column.remove()
-      r.cindyMaterial = {
-        radius: bodyStyle.getPropertyValue('--dsw-radius-md').trim(),
-        shadow: bodyStyle.getPropertyValue('--dsw-shadow-lv1').trim(),
-        focus: bodyStyle.getPropertyValue('--dsw-focus-ring-color').trim(),
-        fast: bodyStyle.getPropertyValue('--ds-transition-duration-fast').trim(),
-        glass,
+      r.material = {
+        radius: getComputedStyle(document.body).getPropertyValue('--dsw-radius-md').trim(),
+        shadow: getComputedStyle(document.body).getPropertyValue('--dsw-shadow-lv1').trim(),
+        fast: getComputedStyle(document.body).getPropertyValue('--ds-transition-duration-fast').trim(),
+        glass: getComputedStyle(column, '::before').backdropFilter,
+        ambient: getComputedStyle(document.body).backgroundImage,
       }
-      window.__pushForm({ palette: 'ocean' })
+      window.__pushForm({ materialRadius: 'host', materialShadow: 'host', materialMotion: 'host', materialGlass: false, materialAmbient: false })
+      await sleep(250)
+      r.materialOff = {
+        radius: getComputedStyle(document.body).getPropertyValue('--dsw-radius-md').trim(),
+        shadow: getComputedStyle(document.body).getPropertyValue('--dsw-shadow-lv1').trim(),
+        glass: getComputedStyle(column, '::before').backdropFilter,
+        ambient: getComputedStyle(document.body).backgroundImage,
+      }
+      column.remove()
+      window.__pushForm({ materialRadius: 'reference', materialShadow: 'flat', materialMotion: 'reference', materialGlass: true, materialAmbient: true })
       await sleep(150)
     })
   })

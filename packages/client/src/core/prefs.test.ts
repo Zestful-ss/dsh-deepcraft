@@ -29,7 +29,25 @@ test('the older brand and palette choices land on one independent palette (D80)'
   expect(normalizePrefs({ palette: 'claude' }).palette).toBe('ember')
   expect(normalizePrefs({ palette: 'host' }).palette).toBe('host')
   expect(normalizePrefs({ palette: 'forest' }).palette).toBe('forest')
+  // The retired reference palette keeps the warm one; its material now rides
+  // the layer's own defaults (D84).
+  expect(normalizePrefs({ palette: 'cindy' }).palette).toBe('ember')
   expect(normalizePrefs({}).palette).toBe('ocean')
+})
+
+test('the material layer defaults to the reference theme and answers each aspect on its own (D84)', () => {
+  const defaults = normalizePrefs({})
+  expect(defaults.materialRadius).toBe('reference')
+  expect(defaults.materialShadow).toBe('flat')
+  expect(defaults.materialMotion).toBe('reference')
+  expect(defaults.materialGlass).toBe(true)
+  expect(defaults.materialAmbient).toBe(true)
+  expect(normalizePrefs({ materialRadius: 'host', materialShadow: 'host', materialMotion: 'host' })).toMatchObject({
+    materialRadius: 'host', materialShadow: 'host', materialMotion: 'host',
+  })
+  expect(normalizePrefs({ materialGlass: false, materialAmbient: false })).toMatchObject({ materialGlass: false, materialAmbient: false })
+  expect(normalizePrefs({ materialRadius: 'rounded' }).materialRadius).toBe('reference')
+  expect(normalizePrefs({ materialShadow: 'soft' }).materialShadow).toBe('flat')
 })
 test('the brand name is trimmed and cut to its limit', () => {
   expect(normalizePrefs({ brandName: '  Acme  ' }).brandName).toBe('Acme')

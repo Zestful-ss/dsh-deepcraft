@@ -23,11 +23,6 @@ hover, warm-compatible slate prose links and a warm neutral surface ladder.
 **Forest green.** A cool green `#397657` on the same warm-neutral ground as
 ember, with its own link step and surface ladder.
 
-**Cindy ivory.** Cindy's warm ivory canvas `#F2F2ED` and neutral near-black
-`#181818`, with its neutral CTA fills, 12px container radii, zero shadows and
-the sidebar's glass layer (D83). Select it only when the whole material should
-change; the other palettes leave the host's geometry alone.
-
 **Follow the host** leaves the host's `--dsw-*` tokens as whoever painted them
 wrote them — the host itself or another theme plugin.
 
@@ -38,60 +33,60 @@ the table. Each palette states its own light and dark values, so no cell falls
 back to another palette's; `—` is a token that palette leaves unset.
 
 <!-- generated:tokens (packages/client/src/theme/tokens.json) -->
-| Token | Ocean light | Ocean dark | Ember light | Ember dark | Forest light | Forest dark | Cindy light | Cindy dark | Host alias | Use |
-|---|---|---|---|---|---|---|---|---|---|---|
-| `--dsw-alias-bg-base` | `#fcfcfb` | `#202427` | `#fcfcfb` | `#141413` | `#fcfcfb` | `#141413` | `#f2f2ed` | `#181818` | host's own |  |
-| `--dsw-alias-bg-layer-1` | `#fcfcfb` | `#24282d` | `#fcfcfb` | `#1c1b1a` | `#fcfcfb` | `#1c1b1a` | `#fdfdf8` | `#1f1f1f` | host's own |  |
-| `--dsw-alias-bg-layer-2` | `#f2f2ef` | `#2b3038` | `#fbfbf9` | `#242320` | `#fbfbf9` | `#242320` | `#fafaf5` | `#1d1d1d` | host's own |  |
-| `--dsw-alias-bg-layer-3` | `#ededea` | `#343b45` | `#f9f9f6` | `#2e2c29` | `#f9f9f6` | `#2e2c29` | `#eeeee9` | `#1d1d1d` | host's own |  |
-| `--dsw-alias-bg-overlay` | `#fcfcfb` | `#2b3038` | `#ffffff` | `#242320` | `#ffffff` | `#242320` | `#fdfdf8` | `#1f1f1f` | host's own |  |
-| `--dsw-alias-border-l1` | `#e5e5e1` | `#3b424c` | `#e8e6dc` | `rgba(255, 255, 255, 0.09)` | `#e8e6dc` | `rgba(255, 255, 255, 0.09)` | `#ecece7` | `#2a2a2a` | host's own | the standard edge: card and panel outlines, dividers, field outlines |
-| `--dsw-alias-border-l2` | `#d4d5d2` | `#505863` | `#dedcd2` | `rgba(255, 255, 255, 0.18)` | `#dedcd2` | `rgba(255, 255, 255, 0.18)` | `#e4e4df` | `#313131` | host's own |  |
-| `--dsw-alias-border-l3` | `#b9bdc5` | `#6b7482` | `#d0cdc1` | `rgba(255, 255, 255, 0.30)` | `#d0cdc1` | `rgba(255, 255, 255, 0.30)` | `#dcdcd7` | `#383838` | host's own |  |
-| `--dsw-alias-brand-primary` | `#5368c9` | `#5368c9` | `#d97757` | `#d97757` | `#397657` | `#397657` | `#3c3f43` | `#eeeeee` | host's own | the single accent: checks, focus rings, selected marks |
-| `--dsw-alias-brand-text` | `#fcfcfb` | `#fcfcfb` | `#141413` | `#141413` | `#fcfcfb` | `#fcfcfb` | `#fcfcfc` | `#151515` | host's own |  |
-| `--dsw-alias-button-primary-fill` | `#5368c9` | `#5368c9` | `#d97757` | `#d97757` | `#397657` | `#397657` | `#3c3f43` | `#eeeeee` | host's own |  |
-| `--dsw-alias-button-primary-hover` | `#3e5bd6` | `#596dce` | `#c6613f` | `#e08a6d` | `#2c6046` | `#438061` | `#2e3237` | `#e2e2e2` | host's own |  |
-| `--dsw-alias-button-elevated-fill` | `#fcfcfb` | `#2b3038` | `#ffffff` | `#242320` | `#ffffff` | `#242320` | `#fdfdf8` | `#1f1f1f` | host's own |  |
-| `--dsw-alias-button-floating-fill` | `#fcfcfb` | `#2b3038` | `#ffffff` | `#242320` | `#ffffff` | `#242320` | `#fdfdf8` | `#1f1f1f` | host's own |  |
-| `--dsw-alias-button-floating-hover` | `#ededea` | `#343b45` | `#ffffff` | `#2e2c29` | `#ffffff` | `#2e2c29` | `#eeeee9` | `#1d1d1d` | host's own |  |
-| `--dsw-alias-button-info-fill` | `#5368c9` | `#5368c9` | `#d97757` | `#d97757` | `#397657` | `#397657` | `#417cdd` | `#417cdd` | host's own |  |
-| `--dsw-alias-button-info-hover` | `#3e5bd6` | `#596dce` | `#c6613f` | `#e08a6d` | `#2c6046` | `#438061` | `#417cdd` | `#417cdd` | host's own |  |
-| `--dsw-alias-interactive-bg-active` | `rgba(83, 104, 201, 0.26)` | `rgba(142, 162, 242, 0.32)` | `rgba(217, 119, 87, 0.30)` | `rgba(217, 119, 87, 0.30)` | `rgba(57, 118, 87, 0.20)` | `rgba(134, 197, 162, 0.24)` | `#eeeee9` | `#1d1d1d` | host's own |  |
-| `--dsh-deepcraft-hover-bg` | `rgba(83, 104, 201, 0.14)` | `rgba(142, 162, 242, 0.16)` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.08)` | `rgba(57, 118, 87, 0.10)` | `rgba(134, 197, 162, 0.12)` | `rgba(26, 26, 26, 0.07)` | `rgba(238, 238, 238, 0.08)` | `var(--dsw-alias-interactive-bg-hover)` | hover wash |
-| `--dsh-deepcraft-link` | `#3e5bd6` | `#8ea2f2` | `#3d5f86` | `#a9c2df` | `#286649` | `#86c5a2` | `#2563eb` | `#60a5fa` | `var(--dsw-alias-link)` | markdown links |
-| `--dsw-alias-markdown-code-block` | `#f7f7f5` | `#252a30` | `#ffffff` | `#1c1b1a` | `#ffffff` | `#1c1b1a` | `#f0f0eb` | `#191919` | host's own |  |
-| `--dsw-alias-markdown-code-block-banner` | `#f2f2ef` | `#2b3038` | `#ffffff` | `#242320` | `#ffffff` | `#242320` | `#fafaf5` | `#1d1d1d` | host's own |  |
-| `--dsw-alias-interactive-bg-hover` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | host's own |  |
-| `--dsw-alias-interactive-bg-hover-solid` | `#e4e8f8` | `#38415a` | `#f0efe9` | `#2e2c29` | `#e6efe9` | `#273b30` | `#eeeee9` | `#1d1d1d` | host's own | the host's solid hover chip |
-| `--dsw-alias-label-primary` | `#202124` | `#eef0f3` | `#141413` | `#faf9f5` | `#141413` | `#faf9f5` | `#1a1a1a` | `#d4d4d4` | host's own |  |
-| `--dsw-alias-label-primary-bluish` | `#202124` | `#eef0f3` | `#141413` | `#faf9f5` | `#141413` | `#faf9f5` | `#1a1a1a` | `#d4d4d4` | host's own |  |
-| `--dsw-alias-label-secondary` | `#61646b` | `#adb2bb` | `#6e6a60` | `#b0aea5` | `#6e6a60` | `#b0aea5` | `#6b6b67` | `#c1c1c1` | host's own |  |
-| `--dsw-alias-label-tertiary` | `#6c7078` | `#8b9099` | `#8f8a7e` | `#8f8d84` | `#8f8a7e` | `#8f8d84` | `#888883` | `#6f6f6f` | host's own |  |
-| `--dsw-alias-label-caption` | `#70747c` | `#8b9099` | `#a6a094` | `#6b6a65` | `#a6a094` | `#6b6a65` | `#888883` | `#6f6f6f` | host's own |  |
-| `--dsw-alias-label-shimmer` | `color-mix(in srgb, #202124 30%, transparent)` | `color-mix(in srgb, #eef0f3 45%, transparent)` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | `color-mix(in srgb, #1A1A1A 30%, transparent)` | `color-mix(in srgb, #D4D4D4 45%, transparent)` | host's own | the highlight band's tint over running words: the host's own rows and the skin's band (shared/sweep-band.ts) alike |
-| `--dsw-alias-label-deep-diving-shimmer` | `color-mix(in srgb, #202124 30%, transparent)` | `color-mix(in srgb, #eef0f3 45%, transparent)` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | `color-mix(in srgb, #1A1A1A 30%, transparent)` | `color-mix(in srgb, #D4D4D4 45%, transparent)` | host's own | the band's tint inside the running row, which the host points --dsw-alias-label-shimmer at; the warm palettes wear the same band as everywhere else |
-| `--dsw-alias-state-business-primary` | `#5368c9` | `#8ea2f2` | `#d97757` | `#d97757` | `#397657` | `#86c5a2` | `#417cdd` | `#417cdd` | host's own |  |
-| `--dsw-alias-state-business-tertiary` | `#e2e7fc` | `#313f6b` | `#e9dfd2` | `#3a2a22` | `#e3eee6` | `#243a2e` | `#eeeee9` | `#1d1d1d` | host's own |  |
-| `--dsw-alias-link` | `#3e5bd6` | `#8ea2f2` | `#b9542f` | `#e08a6d` | `#286649` | `#86c5a2` | `#2563eb` | `#60a5fa` | host's own | text link at rest |
-| `--dsw-shadow-lv2` | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | `none` | `none` | host's own |  |
-| `--dsw-specific-input-major` | `#f7f7f5` | `#252a30` | `#ffffff` | `#0f0e0d` | `#ffffff` | `#0f0e0d` | `#fdfdf8` | `#1f1f1f` | host's own |  |
-| `--dsw-specific-selector` | `#eef0fa` | `#333a4a` | `#fbfbf9` | `#2e2c29` | `#eef4ef` | `#263a2e` | `#eeeee9` | `#1d1d1d` | host's own |  |
-| `--dsw-specific-sidebar-fill` | `#f2f2ef` | `#1d2124` | `#fbfbf9` | `#141413` | `#fbfbf9` | `#141413` | `#eeeee9` | `#141414` | host's own |  |
-| `--dsw-alias-brand-primary-new-colorprimary-new-color` | `#5368c9` | `#5368c9` | `#d97757` | `#d97757` | `#397657` | `#397657` | `#3c3f43` | `#eeeeee` | host's own |  |
-| `--dsh-deepcraft-canvas` | `#fcfcfb` | `#202427` | `#fcfcfb` | `#141413` | `#fcfcfb` | `#141413` | `#f2f2ed` | `#181818` | `var(--dsw-alias-bg-base)` | the page canvas |
-| `--dsh-deepcraft-raised` | `#fcfcfb` | `#2b3038` | `var(--dsw-alias-bg-overlay)` | `#1e1e1d` | `var(--dsw-alias-bg-overlay)` | `#1e1e1d` | `#fdfdf8` | `#1f1f1f` | `var(--dsw-alias-bg-overlay)` | popovers and menus raised above the dark canvas |
-| `--dsh-deepcraft-card` | `#fcfcfb` | `#2b3038` | `#fcfcfb` | `#1e1e1d` | `#fcfcfb` | `#1e1e1d` | `#fdfdf8` | `#1f1f1f` | `var(--dsw-alias-bg-overlay)` | cards on the canvas: the subagent model card |
-| `--dsh-deepcraft-ink-strong` | `#202124` | `#eef0f3` | `var(--dsw-alias-label-primary)` | `#f5f4ef` | `var(--dsw-alias-label-primary)` | `#f5f4ef` | `#0c0c0c` | `#ffffff` | `var(--dsw-alias-label-primary)` | active row ink |
-| `--dsh-deepcraft-session-ink` | `#61646b` | `#adb2bb` | `var(--dsw-alias-label-secondary)` | `#8c8983` | `var(--dsw-alias-label-secondary)` | `#8c8983` | `#6b6b67` | `#c1c1c1` | `var(--dsw-alias-label-secondary)` | session title at rest |
-| `--dsh-deepcraft-logo-ink` | `#202124` | `#eef0f3` | `#141413` | `#faf9f5` | `#141413` | `#faf9f5` | `#0c0c0c` | `#ffffff` | `var(--dsw-alias-label-primary)` | sidebar brand art: the whale and the wordmark |
-| `--dsw-specific-menu` | `#fcfcfb` | `#2b3038` | `#ffffff` | `var(--dsh-deepcraft-raised)` | `#ffffff` | `var(--dsh-deepcraft-raised)` | `#fdfdf8f0` | `#282828f0` | host's own |  |
-| `--dsw-specific-bubble` | `#e3e8fc` | `#303c55` | `#f0f0ef` | `rgba(255, 255, 255, 0.06)` | `#e6f1e8` | `#293e33` | `#fdfdf8` | `#1f1f1f` | host's own | user message bubble |
-| `--dsh-deepcraft-chip` | `#eef0fa` | `#333a4a` | `#f6f6f4` | `var(--dsw-specific-selector)` | `#eef4ef` | `#263a2e` | `#eeeee9` | `#1d1d1d` | `var(--dsw-specific-selector)` | segmented control and switch at rest |
-| `--dsw-alias-label-primary-foreground` | `#fcfcfb` | `#fcfcfb` | `#141413` | `#141413` | `#141413` | `#141413` | `#fcfcfc` | `#151515` | host's own | the ink on a filled primary button: light on the accent in both palettes |
+| Token | Ocean light | Ocean dark | Ember light | Ember dark | Forest light | Forest dark | Host alias | Use |
+|---|---|---|---|---|---|---|---|---|
+| `--dsw-alias-bg-base` | `#fcfcfb` | `#202427` | `#fcfcfb` | `#141413` | `#fcfcfb` | `#141413` | host's own |  |
+| `--dsw-alias-bg-layer-1` | `#fcfcfb` | `#24282d` | `#fcfcfb` | `#1c1b1a` | `#fcfcfb` | `#1c1b1a` | host's own |  |
+| `--dsw-alias-bg-layer-2` | `#f2f2ef` | `#2b3038` | `#fbfbf9` | `#242320` | `#fbfbf9` | `#242320` | host's own |  |
+| `--dsw-alias-bg-layer-3` | `#ededea` | `#343b45` | `#f9f9f6` | `#2e2c29` | `#f9f9f6` | `#2e2c29` | host's own |  |
+| `--dsw-alias-bg-overlay` | `#fcfcfb` | `#2b3038` | `#ffffff` | `#242320` | `#ffffff` | `#242320` | host's own |  |
+| `--dsw-alias-border-l1` | `#e5e5e1` | `#3b424c` | `#e8e6dc` | `rgba(255, 255, 255, 0.09)` | `#e8e6dc` | `rgba(255, 255, 255, 0.09)` | host's own | the standard edge: card and panel outlines, dividers, field outlines |
+| `--dsw-alias-border-l2` | `#d4d5d2` | `#505863` | `#dedcd2` | `rgba(255, 255, 255, 0.18)` | `#dedcd2` | `rgba(255, 255, 255, 0.18)` | host's own |  |
+| `--dsw-alias-border-l3` | `#b9bdc5` | `#6b7482` | `#d0cdc1` | `rgba(255, 255, 255, 0.30)` | `#d0cdc1` | `rgba(255, 255, 255, 0.30)` | host's own |  |
+| `--dsw-alias-brand-primary` | `#5368c9` | `#5368c9` | `#d97757` | `#d97757` | `#397657` | `#397657` | host's own | the single accent: checks, focus rings, selected marks |
+| `--dsw-alias-brand-text` | `#fcfcfb` | `#fcfcfb` | `#141413` | `#141413` | `#fcfcfb` | `#fcfcfb` | host's own |  |
+| `--dsw-alias-button-primary-fill` | `#5368c9` | `#5368c9` | `#d97757` | `#d97757` | `#397657` | `#397657` | host's own |  |
+| `--dsw-alias-button-primary-hover` | `#3e5bd6` | `#596dce` | `#c6613f` | `#e08a6d` | `#2c6046` | `#438061` | host's own |  |
+| `--dsw-alias-button-elevated-fill` | `#fcfcfb` | `#2b3038` | `#ffffff` | `#242320` | `#ffffff` | `#242320` | host's own |  |
+| `--dsw-alias-button-floating-fill` | `#fcfcfb` | `#2b3038` | `#ffffff` | `#242320` | `#ffffff` | `#242320` | host's own |  |
+| `--dsw-alias-button-floating-hover` | `#ededea` | `#343b45` | `#ffffff` | `#2e2c29` | `#ffffff` | `#2e2c29` | host's own |  |
+| `--dsw-alias-button-info-fill` | `#5368c9` | `#5368c9` | `#d97757` | `#d97757` | `#397657` | `#397657` | host's own |  |
+| `--dsw-alias-button-info-hover` | `#3e5bd6` | `#596dce` | `#c6613f` | `#e08a6d` | `#2c6046` | `#438061` | host's own |  |
+| `--dsw-alias-interactive-bg-active` | `rgba(83, 104, 201, 0.26)` | `rgba(142, 162, 242, 0.32)` | `rgba(217, 119, 87, 0.30)` | `rgba(217, 119, 87, 0.30)` | `rgba(57, 118, 87, 0.20)` | `rgba(134, 197, 162, 0.24)` | host's own |  |
+| `--dsh-deepcraft-hover-bg` | `rgba(83, 104, 201, 0.14)` | `rgba(142, 162, 242, 0.16)` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.08)` | `rgba(57, 118, 87, 0.10)` | `rgba(134, 197, 162, 0.12)` | `var(--dsw-alias-interactive-bg-hover)` | hover wash |
+| `--dsh-deepcraft-link` | `#3e5bd6` | `#8ea2f2` | `#3d5f86` | `#a9c2df` | `#286649` | `#86c5a2` | `var(--dsw-alias-link)` | markdown links |
+| `--dsw-alias-markdown-code-block` | `#f7f7f5` | `#252a30` | `#ffffff` | `#1c1b1a` | `#ffffff` | `#1c1b1a` | host's own |  |
+| `--dsw-alias-markdown-code-block-banner` | `#f2f2ef` | `#2b3038` | `#ffffff` | `#242320` | `#ffffff` | `#242320` | host's own |  |
+| `--dsw-alias-interactive-bg-hover` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | host's own |  |
+| `--dsw-alias-interactive-bg-hover-solid` | `#e4e8f8` | `#38415a` | `#f0efe9` | `#2e2c29` | `#e6efe9` | `#273b30` | host's own | the host's solid hover chip |
+| `--dsw-alias-label-primary` | `#202124` | `#eef0f3` | `#141413` | `#faf9f5` | `#141413` | `#faf9f5` | host's own |  |
+| `--dsw-alias-label-primary-bluish` | `#202124` | `#eef0f3` | `#141413` | `#faf9f5` | `#141413` | `#faf9f5` | host's own |  |
+| `--dsw-alias-label-secondary` | `#61646b` | `#adb2bb` | `#6e6a60` | `#b0aea5` | `#6e6a60` | `#b0aea5` | host's own |  |
+| `--dsw-alias-label-tertiary` | `#6c7078` | `#8b9099` | `#8f8a7e` | `#8f8d84` | `#8f8a7e` | `#8f8d84` | host's own |  |
+| `--dsw-alias-label-caption` | `#70747c` | `#8b9099` | `#a6a094` | `#6b6a65` | `#a6a094` | `#6b6a65` | host's own |  |
+| `--dsw-alias-label-shimmer` | `color-mix(in srgb, #202124 30%, transparent)` | `color-mix(in srgb, #eef0f3 45%, transparent)` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | host's own | the highlight band's tint over running words: the host's own rows and the skin's band (shared/sweep-band.ts) alike |
+| `--dsw-alias-label-deep-diving-shimmer` | `color-mix(in srgb, #202124 30%, transparent)` | `color-mix(in srgb, #eef0f3 45%, transparent)` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | host's own | the band's tint inside the running row, which the host points --dsw-alias-label-shimmer at; the warm palettes wear the same band as everywhere else |
+| `--dsw-alias-state-business-primary` | `#5368c9` | `#8ea2f2` | `#d97757` | `#d97757` | `#397657` | `#86c5a2` | host's own |  |
+| `--dsw-alias-state-business-tertiary` | `#e2e7fc` | `#313f6b` | `#e9dfd2` | `#3a2a22` | `#e3eee6` | `#243a2e` | host's own |  |
+| `--dsw-alias-link` | `#3e5bd6` | `#8ea2f2` | `#b9542f` | `#e08a6d` | `#286649` | `#86c5a2` | host's own | text link at rest |
+| `--dsw-shadow-lv2` | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | host's own |  |
+| `--dsw-specific-input-major` | `#f7f7f5` | `#252a30` | `#ffffff` | `#0f0e0d` | `#ffffff` | `#0f0e0d` | host's own |  |
+| `--dsw-specific-selector` | `#eef0fa` | `#333a4a` | `#fbfbf9` | `#2e2c29` | `#eef4ef` | `#263a2e` | host's own |  |
+| `--dsw-specific-sidebar-fill` | `#f2f2ef` | `#1d2124` | `#fbfbf9` | `#141413` | `#fbfbf9` | `#141413` | host's own |  |
+| `--dsw-alias-brand-primary-new-colorprimary-new-color` | `#5368c9` | `#5368c9` | `#d97757` | `#d97757` | `#397657` | `#397657` | host's own |  |
+| `--dsh-deepcraft-canvas` | `#fcfcfb` | `#202427` | `#fcfcfb` | `#141413` | `#fcfcfb` | `#141413` | `var(--dsw-alias-bg-base)` | the page canvas |
+| `--dsh-deepcraft-raised` | `#fcfcfb` | `#2b3038` | `var(--dsw-alias-bg-overlay)` | `#1e1e1d` | `var(--dsw-alias-bg-overlay)` | `#1e1e1d` | `var(--dsw-alias-bg-overlay)` | popovers and menus raised above the dark canvas |
+| `--dsh-deepcraft-card` | `#fcfcfb` | `#2b3038` | `#fcfcfb` | `#1e1e1d` | `#fcfcfb` | `#1e1e1d` | `var(--dsw-alias-bg-overlay)` | cards on the canvas: the subagent model card |
+| `--dsh-deepcraft-ink-strong` | `#202124` | `#eef0f3` | `var(--dsw-alias-label-primary)` | `#f5f4ef` | `var(--dsw-alias-label-primary)` | `#f5f4ef` | `var(--dsw-alias-label-primary)` | active row ink |
+| `--dsh-deepcraft-session-ink` | `#61646b` | `#adb2bb` | `var(--dsw-alias-label-secondary)` | `#8c8983` | `var(--dsw-alias-label-secondary)` | `#8c8983` | `var(--dsw-alias-label-secondary)` | session title at rest |
+| `--dsh-deepcraft-logo-ink` | `#202124` | `#eef0f3` | `#141413` | `#faf9f5` | `#141413` | `#faf9f5` | `var(--dsw-alias-label-primary)` | sidebar brand art: the whale and the wordmark |
+| `--dsw-specific-menu` | `#fcfcfb` | `#2b3038` | `#ffffff` | `var(--dsh-deepcraft-raised)` | `#ffffff` | `var(--dsh-deepcraft-raised)` | host's own |  |
+| `--dsw-specific-bubble` | `#e3e8fc` | `#303c55` | `#f0f0ef` | `rgba(255, 255, 255, 0.06)` | `#e6f1e8` | `#293e33` | host's own | user message bubble |
+| `--dsh-deepcraft-chip` | `#eef0fa` | `#333a4a` | `#f6f6f4` | `var(--dsw-specific-selector)` | `#eef4ef` | `#263a2e` | `var(--dsw-specific-selector)` | segmented control and switch at rest |
+| `--dsw-alias-label-primary-foreground` | `#fcfcfb` | `#fcfcfb` | `#141413` | `#141413` | `#141413` | `#141413` | host's own | the ink on a filled primary button: light on the accent in both palettes |
 <!-- /generated:tokens -->
 
-## Palettes and font roles · 配色与字体归属
+## Palettes, material and font roles · 配色、材质与字体归属
 
 The Colours row chooses one of the skin's own palettes — **Ocean blue** (the
 default), **Warm ember** or **Forest green** — or **Follow the host**. Every
@@ -99,6 +94,18 @@ rule that writes a host colour token carries a palette gate in its selector;
 under "follow the host" those rules drop out and the host's own tokens stand,
 or another theme plugin's, such as a wallpaper plugin that clears the canvas
 and turns the overlays to glass (D80).
+
+The **material** layer is orthogonal to the palette (D84): five own rows choose
+the corner scale (4 / 8 / 12px or the host's), flat shadows (levels off,
+elevation drawn as a stroke) or the host's, the durations (150 / 200 / 250ms or
+the host's), the sidebar's glass and the ambient light. The shipped defaults are
+the reference theme's, so a fresh install wears 12px corners, flat shadows and
+the reference timing; each aspect falls back to the host's value on its own.
+`packages/client/src/theme/material.css` holds the rules, gated on the five
+`data-dsh-deepcraft-material-*` attributes rather than on a palette — the build
+accepts a host-token write under either gate. A palette's aliases (focus ring,
+inline code, citation, diff, tooltip, toast, scrollbar, switch thumb) stay in
+the palette tables: the material layer borrows shape, never a palette's colour.
 
 Three independent rows choose the **interface**, **prose** and **code** font.
 Each role has **Follow the host** (the interface and code roles; prose instead
@@ -230,9 +237,9 @@ The table below is generated from `packages/client/src/theme/tokens.json` by
 | `--dsh-deepcraft-scale-dropdown` | `0.97` | the scale a menu grows from out of its trigger |
 | `--dsh-deepcraft-scale-dropdown-exit` | `0.99` | the scale a menu shrinks to while it fades on closing |
 | `--dsh-deepcraft-timing-feedback` | `var(--dsh-deepcraft-duration-feedback) var(--dsh-deepcraft-ease-standard)` | shorthand: a control's state change, written after the property in a transition |
-| `--dsh-deepcraft-duration-cindy-fast` | `150ms` | Cindy palette: the host’s fast transition (D83) |
-| `--dsh-deepcraft-duration-cindy-base` | `200ms` | Cindy palette: the host’s base transition (D83) |
-| `--dsh-deepcraft-duration-cindy-slow` | `250ms` | Cindy palette: the host’s slow transition (D83) |
+| `--dsh-deepcraft-duration-material-fast` | `150ms` | material layer: the host’s fast transition (D84) |
+| `--dsh-deepcraft-duration-material-base` | `200ms` | material layer: the host’s base transition (D84) |
+| `--dsh-deepcraft-duration-material-slow` | `250ms` | material layer: the host’s slow transition (D84) |
 <!-- /generated:motion -->
 
 ## Layers

@@ -1,0 +1,86 @@
+/* The material layer (D84): the reference theme's shape language as its own
+   option, orthogonal to the palette. Each aspect answers to one preference
+   attribute — corners, shadows, durations, the sidebar's glass and the ambient
+   light — so any palette can carry it and every aspect can go back to the
+   host's value on its own. It changes no host structure, inserts no control and
+   leaves the sidebar's collapse geometry to the host. */
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette][data-dsh-deepcraft-material-radius="reference"] {
+  --dsw-radius-xs: 4px;
+  --dsw-radius-sm: 8px;
+  --dsw-radius-md: 12px;
+  --dsw-radius-lg: 12px;
+  --dsw-radius-xl: 12px;
+  --dsw-radius-panel: 12px;
+}
+
+/* Flat: the three shadow levels come off and elevation is drawn as the host's
+   own stroke, so a raised surface still separates from what it covers. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette][data-dsh-deepcraft-material-shadow="flat"] {
+  --dsw-shadow-lv1: none;
+  --dsw-shadow-lv2: none;
+  --dsw-shadow-lv3: none;
+  --dsw-elevation-panel: var(--dsw-elevation-stroke);
+  --dsw-elevation-prominent: var(--dsw-elevation-stroke);
+  --dsw-elevation-soft: var(--dsw-elevation-stroke);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette][data-dsh-deepcraft-material-motion="reference"] {
+  --ds-transition-duration-fast: var(--dsh-deepcraft-duration-material-fast);
+  --ds-transition-duration: var(--dsh-deepcraft-duration-material-base);
+  --ds-transition-duration-slow: var(--dsh-deepcraft-duration-material-slow);
+}
+
+/* The ambient light: three soft washes behind the whole shell. Light and dark
+   carry their own strengths, and a wallpaper of the reader's own stands in
+   front of them as it does in front of the canvas colour. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-material-ambient="1"] {
+  background-image:
+    radial-gradient(38% 40% at 0% 0%, rgba(255, 198, 150, 0.95), transparent 72%),
+    radial-gradient(34% 36% at -2% 50%, rgba(158, 186, 255, 0.85), transparent 74%),
+    radial-gradient(32% 32% at 2% 100%, rgba(255, 172, 192, 0.80), transparent 72%);
+  background-attachment: fixed;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-material-ambient="1"][data-ds-dark-theme] {
+  background-image:
+    radial-gradient(38% 40% at 0% 0%, rgba(255, 150, 90, 0.34), transparent 72%),
+    radial-gradient(34% 36% at -2% 50%, rgba(92, 128, 255, 0.32), transparent 74%),
+    radial-gradient(32% 32% at 2% 100%, rgba(255, 112, 152, 0.28), transparent 72%);
+}
+
+/* The sidebar is a pane of liquid glass: the frame and the sidebar's own inner
+   sheet step back, the column keeps a translucent tint, and a pseudo element
+   carries the blur. The blur sits on a pseudo element because backdrop-filter
+   makes its element a containing block for fixed descendants — the host's own
+   collapse button is fixed to the window there. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-material-glass="1"] [data-dsh-deepcraft-part~="layout-frame"] {
+  background-color: transparent;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-material-glass="1"] [data-dsh-deepcraft-part~="sidebar-root"] {
+  background-color: transparent;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-material-glass="1"] [data-dsh-deepcraft-part~="sidebar-column"] {
+  position: relative;
+  isolation: isolate;
+  background-color: color-mix(in srgb, var(--dsw-specific-sidebar-fill) 62%, transparent);
+  background-image: linear-gradient(175deg, color-mix(in srgb, #ffffff 16%, transparent), transparent 40%, color-mix(in srgb, #ffffff 8%, transparent));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 30%, transparent), inset -1px 0 0 color-mix(in srgb, #ffffff 22%, transparent);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-material-glass="1"] [data-dsh-deepcraft-part~="sidebar-column"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  backdrop-filter: blur(42px) saturate(200%);
+  -webkit-backdrop-filter: blur(42px) saturate(200%);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-material-glass="1"][data-ds-dark-theme] [data-dsh-deepcraft-part~="sidebar-column"] {
+  background-image: linear-gradient(175deg, color-mix(in srgb, #ffffff 8%, transparent), transparent 40%, color-mix(in srgb, #ffffff 4%, transparent));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #ffffff 12%, transparent), inset -1px 0 0 color-mix(in srgb, #ffffff 8%, transparent);
+}
