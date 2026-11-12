@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.33.0] - 2026-11-12
 
-<h3 id="cn-unreleased">移除</h3>
+[中文](#cn-0.33.0) | [English](#en-0.33.0)
+
+<h3 id="cn-0.33.0">移除</h3>
 
 - 移除聊天框宠物里的原有像素螃蟹与像素鲸鱼：宠物选择只保留 Petdex 宠物与关闭，旧配置里的这两个值回到 Petdex 默认值，插件不再携带这两套角色与动画资源。
 
-<h3 id="en-unreleased">Removals</h3>
+<h3 id="en-0.33.0">Removals</h3>
 
 - Remove the original pixel crab and pixel whale from the chat pet: the choice now offers the Petdex pet and off only, the two retired values fall back to the Petdex default, and the plugin no longer carries either character or their animation assets.
 

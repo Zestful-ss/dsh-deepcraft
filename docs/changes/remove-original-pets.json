@@ -1,8 +1,0 @@
-{
-  "group": "removals",
-  "order": 10,
-  "at": "2026-11-12",
-  "external": false,
-  "zh": "移除聊天框宠物里的原有像素螃蟹与像素鲸鱼：宠物选择只保留 Petdex 宠物与关闭，旧配置里的这两个值回到 Petdex 默认值，插件不再携带这两套角色与动画资源。",
-  "en": "Remove the original pixel crab and pixel whale from the chat pet: the choice now offers the Petdex pet and off only, the two retired values fall back to the Petdex default, and the plugin no longer carries either character or their animation assets."
-}
