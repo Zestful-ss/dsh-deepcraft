@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.32.2] - 2026-11-12
 
-<h3 id="cn-unreleased">体验优化</h3>
+[中文](#cn-0.32.2) | [English](#en-0.32.2)
+
+<h3 id="cn-0.32.2">体验优化</h3>
 
 - 改善 Bot 面的返回入口：按下后走 ds-bot 自己的经典模式切换，不再重新载入页面；只有找不到它的入口时才退回保存模式并重载。
 
-<h3 id="en-unreleased">Improvements</h3>
+<h3 id="en-0.32.2">Improvements</h3>
 
 - Improve the Bot-surface return entry: pressing it uses ds-bot's own classic-mode switch instead of reloading the page, and falls back to the saved mode and a reload only when that switch cannot be found.
 
