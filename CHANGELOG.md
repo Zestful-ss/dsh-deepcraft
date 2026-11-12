@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.32.0] - 2026-11-12
 
-<h3 id="cn-unreleased">新增功能</h3>
+[中文](#cn-0.32.0) | [English](#en-0.32.0)
+
+<h3 id="cn-0.32.0">新增功能</h3>
 
 - 新增 Bot 面返回本主题的入口：ds-bot 占据整页时，宿主侧栏页脚在账号按钮旁保留一个带返回箭头的品牌按钮，按下后写入 ds-bot 的 Agent 模式并重新载入本主题的页面。
 
-<h3 id="en-unreleased">New Features</h3>
+<h3 id="en-0.32.0">New Features</h3>
 
 - Add a return entry on ds-bot's Bot surface: while ds-bot owns the page, the host sidebar footer keeps a branded button with a back arrow beside the account button; pressing it writes ds-bot's Agent mode and reloads onto the theme's page.
 
