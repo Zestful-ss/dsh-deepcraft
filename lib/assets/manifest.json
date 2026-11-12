@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "assets": {
+    "e85ff92d8855.js": {
+      "type": "text/javascript; charset=utf-8",
+      "encoding": "br",
+      "bytes": 15175
+    },
+    "d6381d6c160f.js.map": {
+      "type": "application/json; charset=utf-8",
+      "encoding": "br",
+      "bytes": 70902
+    },
+    "3bd21facdc4c.js": {
+      "type": "text/javascript; charset=utf-8",
+      "encoding": "br",
+      "bytes": 28823
+    },
+    "a57e9bcc2f3d.js.map": {
+      "type": "application/json; charset=utf-8",
+      "encoding": "br",
+      "bytes": 119276
+    }
+  }
+}
