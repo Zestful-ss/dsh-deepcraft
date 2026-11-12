@@ -9,6 +9,10 @@
   // The smoke stand-in reads its case and the fixtures before its own parts run.
   // `settings` is the case whose config form, slot registry and inject are ready;
   // the preview adds the real React and mounts the page the skin registers.
+  // The preview stands in for a full host: the settings case gives it the
+  // config form and slot registry, and this flag also hands it the session
+  // services the mascot reads, so the kept pet is on the page.
+  window.__preview = true
   window.SMOKE_CASE = 'settings'
   window.SMOKE_GROUPS = []
   window.SMOKE_TIER = 'full'
@@ -66,7 +70,9 @@
             </button>
             <div class="_sectionHeader_x_1 preview-section-header">
               <span class="_sectionLabel_x_1">今天</span>
-              <button type="button" class="preview-icon-button" aria-label="搜索会话" data-slot="sidebar.search">⌕</button>
+              <button type="button" class="preview-icon-button" aria-label="搜索会话" data-slot="sidebar.search">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4"/><path d="M10 10l4 4"/></svg>
+              </button>
             </div>
             <div class="_treeBody_x_1 preview-tree" role="tree">
               <div class="_sessionRow_x_1 _selected_x_1 preview-session-row preview-session-row-on" role="treeitem" aria-selected="true">
@@ -87,12 +93,14 @@
             <div class="_footerActions_x_1 preview-footer-actions">
               <div data-slot="sidebar.footer.action">
                 <button type="button" id="plugin-action" class="preview-icon-button" aria-label="用量" data-cordis-badge="3">
-                  <span aria-hidden="true">◔</span>
+                  <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13V8M8 13V4M13 13V10"/></svg>
                 </button>
               </div>
             </div>
             <div class="_settingsArea_x_1 preview-settings-trigger">
-              <button type="button" aria-haspopup="dialog" aria-label="设置" class="preview-icon-button">⚙</button>
+              <button type="button" aria-haspopup="dialog" aria-label="设置" class="preview-icon-button">
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 5h10M3 11h10"/><circle cx="6" cy="5" r="1.6"/><circle cx="10" cy="11" r="1.6"/></svg>
+              </button>
             </div>
             <div class="preview-account-row">
               <button type="button" id="host-account" data-signed-out="false" aria-label="账号菜单" aria-haspopup="menu" aria-expanded="false" class="preview-account">预览用户</button>
@@ -116,7 +124,7 @@
         </div>
 
         <div class="preview-scroll _scrollBody_x_1" data-conversation-scroll data-phase="active">
-          <div data-conversation-session="smoke-session" class="preview-session">
+          <div data-conversation-session="smoke-deepy" class="preview-session">
             <div class="preview-flow" data-chat-flow>
               <div class="preview-row preview-row-user" data-chat-flow-kind="user" data-chat-turn="1">
                 <div class="preview-bubble">带我看看三套配色，以及设置页在哪里。</div>
@@ -141,34 +149,36 @@
                 <span><span data-shimmer>深度思考中</span></span>
               </div>
             </div>
-          </div>
 
-          <div class="preview-seat" data-composer-seat>
-          <div class="preview-composer-stack _composerStack_h_1">
-            <div class="preview-composer _card_x_1" data-composer-card>
-              <div class="preview-input-scroll" data-input-scroll>
-                <div class="_grow_h_1 preview-input-grow">
-                  <div id="editor" contenteditable="true" role="textbox" aria-label="消息" class="preview-input" data-composer-input>随便问点什么…</div>
-                </div>
-              </div>
-              <div class="preview-composer-row _row_x_1">
-                <div class="preview-tools _tools_x_1">
-                  <button type="button" class="preview-icon-button _add_x_1" aria-label="添加文件或运行命令" aria-haspopup="listbox">+</button>
-                  <div class="_modes_x_1 preview-modes">
-                    <div data-slot="conversation.input.permission">
-                      <button type="button" class="preview-mode">编辑</button>
+            <div class="preview-seat" data-composer-seat>
+              <div class="preview-composer-stack _composerStack_h_1">
+                <div class="preview-composer _card_x_1" data-composer-card>
+                  <div class="preview-input-scroll" data-input-scroll>
+                    <div class="_grow_h_1 preview-input-grow">
+                      <div id="editor" contenteditable="true" role="textbox" aria-label="消息" class="preview-input" data-composer-input>随便问点什么…</div>
                     </div>
                   </div>
-                  <div data-slot="conversation.input.model">
-                    <button type="button" class="preview-mode _trigger_x_1">DeepSeek V4</button>
+                  <div class="preview-composer-row _row_x_1">
+                    <div class="preview-tools _tools_x_1">
+                      <button type="button" class="preview-icon-button _add_x_1" aria-label="添加文件或运行命令" aria-haspopup="listbox">+</button>
+                      <div class="_modes_x_1 preview-modes">
+                        <div data-slot="conversation.input.permission">
+                          <button type="button" class="preview-mode">编辑</button>
+                        </div>
+                      </div>
+                      <div data-slot="conversation.input.model">
+                        <button type="button" class="preview-mode _trigger_x_1">DeepSeek V4</button>
+                      </div>
+                    </div>
+                    <div class="preview-trailing _trailing_x_1">
+                      <button type="button" id="send" class="preview-send _primary_x_1" aria-label="发送消息">↑</button>
+                    </div>
                   </div>
-                </div>
-                <div class="preview-trailing _trailing_x_1">
-                  <button type="button" id="send" class="preview-send _primary_x_1" aria-label="发送消息">↑</button>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>

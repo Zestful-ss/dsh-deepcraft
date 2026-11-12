@@ -159,7 +159,7 @@ button, select { font: inherit; color: inherit; }
 /* ---------- sidebar ---------- */
 
 .preview-sidebar {
-  width: 264px;
+  width: 280px;
   flex: none;
   border-right: 1px solid var(--preview-line);
   background: var(--dsw-specific-sidebar-fill, var(--preview-sunken));
@@ -191,6 +191,14 @@ button, select { font: inherit; color: inherit; }
 
 .preview-brand-mark { display: inline-block; width: 22px; height: 18px; flex: none; }
 .preview-brand-name { display: inline-block; height: 18px; }
+
+.preview-icon-button svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
 .preview-icon-button {
   display: grid;
@@ -337,8 +345,14 @@ button, select { font: inherit; color: inherit; }
   padding: 26px 32px 20px;
 }
 
-.preview-session { flex: 1 0 auto; width: min(760px, 100%); margin: 0 auto; }
-.preview-seat { flex: none; width: 100%; }
+.preview-session {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+  width: min(760px, 100%);
+  margin: 0 auto;
+}
+.preview-seat { flex: none; width: 100%; margin-top: auto; }
 
 .preview-flow { display: flex; flex-direction: column; gap: 20px; }
 
@@ -411,6 +425,7 @@ button, select { font: inherit; color: inherit; }
 }
 
 .preview-composer {
+  width: 100%;
   padding: 11px 12px 8px;
   border: 1px solid var(--preview-line);
   border-radius: 14px;

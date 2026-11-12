@@ -8,7 +8,8 @@
   var host = window.__dshSmokeHost
   var CASE = host.CASE
 
-  var deepy = CASE === 'deepy' || CASE === 'crab-states' || CASE === 'petdex-claude' || CASE === 'petdex-deepseek' ? (function () {
+  var preview = CASE === 'settings' && window.__preview === true
+  var deepy = CASE === 'deepy' || CASE === 'crab-states' || CASE === 'petdex-claude' || CASE === 'petdex-deepseek' || preview ? (function () {
     var statusListeners = []
     var feedListeners = []
     var status = new Map()
