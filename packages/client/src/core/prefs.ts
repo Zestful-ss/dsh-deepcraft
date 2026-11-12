@@ -1,4 +1,7 @@
-import { MASCOT_ATTR, MASCOT_BRAND, MASCOT_PETDEX, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PACKAGE_NAME, PALETTE_ATTR, SETTINGS_ENTRY_FALLBACK, TYPEFACE_ATTR } from '../constants'
+import { FONT_CODE_ATTR, FONT_PROSE_ATTR, FONT_UI_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_PETDEX, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PACKAGE_NAME, PALETTE_ATTR, SETTINGS_ENTRY_FALLBACK } from '../constants'
+import { FONT_CUSTOM } from '@dsh-deepcraft/contracts/prefs'
+import { FONT_ROLES } from '../theme/fonts'
+import { customFontStack } from '../shared/fonts'
 import type { PrefKey, Prefs } from '../constants'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import { clampPrefs } from '@dsh-deepcraft/contracts/prefs'
@@ -68,7 +71,9 @@ interface PrefMirror {
 
 const MIRRORS = [
   { key: 'palette', attr: PALETTE_ATTR, value: (prefs: Prefs) => prefs.palette },
-  { key: 'typeface', attr: TYPEFACE_ATTR, value: (prefs: Prefs) => prefs.typeface },
+  { key: 'fontUi', attr: FONT_UI_ATTR, value: (prefs: Prefs) => prefs.fontUi },
+  { key: 'fontProse', attr: FONT_PROSE_ATTR, value: (prefs: Prefs) => prefs.fontProse },
+  { key: 'fontCode', attr: FONT_CODE_ATTR, value: (prefs: Prefs) => prefs.fontCode },
   { key: 'mascot', attr: MASCOT_ATTR, value: resolveMascot },
 ] as const satisfies readonly PrefMirror[]
 
@@ -86,14 +91,31 @@ export function adoptPrefs(next: Prefs) {
   prefs = next
   if (pageOwner() === null) {
     for (const mirror of MIRRORS) document.body.setAttribute(mirror.attr, mirror.value(next))
+    writeFontCustoms(next)
     writeMotionAttribute(next.motion)
   }
   notifyAll(prefsListeners, next)
 }
 
+/** The custom family lists a role uses when its choice is `custom`; every other role takes its own stack. */
+const FONT_CUSTOMS = [
+  { choice: 'fontUi', text: 'fontUiCustom', role: FONT_ROLES.ui },
+  { choice: 'fontProse', text: 'fontProseCustom', role: FONT_ROLES.prose },
+  { choice: 'fontCode', text: 'fontCodeCustom', role: FONT_ROLES.code },
+] as const
+
+/** Write the reader's own family lists beside the choice attributes; a role not on `custom` leaves none behind. */
+function writeFontCustoms(next: Prefs) {
+  for (const { choice, text, role } of FONT_CUSTOMS) {
+    if (next[choice] === FONT_CUSTOM) document.body.style.setProperty(role.customProperty, customFontStack(next[text], role.fallback))
+    else document.body.style.removeProperty(role.customProperty)
+  }
+}
+
 /** Take back every attribute adoptPrefs mirrors onto the document: the page goes back to the host (entry.ts). */
 export function clearPrefsAttributes() {
   for (const name of MIRROR_ATTRS) document.body.removeAttribute(name)
+  for (const { role } of FONT_CUSTOMS) document.body.style.removeProperty(role.customProperty)
 }
 
 /** Whether the operating system asks for reduced motion right now. */

@@ -6,6 +6,27 @@ const EMBER_SHELL = ['body', 'sidebar', 'conversation']
 const EMBER_FILLS = [['body', 'rgb(252, 252, 251)'], ['sidebar', 'rgb(251, 251, 249)'], ['conversation', 'rgb(252, 252, 251)']]
 
 module.exports = {
+  // The three font roles: bundled choices, host leave-alone, and a custom list.
+  fonts(r) {
+    basicChecks(r)
+    const f = r.fonts || {}
+    const theme = f.theme || {}
+    const host = f.host || {}
+    const custom = f.custom || {}
+    check('the bundled choices reach the interface, prose and code tokens',
+      theme.family.includes('DeepCraft Geist Sans') && theme.prose.includes('DeepCraft Literata') &&
+        theme.code.includes('DeepCraft Fira Code') &&
+        theme.markdown.includes('DeepCraft Literata') && theme.codeText.includes('DeepCraft Fira Code'),
+      JSON.stringify(theme))
+    check('host leaves the host\'s own interface and code tokens, and prose follows them',
+      host.family === '"Host Sans", sans-serif' && host.code === '"Host Mono", monospace' &&
+        host.markdown === '"Host Sans", sans-serif' && host.codeText === '"Host Mono", monospace',
+      JSON.stringify(host))
+    check('a custom list is quoted, keeps CSS generics, and ends in the role fallback',
+      custom.family.includes('"Fira Sans", monospace') && custom.markdown.includes('"Fira Sans", monospace'),
+      JSON.stringify(custom))
+    commonChecks(r)
+  },
   // The skin's three palettes (D80): each one's canvases, accents and computed
   // primary button fills.
   palette(r) {

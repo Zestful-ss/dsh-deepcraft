@@ -7,7 +7,7 @@
 (function () {
   var CASE = window.__dshSmokeHost.CASE
 
-  if (CASE === 'host-palette') {
+  if (CASE === 'host-palette' || CASE === 'fonts') {
     var hostSheet = document.createElement('style')
     hostSheet.textContent = [
       'body { --dsw-alias-bg-base: rgb(250, 250, 252); --dsw-alias-bg-overlay: rgb(240, 241, 250); --dsw-alias-bg-layer-2: rgb(245, 246, 250);',

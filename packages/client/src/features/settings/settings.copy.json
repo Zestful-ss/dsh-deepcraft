@@ -135,22 +135,6 @@
     "zh": "跟随宿主",
     "en": "Follow the host"
   },
-  "typefaceTitle": {
-    "zh": "主题字体",
-    "en": "Theme typefaces"
-  },
-  "typefaceDesc": {
-    "zh": "插件自带的字体，或跟随宿主。",
-    "en": "The skin's own faces, or the host's."
-  },
-  "typefaceClaude": {
-    "zh": "主题",
-    "en": "Theme"
-  },
-  "typefaceHost": {
-    "zh": "跟随宿主",
-    "en": "Follow the host"
-  },
   "unavailable": {
     "zh": "ERROR : 设置存储服务异常，改动不会被保存。",
     "en": "The settings store is unavailable, so changes will not be saved."
@@ -202,5 +186,31 @@
   "petImportBroken": {
     "zh": "有 {count} 个已安装的包无法读取，其余包不受影响。",
     "en": "{count} installed packages cannot be read; the rest of the library is unaffected."
-  }
+  },
+  "fontUiTitle": { "zh": "界面字体", "en": "Interface font" },
+  "fontUiDesc": { "zh": "侧栏、按钮和设置页的字体；正文字号和行高仍取宿主。", "en": "The sidebar, buttons and settings page; sizes and line heights stay the host's." },
+  "fontProseTitle": { "zh": "正文字体", "en": "Prose font" },
+  "fontProseDesc": { "zh": "对话与 Markdown 正文的字体；跟随界面或单独选择。", "en": "Conversation and Markdown body text; follow the interface or pick its own." },
+  "fontCodeTitle": { "zh": "代码字体", "en": "Code font" },
+  "fontCodeDesc": { "zh": "代码块、行内代码和技术标签的字体。", "en": "Code blocks, inline code and technical labels." },
+  "fontHost": { "zh": "跟随宿主", "en": "Follow the host" },
+  "fontFollowUi": { "zh": "跟随界面", "en": "Follow the interface" },
+  "fontInter": { "zh": "Inter", "en": "Inter" },
+  "fontGeistSans": { "zh": "Geist Sans", "en": "Geist Sans" },
+  "fontFixel": { "zh": "Fixel Text", "en": "Fixel Text" },
+  "fontAtkinson": { "zh": "Atkinson Hyperlegible", "en": "Atkinson Hyperlegible" },
+  "fontAnthropic": { "zh": "Anthropic（需自备）", "en": "Anthropic (bring your own)" },
+  "fontNotoSerif": { "zh": "Noto Serif", "en": "Noto Serif" },
+  "fontSourceSerif": { "zh": "Source Serif 4", "en": "Source Serif 4" },
+  "fontLiterata": { "zh": "Literata", "en": "Literata" },
+  "fontAnthropicSerif": { "zh": "Anthropic Serif（需自备）", "en": "Anthropic Serif (bring your own)" },
+  "fontJetBrains": { "zh": "JetBrains Mono", "en": "JetBrains Mono" },
+  "fontGeistMono": { "zh": "Geist Mono", "en": "Geist Mono" },
+  "fontFiraCode": { "zh": "Fira Code", "en": "Fira Code" },
+  "fontCommitMono": { "zh": "Commit Mono", "en": "Commit Mono" },
+  "fontAnthropicMono": { "zh": "Anthropic Mono（需自备）", "en": "Anthropic Mono (bring your own)" },
+  "fontCustom": { "zh": "自定义…", "en": "Custom…" },
+  "fontCustomTitle": { "zh": "自定义字体名", "en": "Custom font names" },
+  "fontCustomDesc": { "zh": "本机已安装的字体名，逗号分隔；缺字时回退到系统中文字体。", "en": "Installed family names, comma-separated; missing glyphs fall back to the system CJK face." },
+  "fontCustomPlaceholder": { "zh": "例如：LXGW WenKai, serif", "en": "For example: Avenir Next, serif" }
 }

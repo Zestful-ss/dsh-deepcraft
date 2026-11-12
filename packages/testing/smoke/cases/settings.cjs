@@ -17,7 +17,7 @@ module.exports = {
     check('the settings section registers with the settings dialog', settings.registered === true, JSON.stringify(settings.registered))
     const expected = {
       general: ['subagentModelPicker', 'subagentModelChoice'],
-      appearance: ['palette', 'brandAccent', 'typeface', 'motion', 'mascot', 'chatPet', 'mascotScope', 'brandName', 'brandMark', 'brandWordmark', 'brandInk'],
+      appearance: ['palette', 'brandAccent', 'fontUi', 'fontProse', 'fontCode', 'motion', 'mascot', 'chatPet', 'mascotScope', 'brandName', 'brandMark', 'brandWordmark', 'brandInk'],
     }
     const pages = settings.pages || {}
     for (const tab of Object.keys(expected)) {

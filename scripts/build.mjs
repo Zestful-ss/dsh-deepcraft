@@ -19,7 +19,7 @@
  *   packages/client/src/theme/tokens.json        the design tokens: the token stylesheet and docs/STYLE.md's table
  *   packages/assets/src/                  every image (packages/assets/assets.mjs): small ones inline, the rest
  *                                written to lib/assets/<hash>.<ext> and served by the host half
- *   packages/assets/src/fonts/            the four faces the package ships with their licences and
+ *   packages/assets/src/fonts/            the faces the package ships with their licences and
  *                                authors file, copied to lib/fonts/ (buildFonts)
  *
  * What the build produces for the browser half reaches the source as one
@@ -210,14 +210,12 @@ const CONSTANTS = (() => {
     if (module[name] === undefined) throw new Error(`build: ${file} exports no ${name}`)
     return [name, module[name]]
   }))
-  const { PALETTE_ATTR, PALETTE_HOST, SKIN_PALETTES, TYPEFACE_ATTR, TYPEFACE_CLAUDE, TYPEFACE_HOST } = pick(constants, constantsFile, ['PALETTE_ATTR', 'PALETTE_HOST', 'SKIN_PALETTES', 'TYPEFACE_ATTR', 'TYPEFACE_CLAUDE', 'TYPEFACE_HOST'])
+  const { PALETTE_ATTR, PALETTE_HOST, SKIN_PALETTES } = pick(constants, constantsFile, ['PALETTE_ATTR', 'PALETTE_HOST', 'SKIN_PALETTES'])
   return {
-    // The gate attributes scripts/css.mjs checks and writes the token
-    // blocks under: which palette paints the colours and which typeface sets
-    // the type (D80).
+    // The gate attribute scripts/css.mjs checks and writes the palette token
+    // blocks under (D80).
     gates: {
       palette: { attribute: PALETTE_ATTR, ids: [...SKIN_PALETTES], host: PALETTE_HOST },
-      typeface: { attribute: TYPEFACE_ATTR, claude: TYPEFACE_CLAUDE, host: TYPEFACE_HOST },
     },
   }
 })()
@@ -322,7 +320,8 @@ async function main() {
   checkClaimed(plan, claimed)
 
   const tokenDoc = loadTokens(SRC)
-  const css = buildStylesheet({ sheets, srcDir: SRC, sources, tokenDoc, gates: CONSTANTS.gates, images })
+  const fontCatalog = loadModule('packages/client/src/theme/fonts.ts')
+  const css = buildStylesheet({ sheets, srcDir: SRC, sources, tokenDoc, fonts: fontCatalog, gates: CONSTANTS.gates, images })
   if (writeTokenTable(STYLE_GUIDE, tokenDoc, CONSTANTS.gates.palette.ids)) console.log('built docs/STYLE.md token table from packages/client/src/theme/tokens.json')
   if (writeMotionTable(STYLE_GUIDE, tokenDoc)) console.log('built docs/STYLE.md motion table from packages/client/src/theme/tokens.json')
   if (writeLayerTable(STYLE_GUIDE, tokenDoc)) console.log('built docs/STYLE.md layer table from packages/client/src/theme/tokens.json')

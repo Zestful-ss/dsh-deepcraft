@@ -11,5 +11,5 @@ export default {
     { file: 'settings.css', rank: 310 },
     { file: 'theme-flip.css', rank: 370 },
   ],
-  cases: ['settings', 'late-forms', 'host-palette', 'skin-center-handoff', 'skin-center-arrival']
+  cases: ['settings', 'late-forms', 'host-palette', 'fonts', 'skin-center-handoff', 'skin-center-arrival']
 } satisfies FeatureManifest

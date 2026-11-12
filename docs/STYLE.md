@@ -1,7 +1,7 @@
 # Style Guide · 设计令牌
 
 `dsh-deepcraft` paints colours and type onto the host's own interface (D81). A
-palette decides colours alone, the typeface decides families alone, and every
+palette decides colours alone, the three font roles decide families alone, and every
 host control keeps the geometry, spacing, motion and behaviour the host gives
 it. The brand identity — the default whale and wordmark, or the reader's own
 name, mark and accent — stays the same under every palette (D80).
@@ -86,24 +86,22 @@ back to another palette's; `—` is a token that palette leaves unset.
 | `--dsw-alias-label-primary-foreground` | `#fcfcfb` | `#fcfcfb` | `#141413` | `#141413` | `#141413` | `#141413` | host's own | the ink on a filled primary button: light on the accent in both palettes |
 <!-- /generated:tokens -->
 
-## Palettes and typefaces · 配色与字体归属
+## Palettes and font roles · 配色与字体归属
 
 The Colours row chooses one of the skin's own palettes — **Ocean blue** (the
-default), **Warm ember** or **Forest green** — or **Follow the host**; the
-Typefaces row chooses the skin's faces or the host's. Every rule that writes a
-host token carries a palette gate in its selector, and `--dsw-font-*` carries
-the typeface gate; the build refuses an ungated one.
+default), **Warm ember** or **Forest green** — or **Follow the host**. Every
+rule that writes a host colour token carries a palette gate in its selector;
+under "follow the host" those rules drop out and the host's own tokens stand,
+or another theme plugin's, such as a wallpaper plugin that clears the canvas
+and turns the overlays to glass (D80).
 
-Under "follow the host" those rules drop out: the host's own tokens stand, or
-another theme plugin's, such as a wallpaper plugin that clears the canvas and
-turns the overlays to glass (D80). The skin's own surfaces read its private
-tokens, which alias host tokens under the host palette.
-
-Under the host typeface the skin's own faces fall back to the host's:
-`--dsh-deepcraft-font-serif`, `-prose` and `-brand` to `--dsw-font-family` (the
-host carries no serif), `--dsh-deepcraft-font-code` to `--ds-font-family-code`.
-The stored value for the skin's faces keeps its earlier name `claude`; the row
-reads it as **Theme**.
+Three independent rows choose the **interface**, **prose** and **code** font.
+Each role has **Follow the host** (the interface and code roles; prose instead
+follows the interface), a curated set of bundled families, and **Custom**,
+where the reader names installed families in a comma-separated list. The font
+rules are generated from `packages/client/src/theme/fonts.ts`; a custom list is
+sanitised in `packages/client/src/shared/fonts.ts` and always ends in the
+role's CJK-aware fallback.
 
 A custom accent colour sits over the skin's palettes and rebuilds the accent,
 the low-alpha beds and the prose link from the one colour; under the host's
@@ -114,14 +112,22 @@ palette the row is disabled and the stored colour kept.
 Only families are stated (D81): every host element keeps the size, weight,
 line height and spacing its own rules give it.
 
-- **Serif prose** — Markdown body and headings (`--dsh-deepcraft-font-prose`).
-- **Sans UI** — chrome and body (`--dsw-font-family`).
-- **Mono** — code and technical labels (`--dsh-deepcraft-font-code`).
+- **Interface** — chrome and body (`--dsw-font-family`). `Follow the host`
+  leaves the host's own token untouched.
+- **Prose** — Markdown body and headings (`--dsh-deepcraft-font-prose`); it
+  follows the interface by default.
+- **Code** — code blocks, inline code and technical labels
+  (`--ds-font-family-code`). `Follow the host` leaves the host's own token
+  untouched.
+- **Brand** — the lockup follows the prose face (`--dsh-deepcraft-font-brand`).
 
 A family declaration lands after the host's own `font:` shorthands and
 overrides the family they name alone. The `@font-face` registrations serve the
 bundled faces and the user's own copies from `$DSH_HOME/dsh-deepcraft/fonts/`;
-a missing file falls through the stack.
+a missing file falls through the stack. The bundled Latin faces are Inter,
+Geist Sans, Fixel Text, Atkinson Hyperlegible, Noto Serif, Source Serif 4,
+Literata, JetBrains Mono, Geist Mono, Fira Code and Commit Mono, all under the
+SIL OFL; the Anthropic faces stay user-supplied and are not shipped.
 
 ## Right sidebar · 右侧栏
 

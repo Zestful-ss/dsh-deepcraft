@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, MASCOT_OFF, MASCOT_PETDEX, PREF_DEFAULTS } from '../constants'
+import { BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, FONT_CODE_ANTHROPIC, FONT_FOLLOW, FONT_HOST, FONT_UI_ANTHROPIC, MASCOT_OFF, MASCOT_PETDEX, PREF_DEFAULTS } from '../constants'
 import { resolveMascot } from './prefs'
 import { clampPrefs as normalizePrefs } from '@dsh-deepcraft/contracts/prefs'
 
@@ -65,4 +65,15 @@ test('"follow the theme" resolves to the Petdex guest, off leaves the chat place
   expect(resolveMascot(normalizePrefs({ mascot: MASCOT_OFF }))).toBe(MASCOT_OFF)
   expect(resolveMascot(normalizePrefs({ mascot: 'crab' }))).toBe(MASCOT_PETDEX)
   expect(resolveMascot(normalizePrefs({ mascot: 'deepy' }))).toBe(MASCOT_PETDEX)
+})
+
+test('the retired single typeface choice migrates to the three font roles', () => {
+  const host = normalizePrefs({ typeface: 'host' })
+  expect(host.fontUi).toBe(FONT_HOST)
+  expect(host.fontProse).toBe(FONT_FOLLOW)
+  expect(host.fontCode).toBe(FONT_HOST)
+  const theme = normalizePrefs({ typeface: 'claude' })
+  expect(theme.fontUi).toBe(FONT_UI_ANTHROPIC)
+  expect(theme.fontProse).toBe('anthropic-serif')
+  expect(theme.fontCode).toBe(FONT_CODE_ANTHROPIC)
 })

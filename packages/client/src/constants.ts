@@ -74,7 +74,7 @@ export const MOTION_ATTR = 'data-dsh-deepcraft-motion'
 
 /** The document attributes the choices below resolve onto; the values themselves are in the table (contracts/prefs.ts). */
 export const PALETTE_ATTR = 'data-dsh-deepcraft-palette'
-export const TYPEFACE_ATTR = 'data-dsh-deepcraft-typeface'
+export { FONT_CODE_ATTR, FONT_PROSE_ATTR, FONT_UI_ATTR } from './theme/fonts'
 export const MASCOT_ATTR = 'data-dsh-deepcraft-mascot'
 /** The mascot "follow the theme" resolves to: the reader's one Petdex package, shared by both places. */
 export const MASCOT_PETDEX = 'petdex'

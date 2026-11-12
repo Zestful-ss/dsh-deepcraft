@@ -411,6 +411,12 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-input {
   outline: none;
 }
 
+/* A custom font list is longer than a name: enough room for two families. */
+body[data-dsh-deepcraft] .dsh-deepcraft-font-custom-input {
+  width: 280px;
+  max-width: 60%;
+}
+
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-input:focus {
   border-color: var(--dsw-alias-brand-primary, #d97757);
 }
@@ -528,6 +534,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-control {
   max-width: 100%;
 }
 
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-select,
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-select,
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-url {
   min-width: 160px;
@@ -543,6 +550,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-url {
   line-height: 20px;
 }
 
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-select:disabled,
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-select:disabled,
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-url:disabled {
   opacity: .5;

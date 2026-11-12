@@ -85,6 +85,8 @@ Keep one theme enabled at a time, and restart DeepSeek Harness afterwards. When 
 
 ## Fonts
 
+Appearance offers separate interface, prose and code font choices: Inter, Geist Sans, Fixel Text, Atkinson Hyperlegible, Noto Serif, Source Serif 4, Literata, JetBrains Mono, Geist Mono, Fira Code and Commit Mono, plus a custom list of installed family names for each role. Sizes, weights and line heights stay the host's.
+
 > The Anthropic fonts have no public release; this repository only offers [copies](https://github.com/Zestful-ss/dsh-deepcraft/tree/master/packages/assets/src/fonts/anthropic) for download and study.
 
 To enable them, install the `.ttf` files on your system, or copy them into `$DSH_HOME/dsh-deepcraft/fonts/`.

@@ -3,7 +3,7 @@
  * generate (D9, D80).
  *
  * packages/client/src/theme/tokens.json is the one source: the colour palettes,
- * the typefaces, the reasoning slider's apex, motion and layers. This module
+ * the fonts, the reasoning slider's apex, motion and layers. This module
  * reads and validates it, writes the token stylesheet every palette block of
  * which is gated on its own palette id, and rewrites the three tables in
  * docs/STYLE.md from the same document. The checks over the sheets stay in
@@ -33,7 +33,7 @@ export function loadTokens(srcDir) {
   const validate = new Ajv2020({ allErrors: true }).compile(schema)
   const doc = JSON.parse(fs.readFileSync(path.join(srcDir, TOKEN_SHEET), 'utf8'))
   if (!validate(doc)) throw new Error(`build: packages/client/src/${TOKEN_SHEET} ${validate.errors.map((error) => `${error.instancePath || '/'} ${error.message}`).join('; ')}`)
-  for (const group of ['typeface', 'apex', 'palette', 'motion', 'layer']) {
+  for (const group of ['apex', 'palette', 'motion', 'layer']) {
     const seen = new Set()
     for (const item of doc[group]) {
       if (seen.has(item.token)) throw new Error(`build: packages/client/src/${TOKEN_SHEET} names ${item.token} twice in ${group}`)
@@ -69,14 +69,15 @@ function declarationsOf(items, pick) {
  * win; naming the attribute lifts these above it. The brand marks' addresses
  * come first: every palette paints with them. The motion and layer tokens are
  * ungated blocks beside them: the same durations, curves, distances and
- * stacking levels under every palette and typeface (D9).
+ * stacking levels under every palette (D9).
  *
  * @param doc - packages/client/src/theme/tokens.json.
- * @param gates - the composer, palette and typeface attributes and values (D9, D80).
+ * @param gates - the palette attribute and values (D9, D80).
  * @param images - brand mark name → its address (data URI or route).
  * @param scope - the selector root every skin rule hangs off (`body[data-dsh-deepcraft]`).
+ * @param fonts - the font catalogue (packages/client/src/theme/fonts.ts): faces and role stacks.
  */
-export function tokenSheet(doc, gates, images, scope) {
+export function tokenSheet(doc, gates, images, scope, fonts) {
   const dark = '[data-ds-dark-theme]'
   const light = ':not([data-ds-dark-theme])'
   const gate = ({ attribute }, value) => `[${attribute}="${value}"]`
@@ -87,13 +88,22 @@ export function tokenSheet(doc, gates, images, scope) {
       tokenBlock(`${selector}${dark}`, declarationsOf(doc.palette, (item) => item[id]?.dark)),
     ]
   })
+  const faces = fonts.FONT_FACES.map((face) => {
+    const format = face.format ?? (face.file.endsWith('.woff2') ? 'woff2' : 'truetype')
+    const style = face.style === undefined ? '' : `;font-style:${face.style}`
+    return `@font-face{font-family:"${face.family}";src:url("/dsh-deepcraft/fonts/${face.file}") format("${format}");font-weight:${face.weight}${style};font-display:swap}`
+  }).join('\n')
+  const roles = Object.values(fonts.FONT_ROLES).flatMap((role) => Object.entries(role.stacks).map(([choice, stack]) => {
+    const extra = role.extraProperty !== undefined && choice !== role.hostChoice ? `;${role.extraProperty}: ${stack}` : ''
+    return `${scope}[${role.attr}="${choice}"]{${role.property}: ${stack}${extra}}`
+  }))
+  const fontRules = [faces, ...roles, `${scope}{--dsh-deepcraft-font-brand: var(--dsh-deepcraft-font-prose)}`].filter(Boolean).join('\n')
   return [
-    `/* Generated from packages/client/src/${TOKEN_SHEET} by scripts/shared/design-tokens.mjs; edit the JSON. */\n`,
+    `/* Generated from packages/client/src/${TOKEN_SHEET} and theme/fonts.ts by scripts/shared/design-tokens.mjs; edit those sources. */\n`,
+    fontRules,
     tokenBlock(scope, Object.entries(images).map(([name, url]) => [`--dsh-deepcraft-image-${name}`, `url("${url}")`])),
     tokenBlock(scope, declarationsOf(doc.motion, (item) => item.value)),
     tokenBlock(scope, declarationsOf(doc.layer, (item) => item.value)),
-    tokenBlock(`${scope}${gate(gates.typeface, gates.typeface.claude)}`, declarationsOf(doc.typeface, (item) => item.claude)),
-    tokenBlock(`${scope}${gate(gates.typeface, gates.typeface.host)}`, declarationsOf(doc.typeface, (item) => item.host)),
     tokenBlock(`${scope}${dark}`, declarationsOf(doc.apex, (item) => item.dark)),
     tokenBlock(`${scope}${light}`, declarationsOf(doc.apex, (item) => item.light)),
     ...palettes,

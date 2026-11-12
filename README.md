@@ -85,6 +85,8 @@ dsh plugin --profile desktop add <本地目录>                                 
 
 ## 字体
 
+外观页把界面字体、正文字体与代码字体分开选择；内置 Inter、Geist Sans、Fixel Text、Atkinson Hyperlegible、Noto Serif、Source Serif 4、Literata、JetBrains Mono、Geist Mono、Fira Code 与 Commit Mono，每个角色也可以用本机已安装的字体名自定义。字号、字重与行高仍由宿主决定。
+
 > Anthropic 没有公开发行这三款字体；本仓库只提供下载与研究的[副本](https://github.com/Zestful-ss/dsh-deepcraft/tree/master/packages/assets/src/fonts/anthropic)。
 
 

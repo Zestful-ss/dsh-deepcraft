@@ -41,10 +41,29 @@ export const PALETTE_HOST = 'host'
 /** The skin's own palettes, in the settings page's order; `PALETTE_HOST` follows them. */
 export const SKIN_PALETTES = [PALETTE_OCEAN, PALETTE_EMBER, PALETTE_FOREST] as const
 export const PALETTES = [...SKIN_PALETTES, PALETTE_HOST] as const
-/** Who sets the type, under the same two answers. */
-export const TYPEFACE_CLAUDE = 'claude'
-export const TYPEFACE_HOST = 'host'
-export const TYPEFACES = [TYPEFACE_CLAUDE, TYPEFACE_HOST] as const
+/** Who sets each type role: the host's own face, one of the skin's, or a family list the reader types. */
+export const FONT_HOST = 'host'
+export const FONT_FOLLOW = 'follow'
+export const FONT_CUSTOM = 'custom'
+export const FONT_UI_INTER = 'inter'
+export const FONT_UI_GEIST = 'geist'
+export const FONT_UI_FIXEL = 'fixel'
+export const FONT_UI_ATKINSON = 'atkinson'
+export const FONT_UI_ANTHROPIC = 'anthropic'
+export const FONT_PROSE_NOTO = 'noto-serif'
+export const FONT_PROSE_SOURCE = 'source-serif'
+export const FONT_PROSE_LITERATA = 'literata'
+export const FONT_PROSE_ANTHROPIC = 'anthropic-serif'
+export const FONT_CODE_JETBRAINS = 'jetbrains'
+export const FONT_CODE_GEIST = 'geist-mono'
+export const FONT_CODE_FIRA = 'fira-code'
+export const FONT_CODE_COMMIT = 'commit-mono'
+export const FONT_CODE_ANTHROPIC = 'anthropic-mono'
+export const FONT_UI_VALUES = [FONT_HOST, FONT_UI_INTER, FONT_UI_GEIST, FONT_UI_FIXEL, FONT_UI_ATKINSON, FONT_UI_ANTHROPIC, FONT_CUSTOM] as const
+export const FONT_PROSE_VALUES = [FONT_FOLLOW, FONT_PROSE_NOTO, FONT_PROSE_SOURCE, FONT_PROSE_LITERATA, FONT_PROSE_ANTHROPIC, FONT_CUSTOM] as const
+export const FONT_CODE_VALUES = [FONT_HOST, FONT_CODE_JETBRAINS, FONT_CODE_GEIST, FONT_CODE_FIRA, FONT_CODE_COMMIT, FONT_CODE_ANTHROPIC, FONT_CUSTOM] as const
+/** Longest accepted custom family list. */
+export const FONT_LIST_MAX = 160
 
 /** The mascot on the composer: the reader's Petdex package, or none. */
 export const MASCOT_BRAND = 'brand'
@@ -93,7 +112,12 @@ export const PREFS = {
   /** The composer's own entry for the routes one session delegates on. */
   subagentModelPicker: { type: 'boolean', default: true },
   palette: { type: 'choice', values: PALETTES, default: PALETTE_OCEAN },
-  typeface: { type: 'choice', values: TYPEFACES, default: TYPEFACE_CLAUDE },
+  fontUi: { type: 'choice', values: FONT_UI_VALUES, default: FONT_UI_ANTHROPIC },
+  fontProse: { type: 'choice', values: FONT_PROSE_VALUES, default: FONT_PROSE_ANTHROPIC },
+  fontCode: { type: 'choice', values: FONT_CODE_VALUES, default: FONT_CODE_ANTHROPIC },
+  fontUiCustom: { type: 'text', default: '', max: FONT_LIST_MAX },
+  fontProseCustom: { type: 'text', default: '', max: FONT_LIST_MAX },
+  fontCodeCustom: { type: 'text', default: '', max: FONT_LIST_MAX },
   /** The mascot on the composer; the resolved one rides the document. */
   mascot: { type: 'choice', values: MASCOTS, default: MASCOT_BRAND },
   mascotScope: { type: 'choice', values: MASCOT_SCOPES, default: MASCOT_SCOPE_ALL },
@@ -206,5 +230,12 @@ export function clampPrefs(value: unknown): Prefs {
   // and its per-theme pets (D80).
   out.palette = migratePalette(section)
   out.chatPet = migrateChatPet(section)
+  // The old single typeface choice: `host` meant every role followed the host;
+  // the theme value keeps the shipped fonts, which are the table's defaults.
+  if (section.fontUi === undefined && section.fontProse === undefined && section.fontCode === undefined && section.typeface === 'host') {
+    out.fontUi = FONT_HOST
+    out.fontProse = FONT_FOLLOW
+    out.fontCode = FONT_HOST
+  }
   return out as unknown as Prefs
 }

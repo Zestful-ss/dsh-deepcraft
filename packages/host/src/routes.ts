@@ -50,6 +50,20 @@ const FONT_FILES = {
   'AnthropicMonoWeb.ttf': 'font/ttf',
   'InterVariable.woff2': 'font/woff2',
   'NotoSerifVariable.woff2': 'font/woff2',
+  'GeistSansVariable.woff2': 'font/woff2',
+  'FixelText-Regular.woff2': 'font/woff2',
+  'FixelText-Medium.woff2': 'font/woff2',
+  'FixelText-SemiBold.woff2': 'font/woff2',
+  'AtkinsonHyperlegibleNextVariable.woff2': 'font/woff2',
+  'SourceSerif4Variable.woff2': 'font/woff2',
+  'SourceSerif4Variable-Italic.woff2': 'font/woff2',
+  'LiterataVariable.woff2': 'font/woff2',
+  'LiterataVariable-Italic.woff2': 'font/woff2',
+  'GeistMonoVariable.woff2': 'font/woff2',
+  'GeistMonoVariable-Italic.woff2': 'font/woff2',
+  'FiraCodeVariable.woff2': 'font/woff2',
+  'CommitMono-Regular.woff2': 'font/woff2',
+  'CommitMono-Italic.woff2': 'font/woff2',
 }
 /**
  * The assets the build routed rather than inlined, served under

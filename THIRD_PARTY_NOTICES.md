@@ -65,6 +65,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+## Bundled fonts
+
+The package ships these Latin faces under the SIL Open Font License 1.1:
+Inter, Geist Sans, Geist Mono, Fixel Text, Atkinson Hyperlegible Next, Noto
+Serif, Source Serif 4, Literata, JetBrains Mono, Fira Code and Commit Mono.
+The copyright notices and the full licence travel beside each file as
+`packages/assets/src/fonts/OFL-*.txt`; the Anthropic faces are not shipped and a
+user's own copies remain subject to Anthropic's terms.
+
+Sources: MacPaw's Fixel release and the Fontsource distributions of Inter, Geist, Geist Mono, Atkinson
+Hyperlegible Next, Noto Serif, Source Serif 4, Literata, JetBrains Mono, Fira
+Code and Commit Mono; Fixel Text from MacPaw's Fixel release.
+
 ## transitions.dev
 
 Three of the transitions this skin carries are ported, each into this package's

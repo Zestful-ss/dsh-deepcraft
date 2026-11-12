@@ -263,7 +263,7 @@ function importanceScenario(lane) {
       }
       // The document attributes the stylesheet switches on, each as the page
       // itself carries it: the dark flip, the skin palettes, and the host's own
-      // palette and typefaces.
+      // palette and the three font roles.
       await attribute(page, 'data-ds-dark-theme', '')
       await audit.state('dark')
       await attribute(page, 'data-dsh-deepcraft-palette', 'forest')
@@ -273,10 +273,29 @@ function importanceScenario(lane) {
       await attribute(page, 'data-dsh-deepcraft-palette', 'ember')
       await audit.state('ember light')
       await attribute(page, 'data-dsh-deepcraft-palette', 'host')
-      await attribute(page, 'data-dsh-deepcraft-typeface', 'host')
+      await attribute(page, 'data-dsh-deepcraft-font-ui', 'host')
+      await attribute(page, 'data-dsh-deepcraft-font-prose', 'follow')
+      await attribute(page, 'data-dsh-deepcraft-font-code', 'host')
       await audit.state('host palette')
       await attribute(page, 'data-dsh-deepcraft-palette', 'ocean')
-      await attribute(page, 'data-dsh-deepcraft-typeface', 'claude')
+      await attribute(page, 'data-dsh-deepcraft-font-ui', 'anthropic')
+      await attribute(page, 'data-dsh-deepcraft-font-prose', 'anthropic-serif')
+      await attribute(page, 'data-dsh-deepcraft-font-code', 'anthropic-mono')
+      await audit.state('theme fonts')
+      // Every font role choice has a rule of its own: one state each, so a
+      // removed option cannot leave a selector nobody ever matches.
+      const FONT_CHOICES = [
+        ['font ui', 'data-dsh-deepcraft-font-ui', ['inter', 'geist', 'fixel', 'atkinson', 'anthropic', 'custom']],
+        ['font prose', 'data-dsh-deepcraft-font-prose', ['follow', 'noto-serif', 'source-serif', 'literata', 'anthropic-serif', 'custom']],
+        ['font code', 'data-dsh-deepcraft-font-code', ['jetbrains', 'geist-mono', 'fira-code', 'commit-mono', 'anthropic-mono', 'custom']],
+      ]
+      for (const [label, key, values] of FONT_CHOICES) {
+        for (const value of values) {
+          await attribute(page, key, value)
+          await audit.state(`${label} ${value}`)
+          await attribute(page, key, null)
+        }
+      }
       // The preferences the skin marks the page with, one state each.
       for (const [name, key, value] of MARKS) {
         await attribute(page, key, value)

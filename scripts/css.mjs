@@ -8,7 +8,7 @@
  *   scope        every selector holds `body[data-dsh-deepcraft]` (outside :not());
  *   :has()       only in its selector's last compound, at every nesting level (D9)
  *   token gates  a rule writing a host token carries a palette gate or the
- *                typeface gate, and every private token a palette defines has
+ *                font catalogue, and every private token a palette defines has
  *                an alias under the host's (D80)
  *   attributes   every `data-dsh-*` attribute a selector reads is one the
  *                browser half writes, read off its syntax tree (scripts/source-tree.mjs)
@@ -176,8 +176,8 @@ function paletteGated(selector, gates) {
  * Hold every write of a host token to its gate (D80), and record the private
  * tokens a skin palette defines and the host palette aliases.
  *
- * A `--dsw-font-*` declaration must sit in a rule whose every selector carries
- * the skin typeface gate; any other `--dsw-*` one in a rule whose every
+ * A `--dsw-font-*` declaration belongs to the font catalogue and is exempt
+ * from the palette gate; any other `--dsw-*` one must sit in a rule whose every
  * selector stands under a palette gate. A private colour token defined under
  * one of the skin's palettes needs a value under the host palette.
  */
@@ -187,17 +187,12 @@ function checkTokenGates(label, rule, selectors, gates, names) {
     if (node.type !== 'decl' || !node.prop.startsWith('--')) continue
     const name = node.prop
     const where = `${label}:${node.source.start.line}`
-    if (name.startsWith('--dsw-font-')) {
-      if (!every((selector) => carries(selector, gates.typeface.attribute, gates.typeface.claude))) throw new Error(`build: ${where} writes ${name} outside the skin typeface gate`)
-    } else if (name.startsWith('--dsw-')) {
+    if (name.startsWith('--dsw-font-')) continue
+    if (name.startsWith('--dsw-')) {
       if (!every((selector) => paletteGated(selector, gates))) throw new Error(`build: ${where} writes ${name} outside a palette gate`)
     }
     if (!name.startsWith('--dsh-deepcraft-')) continue
-    if (name.startsWith('--dsh-deepcraft-font-')) {
-      if (every((selector) => carries(selector, gates.typeface.attribute, gates.typeface.claude))) names.skin.add(name)
-      if (every((selector) => carries(selector, gates.typeface.attribute, gates.typeface.host))) names.host.add(name)
-      continue
-    }
+    if (name.startsWith('--dsh-deepcraft-font-')) continue
     if (gates.palette.ids.some((id) => every((selector) => carries(selector, gates.palette.attribute, id)))) names.skin.add(name)
     if (every((selector) => carries(selector, gates.palette.attribute, gates.palette.host))) names.host.add(name)
   }
@@ -443,12 +438,13 @@ function checkHolds(relations) {
  * @param options.srcDir - the source directory.
  * @param options.sources - the browser half on its syntax tree (scripts/source-tree.mjs).
  * @param options.tokenDoc - packages/client/src/theme/tokens.json (loadTokens).
- * @param options.gates - `{ palette: { attribute, ids, host }, typeface: { attribute, claude, host } }`.
+ * @param options.fonts - packages/client/src/theme/fonts.ts: the faces and role stacks.
+ * @param options.gates - `{ palette: { attribute, ids, host } }`.
  * @param options.images - brand mark name → its address, for the token sheet.
  * @returns `{ main }`: the theme's sheet, minified once every check has read
  *     every sheet.
  */
-export function buildStylesheet({ sheets, srcDir, sources, tokenDoc, gates, images }) {
+export function buildStylesheet({ sheets, srcDir, sources, tokenDoc, fonts, gates, images }) {
   const names = { skin: new Set(), host: new Set() }
   const read = new Map()
   const parts = new Map()
@@ -456,13 +452,13 @@ export function buildStylesheet({ sheets, srcDir, sources, tokenDoc, gates, imag
   const keyframes = new Map()
   const processed = sheets.map((sheet) => {
     const source = sheet.file === TOKEN_SHEET
-      ? tokenSheet(tokenDoc, gates, images, SCOPE)
+      ? tokenSheet(tokenDoc, gates, images, SCOPE, fonts)
       : fs.readFileSync(path.join(srcDir, sheet.file), 'utf8').replace(/\r\n/g, '\n')
     return { sheet, text: processSheet(sheet, source, gates, names, read, parts, relations, keyframes).replace(/\n+$/, '') }
   })
   const joined = () => processed.map((item) => item.text).join('\n\n')
   for (const name of names.skin) {
-    if (!names.host.has(name)) throw new Error(`build: ${name} is defined under a skin palette or typeface but has no alias under the host's`)
+    if (!names.host.has(name)) throw new Error(`build: ${name} is defined under a skin palette but has no alias under the host's`)
   }
   checkAttributes(read, sources)
   checkParts(parts)

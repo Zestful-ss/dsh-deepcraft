@@ -81,7 +81,7 @@ function nativeLayoutScenario({ check }) {
   return {
     script: 'greeting',
     prompt: 'hello there',
-    profilePatch: ['- id: ui-skin-deepcraft', '  config:', '    palette: host', '    typeface: host', '    mascot: \'off\''],
+    profilePatch: ['- id: ui-skin-deepcraft', '  config:', '    palette: host', '    fontUi: host', '    fontProse: follow', '    fontCode: host', '    mascot: \'off\''],
     async assert({ page, session, notes }) {
       const withSheet = await page.evaluate(readSeats, SEATS)
       // The skin's one sheet, taken off the page for a frame: every rule it

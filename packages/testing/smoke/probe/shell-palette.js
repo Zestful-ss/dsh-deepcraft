@@ -57,9 +57,9 @@
       }
       await sleep(300)
       r.hostPalette = {
-        host: await readHost({ palette: 'host', typeface: 'host' }, false),
+        host: await readHost({ palette: 'host', fontUi: 'host', fontProse: 'follow', fontCode: 'host' }, false),
         wallpaper: await readHost(null, true),
-        ember: await readHost({ palette: 'ember', typeface: 'claude' }, false),
+        ember: await readHost({ palette: 'ember', fontUi: 'inter', fontProse: 'noto-serif', fontCode: 'jetbrains' }, false),
         // The wallpaper plugin showing one under the warm palette: the
         // shell stands down, one mask lies over the wallpaper, and the base
         // canvas and the skin's own faces keep their fill.
@@ -134,6 +134,42 @@
         r.settings.parentsOff = { appearance: renderTab('appearance') }
         window.__pushForm({ mascot: 'brand', palette: 'ocean' })
       }
+    })
+
+    // The three font roles: bundled choices reach the interface, prose and code
+    // tokens; host leaves the host's tokens; a custom list is sanitised and
+    // ends in the role's fallback.
+    await probe.onlyFor(['fonts'], async function () {
+      var mark = document.createElement('div')
+      mark.className = '_markdown_x_1'
+      mark.innerHTML = '<p>font probe</p>'
+      var code = document.createElement('div')
+      code.innerHTML = '<pre><code>const x = 1</code></pre>'
+      document.body.appendChild(mark)
+      document.body.appendChild(code)
+      var read = function () {
+        var bodyStyle = getComputedStyle(document.body)
+        return {
+          family: bodyStyle.getPropertyValue('--dsw-font-family').trim(),
+          prose: bodyStyle.getPropertyValue('--dsh-deepcraft-font-prose').trim(),
+          code: bodyStyle.getPropertyValue('--ds-font-family-code').trim(),
+          markdown: getComputedStyle(mark.querySelector('p')).fontFamily,
+          markPart: mark.getAttribute('data-dsh-deepcraft-part'),
+          markFamily: getComputedStyle(mark).fontFamily,
+          codeText: getComputedStyle(code.querySelector('code')).fontFamily,
+        }
+      }
+      window.__pushForm({ fontUi: 'geist', fontProse: 'literata', fontCode: 'fira-code' })
+      await sleep(250)
+      r.fonts = { theme: read() }
+      window.__pushForm({ fontUi: 'host', fontProse: 'follow', fontCode: 'host' })
+      await sleep(250)
+      r.fonts.host = read()
+      window.__pushForm({ fontUi: 'custom', fontUiCustom: 'Fira Sans, monospace' })
+      await sleep(250)
+      r.fonts.custom = read()
+      mark.remove()
+      code.remove()
     })
   })
 })()

@@ -60,11 +60,11 @@ function volatileField(field: SchemaField | null | undefined) {
 
 /**
  * The fields the older build stored and the migration reads (D80): its brand
- * choice and its per-theme chat pets. They are not preferences any more, so
- * they carry no default and never render a row; they only reach the browser
- * half beside the form's own values.
+ * choice, its per-theme chat pets and its single typeface choice. They are not
+ * preferences any more, so they carry no default and never render a row; they
+ * only reach the browser half beside the form's own values.
  */
-const LEGACY_FIELDS = ['brand', 'chatPetClaude', 'chatPetDeepseek'] as const
+const LEGACY_FIELDS = ['brand', 'chatPetClaude', 'chatPetDeepseek', 'typeface'] as const
 /** Preferences whose unsaved state must stay readable: see prefsField. */
 const UNDEFAULTED: Readonly<Record<string, true>> = { palette: true, chatPet: true }
 
