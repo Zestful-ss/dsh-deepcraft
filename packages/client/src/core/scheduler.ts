@@ -15,6 +15,7 @@ export interface Handles {
   subagentModel: FeatureHandle
   workspacePins: FeatureHandle
   settingsNav: FeatureHandle
+  dsBotReturn: FeatureHandle
 }
 
 export type HandleName = keyof Handles

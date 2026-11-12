@@ -24,8 +24,8 @@ export type PageOwner = 'skin' | 'ds-bot'
 /** ds-bot's id in the host's boot entry list. */
 const DS_BOT_ENTRY_ID = 'ds-bot'
 /** The local storage key ds-bot keeps its mode under: `agent`, or the Bot surface otherwise. */
-const DS_BOT_MODE_KEY = 'ds-bot:surface'
-const DS_BOT_AGENT_MODE = 'agent'
+export const DS_BOT_MODE_KEY = 'ds-bot:surface'
+export const DS_BOT_AGENT_MODE = 'agent'
 
 /** The boot list's answer, read once: the list is fixed at load. */
 let dsBotEntry: boolean | null = null

@@ -12,6 +12,7 @@ import { installScheduler } from './core/scheduler'
 import type { HandleName, Ui } from './core/scheduler'
 import { mountStylesheet, parkForeignSheets } from './core/stylesheet'
 import { pageOwner, subscribePageOwner } from './shared/visual-owner'
+import type { PageOwner } from './shared/visual-owner'
 import { loadFeatureChunk } from './core/chunks'
 import { handleName, setFeatureRegistry } from './core/feature'
 import type { Feature, FeatureInstall } from './core/feature'
@@ -52,6 +53,16 @@ function isWanted(feature: Feature) {
     : typeof value === 'string' && feature.prefValues.includes(value)
 }
 
+/**
+ * The features that stay while another owner has the page (D81). A skin takes
+ * the page whole. ds-bot keeps the return pill, the reader's way back from
+ * its Bot surface without walking its settings dialog (D82).
+ */
+const KEPT_FOR: Record<PageOwner, string[]> = {
+  'skin': [],
+  'ds-bot': ['dsBotReturn'],
+}
+
 export function apply(ctx: HostContext) {
   const body = document.body
   const ui: Ui = { retire }
@@ -74,22 +85,28 @@ export function apply(ctx: HostContext) {
   let owner = pageOwner()
 
   /**
-   * Give the page back whole: run every feature's teardown and take this
-   * package's body attributes and stylesheet away. The preference binding
-   * stays: another plugin taking the screen uninstalls nothing of the
-   * reader's (D81).
+   * Give the page back: run every feature's teardown except the ones `keep`
+   * names, and take this package's body attributes and stylesheet away. The
+   * preference binding stays: another plugin taking the screen uninstalls
+   * nothing of the reader's (D81). ds-bot keeps one return pill so the
+   * reader has a way back without its settings dialog (D82).
    */
-  function release() {
+  function release(keep: string[] = []) {
     // First, so no preference flip installs a feature mid-release.
     if (offSwitches !== null) {
       offSwitches()
       offSwitches = null
     }
+    const kept: typeof installed = []
     for (let i = installed.length - 1; i >= 0; i--) {
+      if (keep.includes(installed[i].id)) {
+        kept.push(installed[i])
+        continue
+      }
       // One teardown must not block the rest (D12); a failing one is reported.
       try { installed[i].stop() } catch (error) { reportError(error) }
     }
-    installed = []
+    installed = kept.reverse()
     // Each body attribute goes with whoever writes it: a feature's own with
     // its teardown above, the preference mirror's here, the stamps last.
     clearPrefsAttributes()
@@ -208,7 +225,8 @@ export function apply(ctx: HostContext) {
    * off, or the generation ended while the chunk was on its way.
    */
   function belongs(feature: Feature) {
-    if (disposed || owner !== null || failed.has(feature.id)) return false
+    if (disposed || failed.has(feature.id)) return false
+    if (owner !== null && !KEPT_FOR[owner].includes(feature.id)) return false
     if (installed.some(entry => entry.id === feature.id)) return false
     return !isSwitched(feature) || isWanted(feature)
   }
@@ -265,6 +283,20 @@ export function apply(ctx: HostContext) {
       reportFeatureFailure(feature.id, error)
       failed.add(feature.id)
     }
+  }
+
+  /**
+   * Hand the page to another owner: install the owner's KEPT_FOR features,
+   * then release everything else. A kept feature installs before the release
+   * so the page never passes through a frame without its way back (D82).
+   */
+  function yieldTo(next: PageOwner) {
+    const keep = KEPT_FOR[next]
+    for (const feature of FEATURES) {
+      if (!keep.includes(feature.id) || failed.has(feature.id) || installed.some(entry => entry.id === feature.id)) continue
+      installFeature(feature)
+    }
+    release(keep)
   }
 
   /**
@@ -350,11 +382,11 @@ export function apply(ctx: HostContext) {
     if (next === owner) return
     owner = next
     if (next === null) own()
-    else release()
+    else yieldTo(next)
   })
 
-  // Another owner already has this page (D81): the preferences are adopted
-  // for the settings page, and nothing of the theme reaches the page.
-  if (owner !== null) release()
+  // Another owner already has this page (D81): nothing of the theme reaches
+  // it, apart from ds-bot's return pill (D82).
+  if (owner !== null) yieldTo(owner)
   else own()
 }
