@@ -18,7 +18,6 @@ const STAND_IN_PARTS = [
   'host-palette.js',
   'settings-form.js',
   'host-fetch.js',
-  'empty-sessions.js',
   'mascot.js',
   'sessions.js',
   'model-directory.js',

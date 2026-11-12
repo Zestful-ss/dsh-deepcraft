@@ -60,26 +60,16 @@ const SHEET = 'style[data-plugin-css="dsh-deepcraft/client.css"]'
 /** Pseudo-elements the page can read a computed style for. */
 const READABLE_PSEUDO = new Set(['::before', '::after', '::marker', '::placeholder'])
 /**
- * Selectors whose rule only applies while a transient mark is on the page,
- * under a pointer state the walk cannot hold, or in a state the walk carries
- * only now and then: no audited state carries them reliably, so a run that
- * happened to catch the element called the weight removable and the next run,
- * which did not, called it unmatched. Each entry is a contract, not a
- * convenience: the skin's own marks that go on and come off within one
- * animation (the rolling door, the wait badge's leave, the reveal of a panel,
- * the reasoning window whose markdown variant the walk's turn sometimes
- * carries), a state a pointer holds (a file row swapping its operation), and
- * the host's own mark for a theme transition. The hover walk still covers the
- * rules whose own trigger it can point at.
+ * Selectors whose rule only applies while a transient mark is on the page:
+ * no audited state carries them reliably, so a run that happened to catch
+ * the element called the weight removable and the next run, which did not,
+ * called it unmatched. Each entry is a contract, not a convenience: the
+ * skin's own marks that go on and come off within one animation (a page's
+ * arrival and leave), and the host's own mark for a theme transition. The
+ * hover walk still covers the rules whose own trigger it can point at.
  */
 const TRANSIENT_SELECTORS = [
-  '[data-dsh-deepcraft-rolling]',
-  '[data-dsh-deepcraft-revealing]', '[data-dsh-deepcraft-page-enter]', '[data-dsh-deepcraft-page-leave]',
-  '[data-dsh-deepcraft-search-closing]', '[data-dsh-deepcraft-turn-nav-landed]',
-  '[data-dsh-deepcraft-follow-tail]', '[data-dsh-deepcraft-follow-hold]',
-  '[data-dsh-deepcraft-reader-hold]', '[data-dsh-deepcraft-summary-running]', '[data-dsh-deepcraft-wait-badge-leaving]',
-  '[data-dsh-deepcraft-file-merge]', '[data-dsh-deepcraft-roll]',
-  '[data-dsh-deepcraft-reason-window]',
+  '[data-dsh-deepcraft-page-enter]', '[data-dsh-deepcraft-page-leave]',
   '[data-dsh-theme-transitioning]',
 ]
 

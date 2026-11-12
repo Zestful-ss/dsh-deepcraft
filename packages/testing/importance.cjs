@@ -71,6 +71,9 @@ const MARKS = [
   ['custom brand word image', 'data-dsh-deepcraft-custom-word', 'image'],
   ['custom brand tint', 'data-dsh-deepcraft-custom-tint', ''],
   ['custom brand accent', 'data-dsh-deepcraft-accent', '#d97757'],
+  ['the wallpaper plugin', 'data-we-wallpaper', ''],
+  ['own wallpaper', 'data-dsh-deepcraft-wallpaper', 'custom'],
+  ['own wallpaper lite', 'data-dsh-deepcraft-wallpaper-lite', '1'],
 ]
 
 /**

@@ -43,34 +43,9 @@
   // own rows and notices render (inert here, like every element above).
   var primitive = function (type) { return function (props) { return { type: type, props: props } } }
   var primitives = {
-    Tooltip: primitive('Tooltip'),
-    Toast: primitive('Toast'),
-    Modal: primitive('Modal'),
-    IconUnarchiveOutlineRegular: primitive('IconUnarchiveOutlineRegular'),
-    IconTrashOutlineRegular: primitive('IconTrashOutlineRegular'),
-    IconWarningOutlineRegular: primitive('IconWarningOutlineRegular'),
-    // The file row's own share (features/chat-files/): the disclosure row, the
-    // shimmer, the diff card, the read card and the icons are the host's
-    // primitives, and the totals helper counts one added and one removed line per
-    // hunk.
-    DisclosureRow: primitive('DisclosureRow'),
-    TextShimmer: primitive('TextShimmer'),
-    DiffBlock: primitive('DiffBlock'),
-    ReadBlock: primitive('ReadBlock'),
-    IconEditOutlineRegular: primitive('IconEditOutlineRegular'),
-    IconBrowseOutlineRegular: primitive('IconBrowseOutlineRegular'),
-    IconInspectOutlineRegular: primitive('IconInspectOutlineRegular'),
-    diffTotals: function (hunks) {
-      var added = 0
-      var removed = 0
-      for (var i = 0; i < hunks.length; i += 1) {
-        var before = hunks[i].oldText === null ? '' : String(hunks[i].oldText)
-        var after = String(hunks[i].newText)
-        if (after !== '') added += after.split('\n').length
-        if (before !== '') removed += before.split('\n').length
-      }
-      return { added: added, removed: removed }
-    },
+    // The workspace pins' own share: the state dot and the row's menu icon.
+    StateDot: primitive('StateDot'),
+    IconEllipsisOutlineRegular: primitive('IconEllipsisOutlineRegular'),
   }
   // The host's react-dom/client. Each root records the element it was created
   // on, how many times it was asked to render and whether it was unmounted, so
