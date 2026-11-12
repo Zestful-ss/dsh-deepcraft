@@ -19,7 +19,7 @@
   if (stored !== null && typeof stored === 'object') Object.assign(host.formValue, stored)
   // The preview carries no Petdex library, so "follow the brand" would show no
   // pet at all; the built-in pixel whale stands in as the preview's own choice.
-  if (host.formValue.mascot === undefined) host.formValue.mascot = 'deepy'
+  if (host.formValue.mascot === undefined) host.formValue.mascot = 'brand'
   // The stand-in's session fixture has one conversation; make it the shown one
   // so the pet that follows the session stands on the composer.
   if (window.__preview === true && host.deepy !== undefined) {

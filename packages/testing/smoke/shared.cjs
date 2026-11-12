@@ -33,7 +33,7 @@ const tierName = () => tier
  * follow an animation, a glide or a dwell over time. The quick tier skips them
  * whole, and says so in its log.
  */
-const TIMING_CASES = ['crab-states', 'deepy', 'petdex-claude', 'petdex-deepseek']
+const TIMING_CASES = ['petdex-claude', 'petdex-deepseek']
 
 /**
  * Which cases cover which directory under `packages/client/src/features/`, gathered from the

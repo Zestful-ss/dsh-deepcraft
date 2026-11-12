@@ -1,9 +1,7 @@
 {
   "mascotTitle": { "zh": "聊天框宠物", "en": "Chat pet" },
-  "mascotDesc": { "zh": "站在输入框上沿的小伙伴：默认使用 Petdex 宠物，也可以选原来的像素螃蟹或像素鲸鱼。", "en": "The companion on the input area's top edge: a Petdex pet by default, or the original pixel crab or pixel whale." },
+  "mascotDesc": { "zh": "站在输入框上沿的小伙伴：默认使用 Petdex 宠物，也可以关闭。", "en": "The companion on the input area's top edge: a Petdex pet by default, or off." },
   "mascotBrand": { "zh": "Petdex 宠物", "en": "Petdex pet" },
-  "mascotCrab": { "zh": "原有像素螃蟹", "en": "Original pixel crab" },
-  "mascotDeepy": { "zh": "原有像素鲸鱼", "en": "Original pixel whale" },
   "mascotOff": { "zh": "关闭", "en": "Off" },
   "mascotScopeTitle": { "zh": "出现位置", "en": "Where it appears" },
   "mascotScopeHome": { "zh": "首页", "en": "Home" },

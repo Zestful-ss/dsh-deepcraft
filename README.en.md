@@ -65,7 +65,7 @@ The settings page switches between three palettes; light and dark follow the sys
 
 ### Pets
 
-- The pet standing on the input area is one choice, changed by neither palette nor brand: Whaledou by default, or Crab Buddy, the original pixel crab or the pixel whale — and it can be kept to the home page.
+- The pet standing on the input area is one choice, changed by neither palette nor brand: Whaledou by default, or another character from the Petdex library through "Chat pet package", or off — and it can be kept to the home page.
 - "Chat pet package" in the settings page takes a complete package — a folder, a ZIP or a Petdex link holding `pet.json` and an atlas — keeping the original bytes. The pet art belongs to Petdex and each package's author and is not shipped with this plugin.
 
 ### Subagent models
@@ -97,11 +97,6 @@ To enable them, install the `.ttf` files on your system, or copy them into `$DSH
 | [Architecture decisions](docs/adr/README.md) | One page per direction: background, decision, consequences, revisiting conditions |
 | [Changelog](CHANGELOG.md) | Version history |
 | [Contributing](CONTRIBUTING.md) | Building from `packages/client/src/`, commit conventions, and the screenshot and regression tooling |
-
-## Acknowledgements
-
-- The animation frames of Deepy the pixel whale come from the Deepy whale theme pack drawn by calmly-eating-bugs ([@wp3171216237](https://github.com/wp3171216237)), and ship with the plugin by the author's permission; GIFs of all 20 animations are in [docs/gifs/](docs/gifs/).
-- Clawd is a character of Anthropic. Its frames are not covered by the MIT license (see [LICENSE](LICENSE)). This plugin is an unofficial fan work, not affiliated with or endorsed by Anthropic.
 
 ## Related projects
 

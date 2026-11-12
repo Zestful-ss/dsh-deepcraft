@@ -1,4 +1,4 @@
-import { MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY } from '../../constants'
+import { MASCOT_BRAND } from '../../constants'
 import type { FeatureManifest } from '../../core/feature'
 
 export default {
@@ -7,10 +7,8 @@ export default {
   load: 'deferred',
   contracts: ['composer.card', 'composer.fallback-panel', 'composer.seat', 'composer.stack', 'conversation.session', 'conversation.session-attribute', 'shell.phase'],
   pref: 'mascot',
-  prefValues: [MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY],
+  prefValues: [MASCOT_BRAND],
   stylesheets: [
-    { file: 'crab.css', rank: 350 },
-    { file: 'whale.css', rank: 360 },
     { file: 'petdex.css', rank: 365 },
   ],
   settingsRows: [{
@@ -19,7 +17,7 @@ export default {
     pref: 'mascot',
     title: 'mascotTitle',
     desc: 'mascotDesc',
-    choiceLabels: { brand: 'mascotBrand', crab: 'mascotCrab', deepy: 'mascotDeepy', off: 'mascotOff' },
+    choiceLabels: { brand: 'mascotBrand', off: 'mascotOff' },
   }, {
     // One pet for the chat position, whichever palette is in force (D80); the
     // controls below it import a package and take it as the choice.
@@ -39,5 +37,5 @@ export default {
     title: 'mascotScopeTitle',
     choiceLabels: { home: 'mascotScopeHome', all: 'mascotScopeAll' },
   }],
-  cases: ['crab-states', 'deepy', 'petdex-claude', 'petdex-deepseek', 'hero']
+  cases: ['petdex-claude', 'petdex-deepseek']
 } satisfies FeatureManifest

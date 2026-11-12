@@ -20,15 +20,11 @@
  *      treatment; a missing file simply 404s and the stack falls back to a
  *      system-installed copy, then to the look-alike faces this package does
  *      ship (Inter, Noto Serif, JetBrains Mono — SIL OFL).
- *   3. Serve Deepy's animation sheets. The DeepSeek brand's pixel whale plays
- *      more sprite sheets than are worth inlining into the bundle, so they ship
- *      as files beside it and the browser fetches each one the first time its
- *      animation plays.
- *   4. Deny a `subagent` call that omits its model pair, or names one outside
+ *   3. Deny a `subagent` call that omits its model pair, or names one outside
  *      the routes the reader picked for the session (or the one the
  *      `subagentModelChoice` preference made mandatory); the rule is in
  *      subagent-choice.ts.
- *   5. Keep those picks: one row per session in the plugin's own storage
+ *   4. Keep those picks: one row per session in the plugin's own storage
  *      domain, read and written through the plugin's own route so the page
  *      never guesses what the host's policy allows (subagent-models/).
  *

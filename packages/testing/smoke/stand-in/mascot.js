@@ -1,15 +1,15 @@
 /**
- * The deepy and crab-states cases: the session the mascot follows, as the host's
- * services describe it — the session status (uiSession), the session list with
- * its subagent catalog, the chat snapshot's open turn and the session's event
- * feed. The probe drives all four through __deepy.
+ * The Petdex cases: the session the mascot follows, as the host's services
+ * describe it — the session status (uiSession), the session list with its
+ * subagent catalog, the chat snapshot's open turn and the session's event
+ * feed. The probe drives them through __deepy.
  */
 (function () {
   var host = window.__dshSmokeHost
   var CASE = host.CASE
 
   var preview = CASE === 'settings' && window.__preview === true
-  var deepy = CASE === 'deepy' || CASE === 'crab-states' || CASE === 'petdex-claude' || CASE === 'petdex-deepseek' || preview ? (function () {
+  var deepy = CASE === 'petdex-claude' || CASE === 'petdex-deepseek' || preview ? (function () {
     var statusListeners = []
     var feedListeners = []
     var status = new Map()

@@ -1,7 +1,5 @@
-import { MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, MASCOT_PETDEX, MASCOT_SCOPE_ALL } from '../../constants'
+import { MASCOT_OFF, MASCOT_PETDEX, MASCOT_SCOPE_ALL } from '../../constants'
 import { readPrefs, resolveMascot } from '../../core/prefs'
-import { createMascotCrab } from './crab'
-import { createMascotWhale } from './whale'
 import { createPetdexMascot } from './petdex'
 import { decodePet, ensurePet } from '../../shared/petdex'
 import type { PetDescriptor } from '@dsh-deepcraft/contracts/pets'
@@ -10,21 +8,16 @@ import type { FeatureUi } from '../../core/feature'
 import type manifest from './mascot.manifest'
 
 /**
- * The companion on the composer: one choice of its own that no palette or
- * brand changes (D80).
+ * The companion on the composer: the reader's Petdex package, or none (D80).
  *
  * `brand` means the reader's current Petdex package (`chatPet`, whaledou out of
- * the box), drawn from its own atlas. The two original characters stay
- * selectable by hand, and `off` retires the composer guest. `mascotScope` still
- * decides whether the composer guest also stands in the conversation.
- *
+ * the box), drawn from its own atlas; `off` retires the composer guest.
+ * `mascotScope` decides whether the guest also stands in the conversation.
  * One chat instance is on the page at a time. A package that cannot be
  * fetched or decoded leaves the previous instance in place instead of
  * blanking the corner.
  */
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
-  const crab = createMascotCrab(ctx, ui)
-  const whale = createMascotWhale(ctx, ui)
   let petdex: { id: string, player: ReturnType<typeof createPetdexMascot> } | null = null
   /** The package the current request is for, so a pass does not start it twice. */
   let requested: string | null = null
@@ -35,8 +28,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   let failedAt = 0
 
   function releaseChat() {
-    crab.release()
-    whale.release()
     if (petdex !== null) {
       petdex.player.dispose()
       petdex = null
@@ -77,21 +68,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const prefs = readPrefs()
     const mascot = resolveMascot(prefs)
     const conversation = prefs.mascotScope === MASCOT_SCOPE_ALL
-    if (mascot === MASCOT_CRAB) {
-      crab.sync(conversation)
-      whale.release()
-      if (petdex !== null) { petdex.player.release(); petdex.player.dispose(); petdex = null }
-      requested = null
-      generation += 1
-    } else if (mascot === MASCOT_DEEPY) {
-      whale.sync(conversation)
-      crab.release()
-      if (petdex !== null) { petdex.player.release(); petdex.player.dispose(); petdex = null }
-      requested = null
-      generation += 1
-    } else if (mascot === MASCOT_PETDEX) {
-      crab.release()
-      whale.release()
+    if (mascot === MASCOT_PETDEX) {
       if (petdex !== null) petdex.player.sync(conversation)
       void openPetdex(prefs.chatPet, conversation)
     } else if (mascot === MASCOT_OFF) {
@@ -100,8 +77,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   }
 
   function onActivity() {
-    crab.onActivity()
-    whale.onActivity()
     petdex?.player.onActivity()
   }
 
@@ -109,8 +84,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
 
   return () => {
     releaseChat()
-    crab.dispose()
-    whale.dispose()
     delete ui.mascot
   }
 }

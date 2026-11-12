@@ -1,6 +1,5 @@
 /**
- * The shell cases' page reads: the three palettes' canvases and accents, and
- * the classic home page's card carrying the crab.
+ * The palette case's page reads: the three palettes' canvases and accents.
  */
 (function () {
   var probe = window.__dshSmokeProbe
@@ -32,19 +31,6 @@
         r.palettes[id] = Object.assign(light, { dark: Object.assign(dark, { raised: raised }) })
       }
       window.__pushForm({ palette: 'ocean' })
-      await sleep(150)
-    })
-    await probe.onlyFor(['hero'], async function () {
-      // The classic home page's card carries the crab too.
-      var greetRoot = document.createElement('div')
-      greetRoot.className = '_root_x_1'
-      greetRoot.setAttribute('data-phase', 'hero')
-      var greetHolder = document.createElement('div')
-      greetHolder.setAttribute('data-conversation-scroll', '')
-      greetHolder.appendChild(greetRoot)
-      document.body.appendChild(greetHolder)
-      await sleep(150)
-      r.classicCrab = document.querySelector('[data-composer-card] > .dsh-deepcraft-crab') !== null
       await sleep(150)
     })
   })

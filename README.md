@@ -65,7 +65,7 @@
 
 ### 宠物
 
-- 输入区上的宠物只有一项选择，不随配色或标识变化：默认 Whaledou，也可以选 Crab Buddy、原有的像素螃蟹或像素鲸鱼，可设成只出现在首页。
+- 输入区上的宠物只有一项选择，不随配色或标识变化：默认 Whaledou，也可以从「聊天框宠物包」换成 Petdex 宠物库里的其他角色，或关闭；可设成只出现在首页。
 - 设置页的「聊天框宠物包」接受包含 `pet.json` 与图集的文件夹、ZIP 或 Petdex 链接，原文件字节不改动。宠物原画由 Petdex 与各包作者提供，不随本插件发布。
 
 ### 子代理模型
@@ -98,11 +98,6 @@ dsh plugin --profile desktop add <本地目录>                                 
 | [架构决策](docs/adr/README.md) | 每条方向一页：背景、决定、后果与重审条件 |
 | [更新日志](CHANGELOG.md) | 版本历史 |
 | [贡献指南](CONTRIBUTING.md) | 构建、提交规范与回归工具 |
-
-## 鸣谢
-
-- Deepy 的动画帧图来自 calmly-eating-bugs（[@wp3171216237](https://github.com/wp3171216237)）绘制的 Deepy 小鲸鱼主题包。
-- Clawd是 Anthropic 的角色形象。帧图不适用 MIT 许可（见 [LICENSE](LICENSE)）。本插件是非官方爱好者作品，与 Anthropic 没有关联。
 
 ## 友链
 

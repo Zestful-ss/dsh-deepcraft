@@ -66,8 +66,6 @@ const SURFACES = []
 const MARKS = [
   ['motion reduced', 'data-dsh-deepcraft-motion', 'reduced'],
   ['motion full', 'data-dsh-deepcraft-motion', 'full'],
-  ['mascot crab', 'data-dsh-deepcraft-mascot', 'crab'],
-  ['mascot deepy', 'data-dsh-deepcraft-mascot', 'deepy'],
   ['custom brand mark', 'data-dsh-deepcraft-custom-mark', ''],
   ['custom brand word', 'data-dsh-deepcraft-custom-word', 'text'],
   ['custom brand word image', 'data-dsh-deepcraft-custom-word', 'image'],
@@ -259,7 +257,7 @@ function importanceScenario(lane) {
       // An image waiting in the composer: the attachment rail and its card.
       const picker = page.locator('input[type="file"]').first()
       if (await picker.count() > 0) {
-        await picker.setInputFiles(path.join(ROOT, 'packages', 'assets', 'src', 'mascot', 'crab', 'idle.png'))
+        await picker.setInputFiles(path.join(ROOT, 'packages', 'assets', 'src', 'brand', 'deepseek-mark.svg'))
         await page.waitForTimeout(800)
         await audit.state('attachment')
       }

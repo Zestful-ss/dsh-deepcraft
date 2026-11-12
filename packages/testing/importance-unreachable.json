@@ -254,14 +254,6 @@
       ]
     },
     {
-      "reason": "吉祥物：它只在自己的偏好打开且页面空闲时才挂载",
-      "selectors": [
-        "body[data-dsh-deepcraft] :is(.dsh-deepcraft-crab,.dsh-deepcraft-deepy):not([data-ready])",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-crab-anchor=panel]>.dsh-deepcraft-crab",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-deepy-anchor=panel]>.dsh-deepcraft-deepy"
-      ]
-    },
-    {
       "reason": "折叠的侧栏：走查没有折叠它",
       "selectors": [
         "body[data-dsh-deepcraft] [data-sidebar-collapsed] button[data-dsh-deepcraft-part~=new-session]",

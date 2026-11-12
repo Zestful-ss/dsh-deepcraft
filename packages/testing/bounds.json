@@ -42,16 +42,6 @@
       "reason": "All long tasks together over the measured turn. The turn streams a long scripted answer, so some long tasks are the host rendering it; the budget is what the skin's own passes may add on top before the turn counts as blocked."
     },
     {
-      "name": "deepcraftWhaleWaitMs",
-      "value": 15000,
-      "reason": "How long the DeepCraft walk lets the whale appear, switch a sheet or leave. The sheets are fetched from the host half on first use, and the deferred mascot chunk arrives after the page's first frames, so the wait covers one chunk fetch and one sheet decode on a loaded runner."
-    },
-    {
-      "name": "deepcraftStateWaitMs",
-      "value": 12000,
-      "reason": "How long the DeepCraft walk samples the live turn for the thinking and writing states. The scripted answer holds each piece long enough to be seen at 100 ms sampling; the bound covers the wait before the model's first token on a loaded runner rather than the states themselves."
-    },
-    {
       "name": "laneFollowMaxGapPx",
       "value": 220,
       "reason": "How far behind the tail the scroller may lag while the reader follows it. The host's own follow pins the end on every growth and the skin's slide writes no position, so the gap is at most the growth of the frame being sampled; the bound is a third of that scenario's 600px viewport: a follow that stopped working leaves hundreds of pixels more."

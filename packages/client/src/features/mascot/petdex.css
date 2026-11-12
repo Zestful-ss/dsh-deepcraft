@@ -27,9 +27,8 @@ body[data-dsh-deepcraft] .dsh-deepcraft-petdex[data-ready] {
 
 /* A conversation's input area and the panels that take its card's place span
    the whole column, so the pet is set in from the edge of the card they
-   centre, as the original characters are (crab.css, whale.css). The anchor
-   publishes the edge its own layout leaves, and the child adds the 8px the
-   image frame keeps inside it. */
+   centre. The anchor publishes the edge its own layout leaves, and the child
+   adds the 8px the image frame keeps inside it. */
 body[data-dsh-deepcraft] [data-dsh-deepcraft-petdex-anchor="stack"] {
   position: relative;
   --dsh-deepcraft-petdex-edge: max(var(--dsh-composer-side-clearance, 16px), (100% - var(--dsh-composer-card-max-width, 100%)) / 2);

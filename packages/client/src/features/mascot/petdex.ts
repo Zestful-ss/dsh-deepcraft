@@ -26,7 +26,7 @@ const ACTIONS: Readonly<Record<string, { state: PetdexState, frames?: number }>>
   // The package has no sleeping action: its first idle frame stands still.
   sleeping: { state: 'idle', frames: 1 },
   waking: { state: 'waving' },
-  // A poke sends it the other way, as the original characters do.
+  // A poke sends it the other way.
   'poke-left': { state: 'running-right' },
   'poke-right': { state: 'running-left' },
   tickle: { state: 'jumping' },

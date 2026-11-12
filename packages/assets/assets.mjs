@@ -73,9 +73,6 @@ const CONTENT_TYPES = {
  * manifest is not silently missing them.
  */
 export const SOURCE_ONLY = new Set([
-  // scripts/draw-crab.py takes the crab's own laptop frames from these.
-  'mascot/crab-laptop-body.png',
-  'mascot/crab-laptop-ink.png',
   // scripts/fetch-lobe-combines.py composes the openai lockup from this mark.
   'icons/openai.svg',
   // No upstream icon carries Beam's vendor, so its lockup is composed from this

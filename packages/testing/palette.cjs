@@ -29,7 +29,6 @@ const SKIN = {
   brandName: '.dsh-deepcraft-settings-input',
   accent: '.dsh-deepcraft-settings-color',
   accentReset: '.dsh-deepcraft-brand-accent .dsh-deepcraft-settings-button',
-  crab: '.dsh-deepcraft-crab',
 }
 
 /** One palette's computed colours and the identity the page paints. */
@@ -107,6 +106,8 @@ function paletteScenario({ check }) {
       read.palettes = {}
       await openSettings(page)
       await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: SKIN.appearance }).first().click()
+      read.mascotChoices = await page.locator('.dsh-deepcraft-settings-row').filter({ has: page.locator('.dsh-deepcraft-settings-row-title').filter({ hasText: /^(聊天框宠物|Chat pet)$/ }) }).first()
+        .getByRole('button').allTextContents()
       // The reader's own name.
       const name = page.locator(SKIN.brandName).first()
       await name.fill('Acme')
@@ -133,11 +134,6 @@ function paletteScenario({ check }) {
       await waitForSkin(page)
       await openSettings(page)
       await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: SKIN.appearance }).first().click()
-      // The pixel crab, chosen by hand: it must survive every palette.
-      await page.locator('.dsh-deepcraft-settings-row').filter({ has: page.locator('.dsh-deepcraft-settings-row-title').filter({ hasText: /^(聊天框宠物|Chat pet)$/ }) }).first()
-        .getByRole('button', { name: /^(原有像素螃蟹|Original pixel crab)$/ }).click()
-      await page.waitForTimeout(300)
-
       for (const id of ['ocean', 'ember', 'forest']) {
         await pickPalette(page, id)
         read.palettes[id] = await readBoth(page)
@@ -169,7 +165,6 @@ function paletteScenario({ check }) {
       await waitForSkin(page)
       await page.waitForTimeout(600)
       read.home = await readBoth(page)
-      read.homeCrab = await page.locator(SKIN.crab).count() > 0
       // The shared scratch home ends without the images this walk uploaded, so
       // the custom-brand scenario still starts from its own clean state.
       await page.evaluate(async () => {
@@ -226,7 +221,8 @@ function paletteScenario({ check }) {
       checks.push(check('名称、标志与字标在每套配色下都画同一份读者上传的图',
         identity(palettes.ocean?.light) && identity(palettes.ember?.light) && identity(palettes.forest?.light),
         JSON.stringify({ ocean: palettes.ocean?.light?.mark, ember: palettes.ember?.light?.mark })))
-      checks.push(check('像素螃蟹在每套配色下都还在同一个位置', read.homeCrab === true, JSON.stringify({ homeCrab: read.homeCrab })))
+      checks.push(check('聊天框宠物只保留 Petdex 宠物与关闭', read.mascotChoices.length === 2 &&
+        read.mascotChoices.every((label) => /^(Petdex 宠物|Petdex pet|关闭|Off)$/.test(label.trim())), JSON.stringify(read.mascotChoices)))
       checks.push(check('首页与对话画的是同一套默认配色，页面不带旧品牌属性',
         read.home?.light?.accent === '#5368c9' && read.conversation?.light?.accent === '#5368c9' && read.brandAttr === false,
         JSON.stringify({ home: read.home?.light?.accent, conversation: read.conversation?.light?.accent, brandAttr: read.brandAttr })))

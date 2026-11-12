@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_OFF, MASCOT_PETDEX, PREF_DEFAULTS } from '../constants'
+import { BRAND_INK_ORIGINAL, BRAND_INK_TEXT, BRAND_NAME_MAX, MASCOT_OFF, MASCOT_PETDEX, PREF_DEFAULTS } from '../constants'
 import { resolveMascot } from './prefs'
 import { clampPrefs as normalizePrefs } from '@dsh-deepcraft/contracts/prefs'
 
@@ -60,9 +60,9 @@ test('the chat pet is one choice and the older per-theme fields move into it (D8
   expect(normalizePrefs({ brand: 'claude', palette: 'forest', chatPet: 'new-pet' }).chatPet).toBe('new-pet')
 })
 
-test('"follow the theme" resolves to the Petdex guest; a manual character stands, and off only leaves the chat place', () => {
+test('"follow the theme" resolves to the Petdex guest, off leaves the chat place, and the retired characters fall back to Petdex', () => {
   expect(resolveMascot(normalizePrefs({}))).toBe(MASCOT_PETDEX)
-  expect(resolveMascot(normalizePrefs({ mascot: MASCOT_CRAB }))).toBe(MASCOT_CRAB)
-  expect(resolveMascot(normalizePrefs({ mascot: MASCOT_DEEPY }))).toBe(MASCOT_DEEPY)
   expect(resolveMascot(normalizePrefs({ mascot: MASCOT_OFF }))).toBe(MASCOT_OFF)
+  expect(resolveMascot(normalizePrefs({ mascot: 'crab' }))).toBe(MASCOT_PETDEX)
+  expect(resolveMascot(normalizePrefs({ mascot: 'deepy' }))).toBe(MASCOT_PETDEX)
 })

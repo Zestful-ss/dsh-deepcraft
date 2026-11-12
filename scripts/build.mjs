@@ -51,7 +51,7 @@ import { brotliCompressSync } from 'node:zlib'
 import esbuild from 'esbuild'
 import { buildHostHalf } from '../packages/host/build.mjs'
 import { buildFonts, checkClaimed, planAssets, routeText, writeAssets } from '../packages/assets/assets.mjs'
-import { renderWhaleIcon, renderWhaleSheet } from '../packages/assets/whale.mjs'
+import { renderWhaleIcon } from '../packages/assets/whale.mjs'
 import { openBuildCache } from './build-cache.mjs'
 import { checkContracts, checkCycles, checkDependencies, checkListed, checkManifests, checkMotionSources, checkTypes } from './build-checks.mjs'
 import { chunkFiles, chunkModules, ownModuleIds, splitChunks } from './chunks.mjs'
@@ -199,15 +199,13 @@ const FACTORY_CLOSE = `    return module.exports
 })`
 
 /**
- * Evaluate packages/client/src/constants.ts and the mascot sheet tables once (pure, DOM-free):
- * the gate attributes the stylesheets are checked against, the two sheet
- * tables, the asset scales and the preference defaults the browser half carries.
+ * Evaluate packages/client/src/constants.ts once (pure, DOM-free): the gate
+ * attributes the stylesheets are checked against and the value tables the build
+ * reads.
  */
 const CONSTANTS = (() => {
   const constantsFile = 'packages/client/src/constants.ts'
-  const sheetsFile = 'packages/client/src/features/mascot/sheets.ts'
   const constants = loadModule(constantsFile)
-  const sheets = loadModule(sheetsFile)
   const pick = (module, file, names) => Object.fromEntries(names.map((name) => {
     if (module[name] === undefined) throw new Error(`build: ${file} exports no ${name}`)
     return [name, module[name]]
@@ -221,7 +219,6 @@ const CONSTANTS = (() => {
       palette: { attribute: PALETTE_ATTR, ids: [...SKIN_PALETTES], host: PALETTE_HOST },
       typeface: { attribute: TYPEFACE_ATTR, claude: TYPEFACE_CLAUDE, host: TYPEFACE_HOST },
     },
-    ...pick(sheets, sheetsFile, ['CRAB_SHEETS', 'DEEPY_SHEETS', 'DEEPY_GUTTER']),
   }
 })()
 
@@ -280,25 +277,14 @@ function loadCombines(plan, claimed) {
 }
 
 /**
- * The whale's sheets as the vectors the browser plays
- *
- * packages/assets/whale.mjs draws every frame of every animation on the
- * sprite's own cell layout; the result is what the asset plan ships under the
- * sheet's name. The renderer's source is part of each cache key, so a change
- * to the art rebuilds every sheet it reaches.
+ * The plugin's own brand mark, drawn by packages/assets/whale.mjs.
  *
  * @param cache - the build cache (scripts/build-cache.mjs).
- * @returns the vectors to ship, keyed by their path under packages/assets/src/.
+ * @returns the vector to ship, under the brand path the asset plan serves.
  */
-function renderWhaleAssets(cache) {
-  const sheets = CONSTANTS.DEEPY_SHEETS
+function renderBrandMark(cache) {
   const code = fs.readFileSync(path.join(ROOT, 'packages', 'assets', 'whale.mjs'))
   const generated = new Map()
-  for (const [name, sheet] of Object.entries(sheets)) {
-    const shape = JSON.stringify({ sheet, gutter: CONSTANTS.DEEPY_GUTTER })
-    const svg = cache.get('whale-sheet', [code, name, shape], () => Buffer.from(renderWhaleSheet(name, sheet, CONSTANTS.DEEPY_GUTTER), 'utf8')).toString('utf8')
-    generated.set(`mascot/deepy/${name}.svg`, svg)
-  }
   const icon = cache.get('whale-icon', [code], () => Buffer.from(renderWhaleIcon(), 'utf8')).toString('utf8')
   generated.set(`brand/${ICON_FILE}`, icon)
   return { generated }
@@ -321,8 +307,8 @@ async function main() {
   // yet: the plan is read by everything below, and a refusal anywhere in this
   // build must leave lib/ as it was.
   const cache = openBuildCache(CACHE_DIR)
-  const deepy = renderWhaleAssets(cache)
-  const plan = planAssets({ assetsDir: ASSETS, generated: deepy.generated })
+  const mark = renderBrandMark(cache)
+  const plan = planAssets({ assetsDir: ASSETS, generated: mark.generated })
   const claimed = new Set()
   const images = {}
   for (const file of BRAND_MARKS) {
@@ -333,27 +319,6 @@ async function main() {
   }
   const combines = loadCombines(plan, claimed)
 
-  // The crab's sheets ride the bundle: one pair of data URIs per animation.
-  const crab = {}
-  for (const name of Object.keys(CONSTANTS.CRAB_SHEETS)) {
-    const body = plan.entries.get(`mascot/crab/${name}.png`)
-    const ink = plan.entries.get(`mascot/crab/${name}-ink.png`)
-    if (body === undefined || ink === undefined) throw new Error(`build: CRAB_SHEETS["${name}"] has no sheet pair under packages/assets/src/mascot/crab/`)
-    claimed.add(body.file)
-    claimed.add(ink.file)
-    crab[name] = { body: body.url, ink: ink.url }
-  }
-
-  // Deepy's sheets are the vectors the build produced; the addresses are the
-  // route's, one per sheet, and only the played ones are ever fetched.
-  const deepyUrls = {}
-  for (const name of Object.keys(CONSTANTS.DEEPY_SHEETS)) {
-    const entry = plan.entries.get(`mascot/deepy/${name}.svg`)
-    // vectorizeDeepySheets built every one of them, so absence is a bug here.
-    if (entry === undefined) throw new Error(`build: DEEPY_SHEETS["${name}"] has no vector; the sheets and the table disagree`)
-    claimed.add(entry.file)
-    deepyUrls[name] = entry.url
-  }
   checkClaimed(plan, claimed)
 
   const tokenDoc = loadTokens(SRC)
@@ -378,8 +343,6 @@ async function main() {
     // The version this client bundle reports wherever the host asks a client
     // for its build: the account Remote carries it on every call.
     CLIENT_VERSION: PACKAGE.version,
-    CRAB_SHEET_URLS: crab,
-    DEEPY_SHEET_URLS: deepyUrls,
     // The motion tokens, by name: the browser half reads the same table the
     // generated token stylesheet carries, so a duration cannot be 200 ms in the
     // CSS and 250 ms in a Web Animations call (D9).

@@ -18,10 +18,10 @@ export interface MascotSheet {
   still: number
   /** The atlas row the frames start on, when frames flow by a row of their own (a Petdex action). */
   row?: number
-  /** Rows the whole atlas carries; an original character's strip is its own frames alone. */
+  /** Rows the whole atlas carries; a Petdex package's atlas has its own rows. */
   atlasRows?: number
-  /** Per-frame durations; absent on the original characters, which use one frame time. */
-  frameDurationsMs?: readonly number[]
+  /** Per-frame durations, as the package's native action states them. */
+  frameDurationsMs: readonly number[]
   /** The native action this animation plays, as the Petdex packages name it. */
   nativeState?: PetdexState
 }
@@ -35,22 +35,18 @@ export interface MascotSheets {
 }
 
 /**
- * The characters the player plays. A union of literals: the anchor mark is
- * built from the name, and the build reads the marks the stylesheets key on
- * off this type (scripts/source-tree.mjs).
+ * The character the player plays: the reader's Petdex package. A literal: the
+ * anchor mark is built from the name, and the build reads the marks the
+ * stylesheets key on off this type (scripts/source-tree.mjs).
  */
-export type MascotName = 'crab' | 'deepy' | 'petdex'
+export type MascotName = 'petdex'
 
 /** What one character hands the player (see createMascotPlayer). */
 export interface MascotCharacter {
   name: MascotName
   sheets: Record<string, MascotSheet>
-  /** One frame's time for a table without per-frame durations. */
-  frameMs?: number
-  /** The transparent margin each atlas cell carries, in atlas pixels. */
-  gutter?: number
-  /** CSS pixels per atlas pixel; absent means the original characters' 2×. */
-  scale?: number
+  /** CSS pixels per atlas pixel. */
+  scale: number
   /** The installed package this character draws, when it is a Petdex pet. */
   petId?: string
   extras: string[]
@@ -58,8 +54,8 @@ export interface MascotCharacter {
 }
 
 /**
- * One mascot on the composer — the crab or Deepy — played from its sheets
- * by the state the agent is in (packages/client/src/features/mascot/mascot-signals.ts).
+ * One mascot on the composer — the reader's Petdex package — played from its
+ * sheets by the state the agent is in (packages/client/src/features/mascot/mascot-signals.ts).
  *
  * It stands on the composer card, or on the approval panel that takes the
  * card's place: that panel is the composer chain's fallback wrapper, whose
@@ -74,13 +70,12 @@ export interface MascotCharacter {
  * placement slot or activity service retires the host reads here.
  *
  * @param ui - shared handle table.
- * @param character - `{ name, sheets, frameMs, gutter, extras, createSheets }`:
+ * @param character - `{ name, sheets, scale, extras, createSheets }`:
  *     `name` prefixes the class names, the custom properties and the anchor
  *     mark (`dsh-deepcraft-<name>`); `sheets` is the animation table
- *     (`{ frames, box, still }` per key, every key the signals, moments,
- *     sleep, extras and reactions name); `gutter` the transparent margin
- *     each frame cell carries in the character's sheets, in logical pixels
- *     (absent when they carry none); `extras` the idle extras;
+ *     (`{ frames, box, still, frameDurationsMs }` per key, every key the
+ *     signals, moments, sleep, extras and reactions name); `scale` the CSS
+ *     pixels per atlas pixel; `extras` the idle extras;
  *     `createSheets(onReady)` returns `{ ready, failed, paint, dispose }`.
  * @returns `{ sync, release, onActivity, dispose }`.
  */
@@ -91,16 +86,13 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   /** How far a press travels before it lifts the mascot. */
   const LIFT_PX = 4
   const PREFIX = `dsh-deepcraft-${character.name}` as const
-  /** The transparent margin each frame cell carries in this character's sheets (DEEPY_GUTTER), in logical pixels. */
-  const GUTTER = character.gutter ?? 0
   /** A marker on the host element the mascot stands on, which makes it the mascot's containing block. */
   const ANCHOR_ATTR = `data-${PREFIX}-anchor` as const
   /** The stamp carrying the anchor mark across re-renders. */
   const anchorStamp = createStamp(ANCHOR_ATTR)
   const SHEETS = character.sheets
-  const FRAME_MS = character.frameMs
-  /** CSS pixels per atlas pixel: the original characters draw at 2×, a Petdex atlas to the composer's own size. */
-  const UNIT = character.scale ?? 2
+  /** CSS pixels per atlas pixel: a Petdex atlas is drawn to the composer's own size. */
+  const UNIT = character.scale
 
   /** The nodes the mascot is drawn with, built once per generation. */
   let root: HTMLElement | null = null
@@ -124,9 +116,8 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   /** How long one round of an animation lasts: per-frame durations when the sheet carries them. */
   function playMs(key: string) {
     const sheet = SHEETS[key]
-    if (sheet.frameDurationsMs !== undefined) return sheet.frameDurationsMs.reduce((sum, ms) => sum + ms, 0)
-    if (FRAME_MS === undefined) throw new Error(`${PREFIX}: "${key}" carries neither frame durations nor a frame time`)
-    return sheet.frames * FRAME_MS
+    if (sheet.frameDurationsMs === undefined) throw new Error(`${PREFIX}: "${key}" carries no frame durations`)
+    return sheet.frameDurationsMs.reduce((sum, ms) => sum + ms, 0)
   }
 
   /** The character's sheet pipeline. */
@@ -241,22 +232,21 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     return motionReduced() && stage.reaction === null
   }
 
-  /** One frame cell of a sheet: the crop box plus the transparent margin around it. */
+  /** One frame cell of a sheet: its crop box. */
   function cellSize(sheet: MascotSheet) {
-    return [sheet.box[2] + GUTTER * 2, sheet.box[3] + GUTTER * 2]
+    return [sheet.box[2], sheet.box[3]]
   }
 
-  /** One frame's time, from the sheet's own durations or the character's uniform frame time. */
+  /** One frame's time, as the package's native action states it. */
   function frameDuration(key: string, sheet: MascotSheet, frame: number) {
-    if (sheet.frameDurationsMs !== undefined) return sheet.frameDurationsMs[frame]
-    if (FRAME_MS === undefined) throw new Error(`${PREFIX}: "${key}" carries neither frame durations nor a frame time`)
-    return FRAME_MS
+    if (sheet.frameDurationsMs === undefined) throw new Error(`${PREFIX}: "${key}" carries no frame durations`)
+    return sheet.frameDurationsMs[frame]
   }
 
   /** The strip translation that puts one frame of a sheet in the window. */
   function frameOffset(sheet: MascotSheet, frame: number) {
     const [cellWidth, cellHeight] = cellSize(sheet)
-    return `translate(${-((frame % 8) * cellWidth + GUTTER) * UNIT}px, ${-(((sheet.row ?? 0) + Math.floor(frame / 8)) * cellHeight + GUTTER) * UNIT}px)`
+    return `translate(${-((frame % 8) * cellWidth) * UNIT}px, ${-(((sheet.row ?? 0) + Math.floor(frame / 8)) * cellHeight) * UNIT}px)`
   }
 
   /**
@@ -357,9 +347,6 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     style.setProperty(`--${PREFIX}-x`, String(sheet.box[0]))
     style.setProperty(`--${PREFIX}-y`, String(sheet.box[1]))
     style.setProperty(`--${PREFIX}-w`, String(sheet.box[2]))
-    // The sprite's height is the one custom property both characters share:
-    // crab.css reads it in the merged sprite rule.
-    style.setProperty('--dsh-deepcraft-mascot-h', String(sheet.box[3]))
     style.setProperty(`--${PREFIX}-cell-w`, String(cellWidth))
     style.setProperty(`--${PREFIX}-cell-h`, String(cellHeight))
     style.setProperty(`--${PREFIX}-unit`, String(UNIT))

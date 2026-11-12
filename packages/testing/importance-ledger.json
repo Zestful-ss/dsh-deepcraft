@@ -4,9 +4,7 @@
     "body[data-dsh-deepcraft][data-dsh-deepcraft-palette=host] .dsh-deepcraft-popover-card{-webkit-backdrop-filter:blur(16px) saturate(1.4)!;backdrop-filter:blur(16px) saturate(1.4)}|-webkit-backdrop-filter": {
       "selector": "body[data-dsh-deepcraft][data-dsh-deepcraft-palette=host] .dsh-deepcraft-popover-card",
       "prop": "-webkit-backdrop-filter",
-      "verdict": "needed",
-      "state": "host palette",
-      "opponents": []
+      "verdict": "unmatched"
     },
     "body[data-dsh-deepcraft] .dsh-deepcraft-popover-status{color:var(--dsw-alias-label-tertiary, #8f8d84)!;font-size:12px!;line-height:20px!;padding:4px 8px!}|color": {
       "selector": "body[data-dsh-deepcraft] .dsh-deepcraft-popover-status",
@@ -31,9 +29,7 @@
     "body[data-dsh-deepcraft] .dsh-deepcraft-popover-item{width:100%;min-height:32px;padding:2px 7px;border-radius:6px;border:none!;background:transparent;color:var(--dsw-alias-label-primary, #141413);font-size:13px;font-weight:400;display:flex;align-items:center;justify-content:flex-start;gap:8px;box-shadow:none;cursor:pointer;font-family:var(--dsw-font-family);transition:background-color var(--dsh-deepcraft-timing-feedback);box-sizing:border-box}|border": {
       "selector": "body[data-dsh-deepcraft] .dsh-deepcraft-popover-item",
       "prop": "border",
-      "verdict": "needed",
-      "state": "hero",
-      "opponents": []
+      "verdict": "unmatched"
     },
     "body[data-dsh-deepcraft] .dsh-deepcraft-popover-item:hover{background:var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, .08))!;color:var(--dsw-alias-label-primary, #141413)!}|background": {
       "selector": "body[data-dsh-deepcraft] .dsh-deepcraft-popover-item:hover",
@@ -103,9 +99,7 @@
     "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced] :is([class^=dsh-deepcraft-],[class*=\" dsh-deepcraft-\"]){animation-duration:var(--dsh-deepcraft-duration-reduced)!;animation-iteration-count:1;transition-duration:var(--dsh-deepcraft-duration-reduced)}|animation-duration": {
       "selector": "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced] :is([class^=dsh-deepcraft-],[class*=\" dsh-deepcraft-\"])",
       "prop": "animation-duration",
-      "verdict": "needed",
-      "state": "motion reduced",
-      "opponents": []
+      "verdict": "needed"
     },
     "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=hero-mark]>*{display:none!}|display": {
       "selector": "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=hero-mark]>*",

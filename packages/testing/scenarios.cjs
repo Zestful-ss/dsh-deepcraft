@@ -15,7 +15,6 @@ const { sidebarRailScenario } = require('./sidebar-rail.cjs')
 const { remoteSettingsScenario } = require('./remote-settings.cjs')
 const { hostVisibilityScenario } = require('./host-visibility.cjs')
 const { customBrandScenario } = require('./custom-brand.cjs')
-const { deepcraftScenario } = require('./deepcraft.cjs')
 const { petdexScenario } = require('./petdex.cjs')
 const { paletteScenario, legacyScenario } = require('./palette.cjs')
 const { subagentModelScenario } = require('./subagent-model.cjs')
@@ -244,8 +243,6 @@ const SCENARIOS = {
   remoteSettings: remoteSettingsScenario({ check }),
   /** The reader's own brand images through the host half's routes and on the real shell (packages/testing/custom-brand.cjs, D80). */
   customBrand: customBrandScenario({ check }),
-  /** DeepCraft's own walk: the default identity, the whale's gestures and states, and a plain account menu (packages/testing/deepcraft.cjs, D80). */
-  deepcraft: deepcraftScenario({ check }),
   /** Complete Petdex packages imported into the real host and kept as one pet across palettes (packages/testing/petdex.cjs, D80). */
   petdex: petdexScenario({ check }),
   /** Every skin palette's computed colours and the reader's own identity across a switch (palette.cjs, D80). */

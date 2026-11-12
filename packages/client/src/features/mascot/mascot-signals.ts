@@ -55,7 +55,7 @@ function subagentsOf(id: string, list: HostSessionListSnapshot | null): HostSuba
   return Array.isArray(catalog) ? catalog as HostSubagentEntry[] : []
 }
 
-/** One working animation per crowd size, as Clawd's working tiers pick them. */
+/** One working animation per crowd size. */
 function working(busy: number): MascotLevel {
   return { state: 'working', animation: busy >= 3 ? 'building' : busy === 2 ? 'music' : 'typing', priority: 3 }
 }
@@ -118,8 +118,7 @@ export function mascotLevel(reading: MascotReading): MascotLevel {
  * that finishes out of view (the host's `completionUnread`, the sidebar's
  * green dot) is the moment.
  *
- * The names follow the Clawd on Desk themes both mascots are drawn to: a
- * state picks an animation, and its priority decides which of two states
+ * A state picks an animation, and its priority decides which of two states
  * shows.
  *
  * @param onMoment - `onMoment(moment)` with 'error' or 'attention'.

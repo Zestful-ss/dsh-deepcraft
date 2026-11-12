@@ -65,12 +65,6 @@ module.exports = {
       Array.isArray(r.leftBrandProperties) && r.leftBrandProperties.length === 0, JSON.stringify(r.leftBrandProperties))
     commonChecks(r)
   },
-  // The hero page's own extra: the crab on its card.
-  hero(r) {
-    basicChecks(r)
-    check('the hero page carries the crab', r.classicCrab === true, JSON.stringify(r.classicCrab))
-    commonChecks(r)
-  },
   'host-palette'(r) {
     basicChecks(r)
     const hp = r.hostPalette || {}

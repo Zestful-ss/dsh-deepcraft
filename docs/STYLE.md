@@ -238,60 +238,16 @@ The table below is generated from `packages/client/src/theme/tokens.json` by
 | `--dsh-deepcraft-layer-float` | `99999` | a floating card or menu over everything the host draws: the popover cards |
 <!-- /generated:layers -->
 
-## The composer crab · 输入卡片上的螃蟹
+## The composer's Petdex pet
 
-The pixel crab is one of the mascots the Mascot row offers. It stands where
-Deepy does — the composer card's top edge on the home page, the input area or
-the panel that replaces it in a conversation (unless Where it appears keeps it
-to the home page) — and follows the same states with the same keys. It is drawn
-on a 52×36 grid of cells at 2px a cell, crisp (`pixelated`, 104×72px): feet on
-the bottom row, on the edge of what it stands on; the right claw four cells in
-from the grid's right edge, so it stands 8px inside the card's right edge. The
-resting crab — shell 16×12 cells, claws 4×4, eyes 2×2, four legs 2×4 — is
-48×32px (columns 24–47, rows 20–35) and only it takes the pointer. The shell is
-the clay accent `#d97757` in both themes, the side-on back `#b9603f`, the eyes
-`#141413`; the props are an ink mask filled with the tertiary label ink. Every
-frame lasts 80ms. With the animation choice resolved to "reduced" each state
-holds its still frame; a click or a pull still plays its reaction.
-
-| State | Animation | Still frame |
-|---|---|---|
-| idle, every 20–40 s a look around, a claw wave or the whole laptop routine | `idle`, `idle-look`, `idle-wave`, `idle-laptop` | 0 |
-| the model reasons or has not answered: eyes up to a thought bubble | `thinking` | 18 |
-| the model writes or tools run: 1 / 2 / 3+ sessions at work | `typing` / `music` / `building` | 0 / 0 / 0 |
-| subagents running: 1 / 2+ | `music` / `conducting` | 0 / 0 |
-| a compaction runs: squashed | `compacting` | 3 |
-| an approval, a question or a plan review waits: an exclamation mark | `notification` | 0 |
-| a tool call or a turn failed (4.8 s): crossed eyes, a shake | `error` | 4 |
-| a turn or a compaction finished (5.2 s): hops, claws up | `happy` | 3 |
-| a quiet minute / the next pointer move or key | `sleeping` / `waking` | 0 / 11 |
-| a click on the left / right half, four quick clicks, a pull | `poke-left` / `poke-right`, `tickle`, `drag` | 0 |
-
-## Deepy · 小鲸鱼
-
-Picked in the Mascot row, the mascot is Deepy, the pixel whale: a 52×52 grid of
-logical pixels drawn at 2px a pixel (a 104px square), the whale's bottom — row
-50 — on the top edge of what it stands on. The art is stepped pixel art on an
-integer grid, drawn with `image-rendering: pixelated` so downscales keep crisp
-pixel edges. The body is pale blue `#CED9FF` with a deep-blue `#3F5297` outline,
-a white-tinted belly `#EEF2FF`, shade and pectoral fin `#9EB2EB`, and a dark eye
-`#243460`. Its box sits 8px in from the right end of the card it stands over.
-Every frame lasts 50ms. Only the resting body (columns 10–42, rows 32–50, hit
-box 64×36px) takes the pointer. With the animation choice resolved to "reduced"
-each state holds its still frame; a click or a pull still plays its reaction.
-
-| State | Animation | Still frame |
-|---|---|---|
-| idle, every 20–40 s a look around, a spout or a laptop routine | `idle`, `idle-look`, `idle-spout`, `idle-laptop` | 0 |
-| the model reasons or has not answered | `thinking` | 20 |
-| the model writes or tools run: 1 / 2 / 3+ sessions at work | `typing` / `music` / `building` | 16 / 0 / 0 |
-| subagents running: 1 / 2+ | `music` / `conducting` | 0 / 6 |
-| a compaction runs | `compacting` | 20 |
-| an approval, a question or a plan review waits | `notification` | 12 |
-| a tool call or a turn failed (4.8 s) | `error` | 24 |
-| a turn or a compaction finished (5.2 s) | `happy` | 44 |
-| a quiet minute / the next pointer move or key | `sleeping` / `waking` | 10 / 29 |
-| a click on the face / the tail, four quick clicks, a pull | `poke-left` / `poke-right`, `tickle`, `drag` | 0 |
+The chat pet is an installed Petdex package drawn frame for frame from its own
+atlas: eight columns of the author's frame size, rows selected by the native
+action. The window is 72 CSS pixels wide, its height following the cell's
+proportions; the art is neither recoloured nor pixelated. It stands on the
+composer card's top edge, inset from the card's own right edge by the anchor's
+published clearance plus 8px. Only the image frame takes the pointer. With the
+animation choice resolved to "reduced" each state holds its still frame; a
+click or a pull still plays its reaction.
 
 ## Implementation notes
 

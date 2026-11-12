@@ -13,10 +13,6 @@ declare module 'virtual:dsh-deepcraft/generated' {
   export const BUILD_ID: string
   /** The version of the package this bundle was built from; the account Remote wants a client build version. */
   export const CLIENT_VERSION: string
-  /** The address each of Deepy's sheets plays from, by animation name */
-  export const DEEPY_SHEET_URLS: Record<string, string>
-  /** The crab's sheets as data URIs by animation name: its body and its ink mask. */
-  export const CRAB_SHEET_URLS: Record<string, { body: string, ink: string }>
   /** The motion tokens, by token name (packages/client/src/theme/tokens.json, D9); read through shared/motion.ts. */
   export const MOTION: Record<string, string>
 }

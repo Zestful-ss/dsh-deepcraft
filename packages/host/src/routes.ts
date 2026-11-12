@@ -61,7 +61,7 @@ const FONT_FILES = {
  * produce is a 404. The name carries the content hash, so the answer may be
  * cached for good. A text asset is stored brotli-compressed beside its name:
  * a client that takes brotli receives it as it lies, and one that does not
- * gets it decompressed, so the package carries the sheets once, small.
+ * gets it decompressed, so the package carries the text once, small.
  */
 const ASSETS_PATH = `${ROUTE_PREFIX}/assets/`
 /** How long a computed roll-up is served before a background refresh is kicked. */

@@ -53,7 +53,7 @@ export const SLEEP_AFTER_MS = 60000
 /** The quiet spell between two idle extras. */
 export const EXTRA_MIN_MS = 20000
 export const EXTRA_SPAN_MS = 20000
-/** Moments hold for two rounds of their animation, as Clawd's auto-return does. */
+/** Moments hold for two rounds of their animation, so a moment does not blink away. */
 export const MOMENTS: Record<MascotMoment, MascotLevel & { holdMs: number }> = {
   error: { state: 'error', animation: 'error', priority: 8, holdMs: 4800 },
   attention: { state: 'attention', animation: 'happy', priority: 5, holdMs: 5200 },

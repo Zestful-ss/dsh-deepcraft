@@ -50,7 +50,7 @@
       await sleep(200)
       r.passesAfterTeardown = window.__passes - before
       r.leftNodes = document.querySelectorAll(':is([class^="dsh-deepcraft-"], [class*=" dsh-deepcraft-"])').length
-      r.leftMarkers = document.querySelectorAll('[data-dsh-deepcraft-part], [data-dsh-deepcraft-holds], [data-dsh-deepcraft-model-host], [data-dsh-deepcraft-deepy-anchor], [data-dsh-deepcraft-crab-anchor]').length
+      r.leftMarkers = document.querySelectorAll('[data-dsh-deepcraft-part], [data-dsh-deepcraft-holds], [data-dsh-deepcraft-model-host]').length
       r.leftAttrs = Array.prototype.filter.call(document.body.attributes, function (a) { return /^data-dsh-deepcraft/.test(a.name) }).map(function (a) { return a.name })
       // The custom brand's values ride <body>'s own style (features/brand/brand.ts).
       r.leftBrandProperties = Array.prototype.filter.call(document.body.style, function (name) { return name.indexOf('--dsh-deepcraft-custom-') === 0 })

@@ -40,7 +40,6 @@ const PROBE_PARTS = [
   'shell-pages.js',
   'shell-palette.js',
   'brand.js',
-  'mascot.js',
   'petdex.js',
   'peer.js',
   'subagent-model.js',
