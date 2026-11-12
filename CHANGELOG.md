@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修正外观页的配色说明：Cindy 暖象牙会同时启用材质层，其余配色仍只换颜色，标识与宠物不变。
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Correct the Appearance palette description: Cindy ivory enables its material layer as well, while the other palettes still change colours alone and leave the mark and pet untouched.
+
 ## [0.35.0] - 2026-11-12
 
 [中文](#cn-0.35.0) | [English](#en-0.35.0)

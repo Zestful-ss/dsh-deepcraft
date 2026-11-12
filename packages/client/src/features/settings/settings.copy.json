@@ -116,8 +116,8 @@
     "en": "Colours"
   },
   "paletteDesc": {
-    "zh": "内置配色或跟随宿主；切换配色只换颜色，不改标识与宠物。",
-    "en": "A built-in palette or the host's colours; switching changes colours alone, not the brand or the pet."
+    "zh": "内置配色或跟随宿主；Cindy 暖象牙另带材质层，其余配色只换颜色，标识与宠物不变。",
+    "en": "The skin's palettes or the host's; Cindy ivory also carries a material layer, while the others change colours alone. The mark and pet stay put."
   },
   "paletteOcean": {
     "zh": "深海蓝",
