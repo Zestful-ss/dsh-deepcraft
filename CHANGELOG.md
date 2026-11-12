@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">新增功能</h3>
+
+- 新增自定义壁纸：外观页可上传 PNG、JPEG、WebP 图片或 MP4 视频，在整页底层铺开；可调节可见度、模糊，视频可选静态或动态播放并支持低功耗模式。文件由宿主端的路由保存在配置目录，随会话复用。
+
+<h3 id="en-unreleased">New Features</h3>
+
+- Add custom wallpaper: the Appearance tab accepts a PNG, JPEG or WebP image or an MP4 video laid under the whole page, with visibility and blur controls, static or dynamic playback for videos, and a low-power mode. The host-side routes keep the file in the configuration directory for reuse across sessions.
+
 ## [0.35.1] - 2026-11-12
 
 [中文](#cn-0.35.1) | [English](#en-0.35.1)

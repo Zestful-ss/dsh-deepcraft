@@ -16,6 +16,7 @@ export interface Handles {
   workspacePins: FeatureHandle
   settingsNav: FeatureHandle
   dsBotReturn: FeatureHandle
+  wallpaper: FeatureHandle
 }
 
 export type HandleName = keyof Handles

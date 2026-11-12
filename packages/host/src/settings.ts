@@ -36,11 +36,11 @@ function schemaFactoryOf(resolved: unknown): SchemaFactory | null {
   return null
 }
 
-/** One schema factory, as far as this half uses it: it is resolved at runtime and may be absent (D75). */
 interface SchemaFactory {
   object(fields: Record<string, unknown>): unknown
   string(): SchemaField
   boolean(): SchemaField
+  number?(): SchemaField
   union(items: unknown[]): SchemaField
   array(item: unknown): SchemaField
 }
@@ -79,7 +79,11 @@ const UNDEFAULTED: Readonly<Record<string, true>> = { palette: true, chatPet: tr
  * what it reads and falls back to the default (packages/client/src/core/prefs.ts).
  */
 function prefsField(Schema: SchemaFactory, key: PrefKey) {
-  const field = Schema.union([Schema.string(), Schema.boolean(), Schema.array(Schema.string())])
+  // `number` has been in schemastery from the start, but the narrowed factory
+  // declares it optional: an old enough host falls back to the string shape,
+  // which a number preference still accepts (clampPrefs).
+  const numeral = typeof Schema.number === 'function' ? Schema.number() : Schema.string()
+  const field = Schema.union([Schema.string(), Schema.boolean(), numeral, Schema.array(Schema.string())])
   // The migration needs to tell an unsaved field from one saved as its default
   // (D80): these two keep no default in the form, so an absent value stays absent.
   return UNDEFAULTED[key] === true ? field : field.default(PREFS[key].default)

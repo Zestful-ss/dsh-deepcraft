@@ -1,6 +1,7 @@
 import { BRAND_IMAGE_KINDS } from '@dsh-deepcraft/contracts/brand'
 import type { BrandAnswer, BrandImageKind, BrandImageState } from '@dsh-deepcraft/contracts/brand'
 import { BRAND_MARK_ROUTE, BRAND_ROUTE, BRAND_WORDMARK_ROUTE } from '../constants'
+import { changeJson, readJson } from './host-json'
 import { notifyAll } from '@dsh-deepcraft/engine/notify'
 
 /**
@@ -46,12 +47,8 @@ export function loadBrandImages() {
   if (requested) return
   requested = true
   const at = ++generation
-  fetch(BRAND_ROUTE, { credentials: 'same-origin', headers: { accept: 'application/json' } })
-    .then(response => {
-      if (!response.ok) throw new Error(`HTTP ${response.status}`)
-      return response.json()
-    })
-    .then((answer: BrandAnswer) => adopt(answer, at), () => { /* the host half did not answer: the brand's own art stays (D12) */ })
+  readJson<BrandAnswer>(BRAND_ROUTE)
+    .then((answer) => adopt(answer, at), () => { /* the host half did not answer: the brand's own art stays (D12) */ })
 }
 
 /** Re-arm: the next load() reads again (a new host context). */
@@ -99,11 +96,8 @@ function measure(kind: BrandImageKind, state: BrandImageState | null): Promise<B
  */
 function change(kind: BrandImageKind, init: RequestInit) {
   const at = ++generation
-  return fetch(ROUTES[kind], { ...init, credentials: 'same-origin' })
-    .then(response => response.json().then((answer: BrandAnswer | { ok: false, error?: string }) => {
-      if (answer.ok !== true) throw new Error(answer.error ?? `HTTP ${response.status}`)
-      return adopt(answer, at)
-    }))
+  return changeJson<BrandAnswer>(ROUTES[kind], init)
+    .then(answer => adopt(answer, at))
 }
 
 /** Replace one image with a file the reader picked; the content type names its format. */

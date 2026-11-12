@@ -76,6 +76,14 @@ export const MOTION_ATTR = 'data-dsh-deepcraft-motion'
 export const PALETTE_ATTR = 'data-dsh-deepcraft-palette'
 export { FONT_CODE_ATTR, FONT_PROSE_ATTR, FONT_UI_ATTR } from './theme/fonts'
 export const MASCOT_ATTR = 'data-dsh-deepcraft-mascot'
+/**
+ * The reader's wallpaper choices the stylesheet keys on (theme/wallpaper.css):
+ * WALLPAPER_ATTR carries `wallpaperSource` (`custom` while the layer stands,
+ * `none` while it does not), and LITE_ATTR is present (value `1`) while the
+ * low-power choice stills the video and drops the blur.
+ */
+export const WALLPAPER_ATTR = 'data-dsh-deepcraft-wallpaper'
+export const WALLPAPER_LITE_ATTR = 'data-dsh-deepcraft-wallpaper-lite'
 /** The mascot "follow the theme" resolves to: the reader's one Petdex package, shared by both places. */
 export const MASCOT_PETDEX = 'petdex'
 /**
@@ -140,4 +148,6 @@ export {
   SESSION_DELETE_PATH as SESSION_DELETE_ROUTE,
   SUBAGENT_MODELS_PATH as SUBAGENT_MODELS_ROUTE,
   USAGE_PATH as USAGE_ROUTE,
+  WALLPAPER_FILE_PATH as WALLPAPER_FILE_ROUTE,
+  WALLPAPER_PATH as WALLPAPER_ROUTE,
 } from '@dsh-deepcraft/contracts/routes'

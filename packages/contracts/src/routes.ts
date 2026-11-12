@@ -58,3 +58,12 @@ export const SUBAGENT_MODELS_PATH = `${ROUTE_PREFIX}/subagent-models`
 
 /** `GET <id>?v=<version>`: one pet's untouched atlas. */
 export const PETS_IMAGE_PATH = `${PETS_PATH}/image`
+
+/**
+ * The reader's own wallpaper: `GET` answers whether one is in place, with a
+ * version that changes with its bytes (packages/host/src/wallpaper.ts).
+ */
+export const WALLPAPER_PATH = `${ROUTE_PREFIX}/wallpaper`
+
+/** The wallpaper file's bytes: `GET`/`HEAD` serves them (with `Range` for the video), `PUT` replaces them, `DELETE` removes them. */
+export const WALLPAPER_FILE_PATH = `${WALLPAPER_PATH}/file`

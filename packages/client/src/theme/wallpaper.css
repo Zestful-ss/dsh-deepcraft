@@ -12,8 +12,7 @@
    the canvas colour against the plugin's clearing, so host dialogs and cards
    stay opaque. "Follow the host" lays no mask (D80). Theme layering from the
    host would let the shell stand aside by layer. */
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-we-wallpaper] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"]) {
   background-color: transparent;
 }
 
@@ -35,11 +34,11 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
 
 /* ---------- the shell stands down ---------- */
 /* Each of these paints the canvas over the whole window or a whole column. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-we-wallpaper] :is([data-dsh-deepcraft-part~="layout-frame"][data-dsh-deepcraft-holds~="sidebar-column"], [data-dsh-deepcraft-part~="center-column"], [data-dsh-deepcraft-part~="rightbar-column"], [data-dsh-deepcraft-holds~="conversation-scroll"]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"]) :is([data-dsh-deepcraft-part~="layout-frame"][data-dsh-deepcraft-holds~="sidebar-column"], [data-dsh-deepcraft-part~="center-column"], [data-dsh-deepcraft-part~="rightbar-column"], [data-dsh-deepcraft-holds~="conversation-scroll"]) {
   background: transparent;
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-we-wallpaper] :is([data-pane="sidebar"], [data-dsh-deepcraft-part~="sidebar-column"]) {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"]) :is([data-pane="sidebar"], [data-dsh-deepcraft-part~="sidebar-column"]) {
   --dsw-specific-sidebar-fill: transparent;
   background: transparent;
 }
@@ -50,15 +49,15 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
    card's own width, from under the card's top edge to the window's bottom, so
    the dock row and the figures under the card sit on the card's ground. The
    seat is sticky, so the tray goes with it. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-we-wallpaper] :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat] {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"]) :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat] {
   background: transparent;
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-we-wallpaper] :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat]::before {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"]) :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat]::before {
   display: none;
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-we-wallpaper] :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat]::after {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"]) :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat]::after {
   content: "";
   position: absolute;
   top: 16px;
@@ -68,4 +67,53 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
   z-index: -1;
   pointer-events: none;
   background: var(--dsh-deepcraft-canvas);
+}
+
+/* ---------- the reader's own wallpaper: one layer under the whole shell ---------- */
+/* `wallpaperSource = custom` mounts features/wallpaper/wallpaper.ts's fixed
+   layer as a body child and stamps `data-dsh-deepcraft-wallpaper` on the body.
+   The same arrangement as the wallpaper plugin's above applies: the shell
+   stands down, and the canvas veil over the layer is painted from the
+   reader's visibility and blur choices (the `wallpaperVisibility` and
+   `wallpaperBlur` preferences reach the sheet as custom properties). */
+
+body[data-dsh-deepcraft] [data-dsh-deepcraft-wallpaper-layer] {
+  position: fixed;
+  inset: 0;
+  /* Under the canvas veil (body::after, also -1 but painted after the
+     children) and under everything the shell draws. */
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+body[data-dsh-deepcraft] [data-dsh-deepcraft-wallpaper-layer] > :is(img, video) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* A blurred edge would show the canvas under it; the media grows just past
+     the blur's reach. */
+  transform: scale(1.06);
+  filter: blur(var(--dsh-deepcraft-wallpaper-blur, 0px));
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-wallpaper-lite="1"] [data-dsh-deepcraft-wallpaper-layer] > :is(img, video) {
+  filter: none;
+  transform: none;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-dsh-deepcraft-wallpaper="custom"]::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc((1 - min(var(--dsh-deepcraft-wallpaper-visibility, 0.4), 1)) * 100%), transparent);
+}
+
+/* The low-power choice stills the video in the feature and caps how much of
+   the wallpaper shows through. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-dsh-deepcraft-wallpaper="custom"][data-dsh-deepcraft-wallpaper-lite="1"]::after {
+  background: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc((1 - min(var(--dsh-deepcraft-wallpaper-visibility, 0.4), 0.6)) * 100%), transparent);
 }

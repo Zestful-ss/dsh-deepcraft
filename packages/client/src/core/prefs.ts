@@ -1,4 +1,4 @@
-import { FONT_CODE_ATTR, FONT_PROSE_ATTR, FONT_UI_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_PETDEX, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PACKAGE_NAME, PALETTE_ATTR, SETTINGS_ENTRY_FALLBACK } from '../constants'
+import { FONT_CODE_ATTR, FONT_PROSE_ATTR, FONT_UI_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_PETDEX, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PACKAGE_NAME, PALETTE_ATTR, SETTINGS_ENTRY_FALLBACK, WALLPAPER_ATTR, WALLPAPER_LITE_ATTR } from '../constants'
 import { FONT_CUSTOM } from '@dsh-deepcraft/contracts/prefs'
 import { FONT_ROLES } from '../theme/fonts'
 import { customFontStack } from '../shared/fonts'
@@ -75,6 +75,8 @@ const MIRRORS = [
   { key: 'fontProse', attr: FONT_PROSE_ATTR, value: (prefs: Prefs) => prefs.fontProse },
   { key: 'fontCode', attr: FONT_CODE_ATTR, value: (prefs: Prefs) => prefs.fontCode },
   { key: 'mascot', attr: MASCOT_ATTR, value: resolveMascot },
+  { key: 'wallpaperSource', attr: WALLPAPER_ATTR, value: (prefs: Prefs) => prefs.wallpaperSource },
+  { key: 'wallpaperLite', attr: WALLPAPER_LITE_ATTR, value: (prefs: Prefs) => prefs.wallpaperLite ? '1' : '' },
 ] as const satisfies readonly PrefMirror[]
 
 /** Every attribute the mirror writes, plus the animation answer `writeMotionAttribute` resolves. */
@@ -92,6 +94,7 @@ export function adoptPrefs(next: Prefs) {
   if (pageOwner() === null) {
     for (const mirror of MIRRORS) document.body.setAttribute(mirror.attr, mirror.value(next))
     writeFontCustoms(next)
+    writeWallpaperNumbers(next)
     writeMotionAttribute(next.motion)
   }
   notifyAll(prefsListeners, next)
@@ -112,10 +115,18 @@ function writeFontCustoms(next: Prefs) {
   }
 }
 
+/** The two wallpaper amounts reach the sheet as custom properties (theme/wallpaper.css reads them off body). */
+function writeWallpaperNumbers(next: Prefs) {
+  document.body.style.setProperty('--dsh-deepcraft-wallpaper-visibility', String(next.wallpaperVisibility))
+  document.body.style.setProperty('--dsh-deepcraft-wallpaper-blur', `${next.wallpaperBlur}px`)
+}
+
 /** Take back every attribute adoptPrefs mirrors onto the document: the page goes back to the host (entry.ts). */
 export function clearPrefsAttributes() {
   for (const name of MIRROR_ATTRS) document.body.removeAttribute(name)
   for (const { role } of FONT_CUSTOMS) document.body.style.removeProperty(role.customProperty)
+  document.body.style.removeProperty('--dsh-deepcraft-wallpaper-visibility')
+  document.body.style.removeProperty('--dsh-deepcraft-wallpaper-blur')
 }
 
 /** Whether the operating system asks for reduced motion right now. */

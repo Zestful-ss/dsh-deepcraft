@@ -78,6 +78,32 @@ export const MASCOT_SCOPES = [MASCOT_SCOPE_HOME, MASCOT_SCOPE_ALL] as const
 /** Longest accepted pet id: a package directory name the official player can open. */
 export const PET_ID_MAX = 63
 
+
+/**
+ * Where the window's wallpaper comes from: `off` leaves the window bare
+ * (each palette's own canvas and, for Cindy, its ambient light), `custom`
+ * layers the reader's own image or video under the whole shell.
+ */
+export const WALLPAPER_OFF = 'off'
+export const WALLPAPER_CUSTOM = 'custom'
+export const WALLPAPER_SOURCES = [WALLPAPER_OFF, WALLPAPER_CUSTOM] as const
+
+/**
+ * How a wallpaper plays while it is a video: `static` holds its first frame,
+ * `dynamic` lets it loop while the page is shown. Still images read it never.
+ */
+export const WALLPAPER_MOTION_STATIC = 'static'
+export const WALLPAPER_MOTION_DYNAMIC = 'dynamic'
+export const WALLPAPER_MOTIONS = [WALLPAPER_MOTION_STATIC, WALLPAPER_MOTION_DYNAMIC] as const
+
+/** How much of the wallpaper shows through the canvas veil: 0 hides it under the canvas colour, 1 shows it bare. */
+export const WALLPAPER_VISIBILITY_MIN = 0
+export const WALLPAPER_VISIBILITY_MAX = 1
+export const WALLPAPER_VISIBILITY_STEP = 0.05
+/** The blur over the wallpaper, in CSS pixels; 0 leaves it sharp. */
+export const WALLPAPER_BLUR_MIN = 0
+export const WALLPAPER_BLUR_MAX = 20
+export const WALLPAPER_BLUR_STEP = 1
 /* ---------- the table ---------- */
 
 interface PrefSpecBase {
@@ -92,10 +118,12 @@ interface PrefSpecBase {
 interface BooleanSpec extends PrefSpecBase { readonly type: 'boolean', readonly default: boolean }
 interface ChoiceSpec extends PrefSpecBase { readonly type: 'choice', readonly values: readonly string[], readonly default: string }
 interface TextSpec extends PrefSpecBase { readonly type: 'text', readonly default: string, readonly max: number }
+interface NumberSpec extends PrefSpecBase { readonly type: 'number', readonly default: number, readonly min: number, readonly max: number, readonly step: number }
+
 interface ColorSpec extends PrefSpecBase { readonly type: 'color', readonly default: string }
 
 /** One preference's declaration: its type, its default, and what its type adds to that. */
-export type PrefSpec = BooleanSpec | ChoiceSpec | TextSpec | ColorSpec
+export type PrefSpec = BooleanSpec | ChoiceSpec | TextSpec | ColorSpec | NumberSpec
 
 /**
  * One declaration per preference (D73). A `choice`'s values are the set a stored
@@ -124,6 +152,19 @@ export const PREFS = {
   mascotScope: { type: 'choice', values: MASCOT_SCOPES, default: MASCOT_SCOPE_ALL },
   /** The chat pet, by package directory id; it follows neither the palette nor the brand (D80). */
   chatPet: { type: 'text', default: 'whaledou', max: PET_ID_MAX },
+  /**
+   * The reader's own wallpaper: `custom` mounts the layer the host half's
+   * wallpaper file serves under; `off` takes it off again (live, D72).
+   */
+  wallpaperSource: { type: 'choice', values: WALLPAPER_SOURCES, default: WALLPAPER_OFF },
+  /** How much of it shows through the canvas veil; the value reaches the sheet as `--dsh-deepcraft-wallpaper-visibility`. */
+  wallpaperVisibility: { type: 'number', default: 0.4, min: WALLPAPER_VISIBILITY_MIN, max: WALLPAPER_VISIBILITY_MAX, step: WALLPAPER_VISIBILITY_STEP },
+  /** The blur over it, in CSS pixels; the value reaches the sheet as `--dsh-deepcraft-wallpaper-blur`. */
+  wallpaperBlur: { type: 'number', default: 0, min: WALLPAPER_BLUR_MIN, max: WALLPAPER_BLUR_MAX, step: WALLPAPER_BLUR_STEP },
+  /** A video wallpaper's play choice; a still image never reads it. */
+  wallpaperMotion: { type: 'choice', values: WALLPAPER_MOTIONS, default: WALLPAPER_MOTION_STATIC },
+  /** Low power: stills the video and drops the wallpaper's blur. */
+  wallpaperLite: { type: 'boolean', default: false },
 } as const satisfies Record<string, PrefSpec>
 
 /** One preference's key. */
@@ -137,8 +178,8 @@ export type PrefKey = keyof typeof PREFS
 export const LIVE_PREFS = [
   'mascot',
   'subagentModelPicker',
+  'wallpaperSource',
 ] as const satisfies readonly PrefKey[]
-
 /** A preference a feature switch follows live. */
 export type LivePref = typeof LIVE_PREFS[number]
 
@@ -147,7 +188,8 @@ type SpecValue<S> =
   S extends { readonly type: 'boolean' } ? boolean :
     S extends { readonly type: 'choice', readonly values: readonly (infer V)[] } ? V :
       S extends { readonly type: 'text' | 'color' } ? string :
-        never
+        S extends { readonly type: 'number' } ? number :
+          never
 
 /**
  * The preference shape the browser half reads: one field per declaration above,
@@ -211,6 +253,11 @@ function clampPref(spec: PrefSpec, raw: unknown): unknown {
   const legacy = spec.legacy === undefined ? undefined : spec.legacy[String(raw)]
   if (legacy !== undefined) return legacy
   switch (spec.type) {
+    case 'number': {
+      if (typeof raw !== 'number' || !Number.isFinite(raw)) return spec.default
+      const clamped = Math.min(spec.max, Math.max(spec.min, Math.round(raw / spec.step) * spec.step))
+      return Math.round(clamped * 1000) / 1000
+    }
     case 'boolean': return typeof raw === 'boolean' ? raw : spec.default
     case 'choice': return typeof raw === 'string' && spec.values.includes(raw) ? raw : spec.default
     case 'text': return typeof raw === 'string' ? raw.trim().slice(0, spec.max) : spec.default
