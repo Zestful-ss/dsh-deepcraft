@@ -25,6 +25,9 @@ const { readAppearance, compareAppearance, writeAppearance, HOST_DEPENDENT_STATE
 const { SUBAGENT_PATCH } = require('./subagent-model.cjs')
 const { uploadPng } = require('./media-fixture.cjs')
 
+/** The wallpaper file route (packages/contracts/src/routes.ts). */
+const WALLPAPER_FILE_ROUTE = '/dsh-deepcraft/wallpaper/file'
+
 /**
  * The selectors this walk cannot reach, each under the reason it is out of
  * reach, recorded once from a run and reviewed by hand (D9). The list is a
@@ -161,6 +164,15 @@ function importanceScenario(lane) {
       await audit.state(`settings control ${tab}.${index + 1}`)
     }
   }
+
+  /** The Appearance tab's own button: pressed to open the tab. */
+  const appearanceTab = async (page) => {
+    await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: /^(外观|Appearance)$/ }).first().click()
+    await page.waitForTimeout(400)
+  }
+  /** The row under one title, read by the label the interface language gives it. */
+  const rowTitled = (page, title) => page.locator('.dsh-deepcraft-settings-row')
+    .filter({ has: page.locator('.dsh-deepcraft-settings-row-title').filter({ hasText: title }) }).first()
 
   /**
    * The settings page, which most of the sheet dresses and no pointer on the
@@ -341,12 +353,17 @@ function importanceScenario(lane) {
         await attribute(page, key, null)
       }
       // A custom family list draws the input row's own field, so the settings
-      // page is audited with one on show too.
-      await page.evaluate(() => window.__pushForm({ fontUi: 'custom', fontProse: 'custom', fontCode: 'custom' }))
-      await page.waitForTimeout(400)
+      // page is audited once with it on show.
       await withSettings(page, audit)
-      await page.evaluate(() => window.__pushForm({ fontUi: 'anthropic', fontProse: 'anthropic-serif', fontCode: 'anthropic-mono' }))
-      await page.waitForTimeout(300)
+      await openSkinSettings(page)
+      await appearanceTab(page)
+      const uiRoleRow = rowTitled(page, /^(界面字体|Interface font)$/)
+      await uiRoleRow.locator('select').selectOption('custom')
+      await page.waitForTimeout(500)
+      await audit.state('settings custom font')
+      await uiRoleRow.locator('select').selectOption('anthropic')
+      await page.keyboard.press('Escape')
+      await page.waitForTimeout(400)
       // The subagent model entry: the capsule beside the host's model slot, its
       // card open, a route taken and an effort rung pressed. The scenario's
       // patch gives this scratch session the official allowed list, so the host
@@ -372,22 +389,21 @@ function importanceScenario(lane) {
           await audit.state('subagent chosen')
         }
       }
-      // The reader's own wallpaper: a file through the host half's route, then
-      // the source switched on, so the layer the shell stands down for is on the
-      // page. The file is removed again before the walk ends, leaving the
-      // scratch home as the next scenario expects it.
-      await page.evaluate(async () => {
-        const canvas = document.createElement('canvas')
-        canvas.width = 32
-        canvas.height = 32
-        canvas.getContext('2d').fillRect(0, 0, 32, 32)
-        const png = await new Promise((settle) => canvas.toBlob(settle, 'image/png'))
-        await fetch('/dsh-deepcraft/wallpaper/file', { method: 'PUT', headers: { 'content-type': 'image/png' }, body: png })
-      })
-      await page.evaluate(() => window.__pushForm({ wallpaperSource: 'custom' }))
+      // The reader's own wallpaper: the file through the host half's route, the
+      // source switched on by its own control, the page audited with the layer
+      // standing, then the control switched off again and the file removed — the
+      // scratch home stays as the next scenario expects it.
+      await uploadPng(page, WALLPAPER_FILE_ROUTE)
+      await openSkinSettings(page)
+      await appearanceTab(page)
+      await rowTitled(page, /^(壁纸|Wallpaper)$/).getByRole('button', { name: /^(自定义|Custom)$/ }).click()
+      await page.keyboard.press('Escape')
       await page.waitForTimeout(900)
       await audit.state('own wallpaper layer')
-      await page.evaluate(() => window.__pushForm({ wallpaperSource: 'off' }))
+      await openSkinSettings(page)
+      await appearanceTab(page)
+      await rowTitled(page, /^(壁纸|Wallpaper)$/).getByRole('button', { name: /^(关闭|Off)$/ }).click()
+      await page.keyboard.press('Escape')
       await page.evaluate(async () => { await fetch('/dsh-deepcraft/wallpaper/file', { method: 'DELETE' }) })
       await page.waitForTimeout(400)
       // The preferences the controls set render their own markup on the empty
