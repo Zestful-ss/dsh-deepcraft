@@ -36,16 +36,22 @@ module.exports = {
       ['ocean', { light: 'rgb(252, 252, 251)', dark: 'rgb(32, 36, 39)', accent: '#5368c9', button: 'rgb(83, 104, 201)', raised: '#2b3038' }],
       ['ember', { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)', accent: '#d97757', button: 'rgb(217, 119, 87)', raised: '#1e1e1d' }],
       ['forest', { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)', accent: '#397657', button: 'rgb(57, 118, 87)', raised: '#1e1e1d' }],
+      ['cindy', { light: 'rgb(242, 242, 237)', dark: 'rgb(24, 24, 24)', accent: '#3c3f43', darkAccent: '#eeeeee', button: 'rgb(60, 63, 67)', darkButton: 'rgb(238, 238, 238)', raised: '#1f1f1f' }],
     ]
     for (const [id, want] of EXPECTED) {
       const palette = palettes[id] || {}
       const dark = palette.dark || {}
       check(`${id}: the palette has its own canvases, accent and button fill in light and dark`,
         palette.canvas === want.light && palette.accent === want.accent && dark.canvas === want.dark &&
-          dark.accent === want.accent && dark.buttonFill === want.button,
+          dark.accent === (want.darkAccent ?? want.accent) && dark.buttonFill === (want.darkButton ?? want.button),
         JSON.stringify({ light: { canvas: palette.canvas, accent: palette.accent, button: palette.buttonFill }, dark: { canvas: dark.canvas, accent: dark.accent, button: dark.buttonFill } }))
       check(`${id}: the dark canvas keeps the palette's own raised surface`, dark.raised === want.raised, JSON.stringify(dark))
     }
+    const material = r.cindyMaterial || {}
+    check('the Cindy palette carries its 12px radius, zero shadow, focus ring, motion and sidebar glass (D83)',
+      material.radius === '12px' && material.shadow === 'none' && material.focus === '#417cdd' &&
+        /^(150ms|\.15s)$/.test(material.fast) && /blur\(42px\)/.test(material.glass || ''),
+      JSON.stringify(material))
     commonChecks(r)
   },
   // The custom brand over a skin palette (D80): both images painted where the

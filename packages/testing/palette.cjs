@@ -65,7 +65,7 @@ async function readBoth(page) {
 }
 
 /** The palette choices' order, as the settings page lists them. */
-const PALETTES = ['ocean', 'ember', 'forest', 'host']
+const PALETTES = ['ocean', 'ember', 'forest', 'cindy', 'host']
 
 /** Answer any first-run notice that mounted late, then open the skin's settings page. */
 async function openSettings(page) {
@@ -134,7 +134,7 @@ function paletteScenario({ check }) {
       await waitForSkin(page)
       await openSettings(page)
       await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: SKIN.appearance }).first().click()
-      for (const id of ['ocean', 'ember', 'forest']) {
+      for (const id of ['ocean', 'ember', 'forest', 'cindy']) {
         await pickPalette(page, id)
         read.palettes[id] = await readBoth(page)
       }
@@ -143,7 +143,7 @@ function paletteScenario({ check }) {
       await setAccentColor(page, '#1a7f5a')
       await page.waitForFunction(() => document.body.hasAttribute('data-dsh-deepcraft-accent'), null, { timeout: 15000 })
       read.tinted = {}
-      for (const id of ['ocean', 'ember', 'forest']) {
+      for (const id of ['ocean', 'ember', 'forest', 'cindy']) {
         await pickPalette(page, id)
         read.tinted[id] = await readPage(page)
       }
@@ -183,6 +183,7 @@ function paletteScenario({ check }) {
         ocean: { accent: '#5368c9', prose: '#3e5bd6', darkCanvas: 'rgb(32, 36, 39)' },
         ember: { accent: '#d97757', prose: '#3d5f86', darkCanvas: 'rgb(20, 20, 19)' },
         forest: { accent: '#397657', prose: '#286649', darkCanvas: 'rgb(20, 20, 19)' },
+        cindy: { accent: '#3c3f43', darkAccent: '#eeeeee', prose: '#2563eb', darkCanvas: 'rgb(24, 24, 24)' },
       }
       const checks = []
       for (const [id, want] of Object.entries(expected)) {
@@ -191,7 +192,7 @@ function paletteScenario({ check }) {
         const dark = pair.dark || {}
         checks.push(check(`${id}：浅色与深色的画布、强调色、按钮悬停与正文链接来自本套配色`,
           light.palette === id && light.accent === want.accent && light.prose === want.prose &&
-            dark.accent === want.accent && dark.canvas === want.darkCanvas,
+            dark.accent === (want.darkAccent ?? want.accent) && dark.canvas === want.darkCanvas,
           JSON.stringify({ light, dark })))
         checks.push(check(`${id}：选中、悬停与气泡的底色都跟着这套配色`,
           /^(#|rgba?\()/.test(light.bubble || '') && /^(#|rgba?\()/.test(light.selector || '') && /^(#|rgba?\()/.test(light.hover || ''),
@@ -210,8 +211,8 @@ function paletteScenario({ check }) {
       }
       const tinted = read.tinted || {}
       const kept = (page) => page !== undefined && page.accent === '#1a7f5a'
-      checks.push(check('自定义强调色在三套内置配色下都覆盖强调',
-        kept(tinted.ocean) && kept(tinted.ember) && kept(tinted.forest), JSON.stringify(tinted)))
+      checks.push(check('自定义强调色在四套内置配色下都覆盖强调',
+        kept(tinted.ocean) && kept(tinted.ember) && kept(tinted.forest) && kept(tinted.cindy), JSON.stringify(tinted)))
       checks.push(check('切到跟随宿主时不覆盖宿主颜色，强调色控件禁用',
         tinted.host?.palette === 'host' && read.hostAccentDisabled === true, JSON.stringify({ host: tinted.host, disabled: read.hostAccentDisabled })))
       checks.push(check('切回内置配色后自定义强调色立即恢复，清除后回到本套配色的强调色',
@@ -219,7 +220,7 @@ function paletteScenario({ check }) {
       const identity = (page) => page !== undefined && /brand\/mark/.test(page.mark?.image || '') &&
         /brand\/wordmark/.test(page.word?.image || '')
       checks.push(check('名称、标志与字标在每套配色下都画同一份读者上传的图',
-        identity(palettes.ocean?.light) && identity(palettes.ember?.light) && identity(palettes.forest?.light),
+        identity(palettes.ocean?.light) && identity(palettes.ember?.light) && identity(palettes.forest?.light) && identity(palettes.cindy?.light),
         JSON.stringify({ ocean: palettes.ocean?.light?.mark, ember: palettes.ember?.light?.mark })))
       checks.push(check('聊天框宠物只保留 Petdex 宠物与关闭', read.mascotChoices.length === 2 &&
         read.mascotChoices.every((label) => /^(Petdex 宠物|Petdex pet|关闭|Off)$/.test(label.trim())), JSON.stringify(read.mascotChoices)))

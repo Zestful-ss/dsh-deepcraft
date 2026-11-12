@@ -23,6 +23,7 @@
 | [D80](D80-independent-brand-and-palettes.md) | 品牌身份、配色与宠物选择相互独立 | D77、D78 |
 | [D81](D81-native-layout-and-page-ownership.md) | 宿主布局与整页让位 | D70、D71、D74、D49、D23、D32、D55、D56、D57、D58、D63 |
 | [D82](D82-ds-bot-return-entry.md) | Bot 面保留一个返回主题的入口 |  |
+| [D83](D83-cindy-material-layer.md) | Cindy 配色的材质层 |  |
 
 ## 作废的编号
 

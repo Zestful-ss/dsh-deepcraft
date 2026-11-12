@@ -3,7 +3,7 @@ import {
   FONT_CODE_ANTHROPIC, FONT_CODE_COMMIT, FONT_CODE_FIRA, FONT_CODE_GEIST, FONT_CODE_JETBRAINS,
   FONT_CUSTOM, FONT_FOLLOW, FONT_HOST, FONT_LIST_MAX, FONT_PROSE_ANTHROPIC, FONT_PROSE_LITERATA, FONT_PROSE_NOTO, FONT_PROSE_SOURCE,
   FONT_UI_ANTHROPIC, FONT_UI_ATKINSON, FONT_UI_FIXEL, FONT_UI_GEIST, FONT_UI_INTER,
-  MOTION_FULL, MOTION_REDUCED, MOTION_SYSTEM, PALETTE_EMBER, PALETTE_FOREST, PALETTE_HOST, PALETTE_OCEAN,
+  MOTION_FULL, MOTION_REDUCED, MOTION_SYSTEM, PALETTE_CINDY, PALETTE_EMBER, PALETTE_FOREST, PALETTE_HOST, PALETTE_OCEAN,
 } from '../../constants'
 import { accentRow, brandRows } from './settings-brand'
 import { copy } from './copy'
@@ -45,6 +45,7 @@ export function createSettingsAppearanceTab(): SettingsTab {
       { value: PALETTE_OCEAN, label: copy('paletteOcean') },
       { value: PALETTE_EMBER, label: copy('paletteEmber') },
       { value: PALETTE_FOREST, label: copy('paletteForest') },
+      { value: PALETTE_CINDY, label: copy('paletteCindy') },
       { value: PALETTE_HOST, label: copy('paletteHost') },
     ]
     const motionOptions: SegmentOption<Prefs['motion']>[] = [

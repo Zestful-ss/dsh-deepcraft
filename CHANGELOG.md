@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">新增功能</h3>
+
+- 新增 Cindy 暖象牙配色与材质层：浅色暖象牙、深色中性近黑，选中时带 12px 圆角、零阴影、150/200/250ms 动效、焦点环与半透明侧栏玻璃；关闭配色即恢复宿主圆角、阴影与动效。
+
+<h3 id="en-unreleased">New Features</h3>
+
+- Add the Cindy ivory palette and material layer: warm ivory in light and neutral near-black in dark, with 12px radii, zero shadows, 150/200/250ms motion, a focus ring and a translucent glass sidebar; leaving the palette restores the host's radii, shadows and motion.
+
 ## [0.34.0] - 2026-11-12
 
 [中文](#cn-0.34.0) | [English](#en-0.34.0)

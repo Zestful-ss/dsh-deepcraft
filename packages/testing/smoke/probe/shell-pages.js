@@ -1,5 +1,5 @@
 /**
- * The palette case's page reads: the three palettes' canvases and accents.
+ * The palette case's page reads: the four palettes' canvases and accents.
  */
 (function () {
   var probe = window.__dshSmokeProbe
@@ -19,8 +19,8 @@
         }
       }
       r.palettes = {}
-      for (var at = 0; at < ['ocean', 'ember', 'forest'].length; at++) {
-        var id = ['ocean', 'ember', 'forest'][at]
+      for (var at = 0; at < ['ocean', 'ember', 'forest', 'cindy'].length; at++) {
+        var id = ['ocean', 'ember', 'forest', 'cindy'][at]
         window.__pushForm({ palette: id })
         await sleep(150)
         var light = readTheme()
@@ -29,6 +29,23 @@
         var raised = getComputedStyle(document.body).getPropertyValue('--dsh-deepcraft-raised').trim()
         document.body.removeAttribute('data-ds-dark-theme')
         r.palettes[id] = Object.assign(light, { dark: Object.assign(dark, { raised: raised }) })
+      }
+      window.__pushForm({ palette: 'ocean' })
+      await sleep(150)
+      window.__pushForm({ palette: 'cindy' })
+      await sleep(250)
+      var bodyStyle = getComputedStyle(document.body)
+      var column = document.createElement('div')
+      column.setAttribute('data-dsh-deepcraft-part', 'sidebar-column')
+      document.body.appendChild(column)
+      var glass = getComputedStyle(column, '::before').backdropFilter
+      column.remove()
+      r.cindyMaterial = {
+        radius: bodyStyle.getPropertyValue('--dsw-radius-md').trim(),
+        shadow: bodyStyle.getPropertyValue('--dsw-shadow-lv1').trim(),
+        focus: bodyStyle.getPropertyValue('--dsw-focus-ring-color').trim(),
+        fast: bodyStyle.getPropertyValue('--ds-transition-duration-fast').trim(),
+        glass,
       }
       window.__pushForm({ palette: 'ocean' })
       await sleep(150)

@@ -37,9 +37,10 @@ export const MOTION_MODES = [MOTION_SYSTEM, MOTION_REDUCED, MOTION_FULL] as cons
 export const PALETTE_OCEAN = 'ocean'
 export const PALETTE_EMBER = 'ember'
 export const PALETTE_FOREST = 'forest'
+export const PALETTE_CINDY = 'cindy'
 export const PALETTE_HOST = 'host'
 /** The skin's own palettes, in the settings page's order; `PALETTE_HOST` follows them. */
-export const SKIN_PALETTES = [PALETTE_OCEAN, PALETTE_EMBER, PALETTE_FOREST] as const
+export const SKIN_PALETTES = [PALETTE_OCEAN, PALETTE_EMBER, PALETTE_FOREST, PALETTE_CINDY] as const
 export const PALETTES = [...SKIN_PALETTES, PALETTE_HOST] as const
 /** Who sets each type role: the host's own face, one of the skin's, or a family list the reader types. */
 export const FONT_HOST = 'host'

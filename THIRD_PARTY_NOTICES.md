@@ -65,6 +65,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+## Cindy design values
+
+The `cindy` palette's colours, radii and material treatment adapt the visual
+system of Cindy (`makecindy/cindy`) as ported by `nothing688/dsh-cindy-skin`;
+both are Apache-2.0. The values are data in this package, not a copy of either
+project's code.
+
+Sources: <https://github.com/makecindy/cindy> · <https://github.com/nothing688/dsh-cindy-skin>
+
 ## Bundled fonts
 
 The package ships these Latin faces under the SIL Open Font License 1.1:

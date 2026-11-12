@@ -15,7 +15,7 @@
 
 ## Preview
 
-The settings page switches between three palettes; light and dark follow the system. They share every layout, and switching changes colours alone — not the mark, the name or the pet. The Appearance tab also takes your own mark, wordmark, accent colour and pet.
+The settings page switches between four palettes; light and dark follow the system. Ocean, ember and forest change colours alone; Cindy ivory also carries 12px radii, zero shadows, restrained motion and a glass sidebar. Switching never changes the mark, the name or the pet, and the Appearance tab also takes your own mark, wordmark, accent colour and pet.
 
 ### Ocean blue (default)
 
