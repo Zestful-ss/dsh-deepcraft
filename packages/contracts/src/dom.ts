@@ -86,3 +86,15 @@ export const DS_BOT_FOOT_SELECTOR = '.bt-leftcol-foot'
 
 /** ds-bot's account button inside that row, the marker of the row when the footer class is absent (D82). */
 export const DS_BOT_ACCOUNT_SELECTOR = '.bt-account'
+
+/** ds-bot's account menu, opened by the return pill on its way to the mode switch (D82). */
+export const DS_BOT_ACCOUNT_MENU_SELECTOR = '.bt-account-menu'
+
+/** ds-bot's settings layer, where the mode switch stands on versions whose account menu has no mode item (D82). */
+export const DS_BOT_SETTINGS_LAYER_SELECTOR = '.bt-settings-layer'
+
+/** One settings row; the classic-Agent row carries the switch the return pill presses (D82). */
+export const DS_BOT_SET_ROW_SELECTOR = '.bt-set-row'
+
+/** ds-bot's small action button inside a settings row, the switch itself (D82). */
+export const DS_BOT_SOFT_BUTTON_SELECTOR = '.bt-soft'

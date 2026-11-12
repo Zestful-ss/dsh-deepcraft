@@ -94,10 +94,11 @@ function dsBotScenario({ check }) {
       await page.waitForTimeout(1500)
       notes.reload = { ...await read(page), log: await page.evaluate(() => window.__surfaceLog) }
 
+      await page.evaluate(() => { window.__dsBotReturnMark = 'kept' })
       await page.locator('.dsh-deepcraft-ds-bot-return').click()
       await settle(page, 'code')
       await page.waitForTimeout(500)
-      notes.return = await read(page)
+      notes.return = { ...await read(page), mark: await page.evaluate(() => window.__dsBotReturnMark ?? null) }
 
       await page.locator('.bt-return').click()
       await settle(page, 'bot')
@@ -124,7 +125,7 @@ function dsBotScenario({ check }) {
         check('Bot 面唯一的返回入口紧挨账号头像，写着品牌名',
           besideAccount(reload.pill) && reload.pill.text.includes('DeepCraft'),
           JSON.stringify(reload.pill)),
-        check('按下返回入口后写入 agent 模式并回到本主题的页面', themed(returned) && returned.saved === 'agent' && !returned.bot,
+        check('按下返回入口后走 ds-bot 自己的切换回到本主题，页面没有重新加载', themed(returned) && returned.saved === 'agent' && !returned.bot && returned.mark === 'kept',
           JSON.stringify(returned)),
         check('用 ds-bot 自己的菜单项切到 Agent 模式，本主题拿回页面', themed(code) && code.saved === 'agent', JSON.stringify(code)),
         check('ds-bot 的账户菜单没有留在页面上，页面上没有插件的切换', !code.menu && !code.skinSwitch, JSON.stringify(code)),

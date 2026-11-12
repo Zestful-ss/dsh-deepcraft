@@ -1,0 +1,8 @@
+{
+  "group": "improvements",
+  "order": 10,
+  "at": "2026-11-12",
+  "external": false,
+  "zh": "改善 Bot 面的返回入口：按下后走 ds-bot 自己的经典模式切换，不再重新载入页面；只有找不到它的入口时才退回保存模式并重载。",
+  "en": "Improve the Bot-surface return entry: pressing it uses ds-bot's own classic-mode switch instead of reloading the page, and falls back to the saved mode and a reload only when that switch cannot be found."
+}
