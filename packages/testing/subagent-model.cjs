@@ -506,7 +506,7 @@ function subagentModelScenario({ check }) {
       checks.push(check('未选时入口已排成胶囊，外框是中性色', atZero && zero.value === '0' && zero.parentDisplay === 'flex' && zero.gap === '0px' && zero.subagentColour !== '', JSON.stringify(zero)))
       checks.push(check('胶囊右端封口：模型半带右侧圆角与右内描边，两半都没有自己的边框',
         zero.subagentRadius === '7px 0px 0px 7px' && zero.modelRadius === '0px 7px 7px 0px' &&
-          /inset -1px 0px 0px/.test(zero.modelShadow || '') && zero.subagentBorder === 0 && zero.modelBorder === 0,
+          /-1px 0px 0px 0px inset/.test(zero.modelShadow || '') && zero.subagentBorder === 0 && zero.modelBorder === 0,
         JSON.stringify({ subagentRadius: zero.subagentRadius, modelRadius: zero.modelRadius, modelShadow: zero.modelShadow, borders: [zero.subagentBorder, zero.modelBorder] })))
       checks.push(check('选择 1、2、3 条各取一档外框颜色，三档互不相同',
         colours.length === 4 && new Set(colours).size === 4, JSON.stringify(colours)))
