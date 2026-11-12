@@ -84,7 +84,10 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
   const offPrefs = subscribePrefs(sync)
   const onVisibility = () => sync()
   document.addEventListener('visibilitychange', onVisibility)
-  void loadWallpaper().then(sync)
+  // A fresh read: the feature installs and retires with the source switch, so a
+  // "no file" cached by an earlier install must not outlive the file the reader
+  // uploaded in between.
+  void loadWallpaper(true).then(sync)
 
   return () => {
     offWallpaper()

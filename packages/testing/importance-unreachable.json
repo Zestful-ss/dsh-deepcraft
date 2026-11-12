@@ -2,42 +2,6 @@
   "note": "The selectors the importance scenario's walk cannot match an element with, each under the reason it is out of reach. A selector the sheet writes that is neither matched in a page state nor recorded here fails the scenario, and a recorded one that starts matching fails it too: the list is a debt, and it only shrinks. A group may carry \"either\": true when the walk's own answer depends on the moment or on the machine it runs on — a rule that paints inside one animation frame, a row the host renders on some platforms only. Such a record counts whether the walk catches it or not, so the check never asks for it to be struck. Regenerate the rest from importance-verdicts.json's sweep.dead after a run, and review every line.",
   "groups": [
     {
-      "reason": "脚本回答里没有的 markdown 材料：走查那一轮只写普通段落",
-      "selectors": [
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=markdown] h1",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=markdown] h2",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=markdown] h3",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=markdown] h4",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=markdown] :is(th,td)",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=table-scroll] thead th",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=table-scroll] thead td",
-        "body[data-dsh-deepcraft][data-ds-dark-theme] [data-dsh-deepcraft-part~=table-scroll] thead th",
-        "body[data-dsh-deepcraft][data-ds-dark-theme] [data-dsh-deepcraft-part~=table-scroll] thead td",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=table-scroll]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=table-scroll] table",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=table-scroll] tr>:first-child",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=table-scroll] tr>:last-child",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=markdown] :is(h1,h2,h3)",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=markdown] :is(h1,h2,h3)+:is(h1,h2,h3)",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=markdown] :is(h4,h5,h6)",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=link-icon]",
-        "body[data-dsh-deepcraft] :is(code:not(pre code)>[data-dsh-deepcraft-part~=file-mention],code:not(pre code)>a)",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=markdown] :is(a,a)",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=text-mono-label]"
-      ]
-    },
-    {
-      "reason": "桌面端窗口独有：走查跑在浏览器里，页面没有窗口标题栏",
-      "selectors": [
-        "html[data-windows-titlebar] body[data-dsh-deepcraft]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~=layout-frame][data-dsh-deepcraft-holds~=sidebar-column]",
-        "html[data-windows-titlebar] body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=layout-frame][data-dsh-deepcraft-holds~=sidebar-column]",
-        "html[data-windows-titlebar] body[data-dsh-deepcraft]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~=layout-frame]>[data-dsh-deepcraft-part~=sidebar-column]",
-        "html[data-windows-titlebar] body[data-dsh-deepcraft]:not([data-we-wallpaper]) [data-dsh-deepcraft-part~=layout-frame]>[data-dsh-deepcraft-part~=center-column]",
-        "html[data-windows-titlebar] body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=layout-frame]>[data-side=sidebar]",
-        "html[data-windows-titlebar] body[data-dsh-deepcraft] [data-slot=sidebar] [data-dsh-deepcraft-part~=logo-row]"
-      ]
-    },
-    {
       "reason": "一次动画里的短暂标记：走查把页面停住，标记已经落下",
       "selectors": [
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-rows[data-dsh-deepcraft-page-leave=back]",
@@ -65,17 +29,6 @@
       ]
     },
     {
-      "reason": "侧栏行的状态：菜单打开、选中、折叠的箭头",
-      "selectors": [
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=text-select-label]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=group-section]+[data-dsh-deepcraft-part~=group-section]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=session-row][data-dsh-deepcraft-part~=row-menu-open]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=project-row][data-dsh-deepcraft-part~=row-menu-open]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=project-row][data-dsh-deepcraft-part~=row-selected]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-part~=project-row][aria-expanded=false] [data-dsh-deepcraft-part~=row-chevron]"
-      ]
-    },
-    {
       "reason": "设置页里的个别状态：出错、按下、展开、选好图片",
       "selectors": [
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-error",
@@ -92,32 +45,6 @@
       ]
     },
     {
-      "reason": "宿主品牌标志在首页上的形态：走查写品牌标记时不在首页",
-      "selectors": [
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced] [data-dsh-deepcraft-part~=hero-mark]",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced] [data-dsh-deepcraft-part~=hero-mark]+[data-dsh-deepcraft-part~=hero-title-group]"
-      ]
-    },
-    {
-      "reason": "折叠的侧栏：走查没有折叠它",
-      "selectors": [
-        "body[data-dsh-deepcraft] [data-sidebar-collapsed] button[data-dsh-deepcraft-part~=new-session]",
-        "body[data-dsh-deepcraft] [data-sidebar-collapsed] button[data-dsh-deepcraft-part~=new-session] [data-dsh-deepcraft-part~=new-session-mask]"
-      ]
-    },
-    {
-      "reason": "折叠的过程行：脚本回答的过程行不足以折叠",
-      "selectors": [
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-motion=reduced] [data-chat-flow] :is([data-disclosure-row],[data-disclosure-header])~*:not([data-turn-process-member] *,[data-turn-trigger] *):is([data-disclosure-row]~*,[data-disclosure-header]~* *)"
-      ]
-    },
-    {
-      "reason": "宿主会话行的标签：脚本回答里没有这一类行",
-      "selectors": [
-        "body[data-dsh-deepcraft] :is([data-dsh-deepcraft-part~=tag-system],[data-dsh-deepcraft-part~=tag-user],[data-dsh-deepcraft-part~=tag-context],[data-dsh-deepcraft-part~=tag-message],[data-dsh-deepcraft-part~=tag-tool],[data-dsh-deepcraft-part~=tag-subtool],[data-dsh-deepcraft-part~=kind-tag]:not([data-dsh-deepcraft-part~=kind-tag-icon],[data-dsh-deepcraft-part~=kind-tag-label]),[data-dsh-deepcraft-part~=row-tag],[data-dsh-deepcraft-part~=option-line]>[data-dsh-deepcraft-part~=badge],[data-dsh-deepcraft-part~=attempt-badge],[data-dsh-deepcraft-part~=key-badge])"
-      ]
-    },
-    {
       "reason": "设置页的提示行：走查在本机页面上跑，远端只读的提示与分页自己的提示都不在",
       "selectors": [
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-notice",
@@ -126,26 +53,88 @@
       ]
     },
     {
-      "reason": "宿主的按键提示按运行平台给出：这台浏览器上宿主没有为新建会话给出按键，newSessionShortcut 里没有 kbd",
-      "either": true,
+      "reason": "壁纸层：走查开了来源也放好了文件，层仍没挂上；低功耗规则还要层在才生效",
       "selectors": [
-        "body[data-dsh-deepcraft] button[data-dsh-deepcraft-part~=new-session] [data-dsh-deepcraft-part~=new-session-shortcut] kbd[data-dsh-deepcraft-part~=key-separator]",
-        "body[data-dsh-deepcraft] button[data-dsh-deepcraft-part~=new-session] [data-dsh-deepcraft-part~=new-session-shortcut] kbd:not([data-dsh-deepcraft-part~=key-separator])",
-        "body[data-dsh-deepcraft][data-ds-dark-theme] button[data-dsh-deepcraft-part~=new-session] [data-dsh-deepcraft-part~=new-session-shortcut] kbd:not([data-dsh-deepcraft-part~=key-separator])"
-      ]
-    },
-    {
-      "reason": "壁纸层：走查只把来源开到自定义而不上传文件，层从不挂上；低功耗规则还要层在才生效",
-      "selectors": [
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-wallpaper-layer]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-wallpaper-layer] > :is(img, video)",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-wallpaper-lite=\"1\"] [data-dsh-deepcraft-wallpaper-layer] > :is(img, video)"
+        "body[data-dsh-deepcraft] [data-dsh-deepcraft-wallpaper-layer]"
       ]
     },
     {
       "reason": "壁纸错误行：走查不开文件选择器，设置页的失败提示不出现",
       "selectors": [
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-error"
+      ]
+    },
+    {
+      "reason": "脚本回答只有普通段落：没有代码块、标题与表格",
+      "selectors": [
+        "body[data-dsh-deepcraft] :is(pre,code,kbd,samp,[data-dsh-deepcraft-part~=text-mono],[data-dsh-deepcraft-part~=text-code])"
+      ]
+    },
+    {
+      "reason": "皮肤自己的弹层里走查的卡上没有的态：深色下的卡、图标与分隔线、未选行的隐藏勾选",
+      "selectors": [
+        "body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-popover-card",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-popover-card [role=separator]",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-popover-item-icon",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-popover-item-icon svg",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-popover-check[hidden]"
+      ]
+    },
+    {
+      "reason": "置顶区块只在有置顶会话时渲染，走查的临时宿主没有置顶",
+      "selectors": [
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-block",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-section",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-heading",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-list",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-row",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-row[aria-current=true]",
+        "body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-pin-row",
+        "body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-pin-row[aria-current=true]",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-status",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-status:empty",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-sr",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-title",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-workspace",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-menu",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-row .dsh-deepcraft-pin-menu",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-menu[aria-expanded=true]"
+      ]
+    },
+    {
+      "reason": "子代理胶囊与弹层里走查没走到的态：不可用、陈旧说明与两三已选",
+      "selectors": [
+        "body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-btn[data-dsh-subagent-model=unavailable]",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-note",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-stale",
+        "body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-effort-note",
+        "body[data-dsh-deepcraft] [data-dsh-deepcraft-model-capsule=unavailable]",
+        "body[data-dsh-deepcraft] [data-dsh-deepcraft-model-capsule=\"2\"]",
+        "body[data-dsh-deepcraft] [data-dsh-deepcraft-model-capsule=\"3\"]"
+      ]
+    },
+    {
+      "reason": "设置页的个别状态：提示行、出错行与图片预览只在走查不做的操作里出现",
+      "selectors": [
+        "body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-note"
+      ]
+    },
+    {
+      "reason": "宠物面板的锚点与状态行只在导入失败或宠物站在输入区时出现",
+      "selectors": [
+        "body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-status",
+        "body[data-dsh-deepcraft] [data-dsh-deepcraft-petdex-anchor=panel]",
+        "body[data-dsh-deepcraft] [data-dsh-deepcraft-petdex-anchor=panel]>.dsh-deepcraft-petdex"
+      ]
+    },
+    {
+      "reason": "壁纸层：走查开了来源也放好了文件，层仍没挂上；插件壁纸的暗色遮罩要那个插件在页面上",
+      "selectors": [
+        "body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-preview :is(img,video)",
+        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette=host])[data-ds-dark-theme][data-we-wallpaper]",
+        "body[data-dsh-deepcraft] [data-dsh-deepcraft-wallpaper-layer]>:is(img,video)",
+        "body[data-dsh-deepcraft][data-dsh-deepcraft-wallpaper-lite=\"1\"] [data-dsh-deepcraft-wallpaper-layer]>:is(img,video)",
+        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette=host])[data-dsh-deepcraft-wallpaper=custom][data-dsh-deepcraft-wallpaper-lite=\"1\"]"
       ]
     }
   ]

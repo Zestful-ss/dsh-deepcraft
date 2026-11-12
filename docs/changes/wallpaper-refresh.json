@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 10,
+  "at": "2026-11-13",
+  "external": false,
+  "zh": "修复壁纸来源先打开、文件后上传时图层不出现：每次挂载都重新读取宿主半边的文件，不再沿用上一次的空结果。",
+  "en": "Fix the wallpaper layer staying absent when the source was switched on before a file existed: every mount reads the host half's file afresh instead of reusing the earlier empty answer."
+}

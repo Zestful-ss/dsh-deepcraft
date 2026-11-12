@@ -10,9 +10,17 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - 新增与配色无关的材质层：外观页分别选择圆角档位、平铺阴影、动效节奏、玻璃侧栏与环境光，出厂即参考主题的取值，每一项都能单独退回宿主的样子；原 Cindy 配色与材质层的绑定随之移除，已存该配色迁移到暖橙。
 
+### 问题修复
+
+- 修复壁纸来源先打开、文件后上传时图层不出现：每次挂载都重新读取宿主半边的文件，不再沿用上一次的空结果。
+
 <h3 id="en-unreleased">New Features</h3>
 
 - Add a material layer independent of the palette: the Appearance tab chooses the corner scale, flat shadows, motion timing, glass sidebar and ambient light separately, shipped at the reference theme's values with each aspect able to fall back to the host's own; the former Cindy palette and its bundled material are removed, and a stored value migrates to warm ember.
+
+### Bug Fixes
+
+- Fix the wallpaper layer staying absent when the source was switched on before a file existed: every mount reads the host half's file afresh instead of reusing the earlier empty answer.
 
 ## [0.36.0] - 2026-11-12
 
