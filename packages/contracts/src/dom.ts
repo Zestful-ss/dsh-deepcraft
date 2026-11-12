@@ -80,3 +80,9 @@ export const UNTAGGED_SHEET_SELECTOR = 'style:not([data-plugin])'
  * shell's own interface (its Agent mode).
  */
 export const DS_BOT_SURFACE_ATTRIBUTE = 'data-bt-motion'
+
+/** ds-bot's own sidebar footer row; the return pill is put at its start (D82). */
+export const DS_BOT_FOOT_SELECTOR = '.bt-leftcol-foot'
+
+/** ds-bot's account button inside that row, the marker of the row when the footer class is absent (D82). */
+export const DS_BOT_ACCOUNT_SELECTOR = '.bt-account'

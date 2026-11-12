@@ -112,7 +112,7 @@ function dsBotScenario({ check }) {
       const { boot, bot, reload, return: returned, code } = notes
       const themed = (state) => state.theme && state.themeSheet && !state.bot
       const besideAccount = (pill) => pill !== null && !pill.hidden && pill.account !== null &&
-        pill.rect.left >= pill.account.right && pill.rect.top < pill.account.bottom && pill.rect.bottom > pill.account.top
+        pill.rect.right <= pill.account.left && pill.rect.top < pill.account.bottom && pill.rect.bottom > pill.account.top
       return [
         check('以代码一侧启动时本主题拥有页面，页面上没有插件的切换', themed(boot) && !boot.skinSwitch, JSON.stringify(boot)),
         check('ds-bot 自己的按钮把页面交给它，记下的模式是 bot', bot.bot && bot.saved === 'bot' && !bot.theme, JSON.stringify(bot)),

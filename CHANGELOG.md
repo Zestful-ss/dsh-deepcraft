@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修复 Bot 面返回入口在 ds-bot 自带侧栏中不显示的问题：入口改为放进账号按钮所在的行，显示为账号左侧的品牌按钮。
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Fix the Bot-surface return entry missing from ds-bot's own sidebar: the entry now joins the account row and shows as the branded button left of the account.
+
 ## [0.32.0] - 2026-11-12
 
 [中文](#cn-0.32.0) | [English](#en-0.32.0)
