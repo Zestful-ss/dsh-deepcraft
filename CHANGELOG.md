@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.34.0] - 2026-11-12
 
-<h3 id="cn-unreleased">新增功能</h3>
+[中文](#cn-0.34.0) | [English](#en-0.34.0)
+
+<h3 id="cn-0.34.0">新增功能</h3>
 
 - 新增界面、正文与代码三个独立的字体选择，内置 Inter、Geist Sans、Fixel Text、Atkinson Hyperlegible、Noto Serif、Source Serif 4、Literata、JetBrains Mono、Geist Mono、Fira Code 与 Commit Mono，并可为每个角色填写本机字体名；字号、字重与行高仍取宿主。
 
-<h3 id="en-unreleased">New Features</h3>
+<h3 id="en-0.34.0">New Features</h3>
 
 - Add independent interface, prose and code font choices with Inter, Geist Sans, Fixel Text, Atkinson Hyperlegible, Noto Serif, Source Serif 4, Literata, JetBrains Mono, Geist Mono, Fira Code and Commit Mono built in, plus an installed-family list for each role; sizes, weights and line heights stay the host's.
 
