@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修复子代理与模型合用的胶囊在最右侧缺少封口描边与圆角的问题：模型一半现在始终画出右边缘，两半也不带自己的边框。
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Fix the subagent and model capsule missing its closing stroke and corner on the right: the model half now always draws the right edge, and neither half keeps a border of its own.
+
 ## [0.31.1] - 2026-11-11
 
 [中文](#cn-0.31.1) | [English](#en-0.31.1)

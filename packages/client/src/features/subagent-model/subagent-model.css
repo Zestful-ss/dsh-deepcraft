@@ -235,6 +235,7 @@ body[data-dsh-deepcraft] [data-composer-card] [data-dsh-deepcraft-model-capsule-
   height: 28px;
   box-sizing: border-box;
   background: var(--dsh-deepcraft-card, var(--dsw-alias-bg-overlay, #fff));
+  border: none;
   border-radius: 0;
   box-shadow: inset var(--dsh-deepcraft-capsule-side, 1px) 0 0 var(--dsh-deepcraft-capsule-edge, var(--dsw-alias-label-secondary)),
     inset 0 1px 0 var(--dsh-deepcraft-capsule-edge, var(--dsw-alias-label-secondary)),
@@ -247,7 +248,11 @@ body[data-dsh-deepcraft] [data-composer-card] [data-dsh-deepcraft-model-capsule-
   border-radius: 7px 0 0 7px;
 }
 
-body[data-dsh-deepcraft] [data-composer-card][data-composer-variant='inline'] [data-slot="conversation.input.model"] > [data-dsh-deepcraft-model-capsule-part='model'] {
+/* The right half closes the capsule whichever composer variant the host
+   renders: the model button is the last visible item of the marked parent, so
+   its outline is the right, top and bottom edges, and only that half is
+   rounded on the right. */
+body[data-dsh-deepcraft] [data-dsh-deepcraft-model-capsule] [data-slot="conversation.input.model"] > [data-dsh-deepcraft-model-capsule-part='model'] {
   --dsh-deepcraft-capsule-side: -1px;
   padding: 0 10px;
   border-radius: 0 7px 7px 0;

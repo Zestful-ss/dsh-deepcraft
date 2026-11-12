@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 10,
+  "at": "2026-11-12",
+  "external": false,
+  "zh": "修复子代理与模型合用的胶囊在最右侧缺少封口描边与圆角的问题：模型一半现在始终画出右边缘，两半也不带自己的边框。",
+  "en": "Fix the subagent and model capsule missing its closing stroke and corner on the right: the model half now always draws the right edge, and neither half keeps a border of its own."
+}
