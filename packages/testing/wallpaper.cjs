@@ -54,7 +54,9 @@ const readPage = (page) => page.evaluate(() => {
     tag: media === null ? null : media.tagName.toLowerCase(),
     src: media === null ? null : (media.getAttribute('src') ?? ''),
     columnFill: column === null ? null : getComputedStyle(column).backgroundColor,
-    veil: veil.backgroundImage === 'none' ? 'none' : veil.backgroundColor,
+    // The veil is a colour over the layer (the rule writes the `background`
+    // shorthand), so its own background-colour is what says it is painted.
+    veil: veil.backgroundColor,
   }
 })
 
@@ -90,7 +92,7 @@ function wallpaperScenario({ check }) {
           read.on?.attribute === 'custom' && read.on?.layer === true && read.on?.tag === 'img' && (read.on?.src ?? '').includes(ROUTES.file),
           JSON.stringify(read.on)),
         check('层在时侧栏列让出填充，画布面纱盖在层上',
-          read.on?.columnFill === 'rgba(0, 0, 0, 0)' && read.on?.veil !== 'none',
+          read.on?.columnFill === 'rgba(0, 0, 0, 0)' && read.on?.veil !== 'rgba(0, 0, 0, 0)',
           JSON.stringify({ columnFill: read.on?.columnFill, veil: read.on?.veil })),
         check('来源关掉后层从页面上撤走', read.off?.attribute === 'off' && read.off?.layer === false, JSON.stringify(read.off)),
         check('移除之后状态里没有壁纸', read.removed?.ok === true && read.removed?.wallpaper === null, JSON.stringify(read.removed)),
