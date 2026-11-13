@@ -408,6 +408,8 @@ function importanceScenario(lane) {
         await page.waitForTimeout(400)
         await audit.state('recent delete card')
         await page.keyboard.press('Escape')
+        // The next state must read the page with the card gone, not mid-fade.
+        await page.locator('.dsh-deepcraft-session-delete-card').waitFor({ state: 'detached', timeout: 5000 }).catch(() => {})
         await page.waitForTimeout(300)
       }
       // The reader's own wallpaper: the file through the host half's route, the
