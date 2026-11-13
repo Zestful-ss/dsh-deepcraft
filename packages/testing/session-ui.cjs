@@ -35,9 +35,9 @@ async function waitForRows(page, block, ids, timeout = 20000) {
   }, { block, row: ROW, ids }, { timeout }).catch(() => {})
 }
 
-/** Press the host's new-session button and wait for the conversation it opens. */
-async function startSession(page, previous, button, timeout = 20000) {
-  await page.locator(button).first().click()
+/** Press the host's own new-session entry and wait for the conversation it opens. */
+async function startSession(page, previous, press, timeout = 20000) {
+  await press()
   await page.waitForFunction(({ selector, previous }) => {
     const shown = document.querySelector(selector)?.getAttribute('data-conversation-session') ?? ''
     return shown !== '' && shown !== previous

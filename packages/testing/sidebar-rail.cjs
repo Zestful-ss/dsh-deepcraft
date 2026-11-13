@@ -73,12 +73,19 @@ function sidebarRailScenario({ check }) {
       })
       await page.waitForTimeout(300)
       const diff = differences(notes.on, notes.off)
-      notes.skinNodes = await page.evaluate(() => document.querySelectorAll('[data-slot="sidebar"] [class^="dsh-deepcraft-"], [data-slot="sidebar"] [class*=" dsh-deepcraft-"]').length)
+      // The skin's sidebar presence is its own conversation blocks (D85); any
+      // other node of its making inside the host's sidebar would be a redraw of
+      // the host's own.
+      notes.skinNodes = await page.evaluate(() => {
+        const nodes = [...document.querySelectorAll('[data-slot="sidebar"] [class^="dsh-deepcraft-"], [data-slot="sidebar"] [class*=" dsh-deepcraft-"]')]
+        return { total: nodes.length, stray: nodes.filter((node) => node.closest('.dsh-deepcraft-session-block') === null).length }
+      })
       return [
         check('侧栏里真的有宿主自己的会话行', notes.on.length > 0, `rows=${notes.on.length}`),
         check('插件给侧栏加的样式不改变宿主行的显示、定位、间距、边框与行盒',
           diff.length === 0, diff.slice(0, 6).join(' | ')),
-        check('侧栏里没有插件画的节点', notes.skinNodes === 0, `${notes.skinNodes} nodes`),
+        check('侧栏里插件只画自己的会话块，不碰宿主的节点',
+          notes.skinNodes.stray === 0, JSON.stringify(notes.skinNodes)),
         check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')),
       ]
     },

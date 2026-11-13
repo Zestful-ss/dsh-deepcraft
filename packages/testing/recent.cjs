@@ -27,7 +27,8 @@ const SKIN = {
 const HOST = {
   composer: '[data-composer-input]',
   conversation: '[data-conversation-session]',
-  newSession: 'button[data-dsh-deepcraft-part~="new-session"]',
+  // The host's own + on its workspace row, the entry the pinned walk also uses.
+  workspaceRow: '[data-row-key^="workspace:"]',
 }
 
 function recentScenario({ check }) {
@@ -52,7 +53,11 @@ function recentScenario({ check }) {
         JSON.stringify({ order, heading, placement })))
 
       // A second conversation, newer than the first, takes the top row.
-      const second = await startSession(page, first, HOST.newSession)
+      const second = await startSession(page, first, async () => {
+        const row = page.locator(HOST.workspaceRow).first()
+        await row.hover()
+        await row.locator('button').nth(1).click()
+      })
       await sendPrompt(page, 'hello from the second conversation')
       await waitForTurn(page)
       await waitForRows(page, SKIN.block, [second, first])
