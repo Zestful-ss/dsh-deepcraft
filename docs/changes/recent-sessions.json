@@ -1,8 +1,0 @@
-{
-  "group": "new",
-  "order": 10,
-  "at": "2026-11-13",
-  "external": false,
-  "zh": "新增侧栏「最近 24 小时」：最近一天内动过的会话按时间倒序排在最上面，最多十条，宿主的会话列表与置顶汇总保持原样；块里每一行可直接删除会话，确认后删掉本机的记录，仍打开着的会话会被拒绝并提示先关闭。",
-  "en": "Add a \"Last 24 hours\" block at the top of the sidebar: the conversations touched today, newest first, ten at most, with the host's own list and the pinned block unchanged; each row can delete its conversation after a confirmation, removing the stored record on this device, while a conversation the host still holds open is refused with a note to close it."
-}
