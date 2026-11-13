@@ -321,6 +321,19 @@ export function installSessionBlock(ctx: HostContext, options: SessionBlockOptio
       if (block !== null && block.parentElement !== null) block.parentElement.removeChild(block)
       block = document.createElement('div')
       block.className = `${blockClass} dsh-deepcraft-session-block`
+      // The pointer over the block scrolls the block: the host's list is the
+      // block's own ancestor here, so without this the wheel reaches it first
+      // and the rows under the pointer stay put. At either end of the block's
+      // list the event is left alone and the host's list takes it as usual.
+      block.addEventListener('wheel', (event) => {
+        const list = block?.querySelector('.dsh-deepcraft-session-list')
+        if (!(list instanceof HTMLElement)) return
+        const room = list.scrollHeight - list.clientHeight
+        if (room <= 0) return
+        if ((event.deltaY < 0 && list.scrollTop <= 0) || (event.deltaY > 0 && list.scrollTop >= room)) return
+        list.scrollTop += event.deltaY
+        event.preventDefault()
+      }, { passive: false })
       if (options.place === 'first') section.insertBefore(block, section.firstElementChild)
       else section.insertBefore(block, tree)
       root = reactDom.createRoot(block)

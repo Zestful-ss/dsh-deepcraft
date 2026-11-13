@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修复侧栏会话块的滚动：鼠标停在「最近 24 小时」上滚轮却滚动下方工作区列表。块的高度上限改用视口单位（父级高度由内容决定，百分比上限解析为无），块内列表因此成为滚动目标；滚轮落在块上时先滚块内的列表，到两端才交还给宿主。
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Fix the sidebar blocks' scrolling: the wheel over "Last 24 hours" scrolled the workspace list below instead. The block's height cap is now in viewport units (a percentage resolves to none inside a content-sized section), so its own list scrolls, and a wheel over the block reaches that list first, handing the host's list the wheel only at either end.
+
 ## [0.38.0] - 2026-11-13
 
 [中文](#cn-0.38.0) | [English](#en-0.38.0)

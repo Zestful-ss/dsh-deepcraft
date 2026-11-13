@@ -6,11 +6,14 @@
    block gives way first when the section is short. */
 
 body[data-dsh-deepcraft] .dsh-deepcraft-session-block {
-  /* One block per reader: the recent list and the pinned list share this rule. */
+  /* One block per reader: the recent list and the pinned list share this rule.
+     The cap is in viewport units on purpose: the block sits in the host's
+     section, whose height is its content's, so a percentage here resolves to
+     `none` and the block grows past the window while its list never scrolls. */
   display: flex;
   flex: 0 1 auto;
   min-height: 0;
-  max-height: 40%;
+  max-height: min(40vh, 360px);
   margin: 0 calc(-1 * var(--dsh-session-list-edge-inset, 12px)) 4px -4px;
   padding: 0 2px 0 4px;
 }
