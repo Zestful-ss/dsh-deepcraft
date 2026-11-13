@@ -14,6 +14,7 @@ export interface Handles {
   mascot: FeatureHandle
   subagentModel: FeatureHandle
   workspacePins: FeatureHandle
+  recent: FeatureHandle
   settingsNav: FeatureHandle
   dsBotReturn: FeatureHandle
   wallpaper: FeatureHandle

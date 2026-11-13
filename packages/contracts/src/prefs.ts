@@ -186,6 +186,8 @@ export const PREFS = {
   wallpaperMotion: { type: 'choice', values: WALLPAPER_MOTIONS, default: WALLPAPER_MOTION_STATIC },
   /** Low power: stills the video and drops the wallpaper's blur. */
   wallpaperLite: { type: 'boolean', default: false },
+  /** The sidebar's recent block: conversations touched in the last day, at the top (D85). */
+  recentSessions: { type: 'boolean', default: true },
 } as const satisfies Record<string, PrefSpec>
 
 /** One preference's key. */
@@ -200,6 +202,7 @@ export const LIVE_PREFS = [
   'mascot',
   'subagentModelPicker',
   'wallpaperSource',
+  'recentSessions',
 ] as const satisfies readonly PrefKey[]
 /** A preference a feature switch follows live. */
 export type LivePref = typeof LIVE_PREFS[number]

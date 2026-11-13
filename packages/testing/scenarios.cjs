@@ -16,6 +16,7 @@ const { remoteSettingsScenario } = require('./remote-settings.cjs')
 const { hostVisibilityScenario } = require('./host-visibility.cjs')
 const { customBrandScenario } = require('./custom-brand.cjs')
 const { wallpaperScenario } = require('./wallpaper.cjs')
+const { recentScenario } = require('./recent.cjs')
 const { petdexScenario } = require('./petdex.cjs')
 const { paletteScenario, legacyScenario } = require('./palette.cjs')
 const { subagentModelScenario } = require('./subagent-model.cjs')
@@ -245,6 +246,7 @@ const SCENARIOS = {
   /** The reader's own brand images through the host half's routes and on the real shell (packages/testing/custom-brand.cjs, D80). */
   customBrand: customBrandScenario({ check }),
   wallpaper: wallpaperScenario({ check }),
+  recent: recentScenario({ check }),
   /** Complete Petdex packages imported into the real host and kept as one pet across palettes (packages/testing/petdex.cjs, D80). */
   petdex: petdexScenario({ check }),
   /** Every skin palette's computed colours and the reader's own identity across a switch (palette.cjs, D80). */

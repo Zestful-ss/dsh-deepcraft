@@ -62,6 +62,7 @@ The settings page switches between three palettes, light and dark following the 
 
 - The plugin changes colours and typefaces alone: the conversation's reading column and composer, the home's hero page, the conversation header and view tabs, the sidebar's search and account rows, and the tool-call rows are drawn and operated by the host; the plugin neither moves, redraws nor rewrites them.
 - The sidebar gathers every pinned conversation above the workspaces, most recently pinned first; each row names its workspace and opens, renames, unpins or archives through the host's own session menu, while the host's row stays in its workspace.
+- The very top of the sidebar is "Last 24 hours": the conversations touched today, newest first, ten at most, leaving the host's own list and the pinned block untouched. Each row can delete its conversation: the trash asks first, then removes the stored record on this device; a conversation the host still holds open is refused, and the card says to close it.
 
 ### Pets
 

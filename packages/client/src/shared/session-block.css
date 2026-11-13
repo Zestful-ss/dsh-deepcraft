@@ -1,10 +1,12 @@
-/* ---------- pinned conversations: one aggregate above the workspaces ---------- */
-/* The block is the skin's own, mounted before the host's list area; the host's
-   rows stay in their groups. Its rows keep the host tree's own metrics (28px,
-   6px inset, title at 36px from the list's edge) so the two lists read as one
-   column, and the block gives way first when the section is short. */
+/* ---------- conversation blocks above the host's workspace groups ---------- */
+/* The blocks are the skin's own, mounted in the section's list area: the recent
+   one first, the pinned one before the host's own list. The host's rows stay in
+   their groups. The rows keep the host tree's own metrics (28px, 6px inset,
+   title at 36px from the list's edge) so the lists read as one column, and a
+   block gives way first when the section is short. */
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-block {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-block {
+  /* One block per reader: the recent list and the pinned list share this rule. */
   display: flex;
   flex: 0 1 auto;
   min-height: 0;
@@ -13,7 +15,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-pin-block {
   padding: 0 2px 0 4px;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-section {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-section {
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -21,7 +23,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-pin-section {
   width: 100%;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-heading {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-heading {
   flex: none;
   height: 24px;
   padding: 0 8px;
@@ -32,7 +34,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-pin-heading {
   line-height: 24px;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-list {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-list {
   display: flex;
   flex: 0 1 auto;
   flex-direction: column;
@@ -43,7 +45,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-pin-list {
   scrollbar-gutter: stable;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-row {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-row {
   display: flex;
   flex: none;
   align-items: center;
@@ -60,23 +62,23 @@ body[data-dsh-deepcraft] .dsh-deepcraft-pin-row {
   transition: background-color var(--dsh-deepcraft-timing-feedback), color var(--dsh-deepcraft-timing-feedback);
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-row:hover,
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-row:focus-visible,
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-row[aria-current='true'] {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-row:hover,
+body[data-dsh-deepcraft] .dsh-deepcraft-session-row:focus-visible,
+body[data-dsh-deepcraft] .dsh-deepcraft-session-row[aria-current='true'] {
   background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
   color: var(--dsw-alias-label-primary);
   outline: none;
 }
 
-body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-pin-row:hover,
-body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-pin-row:focus-visible,
-body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-pin-row[aria-current='true'] {
+body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-session-row:hover,
+body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-session-row:focus-visible,
+body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-session-row[aria-current='true'] {
   color: var(--dsh-deepcraft-ink-strong);
 }
 
 /* The host tree's leading cell: a 6px circle in 14px, so the titles of both
    lists start at the same x. A live status replaces the circle with its dot. */
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-status {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-status {
   display: inline-flex;
   flex: none;
   align-items: center;
@@ -85,7 +87,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-pin-status {
   height: 16px;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-status:empty::after {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-status:empty::after {
   content: '';
   display: inline-block;
   width: 6px;
@@ -95,7 +97,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-pin-status:empty::after {
   box-sizing: border-box;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-sr {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-sr {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -107,7 +109,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-pin-sr {
   border: 0;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-title {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-title {
   flex: 1 1 auto;
   min-width: 0;
   margin: 0 4px;
@@ -116,7 +118,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-pin-title {
   white-space: nowrap;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-workspace {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-workspace {
   flex: 0 1 auto;
   max-width: 34%;
   color: var(--dsw-alias-label-caption, #a6a094);
@@ -126,7 +128,8 @@ body[data-dsh-deepcraft] .dsh-deepcraft-pin-workspace {
   white-space: nowrap;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-menu {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-menu,
+body[data-dsh-deepcraft] .dsh-deepcraft-session-delete {
   display: inline-flex;
   flex: none;
   align-items: center;
@@ -143,18 +146,23 @@ body[data-dsh-deepcraft] .dsh-deepcraft-pin-menu {
   transition: background-color var(--dsh-deepcraft-timing-feedback), color var(--dsh-deepcraft-timing-feedback), opacity var(--dsh-deepcraft-timing-feedback);
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-row:hover .dsh-deepcraft-pin-menu,
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-row:focus-within .dsh-deepcraft-pin-menu,
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-menu[aria-expanded='true'] {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-row:hover .dsh-deepcraft-session-menu,
+body[data-dsh-deepcraft] .dsh-deepcraft-session-row:hover .dsh-deepcraft-session-delete,
+body[data-dsh-deepcraft] .dsh-deepcraft-session-row:focus-within .dsh-deepcraft-session-menu,
+body[data-dsh-deepcraft] .dsh-deepcraft-session-row:focus-within .dsh-deepcraft-session-delete,
+body[data-dsh-deepcraft] .dsh-deepcraft-session-menu[aria-expanded='true'],
+body[data-dsh-deepcraft] .dsh-deepcraft-session-delete[data-busy] {
   opacity: 1;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-menu:hover {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-menu:hover,
+body[data-dsh-deepcraft] .dsh-deepcraft-session-delete:hover {
   background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
   color: var(--dsw-alias-label-primary);
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-pin-menu:focus-visible {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-menu:focus-visible,
+body[data-dsh-deepcraft] .dsh-deepcraft-session-delete:focus-visible {
   outline: 2px solid var(--dsw-alias-brand-primary);
   outline-offset: -2px;
 }

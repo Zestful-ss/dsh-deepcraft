@@ -1,0 +1,13 @@
+{
+  "recentHeading": { "zh": "最近 24 小时", "en": "Last 24 hours" },
+  "recentTitle": { "zh": "最近会话", "en": "Recent sessions" },
+  "recentDesc": { "zh": "在侧栏最上面列出最近 24 小时内有过动静的会话，最多十条；宿主的会话列表与置顶汇总不变。", "en": "Lists the conversations touched in the last 24 hours at the very top of the sidebar, ten at most; the host's own list and the pinned block stay as they are." },
+  "recentMenu": { "zh": "{title} 的会话操作", "en": "Actions for {title}" },
+  "deleteSession": { "zh": "删除会话 {title}", "en": "Delete {title}" },
+  "deleteTitle": { "zh": "删除会话？", "en": "Delete this conversation?" },
+  "deleteNote": { "zh": "「{title}」的记录会从本机删除，无法恢复。", "en": "The stored record of “{title}” is removed from this device, and cannot be restored." },
+  "deleteConfirm": { "zh": "删除", "en": "Delete" },
+  "deleteCancel": { "zh": "取消", "en": "Cancel" },
+  "deleteOpen": { "zh": "会话还开着，先关掉它再删除。", "en": "The conversation is still open; close it before deleting." },
+  "deleteFailed": { "zh": "删除失败：{value}", "en": "Deleting failed: {value}" }
+}

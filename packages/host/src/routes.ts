@@ -184,9 +184,10 @@ async function deleteSession(ctx: DshContext, req: DshRequest, res: DshResponse)
   }
   const raw = await readRequestBody(req, DELETE_BODY_MAX)
   if (raw === null) {
-    // An oversized body leaves its remainder unread: the socket is ended once
-    // this request's answer is out, never before it.
-    res.once('finish', () => req.destroy())
+    // An oversized body leaves its remainder unread: the socket is ended
+    // gracefully once this answer is out — `destroy()` would RST it and drop
+    // the response itself.
+    res.once('finish', () => req.socket.end())
   }
   let request = null
   try {

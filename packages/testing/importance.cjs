@@ -389,6 +389,17 @@ function importanceScenario(lane) {
           await audit.state('subagent chosen')
         }
       }
+      // The recent block's delete card: the row's trash opens it, the card is
+      // audited with its two buttons, and Escape puts it away again.
+      const recentRow = page.locator('.dsh-deepcraft-session-block-recent .dsh-deepcraft-session-row').first()
+      if (await recentRow.count() > 0) {
+        await recentRow.hover()
+        await recentRow.locator('.dsh-deepcraft-session-delete').click({ force: true })
+        await page.waitForTimeout(400)
+        await audit.state('recent delete card')
+        await page.keyboard.press('Escape')
+        await page.waitForTimeout(300)
+      }
       // The reader's own wallpaper: the file through the host half's route, the
       // source switched on by its own control, the page audited with the layer
       // standing, then the control switched off again and the file removed — the

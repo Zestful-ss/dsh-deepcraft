@@ -113,6 +113,8 @@ const THEME_SHEETS = [
   { file: 'theme/material.css', rank: 55 },
   { file: 'theme/hero.css', rank: 70 },
   { file: 'theme/sidebar.css', rank: 110 },
+  // The sidebar's own conversation blocks: the recent list and the pinned one.
+  { file: 'shared/session-block.css', rank: 125 },
   { file: 'theme/third-party.css', rank: 300 },
   // Last: the page on a wallpaper restates what the features paint on the shell
   { file: 'theme/wallpaper.css', rank: 400 },

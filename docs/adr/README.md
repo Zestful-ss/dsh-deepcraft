@@ -24,6 +24,7 @@
 | [D81](D81-native-layout-and-page-ownership.md) | 宿主布局与整页让位 | D70、D71、D74、D49、D23、D32、D55、D56、D57、D58、D63 |
 | [D82](D82-ds-bot-return-entry.md) | Bot 面保留一个返回主题的入口 |  |
 | [D84](D84-material-layer-as-appearance-options.md) | 材质层是与配色无关的外观选项 | D83 |
+| [D85](D85-recent-sessions-and-delete.md) | 侧栏的最近会话块与直接删除 | 无 |
 
 ## 作废的编号
 

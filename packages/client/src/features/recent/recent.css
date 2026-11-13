@@ -1,0 +1,63 @@
+/* ---------- the recent block's delete confirmation ---------- */
+/* The row's trash opens this card through the shared popover card, so the frame,
+   the blur and the open/close fade are the neutral ones; only the text and the
+   two buttons are this feature's. The card is placed by the shared anchoring
+   helper beside the row's button. */
+
+body[data-dsh-deepcraft] .dsh-deepcraft-session-delete-card {
+  max-width: 260px;
+  padding: 12px 14px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-session-delete-note {
+  margin: 0;
+  color: var(--dsw-alias-label-primary);
+  font-family: var(--dsw-font-family);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-session-delete-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-session-delete-button {
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--dsw-alias-label-primary);
+  cursor: pointer;
+  font-family: var(--dsw-font-family);
+  font-size: 12px;
+  transition: background-color var(--dsh-deepcraft-timing-feedback), border-color var(--dsh-deepcraft-timing-feedback);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-session-delete-button:hover {
+  background: var(--dsh-deepcraft-hover-bg, rgba(0, 0, 0, 0.08));
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-session-delete-button:focus-visible {
+  outline: 2px solid var(--dsw-alias-brand-primary);
+  outline-offset: -2px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-session-delete-button[data-busy] {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* The destructive choice keeps the palette's own warning red: the same token the
+   host's error text reads, so a palette that recolours errors recolours this. */
+body[data-dsh-deepcraft] .dsh-deepcraft-session-delete-danger {
+  border-color: var(--dsw-alias-state-error-primary, #c0392b);
+  color: var(--dsw-alias-state-error-primary, #c0392b);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-session-delete-danger:hover {
+  background: color-mix(in srgb, var(--dsw-alias-state-error-primary, #c0392b) 12%, transparent);
+}

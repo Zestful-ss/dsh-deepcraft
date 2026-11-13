@@ -17,13 +17,14 @@ const path = require('node:path')
 const { randomUUID } = require('node:crypto')
 const { sendPrompt, waitForTurn } = require('./prompt.cjs')
 const { dismissOverlays, waitForSkin } = require('./dsh-web.cjs')
+const { openRow, rowsOf, shownSession, waitForRows } = require('./session-ui.cjs')
 
 /** The skin's aggregate and the host's own rows. */
 const SKIN = {
-  block: '.dsh-deepcraft-pin-block',
-  row: '.dsh-deepcraft-pin-row',
-  menu: '.dsh-deepcraft-pin-menu',
-  title: '.dsh-deepcraft-pin-title',
+  block: '.dsh-deepcraft-session-block-pins',
+  row: '.dsh-deepcraft-session-row',
+  menu: '.dsh-deepcraft-session-menu',
+  title: '.dsh-deepcraft-session-title',
 }
 const HOST = {
   sessionRow: '[data-row-key^="session:"]',
@@ -34,11 +35,6 @@ const HOST = {
   dialog: '[role="dialog"]',
   composer: '[data-composer-input]',
   conversation: '[data-conversation-session]',
-}
-
-/** The session the page shows. */
-function shownSession(page) {
-  return page.evaluate((selector) => document.querySelector(selector)?.getAttribute('data-conversation-session') ?? '', HOST.conversation)
 }
 
 /** Open the host's row menu for one of the host's own session rows. */
@@ -52,7 +48,7 @@ async function openRowMenu(page, sessionId) {
 
 /** Open the host menu from one pinned row's own menu button. */
 async function openPinMenu(page, sessionId) {
-  const row = page.locator(`${SKIN.row}[data-session-id="${sessionId}"]`).first()
+  const row = page.locator(`${SKIN.block} ${SKIN.row}[data-session-id="${sessionId}"]`).first()
   await row.waitFor({ state: 'visible', timeout: 20000 })
   await row.hover()
   await row.locator(SKIN.menu).click()
@@ -64,20 +60,6 @@ async function pressMenuItem(page, pattern) {
   const item = page.locator(HOST.menu).locator(HOST.menuItem).filter({ hasText: pattern }).first()
   await item.waitFor({ state: 'visible', timeout: 10000 })
   await item.click()
-}
-
-/** The pinned rows' session ids, in the order drawn. */
-function pinOrder(page) {
-  return page.evaluate((selector) => [...document.querySelectorAll(`${selector} ${'.dsh-deepcraft-pin-row'}`)]
-    .map((row) => row.getAttribute('data-session-id') ?? ''), SKIN.block)
-}
-
-/** Wait until the aggregate holds exactly these session ids in this order. */
-async function waitForPins(page, ids, timeout = 20000) {
-  await page.waitForFunction(({ block, ids }) => {
-    const rows = [...document.querySelectorAll(`${block} .dsh-deepcraft-pin-row`)]
-    return rows.length === ids.length && rows.every((row, at) => row.getAttribute('data-session-id') === ids[at])
-  }, { block: SKIN.block, ids }, { timeout }).catch(() => {})
 }
 
 /** Expand one workspace group when it is folded. */
@@ -123,8 +105,8 @@ function workspacePinsScenario({ check }) {
       // The host's own menu pins the first conversation; the aggregate appears.
       await openRowMenu(page, first)
       await pressMenuItem(page, /^(置顶会话|Pin session|Pin conversation|Pin)/i)
-      await waitForPins(page, [first])
-      checks.push(check('宿主菜单置顶后，顶部出现这条会话', (await pinOrder(page)).join() === first, JSON.stringify(await pinOrder(page))))
+      await waitForRows(page, SKIN.block, [first])
+      checks.push(check('宿主菜单置顶后，顶部出现这条会话', (await rowsOf(page, SKIN.block)).join() === first, JSON.stringify(await rowsOf(page, SKIN.block))))
 
       // A second conversation in the second workspace, through that row's own ＋.
       await newSessionIn(page, 'workspace-b')
@@ -139,9 +121,9 @@ function workspacePinsScenario({ check }) {
       await expandWorkspace(page, 'workspace-b')
       await openRowMenu(page, second)
       await pressMenuItem(page, /^(置顶会话|Pin session|Pin conversation|Pin)/i)
-      await waitForPins(page, [second, first])
+      await waitForRows(page, SKIN.block, [second, first])
 
-      const order = await pinOrder(page)
+      const order = await rowsOf(page, SKIN.block)
       const text = await page.locator(SKIN.block).innerText()
       checks.push(check('两条置顶会话按最近置顶在前排列', order.join() === [second, first].join(), JSON.stringify(order)))
       checks.push(check('置顶行写明各自工作区', text.includes('lane-workspace') && text.includes('workspace-b'), text.replace(/\s+/g, ' ')))
@@ -156,10 +138,8 @@ function workspacePinsScenario({ check }) {
         originals.keys.includes(`session:${first}`) && originals.keys.includes(`session:${second}`), JSON.stringify(originals)))
 
       // Pointer, then keyboard: both open the conversation the row names.
-      await page.locator(`${SKIN.row}[data-session-id="${first}"]`).click()
-      await page.waitForFunction((id) => (document.querySelector('[data-conversation-session]')?.getAttribute('data-conversation-session') ?? '') === id, first, { timeout: 20000 })
-      const pointerOpen = await shownSession(page)
-      await page.locator(`${SKIN.row}[data-session-id="${second}"]`).focus()
+      const pointerOpen = await openRow(page, `${SKIN.block} ${SKIN.row}[data-session-id="${first}"]`, first)
+      await page.locator(`${SKIN.block} ${SKIN.row}[data-session-id="${second}"]`).focus()
       await page.keyboard.press('Enter')
       await page.waitForFunction((id) => (document.querySelector('[data-conversation-session]')?.getAttribute('data-conversation-session') ?? '') === id, second, { timeout: 20000 })
       const keyboardOpen = await shownSession(page)
@@ -176,19 +156,19 @@ function workspacePinsScenario({ check }) {
       await dialog.locator('input').first().press('Enter')
       await dialog.waitFor({ state: 'detached', timeout: 15000 }).catch(() => {})
       await page.waitForFunction(({ block, id }) => {
-        const row = document.querySelector(`${block} .dsh-deepcraft-pin-row[data-session-id="${id}"]`)
-        return row !== null && (row.querySelector('.dsh-deepcraft-pin-title')?.textContent ?? '') === 'Pinned by reader'
+        const row = document.querySelector(`${block} .dsh-deepcraft-session-row[data-session-id="${id}"]`)
+        return row !== null && (row.querySelector('.dsh-deepcraft-session-title')?.textContent ?? '') === 'Pinned by reader'
       }, { block: SKIN.block, id: second }, { timeout: 15000 }).catch(() => {})
-      const renamed = await page.locator(`${SKIN.row}[data-session-id="${second}"] ${SKIN.title}`).innerText().catch(() => '')
+      const renamed = await page.locator(`${SKIN.block} ${SKIN.row}[data-session-id="${second}"] ${SKIN.title}`).innerText().catch(() => '')
       checks.push(check('从置顶行重命名后，置顶行显示新标题', renamed === 'Pinned by reader', renamed))
 
       // Unpin the first: only the aggregate loses it, its host row stays.
       await openPinMenu(page, first)
       await pressMenuItem(page, /^(取消置顶|Unpin)/i)
-      await waitForPins(page, [second])
+      await waitForRows(page, SKIN.block, [second])
       const afterUnpin = await page.evaluate(({ sessionRow, sessionId, block }) => ({
         row: document.querySelector(`${sessionRow}[data-row-key="session:${sessionId}"]`) !== null,
-        pinned: [...document.querySelectorAll(`${block} .dsh-deepcraft-pin-row`)].map((node) => node.getAttribute('data-session-id')),
+        pinned: [...document.querySelectorAll(`${block} .dsh-deepcraft-session-row`)].map((node) => node.getAttribute('data-session-id')),
       }), { sessionRow: HOST.sessionRow, sessionId: first, block: SKIN.block })
       checks.push(check('取消置顶只移出汇总区，宿主原行还在', afterUnpin.row && afterUnpin.pinned.join() === second, JSON.stringify(afterUnpin)))
 
@@ -196,9 +176,9 @@ function workspacePinsScenario({ check }) {
       await page.reload({ waitUntil: 'domcontentloaded' })
       await waitForSkin(page)
       await dismissOverlays(page)
-      await waitForPins(page, [second])
-      const afterReload = await page.locator(`${SKIN.row}[data-session-id="${second}"] ${SKIN.title}`).innerText().catch(() => '')
-      checks.push(check('刷新后置顶顺序与新标题都保留', (await pinOrder(page)).join() === second && afterReload === 'Pinned by reader', JSON.stringify({ order: await pinOrder(page), afterReload })))
+      await waitForRows(page, SKIN.block, [second])
+      const afterReload = await page.locator(`${SKIN.block} ${SKIN.row}[data-session-id="${second}"] ${SKIN.title}`).innerText().catch(() => '')
+      checks.push(check('刷新后置顶顺序与新标题都保留', (await rowsOf(page, SKIN.block)).join() === second && afterReload === 'Pinned by reader', JSON.stringify({ order: await rowsOf(page, SKIN.block), afterReload })))
 
       // Host search takes the aggregate off the page; Escape brings it back.
       const search = page.locator('[data-slot="sidebar"] input[type="text"]').first()

@@ -81,27 +81,6 @@
       ]
     },
     {
-      "reason": "置顶区块只在有置顶会话时渲染，走查的临时宿主没有置顶",
-      "selectors": [
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-block",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-section",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-heading",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-list",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-row",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-row[aria-current=true]",
-        "body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-pin-row",
-        "body[data-dsh-deepcraft][data-ds-dark-theme] .dsh-deepcraft-pin-row[aria-current=true]",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-status",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-status:empty",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-sr",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-title",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-workspace",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-menu",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-row .dsh-deepcraft-pin-menu",
-        "body[data-dsh-deepcraft] .dsh-deepcraft-pin-menu[aria-expanded=true]"
-      ]
-    },
-    {
       "reason": "子代理胶囊与弹层里走查没走到的态：不可用、陈旧说明与两三已选",
       "selectors": [
         "body[data-dsh-deepcraft] .dsh-deepcraft-subagent-model-btn[data-dsh-subagent-model=unavailable]",

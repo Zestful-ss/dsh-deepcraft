@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">新增功能</h3>
+
+- 新增侧栏「最近 24 小时」：最近一天内动过的会话按时间倒序排在最上面，最多十条，宿主的会话列表与置顶汇总保持原样；块里每一行可直接删除会话，确认后删掉本机的记录，仍打开着的会话会被拒绝并提示先关闭。
+
+<h3 id="en-unreleased">New Features</h3>
+
+- Add a "Last 24 hours" block at the top of the sidebar: the conversations touched today, newest first, ten at most, with the host's own list and the pinned block unchanged; each row can delete its conversation after a confirmation, removing the stored record on this device, while a conversation the host still holds open is refused with a note to close it.
+
 ## [0.37.0] - 2026-11-12
 
 [中文](#cn-0.37.0) | [English](#en-0.37.0)
