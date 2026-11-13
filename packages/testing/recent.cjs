@@ -4,11 +4,12 @@
  * (D85).
  *
  * The scenario reads the block at the very top of the session section, opens one
- * conversation from it, deletes a closed one through the card (the row leaves and
- * the host half answers), and presses delete on the conversation the host still
- * has open — the card must name that instead of deleting. The 24-hour window and
- * its ordering are the unit lane's (`select.test.ts`); this walk proves the block
- * is on the page, in place, and wired to the host's own session data.
+ * conversation from it, and presses delete on the conversation the host still
+ * holds open: the card names the conversation, the confirm is refused, and the
+ * row stays. Deleting a stored record itself is the smoke lane's
+ * (packages/testing/smoke/host-half.cjs drives the route against a scratch home),
+ * and the 24-hour window is the unit lane's (select.test.ts); this walk proves the
+ * block is on the page, in place, and wired to the host's own session data.
  */
 'use strict'
 const { sendPrompt, waitForTurn } = require('./prompt.cjs')
@@ -67,34 +68,28 @@ function recentScenario({ check }) {
       await openRow(page, `${SKIN.block} ${SKIN.row}[data-session-id="${first}"]`, first)
       checks.push(check('块里的一行按下后打开对应会话', await shownSession(page) === first, await shownSession(page)))
 
-      // Deleting the closed conversation: the card names it, the confirm removes
-      // the row, and the block keeps the other.
-      const secondTitle = await page.locator(`${SKIN.block} ${SKIN.row}[data-session-id="${second}"] ${SKIN.title}`).innerText()
-      await page.locator(`${SKIN.block} ${SKIN.row}[data-session-id="${second}"] ${SKIN.trash}`).click()
+      // Delete on the conversation the host still holds open: the card names it,
+      // the confirm is refused with the reason, and the row stays.
+      const firstTitle = await page.locator(`${SKIN.block} ${SKIN.row}[data-session-id="${first}"] ${SKIN.title}`).innerText()
+      await page.locator(`${SKIN.block} ${SKIN.row}[data-session-id="${first}"] ${SKIN.trash}`).click()
       await page.locator(SKIN.card).waitFor({ state: 'visible', timeout: 10000 })
       const note = await page.locator(SKIN.note).innerText()
       await page.locator(SKIN.confirm).click()
-      await page.locator(SKIN.card).waitFor({ state: 'detached', timeout: 15000 }).catch(() => {})
-      await waitForRows(page, SKIN.block, [first])
-      checks.push(check('确认卡写着会话名，确认后这一行从块里消失',
-        note.includes(secondTitle) && (await rowsOf(page, SKIN.block)).join() === first,
-        JSON.stringify({ note, order: await rowsOf(page, SKIN.block) })))
-
-      // The conversation the host still holds open is refused, and the card says why.
-      await page.locator(`${SKIN.block} ${SKIN.row}[data-session-id="${first}"] ${SKIN.trash}`).click()
-      await page.locator(SKIN.card).waitFor({ state: 'visible', timeout: 10000 })
-      await page.locator(SKIN.confirm).click()
       await page.waitForFunction((selector) => {
-        const note = document.querySelector(selector)
-        return note !== null && /开着|open/.test(note.textContent ?? '')
+        const text = document.querySelector(selector)
+        return text !== null && /开着|open/.test(text.textContent ?? '')
       }, SKIN.note, { timeout: 15000 }).catch(() => {})
       const refused = await page.locator(SKIN.note).innerText()
       const stillThere = (await rowsOf(page, SKIN.block)).includes(first)
       await page.keyboard.press('Escape')
-      checks.push(check('还开着的会话不删除，卡上说明先关闭',
-        /开着|open/.test(refused) && stillThere, JSON.stringify({ refused, stillThere })))
+      await page.locator(SKIN.card).waitFor({ state: 'detached', timeout: 10000 }).catch(() => {})
+      checks.push(check('确认卡写着会话名，还开着的会话不删除并说明先关闭',
+        note.includes(firstTitle) && /开着|open/.test(refused) && stillThere,
+        JSON.stringify({ note, refused, stillThere })))
 
-      checks.push(check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')))
+      // The refusal is the host's own 409, logged by the browser as a failed load.
+      const problems = session.problems.filter((line) => !/status of 409/.test(line))
+      checks.push(check('控制台没有异常', problems.length === 0, problems.slice(0, 3).join(' | ')))
       return checks
     },
   }

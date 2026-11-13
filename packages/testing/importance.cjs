@@ -389,6 +389,16 @@ function importanceScenario(lane) {
           await audit.state('subagent chosen')
         }
       }
+      // The row's host menu, open: the row reports the state on its own button,
+      // and the menu itself is the host's.
+      const recentMenu = page.locator('.dsh-deepcraft-session-block-recent .dsh-deepcraft-session-menu').first()
+      if (await recentMenu.count() > 0) {
+        await recentMenu.click({ force: true })
+        await page.waitForTimeout(500)
+        await audit.state('recent row menu')
+        await page.keyboard.press('Escape')
+        await page.waitForTimeout(400)
+      }
       // The recent block's delete card: the row's trash opens it, the card is
       // audited with its two buttons, and Escape puts it away again.
       const recentRow = page.locator('.dsh-deepcraft-session-block-recent .dsh-deepcraft-session-row').first()

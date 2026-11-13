@@ -71,6 +71,8 @@ const READABLE_PSEUDO = new Set(['::before', '::after', '::marker', '::placehold
 const TRANSIENT_SELECTORS = [
   '[data-dsh-deepcraft-page-enter]', '[data-dsh-deepcraft-page-leave]',
   '[data-dsh-theme-transitioning]',
+  // The delete card's confirm while its request is out: one round trip long.
+  '.dsh-deepcraft-session-delete-button[data-busy]',
 ]
 
 /**

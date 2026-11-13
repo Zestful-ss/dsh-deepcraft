@@ -87,16 +87,6 @@ body[data-dsh-deepcraft] .dsh-deepcraft-session-status {
   height: 16px;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-session-status:empty::after {
-  content: '';
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border: 1px solid var(--dsw-alias-label-caption, #a6a094);
-  border-radius: 50%;
-  box-sizing: border-box;
-}
-
 body[data-dsh-deepcraft] .dsh-deepcraft-session-sr {
   position: absolute;
   width: 1px;
@@ -150,8 +140,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-session-row:hover .dsh-deepcraft-session
 body[data-dsh-deepcraft] .dsh-deepcraft-session-row:hover .dsh-deepcraft-session-delete,
 body[data-dsh-deepcraft] .dsh-deepcraft-session-row:focus-within .dsh-deepcraft-session-menu,
 body[data-dsh-deepcraft] .dsh-deepcraft-session-row:focus-within .dsh-deepcraft-session-delete,
-body[data-dsh-deepcraft] .dsh-deepcraft-session-menu[aria-expanded='true'],
-body[data-dsh-deepcraft] .dsh-deepcraft-session-delete[data-busy] {
+body[data-dsh-deepcraft] .dsh-deepcraft-session-menu[aria-expanded='true'] {
   opacity: 1;
 }
 
