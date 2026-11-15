@@ -15,6 +15,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 - 修复岛屿伙伴常驻不播动画：单帧精灵表上的 Web Animations 变换压过自身 CSS 的漂浮、跳动与抖动；同时修复长按拖动超过安静时限后空转计时器忙循环、宠物范围切换期间加载落错页面，以及第二次选择 ZIP 导入读到空文件列表。
 - 修复壁纸与品牌图的并发写竞态：上传壁纸时并发读到旧状态会永久盖回界面，品牌标志与文字标志的快写会让后到的响应丢掉先到的成功；两项写现在都串行化。同时让图像壁纸的可见度与模糊滑杆拖动即时预览，不再等到松手提交。
 - 修复若干界面行为：删除会话的确认卡不再失去锚点定位，重载时随功能一并关闭且异步回调不再撤销下一张卡；子代理模型在无会话页面的挂起读取不再落回旧路由，规则开关随主开关一起禁用；品牌名称输入框按 Esc 不再把取消的草稿当提交；ds-bot 返回操作在功能拆除后不再触发整页重载，页脚行被替换后能重新发现。
+- 修复三个会话与品牌界面的边界问题:置顶与最近会话的分区标题随语言切换重绘,不再停留在安装时的语言;子代理模型卡片在其触发按钮被卸载(会话切换等)时随之关闭,不再留下无主悬浮卡;品牌图与壁纸的读操作排在仍在途的写之后,热重载期间的读不再用旧快照盖回刚上传的图片。
 
 <h3 id="en-unreleased">New Features</h3>
 
@@ -25,6 +26,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 - Fix the island companions never animating: a Web Animations transform on their single-frame sheets out-painted the strip's own CSS float, hop and shake; also fix a busy timer loop when a drag outlives the quiet deadline, a scope switch landing a loaded pet on the wrong page, and a second ZIP pick reading an empty selection.
 - Fix the concurrent-write races on wallpaper and brand images: a read during an upload could permanently paint the old state, and two fast brand mutations could drop the first success — writes are serialized now. The image wallpaper's visibility and blur sliders also preview live while dragging instead of only on release.
 - Fix several surface behaviors: the delete-conversation card keeps its anchored positioning, closes with the feature on reload, and a late async reply no longer unregisters the next card; the subagent panel stops landing stale routes on a session-less page and the rule switch disables with its master; Escape in the brand name field no longer commits the cancelled draft; the ds-bot return action no longer reloads a page after teardown, and footer replacement is rediscovered.
+- Fix three session/brand surface edge cases: the pinned and recent block headings repaint on a locale switch instead of keeping the install-time language; the subagent model card closes when its trigger unmounts (session switch and similar) instead of floating ownerless; brand-image and wallpaper reads queue behind in-flight writes, so a reload-time read no longer paints a stale snapshot over a just-uploaded image.
 
 ## [0.41.0] - 2026-11-15
 
