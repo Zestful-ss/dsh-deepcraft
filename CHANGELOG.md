@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.40.0] - 2026-11-15
 
-<h3 id="cn-unreleased">新增功能</h3>
+[中文](#cn-0.40.0) | [English](#en-0.40.0)
+
+<h3 id="cn-0.40.0">新增功能</h3>
 
 - 聊天框宠物新增随插件发布的 Cindy：取自开源应用 Cindy 的岛屿伙伴原画（Apache-2.0），保留与 Petdex 相同的状态与手势，沿用「聊天框宠物包」的同一处选择。
 
@@ -14,7 +16,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - 移除深海蓝、暖橙与森林绿三套配色：配色页保留 Cindy（默认）与跟随宿主，已选旧配色的读者自动落到 Cindy。
 
-<h3 id="en-unreleased">New Features</h3>
+<h3 id="en-0.40.0">New Features</h3>
 
 - Add Cindy to the chat pet choices, shipped with the plugin: the island companion drawn for the open-source app Cindy (Apache-2.0), keeping the same states and gestures a Petdex pet answers, picked from the same Chat pet package select.
 
