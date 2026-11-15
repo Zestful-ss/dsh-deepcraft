@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">新增功能</h3>
+
+- 随插件发布的岛屿伙伴再添 Pululu：开源应用 Cindy 的第十只可选皮肤，整脸原画随包发布，状态与手势与其他岛屿伙伴一致。
+
+<h3 id="en-unreleased">New Features</h3>
+
+- Pululu joins the shipped island companions: the tenth selectable skin drawn for the open-source app Cindy, its whole face painted into the sprite, keeping the same states and gestures as the other island pets.
+
 ## [0.41.0] - 2026-11-15
 
 [中文](#cn-0.41.0) | [English](#en-0.41.0)
