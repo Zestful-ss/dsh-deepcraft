@@ -1,8 +1,0 @@
-{
-  "group": "removals",
-  "order": 30,
-  "at": "2026-11-15",
-  "external": false,
-  "zh": "移除深海蓝、暖橙与森林绿三套配色：配色页保留 Cindy（默认）与跟随宿主，已选旧配色的读者自动落到 Cindy。",
-  "en": "Remove the Ocean blue, Warm ember and Forest green palettes: the palette choice keeps Cindy (the default) and following the host, and a reader on a removed palette lands on Cindy."
-}
