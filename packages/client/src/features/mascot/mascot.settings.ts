@@ -177,7 +177,7 @@ function PetSoundControl(view: SettingsRowView) {
     return React.createElement('div', { key: event, className: 'dsh-deepcraft-settings-pet-sound-row' },
       React.createElement('span', { className: 'dsh-deepcraft-settings-pet-sound-label' }, copy(labelKey)),
       React.createElement('select', {
-        className: 'dsh-deepcraft-settings-pet-select',
+        className: 'dsh-deepcraft-settings-pet-sound-select',
         value: choice,
         disabled: view.disabled,
         onChange: (change: React.ChangeEvent<HTMLSelectElement>) => { writePick(event, change.currentTarget.value) },
