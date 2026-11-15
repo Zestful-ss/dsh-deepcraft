@@ -1,8 +1,0 @@
-{
-  "group": "fixes",
-  "order": 0,
-  "at": "2026-11-16",
-  "external": false,
-  "zh": "修复壁纸下侧栏根与右栏停靠面板仍不透底的问题：让位清单补上 `sidebar-root`、`panel-guide` 与 `panel`",
-  "en": "Fix the sidebar root and the right column's docked panels still painting opaque under a wallpaper: the stand-down list now covers `sidebar-root`, `panel-guide` and `panel`"
-}
