@@ -50,6 +50,8 @@ const readPage = (page) => page.evaluate(() => {
   const column = document.querySelector('[data-dsh-deepcraft-part~="sidebar-column"]')
   const root = document.querySelector('#root')
   const pane = document.querySelector('[data-pane="conversation"]')
+  const sideRoot = document.querySelector('[data-dsh-deepcraft-part~="sidebar-root"]')
+  const docked = document.querySelector('[data-dsh-deepcraft-part~="rightbar-column"] [data-dsh-deepcraft-part~="panel-guide"]')
   return {
     attribute: document.body.getAttribute('data-dsh-deepcraft-wallpaper'),
     mount: html.getAttribute('data-dsh-deepcraft-wallpaper-mount'),
@@ -58,9 +60,10 @@ const readPage = (page) => page.evaluate(() => {
     painted: style.backgroundImage,
     columnFill: column === null ? null : getComputedStyle(column).backgroundColor,
     // The skin's own canvas rules gate out under a wallpaper: an opaque fill
-    // left on #root or the conversation pane covers the painted canvas.
     rootFill: root === null ? null : getComputedStyle(root).backgroundColor,
     paneFill: pane === null ? null : getComputedStyle(pane).backgroundColor,
+    sideRootFill: sideRoot === null ? null : getComputedStyle(sideRoot).backgroundColor,
+    dockedFill: docked === null ? null : getComputedStyle(docked).backgroundColor,
     veil: style.getPropertyValue('--dsh-deepcraft-wallpaper-veil').trim(),
   }
 })
@@ -97,9 +100,9 @@ function wallpaperScenario({ check }) {
         check('来源开到自定义后，画布底层画的是这份文件',
           read.on?.attribute === 'custom' && read.on?.mount === 'image' && (read.on?.image ?? '').includes(ROUTES.file) && (read.on?.painted ?? 'none') !== 'none',
           JSON.stringify(read.on)),
-        check('壁纸在时侧栏列、页面根与会话面板都让出填充，画布面纱盖在图上',
-          read.on?.columnFill === 'rgba(0, 0, 0, 0)' && (read.on?.rootFill === 'rgba(0, 0, 0, 0)' || read.on?.rootFill === 'transparent') && (read.on?.paneFill === 'rgba(0, 0, 0, 0)' || read.on?.paneFill === 'transparent' || read.on?.paneFill === null) && (read.on?.painted ?? '').includes('linear-gradient') && read.on?.veil !== '' && read.on?.veil !== 'transparent',
-          JSON.stringify({ columnFill: read.on?.columnFill, rootFill: read.on?.rootFill, paneFill: read.on?.paneFill, painted: read.on?.painted, veil: read.on?.veil })),
+        check('壁纸在时侧栏列、页面根、会话面板与停靠面板都让出填充，画布面纱盖在图上',
+          read.on?.columnFill === 'rgba(0, 0, 0, 0)' && (read.on?.rootFill === 'rgba(0, 0, 0, 0)' || read.on?.rootFill === 'transparent') && (read.on?.paneFill === 'rgba(0, 0, 0, 0)' || read.on?.paneFill === 'transparent' || read.on?.paneFill === null) && (read.on?.sideRootFill === 'rgba(0, 0, 0, 0)' || read.on?.sideRootFill === 'transparent' || read.on?.sideRootFill === null) && (read.on?.dockedFill === 'rgba(0, 0, 0, 0)' || read.on?.dockedFill === 'transparent' || read.on?.dockedFill === null) && (read.on?.painted ?? '').includes('linear-gradient') && read.on?.veil !== '' && read.on?.veil !== 'transparent',
+          JSON.stringify({ columnFill: read.on?.columnFill, rootFill: read.on?.rootFill, paneFill: read.on?.paneFill, sideRootFill: read.on?.sideRootFill, dockedFill: read.on?.dockedFill, painted: read.on?.painted, veil: read.on?.veil })),
         check('来源关掉后画布回到纯色', read.off?.attribute === 'off' && read.off?.mount === null, JSON.stringify(read.off)),
         check('移除之后状态里没有壁纸', read.removed?.ok === true && read.removed?.wallpaper === null, JSON.stringify(read.removed)),
         check('控制台没有异常', problems.length === 0, problems.slice(0, 3).join(' | ')),

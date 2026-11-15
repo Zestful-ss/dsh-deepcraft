@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修复壁纸下侧栏根与右栏停靠面板仍不透底的问题：让位清单补上 `sidebar-root`、`panel-guide` 与 `panel`
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Fix the sidebar root and the right column's docked panels still painting opaque under a wallpaper: the stand-down list now covers `sidebar-root`, `panel-guide` and `panel`
+
 ## [0.40.1] - 2026-11-15
 
 [中文](#cn-0.40.1) | [English](#en-0.40.1)

@@ -33,8 +33,10 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
 }
 
 /* ---------- the shell stands down ---------- */
-/* Each of these paints the canvas over the whole window or a whole column. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) :is([data-dsh-deepcraft-part~="layout-frame"][data-dsh-deepcraft-holds~="sidebar-column"], [data-dsh-deepcraft-part~="center-column"], [data-dsh-deepcraft-part~="rightbar-column"], [data-dsh-deepcraft-holds~="conversation-scroll"]) {
+/* Each of these paints the canvas over the whole window or a whole column:
+   the frame holding the sidebar, the center and right columns, the scroll
+   holder, the sidebar's own root, and the docked panels inside the rightbar. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) :is([data-dsh-deepcraft-part~="layout-frame"][data-dsh-deepcraft-holds~="sidebar-column"], [data-dsh-deepcraft-part~="center-column"], [data-dsh-deepcraft-part~="rightbar-column"], [data-dsh-deepcraft-holds~="conversation-scroll"], [data-dsh-deepcraft-part~="sidebar-root"], [data-dsh-deepcraft-part~="rightbar-column"] :is([data-dsh-deepcraft-part~="panel-guide"], [data-dsh-deepcraft-part~="panel"])) {
   background: transparent;
 }
 
