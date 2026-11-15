@@ -4,6 +4,26 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+## [0.41.0] - 2026-11-15
+
+[中文](#cn-0.41.0) | [English](#en-0.41.0)
+
+<h3 id="cn-0.41.0">新增功能</h3>
+
+- 随插件发布的聊天宠物从 Cindy 一只扩为整套岛屿伙伴：新增 Annie、Black Cat、Boli、Chaku、Erika、Muffin、Tarara 与 Apple Girl 的原画（Apache-2.0），仍在设置页同一处选择，状态与手势与 Petdex 宠物一致。
+
+### 问题修复
+
+- 修复视频壁纸在桌面端整页不显示：视频层在负 z-index 上，宿主画布把脱离层叠上下文的孩子压到文档背景之下，卸载视频层时同时停止解码。
+
+<h3 id="en-0.41.0">New Features</h3>
+
+- Grow the shipped chat pets from Cindy alone to the whole island set: Annie, Black Cat, Boli, Chaku, Erika, Muffin, Tarara and Apple Girl join her (Apache-2.0), picked from the same settings row, keeping the same states and gestures a Petdex pet answers.
+
+### Bug Fixes
+
+- Fix the video wallpaper painting nothing on desktop: its layer sits at a negative z-index and the host canvas drops a child outside a stacking context below the document background; unmounting the layer now pauses the video too.
+
 ## [0.40.2] - 2026-11-15
 
 [中文](#cn-0.40.2) | [English](#en-0.40.2)
