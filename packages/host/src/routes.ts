@@ -22,6 +22,7 @@ import { fenceRefused, methodRefused, readRequestBody, refusalOf, sendJson } fro
 import { createStaticFiles } from '@dsh-deepcraft/engine/node/static-files'
 import { packageRoot } from './package-root.js'
 import { petRoutes } from './pets/routes.js'
+import { petSoundRoutes } from './pet-sound.js'
 import { wallpaperRoutes } from './wallpaper.js'
 import { subagentModelRoutes } from './subagent-models/route.js'
 import type { SubagentModelStore } from './subagent-models/store.js'
@@ -386,6 +387,7 @@ export function registerRoutes(ctx: DshContext, scope: DshScope, models: Subagen
     for (const { label, route } of brandRoutes(ctx)) register(label, route)
     for (const { label, route } of wallpaperRoutes(ctx)) register(label, route)
     for (const { label, route } of petRoutes(ctx)) register(label, route)
+    for (const { label, route } of petSoundRoutes(ctx)) register(label, route)
     for (const { label, route } of subagentModelRoutes(ctx, models)) register(label, route)
     return () => {
       usage.dispose()
