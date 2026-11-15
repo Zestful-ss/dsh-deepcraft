@@ -283,6 +283,54 @@
     "zh": "Pululu",
     "en": "Pululu"
   },
+  "petSounds": {
+    "zh": "宠物声音",
+    "en": "Pet sounds"
+  },
+  "petSoundAttention": {
+    "zh": "完成提醒",
+    "en": "Completion"
+  },
+  "petSoundError": {
+    "zh": "出错提醒",
+    "en": "Error"
+  },
+  "petSound_off": {
+    "zh": "关闭",
+    "en": "Off"
+  },
+  "petSound_chime": {
+    "zh": "风铃",
+    "en": "Chime"
+  },
+  "petSound_ding": {
+    "zh": "叮",
+    "en": "Ding"
+  },
+  "petSound_custom": {
+    "zh": "自定义…",
+    "en": "Custom…"
+  },
+  "petSoundUpload": {
+    "zh": "上传",
+    "en": "Upload"
+  },
+  "petSoundReplace": {
+    "zh": "替换",
+    "en": "Replace"
+  },
+  "petSoundRemove": {
+    "zh": "移除",
+    "en": "Remove"
+  },
+  "petSoundPreview": {
+    "zh": "试听{event}声音",
+    "en": "Preview the {event} sound"
+  },
+  "petSoundFailed": {
+    "zh": "声音上传失败，请重试。",
+    "en": "Sound upload failed; please try again."
+  },
   "fontHarmony": { "zh": "HarmonyOS Sans SC", "en": "HarmonyOS Sans SC" },
   "fontUiTitle": { "zh": "界面字体", "en": "Interface font" },
   "fontUiDesc": { "zh": "侧栏、按钮和设置页的字体；正文字号和行高仍取宿主。", "en": "The sidebar, buttons and settings page; sizes and line heights stay the host's." },

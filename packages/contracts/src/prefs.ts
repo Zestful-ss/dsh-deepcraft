@@ -55,6 +55,10 @@ export const MATERIAL_MOTIONS = [MATERIAL_REFERENCE, MATERIAL_HOST] as const
 export const FONT_HOST = 'host'
 export const FONT_FOLLOW = 'follow'
 export const FONT_CUSTOM = 'custom'
+/** A pet sound pick: a bundled tone, `off`, or the reader's own uploaded file for the event. */
+export const PET_SOUND_OFF = 'off'
+export const PET_SOUND_CUSTOM = 'custom'
+export const PET_SOUND_CHOICES = [PET_SOUND_OFF, 'chime', 'ding', PET_SOUND_CUSTOM] as const
 export const FONT_UI_INTER = 'inter'
 export const FONT_UI_HARMONY = 'harmony'
 export const FONT_UI_GEIST = 'geist'
@@ -174,6 +178,12 @@ export const PREFS = {
   mascotScope: { type: 'choice', values: MASCOT_SCOPES, default: MASCOT_SCOPE_ALL },
   /** The chat pet, by package directory id; it follows neither the palette nor the brand (D80). */
   chatPet: { type: 'text', default: 'whaledou', max: PET_ID_MAX },
+  /**
+   * The sound the pet plays on each moment: a builtin id, `off`, or `custom`
+   * naming the file the host half stores for the event (pet-sound contract).
+   */
+  petSoundAttention: { type: 'choice', values: PET_SOUND_CHOICES, default: PET_SOUND_OFF },
+  petSoundError: { type: 'choice', values: PET_SOUND_CHOICES, default: PET_SOUND_OFF },
   /**
    * The reader's own wallpaper: `custom` mounts the layer the host half's
    * wallpaper file serves under; `builtin` mounts one of the bundled set;

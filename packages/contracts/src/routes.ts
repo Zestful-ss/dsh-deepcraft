@@ -60,6 +60,15 @@ export const SUBAGENT_MODELS_PATH = `${ROUTE_PREFIX}/subagent-models`
 export const PETS_IMAGE_PATH = `${PETS_PATH}/image`
 
 /**
+ * The reader's own pet sounds: `GET` answers which events have a stored
+ * custom file and each one's version (packages/host/src/pet-sound.ts).
+ */
+export const PET_SOUNDS_PATH = `${ROUTE_PREFIX}/pet-sounds`
+
+/** One event's custom sound bytes: `GET`/`HEAD` serves them, `PUT` replaces them, `DELETE` removes them. */
+export const PET_SOUND_FILE_PATH = `${PET_SOUNDS_PATH}/file`
+
+/**
  * The reader's own wallpaper: `GET` answers whether one is in place, with a
  * version that changes with its bytes (packages/host/src/wallpaper.ts).
  */

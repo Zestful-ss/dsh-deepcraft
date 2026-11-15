@@ -1,10 +1,11 @@
 import { COMPOSER_STACK, conversationSessionId, findComposerCard, findComposerSeat, findConversationSession, findHeroRoot } from '@dsh-deepcraft/engine/host'
 import { CHAIN_OVERLAY_FALLBACK_ATTRIBUTE, PHASE_ATTRIBUTE } from '@dsh-deepcraft/contracts/dom'
-import { motionReduced } from '../../core/prefs'
+import { motionReduced, readPrefs } from '../../core/prefs'
 import { createMascotSignals } from './mascot-signals'
 import type { PetdexState } from '@dsh-deepcraft/contracts/pets'
 import type { MascotMoment } from './mascot-signals'
 import { decideStage, finishStage, freshStage, nextDecisionAt, switchSettles, takeMoment } from './mascot-stage'
+import { playPetSound, soundOfMoment } from './pet-sound'
 import type { MascotPick, PlayMode } from './mascot-stage'
 import { buildElement, closestFrom, createStamp, setAttributeIfChanged } from '@dsh-deepcraft/engine/dom'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
@@ -259,6 +260,8 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   /** A moment happened: it takes the stage, or waits behind a greater one (takeMoment). */
   function onMoment(name: MascotMoment) {
     if (takeMoment(stage, name, Date.now())) step()
+    const event = soundOfMoment(name)
+    if (event !== null) playPetSound(event, readPrefs())
   }
 
   /** A once animation reached its last frame: whoever asked for it lets go. */

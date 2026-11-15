@@ -11,9 +11,15 @@ import {
   readPetLibrary,
   subscribePetLibrary,
 } from '../../shared/petdex'
+import { loadPetSounds, readPetSounds, subscribePetSounds, uploadPetSound, removePetSound } from '../../shared/pet-sound'
+import type { PetSoundEvent, PetSounds } from '../../shared/pet-sound'
+import { previewPetSound } from './pet-sound'
+import { PET_SOUND_CHOICES, PET_SOUND_CUSTOM, PET_SOUND_OFF } from '@dsh-deepcraft/contracts/prefs'
+import { PET_SOUND_TYPES } from '@dsh-deepcraft/contracts/pet-sound'
 import type { PetLibrary } from '../../shared/petdex'
 import { ISLAND_PETS } from './island'
 import { copy } from '../settings/copy'
+import type { CopyKey } from '../settings/copy'
 import type { SettingsRowView } from '../../core/feature'
 
 /**
@@ -138,8 +144,94 @@ function ChatPetControl(view: SettingsRowView) {
         view.write({ chatPet: value })
       },
     }),
+    React.createElement(PetSoundControl, view),
     pet === undefined ? null : React.createElement(PetPreview, { pet }),
     React.createElement(ImportPetControl, view),
+  )
+}
+
+/**
+ * Per-event sound picks: each moment takes a bundled tone, `off`, or the
+ * reader's own uploaded file the host half stores (pet-sound contract). The
+ * preview button plays the current pick; the upload button names a file for
+ * `custom`, and picking `custom` without a file yet arms the upload.
+ */
+function PetSoundControl(view: SettingsRowView) {
+  const [, setSounds] = React.useState<PetSounds | null>(null)
+  React.useEffect(() => {
+    const unsubscribe = subscribePetSounds(setSounds)
+    loadPetSounds()
+    return unsubscribe
+  }, [])
+  const fileInput = React.useRef<HTMLInputElement | null>(null)
+  const pending = React.useRef<PetSoundEvent | null>(null)
+  const [error, setError] = React.useState<string | null>(null)
+
+  function writePick(event: PetSoundEvent, value: string) {
+    view.write({ [event === 'error' ? 'petSoundError' : 'petSoundAttention']: value })
+  }
+
+  function eventRow(event: PetSoundEvent, labelKey: CopyKey) {
+    const choice = event === 'error' ? view.prefs.petSoundError : view.prefs.petSoundAttention
+    const stored = readPetSounds()[event]
+    return React.createElement('div', { key: event, className: 'dsh-deepcraft-settings-pet-sound-row' },
+      React.createElement('span', { className: 'dsh-deepcraft-settings-pet-sound-label' }, copy(labelKey)),
+      React.createElement('select', {
+        className: 'dsh-deepcraft-settings-pet-select',
+        value: choice,
+        disabled: view.disabled,
+        onChange: (change: React.ChangeEvent<HTMLSelectElement>) => { writePick(event, change.currentTarget.value) },
+      },
+        PET_SOUND_CHOICES.map(id => React.createElement('option', { key: id, value: id }, copy(`petSound_${id}`))),
+      ),
+      React.createElement('button', {
+        type: 'button',
+        className: 'dsh-deepcraft-settings-pet-button',
+        disabled: view.disabled || choice === PET_SOUND_OFF,
+        'aria-label': copy('petSoundPreview', { event: copy(labelKey) }),
+        title: copy('petSoundPreview', { event: copy(labelKey) }),
+        onClick: () => { previewPetSound(choice, event) },
+      }, '▶'),
+      choice !== PET_SOUND_CUSTOM ? null : React.createElement(React.Fragment, null,
+        React.createElement('button', {
+          type: 'button',
+          className: 'dsh-deepcraft-settings-pet-button',
+          disabled: view.disabled,
+          onClick: () => { pending.current = event; fileInput.current?.click() },
+        }, copy(stored === null ? 'petSoundUpload' : 'petSoundReplace')),
+        stored === null ? null : React.createElement('button', {
+          type: 'button',
+          className: 'dsh-deepcraft-settings-pet-button',
+          disabled: view.disabled,
+          onClick: () => { void removePetSound(event).catch(() => setError(copy('petSoundFailed'))) },
+        }, copy('petSoundRemove')),
+      ),
+    )
+  }
+
+  return React.createElement('div', { className: 'dsh-deepcraft-settings-pet-sound' },
+    React.createElement('div', { className: 'dsh-deepcraft-settings-pet-sound-title' }, copy('petSounds')),
+    eventRow('attention', 'petSoundAttention'),
+    eventRow('error', 'petSoundError'),
+    React.createElement('input', {
+      ref: fileInput,
+      type: 'file',
+      accept: Object.keys(PET_SOUND_TYPES).join(','),
+      hidden: true,
+      onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.currentTarget.files?.[0]
+        event.currentTarget.value = ''
+        const target = pending.current
+        pending.current = null
+        if (file === undefined || target === null) return
+        setError(null)
+        void uploadPetSound(target, file).catch(() => setError(copy('petSoundFailed')))
+      },
+    }),
+    error === null ? null : React.createElement('p', {
+      className: 'dsh-deepcraft-settings-pet-status',
+      role: 'alert',
+    }, error),
   )
 }
 

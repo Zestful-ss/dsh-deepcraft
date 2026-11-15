@@ -3,6 +3,7 @@ import { readPrefs, resolveMascot } from '../../core/prefs'
 import { createPetdexMascot } from './petdex'
 import { createIslandMascot, isIslandPet } from './island'
 import { decodePet, ensurePet } from '../../shared/petdex'
+import { loadPetSounds, resetPetSounds } from '../../shared/pet-sound'
 import type { PetDescriptor } from '@dsh-deepcraft/contracts/pets'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
@@ -94,9 +95,11 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   }
 
   ui.mascot = { sync, onActivity }
+  loadPetSounds()
 
   return () => {
     releaseChat()
+    resetPetSounds()
     delete ui.mascot
   }
 }
