@@ -4,16 +4,6 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
-
-<h3 id="cn-unreleased">问题修复</h3>
-
-- 修复壁纸来源从内建切到自定义后图层不出现：图层模块常驻时沿用了上传前的空缓存，切换到自定义现会重新向宿主半边读取一次。
-
-<h3 id="en-unreleased">Bug Fixes</h3>
-
-- Fix the wallpaper layer staying away after the source switches from built-in to custom: the long-lived module kept the cache from before the upload, and switching to custom now re-reads the host half once.
-
 ## [0.39.0] - 2026-11-15
 
 [中文](#cn-0.39.0) | [English](#en-0.39.0)
@@ -26,6 +16,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 ### 问题修复
 
 - 修复壁纸控件引用宿主不存在的三个令牌（输入框底色、悬停底色、错误字色），改用宿主已有的具体令牌与错误色。
+- 修复壁纸来源从内建切到自定义后图层不出现：图层模块常驻时沿用了上传前的空缓存，切换到自定义现会重新向宿主半边读取一次。
 
 <h3 id="en-0.39.0">New Features</h3>
 
@@ -35,6 +26,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 ### Bug Fixes
 
 - Fix the wallpaper controls referencing three tokens the host does not define (the input fill, its hover fill and the error ink), using the host's own specific tokens and error colour instead.
+- Fix the wallpaper layer staying away after the source switches from built-in to custom: the long-lived module kept the cache from before the upload, and switching to custom now re-reads the host half once.
 
 ## [0.38.1] - 2026-11-13
 
