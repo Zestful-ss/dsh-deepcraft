@@ -326,6 +326,29 @@ function loadWallpapers(plan, claimed) {
 }
 
 /**
+ * The still-sprite mascots shipped with the package, keyed by the pet id the
+ * chat pet choice writes: `mascot/<id>.png` (features/mascot/island.ts).
+ *
+ * @param plan - the asset plan (planAssets).
+ * @param claimed - the paths the build read (checkClaimed).
+ * @returns id → the asset route's address.
+ */
+function loadPetSprites(plan, claimed) {
+  const out = {}
+  for (const [file, entry] of plan.entries) {
+    if (!file.startsWith('mascot/')) continue
+    const match = /^mascot\/island-([a-z0-9-]+)\.png$/.exec(file)
+    if (match === null) throw new Error(`build: packages/assets/src/${file} sits in mascot/ but is not named island-<id>.png`)
+    const [, id] = match
+    if (out[id] !== undefined) throw new Error(`build: packages/assets/src/${file} names mascot "${id}" twice`)
+    claimed.add(file)
+    out[id] = entry.url
+  }
+  return out
+}
+
+
+/**
  * The plugin's own brand mark, drawn by packages/assets/whale.mjs.
  *
  * @param cache - the build cache (scripts/build-cache.mjs).
@@ -368,11 +391,14 @@ async function main() {
   }
   const combines = loadCombines(plan, claimed)
 
+  // The mascot characters shipped with the package: `mascot/<id>.png` is one
+  // still sprite, claimed by the same read that builds the map.
+  const petSprites = loadPetSprites(plan, claimed)
+
   // The built-in wallpaper set: every wallpaper/<id>.<webp|mp4> pair the
   // settings page offers, by its bare id. The files are claimed by the same
   // read that builds the map, so an unclaimed asset still fails the build.
   const wallpapers = loadWallpapers(plan, claimed)
-
   checkClaimed(plan, claimed)
 
   const tokenDoc = loadTokens(SRC)
@@ -405,6 +431,8 @@ async function main() {
     // The bundled wallpapers the settings page offers, by their ids: each
     // still is a webp and each video an mp4 beside it (packages/assets/src/wallpapers/).
     WALLPAPERS: wallpapers,
+    // The bundled still-sprite mascots, by their ids (packages/assets/src/mascot/).
+    PET_SPRITES: petSprites,
   })
 
   /**

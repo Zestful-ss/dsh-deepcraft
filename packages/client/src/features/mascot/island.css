@@ -1,0 +1,227 @@
+/* ── The island mascot: a still sprite with the island motion vocabulary ────
+   One 128px character drawn 56px across in the same 72×78 window a Petdex pet
+   stands in (island.ts's SPRITE_EDGE is the 56). The strip is the sprite's
+   canvas and never moves; the whole sprite — strip, eyes and sparkles — plays
+   the reference theme's island states under data-animation: idle floats,
+   working types, waiting stares, a win hops with sparkles. Only the image
+   frame takes the pointer. Reduced motion is the page-wide rule
+   (theme/chrome.css). */
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island {
+  position: absolute;
+  right: 8px;
+  bottom: 100%;
+  z-index: 1;
+  width: 72px;
+  height: 78px;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-ready] {
+  visibility: visible;
+}
+
+body[data-dsh-deepcraft] [data-dsh-deepcraft-island-anchor="stack"] {
+  position: relative;
+  --dsh-deepcraft-island-edge: max(var(--dsh-composer-side-clearance, 16px), (100% - var(--dsh-composer-card-max-width, 100%)) / 2);
+}
+
+body[data-dsh-deepcraft] [data-dsh-deepcraft-island-anchor="panel"] {
+  position: relative;
+  --dsh-deepcraft-island-edge: max(var(--dsh-composer-side-clearance, 16px) + 16px, (100% - var(--dsh-chat-content-width, 100%)) / 2);
+}
+
+body[data-dsh-deepcraft] :is([data-dsh-deepcraft-island-anchor="stack"], [data-dsh-deepcraft-island-anchor="panel"]) > .dsh-deepcraft-island {
+  right: calc(var(--dsh-deepcraft-island-edge, 0px) + 8px);
+}
+
+body[data-dsh-deepcraft] [data-dsh-deepcraft-island-anchor="panel"] > .dsh-deepcraft-island {
+  bottom: calc(100% - 11px);
+}
+
+/* The window keeps the sprite centred over its own bottom edge; the strip is
+   the canvas the art sits on. */
+body[data-dsh-deepcraft] .dsh-deepcraft-island-sprite {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island-strip {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 56px;
+  height: 56px;
+  margin-left: -28px;
+  background-image: var(--dsh-deepcraft-island-sheet, none);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+/* The face rides the strip: the eyes sit in the sprite's own coordinate box,
+   the sparkles next to it. All transforms play on the strip so the face never
+   lags the body. */
+body[data-dsh-deepcraft] .dsh-deepcraft-island-eyes {
+  position: absolute;
+  left: calc(var(--dsh-deepcraft-island-eye-x, 0) * 56px);
+  top: calc(var(--dsh-deepcraft-island-eye-y, 0) * 56px);
+  width: calc(var(--dsh-deepcraft-island-eye-w, 0) * 56px);
+  height: calc(var(--dsh-deepcraft-island-eye-h, 0) * 56px);
+  transform-origin: center;
+  pointer-events: none;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island-eye {
+  position: absolute;
+  top: 0;
+  display: block;
+  height: 100%;
+  width: calc(var(--dsh-deepcraft-island-eye-width, 0) * 56px);
+  border-radius: 50%;
+  background-color: var(--dsh-deepcraft-island-eye-color, currentColor);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island-eye-left { left: 0; }
+body[data-dsh-deepcraft] .dsh-deepcraft-island-eye-right { right: 0; }
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island-sparkle {
+  position: absolute;
+  z-index: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background-color: var(--dsh-deepcraft-label-tertiary, currentColor);
+  opacity: 0;
+  transform: scale(0.6);
+  pointer-events: none;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island-sparkle:nth-of-type(3) { left: 12px; top: 14px; }
+body[data-dsh-deepcraft] .dsh-deepcraft-island-sparkle:nth-of-type(4) { right: 12px; top: 18px; }
+body[data-dsh-deepcraft] .dsh-deepcraft-island-sparkle:nth-of-type(5) { right: 18px; bottom: 16px; }
+
+/* ── The states the stage names (data-animation on the root) ─────────────── */
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="idle"] .dsh-deepcraft-island-strip {
+  animation: dsh-deepcraft-island-float var(--dsh-deepcraft-duration-island-float) var(--dsh-deepcraft-ease-island-cycle) infinite;
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="waking"] .dsh-deepcraft-island-strip {
+  animation: dsh-deepcraft-island-float var(--dsh-deepcraft-duration-island-float) var(--dsh-deepcraft-ease-island-cycle) backwards;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="typing"] .dsh-deepcraft-island-strip,
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="music"] .dsh-deepcraft-island-strip,
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="conducting"] .dsh-deepcraft-island-strip,
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="building"] .dsh-deepcraft-island-strip,
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="compacting"] .dsh-deepcraft-island-strip {
+  animation: dsh-deepcraft-island-type var(--dsh-deepcraft-duration-island-type) var(--dsh-deepcraft-ease-island-cycle) infinite;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="thinking"] .dsh-deepcraft-island-strip,
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="notification"] .dsh-deepcraft-island-strip {
+  animation: dsh-deepcraft-island-focus var(--dsh-deepcraft-duration-island-focus) var(--dsh-deepcraft-ease-island-cycle) infinite;
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="thinking"] .dsh-deepcraft-island-eyes,
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="notification"] .dsh-deepcraft-island-eyes {
+  animation: dsh-deepcraft-island-eye-focus var(--dsh-deepcraft-duration-island-focus) var(--dsh-deepcraft-ease-island-cycle) infinite;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="happy"] .dsh-deepcraft-island-strip,
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="jumping"] .dsh-deepcraft-island-strip,
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="tickle"] .dsh-deepcraft-island-strip,
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="waving"] .dsh-deepcraft-island-strip {
+  animation: dsh-deepcraft-island-hop var(--dsh-deepcraft-duration-island-hop) var(--dsh-deepcraft-ease-island-hop);
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="happy"] .dsh-deepcraft-island-strip {
+  animation-iteration-count: infinite;
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="tickle"] .dsh-deepcraft-island-strip {
+  animation-fill-mode: backwards;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="happy"] .dsh-deepcraft-island-sparkle,
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="jumping"] .dsh-deepcraft-island-sparkle {
+  animation: dsh-deepcraft-island-sparkle var(--dsh-deepcraft-duration-island-hop) var(--dsh-deepcraft-ease-island-out) infinite;
+  animation-delay: var(--dsh-deepcraft-island-sparkle-delay);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="error"] .dsh-deepcraft-island-strip {
+  animation: dsh-deepcraft-island-shake var(--dsh-deepcraft-duration-island-shake) var(--dsh-deepcraft-ease-island-cycle) infinite;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="sleeping"] .dsh-deepcraft-island-strip {
+  animation: dsh-deepcraft-island-sleep var(--dsh-deepcraft-duration-island-sleep) var(--dsh-deepcraft-ease-island-cycle) infinite;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="poke-left"] .dsh-deepcraft-island-strip {
+  animation: dsh-deepcraft-island-lean-right var(--dsh-deepcraft-duration-island-lean) var(--dsh-deepcraft-ease-island-out);
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="poke-right"] .dsh-deepcraft-island-strip {
+  animation: dsh-deepcraft-island-lean-left var(--dsh-deepcraft-duration-island-lean) var(--dsh-deepcraft-ease-island-out);
+}
+body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="drag"] .dsh-deepcraft-island-strip {
+  animation: dsh-deepcraft-island-lift var(--dsh-deepcraft-duration-island-type) var(--dsh-deepcraft-ease-island-out) infinite;
+}
+
+/* The pointer lands on the character alone: the 56px sprite strip inside
+   the window, so the glass around it stays the card's own. */
+body[data-dsh-deepcraft] .dsh-deepcraft-island-hit {
+  position: absolute;
+  bottom: 0;
+  left: 8px;
+  width: 56px;
+  height: 56px;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+@keyframes dsh-deepcraft-island-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+@keyframes dsh-deepcraft-island-type {
+  0%, 100% { transform: translate(-1px, 0) rotate(-1deg); }
+  50% { transform: translate(1px, 1px) rotate(1deg); }
+}
+@keyframes dsh-deepcraft-island-focus {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-1px) rotate(1deg); }
+}
+@keyframes dsh-deepcraft-island-eye-focus {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.72); }
+}
+@keyframes dsh-deepcraft-island-hop {
+  0%, 100% { transform: translateY(0); }
+  35% { transform: translateY(-5px); }
+  65% { transform: translateY(1px); }
+}
+@keyframes dsh-deepcraft-island-sparkle {
+  0% { opacity: 0; transform: translateY(3px) scale(0.45); }
+  45% { opacity: 1; transform: translateY(-4px) scale(1); }
+  100% { opacity: 0; transform: translateY(-7px) scale(0.6); }
+}
+@keyframes dsh-deepcraft-island-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+@keyframes dsh-deepcraft-island-sleep {
+  0%, 100% { transform: translateY(1px) scaleY(0.97); opacity: 0.8; }
+  50% { transform: translateY(-1px) scaleY(1); opacity: 1; }
+}
+@keyframes dsh-deepcraft-island-lean-left {
+  0% { transform: rotate(0); }
+  40% { transform: translateX(-3px) rotate(-7deg); }
+  100% { transform: rotate(0); }
+}
+@keyframes dsh-deepcraft-island-lean-right {
+  0% { transform: rotate(0); }
+  40% { transform: translateX(3px) rotate(7deg); }
+  100% { transform: rotate(0); }
+}
+@keyframes dsh-deepcraft-island-lift {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-9px) rotate(-4deg); }
+}

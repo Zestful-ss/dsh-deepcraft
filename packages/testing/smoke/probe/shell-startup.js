@@ -26,6 +26,10 @@
       document.body.appendChild(document.createElement('i'))
       await sleep(200)
       r.lateAfter = document.body.getAttribute('data-dsh-deepcraft-palette')
+      // The shared checks at the tail read the skin's own fills: back to the
+      // shipped palette, the host's colours proved their binding above.
+      window.__pushForm({ palette: 'cindy' })
+      await sleep(200)
     })
   })
 })()

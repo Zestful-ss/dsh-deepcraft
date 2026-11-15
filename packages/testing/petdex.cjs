@@ -176,11 +176,11 @@ function petdexScenario({ check }) {
       await openSettings(page)
       await pickPalette(page, 1)
       await openHome(page, url)
-      read.ember = await waitForGuest(page, firstId)
+      read.hostPalette = await waitForGuest(page, firstId)
       await openSettings(page)
-      await pickPalette(page, 2)
+      await pickPalette(page, 0)
       await openHome(page, url)
-      read.forest = await waitForGuest(page, firstId)
+      read.backPalette = await waitForGuest(page, firstId)
 
       // A new choice replaces it, and survives a reload.
       await openSettings(page)
@@ -224,9 +224,9 @@ function petdexScenario({ check }) {
             first.spriteWidth === 72 && first.spriteHeight === 78 &&
             typeof first.sheet === 'string' && first.sheet.includes(`${ROUTES.image}/e2e-crab`) && first.action === 'idle',
           JSON.stringify(first)),
-        check('换到暖橙与森林绿后仍是同一只宠物，配色不改宠物选择',
-          read.ember?.id === 'e2e-crab' && read.forest?.id === 'e2e-crab',
-          JSON.stringify({ ember: read.ember?.id, forest: read.forest?.id })),
+        check('换到跟随宿主与换回后仍是同一只宠物，配色不改宠物选择',
+          read.hostPalette?.id === 'e2e-crab' && read.backPalette?.id === 'e2e-crab',
+          JSON.stringify({ host: read.hostPalette?.id, back: read.backPalette?.id })),
         check('换一只宠物后画的是一只，刷新后选择仍在',
           !!second && second.id === 'e2e-whale' && second.ready && second.sheet.includes(`${ROUTES.image}/e2e-whale`) &&
             read.afterReload?.id === 'e2e-whale',

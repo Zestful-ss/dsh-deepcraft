@@ -12,6 +12,7 @@ import {
   subscribePetLibrary,
 } from '../../shared/petdex'
 import type { PetLibrary } from '../../shared/petdex'
+import { ISLAND_PET_CINDY } from './island'
 import { copy } from '../settings/copy'
 import type { SettingsRowView } from '../../core/feature'
 
@@ -94,14 +95,14 @@ function PetPreview(props: { pet: PetDescriptor }) {
   )
 }
 
-/** A select over the installed packages, with a value the library no longer holds kept visible. */
+/** A select over the shipped island character and the installed packages, with a value the library no longer holds kept visible. */
 function PetSelect(props: {
   pets: PetDescriptor[]
   value: string
   disabled?: boolean
   onPick(value: string): void
 }) {
-  const known = props.pets.some(pet => pet.id === props.value)
+  const known = props.value === ISLAND_PET_CINDY || props.pets.some(pet => pet.id === props.value)
   return React.createElement(
     'select',
     {
@@ -111,6 +112,7 @@ function PetSelect(props: {
       onChange: (event: React.ChangeEvent<HTMLSelectElement>) => { props.onPick(event.currentTarget.value) },
     },
     known ? null : React.createElement('option', { value: props.value }, props.value),
+    React.createElement('option', { value: ISLAND_PET_CINDY }, copy('petIslandCindy')),
     props.pets.map(pet => React.createElement('option', { key: pet.id, value: pet.id }, pet.displayName)),
   )
 }
@@ -123,7 +125,7 @@ function ChatPetControl(view: SettingsRowView) {
   React.useEffect(() => {
     // A preset the reader has never displayed yet is downloaded on first
     // sight, so the picker and the preview can name it.
-    if (pet === undefined) void ensurePet(selected).catch(() => undefined)
+    if (pet === undefined && selected !== ISLAND_PET_CINDY) void ensurePet(selected).catch(() => undefined)
   }, [pet, selected])
   return React.createElement(
     'div',

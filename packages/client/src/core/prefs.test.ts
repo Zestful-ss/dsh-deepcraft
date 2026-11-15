@@ -21,14 +21,16 @@ test('a choice outside its set reads as its default', () => {
   expect(normalizePrefs({ motion: 1 }).motion).toBe(PREF_DEFAULTS.motion)
 })
 
-test('the older brand and palette choices land on one independent palette (D80)', () => {
-  expect(normalizePrefs({ brand: 'off', palette: 'claude' }).palette).toBe('ocean')
-  expect(normalizePrefs({ brand: 'deepseek' }).palette).toBe('ocean')
-  expect(normalizePrefs({ brand: 'claude' }).palette).toBe('ember')
-  expect(normalizePrefs({ brand: 'anthropic' }).palette).toBe('ember')
-  expect(normalizePrefs({ palette: 'claude' }).palette).toBe('ember')
+test('the older brand and palette choices land on the one palette (D80)', () => {
+  expect(normalizePrefs({ brand: 'off', palette: 'claude' }).palette).toBe('cindy')
+  expect(normalizePrefs({ brand: 'deepseek' }).palette).toBe('cindy')
+  expect(normalizePrefs({ brand: 'claude' }).palette).toBe('cindy')
+  expect(normalizePrefs({ brand: 'anthropic' }).palette).toBe('cindy')
+  expect(normalizePrefs({ palette: 'claude' }).palette).toBe('cindy')
   expect(normalizePrefs({ palette: 'host' }).palette).toBe('host')
-  expect(normalizePrefs({ palette: 'forest' }).palette).toBe('forest')
+  expect(normalizePrefs({ palette: 'forest' }).palette).toBe('cindy')
+  expect(normalizePrefs({ palette: 'ocean' }).palette).toBe('cindy')
+  expect(normalizePrefs({ palette: 'ember' }).palette).toBe('cindy')
   expect(normalizePrefs({ palette: 'cindy' }).palette).toBe('cindy')
   expect(normalizePrefs({}).palette).toBe('cindy')
 })
@@ -73,7 +75,7 @@ test('the chat pet is one choice and the older per-theme fields move into it (D8
   expect(normalizePrefs({ brand: 'deepseek', chatPetDeepseek: '' }).chatPet).toBe('whaledou')
   expect(normalizePrefs({ brand: 'claude', palette: 'claude', chatPetClaude: 'my-crab' }).chatPet).toBe('my-crab')
   expect(normalizePrefs({ palette: 'claude' }).chatPet).toBe('crab-buddy')
-  expect(normalizePrefs({ brand: 'claude', palette: 'forest', chatPet: 'new-pet' }).chatPet).toBe('new-pet')
+  expect(normalizePrefs({ brand: 'claude', palette: 'ocean', chatPet: 'new-pet' }).chatPet).toBe('new-pet')
 })
 
 test('"follow the theme" resolves to the Petdex guest, off leaves the chat place, and the retired characters fall back to Petdex', () => {

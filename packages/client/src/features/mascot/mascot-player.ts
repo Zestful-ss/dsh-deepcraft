@@ -35,11 +35,47 @@ export interface MascotSheets {
 }
 
 /**
- * The character the player plays: the reader's Petdex package. A literal: the
- * anchor mark is built from the name, and the build reads the marks the
- * stylesheets key on off this type (scripts/source-tree.mjs).
+ * The single-image sheet every character shares: decode the image once and
+ * paint its url, so a package's atlas and an island's still sprite ask the
+ * same questions of the browser. `property` is the custom property the
+ * stylesheet reads the url through.
  */
-export type MascotName = 'petdex'
+export function imageSheets(imageUrl: string, property: string, onReady: () => void): MascotSheets {
+  let loaded = false
+  let failed = false
+  let disposed = false
+  const image = new Image()
+  image.decoding = 'async'
+  image.src = imageUrl
+  void image.decode().then(() => {
+    if (disposed) return
+    loaded = true
+    onReady()
+  }, () => {
+    if (disposed) return
+    failed = true
+    onReady()
+  })
+  return {
+    ready: () => loaded,
+    failed: () => failed,
+    paint(style) {
+      style.setProperty(property, `url("${imageUrl}")`)
+    },
+    dispose() {
+      disposed = true
+      image.src = ''
+    },
+  }
+}
+
+/**
+ * The characters the player plays: `petdex` is an installed package's atlas,
+ * `island` a still sprite shipped with the package. A literal: the anchor
+ * mark is built from the name, and the build reads the marks the stylesheets
+ * key on off this type (scripts/source-tree.mjs).
+ */
+export type MascotName = 'petdex' | 'island'
 
 /** What one character hands the player (see createMascotPlayer). */
 export interface MascotCharacter {
@@ -50,6 +86,8 @@ export interface MascotCharacter {
   /** The installed package this character draws, when it is a Petdex pet. */
   petId?: string
   extras: string[]
+  /** Append the character's own decorations inside the strip's frame (eyes, sparkles), once per root build; decorations on the strip ride its motion. */
+  decorate?(sprite: HTMLElement, strip: HTMLElement): void
   createSheets(onReady: () => void): MascotSheets
 }
 
@@ -135,6 +173,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     sprite = buildElement('span', `${PREFIX}-sprite`)
     strip = buildElement('span', `${PREFIX}-strip`)
     sprite.appendChild(strip)
+    character.decorate?.(sprite, strip)
     built.appendChild(sprite)
     const hit = buildElement('span', `${PREFIX}-hit`)
     hit.addEventListener('pointerdown', onPressStart)

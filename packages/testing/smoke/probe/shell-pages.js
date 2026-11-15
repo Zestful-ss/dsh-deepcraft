@@ -24,8 +24,8 @@
         }
       }
       r.palettes = {}
-      for (var at = 0; at < ['ocean', 'ember', 'forest', 'cindy'].length; at++) {
-        var id = ['ocean', 'ember', 'forest', 'cindy'][at]
+      for (var at = 0; at < ['cindy'].length; at++) {
+        var id = ['cindy'][at]
         window.__pushForm({ palette: id })
         await sleep(150)
         var light = readTheme()
@@ -38,7 +38,7 @@
       canvasBox.remove()
       // The ambient light asks to be on for its reading: it ships off with the
       // cindy default, and this case proves the layer's own value resolves.
-      window.__pushForm({ palette: 'ocean', materialAmbient: true })
+      window.__pushForm({ palette: 'cindy', materialAmbient: true })
       await sleep(150)
       // The material layer's defaults, then every aspect back to the host's
       // value on its own (D84). The column is a stand-in for the host's own

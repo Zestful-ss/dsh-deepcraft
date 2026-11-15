@@ -1,16 +1,17 @@
 #!/usr/bin/env node
 /**
- * palette.cjs — the three skin palettes, the reader's own identity and the old
+ * palette.cjs — the skin palette, the reader's own identity and the old
  * configuration, on the real host (D66, D80).
  *
  * Registered in the lane's scenario table (packages/testing/scenarios.cjs).
- *   palette              every palette's computed colours in light and dark,
+ *   palette              the palette's computed colours in light and dark,
  *                        the reader's own name, images, accent and pet kept
  *                        across a palette switch, the accent override and its
  *                        reset, and the host palette taking none of them.
- *   paletteLegacyClaude  an older profile's brand `claude` migrates to the warm
- *                        palette and its per-theme pet to the one chat choice.
- *   paletteLegacyDeepseek an older profile's brand `off` migrates to the ocean
+ *   paletteLegacyClaude  an older profile's brand `claude` migrates to the one
+ *                        skin palette and its per-theme pet to the one chat
+ *                        choice.
+ *   paletteLegacyDeepseek an older profile's brand `off` migrates to the same
  *                        palette and its per-theme pet likewise.
  *
  * Every setting is written by pressing the real control (or, for the colour
@@ -72,7 +73,7 @@ async function readBoth(page) {
 }
 
 /** The palette choices' order, as the settings page lists them. */
-const PALETTES = ['ocean', 'ember', 'forest', 'cindy', 'host']
+const PALETTES = ['cindy', 'host']
 
 /** Answer any first-run notice that mounted late, then open the skin's settings page. */
 async function openSettings(page) {
@@ -141,25 +142,19 @@ function paletteScenario({ check }) {
       await waitForSkin(page)
       await openSettings(page)
       await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: SKIN.appearance }).first().click()
-      for (const id of ['ocean', 'ember', 'forest', 'cindy']) {
-        await pickPalette(page, id)
-        read.palettes[id] = await readBoth(page)
-      }
-      // The reader's accent over every skin palette, kept as the palette moves.
-      await pickPalette(page, 'ocean')
+      await pickPalette(page, 'cindy')
+      read.palettes.cindy = await readBoth(page)
+      // The reader's accent over the skin palette.
+      await pickPalette(page, 'cindy')
       await setAccentColor(page, '#1a7f5a')
       await page.waitForFunction(() => document.body.hasAttribute('data-dsh-deepcraft-accent'), null, { timeout: 15000 })
-      read.tinted = {}
-      for (const id of ['ocean', 'ember', 'forest', 'cindy']) {
-        await pickPalette(page, id)
-        read.tinted[id] = await readPage(page)
-      }
+      read.tinted = { cindy: await readPage(page) }
       // The host palette takes none of the override; back on a skin palette the
       // stored colour returns, and the reset hands the palette's own back.
       await pickPalette(page, 'host')
       read.tinted.host = await readPage(page)
       read.hostAccentDisabled = await page.locator(SKIN.accent).isDisabled()
-      await pickPalette(page, 'ocean')
+      await pickPalette(page, 'cindy')
       read.tinted.back = await readPage(page)
       await page.locator(SKIN.accentReset).click()
       await page.waitForFunction(() => !document.body.hasAttribute('data-dsh-deepcraft-accent'), null, { timeout: 15000 })
@@ -187,9 +182,6 @@ function paletteScenario({ check }) {
     async assert({ session }) {
       const palettes = read.palettes
       const expected = {
-        ocean: { accent: '#5368c9', prose: '#3e5bd6', darkCanvas: 'rgb(32, 36, 39)' },
-        ember: { accent: '#d97757', prose: '#3d5f86', darkCanvas: 'rgb(20, 20, 19)' },
-        forest: { accent: '#397657', prose: '#286649', darkCanvas: 'rgb(20, 20, 19)' },
         cindy: { accent: '#3c3f43', darkAccent: '#eeeeee', prose: '#1d4ed8', darkCanvas: 'rgb(24, 24, 24)' },
       }
       const checks = []
@@ -218,21 +210,21 @@ function paletteScenario({ check }) {
       }
       const tinted = read.tinted || {}
       const kept = (page) => page !== undefined && page.accent === '#1a7f5a'
-      checks.push(check('自定义强调色在四套内置配色下都覆盖强调',
-        kept(tinted.ocean) && kept(tinted.ember) && kept(tinted.forest) && kept(tinted.cindy), JSON.stringify(tinted)))
+      checks.push(check('自定义强调色覆盖本套配色的强调',
+        kept(tinted.cindy), JSON.stringify(tinted)))
       checks.push(check('切到跟随宿主时不覆盖宿主颜色，强调色控件禁用',
         tinted.host?.palette === 'host' && read.hostAccentDisabled === true, JSON.stringify({ host: tinted.host, disabled: read.hostAccentDisabled })))
       checks.push(check('切回内置配色后自定义强调色立即恢复，清除后回到本套配色的强调色',
-        kept(tinted.back) && read.reset?.accent === '#5368c9', JSON.stringify({ back: tinted.back, reset: read.reset })))
+        kept(tinted.back) && read.reset?.accent === '#3c3f43', JSON.stringify({ back: tinted.back, reset: read.reset })))
       const identity = (page) => page !== undefined && /brand\/mark/.test(page.mark?.image || '') &&
         /brand\/wordmark/.test(page.word?.image || '')
-      checks.push(check('名称、标志与字标在每套配色下都画同一份读者上传的图',
-        identity(palettes.ocean?.light) && identity(palettes.ember?.light) && identity(palettes.forest?.light) && identity(palettes.cindy?.light),
-        JSON.stringify({ ocean: palettes.ocean?.light?.mark, ember: palettes.ember?.light?.mark })))
+      checks.push(check('名称、标志与字标画同一份读者上传的图',
+        identity(palettes.cindy?.light),
+        JSON.stringify({ mark: palettes.cindy?.light?.mark })))
       checks.push(check('聊天框宠物只保留 Petdex 宠物与关闭', read.mascotChoices.length === 2 &&
         read.mascotChoices.every((label) => /^(Petdex 宠物|Petdex pet|关闭|Off)$/.test(label.trim())), JSON.stringify(read.mascotChoices)))
       checks.push(check('首页与对话画的是同一套默认配色，页面不带旧品牌属性',
-        read.home?.light?.accent === '#5368c9' && read.conversation?.light?.accent === '#5368c9' && read.brandAttr === false,
+        read.home?.light?.accent === '#3c3f43' && read.conversation?.light?.accent === '#3c3f43' && read.brandAttr === false,
         JSON.stringify({ home: read.home?.light?.accent, conversation: read.conversation?.light?.accent, brandAttr: read.brandAttr })))
       checks.push(check('控制台没有异常', session.problems.length === 0, session.problems.slice(0, 3).join(' | ')))
       return checks
@@ -246,14 +238,14 @@ const LEGACY = {
     brand: 'claude',
     chatPet: 'my-crab',
     profile: ['- id: ui-skin-deepcraft', '  config:', '    brand: claude', `    palette: claude`, `    chatPetClaude: my-crab`],
-    palette: 'ember',
+    palette: 'cindy',
     id: 'my-crab',
   },
   deepseek: {
     brand: 'off',
     chatPet: 'my-whale',
     profile: ['- id: ui-skin-deepcraft', '  config:', '    brand: \'off\'', `    palette: claude`, `    chatPetDeepseek: my-whale`],
-    palette: 'ocean',
+    palette: 'cindy',
     id: 'my-whale',
   },
 }

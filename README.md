@@ -2,9 +2,9 @@
 
 # DeepCraft
 
-**为 DeepSeek Harness 提供可自定义品牌、多套配色与字体的外观插件。**
+**为 DeepSeek Harness 提供可自定义品牌、配色与字体的外观插件。**
 
-> **默认深海蓝，另有暖橙与森林绿；标志、名称、强调色与宠物都可以换成你自己的。**
+> **默认 Cindy 配色，可退回宿主；标志、名称、强调色与宠物都可以换成你自己的。**
 
 [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red.svg)](README.md) [![English](https://img.shields.io/badge/lang-English-blue.svg)](README.en.md)
 
@@ -15,7 +15,7 @@
 
 ## 预览
 
-四套配色在插件设置里切换，亮暗跟随系统；配色只换颜色，不改标志、名称与宠物。外观页还有一层与配色无关的材质：4 / 8 / 12px 圆角、平铺阴影、150 / 200 / 250ms 的动效节奏、玻璃侧栏与环境光，出厂即参考主题的取值，每一项都可以单独退回宿主的样子。同一页还能换上自己的标志、文字标志、强调色、宠物与壁纸——打包了一组静态与动态壁纸，也可以上传自己的图片或视频，铺在整页底层，可见度、模糊与播放方式可调。
+配色在插件设置里切换，Cindy 或跟随宿主，亮暗跟随系统；配色只换颜色，不改标志、名称与宠物。外观页还有一层与配色无关的材质：4 / 8 / 12px 圆角、平铺阴影、150 / 200 / 250ms 的动效节奏、玻璃侧栏与环境光，出厂即参考主题的取值，每一项都可以单独退回宿主的样子。同一页还能换上自己的标志、文字标志、强调色、宠物与壁纸——打包了一组静态与动态壁纸，也可以上传自己的图片或视频，铺在整页底层，可见度、模糊与播放方式可调。
 
 ### Cindy（默认）
 
@@ -32,45 +32,6 @@ Cindy 的暖象牙与近黑画布、墨水色阶文字、黑白反转主按钮�
   </tr>
 </table>
 
-### 深海蓝
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/ocean-home-light.png" alt="深海蓝首页 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/ocean-home-dark.png" alt="深海蓝首页 —— 暗色" /></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/ocean-conversation-light.png" alt="深海蓝 Markdown 对话 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/ocean-conversation-dark.png" alt="深海蓝 Markdown 对话 —— 暗色" /></td>
-  </tr>
-</table>
-
-### 暖橙
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-light.png" alt="暖橙首页 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-dark.png" alt="暖橙首页 —— 暗色" /></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/ember-conversation-light.png" alt="暖橙 Markdown 对话 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/ember-conversation-dark.png" alt="暖橙 Markdown 对话 —— 暗色" /></td>
-  </tr>
-</table>
-
-### 森林绿
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/forest-home-light.png" alt="森林绿首页 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/forest-home-dark.png" alt="森林绿首页 —— 暗色" /></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/forest-conversation-light.png" alt="森林绿 Markdown 对话 —— 亮色" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/forest-conversation-dark.png" alt="森林绿 Markdown 对话 —— 暗色" /></td>
-  </tr>
-</table>
-
 > 首页（上），对话界面（下）；浅色在左，深色在右。
 
 ### 版面
@@ -81,7 +42,7 @@ Cindy 的暖象牙与近黑画布、墨水色阶文字、黑白反转主按钮�
 
 ### 宠物
 
-- 输入区上的宠物只有一项选择，不随配色或标识变化：默认 Whaledou，也可以从「聊天框宠物包」换成 Petdex 宠物库里的其他角色，或关闭；可设成只出现在首页。
+- 输入区上的宠物只有一项选择，不随配色或标识变化：默认 Whaledou，也可以换成随插件发布的 Cindy（开源应用 Cindy 的岛屿伙伴原画，Apache-2.0）或 Petdex 宠物库里的其他角色，或关闭；可设成只出现在首页。
 - 设置页的「聊天框宠物包」接受包含 `pet.json` 与图集的文件夹、ZIP 或 Petdex 链接，原文件字节不改动。宠物原画由 Petdex 与各包作者提供，不随本插件发布。
 
 ### 子代理模型

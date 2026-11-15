@@ -1,0 +1,8 @@
+{
+  "group": "new",
+  "order": 10,
+  "at": "2026-11-15",
+  "external": false,
+  "zh": "聊天框宠物新增随插件发布的 Cindy：取自开源应用 Cindy 的岛屿伙伴原画（Apache-2.0），保留与 Petdex 相同的状态与手势，沿用「聊天框宠物包」的同一处选择。",
+  "en": "Add Cindy to the chat pet choices, shipped with the plugin: the island companion drawn for the open-source app Cindy (Apache-2.0), keeping the same states and gestures a Petdex pet answers, picked from the same Chat pet package select."
+}

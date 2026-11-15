@@ -60,12 +60,12 @@ function petdexChecks(r, label, { palette, id }) {
 module.exports = {
   'petdex-claude'(r) {
     basicChecks(r)
-    petdexChecks(r, 'the ember palette’s Petdex pet', { palette: 'ember', id: 'crab-buddy' })
+    petdexChecks(r, 'the crab package’s pet', { palette: 'cindy', id: 'crab-buddy' })
     commonChecks(r)
   },
   'petdex-deepseek'(r) {
     basicChecks(r)
-    petdexChecks(r, 'the cindy palette’s Petdex pet', { palette: 'cindy', id: 'whaledou' })
+    petdexChecks(r, 'the default package’s pet', { palette: 'cindy', id: 'whaledou' })
     commonChecks(r)
   },
 }

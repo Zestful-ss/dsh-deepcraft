@@ -5,7 +5,7 @@ import {
   FONT_UI_ANTHROPIC, FONT_UI_ATKINSON, FONT_UI_FIXEL, FONT_UI_GEIST, FONT_UI_HARMONY, FONT_UI_INTER,
   MOTION_FULL, MOTION_REDUCED, MOTION_SYSTEM,
   MATERIAL_HOST, MATERIAL_REFERENCE, MATERIAL_SHADOWS_FLAT,
-  PALETTE_CINDY, PALETTE_EMBER, PALETTE_FOREST, PALETTE_HOST, PALETTE_OCEAN,
+  PALETTE_CINDY, PALETTE_HOST,
 } from '../../constants'
 import { accentRow, brandRows } from './settings-brand'
 import { copy } from './copy'
@@ -45,9 +45,6 @@ export function createSettingsAppearanceTab(): SettingsTab {
     const write = view.write
     const controls = view.controls
     const paletteOptions: SegmentOption<Prefs['palette']>[] = [
-      { value: PALETTE_OCEAN, label: copy('paletteOcean') },
-      { value: PALETTE_EMBER, label: copy('paletteEmber') },
-      { value: PALETTE_FOREST, label: copy('paletteForest') },
       { value: PALETTE_CINDY, label: copy('paletteCindy') },
       { value: PALETTE_HOST, label: copy('paletteHost') },
     ]

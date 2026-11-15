@@ -117,19 +117,7 @@
   },
   "paletteDesc": {
     "zh": "内置配色或跟随宿主；只换颜色，标识与宠物不变。形状、材质与动效在下面的材质层单独选择。",
-    "en": "The skin's palettes or the host's; colours only, leaving the mark and pet alone. Shape, material and motion are the material layer's own choice below."
-  },
-  "paletteOcean": {
-    "zh": "深海蓝",
-    "en": "Ocean blue"
-  },
-  "paletteEmber": {
-    "zh": "暖橙",
-    "en": "Warm ember"
-  },
-  "paletteForest": {
-    "zh": "森林绿",
-    "en": "Forest green"
+    "en": "The skin's palette or the host's; colours only, leaving the mark and pet alone. Shape, material and motion are the material layer's own choice below."
   },
   "paletteCindy": {
     "zh": "Cindy",
@@ -254,6 +242,10 @@
   "petImportBroken": {
     "zh": "有 {count} 个已安装的包无法读取，其余包不受影响。",
     "en": "{count} installed packages cannot be read; the rest of the library is unaffected."
+  },
+  "petIslandCindy": {
+    "zh": "Cindy",
+    "en": "Cindy"
   },
   "fontHarmony": { "zh": "HarmonyOS Sans SC", "en": "HarmonyOS Sans SC" },
   "fontUiTitle": { "zh": "界面字体", "en": "Interface font" },

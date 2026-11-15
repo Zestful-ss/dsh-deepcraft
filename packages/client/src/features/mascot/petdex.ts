@@ -1,6 +1,6 @@
 import { PETDEX_ACTIONS } from '@dsh-deepcraft/contracts/pets'
 import type { PetDescriptor, PetdexState } from '@dsh-deepcraft/contracts/pets'
-import { createMascotPlayer } from './mascot-player'
+import { createMascotPlayer, imageSheets } from './mascot-player'
 import type { MascotSheet } from './mascot-player'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
@@ -71,32 +71,7 @@ export function createPetdexMascot(ctx: HostContext, ui: FeatureUi<typeof manife
     petId: pet.id,
     extras: ['waving', 'jumping'],
     createSheets(onReady) {
-      let loaded = false
-      let failed = false
-      let disposed = false
-      const image = new Image()
-      image.decoding = 'async'
-      image.src = pet.imageUrl
-      void image.decode().then(() => {
-        if (disposed) return
-        loaded = true
-        onReady()
-      }, () => {
-        if (disposed) return
-        failed = true
-        onReady()
-      })
-      return {
-        ready: () => loaded,
-        failed: () => failed,
-        paint(style) {
-          style.setProperty('--dsh-deepcraft-petdex-sheet', `url("${pet.imageUrl}")`)
-        },
-        dispose() {
-          disposed = true
-          image.src = ''
-        },
-      }
+      return imageSheets(pet.imageUrl, '--dsh-deepcraft-petdex-sheet', onReady)
     },
   })
 }

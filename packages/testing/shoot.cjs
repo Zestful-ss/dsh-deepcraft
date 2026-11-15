@@ -28,7 +28,7 @@
  *
  * Usage:
  *   node packages/testing/shoot.cjs --token <launch-token> [--url http://127.0.0.1:3080]
- *     [--palette ocean|ember|forest|cindy] [--scene home|conversation] [--session <title>]
+ *     [--palette cindy] [--scene home|conversation] [--session <title>]
  *
  * The launch token comes from the `dsh web` banner (GUI URL `/?token=…`) or
  * the DSH_WEB_TOKEN env var. Chrome comes from packages/testing/browser.cjs and
@@ -57,9 +57,6 @@ const DEMO_TITLE = 'Markdown rendering tour'
  * under `:not([data-ds-dark-theme])`.
  */
 const CANVAS = {
-  ocean: { light: 'rgb(252, 252, 251)', dark: 'rgb(32, 36, 39)' },
-  ember: { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)' },
-  forest: { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)' },
   cindy: { light: 'rgb(242, 242, 237)', dark: 'rgb(24, 24, 24)' },
 }
 
@@ -159,9 +156,9 @@ async function captureOnce(page, options, scheme, outFile) {
  * @returns the two files written.
  */
 async function shoot(options) {
-  const palette = options.palette || 'ocean'
+  const palette = options.palette || 'cindy'
   const scene = options.scene || 'home'
-  if (!CANVAS[palette]) throw new Error(`unknown palette "${palette}" (ocean, ember, forest or cindy)`)
+  if (!CANVAS[palette]) throw new Error(`unknown palette "${palette}" (cindy)`)
   if (!HEIGHTS[scene]) throw new Error(`unknown scene "${scene}" (home or conversation)`)
   const base = (options.url || 'http://127.0.0.1:3080').replace(/\/+$/, '')
   const out = path.resolve(options.out || path.join(__dirname, '..', '..', 'docs', 'screenshots'))
@@ -195,7 +192,7 @@ if (require.main === module) {
   }
   const token = argOf('token') || process.env.DSH_WEB_TOKEN
   if (!token) {
-    console.error('usage: node packages/testing/shoot.cjs --token <launch-token> [--url <base>] [--palette ocean|ember|forest|cindy] [--scene home|conversation] [--session <title>]')
+    console.error('usage: node packages/testing/shoot.cjs --token <launch-token> [--url <base>] [--palette cindy] [--scene home|conversation] [--session <title>]')
     process.exit(2)
   }
   shoot({ token, url: argOf('url'), out: argOf('out'), palette: argOf('palette'), scene: argOf('scene'), session: argOf('session') })

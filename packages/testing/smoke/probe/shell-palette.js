@@ -59,11 +59,11 @@
       r.hostPalette = {
         host: await readHost({ palette: 'host', fontUi: 'host', fontProse: 'follow', fontCode: 'host', wallpaperSource: 'off' }, false),
         wallpaper: await readHost(null, true),
-        ember: await readHost({ palette: 'ember', fontUi: 'inter', fontProse: 'noto-serif', fontCode: 'jetbrains', wallpaperSource: 'off' }, false),
-        // The wallpaper plugin showing one under the warm palette: the
+        cindy: await readHost({ palette: 'cindy', fontUi: 'inter', fontProse: 'noto-serif', fontCode: 'jetbrains', wallpaperSource: 'off' }, false),
+        // The wallpaper plugin showing one under the skin palette: the
         // shell stands down, one mask lies over the wallpaper, and the base
         // canvas and the skin's own faces keep their fill.
-        emberWallpaper: await readHost(null, true),
+        cindyWallpaper: await readHost(null, true),
       }
       document.body.removeAttribute('data-we-wallpaper')
       await sleep(120)
@@ -132,7 +132,7 @@
         linkNode.remove()
         window.__pushForm({ mascot: 'off', palette: 'host', wallpaperSource: 'off' })
         r.settings.parentsOff = { appearance: renderTab('appearance') }
-        window.__pushForm({ mascot: 'brand', palette: 'ocean', wallpaperSource: 'builtin' })
+        window.__pushForm({ mascot: 'brand', palette: 'cindy', wallpaperSource: 'builtin' })
       }
     })
 

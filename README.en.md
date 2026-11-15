@@ -2,9 +2,9 @@
 
 # DeepCraft
 
-**Customizable branding, color palettes and typefaces for the DeepSeek Harness Web GUI.**
+**Customizable branding, a colour palette and typefaces for the DeepSeek Harness Web GUI.**
 
-> **Ocean blue by default, with Warm ember and Forest green beside it; the mark, name, accent and pet can all be your own.**
+> **Cindy by default, able to fall back to the host; the mark, name, accent and pet can all be your own.**
 
 [![English](https://img.shields.io/badge/lang-English-blue.svg)](README.en.md) [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red.svg)](README.md)
 
@@ -15,7 +15,7 @@
 
 ## Preview
 
-The settings page switches between four palettes, light and dark following the system; a palette changes colours alone, never the mark, the name or the pet. The Appearance tab also carries a material layer of its own, independent of the palette: a 4 / 8 / 12px corner scale, flat shadows, 150 / 200 / 250ms motion timing, a glass sidebar and ambient light, shipped at the reference theme's values and each one able to fall back to the host's own look. The same tab takes your own mark, wordmark, accent colour, pet and wallpaper — a bundled set of stills and videos, or an image or video of your own layered under the whole page, with visibility, blur and playback controls.
+The settings page switches between the Cindy palette and following the host, light and dark following the system; a palette changes colours alone, never the mark, the name or the pet. The Appearance tab also carries a material layer of its own, independent of the palette: a 4 / 8 / 12px corner scale, flat shadows, 150 / 200 / 250ms motion timing, a glass sidebar and ambient light, shipped at the reference theme's values and each one able to fall back to the host's own look. The same tab takes your own mark, wordmark, accent colour, pet and wallpaper — a bundled set of stills and videos, or an image or video of your own layered under the whole page, with visibility, blur and playback controls.
 
 ### Cindy (default)
 
@@ -32,45 +32,6 @@ Cindy's warm ivory and near-black canvas, ink-ladder text, the inverted monochro
   </tr>
 </table>
 
-### Ocean blue
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/ocean-home-light.png" alt="Ocean blue, home — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/ocean-home-dark.png" alt="Ocean blue, home — dark" /></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/ocean-conversation-light.png" alt="Ocean blue, Markdown conversation — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/ocean-conversation-dark.png" alt="Ocean blue, Markdown conversation — dark" /></td>
-  </tr>
-</table>
-
-### Warm ember
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-light.png" alt="Warm ember, home — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/ember-home-dark.png" alt="Warm ember, home — dark" /></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/ember-conversation-light.png" alt="Warm ember, Markdown conversation — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/ember-conversation-dark.png" alt="Warm ember, Markdown conversation — dark" /></td>
-  </tr>
-</table>
-
-### Forest green
-
-<table>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/forest-home-light.png" alt="Forest green, home — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/forest-home-dark.png" alt="Forest green, home — dark" /></td>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><img src="./docs/screenshots/forest-conversation-light.png" alt="Forest green, Markdown conversation — light" /></td>
-    <td align="center" width="50%"><img src="./docs/screenshots/forest-conversation-dark.png" alt="Forest green, Markdown conversation — dark" /></td>
-  </tr>
-</table>
-
 > Home above, Markdown conversation below; light on the left, dark on the right.
 
 ### Layout
@@ -81,7 +42,7 @@ Cindy's warm ivory and near-black canvas, ink-ladder text, the inverted monochro
 
 ### Pets
 
-- The pet standing on the input area is one choice, changed by neither palette nor brand: Whaledou by default, or another character from the Petdex library through "Chat pet package", or off — and it can be kept to the home page.
+- The pet standing on the input area is one choice, changed by neither palette nor brand: Whaledou by default, Cindy — the island companion drawn for the open-source app Cindy (Apache-2.0) shipped with the plugin — or another character from the Petdex library through "Chat pet package", or off — and it can be kept to the home page.
 - "Chat pet package" in the settings page takes a complete package — a folder, a ZIP or a Petdex link holding `pet.json` and an atlas — keeping the original bytes. The pet art belongs to Petdex and each package's author and is not shipped with this plugin.
 
 ### Subagent models

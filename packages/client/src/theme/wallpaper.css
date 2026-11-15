@@ -69,19 +69,31 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
   background: var(--dsh-deepcraft-canvas);
 }
 
-/* ---------- the reader's own wallpaper: one layer under the whole shell ---------- */
-/* `wallpaperSource = custom` mounts features/wallpaper/wallpaper.ts's fixed
-   layer as a body child and stamps `data-dsh-deepcraft-wallpaper` on the body.
-   The same arrangement as the wallpaper plugin's above applies: the shell
-   stands down, and the canvas veil over the layer is painted from the
-   reader's visibility and blur choices (the `wallpaperVisibility` and
-   `wallpaperBlur` preferences reach the sheet as custom properties). */
+/* ---------- the reader's own wallpaper ---------- */
+/* `wallpaperSource = custom|builtin` installs features/wallpaper/wallpaper.ts.
+   An image paints into the document element's canvas background: the canvas
+   sits under the whole shell by construction, and a body's negative-z child
+   cannot say the same on every compositor — the desktop's drops one below
+   this background entirely. The veil the reader's `wallpaperVisibility`
+   choice dials in and the media itself arrive as custom properties
+   (`--dsh-deepcraft-wallpaper-veil`, `--dsh-deepcraft-wallpaper-image`); the
+   opaque html canvas from tokens.css stays as the base colour under both
+   layers, so a missing or undecodable image falls back to plain canvas.
+   `wallpaperBlur` is baked into the bitmap the feature hands over, since a
+   background cannot be filtered alone. */
+html[data-dsh-deepcraft-wallpaper-mount="image"]:has(body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])) {
+  background-image: linear-gradient(var(--dsh-deepcraft-wallpaper-veil) 0 0), var(--dsh-deepcraft-wallpaper-image);
+  background-size: 100% 100%, cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
+/* A video cannot be a canvas background: it keeps the body's own layer at
+   z-index -1, and the veil over it is the body's last pseudo-element, which
+   gates to it alone so an image is never dimmed twice. */
 body[data-dsh-deepcraft] [data-dsh-deepcraft-wallpaper-layer] {
   position: fixed;
   inset: 0;
-  /* Under the canvas veil (body::after, also -1 but painted after the
-     children) and under everything the shell draws. */
   z-index: -1;
   pointer-events: none;
   overflow: hidden;
@@ -103,7 +115,7 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-wallpaper-lite="1"] [data-dsh-deepcr
   transform: none;
 }
 
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"])::after {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-dsh-deepcraft-wallpaper-media="video"]::after {
   content: "";
   position: fixed;
   inset: 0;
@@ -114,6 +126,6 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
 
 /* The low-power choice stills the video in the feature and caps how much of
    the wallpaper shows through. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"])[data-dsh-deepcraft-wallpaper-lite="1"]::after {
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-dsh-deepcraft-wallpaper-media="video"][data-dsh-deepcraft-wallpaper-lite="1"]::after {
   background: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc((1 - min(var(--dsh-deepcraft-wallpaper-visibility, 0.4), 0.6)) * 100%), transparent);
 }

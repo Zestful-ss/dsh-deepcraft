@@ -10,6 +10,7 @@ export default {
   prefValues: [MASCOT_BRAND],
   stylesheets: [
     { file: 'petdex.css', rank: 365 },
+    { file: 'island.css', rank: 366 },
   ],
   settingsRows: [{
     tab: 'appearance',

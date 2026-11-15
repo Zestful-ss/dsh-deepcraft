@@ -7,7 +7,7 @@ module.exports = {
     check('the store stays on the shipped palette until the namespace is served',
       r.lateBefore === 'cindy', JSON.stringify(r.lateBefore))
     check('a namespace served after apply still binds the form and its value',
-      r.lateAfter === 'forest',
+      r.lateAfter === 'host',
       JSON.stringify({ after: r.lateAfter }))
     commonChecks(r)
   },

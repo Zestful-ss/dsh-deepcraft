@@ -291,24 +291,15 @@ function importanceScenario(lane) {
       // palette and the three font roles.
       await attribute(page, 'data-ds-dark-theme', '')
       await audit.state('dark')
-      await attribute(page, 'data-dsh-deepcraft-palette', 'forest')
-      await audit.state('forest dark')
       await attribute(page, 'data-dsh-deepcraft-palette', 'cindy')
       await audit.state('cindy dark')
       await attribute(page, 'data-ds-dark-theme', null)
       await audit.state('cindy light')
+      // The palette in the dark, and the reader's own accent in the dark: each
+      // is a rule of its own in the palette and accent sheets.
       await attribute(page, 'data-ds-dark-theme', '')
-      await attribute(page, 'data-dsh-deepcraft-palette', 'forest')
-      await attribute(page, 'data-ds-dark-theme', null)
-      await audit.state('forest light')
-      await attribute(page, 'data-dsh-deepcraft-palette', 'ember')
-      await audit.state('ember light')
-      // The second palette in the dark, and the reader's own accent in the dark:
-      // each is a rule of its own in the palette and accent sheets.
-      await attribute(page, 'data-ds-dark-theme', '')
-      await audit.state('ember dark')
       await attribute(page, 'data-dsh-deepcraft-accent', '#d97757')
-      await audit.state('ember dark accent')
+      await audit.state('cindy dark accent')
       await attribute(page, 'data-dsh-deepcraft-accent', null)
       await attribute(page, 'data-ds-dark-theme', null)
       const MATERIAL_ATTRS = [
@@ -333,7 +324,7 @@ function importanceScenario(lane) {
       await attribute(page, 'data-dsh-deepcraft-font-prose', 'follow')
       await attribute(page, 'data-dsh-deepcraft-font-code', 'host')
       await audit.state('host palette')
-      await attribute(page, 'data-dsh-deepcraft-palette', 'ocean')
+      await attribute(page, 'data-dsh-deepcraft-palette', 'cindy')
       await attribute(page, 'data-dsh-deepcraft-font-ui', 'anthropic')
       await attribute(page, 'data-dsh-deepcraft-font-prose', 'anthropic-serif')
       await attribute(page, 'data-dsh-deepcraft-font-code', 'anthropic-mono')

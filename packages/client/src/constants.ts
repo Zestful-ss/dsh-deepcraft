@@ -95,6 +95,14 @@ export const MATERIAL_AMBIENT_ATTR = 'data-dsh-deepcraft-material-ambient'
  */
 export const WALLPAPER_ATTR = 'data-dsh-deepcraft-wallpaper'
 export const WALLPAPER_LITE_ATTR = 'data-dsh-deepcraft-wallpaper-lite'
+/**
+ * Where the wallpaper paints (features/wallpaper/wallpaper.ts): MOUNT_ATTR on
+ * the document element marks an image painted into the canvas background, and
+ * MEDIA_ATTR on the body marks the media kind under the shell so the
+ * stylesheet's veil gates to video alone.
+ */
+export const WALLPAPER_MOUNT_ATTR = 'data-dsh-deepcraft-wallpaper-mount'
+export const WALLPAPER_MEDIA_ATTR = 'data-dsh-deepcraft-wallpaper-media'
 /** The mascot "follow the theme" resolves to: the reader's one Petdex package, shared by both places. */
 export const MASCOT_PETDEX = 'petdex'
 /**

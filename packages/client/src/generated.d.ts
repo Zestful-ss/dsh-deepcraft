@@ -17,6 +17,9 @@ declare module 'virtual:dsh-deepcraft/generated' {
   export const MOTION: Record<string, string>
   /** The bundled wallpapers the settings page offers, by their ids (packages/assets/src/wallpapers/, D72). */
   export const WALLPAPERS: Record<string, { url: string, video: boolean }>
+
+  /** The bundled still-sprite mascots the chat pet choice offers, by their ids (packages/assets/src/mascot/). */
+  export const PET_SPRITES: Record<string, string>
 }
 
 /**

@@ -17,10 +17,10 @@
   var formListeners = []
   var formValue = {}
   // The default identity's pet is whaledou; the Petdex case below picks its own.
-  if (CASE === 'petdex-claude') Object.assign(formValue, { palette: 'ember', chatPet: 'crab-buddy' })
-  // The late-forms case is served the forest palette after apply; the shipped
+  if (CASE === 'petdex-claude') Object.assign(formValue, { chatPet: 'crab-buddy' })
+  // The late-forms case is served the host palette after apply; the shipped
   // cindy palette stands until the namespace arrives.
-  if (CASE === 'late-forms') formValue.palette = 'forest'
+  if (CASE === 'late-forms') formValue.palette = 'host'
   var form = {
     getSnapshot: function () { return { status: 'ready', value: formValue } },
     subscribe: function (listener) {

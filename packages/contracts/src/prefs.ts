@@ -30,17 +30,14 @@ export const MOTION_FULL = 'full'
 export const MOTION_MODES = [MOTION_SYSTEM, MOTION_REDUCED, MOTION_FULL] as const
 
 /**
- * Who paints the colours: one of the skin's own palettes, each a full light
- * and dark set of its own (theme/tokens.json, D80), or the host's colour tokens
- * left to the host and other theme plugins.
+ * Who paints the colours: the skin's Cindy palette, a full light and dark set
+ * of its own (theme/tokens.json, D80), or the host's colour tokens left to the
+ * host and other theme plugins.
  */
-export const PALETTE_OCEAN = 'ocean'
-export const PALETTE_EMBER = 'ember'
-export const PALETTE_FOREST = 'forest'
 export const PALETTE_CINDY = 'cindy'
 export const PALETTE_HOST = 'host'
 /** The skin's own palettes, in the settings page's order; `PALETTE_HOST` follows them. */
-export const SKIN_PALETTES = [PALETTE_OCEAN, PALETTE_EMBER, PALETTE_FOREST, PALETTE_CINDY] as const
+export const SKIN_PALETTES = [PALETTE_CINDY] as const
 export const PALETTES = [...SKIN_PALETTES, PALETTE_HOST] as const
 
 /**
@@ -242,22 +239,17 @@ const COLOR_RE = /^#[0-9a-f]{6}$/i
 /** The values earlier builds stored for their brand choice; only the migration below reads them (D80). */
 const LEGACY_BRAND_DEEPSEEK = 'deepseek'
 const LEGACY_BRAND_OFF = 'off'
-const LEGACY_PALETTE_CLAUDE = 'claude'
 
 /**
  * The colour palette a stored configuration means (D80). A value this build
- * knows wins; the host's palette stands; otherwise the old brand (or, without
- * one, the old palette) decides between the skin's blue and its warm palette.
+ * knows wins; the host's palette stands; everything else — the palettes this
+ * build retired, the old brand's answer and the old claude id — reads as the
+ * one palette left.
  */
 function migratePalette(section: Record<string, unknown>) {
   const raw = section.palette
   if (typeof raw === 'string' && (PALETTES as readonly string[]).includes(raw)) return raw
-  if (raw === PALETTE_HOST) return PALETTE_HOST
-  const brand = section.brand
-  if (brand !== undefined) {
-    return brand === LEGACY_BRAND_DEEPSEEK || brand === LEGACY_BRAND_OFF ? PALETTE_OCEAN : PALETTE_EMBER
-  }
-  return raw === LEGACY_PALETTE_CLAUDE ? PALETTE_EMBER : PALETTE_CINDY
+  return raw === PALETTE_HOST ? PALETTE_HOST : PALETTE_CINDY
 }
 
 /**

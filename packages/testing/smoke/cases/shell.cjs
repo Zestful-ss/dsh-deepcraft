@@ -1,9 +1,9 @@
 'use strict'
 const { check, basicChecks, commonChecks } = require('./_shared.cjs')
 
-/** The shell surfaces a wallpaper plugin shows through, and what the warm palette paints them */
-const EMBER_SHELL = ['body', 'sidebar', 'conversation']
-const EMBER_FILLS = [['body', 'rgb(252, 252, 251)'], ['sidebar', 'rgb(251, 251, 249)'], ['conversation', 'rgb(252, 252, 251)']]
+/** The shell surfaces a wallpaper plugin shows through, and what the skin palette paints them */
+const CINDY_SHELL = ['body', 'sidebar', 'conversation']
+const CINDY_FILLS = [['body', 'rgb(242, 242, 237)'], ['sidebar', 'rgb(238, 238, 233)'], ['conversation', 'rgb(242, 242, 237)']]
 
 module.exports = {
   // The three font roles: bundled choices, host leave-alone, and a custom list.
@@ -27,15 +27,12 @@ module.exports = {
       JSON.stringify(custom))
     commonChecks(r)
   },
-  // The skin's three palettes (D80): each one's canvases, accents and computed
-  // primary button fills.
+  // The skin's palette (D80): its canvases, accents and computed primary
+  // button fills in light and dark.
   palette(r) {
     basicChecks(r)
     const palettes = r.palettes || {}
     const EXPECTED = [
-      ['ocean', { light: 'rgb(252, 252, 251)', dark: 'rgb(32, 36, 39)', accent: '#5368c9', button: 'rgb(83, 104, 201)', raised: '#2b3038' }],
-      ['ember', { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)', accent: '#d97757', button: 'rgb(217, 119, 87)', raised: '#1e1e1d' }],
-      ['forest', { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)', accent: '#397657', button: 'rgb(57, 118, 87)', raised: '#1e1e1d' }],
       ['cindy', { light: 'rgb(242, 242, 237)', dark: 'rgb(24, 24, 24)', accent: '#3c3f43', darkAccent: '#eeeeee', button: 'rgb(60, 63, 67)', darkButton: 'rgb(238, 238, 238)', raised: '#1f1f1f' }],
     ]
     for (const [id, want] of EXPECTED) {
@@ -49,8 +46,8 @@ module.exports = {
     }
     const material = r.material || {}
     const off = r.materialOff || {}
-    check('the material layer answers its own values: the 12px corners, flat shadow, 150ms fast step, glass sidebar and ambient light (D84)',
-      material.radius === '12px' && material.shadow === 'none' &&
+    check('the material layer answers its own values: the 12px corners, cindy flat shadow, 150ms fast step, glass sidebar and ambient light (D84)',
+      material.radius === '12px' && /^0 1px 2px rgba\(0, 0, 0, 0?\.12\)$/.test(material.shadow) &&
         /^(150ms|\.15s)$/.test(material.fast) && /blur\(42px\)/.test(material.glass || '') && /radial-gradient/.test(material.ambient || ''),
       JSON.stringify(material))
     check('every material aspect returns to the host on its own, with no palette involved (D84)',
@@ -84,13 +81,13 @@ module.exports = {
     check('a custom accent takes the accent tokens, with the light ink on a dark fill',
       tinted.accent === '#1a7f5a' && tinted.accentInk === '#faf9f5',
       JSON.stringify({ accent: tinted.accent, ink: tinted.accentInk }))
-    const forestTinted = brand.forestTinted || {}
-    check('a custom accent remains in force when switching to another skin palette',
-      forestTinted.accent === '#1a7f5a' && forestTinted.buttonFill === 'rgb(26, 127, 90)',
-      JSON.stringify(forestTinted))
+    const hostTinted = brand.hostTinted || {}
+    check('the custom accent stands down under the host palette',
+      hostTinted.accent === '',
+      JSON.stringify(hostTinted))
     const cleared = brand.cleared || {}
     check('clearing the accent hands the brand\'s own accent back, and the images return to their own colours',
-      cleared.accent === '#d97757' && cleared.tintAttr === null && cleared.mark.image.includes(markUrl),
+      cleared.accent === '#3c3f43' && cleared.tintAttr === null && cleared.mark.image.includes(markUrl),
       JSON.stringify(cleared))
     check('teardown takes the custom brand\'s values off <body>',
       Array.isArray(r.leftBrandProperties) && r.leftBrandProperties.length === 0, JSON.stringify(r.leftBrandProperties))
@@ -115,28 +112,28 @@ module.exports = {
     check('a wallpaper plugin\'s cleared canvas and glass reach the sidebar and the cards',
       wall.sidebar === 'rgba(0, 0, 0, 0)' && wall.popover === 'rgba(255, 255, 255, 0.6)' && wall.body === 'rgba(0, 0, 0, 0)',
       JSON.stringify(wall))
-    const ember = hp.ember || {}
-    check('back on the warm palette the skin\'s colours and faces return',
-      ember.base === '#fcfcfb' && ember.body === 'rgb(252, 252, 251)' && ember.popover === 'rgb(255, 255, 255)',
-      JSON.stringify(ember))
-    // A wallpaper under the warm palette. The shell canvases stand down and
+    const cindy = hp.cindy || {}
+    check('back on the skin palette the skin\'s colours and faces return',
+      cindy.base === '#f2f2ed' && cindy.body === 'rgb(242, 242, 237)' && cindy.popover === 'rgb(253, 253, 248)',
+      JSON.stringify(cindy))
+    // A wallpaper under the skin palette. The shell canvases stand down and
     // one fixed mask in the canvas colour lies over the wallpaper; the base
     // canvas the host paints its dialogs and cards with stays opaque. Taking
     // the marker away brings the fills back and lifts the mask. The document
     // element's canvas stays behind the layer.
-    const wallEmber = hp.emberWallpaper || {}
+    const wallCindy = hp.cindyWallpaper || {}
     check('with a skin palette and a wallpaper up the shell stands down under one mask',
-      EMBER_SHELL.every((key) => wallEmber[key] === 'rgba(0, 0, 0, 0)') && wallEmber.sidebarFill === 'transparent' &&
-        wallEmber.maskPosition === 'fixed' && /^color\(srgb 0\.98\d* 0\.98\d* 0\.98\d* \/ 0\.86\)$/.test(wallEmber.mask || '') &&
-        wallEmber.html === 'rgb(252, 252, 251)',
-      JSON.stringify(wallEmber))
+      CINDY_SHELL.every((key) => wallCindy[key] === 'rgba(0, 0, 0, 0)') && wallCindy.sidebarFill === 'transparent' &&
+        wallCindy.maskPosition === 'fixed' && /^color\(srgb /.test(wallCindy.mask || '') &&
+        wallCindy.html === 'rgb(242, 242, 237)',
+      JSON.stringify(wallCindy))
     check('and the base canvas keeps its fill',
-      wallEmber.base === '#fcfcfb' && wallEmber.popover === ember.popover,
-      JSON.stringify({ wallpaper: wallEmber, ember }))
+      wallCindy.base === '#f2f2ed' && wallCindy.popover === cindy.popover,
+      JSON.stringify({ wallpaper: wallCindy, cindy }))
     check('with the wallpaper gone the skin\'s own fills are back and the mask is lifted',
-      EMBER_FILLS.every(([key, value]) => ember[key] === value) && ember.sidebarFill === '#fbfbf9' &&
-        ember.mask === 'rgba(0, 0, 0, 0)',
-      JSON.stringify(ember))
+      CINDY_FILLS.every(([key, value]) => cindy[key] === value) && cindy.sidebarFill === '#eeeee9' &&
+        cindy.mask === 'rgba(0, 0, 0, 0)',
+      JSON.stringify(cindy))
     commonChecks(r)
   },
 }

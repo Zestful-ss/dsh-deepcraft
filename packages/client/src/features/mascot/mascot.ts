@@ -1,6 +1,7 @@
 import { MASCOT_OFF, MASCOT_PETDEX, MASCOT_SCOPE_ALL } from '../../constants'
 import { readPrefs, resolveMascot } from '../../core/prefs'
 import { createPetdexMascot } from './petdex'
+import { createIslandMascot, ISLAND_PET_CINDY } from './island'
 import { decodePet, ensurePet } from '../../shared/petdex'
 import type { PetDescriptor } from '@dsh-deepcraft/contracts/pets'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
@@ -8,14 +9,15 @@ import type { FeatureUi } from '../../core/feature'
 import type manifest from './mascot.manifest'
 
 /**
- * The companion on the composer: the reader's Petdex package, or none (D80).
+ * The companion on the composer: the reader's Petdex package, the shipped
+ * island character, or none (D80).
  *
- * `brand` means the reader's current Petdex package (`chatPet`, whaledou out of
- * the box), drawn from its own atlas; `off` retires the composer guest.
- * `mascotScope` decides whether the guest also stands in the conversation.
- * One chat instance is on the page at a time. A package that cannot be
- * fetched or decoded leaves the previous instance in place instead of
- * blanking the corner.
+ * `brand` means the reader's current pet choice (`chatPet`): an island id
+ * draws the packaged still sprite, every other id a Petdex package drawn from
+ * its own atlas; `off` retires the composer guest. `mascotScope` decides
+ * whether the guest also stands in the conversation. One chat instance is on
+ * the page at a time. A package that cannot be fetched or decoded leaves the
+ * previous instance in place instead of blanking the corner.
  */
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   let petdex: { id: string, player: ReturnType<typeof createPetdexMascot> } | null = null
@@ -38,6 +40,15 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
 
   async function openPetdex(id: string, conversation: boolean) {
     if (requested === id) return
+    // An island id answers at once: the sprite ships with the package.
+    if (id === ISLAND_PET_CINDY) {
+      requested = id
+      generation += 1
+      if (petdex !== null) petdex.player.dispose()
+      petdex = { id, player: createIslandMascot(ctx, ui, id) }
+      petdex.player.sync(conversation)
+      return
+    }
     if (failedId === id && Date.now() - failedAt < 10000) return
     requested = id
     const token = ++generation
