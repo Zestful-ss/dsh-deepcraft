@@ -1,8 +1,0 @@
-{
-  "group": "fixes",
-  "order": 0,
-  "at": "2026-11-16",
-  "external": false,
-  "zh": "修复壁纸开启后正文画布仍盖在图上的问题：画布规则补上皮肤自己的壁纸标记，`#root` 与会话面板正确让出填充",
-  "en": "Fix the page canvas still covering the wallpaper: the canvas rules now gate out under the skin's own wallpaper marker, so `#root` and the conversation pane yield their fill"
-}
