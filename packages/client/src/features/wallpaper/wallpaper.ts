@@ -30,6 +30,8 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
   let media: HTMLImageElement | HTMLVideoElement | null = null
   let current: WallpaperFile | null = null
   let mounted = false
+  let dead = false
+  let lastSource: string | null = null
 
   /** Whether the video plays right now: the reader's choices plus the page's own visibility. */
   const plays = () =>
@@ -51,6 +53,18 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
   }
 
   const sync = () => {
+    if (dead) return
+    const prefs = readPrefs()
+    // The feature stays installed across the builtin↔custom switch, so the
+    // cached answer can predate a file dropped through the file route: a
+    // switch into `custom` re-reads the host half once.
+    if (prefs.wallpaperSource !== lastSource) {
+      lastSource = prefs.wallpaperSource
+      if (prefs.wallpaperSource !== WALLPAPER_BUILTIN) {
+        void loadWallpaper(true).then(sync)
+        return
+      }
+    }
     current = currentFile()
     if (current === null) {
       if (mounted) {
@@ -103,6 +117,7 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
   void loadWallpaper(true).then(sync)
 
   return () => {
+    dead = true
     offWallpaper()
     offPrefs()
     document.removeEventListener('visibilitychange', onVisibility)

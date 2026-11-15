@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 0,
+  "at": "2026-11-15",
+  "external": false,
+  "zh": "修复壁纸来源从内建切到自定义后图层不出现：图层模块常驻时沿用了上传前的空缓存，切换到自定义现会重新向宿主半边读取一次。",
+  "en": "Fix the wallpaper layer staying away after the source switches from built-in to custom: the long-lived module kept the cache from before the upload, and switching to custom now re-reads the host half once."
+}

@@ -34,6 +34,13 @@ const SKIN = {
 /** One palette's computed colours and the identity the page paints. */
 const readPage = (page) => page.evaluate(() => {
   const style = getComputedStyle(document.body)
+  // The body's own fill stands down under a wallpaper (wallpaper.css), so the
+  // canvas colour is read on a probe element where the token resolves.
+  const canvasProbe = document.createElement('div')
+  canvasProbe.style.backgroundColor = 'var(--dsh-deepcraft-canvas)'
+  document.body.appendChild(canvasProbe)
+  const canvas = getComputedStyle(canvasProbe).backgroundColor
+  canvasProbe.remove()
   const art = (selector, pseudo) => {
     const node = document.querySelector(selector)
     if (node === null) return null
@@ -42,7 +49,7 @@ const readPage = (page) => page.evaluate(() => {
   }
   return {
     palette: document.body.getAttribute('data-dsh-deepcraft-palette'),
-    canvas: style.backgroundColor,
+    canvas,
     ink: style.color,
     accent: style.getPropertyValue('--dsw-alias-brand-primary').trim(),
     accentInk: style.getPropertyValue('--dsw-alias-brand-text').trim(),

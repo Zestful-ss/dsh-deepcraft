@@ -73,7 +73,8 @@ function wallpaperScenario({ check }) {
         await page.waitForFunction(() => document.querySelector('[data-dsh-deepcraft-wallpaper-layer]') !== null, undefined, { timeout: 15000 }).catch(() => {})
         read.on = await readPage(page)
         await pickSource(page, SKIN.off)
-        await page.waitForTimeout(500)
+        await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-wallpaper') === 'off', undefined, { timeout: 15000 }).catch(() => {})
+        await page.waitForTimeout(300)
         read.off = await readPage(page)
       } finally {
         read.removed = await page.evaluate(async (route) => {
