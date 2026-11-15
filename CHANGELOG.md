@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.39.0] - 2026-11-15
 
-<h3 id="cn-unreleased">新增功能</h3>
+[中文](#cn-0.39.0) | [English](#en-0.39.0)
+
+<h3 id="cn-0.39.0">新增功能</h3>
 
 - 新增 Cindy 配色并设为默认：暖象牙与近黑表面、黑白反转主按钮、#417CDD 功能蓝，配套 Cindy 的圆角阶梯、菜单阴影与侧栏亚克力底；新装默认关闭环境光晕。
 - 新增 HarmonyOS Sans SC 中文字体选项并设为界面字体默认（西文走 Inter），壁纸来源新增内置选项并打包 Cindy 的全部静态与动态壁纸，新装默认开启 cindy-whisper。
@@ -15,7 +17,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - 修复壁纸控件引用宿主不存在的三个令牌（输入框底色、悬停底色、错误字色），改用宿主已有的具体令牌与错误色。
 
-<h3 id="en-unreleased">New Features</h3>
+<h3 id="en-0.39.0">New Features</h3>
 
 - Add the Cindy palette and make it the default: warm-ivory and near-black surfaces, the inverted monochrome primary button, the #417CDD functional blue, plus Cindy's own corner ladder, menu shadows and acrylic sidebar backing; a fresh install starts without the ambient wash.
 - Add the HarmonyOS Sans SC CJK font as the interface font's default (Latin reads Inter), give the wallpaper source a built-in choice shipping all of Cindy's still and video wallpapers, and start a fresh install on cindy-whisper.
