@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 21,
+  "at": "2026-11-16",
+  "external": false,
+  "zh": "修复壁纸与品牌图的并发写竞态：上传壁纸时并发读到旧状态会永久盖回界面，品牌标志与文字标志的快写会让后到的响应丢掉先到的成功；两项写现在都串行化。同时让图像壁纸的可见度与模糊滑杆拖动即时预览，不再等到松手提交。",
+  "en": "Fix the concurrent-write races on wallpaper and brand images: a read during an upload could permanently paint the old state, and two fast brand mutations could drop the first success — writes are serialized now. The image wallpaper's visibility and blur sliders also preview live while dragging instead of only on release."
+}

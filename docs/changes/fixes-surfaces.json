@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 22,
+  "at": "2026-11-16",
+  "external": false,
+  "zh": "修复若干界面行为：删除会话的确认卡不再失去锚点定位，重载时随功能一并关闭且异步回调不再撤销下一张卡；子代理模型在无会话页面的挂起读取不再落回旧路由，规则开关随主开关一起禁用；品牌名称输入框按 Esc 不再把取消的草稿当提交；ds-bot 返回操作在功能拆除后不再触发整页重载，页脚行被替换后能重新发现。",
+  "en": "Fix several surface behaviors: the delete-conversation card keeps its anchored positioning, closes with the feature on reload, and a late async reply no longer unregisters the next card; the subagent panel stops landing stale routes on a session-less page and the rule switch disables with its master; Escape in the brand name field no longer commits the cancelled draft; the ds-bot return action no longer reloads a page after teardown, and footer replacement is rediscovered."
+}

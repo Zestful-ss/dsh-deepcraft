@@ -229,6 +229,9 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const id = sessionId()
     if (id === loadedSession) return
     if (id === null) {
+      // An in-flight read for the session the reader just left must not land:
+      // its answer names routes a page without a session cannot save.
+      generation += 1
       loadedSession = null
       state = EMPTY
       refresh()

@@ -5,6 +5,9 @@
    helper beside the row's button. */
 
 body[data-dsh-deepcraft] .dsh-deepcraft-session-delete-card {
+  /* The shared card says nothing about positioning; the anchoring helper
+     writes left/top, which a static box ignores. */
+  position: fixed;
   max-width: 260px;
   padding: 12px 14px;
 }

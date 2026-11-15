@@ -91,13 +91,19 @@ function measure(kind: BrandImageKind, state: BrandImageState | null): Promise<B
 }
 
 /**
- * Send one request that changes an image and adopt the status it answers with.
- * A refusal rejects with the reason the host half gave.
+ * Send one request that changes an image and adopt the status it answers
+ * with. A refusal rejects with the reason the host half gave. Writes chain,
+ * since each answer is a whole-status snapshot: two overlapping writes would
+ * let the earlier answer overwrite the later one's image.
  */
+let inFlightChange: Promise<unknown> = Promise.resolve()
+
 function change(kind: BrandImageKind, init: RequestInit) {
   const at = ++generation
-  return changeJson<BrandAnswer>(ROUTES[kind], init)
+  const work = inFlightChange.then(() => changeJson<BrandAnswer>(ROUTES[kind], init))
     .then(answer => adopt(answer, at))
+  inFlightChange = work.catch(() => { /* a refusal must not jam the next write */ })
+  return work
 }
 
 /** Replace one image with a file the reader picked; the content type names its format. */

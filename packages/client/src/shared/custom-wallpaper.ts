@@ -56,6 +56,10 @@ export function subscribeWallpaper(listener: (file: WallpaperFile | null) => voi
  * not answer leaves no wallpaper (D12).
  */
 export function loadWallpaper(fresh = false): Promise<WallpaperFile | null> {
+  // A write still in flight answers after a read that started before it:
+  // ordering by send lets the read's stale answer win for good, so the read
+  // waits for the write first.
+  if (inFlightChange !== null) return inFlightChange.then(() => loadWallpaper(fresh), () => loadWallpaper(fresh))
   if (requested && !fresh) return Promise.resolve(file)
   requested = true
   const at = ++generation
@@ -63,11 +67,18 @@ export function loadWallpaper(fresh = false): Promise<WallpaperFile | null> {
     .then((answer) => adopt(answer, at), () => file)
 }
 
+/** A PUT/DELETE the route has not answered yet; reads wait on it. */
+let inFlightChange: Promise<WallpaperFile | null> | null = null
+
 /** One change through the file route: `PUT` the bytes, `DELETE` removes them. */
 function change(init: RequestInit) {
   const at = ++generation
-  return changeJson<WallpaperAnswer>(WALLPAPER_FILE_ROUTE, init)
+  const work = changeJson<WallpaperAnswer>(WALLPAPER_FILE_ROUTE, init)
     .then(answer => adopt(answer, at))
+  inFlightChange = work.finally(() => {
+    if (inFlightChange === work) inFlightChange = null
+  })
+  return work
 }
 
 /** Replace the wallpaper with a file the reader picked; the content type names its format. */

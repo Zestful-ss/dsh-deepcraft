@@ -33,7 +33,7 @@ export function createSettingsGeneralTab(): SettingsTab {
           'subagentModelChoice',
           copy('subagentModelChoiceTitle'),
           copy('subagentModelChoiceDesc'),
-          controls.toggle(prefs.subagentModelChoice !== false, value => { write({ subagentModelChoice: value }) }),
+          controls.toggle(prefs.subagentModelChoice !== false, value => { write({ subagentModelChoice: value }) }, prefs.subagentModelPicker === false),
           prefs.subagentModelPicker !== false,
         ),
       },

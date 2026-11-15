@@ -3,6 +3,7 @@ import { PALETTE_HOST } from '@dsh-deepcraft/contracts/prefs'
 import { WALLPAPERS } from 'virtual:dsh-deepcraft/generated'
 import { motionReduced, readPrefs, subscribePrefs } from '../../core/prefs'
 import { loadWallpaper, readWallpaper, subscribeWallpaper } from '../../shared/custom-wallpaper'
+import { subscribeMutations } from '@dsh-deepcraft/engine/bus'
 import type { WallpaperFile } from '../../shared/custom-wallpaper'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
@@ -73,11 +74,18 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
     return readWallpaper()
   }
 
+  /** One amount as the document carries it right now — a slider's draft custom property outranks the stored preference. */
+  const wallpaperAmount = (name: string, fallback: number) => {
+    const parsed = Number.parseFloat(getComputedStyle(document.body).getPropertyValue(name))
+    return Number.isFinite(parsed) ? parsed : fallback
+  }
+
   /** The veil colour the stylesheet's gradient layer paints over the html image (theme/wallpaper.css's math). */
   const veilColor = () => {
     const prefs = readPrefs()
     const canvas = getComputedStyle(document.body).getPropertyValue('--dsh-deepcraft-canvas').trim() || 'transparent'
-    const cap = prefs.wallpaperLite ? Math.min(prefs.wallpaperVisibility, 0.6) : Math.min(prefs.wallpaperVisibility, 1)
+    const visibility = wallpaperAmount('--dsh-deepcraft-wallpaper-visibility', prefs.wallpaperVisibility)
+    const cap = prefs.wallpaperLite ? Math.min(visibility, 0.6) : Math.min(visibility, 1)
     return `color-mix(in srgb, ${canvas} ${(1 - cap) * 100}%, transparent)`
   }
 
@@ -134,13 +142,14 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
    */
   const paintImage = (file: WallpaperFile) => {
     const prefs = readPrefs()
-    const key = `${file.state.version}\t${prefs.wallpaperBlur}\t${prefs.wallpaperLite}`
+    const blur = wallpaperAmount('--dsh-deepcraft-wallpaper-blur', prefs.wallpaperBlur)
+    const key = `${file.state.version}\t${blur}\t${prefs.wallpaperLite}`
     document.documentElement.style.setProperty(VEIL_PROPERTY, veilColor())
     if (key !== paintedKey) {
       paintedKey = key
       const seq = ++paintSeq
-      const urlPromise = prefs.wallpaperBlur > 0 && !prefs.wallpaperLite
-        ? blurToUrl(file, prefs.wallpaperBlur)
+      const urlPromise = blur > 0 && !prefs.wallpaperLite
+        ? blurToUrl(file, blur)
         : Promise.resolve(file.url)
       void urlPromise.then(url => {
         if (dead || seq !== paintSeq || paintedKey !== key) {
@@ -232,6 +241,22 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
   const offPrefs = subscribePrefs(sync)
   const onVisibility = () => sync()
   document.addEventListener('visibilitychange', onVisibility)
+  // The amount sliders preview through the body's own custom properties
+  // before their preference lands; an image's veil and blurred bitmap are
+  // baked from the stored value, so a live draft must repaint them itself.
+  const offDraft = subscribeMutations(document.body, {
+    attributes: true,
+    attributeFilter: ['style'],
+    attributeOldValue: true,
+  }, records => {
+    if (records.some(record => {
+      const before = record.oldValue ?? ''
+      const after = document.body.getAttribute('style') ?? ''
+      const pick = (style: string, name: string) => new RegExp(`${name}\\s*:\\s*([^;]+)`).exec(style)?.[1]?.trim() ?? ''
+      return pick(before, '--dsh-deepcraft-wallpaper-visibility') !== pick(after, '--dsh-deepcraft-wallpaper-visibility')
+        || pick(before, '--dsh-deepcraft-wallpaper-blur') !== pick(after, '--dsh-deepcraft-wallpaper-blur')
+    })) sync()
+  })
   // A fresh read: the feature installs and retires with the source switch, so a
   // "no file" cached by an earlier install must not outlive the file the reader
   // uploaded in between.
@@ -242,6 +267,7 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
     paintSeq += 1
     offWallpaper()
     offPrefs()
+    offDraft()
     document.removeEventListener('visibilitychange', onVisibility)
     if (video !== null) video.pause()
     clearSurfaces()

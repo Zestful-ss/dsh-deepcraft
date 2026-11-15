@@ -157,11 +157,19 @@ function folderInput(): HTMLInputElement {
 /** One picker for a file, opened from a button of the page. */
 function pickFiles(input: HTMLInputElement): Promise<FileList | null> {
   const { promise, resolve } = Promise.withResolvers<FileList | null>()
-  input.addEventListener('change', () => {
+  const onChange = () => {
+    input.removeEventListener('cancel', onCancel)
     resolve(input.files)
     input.value = ''
-  }, { once: true })
-  input.addEventListener('cancel', () => { resolve(null) }, { once: true })
+  }
+  const onCancel = () => {
+    // The other side stays armed through a cancel: the next pick's handler
+    // would see a stale change listener empty the selection first.
+    input.removeEventListener('change', onChange)
+    resolve(null)
+  }
+  input.addEventListener('change', onChange, { once: true })
+  input.addEventListener('cancel', onCancel, { once: true })
   input.click()
   return promise
 }

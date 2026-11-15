@@ -72,7 +72,9 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     failedId = null
     if (petdex !== null) petdex.player.dispose()
     petdex = { id, player: createPetdexMascot(ctx, ui, pet) }
-    petdex.player.sync(conversation)
+    // The scope was read before the fetch; the page the mascot lands on is
+    // the one the reader sees now.
+    petdex.player.sync(prefs.mascotScope === MASCOT_SCOPE_ALL)
   }
 
   function sync() {

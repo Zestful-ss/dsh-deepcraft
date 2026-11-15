@@ -303,7 +303,9 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
       stage.animation = null
     }
     const sheet = SHEETS[key]
-    if (still()) {
+    if (still() || sheet.frames <= 1) {
+      // A one-frame sheet has nothing to cycle; a WAAPI transform would only
+      // out-paint the CSS animation the strip's own stylesheet runs on it.
       strip.style.transform = frameOffset(sheet, sheet.still)
       return
     }

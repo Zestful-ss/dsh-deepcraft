@@ -67,11 +67,15 @@ export function confirmDelete(options: { anchor: HTMLElement, title: string, ses
 
   /** Take the card down and give the page back its listeners. */
   function close() {
+    // Only the current card may unregister itself: a pending delete whose
+    // promise answers after its card closed would otherwise strip the next
+    // confirmation's registry entry.
+    if (pending?.card !== card) return
+    pending = null
     document.removeEventListener('pointerdown', onOutside, true)
     document.removeEventListener('keydown', onKey, true)
     unregisterPopover(POPOVER)
     card.remove()
-    if (pending?.card === card) pending = null
     options.anchor.focus()
   }
   function onOutside(event: Event) {

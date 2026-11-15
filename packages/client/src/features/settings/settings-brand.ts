@@ -39,10 +39,16 @@ function paintedAccent() {
  */
 function useDraft(stored: string, commit: (value: string) => void) {
   const [draft, setDraft] = React.useState(stored)
+  // The blur path asks for the latest text after a revert has run; the state
+  // setter would hand it the value the render captured instead.
+  const text = React.useRef(draft)
   const editing = React.useRef(false)
   const timer = React.useRef<number | null>(null)
   React.useEffect(() => {
-    if (!editing.current) setDraft(stored)
+    if (!editing.current) {
+      text.current = stored
+      setDraft(stored)
+    }
   }, [stored])
   React.useEffect(() => () => { if (timer.current !== null) clearTimeout(timer.current) }, [])
   const flush = (value: string) => {
@@ -51,11 +57,13 @@ function useDraft(stored: string, commit: (value: string) => void) {
       timer.current = null
     }
     editing.current = false
+    text.current = value
     setDraft(value)
     if (value !== stored) commit(value)
   }
   const change = (value: string) => {
     editing.current = true
+    text.current = value
     setDraft(value)
     if (timer.current !== null) clearTimeout(timer.current)
     timer.current = setTimeout(() => flush(value), DRAFT_SAVE_DEBOUNCE_MS)
@@ -64,13 +72,14 @@ function useDraft(stored: string, commit: (value: string) => void) {
     if (timer.current !== null) clearTimeout(timer.current)
     timer.current = null
     editing.current = false
+    text.current = stored
     setDraft(stored)
   }
-  return { draft, change, flush, revert }
+  return { draft, text, change, flush, revert }
 }
 
 function BrandNameInput(props: { stored: string, write: SettingsView['write'] }) {
-  const { draft, change, flush, revert } = useDraft(props.stored, value => props.write({ brandName: value.trim().slice(0, BRAND_NAME_MAX) }))
+  const { draft, text, change, flush, revert } = useDraft(props.stored, value => props.write({ brandName: value.trim().slice(0, BRAND_NAME_MAX) }))
   return React.createElement('input', {
     type: 'text',
     className: 'dsh-deepcraft-settings-input',
@@ -80,11 +89,11 @@ function BrandNameInput(props: { stored: string, write: SettingsView['write'] })
     spellCheck: false,
     autoComplete: 'off',
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => change(event.target.value),
-    onBlur: () => flush(draft),
+    onBlur: () => flush(text.current),
     onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') {
         event.preventDefault()
-        flush(draft)
+        flush(text.current)
         event.currentTarget.blur()
       } else if (event.key === 'Escape') {
         revert()

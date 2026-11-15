@@ -5,7 +5,7 @@ import type { SessionBlockRow, SessionBlockServices } from '../../shared/session
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './recent.manifest'
-import { confirmDelete } from './confirm'
+import { closeDeleteConfirmation, confirmDelete } from './confirm'
 import { copy } from './copy'
 import { selectRecent } from './select'
 
@@ -68,6 +68,9 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   })
   ui.recent = { sync: block.sync }
   return () => {
+    // An open confirmation is body-mounted, so the block's own teardown does
+    // not reach it: a reload would leave its buttons answering a dead page.
+    closeDeleteConfirmation()
     delete ui.recent
     block.dispose()
   }
