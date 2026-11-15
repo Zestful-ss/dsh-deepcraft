@@ -1,4 +1,6 @@
 import { PET_SPRITES } from 'virtual:dsh-deepcraft/generated'
+import { ISLAND_PETS } from '@dsh-deepcraft/contracts/pets'
+import type { IslandPetId } from '@dsh-deepcraft/contracts/pets'
 import { buildElement } from '@dsh-deepcraft/engine/dom'
 import { motionMs } from '../../shared/motion'
 import { createMascotPlayer, imageSheets } from './mascot-player'
@@ -21,12 +23,11 @@ import type manifest from './mascot.manifest'
  */
 
 /** The pet ids the settings page and `chatPet` write for the shipped island characters. */
-export const ISLAND_PETS = ['cindy', 'annie', 'blackcat', 'boli', 'chaku', 'erika', 'muffin', 'pululu', 'tarara', 'whitesnow'] as const
+export { ISLAND_PETS }
+export type { IslandPetId }
 
 /** The pet id of the reference character, kept for callers that name it directly. */
 export const ISLAND_PET_CINDY: IslandPetId = 'cindy'
-
-export type IslandPetId = (typeof ISLAND_PETS)[number]
 
 /** Whether a `chatPet` value names a shipped island character. */
 export const isIslandPet = (id: string): id is IslandPetId => (ISLAND_PETS as readonly string[]).includes(id)

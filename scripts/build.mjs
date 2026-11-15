@@ -344,6 +344,12 @@ function loadPetSprites(plan, claimed) {
     claimed.add(file)
     out[id] = entry.url
   }
+  // Every shipped island id must name a sprite: the settings page offers all
+  // of ISLAND_PETS, and a miss only surfaces at mascot construction.
+  const { ISLAND_PETS } = loadModule('packages/contracts/src/pets.ts')
+  for (const id of ISLAND_PETS) {
+    if (out[id] === undefined) throw new Error(`build: packages/assets/src/mascot/island-${id}.png is missing but the pet is offered`)
+  }
   return out
 }
 

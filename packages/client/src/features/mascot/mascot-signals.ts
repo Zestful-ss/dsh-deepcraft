@@ -259,6 +259,15 @@ export function createMascotSignals(ctx: HostContext, onMoment: (moment: MascotM
       chat = target
       stopChat = chat.subscribe(onChange)
     }
+
+    /** Arm the chat-target watch once the host builds it; a feed event retries. */
+    function armChat() {
+      if (chat !== null || sessionId === null) return
+      const built = findChatTarget(ctx, sessionId)
+      if (built === null) return
+      chat = built
+      stopChat = chat.subscribe(onChange)
+    }
     adoptCompactions(feed.getSnapshot().entries)
     stopFeed = feed.subscribe(() => {
       const latest = feed.getSnapshot()
@@ -273,6 +282,7 @@ export function createMascotSignals(ctx: HostContext, onMoment: (moment: MascotM
       for (let i = 0; i < arrived.length; i++) {
         if (arrived[i].type === 'event') take(arrived[i].event)
       }
+      if (chat === null) armChat()
     })
   }
 

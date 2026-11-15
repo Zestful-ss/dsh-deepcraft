@@ -68,6 +68,10 @@ export const PET_ID_RE = /^[a-z0-9][a-z0-9-]{0,62}$/
 /** The name of the manifest file inside a package; the official download serves it as `petjson.json`. */
 export const PET_MANIFEST_FILE = 'pet.json'
 
+/** The shipped island characters' ids: each names `mascot/island-<id>.png` in the assets the build ships. */
+export const ISLAND_PETS = ['cindy', 'annie', 'blackcat', 'boli', 'chaku', 'erika', 'muffin', 'pululu', 'tarara', 'whitesnow'] as const
+export type IslandPetId = (typeof ISLAND_PETS)[number]
+
 /** One installed pet, as the browser half reads it. Paths and tokens never cross this boundary. */
 export interface PetDescriptor {
   /** The directory under the pets root. */

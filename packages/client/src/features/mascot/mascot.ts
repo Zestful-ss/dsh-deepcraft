@@ -36,6 +36,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       petdex = null
     }
     requested = null
+    failedId = null
     generation += 1
   }
 
@@ -45,9 +46,17 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     if (isIslandPet(id)) {
       requested = id
       generation += 1
-      if (petdex !== null) petdex.player.dispose()
-      petdex = { id, player: createIslandMascot(ctx, ui, id) }
-      petdex.player.sync(conversation)
+      try {
+        const next = createIslandMascot(ctx, ui, id)
+        if (petdex !== null) petdex.player.dispose()
+        petdex = { id, player: next }
+        petdex.player.sync(conversation)
+      } catch (error) {
+        // A broken island package names the pet it could not stand up; the
+        // previous guest keeps playing and the next pass may try another.
+        console.warn(`[dsh-deepcraft] the chat pet "${id}" could not be shown:`, error)
+        requested = null
+      }
       return
     }
     if (failedId === id && Date.now() - failedAt < 10000) return
@@ -62,20 +71,30 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       // for an import it performed itself. A broken package is not fetched
       // again on the next pass.
       console.warn(`[dsh-deepcraft] the chat pet "${id}" could not be loaded:`, error)
-      failedId = id
-      failedAt = Date.now()
-      if (token === generation) requested = null
+      if (token === generation) {
+        failedId = id
+        failedAt = Date.now()
+        requested = null
+      }
       return
     }
     if (token !== generation) return
     const prefs = readPrefs()
     if (resolveMascot(prefs) !== MASCOT_PETDEX || prefs.chatPet !== id) return
     failedId = null
-    if (petdex !== null) petdex.player.dispose()
-    petdex = { id, player: createPetdexMascot(ctx, ui, pet) }
-    // The scope was read before the fetch; the page the mascot lands on is
-    // the one the reader sees now.
-    petdex.player.sync(prefs.mascotScope === MASCOT_SCOPE_ALL)
+    try {
+      const next = createPetdexMascot(ctx, ui, pet)
+      if (petdex !== null) petdex.player.dispose()
+      petdex = { id, player: next }
+      // The scope was read before the fetch; the page the mascot lands on is
+      // the one the reader sees now.
+      petdex.player.sync(prefs.mascotScope === MASCOT_SCOPE_ALL)
+    } catch (error) {
+      // A malformed package can stand down the whole player: keep the guest
+      // that was playing and leave the pick free for another try (D12).
+      console.warn(`[dsh-deepcraft] the chat pet "${id}" could not be shown:`, error)
+      requested = null
+    }
   }
 
   function sync() {

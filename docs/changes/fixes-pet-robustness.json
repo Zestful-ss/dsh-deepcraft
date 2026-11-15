@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 22,
+  "at": "2026-11-16",
+  "external": false,
+  "zh": "修复宠物内置音效在首次手势前创建音频上下文后永久静音、宠物构造失败留下死引用且不再重试、聊天目标晚于订阅出现时流式信号永不接管，以及自定义字体输入框在键入期间被保存值覆盖。",
+  "en": "Fix the pet's built-in tones staying silent forever when the audio context was created before the first gesture, a failed pet construction leaving a dead player behind and refusing every retry, streaming signals never attaching when the chat target arrived after the subscription, and the custom font input being overwritten by the stored value mid-typing."
+}

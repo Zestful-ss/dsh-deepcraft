@@ -191,6 +191,12 @@ export function ClaudeStyleSettingsSection(props: { embed?: boolean }) {
     setPrefs(Object.assign({}, prefs, patch))
     savePrefs(patch).then(result => {
       if (result === null) setError(copy('unavailable'))
+    }).catch((error: unknown) => {
+      // A storage fault rejects rather than answering false; the binding has
+      // already re-read the stored values, so the error line says the write
+      // did not land (D12 — the page keeps working).
+      setError(copy('unavailable'))
+      console.warn('[dsh-deepcraft] the settings write did not land:', error)
     })
   }
 
@@ -316,7 +322,13 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       },
     }
   }
-  if (typeof ctx.inject !== 'function') return stopThemeFlip
+  if (typeof ctx.inject !== 'function') return () => {
+    // The same cleanup the main return runs: an old host still held the nav
+    // handle and a drive a Ctrl+, may have armed.
+    stopThemeFlip()
+    hostSettings.stopSettingsDrive()
+    if (ui && ui.settingsNav) delete ui.settingsNav
+  }
   const fiber = ctx.inject(['slots'], scope => {
     const slots = hostSlots(scope)
     if (slots === undefined || slots === null || typeof slots.inject !== 'function') return

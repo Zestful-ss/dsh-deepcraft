@@ -229,17 +229,20 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     const id = sessionId()
     if (id === loadedSession) {
       // The catalog can land after the one watch this session got missed its
-      // store; re-arming is cheap and a copy change repaints through the bump.
+      // store; re-arming happens inside watchCatalog only while it is unarmed.
+      // State changes refresh at their own call sites — repainting here would
+      // rebuild the card's rows on every pass.
       watchCatalog()
-      refresh()
       return
     }
     if (id === null) {
       // An in-flight read for the session the reader just left must not land:
-      // its answer names routes a page without a session cannot save.
+      // its answer names routes a page without a session cannot save. The dead
+      // session's catalog watch goes with it.
       generation += 1
       loadedSession = null
       state = EMPTY
+      watchCatalog()
       refresh()
       return
     }
@@ -394,10 +397,23 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
         seatNode = node
         if (node === null) {
           clearCapsule()
-          // The button leaving the tree orphans an open card: its anchor has
-          // no box, so the card's next paint would clamp to the corner.
-          closeCard()
-        } else markCapsule()
+          // React hands ref(null) and ref(newNode) in the same commit when the
+          // host re-renders the slot: closing the card on the null would strand
+          // it on the old button every time the composer repaints, so the
+          // orphan check waits a task for the replacement's ref.
+          queueMicrotask(() => {
+            if (seatNode === null) closeCard()
+          })
+        } else {
+          markCapsule()
+          // A replaced button keeps the open card: it becomes the new anchor
+          // and reports the state the card carries.
+          if (open) {
+            trigger = node
+            setAttributeIfChanged(node, 'aria-expanded', 'true')
+            setAttributeIfChanged(node, 'data-open', 'true')
+          }
+        }
       },
       className: 'dsh-deepcraft-subagent-model-btn',
       'data-dsh-subagent-model': usable ? (drawn.selected.length > 0 ? 'chosen' : 'empty') : 'unavailable',
@@ -443,15 +459,25 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   // The catalog arrives after the entry does: names for the rows and the
   // trigger come from it, so its store is worth hearing.
   let stopCatalog: (() => void) | null = null
+  /** The session the armed watch belongs to, so one arming stands for its session. */
+  let watching: string | null = null
   function watchCatalog() {
     const id = loadedSession
+    // An armed watch is left alone: re-arming on every scheduler pass churns
+    // the store subscription and repaints the card's rows in place.
+    if (watching === id) return
     if (stopCatalog !== null) {
       stopCatalog()
       stopCatalog = null
     }
+    // The directory can still be missing right after a session switch: leave
+    // the pass unarmed so the next one asks again rather than never loading.
+    watching = null
     if (id === null) return
     const directory = sessionModelDirectory(ctx, id)
-    if (typeof directory?.store?.subscribe === 'function') {
+    if (directory === null) return
+    if (typeof directory.store?.subscribe === 'function' || typeof directory.load === 'function') watching = id
+    if (typeof directory.store?.subscribe === 'function') {
       // The names come from the catalog's snapshot: only a new one redraws.
       let shown = sessionModelCatalog(ctx, id)
       stopCatalog = directory.store.subscribe(() => {
@@ -461,7 +487,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
         refresh()
       })
     }
-    if (typeof directory?.load === 'function') {
+    if (typeof directory.load === 'function') {
       // A failed catalog load is the host's own to report through the store;
       // this only keeps the rejection out of the pass.
       Promise.resolve(directory.load()).catch(() => {})

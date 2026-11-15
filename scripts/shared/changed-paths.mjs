@@ -19,10 +19,14 @@ const ROOT = path.resolve(import.meta.dirname, '..', '..')
  * Every path the working tree has changed under `scope`, or the whole tree when
  * no scope is given.
  * @param scope - directories or files to limit the reading to, as `git` takes them.
- * @returns the paths, with a file the change removed left out: it has nothing
- *     for a caller to read, and whatever still imports it reaches its tests.
+ * @param options - `{ removed: true }` keeps a deleted path in the answer: the
+ *     snapshot rule has to see a file that is gone, while the unit-test picker
+ *     wants only files a test can be found beside (the default).
  */
-export function changedPaths(...scope) {
+export function changedPaths(...scopeAndOptions) {
+  const last = scopeAndOptions[scopeAndOptions.length - 1]
+  const options = typeof last === 'object' && last !== null ? last : {}
+  const scope = typeof last === 'object' && last !== null ? scopeAndOptions.slice(0, -1) : scopeAndOptions
   const out = execFileSync('git', ['status', '--porcelain', '-z', '--', ...scope], { cwd: ROOT, encoding: 'utf8' })
   const parts = out.split('\0')
   const paths = []
@@ -31,7 +35,7 @@ export function changedPaths(...scope) {
     if (entry.length === 0) continue
     const status = entry.slice(0, 2)
     const file = entry.slice(3)
-    if (file !== '' && fs.existsSync(path.join(ROOT, file))) paths.push(file)
+    if (file !== '' && (options.removed === true || fs.existsSync(path.join(ROOT, file)))) paths.push(file)
     // A rename or a copy states its original path in the part after this one.
     if (status.includes('R') || status.includes('C')) at += 1
   }

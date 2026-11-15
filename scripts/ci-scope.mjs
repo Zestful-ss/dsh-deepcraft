@@ -106,7 +106,7 @@ function holdsFile(revision, file) {
  * the snapshot down would read as no change at all.
  */
 function workingTreePaths() {
-  return changedPaths()
+  return changedPaths({ removed: true })
 }
 
 /** The paths this push changed, by the base the caller named. */

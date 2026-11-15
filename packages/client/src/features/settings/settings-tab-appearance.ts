@@ -15,7 +15,8 @@ import type { SegmentOption, SettingsTab, SettingsView } from './settings-contro
 /** A saved family list, held locally while the reader types and committed on blur or Enter. */
 function FontCustomInput(props: { value: string, placeholder: string, onSave(value: string): void }) {
   const [draft, setDraft] = React.useState(props.value)
-  React.useEffect(() => setDraft(props.value), [props.value])
+  const editing = React.useRef(false)
+  React.useEffect(() => { if (!editing.current) setDraft(props.value) }, [props.value])
   return React.createElement('input', {
     className: 'dsh-deepcraft-settings-input dsh-deepcraft-font-custom-input',
     type: 'text',
@@ -23,8 +24,12 @@ function FontCustomInput(props: { value: string, placeholder: string, onSave(val
     placeholder: props.placeholder,
     maxLength: FONT_LIST_MAX,
     spellCheck: false,
+    onFocus: () => { editing.current = true },
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => setDraft(event.currentTarget.value),
-    onBlur: () => props.onSave(draft),
+    onBlur: () => {
+      editing.current = false
+      props.onSave(draft)
+    },
     onKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') { event.currentTarget.blur() }
     },

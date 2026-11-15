@@ -14,7 +14,9 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 ### 问题修复
 
 - 修复岛屿伙伴常驻不播动画：单帧精灵表上的 Web Animations 变换压过自身 CSS 的漂浮、跳动与抖动；同时修复长按拖动超过安静时限后空转计时器忙循环、宠物范围切换期间加载落错页面，以及第二次选择 ZIP 导入读到空文件列表。
+- 修复子代理模型卡片在每次调度时整卡重绘，使弹层里的点击始终落空、选择无法写入；同时修复会话切走后遗留的目录监听，以及宿主重绘座位时打开的卡片错误关闭。
 - 修复壁纸与品牌图的并发写竞态：上传壁纸时并发读到旧状态会永久盖回界面，品牌标志与文字标志的快写会让后到的响应丢掉先到的成功；两项写现在都串行化。同时让图像壁纸的可见度与模糊滑杆拖动即时预览，不再等到松手提交。
+- 修复宠物内置音效在首次手势前创建音频上下文后永久静音、宠物构造失败留下死引用且不再重试、聊天目标晚于订阅出现时流式信号永不接管，以及自定义字体输入框在键入期间被保存值覆盖。
 - 修复若干界面行为：删除会话的确认卡不再失去锚点定位，重载时随功能一并关闭且异步回调不再撤销下一张卡；子代理模型在无会话页面的挂起读取不再落回旧路由，规则开关随主开关一起禁用；品牌名称输入框按 Esc 不再把取消的草稿当提交；ds-bot 返回操作在功能拆除后不再触发整页重载，页脚行被替换后能重新发现。
 - 修复三个会话与品牌界面的边界问题:置顶与最近会话的分区标题随语言切换重绘,不再停留在安装时的语言;子代理模型卡片在其触发按钮被卸载(会话切换等)时随之关闭,不再留下无主悬浮卡;品牌图与壁纸的读操作排在仍在途的写之后,热重载期间的读不再用旧快照盖回刚上传的图片。
 - 修复若干并发与生命周期问题：壁纸、品牌图与宠物音效的写入车道在一次上传后不再让页面卡死、一次拒绝不再毒化后续写入；宠物图库的整表刷新不再抹掉同时完成的安装；设置写入在存储故障后不再永久叠加草稿值；外观标记的卸载不再清掉下一代刚写的属性；匹配观察现在能听到仅靠属性翻转产生的匹配；主机资源在一次读取失败后恢复待命，子代理模型选择的提示与工具注册随注入代际卸载。
@@ -27,7 +29,9 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 ### Bug Fixes
 
 - Fix the island companions never animating: a Web Animations transform on their single-frame sheets out-painted the strip's own CSS float, hop and shake; also fix a busy timer loop when a drag outlives the quiet deadline, a scope switch landing a loaded pet on the wrong page, and a second ZIP pick reading an empty selection.
+- Fix the subagent model card repainting on every scheduler pass, which made every click inside the popover miss its target and selections never save; also fix the catalog watch left armed after the session is left, and an open card closing whenever the host repaints its seat.
 - Fix the concurrent-write races on wallpaper and brand images: a read during an upload could permanently paint the old state, and two fast brand mutations could drop the first success — writes are serialized now. The image wallpaper's visibility and blur sliders also preview live while dragging instead of only on release.
+- Fix the pet's built-in tones staying silent forever when the audio context was created before the first gesture, a failed pet construction leaving a dead player behind and refusing every retry, streaming signals never attaching when the chat target arrived after the subscription, and the custom font input being overwritten by the stored value mid-typing.
 - Fix several surface behaviors: the delete-conversation card keeps its anchored positioning, closes with the feature on reload, and a late async reply no longer unregisters the next card; the subagent panel stops landing stale routes on a session-less page and the rule switch disables with its master; Escape in the brand name field no longer commits the cancelled draft; the ds-bot return action no longer reloads a page after teardown, and footer replacement is rediscovered.
 - Fix three session/brand surface edge cases: the pinned and recent block headings repaint on a locale switch instead of keeping the install-time language; the subagent model card closes when its trigger unmounts (session switch and similar) instead of floating ownerless; brand-image and wallpaper reads queue behind in-flight writes, so a reload-time read no longer paints a stale snapshot over a just-uploaded image.
 - Fix several concurrency and lifecycle issues: the wallpaper, brand-image and pet-sound write lanes no longer freeze the page after one upload and a refusal no longer poisons later writes; a petdex whole-list refresh no longer erases an install that landed in flight; a settings write that hit a storage fault no longer overlays the drafted value forever; parts teardown no longer strips a newer generation's marks; match observation now hears matches created by an attribute flip alone; a host resource re-arms after a failed read, and the subagent model choice's prompt and tool registrations unload with the injected generation.

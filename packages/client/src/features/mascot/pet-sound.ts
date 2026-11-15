@@ -18,6 +18,10 @@ let audioContext: AudioContext | null = null
 function playBuiltin(id: string) {
   audioContext ??= new AudioContext()
   const ctx = audioContext
+  // A context built before the first gesture starts suspended and would stay
+  // that way for the page's life: resume on every play so the first gesture's
+  // next moment is heard (D12 — a refused resume keeps the animation only).
+  if (ctx.state === 'suspended') void ctx.resume().catch(() => {})
   const now = ctx.currentTime
   const notes: [number, number][] = id === 'ding' ? [[880, 0.18]] : [[660, 0.12], [990, 0.16]]
   let at = now

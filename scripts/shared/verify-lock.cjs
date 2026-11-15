@@ -88,6 +88,21 @@ function lockState() {
 
 /** Hold the lock, waiting out any run in flight, and return the release. */
 async function takeLock(label, runId) {
+  // One token for the life of this wait: a release drops the directory only
+  // while it still holds this run's token, so a run that broke in between the
+  // mkdir and the owner write cannot carry a successor's lock away with it.
+  const token = `${process.pid}-${Date.now()}-${Math.random().toString(36).slice(2)}`
+  const release = () => {
+    try {
+      const owner = JSON.parse(fs.readFileSync(OWNER, 'utf8'))
+      if (owner.token !== token) return
+    } catch {
+      // The file is the run's own; a missing or torn write means the lock is
+      // no longer this run's to drop (another took the directory already).
+      return
+    }
+    fs.rmSync(LOCK, { recursive: true, force: true })
+  }
   let announced = 0
   for (;;) {
     try {
@@ -97,8 +112,8 @@ async function takeLock(label, runId) {
       // a missing parent.
       fs.mkdirSync(path.dirname(LOCK), { recursive: true })
       fs.mkdirSync(LOCK)
-      fs.writeFileSync(OWNER, `${JSON.stringify({ pid: process.pid, at: new Date().toISOString(), label, runId }, null, 2)}\n`)
-      return () => fs.rmSync(LOCK, { recursive: true, force: true })
+      fs.writeFileSync(OWNER, `${JSON.stringify({ pid: process.pid, at: new Date().toISOString(), label, runId, token }, null, 2)}\n`)
+      return release
     } catch (error) {
       // The lock directory is the lock: another run holds it.
       if (error.code !== 'EEXIST') throw error

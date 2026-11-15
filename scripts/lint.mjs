@@ -72,7 +72,7 @@ function decisionNumbers() {
 // past the line is one file holding several subjects, which is the shape the
 // line exists to catch (D66). Declaration files are generated and stand aside.
 const sources = [
-  ...filesUnder(path.join(ROOT, 'packages'), ['.ts', '.css', '.cjs', '.js'], SKIPPED_DIRS),
+  ...filesUnder(path.join(ROOT, 'packages'), ['.ts', '.css', '.cjs', '.mjs', '.js'], SKIPPED_DIRS),
   ...filesUnder(path.join(ROOT, 'scripts'), ['.mjs', '.cjs', '.js'], SKIPPED_DIRS),
 ].filter((file) => !/\.d\.ts$/.test(file))
 for (const file of sources) {

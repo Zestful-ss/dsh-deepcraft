@@ -257,7 +257,13 @@ function keyOf(tree, request) {
 function cached(key) {
   const file = path.join(CACHE, `${key}.json`)
   if (!fs.existsSync(file)) return null
-  const record = JSON.parse(fs.readFileSync(file, 'utf8'))
+  let record
+  try {
+    record = JSON.parse(fs.readFileSync(file, 'utf8'))
+  } catch {
+    // A killed writer leaves a torn file: the cache misses and the run goes again.
+    return null
+  }
   return record.format === FORMAT ? record : null
 }
 
