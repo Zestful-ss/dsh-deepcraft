@@ -37,9 +37,10 @@ export const MOTION_MODES = [MOTION_SYSTEM, MOTION_REDUCED, MOTION_FULL] as cons
 export const PALETTE_OCEAN = 'ocean'
 export const PALETTE_EMBER = 'ember'
 export const PALETTE_FOREST = 'forest'
+export const PALETTE_CINDY = 'cindy'
 export const PALETTE_HOST = 'host'
 /** The skin's own palettes, in the settings page's order; `PALETTE_HOST` follows them. */
-export const SKIN_PALETTES = [PALETTE_OCEAN, PALETTE_EMBER, PALETTE_FOREST] as const
+export const SKIN_PALETTES = [PALETTE_OCEAN, PALETTE_EMBER, PALETTE_FOREST, PALETTE_CINDY] as const
 export const PALETTES = [...SKIN_PALETTES, PALETTE_HOST] as const
 
 /**
@@ -58,6 +59,7 @@ export const FONT_HOST = 'host'
 export const FONT_FOLLOW = 'follow'
 export const FONT_CUSTOM = 'custom'
 export const FONT_UI_INTER = 'inter'
+export const FONT_UI_HARMONY = 'harmony'
 export const FONT_UI_GEIST = 'geist'
 export const FONT_UI_FIXEL = 'fixel'
 export const FONT_UI_ATKINSON = 'atkinson'
@@ -71,7 +73,7 @@ export const FONT_CODE_GEIST = 'geist-mono'
 export const FONT_CODE_FIRA = 'fira-code'
 export const FONT_CODE_COMMIT = 'commit-mono'
 export const FONT_CODE_ANTHROPIC = 'anthropic-mono'
-export const FONT_UI_VALUES = [FONT_HOST, FONT_UI_INTER, FONT_UI_GEIST, FONT_UI_FIXEL, FONT_UI_ATKINSON, FONT_UI_ANTHROPIC, FONT_CUSTOM] as const
+export const FONT_UI_VALUES = [FONT_HOST, FONT_UI_HARMONY, FONT_UI_INTER, FONT_UI_GEIST, FONT_UI_FIXEL, FONT_UI_ATKINSON, FONT_UI_ANTHROPIC, FONT_CUSTOM] as const
 export const FONT_PROSE_VALUES = [FONT_FOLLOW, FONT_PROSE_NOTO, FONT_PROSE_SOURCE, FONT_PROSE_LITERATA, FONT_PROSE_ANTHROPIC, FONT_CUSTOM] as const
 export const FONT_CODE_VALUES = [FONT_HOST, FONT_CODE_JETBRAINS, FONT_CODE_GEIST, FONT_CODE_FIRA, FONT_CODE_COMMIT, FONT_CODE_ANTHROPIC, FONT_CUSTOM] as const
 /** Longest accepted custom family list. */
@@ -93,11 +95,13 @@ export const PET_ID_MAX = 63
 /**
  * Where the window's wallpaper comes from: `off` leaves the window bare
  * (each palette's own canvas and the material layer's ambient light), `custom`
- * layers the reader's own image or video under the whole shell.
+ * layers the reader's own image or video under the whole shell, `builtin`
+ * ships one of the bundled set.
  */
 export const WALLPAPER_OFF = 'off'
 export const WALLPAPER_CUSTOM = 'custom'
-export const WALLPAPER_SOURCES = [WALLPAPER_OFF, WALLPAPER_CUSTOM] as const
+export const WALLPAPER_BUILTIN = 'builtin'
+export const WALLPAPER_SOURCES = [WALLPAPER_OFF, WALLPAPER_CUSTOM, WALLPAPER_BUILTIN] as const
 
 /**
  * How a wallpaper plays while it is a video: `static` holds its first frame,
@@ -155,14 +159,14 @@ export const PREFS = {
   materialMotion: { type: 'choice', values: MATERIAL_MOTIONS, default: MATERIAL_REFERENCE },
   /** The sidebar's liquid glass: a translucent tint, a blur and an inner hairline. */
   materialGlass: { type: 'boolean', default: true },
-  /** The ambient light behind the whole shell: three soft radial washes. */
-  materialAmbient: { type: 'boolean', default: true },
+  /** The ambient light behind the whole shell: three soft radial washes; the cindy palette carries none (docs/STYLE.md). */
+  materialAmbient: { type: 'boolean', default: false },
   /** The session must name a subagent model rather than inherit the parent route. */
   subagentModelChoice: { type: 'boolean', default: false },
   /** The composer's own entry for the routes one session delegates on. */
   subagentModelPicker: { type: 'boolean', default: true },
-  palette: { type: 'choice', values: PALETTES, default: PALETTE_OCEAN },
-  fontUi: { type: 'choice', values: FONT_UI_VALUES, default: FONT_UI_ANTHROPIC },
+  palette: { type: 'choice', values: PALETTES, default: PALETTE_CINDY },
+  fontUi: { type: 'choice', values: FONT_UI_VALUES, default: FONT_UI_HARMONY },
   fontProse: { type: 'choice', values: FONT_PROSE_VALUES, default: FONT_PROSE_ANTHROPIC },
   fontCode: { type: 'choice', values: FONT_CODE_VALUES, default: FONT_CODE_ANTHROPIC },
   fontUiCustom: { type: 'text', default: '', max: FONT_LIST_MAX },
@@ -175,9 +179,13 @@ export const PREFS = {
   chatPet: { type: 'text', default: 'whaledou', max: PET_ID_MAX },
   /**
    * The reader's own wallpaper: `custom` mounts the layer the host half's
-   * wallpaper file serves under; `off` takes it off again (live, D72).
+   * wallpaper file serves under; `builtin` mounts one of the bundled set;
+   * `off` takes it off again (live, D72). A fresh install wears Cindy's own
+   * `cindy-whisper` over the palette.
    */
-  wallpaperSource: { type: 'choice', values: WALLPAPER_SOURCES, default: WALLPAPER_OFF },
+  wallpaperSource: { type: 'choice', values: WALLPAPER_SOURCES, default: WALLPAPER_BUILTIN },
+  /** The bundled wallpaper's id while the source is `builtin`; a text field so the build can hold the set to the files it ships. */
+  wallpaperBuiltinId: { type: 'text', default: 'cindy-whisper', max: 40 },
   /** How much of it shows through the canvas veil; the value reaches the sheet as `--dsh-deepcraft-wallpaper-visibility`. */
   wallpaperVisibility: { type: 'number', default: 0.4, min: WALLPAPER_VISIBILITY_MIN, max: WALLPAPER_VISIBILITY_MAX, step: WALLPAPER_VISIBILITY_STEP },
   /** The blur over it, in CSS pixels; the value reaches the sheet as `--dsh-deepcraft-wallpaper-blur`. */
@@ -235,24 +243,21 @@ const COLOR_RE = /^#[0-9a-f]{6}$/i
 const LEGACY_BRAND_DEEPSEEK = 'deepseek'
 const LEGACY_BRAND_OFF = 'off'
 const LEGACY_PALETTE_CLAUDE = 'claude'
-const LEGACY_PALETTE_CINDY = 'cindy'
 
 /**
  * The colour palette a stored configuration means (D80). A value this build
- * knows wins; the host's palette stands; a stored `cindy` keeps the warm palette
- * its material now rides beside (D84); otherwise the old brand (or, without one,
- * the old palette) decides between the skin's blue and its warm palette.
+ * knows wins; the host's palette stands; otherwise the old brand (or, without
+ * one, the old palette) decides between the skin's blue and its warm palette.
  */
 function migratePalette(section: Record<string, unknown>) {
   const raw = section.palette
   if (typeof raw === 'string' && (PALETTES as readonly string[]).includes(raw)) return raw
   if (raw === PALETTE_HOST) return PALETTE_HOST
-  if (raw === LEGACY_PALETTE_CINDY) return PALETTE_EMBER
   const brand = section.brand
   if (brand !== undefined) {
     return brand === LEGACY_BRAND_DEEPSEEK || brand === LEGACY_BRAND_OFF ? PALETTE_OCEAN : PALETTE_EMBER
   }
-  return raw === LEGACY_PALETTE_CLAUDE ? PALETTE_EMBER : PALETTE_OCEAN
+  return raw === LEGACY_PALETTE_CLAUDE ? PALETTE_EMBER : PALETTE_CINDY
 }
 
 /**
@@ -306,11 +311,17 @@ export function clampPrefs(value: unknown): Prefs {
   out.palette = migratePalette(section)
   out.chatPet = migrateChatPet(section)
   // The old single typeface choice: `host` meant every role followed the host;
-  // the theme value keeps the shipped fonts, which are the table's defaults.
-  if (section.fontUi === undefined && section.fontProse === undefined && section.fontCode === undefined && section.typeface === 'host') {
-    out.fontUi = FONT_HOST
-    out.fontProse = FONT_FOLLOW
-    out.fontCode = FONT_HOST
+  // `claude` meant the Anthropic trio, which is no longer a table default.
+  if (section.fontUi === undefined && section.fontProse === undefined && section.fontCode === undefined) {
+    if (section.typeface === 'host') {
+      out.fontUi = FONT_HOST
+      out.fontProse = FONT_FOLLOW
+      out.fontCode = FONT_HOST
+    } else if (section.typeface === 'claude') {
+      out.fontUi = FONT_UI_ANTHROPIC
+      out.fontProse = FONT_PROSE_ANTHROPIC
+      out.fontCode = FONT_CODE_ANTHROPIC
+    }
   }
   return out as unknown as Prefs
 }

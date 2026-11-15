@@ -53,21 +53,21 @@
       ]
     },
     {
-      "reason": "壁纸层：走查开了来源也放好了文件，层仍没挂上；低功耗规则还要层在才生效",
+      "reason": "调色板的深色块：走查给深色留了 cindy、forest 与 ember 的页面形态，ocean 的深色块没有自己的形态",
       "selectors": [
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-wallpaper-layer]"
+        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette=ocean][data-ds-dark-theme]"
+      ]
+    },
+    {
+      "reason": "环境光的暗色块：走查开着环境光的页面形态是浅色",
+      "selectors": [
+        "body[data-dsh-deepcraft][data-dsh-deepcraft-material-ambient=\"1\"][data-ds-dark-theme]"
       ]
     },
     {
       "reason": "壁纸错误行：走查不开文件选择器，设置页的失败提示不出现",
       "selectors": [
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-error"
-      ]
-    },
-    {
-      "reason": "脚本回答只有普通段落：没有代码块、标题与表格",
-      "selectors": [
-        "body[data-dsh-deepcraft] :is(pre,code,kbd,samp,[data-dsh-deepcraft-part~=text-mono],[data-dsh-deepcraft-part~=text-code])"
       ]
     },
     {
@@ -107,13 +107,10 @@
       ]
     },
     {
-      "reason": "壁纸层：走查开了来源也放好了文件，层仍没挂上；插件壁纸的暗色遮罩要那个插件在页面上",
+      "reason": "壁纸层：插件壁纸的暗色遮罩要那个插件在页面上；低功耗遮罩要层和低功耗一起开着，走查只放一个标记",
       "selectors": [
-        "body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-preview :is(img,video)",
         "body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette=host])[data-ds-dark-theme][data-we-wallpaper]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-wallpaper-layer]>:is(img,video)",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-wallpaper-lite=\"1\"] [data-dsh-deepcraft-wallpaper-layer]>:is(img,video)",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette=host])[data-dsh-deepcraft-wallpaper=custom][data-dsh-deepcraft-wallpaper-lite=\"1\"]"
+        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette=host]):is([data-dsh-deepcraft-wallpaper=custom],[data-dsh-deepcraft-wallpaper=builtin])[data-dsh-deepcraft-wallpaper-lite=\"1\"]"
       ]
     }
   ]

@@ -67,10 +67,12 @@ SOFTWARE.
 
 ## Cindy design values
 
-The material layer's corner scale, flat shadows, durations, sidebar glass and
-ambient light adapt the visual system of Cindy (`makecindy/cindy`) as ported by
-`nothing688/dsh-cindy-skin`; both are Apache-2.0. The values are data in this
-package, not a copy of either project's code.
+The `cindy` palette's colours, the corner ladder, the shadow rungs and the
+sidebar's acrylic tint carry the visual system of Cindy (`makecindy/cindy`),
+Apache-2.0, and the bundled wallpapers under `packages/assets/src/wallpapers/`
+are Cindy's own artwork under the same licence. The material layer's corner
+scale, flat shadows, durations, sidebar glass and ambient light adapt that
+system further, as ported by `nothing688/dsh-cindy-skin`.
 
 Sources: <https://github.com/makecindy/cindy> · <https://github.com/nothing688/dsh-cindy-skin>
 
@@ -83,9 +85,15 @@ The copyright notices and the full licence travel beside each file as
 `packages/assets/src/fonts/OFL-*.txt`; the Anthropic faces are not shipped and a
 user's own copies remain subject to Anthropic's terms.
 
+The CJK face HarmonyOS Sans SC ships as unicode-range slices under
+`packages/assets/src/fonts/harmonyos/`, from the
+`harmonyos-sans-sc-webfont-splitted` package (v1.1.0, Unlicense); its licence
+travels beside the files as `LICENSE.txt`.
+
 Sources: MacPaw's Fixel release and the Fontsource distributions of Inter, Geist, Geist Mono, Atkinson
 Hyperlegible Next, Noto Serif, Source Serif 4, Literata, JetBrains Mono, Fira
-Code and Commit Mono; Fixel Text from MacPaw's Fixel release.
+Code and Commit Mono; Fixel Text from MacPaw's Fixel release; HarmonyOS Sans SC
+webfont slices from <https://github.com/SunsetMkt/HarmonyOS_Sans_SC_Webfont_Splitted>.
 
 ## transitions.dev
 

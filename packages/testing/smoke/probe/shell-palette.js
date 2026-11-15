@@ -57,9 +57,9 @@
       }
       await sleep(300)
       r.hostPalette = {
-        host: await readHost({ palette: 'host', fontUi: 'host', fontProse: 'follow', fontCode: 'host' }, false),
+        host: await readHost({ palette: 'host', fontUi: 'host', fontProse: 'follow', fontCode: 'host', wallpaperSource: 'off' }, false),
         wallpaper: await readHost(null, true),
-        ember: await readHost({ palette: 'ember', fontUi: 'inter', fontProse: 'noto-serif', fontCode: 'jetbrains' }, false),
+        ember: await readHost({ palette: 'ember', fontUi: 'inter', fontProse: 'noto-serif', fontCode: 'jetbrains', wallpaperSource: 'off' }, false),
         // The wallpaper plugin showing one under the warm palette: the
         // shell stands down, one mask lies over the wallpaper, and the base
         // canvas and the skin's own faces keep their fill.
@@ -130,9 +130,9 @@
           ink: markStyle.backgroundColor,
         }
         linkNode.remove()
-        window.__pushForm({ mascot: 'off', palette: 'host' })
+        window.__pushForm({ mascot: 'off', palette: 'host', wallpaperSource: 'off' })
         r.settings.parentsOff = { appearance: renderTab('appearance') }
-        window.__pushForm({ mascot: 'brand', palette: 'ocean' })
+        window.__pushForm({ mascot: 'brand', palette: 'ocean', wallpaperSource: 'builtin' })
       }
     })
 

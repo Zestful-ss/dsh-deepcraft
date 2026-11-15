@@ -15,6 +15,8 @@ declare module 'virtual:dsh-deepcraft/generated' {
   export const CLIENT_VERSION: string
   /** The motion tokens, by token name (packages/client/src/theme/tokens.json, D9); read through shared/motion.ts. */
   export const MOTION: Record<string, string>
+  /** The bundled wallpapers the settings page offers, by their ids (packages/assets/src/wallpapers/, D72). */
+  export const WALLPAPERS: Record<string, { url: string, video: boolean }>
 }
 
 /**

@@ -8,19 +8,24 @@
 
   probe.step(async function () {
     await probe.onlyFor(['palette'], async function () {
+      var canvasBox = document.createElement('div')
+      document.body.appendChild(canvasBox)
+      // The canvas token resolves on a probe element: the body's own fill
+      // stands down while the shipped wallpaper attribute is up.
       var readTheme = function () {
         var body = getComputedStyle(document.body)
         var primaryBtn = document.querySelector('._primary_h_1')
+        canvasBox.style.backgroundColor = 'var(--dsh-deepcraft-canvas)'
         return {
-          canvas: body.backgroundColor,
+          canvas: getComputedStyle(canvasBox).backgroundColor,
           accent: body.getPropertyValue('--dsw-alias-brand-primary').trim(),
           buttonFill: primaryBtn === null ? '' : getComputedStyle(primaryBtn).backgroundColor,
           buttonInk: primaryBtn === null ? '' : getComputedStyle(primaryBtn).color,
         }
       }
       r.palettes = {}
-      for (var at = 0; at < ['ocean', 'ember', 'forest'].length; at++) {
-        var id = ['ocean', 'ember', 'forest'][at]
+      for (var at = 0; at < ['ocean', 'ember', 'forest', 'cindy'].length; at++) {
+        var id = ['ocean', 'ember', 'forest', 'cindy'][at]
         window.__pushForm({ palette: id })
         await sleep(150)
         var light = readTheme()
@@ -30,7 +35,10 @@
         document.body.removeAttribute('data-ds-dark-theme')
         r.palettes[id] = Object.assign(light, { dark: Object.assign(dark, { raised: raised }) })
       }
-      window.__pushForm({ palette: 'ocean' })
+      canvasBox.remove()
+      // The ambient light asks to be on for its reading: it ships off with the
+      // cindy default, and this case proves the layer's own value resolves.
+      window.__pushForm({ palette: 'ocean', materialAmbient: true })
       await sleep(150)
       // The material layer's defaults, then every aspect back to the host's
       // value on its own (D84). The column is a stand-in for the host's own

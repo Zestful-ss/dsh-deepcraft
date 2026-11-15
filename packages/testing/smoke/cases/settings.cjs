@@ -5,7 +5,7 @@ module.exports = {
   'late-forms'(r) {
     check('apply() completes', r.applyError === null, r.applyError)
     check('the store stays on the shipped palette until the namespace is served',
-      r.lateBefore === 'ocean', JSON.stringify(r.lateBefore))
+      r.lateBefore === 'cindy', JSON.stringify(r.lateBefore))
     check('a namespace served after apply still binds the form and its value',
       r.lateAfter === 'forest',
       JSON.stringify({ after: r.lateAfter }))
@@ -18,9 +18,9 @@ module.exports = {
     const expected = {
       general: { rows: ['recentSessions', 'subagentModelPicker', 'subagentModelChoice'], disabled: [] },
       appearance: {
-        rows: ['palette', 'brandAccent', 'fontUi', 'fontProse', 'fontCode', 'motion', 'mascot', 'chatPet', 'mascotScope', 'materialRadius', 'materialShadow', 'materialMotion', 'materialGlass', 'materialAmbient', 'brandName', 'brandMark', 'brandWordmark', 'brandInk', 'wallpaperSource', 'wallpaperVisibility', 'wallpaperBlur', 'wallpaperMotion', 'wallpaperLite'],
-        // The wallpaper children grey out until the source is `custom`.
-        disabled: ['wallpaperVisibility', 'wallpaperBlur', 'wallpaperMotion', 'wallpaperLite'],
+        rows: ['palette', 'brandAccent', 'fontUi', 'fontProse', 'fontCode', 'motion', 'mascot', 'chatPet', 'mascotScope', 'materialRadius', 'materialShadow', 'materialMotion', 'materialGlass', 'materialAmbient', 'brandName', 'brandMark', 'brandWordmark', 'brandInk', 'wallpaperSource', 'wallpaperVisibility', 'wallpaperBuiltinId', 'wallpaperBlur', 'wallpaperMotion', 'wallpaperLite'],
+        // The shipped source is the bundled set, so every wallpaper child acts.
+        disabled: [],
       },
     }
     const pages = settings.pages || {}
@@ -35,7 +35,7 @@ module.exports = {
     }
     const off = settings.parentsOff || {}
     check('a sub-row greys out while its parent is off: the accent, the pet, its scope and the wallpaper controls',
-      !!off.appearance && JSON.stringify(off.appearance.disabled) === '["brandAccent","chatPet","mascotScope","wallpaperVisibility","wallpaperBlur","wallpaperMotion","wallpaperLite"]',
+      !!off.appearance && JSON.stringify(off.appearance.disabled) === '["brandAccent","chatPet","mascotScope","wallpaperVisibility","wallpaperBuiltinId","wallpaperBlur","wallpaperMotion","wallpaperLite"]',
       JSON.stringify(off))
     const link = settings.link || {}
     const mark = settings.mark || {}

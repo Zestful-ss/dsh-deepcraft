@@ -11,10 +11,14 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
 }
 
 /* The document element sits above the body and cannot read its tokens, so the
-   light palette states its canvas here. It stays painted under a wallpaper: the
-   layer sits above this canvas and below the shell. */
-html:has(body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):not([data-ds-dark-theme])) {
+   light palettes state their canvases here. It stays painted under a
+   wallpaper: the layer sits above this canvas and below the shell. */
+html:has(body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):not([data-dsh-deepcraft-palette="cindy"]):not([data-ds-dark-theme])) {
   background-color: #fcfcfb;
+}
+
+html:has(body[data-dsh-deepcraft][data-dsh-deepcraft-palette="cindy"]:not([data-ds-dark-theme])) {
+  background-color: #f2f2ed;
 }
 
 /* The shell's own root paints the host's base fill over the body, so the skin's

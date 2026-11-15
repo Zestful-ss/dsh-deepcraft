@@ -296,8 +296,10 @@ async function hostHalf() {
   // moved revision.
   console.log('\nhost half — public assets')
   const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'lib', 'assets', 'manifest.json'), 'utf8')).assets
-  const [assetName, asset] = Object.entries(manifest)[0] ?? []
-  if (assetName === undefined) throw new Error('no routed assets in lib/assets/manifest.json; run npm run build')
+  // The compression checks below read a brotli-stored asset: binaries ride
+  // uncompressed, so the pick is the first entry that has one.
+  const [assetName, asset] = Object.entries(manifest).find(([, a]) => a.encoding === 'br') ?? []
+  if (assetName === undefined) throw new Error('no compressed routed assets in lib/assets/manifest.json; run npm run build')
   // Every name the manifest carries has its file: the manifest is what the
   // route answers from, so an entry an earlier build's cleanup removed (D72)
   // would have the route refuse a name the manifest promises.
@@ -377,6 +379,17 @@ async function hostHalf() {
   const absent = await requestAsset(fontHost, '/dsh-deepcraft/fonts/AnthropicSansWebText.ttf')
   check('a face the package does not carry is a 404 until the user drops one in',
     absent.status === 404, `HTTP ${absent.status}`)
+  // The HarmonyOS slices ship under their own directory: the route answers
+  // `harmonyos/<name>.woff2` and nothing else below it.
+  const slice = fs.readdirSync(path.join(ROOT, 'lib', 'fonts', 'harmonyos')).find((name) => name.endsWith('.woff2'))
+  const harmony = await requestAsset(fontHost, `/dsh-deepcraft/fonts/harmonyos/${slice}`)
+  check(`the HarmonyOS slice ${slice} is served from its own directory`,
+    harmony.status === 200 && harmony.headers['content-type'] === 'font/woff2' &&
+      harmony.raw !== null && Buffer.compare(harmony.raw, fs.readFileSync(path.join(ROOT, 'lib', 'fonts', 'harmonyos', slice))) === 0,
+    `HTTP ${harmony.status} ${JSON.stringify(harmony.headers)}`)
+  const stray = await requestAsset(fontHost, '/dsh-deepcraft/fonts/harmonyos/LICENSE.txt')
+  check('a file beside the slices that is not a woff2 is a 404',
+    stray.status === 404, `HTTP ${stray.status}`)
   fs.mkdirSync(droppedDir, { recursive: true })
   fs.writeFileSync(path.join(droppedDir, 'JetBrainsMonoVariable.ttf'), Buffer.from('dropped-mono'))
   // The three faces the package does not carry: the drop point answers each of

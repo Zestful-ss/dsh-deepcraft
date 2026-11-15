@@ -65,7 +65,7 @@ module.exports = {
   },
   'petdex-deepseek'(r) {
     basicChecks(r)
-    petdexChecks(r, 'the ocean palette’s Petdex pet', { palette: 'ocean', id: 'whaledou' })
+    petdexChecks(r, 'the cindy palette’s Petdex pet', { palette: 'cindy', id: 'whaledou' })
     commonChecks(r)
   },
 }

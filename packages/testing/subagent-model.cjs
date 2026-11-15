@@ -557,7 +557,7 @@ function subagentModelScenario({ check }) {
       await openSkinSettings(page)
       await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: /^(外观|Appearance)$/ }).first().click()
       const paletteReadings = []
-      const paletteIds = ['ocean', 'ember', 'forest', 'host']
+      const paletteIds = ['ocean', 'ember', 'forest', 'cindy', 'host']
       for (let i = 0; i < paletteIds.length; i++) {
         await page.locator('.dsh-deepcraft-palette-options button').nth(i).click()
         await page.waitForFunction((id) => document.body.getAttribute('data-dsh-deepcraft-palette') === id, paletteIds[i], { timeout: 15000 }).catch(() => {})
@@ -568,7 +568,7 @@ function subagentModelScenario({ check }) {
         await page.evaluate(() => document.body.removeAttribute('data-ds-dark-theme'))
         paletteReadings.push({ palette: paletteIds[i], light, dark })
       }
-      checks.push(check('三套内置配色与跟随宿主在浅色和深色下都把最高档画成当前强调色',
+      checks.push(check('四套内置配色与跟随宿主在浅色和深色下都把最高档画成当前强调色',
         paletteReadings.every(({ light, dark }) => light.value === '3' && dark.value === '3' &&
           light.edge === light.expected && dark.edge === dark.expected &&
           light.palette !== null && dark.palette === light.palette),

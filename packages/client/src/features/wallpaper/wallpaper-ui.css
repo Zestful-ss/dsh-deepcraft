@@ -20,7 +20,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-preview {
   aspect-ratio: 16 / 10;
   border-radius: var(--dsw-radius-md);
   border: 1px solid var(--dsw-alias-border-l2);
-  background: var(--dsw-alias-bg-input);
+  background: var(--dsw-specific-input-major);
   overflow: hidden;
 }
 
@@ -28,7 +28,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-preview[data-empty] {
   background:
     radial-gradient(38% 40% at 0% 0%, color-mix(in srgb, var(--dsh-deepcraft-accent) 34%, transparent), transparent 72%),
     radial-gradient(34% 36% at 100% 100%, color-mix(in srgb, var(--dsh-deepcraft-accent) 22%, transparent), transparent 74%),
-    var(--dsw-alias-bg-input);
+    var(--dsw-specific-input-major);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-preview :is(img, video) {
@@ -48,17 +48,18 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-button {
   appearance: none;
   border: 1px solid var(--dsw-alias-border-l2);
   border-radius: var(--dsw-radius-sm);
-  background: var(--dsw-alias-bg-input);
+  background: var(--dsw-specific-input-major);
   color: var(--dsw-alias-label-primary);
   font: inherit;
   font-size: 12px;
   line-height: 1;
   padding: 7px 12px;
   cursor: pointer;
+  transition: background var(--dsh-deepcraft-duration-feedback) var(--dsh-deepcraft-ease-standard);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-button:hover:not(:disabled) {
-  background: var(--dsw-alias-bg-input-hover);
+  background: var(--dsw-alias-interactive-bg-hover-solid);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-button:disabled {
@@ -78,7 +79,7 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-off {
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-error {
-  color: var(--dsw-alias-label-error);
+  color: var(--dsw-alias-state-error-primary, #c0392b);
   font-size: 12px;
 }
 
@@ -101,4 +102,46 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-value {
   color: var(--dsw-alias-label-secondary);
   font-size: 12px;
   font-variant-numeric: tabular-nums;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-builtin {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-builtin-item {
+  font-size: 11px;
+  line-height: 1.2;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color var(--dsh-deepcraft-duration-feedback) var(--dsh-deepcraft-ease-standard),
+              box-shadow var(--dsh-deepcraft-duration-feedback) var(--dsh-deepcraft-ease-standard);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-builtin-item:hover:not([data-active]) {
+  border-color: var(--dsw-alias-border-l3);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-builtin-item[data-active] {
+  border-color: var(--dsh-deepcraft-accent);
+  box-shadow: inset 0 0 0 1px var(--dsh-deepcraft-accent);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-builtin-item img,
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-builtin-item video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: var(--dsw-specific-input-major);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-builtin-name {
+  padding: 4px 6px;
+  text-align: center;
+  color: var(--dsw-alias-label-secondary);
 }

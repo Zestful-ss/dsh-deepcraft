@@ -27,13 +27,14 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["token", "ember", "ocean", "forest"],
+        "required": ["token", "ember", "ocean", "forest", "cindy"],
         "additionalProperties": false,
         "properties": {
           "token": { "$ref": "#/$defs/token" },
           "ember": { "$ref": "#/$defs/fullThemes" },
           "ocean": { "$ref": "#/$defs/fullThemes" },
           "forest": { "$ref": "#/$defs/fullThemes" },
+          "cindy": { "$ref": "#/$defs/fullThemes" },
           "host": { "$ref": "#/$defs/value" },
           "use": { "description": "What the token paints, for the docs/STYLE.md table.", "type": "string", "minLength": 1 },
           "note": { "$ref": "#/$defs/note" }

@@ -131,6 +131,10 @@
     "zh": "森林绿",
     "en": "Forest green"
   },
+  "paletteCindy": {
+    "zh": "Cindy",
+    "en": "Cindy"
+  },
   "paletteHost": {
     "zh": "跟随宿主",
     "en": "Follow the host"
@@ -251,6 +255,7 @@
     "zh": "有 {count} 个已安装的包无法读取，其余包不受影响。",
     "en": "{count} installed packages cannot be read; the rest of the library is unaffected."
   },
+  "fontHarmony": { "zh": "HarmonyOS Sans SC", "en": "HarmonyOS Sans SC" },
   "fontUiTitle": { "zh": "界面字体", "en": "Interface font" },
   "fontUiDesc": { "zh": "侧栏、按钮和设置页的字体；正文字号和行高仍取宿主。", "en": "The sidebar, buttons and settings page; sizes and line heights stay the host's." },
   "fontProseTitle": { "zh": "正文字体", "en": "Prose font" },

@@ -91,7 +91,8 @@ export function tokenSheet(doc, gates, images, scope, fonts) {
   const faces = fonts.FONT_FACES.map((face) => {
     const format = face.format ?? (face.file.endsWith('.woff2') ? 'woff2' : 'truetype')
     const style = face.style === undefined ? '' : `;font-style:${face.style}`
-    return `@font-face{font-family:"${face.family}";src:url("/dsh-deepcraft/fonts/${face.file}") format("${format}");font-weight:${face.weight}${style};font-display:swap}`
+    const range = face.unicodeRange === undefined ? '' : `;unicode-range:${face.unicodeRange}`
+    return `@font-face{font-family:"${face.family}";src:url("/dsh-deepcraft/fonts/${face.file}") format("${format}");font-weight:${face.weight}${style}${range};font-display:swap}`
   }).join('\n')
   const roles = Object.values(fonts.FONT_ROLES).flatMap((role) => Object.entries(role.stacks).map(([choice, stack]) => {
     const extra = role.extraProperty !== undefined && choice !== role.hostChoice ? `;${role.extraProperty}: ${stack}` : ''

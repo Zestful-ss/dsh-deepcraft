@@ -286,6 +286,46 @@ function loadCombines(plan, claimed) {
 }
 
 /**
+ * The built-in wallpaper set, keyed by the id the settings page writes into
+ * `wallpaperBuiltinId`. One file per wallpaper: `wallpapers/<id>.webp` for a
+ * still, `wallpapers/<id>.mp4` for a video; a video may keep a `.webp` poster
+ * beside it but the map names the video.
+ *
+ * @param plan - the asset plan (planAssets).
+ * @param claimed - the paths the build read (checkClaimed).
+ * @returns id → { url, video } where url is the asset route's address.
+ */
+function loadWallpapers(plan, claimed) {
+  const out = {}
+  for (const [file, entry] of plan.entries) {
+    if (!file.startsWith('wallpapers/')) continue
+    const match = /^wallpapers\/([^/]+)\.(webp|mp4)$/.exec(file)
+    if (match === null) throw new Error(`build: packages/assets/src/${file} sits in wallpapers/ but is not named <id>.webp or <id>.mp4`)
+    const [, id, extension] = match
+    const current = out[id]
+    if (current !== undefined && current.video === true && extension === 'webp') {
+      // A video's still poster: claimed, never the id's answer.
+      claimed.add(file)
+      continue
+    }
+    if (current !== undefined && current.video === false && extension === 'mp4') {
+      // A still and its video variant: the video wins the id.
+      claimed.add(file)
+      out[id] = { url: entry.url, video: true }
+      continue
+    }
+    if (current !== undefined && !(current.video === true && extension === 'webp')) {
+      throw new Error(`build: packages/assets/src/${file} names wallpaper "${id}" twice; keep one .webp or .mp4 per id`)
+    }
+    claimed.add(file)
+    if (current === undefined || extension === 'mp4') {
+      out[id] = { url: entry.url, video: extension === 'mp4' }
+    }
+  }
+  return out
+}
+
+/**
  * The plugin's own brand mark, drawn by packages/assets/whale.mjs.
  *
  * @param cache - the build cache (scripts/build-cache.mjs).
@@ -328,6 +368,11 @@ async function main() {
   }
   const combines = loadCombines(plan, claimed)
 
+  // The built-in wallpaper set: every wallpaper/<id>.<webp|mp4> pair the
+  // settings page offers, by its bare id. The files are claimed by the same
+  // read that builds the map, so an unclaimed asset still fails the build.
+  const wallpapers = loadWallpapers(plan, claimed)
+
   checkClaimed(plan, claimed)
 
   const tokenDoc = loadTokens(SRC)
@@ -357,6 +402,9 @@ async function main() {
     // generated token stylesheet carries, so a duration cannot be 200 ms in the
     // CSS and 250 ms in a Web Animations call (D9).
     MOTION: motionValues(tokenDoc),
+    // The bundled wallpapers the settings page offers, by their ids: each
+    // still is a webp and each video an mp4 beside it (packages/assets/src/wallpapers/).
+    WALLPAPERS: wallpapers,
   })
 
   /**

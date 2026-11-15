@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 0,
+  "at": "2026-11-15",
+  "external": false,
+  "zh": "修复壁纸控件引用宿主不存在的三个令牌（输入框底色、悬停底色、错误字色），改用宿主已有的具体令牌与错误色。",
+  "en": "Fix the wallpaper controls referencing three tokens the host does not define (the input fill, its hover fill and the error ink), using the host's own specific tokens and error colour instead."
+}

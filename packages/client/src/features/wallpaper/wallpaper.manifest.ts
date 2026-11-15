@@ -5,7 +5,7 @@ export default {
   order: 145,
   contracts: [],
   pref: 'wallpaperSource',
-  prefValues: ['custom'],
+  prefValues: ['custom', 'builtin'],
   stylesheets: [
     { file: 'wallpaper-ui.css', rank: 367 },
   ],
@@ -24,6 +24,14 @@ export default {
     control: 'wallpaperVisibility',
     title: 'wallpaperVisibilityTitle',
     desc: 'wallpaperVisibilityDesc',
+  }, {
+    tab: 'appearance',
+    rank: 62,
+    pref: 'wallpaperBuiltinId',
+    parent: 'wallpaperSource',
+    control: 'wallpaperBuiltin',
+    title: 'wallpaperBuiltinTitle',
+    desc: 'wallpaperBuiltinDesc',
   }, {
     tab: 'appearance',
     rank: 63,

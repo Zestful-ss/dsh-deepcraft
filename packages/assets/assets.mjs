@@ -81,12 +81,22 @@ const SHIPPED_FONTS = [
   'AUTHORS.txt',
 ]
 
+/**
+ * The font directories the package ships whole: each holds its own licence
+ * beside the faces (`harmonyos/` carries HarmonyOS Sans SC's slices and the
+ * Unlicense text). `anthropic/` stays source-only (its faces are a user's own).
+ */
+const SHIPPED_FONT_DIRS = [
+  'harmonyos',
+]
+
 /** Content type per extension; an extension outside this table is refused. */
 const CONTENT_TYPES = {
   '.svg': 'image/svg+xml',
   '.png': 'image/png',
   '.webp': 'image/webp',
   '.jpg': 'image/jpeg',
+  '.mp4': 'video/mp4',
 }
 
 /**
@@ -263,7 +273,7 @@ export function buildFonts({ assetsDir, libDir }) {
   const source = path.join(assetsDir, FONT_DIR)
   for (const entry of fs.readdirSync(source, { withFileTypes: true })) {
     if (entry.isDirectory()) {
-      if (entry.name !== PRIVATE_FONT_DIR) throw new Error(`build: packages/assets/src/${FONT_DIR}/${entry.name}/ is a directory the build does not ship; only ${PRIVATE_FONT_DIR}/ is one`)
+      if (entry.name !== PRIVATE_FONT_DIR && !SHIPPED_FONT_DIRS.includes(entry.name)) throw new Error(`build: packages/assets/src/${FONT_DIR}/${entry.name}/ is a directory the build does not ship; the shipped ones are ${SHIPPED_FONT_DIRS.join(', ')}`)
       continue
     }
     if (!SHIPPED_FONTS.includes(entry.name)) throw new Error(`build: packages/assets/src/${FONT_DIR}/${entry.name} ships nothing; add it to SHIPPED_FONTS or delete it`)
@@ -272,11 +282,22 @@ export function buildFonts({ assetsDir, libDir }) {
   fs.rmSync(target, { recursive: true, force: true })
   fs.mkdirSync(target, { recursive: true })
   let bytes = 0
+  let files = 0
+  const copy = (from, to) => {
+    fs.copyFileSync(from, to)
+    bytes += fs.statSync(to).size
+    files += 1
+  }
   for (const name of SHIPPED_FONTS) {
     // The file list was checked against the directory above, so a missing one
     // is a build bug rather than a state a user can reach.
-    fs.copyFileSync(path.join(source, name), path.join(target, name))
-    bytes += fs.statSync(path.join(target, name)).size
+    copy(path.join(source, name), path.join(target, name))
   }
-  return { files: SHIPPED_FONTS.length, bytes }
+  for (const dir of SHIPPED_FONT_DIRS) {
+    const from = path.join(source, dir)
+    const to = path.join(target, dir)
+    fs.mkdirSync(to, { recursive: true })
+    for (const name of fs.readdirSync(from)) copy(path.join(from, name), path.join(to, name))
+  }
+  return { files, bytes }
 }

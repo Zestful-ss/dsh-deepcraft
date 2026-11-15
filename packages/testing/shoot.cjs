@@ -28,7 +28,7 @@
  *
  * Usage:
  *   node packages/testing/shoot.cjs --token <launch-token> [--url http://127.0.0.1:3080]
- *     [--palette ocean|ember|forest] [--scene home|conversation] [--session <title>]
+ *     [--palette ocean|ember|forest|cindy] [--scene home|conversation] [--session <title>]
  *
  * The launch token comes from the `dsh web` banner (GUI URL `/?token=…`) or
  * the DSH_WEB_TOKEN env var. Chrome comes from packages/testing/browser.cjs and
@@ -60,6 +60,7 @@ const CANVAS = {
   ocean: { light: 'rgb(252, 252, 251)', dark: 'rgb(32, 36, 39)' },
   ember: { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)' },
   forest: { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)' },
+  cindy: { light: 'rgb(242, 242, 237)', dark: 'rgb(24, 24, 24)' },
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -115,10 +116,20 @@ async function captureOnce(page, options, scheme, outFile) {
     // snapshot; no durable preference is read or written.
     await page.evaluate(`document.body.setAttribute('data-ds-dark-theme', '')`)
   }
+  // The body's own fill stands down under a wallpaper (wallpaper.css), so the
+  // canvas colour is read on a probe element where the token resolves.
   const wantBg = CANVAS[palette][scheme]
-  const bg = await page.evaluate(`getComputedStyle(document.body).backgroundColor`)
+  const readCanvas = `(() => {
+    const probe = document.createElement('div')
+    probe.style.backgroundColor = 'var(--dsh-deepcraft-canvas)'
+    document.body.appendChild(probe)
+    const color = getComputedStyle(probe).backgroundColor
+    probe.remove()
+    return color
+  })()`
+  const bg = await page.evaluate(readCanvas)
   if (bg !== wantBg) {
-    throw new Error(`${scheme} palette did not take effect (body bg ${bg}, expected ${wantBg})`)
+    throw new Error(`${scheme} palette did not take effect (canvas ${bg}, expected ${wantBg})`)
   }
 
   const { swapped, caught, visibleText } = await sanitizePage((expression) => page.evaluate(expression))
@@ -128,7 +139,7 @@ async function captureOnce(page, options, scheme, outFile) {
   // dark-mode screenshot.
   if (scheme === 'dark') {
     await page.evaluate(`document.body.setAttribute('data-ds-dark-theme', '')`)
-    const bgAgain = await page.evaluate(`getComputedStyle(document.body).backgroundColor`)
+    const bgAgain = await page.evaluate(readCanvas)
     if (bgAgain !== wantBg) throw new Error(`dark palette was reverted before capture (${bgAgain})`)
   }
 
@@ -150,7 +161,7 @@ async function captureOnce(page, options, scheme, outFile) {
 async function shoot(options) {
   const palette = options.palette || 'ocean'
   const scene = options.scene || 'home'
-  if (!CANVAS[palette]) throw new Error(`unknown palette "${palette}" (ocean, ember or forest)`)
+  if (!CANVAS[palette]) throw new Error(`unknown palette "${palette}" (ocean, ember, forest or cindy)`)
   if (!HEIGHTS[scene]) throw new Error(`unknown scene "${scene}" (home or conversation)`)
   const base = (options.url || 'http://127.0.0.1:3080').replace(/\/+$/, '')
   const out = path.resolve(options.out || path.join(__dirname, '..', '..', 'docs', 'screenshots'))
@@ -184,7 +195,7 @@ if (require.main === module) {
   }
   const token = argOf('token') || process.env.DSH_WEB_TOKEN
   if (!token) {
-    console.error('usage: node packages/testing/shoot.cjs --token <launch-token> [--url <base>] [--palette ocean|ember|forest] [--scene home|conversation] [--session <title>]')
+    console.error('usage: node packages/testing/shoot.cjs --token <launch-token> [--url <base>] [--palette ocean|ember|forest|cindy] [--scene home|conversation] [--session <title>]')
     process.exit(2)
   }
   shoot({ token, url: argOf('url'), out: argOf('out'), palette: argOf('palette'), scene: argOf('scene'), session: argOf('session') })

@@ -83,21 +83,10 @@ const SCRIPTS = {
     auxiliary: { text: ['Scripted inspection'] },
   },
   /**
-   * Several rounds in one turn, after the model keeps the reader waiting past
-   * the point the waiting line calls overtime: a thought and a tool, a thought
-   * and a note with another tool, then the answer. The process groups on both
-   * sides of the intermediate note carry thinking and a tool call each.
+   * One reply whose streamed lines fill several screens: enough text to push the
+   * column past the viewport edge, so the lane reads how the page follows a
+   * long answer.
    */
-  /**
-   * A long reasoning, delivered a couple of steps at a time: the thinking row's
-   * window grows with it and steps it up once it fills the height reasoning may
-   * reach, and the
-   * reader never loses its last line. Each step is long enough to fill more than
-   * a couple of lines even where the host's body renders the whole reasoning as
-   * one wrapped paragraph, and the whole script runs well past the host's cap on
-   * that body — the lane's own scenario reads the window on both sides of it.
-   */
-  /** Enough streamed lines to push the column past the viewport edge. */
   long: {
     conversation: [
       {
@@ -106,6 +95,39 @@ const SCRIPTS = {
       },
     ],
     auxiliary: { text: ['Scripted long answer'] },
+  },
+  /**
+   * The Markdown tour the README's conversation shot shows: a heading, the
+   * inline formats, both list shapes, a table, a code block and a quote, in the
+   * language the reader asks in. Scripted so the shot can be retaken on any
+   * machine with no model behind it. The auxiliary text answers the host's own
+   * title request, and it names the session with the stand-in the shot's guard
+   * accepts.
+   */
+  tour: {
+    conversation: [
+      {
+        thinking: [
+          'The reader wants a Markdown tour. ',
+          'A heading, the inline marks, lists, a table, code and a quote cover the renderer.',
+        ],
+        text: [
+          '# Markdown 渲染示例\n\n',
+          '这是一段**粗体**与*斜体*并存的普通段落，行内代码写作 `const answer = 42`，还有一个[链接](#markdown-tour)。\n\n',
+          '## 列表\n\n',
+          '- 无序列表的第一项\n- 第二项里夹着 `code` 标记\n\n',
+          '1. 有序列表的第一项\n2. 第二项保持简短\n\n',
+          '## 表格\n\n',
+          '| 列名 | 取值 | 说明 |\n| --- | --- | --- |\n| 第一行 | 42 | 表格里的数字 |\n| 第二行 | 是 | 一句说明 |\n\n',
+          '## 代码块\n\n',
+          '```js\nfunction greet(name) {\n  return `hello, ${name}`\n}\n```\n\n',
+          '## 引用\n\n',
+          '> 引用段落保持简洁，\n> 两行为止。\n\n',
+          '以上为本次展示的全部格式。',
+        ],
+      },
+    ],
+    auxiliary: { text: ['Markdown rendering tour'] },
   },
   /**
    * One burst: the whole answer in a single flush, longer than the stretch a
@@ -136,24 +158,6 @@ const SCRIPTS = {
    * the scratch home, and `{{workspaceCode}}` is the same path with its
    * backslashes doubled: inside a program's own source a single backslash is an
    * escape.
-   */
-  /**
-   * The waiting line's own words: the model reasons in an English clause it is
-   * on ("I am checking the file is true"), then in a sentence carrying no clause
-   * at all, then in a second clause, and then reads a file. The line has to say
-   * the model's clause while it reasons and the file's name while the call runs,
-   * and the sentence between the two clauses must not put the waiting word back:
-   * the clause stands until the next intent arrives. Each piece is short and the
-   * pause between them is the lane's own, so every state stands long enough for
-   * the scenario to sample it.
-   */
-  /**
-   * The Markdown tour the README's conversation shot shows: a heading, the
-   * inline formats, both list shapes, a table, a code block and a quote, in the
-   * language the reader asks in. Scripted so the shot can be retaken on any
-   * machine with no model behind it. The auxiliary text answers the host's own
-   * title request, and it names the session with the stand-in the shot's guard
-   * accepts.
    */
 }
 

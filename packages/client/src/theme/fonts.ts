@@ -15,8 +15,10 @@ import {
   FONT_UI_ATKINSON,
   FONT_UI_FIXEL,
   FONT_UI_GEIST,
+  FONT_UI_HARMONY,
   FONT_UI_INTER,
 } from '@dsh-deepcraft/contracts/prefs'
+import { HARMONYOS_FACES } from './fonts-harmonyos'
 
 /**
  * The font catalogue: every face the package ships, and the family stack each
@@ -32,6 +34,8 @@ export interface FontFaceSpec {
   weight: string
   style?: 'normal' | 'italic'
   format?: 'truetype' | 'truetype-variations' | 'woff2'
+  /** The codepoints this slice covers; emitted as the @font-face `unicode-range` when set. */
+  unicodeRange?: string
 }
 
 /** The families every file in the package is registered under. */
@@ -57,6 +61,10 @@ export const FONT_FACES: readonly FontFaceSpec[] = [
   { family: 'DeepCraft Fira Code', file: 'FiraCodeVariable.woff2', weight: '300 700' },
   { family: 'DeepCraft Commit Mono', file: 'CommitMono-Regular.woff2', weight: '400' },
   { family: 'DeepCraft Commit Mono', file: 'CommitMono-Italic.woff2', weight: '400', style: 'italic' },
+  // HarmonyOS Sans SC ships as 82 unicode-range slices per weight; the CJK UI
+  // stack below is the only role that names the family, so only it pays for
+  // the slices (they download per range, on demand).
+  ...HARMONYOS_FACES,
 ]
 
 /** The CJK and system families every role falls back through. */
@@ -65,6 +73,7 @@ export const PROSE_FALLBACK = 'Georgia, "Times New Roman", "Noto Sans SC", "Sour
 export const CODE_FALLBACK = 'ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "Liberation Mono", Menlo, Courier, "PingFang SC", "Microsoft YaHei", monospace'
 
 const inter = `"DeepCraft Inter", ${UI_FALLBACK}`
+const harmonyos = `"DeepCraft HarmonyOS Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC", sans-serif`
 const geist = `"DeepCraft Geist Sans", ${UI_FALLBACK}`
 const fixel = `"DeepCraft Fixel Text", ${UI_FALLBACK}`
 const atkinson = `"DeepCraft Atkinson Hyperlegible", ${UI_FALLBACK}`
@@ -103,6 +112,7 @@ export const FONT_ROLES = {
     customProperty: '--dsh-deepcraft-font-ui-custom',
     fallback: inter,
     stacks: {
+      [FONT_UI_HARMONY]: `"DeepCraft Inter", ${harmonyos}`,
       [FONT_UI_INTER]: inter,
       [FONT_UI_GEIST]: geist,
       [FONT_UI_FIXEL]: fixel,

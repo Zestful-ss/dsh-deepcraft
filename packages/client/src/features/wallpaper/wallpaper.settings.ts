@@ -1,6 +1,7 @@
 import * as React from 'react'
-import { WALLPAPER_BLUR_MAX, WALLPAPER_BLUR_MIN, WALLPAPER_BLUR_STEP, WALLPAPER_CUSTOM, WALLPAPER_VISIBILITY_MAX, WALLPAPER_VISIBILITY_MIN, WALLPAPER_VISIBILITY_STEP } from '@dsh-deepcraft/contracts/prefs'
+import { WALLPAPER_BLUR_MAX, WALLPAPER_BLUR_MIN, WALLPAPER_BLUR_STEP, WALLPAPER_BUILTIN, WALLPAPER_CUSTOM, WALLPAPER_VISIBILITY_MAX, WALLPAPER_VISIBILITY_MIN, WALLPAPER_VISIBILITY_STEP } from '@dsh-deepcraft/contracts/prefs'
 import { WALLPAPER_MAX_BYTES, WALLPAPER_TYPES } from '@dsh-deepcraft/contracts/wallpaper'
+import { WALLPAPERS } from 'virtual:dsh-deepcraft/generated'
 import { loadWallpaper, readWallpaper, removeWallpaper, subscribeWallpaper, uploadWallpaper } from '../../shared/custom-wallpaper'
 import { featureCopy } from '../../core/i18n'
 import COPY from './wallpaper.copy.json'
@@ -64,6 +65,7 @@ function WallpaperSourceControl(props: SettingsRowView) {
     run(uploadWallpaper(picked))
   }
   const custom = props.prefs.wallpaperSource === WALLPAPER_CUSTOM
+  const builtin = props.prefs.wallpaperSource === WALLPAPER_BUILTIN
   return React.createElement(
     'div',
     { className: 'dsh-deepcraft-settings-wallpaper' },
@@ -72,9 +74,11 @@ function WallpaperSourceControl(props: SettingsRowView) {
       { className: 'dsh-deepcraft-settings-wallpaper-top' },
       React.createElement(
         'div',
-        { className: 'dsh-deepcraft-settings-wallpaper-preview', 'data-empty': file === null ? '' : undefined },
+        { className: 'dsh-deepcraft-settings-wallpaper-preview', 'data-empty': file === null && !builtin ? '' : undefined },
         file === null
-          ? null
+          ? builtin
+            ? React.createElement('img', { src: WALLPAPERS[props.prefs.wallpaperBuiltinId]?.url, alt: '' })
+            : null
           : file.state.video
             ? React.createElement('video', { src: file.url, muted: true, playsInline: true, autoPlay: true, loop: true })
             : React.createElement('img', { src: file.url, alt: '' }),
@@ -113,9 +117,9 @@ function WallpaperSourceControl(props: SettingsRowView) {
           type: 'button',
           className: 'dsh-deepcraft-segment',
           disabled: props.disabled,
-          'data-active': custom ? undefined : '',
-          'aria-pressed': custom ? 'false' : 'true',
-          onClick: () => { if (custom) props.write({ wallpaperSource: 'off' }) },
+          'data-active': custom || builtin ? undefined : '',
+          'aria-pressed': custom || builtin ? 'false' : 'true',
+          onClick: () => { if (custom || builtin) props.write({ wallpaperSource: 'off' }) },
         }, copy('wallpaperOff')),
         React.createElement('button', {
           type: 'button',
@@ -125,8 +129,16 @@ function WallpaperSourceControl(props: SettingsRowView) {
           'aria-pressed': custom ? 'true' : 'false',
           onClick: () => { if (!custom) props.write({ wallpaperSource: WALLPAPER_CUSTOM }) },
         }, copy('wallpaperCustom')),
+        React.createElement('button', {
+          type: 'button',
+          className: 'dsh-deepcraft-segment',
+          disabled: props.disabled,
+          'data-active': builtin ? '' : undefined,
+          'aria-pressed': builtin ? 'true' : 'false',
+          onClick: () => { if (!builtin) props.write({ wallpaperSource: WALLPAPER_BUILTIN }) },
+        }, copy('wallpaperBuiltin')),
       ),
-      custom ? null : React.createElement('span', { className: 'dsh-deepcraft-settings-wallpaper-off' }, copy('wallpaperFileDesc')),
+      custom || builtin ? null : React.createElement('span', { className: 'dsh-deepcraft-settings-wallpaper-off' }, copy('wallpaperFileDesc')),
     ),
     error === null ? null : React.createElement('div', { className: 'dsh-deepcraft-settings-wallpaper-error', role: 'alert' }, error),
   )
@@ -184,9 +196,64 @@ function AmountControl(props: SettingsRowView & {
   )
 }
 
+/** The bundled wallpapers the settings page offers, in the order the picker lists them. */
+const BUILTIN_WALLPAPERS = [
+  'cindy-whisper',
+  'cindy-neon',
+  'cindy-prism',
+  'cindy-scarlet-stroll',
+  'cindy-night-glance',
+  'cindy-dream',
+  'cindy-studio',
+  'cindy-window',
+  'dune-dawn',
+  'dune-sphere',
+  'indigo-folds',
+  'night-launch',
+  'ocean-clouds',
+  'planet-dawn',
+  'rose-quartz',
+  'silent-orbits',
+] as const
+
+/**
+ * The built-in picker's control: a grid of thumbnails over the bundled set,
+ * each still or video named by its id. Picking one switches the source to
+ * `builtin` and writes the id, so the choice lands in one move.
+ */
+function WallpaperBuiltinControl(props: SettingsRowView) {
+  const active = props.prefs.wallpaperBuiltinId
+  return React.createElement(
+    'div',
+    { className: 'dsh-deepcraft-settings-wallpaper-builtin' },
+    BUILTIN_WALLPAPERS.map(id => {
+      const wallpaper = WALLPAPERS[id]
+      if (wallpaper === undefined) return null
+      return React.createElement(
+        'button',
+        {
+          key: id,
+          type: 'button',
+          className: 'dsh-deepcraft-settings-wallpaper-button dsh-deepcraft-settings-wallpaper-builtin-item',
+          disabled: props.disabled,
+          'data-active': id === active ? '' : undefined,
+          'aria-pressed': id === active ? 'true' : 'false',
+          'aria-label': copy(`wallpaperBuiltin_${id}` as keyof typeof COPY),
+          onClick: () => props.write({ wallpaperSource: WALLPAPER_BUILTIN, wallpaperBuiltinId: id }),
+        },
+        wallpaper.video
+          ? React.createElement('video', { src: wallpaper.url, muted: true, playsInline: true, preload: 'metadata' })
+          : React.createElement('img', { src: wallpaper.url, alt: '' }),
+        React.createElement('span', { className: 'dsh-deepcraft-settings-wallpaper-builtin-name' }, copy(`wallpaperBuiltin_${id}` as keyof typeof COPY)),
+      )
+    }),
+  )
+}
+
 /** The controls one feature's settings rows draw themselves (D72). */
 export const controls = {
   wallpaperSource: WallpaperSourceControl,
+  wallpaperBuiltin: WallpaperBuiltinControl,
   wallpaperVisibility: (props: SettingsRowView) => React.createElement(AmountControl, {
     ...props,
     pref: 'wallpaperVisibility',

@@ -29,10 +29,8 @@ test('the older brand and palette choices land on one independent palette (D80)'
   expect(normalizePrefs({ palette: 'claude' }).palette).toBe('ember')
   expect(normalizePrefs({ palette: 'host' }).palette).toBe('host')
   expect(normalizePrefs({ palette: 'forest' }).palette).toBe('forest')
-  // The retired reference palette keeps the warm one; its material now rides
-  // the layer's own defaults (D84).
-  expect(normalizePrefs({ palette: 'cindy' }).palette).toBe('ember')
-  expect(normalizePrefs({}).palette).toBe('ocean')
+  expect(normalizePrefs({ palette: 'cindy' }).palette).toBe('cindy')
+  expect(normalizePrefs({}).palette).toBe('cindy')
 })
 
 test('the material layer defaults to the reference theme and answers each aspect on its own (D84)', () => {
@@ -41,7 +39,7 @@ test('the material layer defaults to the reference theme and answers each aspect
   expect(defaults.materialShadow).toBe('flat')
   expect(defaults.materialMotion).toBe('reference')
   expect(defaults.materialGlass).toBe(true)
-  expect(defaults.materialAmbient).toBe(true)
+  expect(defaults.materialAmbient).toBe(false)
   expect(normalizePrefs({ materialRadius: 'host', materialShadow: 'host', materialMotion: 'host' })).toMatchObject({
     materialRadius: 'host', materialShadow: 'host', materialMotion: 'host',
   })

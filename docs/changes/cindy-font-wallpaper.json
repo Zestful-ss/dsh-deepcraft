@@ -1,0 +1,8 @@
+{
+  "group": "new",
+  "order": 20,
+  "at": "2026-11-15",
+  "external": false,
+  "zh": "新增 HarmonyOS Sans SC 中文字体选项并设为界面字体默认（西文走 Inter），壁纸来源新增内置选项并打包 Cindy 的全部静态与动态壁纸，新装默认开启 cindy-whisper。",
+  "en": "Add the HarmonyOS Sans SC CJK font as the interface font's default (Latin reads Inter), give the wallpaper source a built-in choice shipping all of Cindy's still and video wallpapers, and start a fresh install on cindy-whisper."
+}

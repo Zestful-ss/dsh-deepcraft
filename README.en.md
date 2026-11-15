@@ -15,9 +15,24 @@
 
 ## Preview
 
-The settings page switches between three palettes, light and dark following the system; a palette changes colours alone, never the mark, the name or the pet. The Appearance tab also carries a material layer of its own, independent of the palette: a 4 / 8 / 12px corner scale, flat shadows, 150 / 200 / 250ms motion timing, a glass sidebar and ambient light, shipped at the reference theme's values and each one able to fall back to the host's own look. The same tab takes your own mark, wordmark, accent colour, pet and wallpaper — an image or video layered under the whole page, with visibility, blur and playback controls.
+The settings page switches between four palettes, light and dark following the system; a palette changes colours alone, never the mark, the name or the pet. The Appearance tab also carries a material layer of its own, independent of the palette: a 4 / 8 / 12px corner scale, flat shadows, 150 / 200 / 250ms motion timing, a glass sidebar and ambient light, shipped at the reference theme's values and each one able to fall back to the host's own look. The same tab takes your own mark, wordmark, accent colour, pet and wallpaper — a bundled set of stills and videos, or an image or video of your own layered under the whole page, with visibility, blur and playback controls.
 
-### Ocean blue (default)
+### Cindy (default)
+
+Cindy's warm ivory and near-black canvas, ink-ladder text, the inverted monochrome primary button and the #417CDD functional blue; 4 / 8 / 12 / 16 / 24px corners, an acrylic sidebar backing, no ambient light at the factory defaults, and the cindy-whisper wallpaper on. The palette and wallpapers come from the open-source app Cindy (Apache-2.0).
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="./docs/screenshots/cindy-home-light.png" alt="Cindy, home — light" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/cindy-home-dark.png" alt="Cindy, home — dark" /></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="./docs/screenshots/cindy-conversation-light.png" alt="Cindy, Markdown conversation — light" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/cindy-conversation-dark.png" alt="Cindy, Markdown conversation — dark" /></td>
+  </tr>
+</table>
+
+### Ocean blue
 
 <table>
   <tr>
@@ -86,7 +101,7 @@ Keep one theme enabled at a time, and restart DeepSeek Harness afterwards. When 
 
 ## Fonts
 
-Appearance offers separate interface, prose and code font choices: Inter, Geist Sans, Fixel Text, Atkinson Hyperlegible, Noto Serif, Source Serif 4, Literata, JetBrains Mono, Geist Mono, Fira Code and Commit Mono, plus a custom list of installed family names for each role. Sizes, weights and line heights stay the host's.
+Appearance offers separate interface, prose and code font choices: HarmonyOS Sans SC, Inter, Geist Sans, Fixel Text, Atkinson Hyperlegible, Noto Serif, Source Serif 4, Literata, JetBrains Mono, Geist Mono, Fira Code and Commit Mono, plus a custom list of installed family names for each role. Sizes, weights and line heights stay the host's. HarmonyOS Sans SC is the default interface font, paired with Inter: Latin reads Inter, CJK reads HarmonyOS Sans SC.
 
 > The Anthropic fonts have no public release; this repository only offers [copies](https://github.com/Zestful-ss/dsh-deepcraft/tree/master/packages/assets/src/fonts/anthropic) for download and study.
 

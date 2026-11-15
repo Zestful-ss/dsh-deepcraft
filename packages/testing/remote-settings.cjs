@@ -59,7 +59,7 @@ const readSettingsPage = (page) => page.evaluate((skin) => {
 }, { page: SKIN.page, rows: SKIN.rows, error: SKIN.error })
 
 /** The skin's own palettes, in the settings page's order (contracts/prefs.ts). */
-const PALETTES = ['ocean', 'ember']
+const PALETTES = ['ocean', 'ember', 'forest', 'cindy']
 
 /** Open the Appearance tab and press one palette's choice. */
 async function pickPalette(page, palette) {

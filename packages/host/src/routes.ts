@@ -42,6 +42,10 @@ const COPY_FILE = 'model-descriptions.json'
  * (copyright), so only a copy the user dropped in answers them. A name neither
  * directory holds is absent: sendFile's ENOENT becomes a 404, which the browser
  * half's font stacks fall back from.
+ *
+ * The HarmonyOS Sans SC slices are too many to list one by one, so the
+ * whitelist carries them as the one directory `harmonyos/<basename>.woff2`:
+ * the pattern below still refuses every separator but that one.
  */
 const FONT_FILES = {
   'JetBrainsMonoVariable.ttf': 'font/ttf',
@@ -305,7 +309,11 @@ export function registerRoutes(ctx: DshContext, scope: DshScope, models: Subagen
           })
           return
         }
-        const font = sub.startsWith('/fonts/') ? (FONT_FILES as Record<string, string | undefined>)[sub.slice('/fonts/'.length)] : undefined
+        const fontName = sub.startsWith('/fonts/') ? sub.slice('/fonts/'.length) : ''
+        const font = fontName !== ''
+          ? ((FONT_FILES as Record<string, string | undefined>)[fontName] ??
+            (/^harmonyos\/[A-Za-z0-9_-]+\.woff2$/.test(fontName) ? 'font/woff2' : undefined))
+          : undefined
         if (font !== undefined) {
           // The whitelisted name is the whole contract; the user's own copy
           // wins over the bundled face of the same name.

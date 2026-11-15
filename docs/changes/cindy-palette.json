@@ -1,0 +1,8 @@
+{
+  "group": "new",
+  "order": 10,
+  "at": "2026-11-15",
+  "external": false,
+  "zh": "新增 Cindy 配色并设为默认：暖象牙与近黑表面、黑白反转主按钮、#417CDD 功能蓝，配套 Cindy 的圆角阶梯、菜单阴影与侧栏亚克力底；新装默认关闭环境光晕。",
+  "en": "Add the Cindy palette and make it the default: warm-ivory and near-black surfaces, the inverted monochrome primary button, the #417CDD functional blue, plus Cindy's own corner ladder, menu shadows and acrylic sidebar backing; a fresh install starts without the ambient wash."
+}

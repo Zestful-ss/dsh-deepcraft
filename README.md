@@ -15,9 +15,24 @@
 
 ## 预览
 
-三套配色在插件设置里切换，亮暗跟随系统；配色只换颜色，不改标志、名称与宠物。外观页还有一层与配色无关的材质：4 / 8 / 12px 圆角、平铺阴影、150 / 200 / 250ms 的动效节奏、玻璃侧栏与环境光，出厂即参考主题的取值，每一项都可以单独退回宿主的样子。同一页还能换上自己的标志、文字标志、强调色、宠物与壁纸——图片或视频铺在整页底层，可见度、模糊与播放方式可调。
+四套配色在插件设置里切换，亮暗跟随系统；配色只换颜色，不改标志、名称与宠物。外观页还有一层与配色无关的材质：4 / 8 / 12px 圆角、平铺阴影、150 / 200 / 250ms 的动效节奏、玻璃侧栏与环境光，出厂即参考主题的取值，每一项都可以单独退回宿主的样子。同一页还能换上自己的标志、文字标志、强调色、宠物与壁纸——打包了一组静态与动态壁纸，也可以上传自己的图片或视频，铺在整页底层，可见度、模糊与播放方式可调。
 
-### 深海蓝（默认）
+### Cindy（默认）
+
+Cindy 的暖象牙与近黑画布、墨水色阶文字、黑白反转主按钮与 #417CDD 功能蓝；圆角取 4 / 8 / 12 / 16 / 24px，侧栏亚克力底，出厂不带环境光，默认配 cindy-whisper 壁纸。配色与壁纸取自开源应用 Cindy（Apache-2.0）。
+
+<table>
+  <tr>
+    <td align="center" width="50%"><img src="./docs/screenshots/cindy-home-light.png" alt="Cindy 首页 —— 亮色" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/cindy-home-dark.png" alt="Cindy 首页 —— 暗色" /></td>
+  </tr>
+  <tr>
+    <td align="center" width="50%"><img src="./docs/screenshots/cindy-conversation-light.png" alt="Cindy Markdown 对话 —— 亮色" /></td>
+    <td align="center" width="50%"><img src="./docs/screenshots/cindy-conversation-dark.png" alt="Cindy Markdown 对话 —— 暗色" /></td>
+  </tr>
+</table>
+
+### 深海蓝
 
 <table>
   <tr>
@@ -86,7 +101,7 @@ dsh plugin --profile desktop add <本地目录>                                 
 
 ## 字体
 
-外观页把界面字体、正文字体与代码字体分开选择；内置 Inter、Geist Sans、Fixel Text、Atkinson Hyperlegible、Noto Serif、Source Serif 4、Literata、JetBrains Mono、Geist Mono、Fira Code 与 Commit Mono，每个角色也可以用本机已安装的字体名自定义。字号、字重与行高仍由宿主决定。
+外观页把界面字体、正文字体与代码字体分开选择；内置 HarmonyOS Sans SC、Inter、Geist Sans、Fixel Text、Atkinson Hyperlegible、Noto Serif、Source Serif 4、Literata、JetBrains Mono、Geist Mono、Fira Code 与 Commit Mono，每个角色也可以用本机已安装的字体名自定义。字号、字重与行高仍由宿主决定。HarmonyOS Sans SC 是默认界面字体，与 Inter 组合：西文取 Inter，中文取 HarmonyOS Sans SC。
 
 > Anthropic 没有公开发行这三款字体；本仓库只提供下载与研究的[副本](https://github.com/Zestful-ss/dsh-deepcraft/tree/master/packages/assets/src/fonts/anthropic)。
 

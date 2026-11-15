@@ -54,9 +54,18 @@ async function captureBothSchemes(context) {
       // snapshot; no durable preference is read or written.
       await page.evaluate(() => document.body.setAttribute('data-ds-dark-theme', ''))
     }
-    const background = await page.evaluate(() => getComputedStyle(document.body).backgroundColor)
+    // The body's own fill stands down under a wallpaper (wallpaper.css), so
+    // the canvas colour is read on a probe element where the token resolves.
+    const background = await page.evaluate(() => {
+      const probe = document.createElement('div')
+      probe.style.backgroundColor = 'var(--dsh-deepcraft-canvas)'
+      document.body.appendChild(probe)
+      const color = getComputedStyle(probe).backgroundColor
+      probe.remove()
+      return color
+    })
     const wanted = canvas[scheme]
-    if (background !== wanted) throw new Error(`${scheme} palette did not take effect (body bg ${background}, expected ${wanted})`)
+    if (background !== wanted) throw new Error(`${scheme} palette did not take effect (canvas ${background}, expected ${wanted})`)
     const { caught, visibleText } = await sanitizePage((expression) => page.evaluate(expression))
     const file = path.join(out, `shots-${scheme}.png`)
     await page.screenshot({ path: file })

@@ -1,4 +1,5 @@
-import { QUIET_ATTR, WALLPAPER_MOTION_DYNAMIC } from '../../constants'
+import { QUIET_ATTR, WALLPAPER_BUILTIN, WALLPAPER_MOTION_DYNAMIC } from '../../constants'
+import { WALLPAPERS } from 'virtual:dsh-deepcraft/generated'
 import { motionReduced, readPrefs, subscribePrefs } from '../../core/prefs'
 import { loadWallpaper, readWallpaper, subscribeWallpaper } from '../../shared/custom-wallpaper'
 import type { WallpaperFile } from '../../shared/custom-wallpaper'
@@ -18,8 +19,9 @@ const LAYER_ATTR = 'data-dsh-deepcraft-wallpaper-layer'
  * stand down and paint the canvas veil over it; this module only keeps the
  * media element in step with the stored file and the reader's play choices.
  *
- * It installs while `wallpaperSource` is `custom` (the manifest's live switch,
- * D72); the layer itself shows nothing while the host half holds no file.
+ * It installs while `wallpaperSource` is `custom` or `builtin` (the manifest's
+ * live switch, D72); the layer itself shows nothing while the host half holds
+ * no file and no bundled pick is stored.
  */
 export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
   const layer = document.createElement('div')
@@ -37,8 +39,19 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
       && !motionReduced()
       && document.visibilityState === 'visible'
 
+  /** The media the layer paints: the bundled pick while the source is `builtin`, the reader's own file otherwise. */
+  const currentFile = (): WallpaperFile | null => {
+    const prefs = readPrefs()
+    if (prefs.wallpaperSource === WALLPAPER_BUILTIN) {
+      const wallpaper = WALLPAPERS[prefs.wallpaperBuiltinId]
+      if (wallpaper === undefined) return null
+      return { state: { type: wallpaper.video ? 'video/mp4' : 'image/webp', version: wallpaper.url, video: wallpaper.video }, url: wallpaper.url }
+    }
+    return readWallpaper()
+  }
+
   const sync = () => {
-    current = readWallpaper()
+    current = currentFile()
     if (current === null) {
       if (mounted) {
         layer.remove()
