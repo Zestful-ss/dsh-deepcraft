@@ -53,12 +53,6 @@
       ]
     },
     {
-      "reason": "调色板的深色块：走查给深色留了 cindy、forest 与 ember 的页面形态，ocean 的深色块没有自己的形态",
-      "selectors": [
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette=ocean][data-ds-dark-theme]"
-      ]
-    },
-    {
       "reason": "环境光的暗色块：走查开着环境光的页面形态是浅色",
       "selectors": [
         "body[data-dsh-deepcraft][data-dsh-deepcraft-material-ambient=\"1\"][data-ds-dark-theme]"

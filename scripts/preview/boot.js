@@ -81,14 +81,14 @@
 
   var palette = document.getElementById('preview-palette')
   var themeButton = document.getElementById('preview-theme')
-  var paletteNames = ['ocean', 'ember', 'forest', 'host']
+  var paletteNames = ['cindy', 'host']
 
   /** The palette the document carries, once the skin has mirrored the prefs. */
   function currentPalette() {
     var mirrored = body.getAttribute('data-dsh-deepcraft-palette')
     if (mirrored !== null) return mirrored
     var stored = window.__previewPrefs().palette
-    return typeof stored === 'string' ? stored : 'ocean'
+    return typeof stored === 'string' ? stored : 'cindy'
   }
 
   function syncPalette() {

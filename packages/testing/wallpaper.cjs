@@ -5,10 +5,11 @@
  * Registered in the lane's scenario table (packages/testing/scenarios.cjs).
  *
  * The file goes through the host half's route, the way the settings page's
- * picker sends it, and the source is switched on by its own control: the layer
- * must then stand under the shell, the sidebar column must give up its fill, and
- * the canvas veil must be painted over the layer at the stored visibility.
- * Switching the source off takes the layer away again, and the file is removed
+ * picker sends it, and the source is switched on by its own control: an image
+ * paints into the document element's canvas background (theme/wallpaper.css),
+ * the sidebar column must give up its fill, and the canvas veil must ride over
+ * the image as the gradient's colour at the stored visibility. Switching the
+ * source off takes the canvas back to plain colour, and the file is removed
  * before the scenario ends so the home the next scenario boots on carries none.
  */
 'use strict'
@@ -42,21 +43,20 @@ async function pickSource(page, choice) {
   await page.waitForTimeout(600)
 }
 
-/** What the page paints for the layer and the shell it should stand down. */
+/** What the page paints for the wallpaper and the shell it should stand down. */
 const readPage = (page) => page.evaluate(() => {
-  const layer = document.querySelector('[data-dsh-deepcraft-wallpaper-layer]')
-  const media = layer === null ? null : layer.firstElementChild
+  const html = document.documentElement
+  const style = getComputedStyle(html)
   const column = document.querySelector('[data-dsh-deepcraft-part~="sidebar-column"]')
-  const veil = getComputedStyle(document.body, '::after')
   return {
     attribute: document.body.getAttribute('data-dsh-deepcraft-wallpaper'),
-    layer: layer !== null,
-    tag: media === null ? null : media.tagName.toLowerCase(),
-    src: media === null ? null : (media.getAttribute('src') ?? ''),
+    mount: html.getAttribute('data-dsh-deepcraft-wallpaper-mount'),
+    image: style.getPropertyValue('--dsh-deepcraft-wallpaper-image').trim(),
+    // The image and the veil are the html canvas's own background: the
+    // gradient layer above the media is what the visibility dial writes.
+    painted: style.backgroundImage,
     columnFill: column === null ? null : getComputedStyle(column).backgroundColor,
-    // The veil is a colour over the layer (the rule writes the `background`
-    // shorthand), so its own background-colour is what says it is painted.
-    veil: veil.backgroundColor,
+    veil: style.getPropertyValue('--dsh-deepcraft-wallpaper-veil').trim(),
   }
 })
 
@@ -70,7 +70,7 @@ function wallpaperScenario({ check }) {
         read.upload = await uploadPng(page, ROUTES.file)
         read.status = await page.evaluate(async (route) => (await fetch(route)).json(), ROUTES.status)
         await pickSource(page, SKIN.custom)
-        await page.waitForFunction(() => document.querySelector('[data-dsh-deepcraft-wallpaper-layer]') !== null, undefined, { timeout: 15000 }).catch(() => {})
+        await page.waitForFunction(() => document.documentElement.getAttribute('data-dsh-deepcraft-wallpaper-mount') === 'image', undefined, { timeout: 15000 }).catch(() => {})
         read.on = await readPage(page)
         await pickSource(page, SKIN.off)
         await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-wallpaper') === 'off', undefined, { timeout: 15000 }).catch(() => {})
@@ -89,13 +89,13 @@ function wallpaperScenario({ check }) {
         check('文件按自己的类型存进宿主半边，状态里带类型与版本',
           read.upload.status === 200 && read.status?.wallpaper?.type === 'image/png' && typeof read.status?.wallpaper?.version === 'string',
           JSON.stringify({ upload: read.upload.status, status: read.status })),
-        check('来源开到自定义后，层挂在页面底层，画的是这份文件',
-          read.on?.attribute === 'custom' && read.on?.layer === true && read.on?.tag === 'img' && (read.on?.src ?? '').includes(ROUTES.file),
+        check('来源开到自定义后，画布底层画的是这份文件',
+          read.on?.attribute === 'custom' && read.on?.mount === 'image' && (read.on?.image ?? '').includes(ROUTES.file) && (read.on?.painted ?? 'none') !== 'none',
           JSON.stringify(read.on)),
-        check('层在时侧栏列让出填充，画布面纱盖在层上',
-          read.on?.columnFill === 'rgba(0, 0, 0, 0)' && read.on?.veil !== 'rgba(0, 0, 0, 0)',
-          JSON.stringify({ columnFill: read.on?.columnFill, veil: read.on?.veil })),
-        check('来源关掉后层从页面上撤走', read.off?.attribute === 'off' && read.off?.layer === false, JSON.stringify(read.off)),
+        check('壁纸在时侧栏列让出填充，画布面纱盖在图上',
+          read.on?.columnFill === 'rgba(0, 0, 0, 0)' && (read.on?.painted ?? '').includes('linear-gradient') && read.on?.veil !== '' && read.on?.veil !== 'transparent',
+          JSON.stringify({ columnFill: read.on?.columnFill, painted: read.on?.painted, veil: read.on?.veil })),
+        check('来源关掉后画布回到纯色', read.off?.attribute === 'off' && read.off?.mount === null, JSON.stringify(read.off)),
         check('移除之后状态里没有壁纸', read.removed?.ok === true && read.removed?.wallpaper === null, JSON.stringify(read.removed)),
         check('控制台没有异常', problems.length === 0, problems.slice(0, 3).join(' | ')),
       ]

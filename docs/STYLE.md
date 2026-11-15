@@ -8,20 +8,13 @@ name, mark and accent — stays the same under every palette (D80).
 
 ## Palette
 
-Four palettes of the skin's own, plus the host's colours left in place:
+One palette of the skin's own, plus the host's colours left in place:
 
-**Ocean blue (the default).** A low-saturation periwinkle `#5368C9` for fills,
-the lighter `#5F73D9` for the selected plate, a deeper step for text links on
-the light canvas and a lighter one on the dark. The neutrals are a warm-free
-grey ladder: a near-white canvas `#FCFCFB` under a light-grey sidebar in light,
-and a charcoal canvas `#202427` under a blue-black sidebar in dark.
-
-**Warm ember.** The warm counterpart: ivory light `#FCFCFB` and warm black
-`#141413`, an ember `#D97757` for every action with `#C6613F` as the light
-hover, warm-compatible slate prose links and a warm neutral surface ladder.
-
-**Forest green.** A cool green `#397657` on the same warm-neutral ground as
-ember, with its own link step and surface ladder.
+**Cindy (the default).** A graphite `#3C3F43` for fills, a deeper `#2E3237`
+for the hover and `#EEEEEE` as the dark accent, blue `#1D4ED8` for prose
+links on the light canvas and `#93C5FD` on the dark. The neutrals are a warm
+ladder: an ivory canvas `#F2F2ED` under a light-warm sidebar in light, and
+the same `#181818` under canvas and sidebar in dark.
 
 **Follow the host** leaves the host's `--dsw-*` tokens as whoever painted them
 wrote them — the host itself or another theme plugin.
@@ -88,8 +81,8 @@ back to another palette's; `—` is a token that palette leaves unset.
 
 ## Palettes, material and font roles · 配色、材质与字体归属
 
-The Colours row chooses one of the skin's own palettes — **Ocean blue** (the
-default), **Warm ember** or **Forest green** — or **Follow the host**. Every
+The Colours row chooses the skin's own palette — **Cindy** (the default) — or
+**Follow the host**. Every
 rule that writes a host colour token carries a palette gate in its selector;
 under "follow the host" those rules drop out and the host's own tokens stand,
 or another theme plugin's, such as a wallpaper plugin that clears the canvas

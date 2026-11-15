@@ -27,8 +27,6 @@ const SKIN = {
   page: SETTINGS_PAGE,
   rows: 'fieldset.dsh-deepcraft-settings-rows',
   error: '.dsh-deepcraft-settings-error',
-  // The four palette choices sit in their own row on the Appearance tab.
-  paletteButton: (at) => `.dsh-deepcraft-palette-options button:nth-child(${at + 1})`,
   appearanceTab: /^(外观|Appearance)$/,
 }
 
@@ -58,8 +56,8 @@ const readSettingsPage = (page) => page.evaluate((skin) => {
   }
 }, { page: SKIN.page, rows: SKIN.rows, error: SKIN.error })
 
-/** The skin's own palettes, in the settings page's order (contracts/prefs.ts). */
-const PALETTES = ['ocean', 'ember', 'forest', 'cindy']
+/** The skin's own palettes, in the settings page's order (contracts/prefs.ts); the host choice follows them. */
+const PALETTES = ['cindy', 'host']
 
 /** Open the Appearance tab and press one palette's choice. */
 async function pickPalette(page, palette) {
@@ -91,7 +89,7 @@ function remoteSettingsScenario({ check }) {
       await waitForSkin(remote)
       await dismissOverlays(remote)
       const original = await paletteOf(local)
-      const target = original === 'ocean' ? 'ember' : 'ocean'
+      const target = original === 'cindy' ? 'host' : 'cindy'
       const notes = { hostname: await remote.evaluate(() => location.hostname), original, target, remoteAtStart: await paletteOf(remote), problems }
       context.notes.remoteSettings = notes
       // The loopback page writes one palette; the remote page follows it without
