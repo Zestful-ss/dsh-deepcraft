@@ -42,7 +42,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
 
   const block = installSessionBlock(ctx, {
     kind: 'recent',
-    heading: copy('recentHeading'),
+    heading: () => copy('recentHeading'),
     menuLabel: (title: string) => copy('recentMenu', { title }),
     place: 'first',
     schedule: () => ui.schedule?.(),

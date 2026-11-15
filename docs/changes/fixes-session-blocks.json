@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 23,
+  "at": "2026-11-16",
+  "external": false,
+  "zh": "修复三个会话与品牌界面的边界问题:置顶与最近会话的分区标题随语言切换重绘,不再停留在安装时的语言;子代理模型卡片在其触发按钮被卸载(会话切换等)时随之关闭,不再留下无主悬浮卡;品牌图与壁纸的读操作排在仍在途的写之后,热重载期间的读不再用旧快照盖回刚上传的图片。",
+  "en": "Fix three session/brand surface edge cases: the pinned and recent block headings repaint on a locale switch instead of keeping the install-time language; the subagent model card closes when its trigger unmounts (session switch and similar) instead of floating ownerless; brand-image and wallpaper reads queue behind in-flight writes, so a reload-time read no longer paints a stale snapshot over a just-uploaded image."
+}

@@ -30,7 +30,7 @@ function gather(ctx: HostContext, services: SessionBlockServices): SessionBlockR
 export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   const block = installSessionBlock(ctx, {
     kind: 'pins',
-    heading: copy('pinsTitle'),
+    heading: () => copy('pinsTitle'),
     menuLabel: (title: string) => copy('pinsMenu', { title }),
     place: 'above-tree',
     schedule: () => ui.schedule?.(),

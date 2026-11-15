@@ -49,7 +49,8 @@ export interface SessionBlockOptions {
   /** The block's own name: its section's `data-dsh-deepcraft-session-block` and class suffix. */
   kind: 'pins' | 'recent'
   /** The heading above its rows, and the name its group carries. */
-  heading: string
+  /** The heading above its rows, and the name its group carries; read each render so a locale switch redraws it. */
+  heading(): string
   /** The menu button's accessible name for one row. */
   menuLabel(title: string): string
   /** The rows to draw now, or null while a source the block reads is not ready. */
@@ -309,10 +310,12 @@ export function installSessionBlock(ctx: HostContext, options: SessionBlockOptio
   /** Draw the block's rows, if anything about them changed. */
   function render(rows: SessionBlockRow[], tree: HTMLElement, section: HTMLElement) {
     const current = services === null ? null : currentSessionId(ctx, services.sessions)
+    const heading = options.heading()
     const signature = JSON.stringify({
       rows,
       current,
       open: rows.map(item => menuOpenFor(item.id)),
+      heading,
     })
     if (signature === rendered && block !== null && block.parentElement === section) return
     if (block === null || block.parentElement !== section) {
@@ -343,8 +346,8 @@ export function installSessionBlock(ctx: HostContext, options: SessionBlockOptio
       className: 'dsh-deepcraft-session-section',
       'data-dsh-deepcraft-session-block': options.kind,
     },
-    React.createElement('div', { className: 'dsh-deepcraft-session-heading' }, options.heading),
-    React.createElement('div', { className: 'dsh-deepcraft-session-list', role: 'group', 'aria-label': options.heading },
+    React.createElement('div', { className: 'dsh-deepcraft-session-heading' }, heading),
+    React.createElement('div', { className: 'dsh-deepcraft-session-list', role: 'group', 'aria-label': heading },
       rows.map(item => rowElement(item, current)))))
   }
 

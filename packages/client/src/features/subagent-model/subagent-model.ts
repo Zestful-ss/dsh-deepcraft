@@ -227,7 +227,13 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   /** Start a read for whichever session is shown now, when it is not the one already loaded. */
   function sync() {
     const id = sessionId()
-    if (id === loadedSession) return
+    if (id === loadedSession) {
+      // The catalog can land after the one watch this session got missed its
+      // store; re-arming is cheap and a copy change repaints through the bump.
+      watchCatalog()
+      refresh()
+      return
+    }
     if (id === null) {
       // An in-flight read for the session the reader just left must not land:
       // its answer names routes a page without a session cannot save.
@@ -386,8 +392,12 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       id: SEAT_ID,
       ref: (node: HTMLButtonElement | null) => {
         seatNode = node
-        if (node === null) clearCapsule()
-        else markCapsule()
+        if (node === null) {
+          clearCapsule()
+          // The button leaving the tree orphans an open card: its anchor has
+          // no box, so the card's next paint would clamp to the corner.
+          closeCard()
+        } else markCapsule()
       },
       className: 'dsh-deepcraft-subagent-model-btn',
       'data-dsh-subagent-model': usable ? (drawn.selected.length > 0 ? 'chosen' : 'empty') : 'unavailable',

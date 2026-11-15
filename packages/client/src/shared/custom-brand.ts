@@ -42,8 +42,12 @@ export function subscribeBrandImages(listener: (images: BrandImages) => void) {
   }
 }
 
+/** A write still in flight answers after a read that started before it: reads wait on it, same as the wallpaper's. */
+let inFlightChange: Promise<unknown> | null = null
+
 /** Read the host half's status once per arming; a host half that does not answer leaves no custom image. */
-export function loadBrandImages() {
+export function loadBrandImages(): void {
+  if (inFlightChange !== null) { void inFlightChange.then(loadBrandImages, loadBrandImages); return }
   if (requested) return
   requested = true
   const at = ++generation
@@ -96,13 +100,13 @@ function measure(kind: BrandImageKind, state: BrandImageState | null): Promise<B
  * since each answer is a whole-status snapshot: two overlapping writes would
  * let the earlier answer overwrite the later one's image.
  */
-let inFlightChange: Promise<unknown> = Promise.resolve()
-
 function change(kind: BrandImageKind, init: RequestInit) {
   const at = ++generation
-  const work = inFlightChange.then(() => changeJson<BrandAnswer>(ROUTES[kind], init))
+  const work = (inFlightChange ?? Promise.resolve()).then(() => changeJson<BrandAnswer>(ROUTES[kind], init))
     .then(answer => adopt(answer, at))
-  inFlightChange = work.catch(() => { /* a refusal must not jam the next write */ })
+  inFlightChange = work.finally(() => {
+    if (inFlightChange === work) inFlightChange = null
+  })
   return work
 }
 
