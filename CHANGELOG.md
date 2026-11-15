@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修复壁纸开启后正文画布仍盖在图上的问题：画布规则补上皮肤自己的壁纸标记，`#root` 与会话面板正确让出填充
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Fix the page canvas still covering the wallpaper: the canvas rules now gate out under the skin's own wallpaper marker, so `#root` and the conversation pane yield their fill
+
 ## [0.40.0] - 2026-11-15
 
 [中文](#cn-0.40.0) | [English](#en-0.40.0)
