@@ -182,7 +182,10 @@ export function nextDecisionAt(stage: MascotStage, now: number, waitSettle: bool
   if (stage.current !== null && stage.current.mode === 'once' && stage.current.done !== true) {
     at = Math.min(at, stage.current.start + playMs(stage.current.key))
   }
-  if (!stage.asleep && stage.level !== null && stage.level.state === 'idle') at = Math.min(at, stage.quietSince + SLEEP_AFTER_MS)
+  // A reaction on screen decides before the sleep test runs, so its deadline
+  // cannot flip while the hand holds the mascot — arming it would reschedule
+  // a timer that is already in the past, forever.
+  if (stage.reaction === null && !stage.asleep && stage.level !== null && stage.level.state === 'idle') at = Math.min(at, stage.quietSince + SLEEP_AFTER_MS)
   if (stage.extra === null && stage.nextExtraAt > now) at = Math.min(at, stage.nextExtraAt)
   return at
 }
