@@ -133,7 +133,12 @@ export function install() {
     })
     if (target.parentElement !== null) {
       offParent = subscribeMutations(target.parentElement, { childList: true }, () => {
-        if (!target.isConnected) place()
+        // The row may be replaced in two commits: gone now, back next tick —
+        // resume the page-wide look so the replacement still gets its pill.
+        if (!target.isConnected) {
+          look()
+          place()
+        }
       })
     }
   }
@@ -181,6 +186,7 @@ export function install() {
   const offPrefs = subscribePrefs((prefs: Prefs) => {
     label.textContent = prefs.brandName.trim() || 'DeepCraft'
   })
+  let dead = false
   const onClick = async () => {
     if (button.disabled) return
     button.disabled = true
@@ -188,7 +194,9 @@ export function install() {
     // ds-bot owns the switch, and a control that changed shape must not trap
     // the reader on the Bot page: the saved-mode reload below is the fallback.
     try { switched = await switchThroughDsBot() } catch { switched = false }
-    if (switched) return
+    // The feature may be torn down mid-poll: a reload on the dead generation
+    // would bounce a page this instance no longer owns.
+    if (dead || switched) return
     button.disabled = false
     localStorage.setItem(DS_BOT_MODE_KEY, DS_BOT_AGENT_MODE)
     location.reload()
@@ -199,6 +207,7 @@ export function install() {
   place()
 
   return () => {
+    dead = true
     button.removeEventListener('click', onClick)
     offPrefs()
     offOwner()
