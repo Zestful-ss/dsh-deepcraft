@@ -1,7 +1,7 @@
 import { MASCOT_OFF, MASCOT_PETDEX, MASCOT_SCOPE_ALL } from '../../constants'
 import { readPrefs, resolveMascot } from '../../core/prefs'
 import { createPetdexMascot } from './petdex'
-import { createIslandMascot, ISLAND_PET_CINDY } from './island'
+import { createIslandMascot, isIslandPet } from './island'
 import { decodePet, ensurePet } from '../../shared/petdex'
 import type { PetDescriptor } from '@dsh-deepcraft/contracts/pets'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
@@ -41,7 +41,7 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   async function openPetdex(id: string, conversation: boolean) {
     if (requested === id) return
     // An island id answers at once: the sprite ships with the package.
-    if (id === ISLAND_PET_CINDY) {
+    if (isIslandPet(id)) {
       requested = id
       generation += 1
       if (petdex !== null) petdex.player.dispose()

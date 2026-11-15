@@ -27,17 +27,35 @@ const SKIN = {
   appearance: /^(外观|Appearance)$/,
   rowTitle: /^(壁纸|Wallpaper)$/,
   custom: /^(自定义|Custom)$/,
+  builtin: /^(内置|Built-in)$/,
+  video: /^(Cindy Window)$/,
   off: /^(关闭|Off)$/,
 }
 
-/** Open the Appearance tab and press one of the wallpaper source's two choices. */
-async function pickSource(page, choice) {
+/** Open the Appearance tab and answer the wallpaper row's locator. */
+async function wallpaperRow(page) {
   await openSkinSettings(page)
   await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: SKIN.appearance }).first().click()
   await page.waitForTimeout(400)
-  const row = page.locator('.dsh-deepcraft-settings-row')
+  return page.locator('.dsh-deepcraft-settings-row')
     .filter({ has: page.locator('.dsh-deepcraft-settings-row-title').filter({ hasText: SKIN.rowTitle }) }).first()
+}
+
+/** Press one of the wallpaper source's three choices. */
+async function pickSource(page, choice) {
+  const row = await wallpaperRow(page)
   await row.getByRole('button', { name: choice }).click()
+  await page.waitForTimeout(600)
+  await page.keyboard.press('Escape')
+  await page.waitForTimeout(600)
+}
+
+/** Switch the source to the built-in set and press one tile by its name. */
+async function pickBuiltin(page, name) {
+  const row = await wallpaperRow(page)
+  await row.getByRole('button', { name: SKIN.builtin }).click()
+  await page.waitForTimeout(400)
+  await page.locator('.dsh-deepcraft-settings-wallpaper-builtin-item').filter({ hasText: name }).first().click()
   await page.waitForTimeout(600)
   await page.keyboard.press('Escape')
   await page.waitForTimeout(600)
@@ -84,6 +102,29 @@ function wallpaperScenario({ check }) {
         await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-wallpaper') === 'off', undefined, { timeout: 15000 }).catch(() => {})
         await page.waitForTimeout(300)
         read.off = await readPage(page)
+        // A built-in video keeps the body's own layer: the html canvas stays
+        // unmounted, and the body becomes the stacking context a negative-z
+        // layer needs on the desktop compositor.
+        await pickBuiltin(page, SKIN.video)
+        await page.waitForFunction(() => document.querySelector('[data-dsh-deepcraft-wallpaper-layer] video') !== null, undefined, { timeout: 15000 }).catch(() => {})
+        read.video = await page.evaluate(() => {
+          const layer = document.querySelector('[data-dsh-deepcraft-wallpaper-layer]')
+          const media = layer === null ? null : layer.firstElementChild
+          const column = document.querySelector('[data-dsh-deepcraft-part~="sidebar-column"]')
+          const veil = getComputedStyle(document.body, '::after')
+          return {
+            attribute: document.body.getAttribute('data-dsh-deepcraft-wallpaper'),
+            mediaAttr: document.body.getAttribute('data-dsh-deepcraft-wallpaper-media'),
+            mount: document.documentElement.getAttribute('data-dsh-deepcraft-wallpaper-mount'),
+            isolation: getComputedStyle(document.body).isolation,
+            layer: layer !== null,
+            tag: media === null ? null : media.tagName.toLowerCase(),
+            columnFill: column === null ? null : getComputedStyle(column).backgroundColor,
+            veil: veil.content === 'none' || veil.backgroundColor === 'rgba(0, 0, 0, 0)' ? null : veil.backgroundColor,
+          }
+        })
+        await pickSource(page, SKIN.off)
+        await page.waitForTimeout(300)
       } finally {
         read.removed = await page.evaluate(async (route) => {
           await fetch(route, { method: 'DELETE' })
@@ -103,6 +144,12 @@ function wallpaperScenario({ check }) {
         check('壁纸在时侧栏列、页面根、会话面板与停靠面板都让出填充，画布面纱盖在图上',
           read.on?.columnFill === 'rgba(0, 0, 0, 0)' && (read.on?.rootFill === 'rgba(0, 0, 0, 0)' || read.on?.rootFill === 'transparent') && (read.on?.paneFill === 'rgba(0, 0, 0, 0)' || read.on?.paneFill === 'transparent' || read.on?.paneFill === null) && (read.on?.sideRootFill === 'rgba(0, 0, 0, 0)' || read.on?.sideRootFill === 'transparent' || read.on?.sideRootFill === null) && (read.on?.dockedFill === 'rgba(0, 0, 0, 0)' || read.on?.dockedFill === 'transparent' || read.on?.dockedFill === null) && (read.on?.painted ?? '').includes('linear-gradient') && read.on?.veil !== '' && read.on?.veil !== 'transparent',
           JSON.stringify({ columnFill: read.on?.columnFill, rootFill: read.on?.rootFill, paneFill: read.on?.paneFill, sideRootFill: read.on?.sideRootFill, dockedFill: read.on?.dockedFill, painted: read.on?.painted, veil: read.on?.veil })),
+        check('内置视频仍走页面自己的视频层，画布不挂图像',
+          read.video?.attribute === 'builtin' && read.video?.mediaAttr === 'video' && read.video?.mount === null && read.video?.layer === true && read.video?.tag === 'video',
+          JSON.stringify(read.video)),
+        check('视频层在叠层上下文里，侧栏让出填充，面纱盖在视频上',
+          read.video?.isolation === 'isolate' && (read.video?.columnFill === 'rgba(0, 0, 0, 0)' || read.video?.columnFill === 'transparent') && read.video?.veil !== null,
+          JSON.stringify({ isolation: read.video?.isolation, columnFill: read.video?.columnFill, veil: read.video?.veil })),
         check('来源关掉后画布回到纯色', read.off?.attribute === 'off' && read.off?.mount === null, JSON.stringify(read.off)),
         check('移除之后状态里没有壁纸', read.removed?.ok === true && read.removed?.wallpaper === null, JSON.stringify(read.removed)),
         check('控制台没有异常', problems.length === 0, problems.slice(0, 3).join(' | ')),

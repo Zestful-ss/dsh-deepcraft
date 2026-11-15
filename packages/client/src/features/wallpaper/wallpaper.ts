@@ -120,6 +120,8 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
     }
     paintedKey = null
     if (mounted) {
+      // A detached video keeps decoding unless it is told to stop.
+      if (video !== null) video.pause()
       layer.remove()
       mounted = false
     }

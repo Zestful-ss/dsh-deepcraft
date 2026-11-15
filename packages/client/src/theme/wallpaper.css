@@ -92,7 +92,14 @@ html[data-dsh-deepcraft-wallpaper-mount="image"]:has(body[data-dsh-deepcraft][da
 
 /* A video cannot be a canvas background: it keeps the body's own layer at
    z-index -1, and the veil over it is the body's last pseudo-element, which
-   gates to it alone so an image is never dimmed twice. */
+   gates to it alone so an image is never dimmed twice. The body becomes a
+   stacking context while a video mounts: without one the desktop compositor
+   drops a negative-z child below the document's own canvas background, where
+   an opaque fill hides the video entirely. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-wallpaper-media="video"] {
+  isolation: isolate;
+}
+
 body[data-dsh-deepcraft] [data-dsh-deepcraft-wallpaper-layer] {
   position: fixed;
   inset: 0;

@@ -32,9 +32,7 @@
   <div class="preview-controls">
     <label class="preview-field">配色
       <select id="preview-palette">
-        <option value="ocean">深海蓝</option>
-        <option value="ember">暖橙</option>
-        <option value="forest">森林绿</option>
+        <option value="cindy">Cindy</option>
         <option value="host">跟随宿主</option>
       </select>
     </label>
@@ -127,14 +125,14 @@
           <div data-conversation-session="smoke-deepy" class="preview-session">
             <div class="preview-flow" data-chat-flow>
               <div class="preview-row preview-row-user" data-chat-flow-kind="user" data-chat-turn="1">
-                <div class="preview-bubble">带我看看三套配色，以及设置页在哪里。</div>
+                <div class="preview-bubble">带我看看皮肤的配色与设置页。</div>
               </div>
               <div class="preview-row preview-row-assistant" data-chat-flow-kind="assistant-step" data-chat-turn="1">
                 <div class="preview-assistant-name">DeepSeek</div>
                 <div class="preview-markdown" data-markdown-variant="default">
-                  <p>深海蓝是默认配色，暖橙与森林绿会重绘同一组 token。皮肤自己的设置页在 <code>设置 → DeepCraft</code>。</p>
-                  <pre class="preview-code"><code>body[data-dsh-deepcraft-palette="ocean"] {
-  --dsh-deepcraft-canvas: #0f1a24;
+                  <p>Cindy 是皮肤自带的配色，跟随宿主把 token 交给页面自己的主题。皮肤自己的设置页在 <code>设置 → DeepCraft</code>。</p>
+                  <pre class="preview-code"><code>body[data-dsh-deepcraft-palette="cindy"] {
+  --dsh-deepcraft-canvas: #f2f2ed;
 }</code></pre>
                   <p>设置页的每一行、开关和预览卡片都由皮肤自己渲染。</p>
                 </div>

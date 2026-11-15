@@ -1,0 +1,8 @@
+{
+  "group": "fix",
+  "order": 20,
+  "at": "2026-11-16",
+  "external": false,
+  "zh": "修复视频壁纸在桌面端整页不显示：视频层在负 z-index 上，宿主画布把脱离层叠上下文的孩子压到文档背景之下，卸载视频层时同时停止解码。",
+  "en": "Fix the video wallpaper painting nothing on desktop: its layer sits at a negative z-index and the host canvas drops a child outside a stacking context below the document background; unmounting the layer now pauses the video too."
+}

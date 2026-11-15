@@ -243,9 +243,41 @@
     "zh": "有 {count} 个已安装的包无法读取，其余包不受影响。",
     "en": "{count} installed packages cannot be read; the rest of the library is unaffected."
   },
-  "petIslandCindy": {
+  "petIsland_cindy": {
     "zh": "Cindy",
     "en": "Cindy"
+  },
+  "petIsland_annie": {
+    "zh": "Annie",
+    "en": "Annie"
+  },
+  "petIsland_blackcat": {
+    "zh": "黑猫",
+    "en": "Black Cat"
+  },
+  "petIsland_boli": {
+    "zh": "波莉",
+    "en": "Boli"
+  },
+  "petIsland_chaku": {
+    "zh": "Chaku",
+    "en": "Chaku"
+  },
+  "petIsland_erika": {
+    "zh": "Erika",
+    "en": "Erika"
+  },
+  "petIsland_muffin": {
+    "zh": "松饼",
+    "en": "Muffin"
+  },
+  "petIsland_tarara": {
+    "zh": "Tarara",
+    "en": "Tarara"
+  },
+  "petIsland_whitesnow": {
+    "zh": "苹果少女",
+    "en": "Apple Girl"
   },
   "fontHarmony": { "zh": "HarmonyOS Sans SC", "en": "HarmonyOS Sans SC" },
   "fontUiTitle": { "zh": "界面字体", "en": "Interface font" },

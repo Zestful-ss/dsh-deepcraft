@@ -55,6 +55,11 @@ body[data-dsh-deepcraft] .dsh-deepcraft-island-strip {
   width: 56px;
   height: 56px;
   margin-left: -28px;
+  /* The individual `scale` composes with the animated `transform`; a skin may
+     stand inside its stage smaller than the frame (the island source's
+     imageScale, origin 62%). */
+  scale: var(--dsh-deepcraft-island-image-scale, 1);
+  transform-origin: 50% 62%;
   background-image: var(--dsh-deepcraft-island-sheet, none);
   background-repeat: no-repeat;
   background-size: 100% 100%;

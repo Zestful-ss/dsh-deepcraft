@@ -20,8 +20,16 @@ import type manifest from './mascot.manifest'
  * stylesheet animates.
  */
 
-/** The pet id the settings page and `chatPet` write for the Cindy character. */
-export const ISLAND_PET_CINDY = 'cindy'
+/** The pet ids the settings page and `chatPet` write for the shipped island characters. */
+export const ISLAND_PETS = ['cindy', 'annie', 'blackcat', 'boli', 'chaku', 'erika', 'muffin', 'tarara', 'whitesnow'] as const
+
+/** The pet id of the reference character, kept for callers that name it directly. */
+export const ISLAND_PET_CINDY: IslandPetId = 'cindy'
+
+export type IslandPetId = (typeof ISLAND_PETS)[number]
+
+/** Whether a `chatPet` value names a shipped island character. */
+export const isIslandPet = (id: string): id is IslandPetId => (ISLAND_PETS as readonly string[]).includes(id)
 
 /** The sprite's edge in the window, in CSS pixels; the source art is 128px. */
 const SPRITE_EDGE = 56
@@ -50,8 +58,10 @@ const BEATS: Readonly<Record<string, number>> = {
 }
 
 /**
- * The character's face: the dot centres and sizes the island source states,
- * as fractions of the 128px sprite. `left`/`right` are the eye centres.
+ * The character's face: the dot centres and sizes the island source states
+ * (AgentIslandSection's per-skin table), as fractions of the 128px sprite.
+ * `left`/`right` are the eye centres; `imageScale` is the sprite's own scale
+ * inside its stage.
  */
 interface IslandFace {
   eyeColor: string
@@ -60,10 +70,19 @@ interface IslandFace {
   eyeY: number
   eyeRx: number
   eyeRy: number
+  imageScale?: number
 }
 
-const FACES: Readonly<Record<string, IslandFace>> = {
-  [ISLAND_PET_CINDY]: { eyeColor: 'rgb(107 61 50)', leftX: 6.71 / 16, rightX: 9.3 / 16, eyeY: 9.5 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
+const FACES: Readonly<Record<IslandPetId, IslandFace>> = {
+  cindy: { eyeColor: 'rgb(107 61 50)', leftX: 6.71 / 16, rightX: 9.3 / 16, eyeY: 9.5 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
+  blackcat: { eyeColor: 'rgb(253 207 69)', leftX: 5.95 / 16, rightX: 10.05 / 16, eyeY: 9.05 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
+  erika: { eyeColor: 'rgb(135 93 66)', leftX: 6.84 / 16, rightX: 9.16 / 16, eyeY: 10.75 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
+  tarara: { eyeColor: 'rgb(61 114 228)', leftX: 6.9 / 16, rightX: 9.7 / 16, eyeY: 10.4 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
+  boli: { eyeColor: 'black', leftX: 5.63 / 16, rightX: 10.63 / 16, eyeY: 8.13 / 16, eyeRx: 0.88 / 16, eyeRy: 0.88 / 16, imageScale: 0.8 },
+  whitesnow: { eyeColor: 'black', leftX: 6.86 / 16, rightX: 9.5 / 16, eyeY: 9.64 / 16, eyeRx: 0.465 / 16, eyeRy: 1.02 / 16 },
+  annie: { eyeColor: 'rgb(174 33 70)', leftX: 6.31 / 16, rightX: 9.56 / 16, eyeY: 11.69 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
+  chaku: { eyeColor: 'rgb(253 207 69)', leftX: 6.19 / 16, rightX: 9.69 / 16, eyeY: 9.69 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
+  muffin: { eyeColor: 'black', leftX: 5.56 / 16, rightX: 10.56 / 16, eyeY: 9.31 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
 }
 
 function sheet(key: string): MascotSheet {
@@ -83,7 +102,7 @@ function sheet(key: string): MascotSheet {
  * @param petId - the island character's id; the build refuses a sprite without
  *     a file and a face without a config, so a lookup miss throws.
  */
-export function createIslandMascot(ctx: HostContext, ui: FeatureUi<typeof manifest>, petId: string) {
+export function createIslandMascot(ctx: HostContext, ui: FeatureUi<typeof manifest>, petId: IslandPetId) {
   const url = PET_SPRITES[petId]
   const face = FACES[petId]
   if (url === undefined || face === undefined) throw new Error(`dsh-deepcraft-island: "${petId}" carries no sprite or face`)
@@ -95,7 +114,9 @@ export function createIslandMascot(ctx: HostContext, ui: FeatureUi<typeof manife
     scale: SPRITE_EDGE / SPRITE_PX,
     petId,
     extras: ['waving', 'jumping'],
-    decorate(_sprite, strip) {
+    decorate(sprite, strip) {
+      // A skin may stand inside its stage smaller than the frame (boli).
+      if (face.imageScale !== undefined) sprite.style.setProperty('--dsh-deepcraft-island-image-scale', `${face.imageScale}`)
       // The face is drawn over the sprite it belongs to, in the sprite's own
       // coordinates: the eye dots sit inside a box spanning both pupils.
       const eyes = buildElement('span', 'dsh-deepcraft-island-eyes')
