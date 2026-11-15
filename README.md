@@ -42,7 +42,7 @@ Cindy 的暖象牙与近黑画布、墨水色阶文字、黑白反转主按钮�
 
 ### 宠物
 
-- 输入区上的宠物只有一项选择，不随配色或标识变化：默认 Whaledou，也可以换成随插件发布的九只岛屿伙伴——开源应用 Cindy 的 Cindy、Annie、Black Cat、Boli、Chaku、Erika、Muffin、Tarara 与 Apple Girl 原画（Apache-2.0）——或 Petdex 宠物库里的其他角色，或关闭；可设成只出现在首页。
+- 输入区上的宠物只有一项选择，不随配色或标识变化：默认 Whaledou，也可以换成随插件发布的十只岛屿伙伴——开源应用 Cindy 的 Cindy、Annie、Black Cat、Boli、Chaku、Erika、Muffin、Pululu、Tarara 与 Apple Girl 原画（Apache-2.0）——或 Petdex 宠物库里的其他角色，或关闭；可设成只出现在首页。
 - 设置页的「聊天框宠物包」接受包含 `pet.json` 与图集的文件夹、ZIP 或 Petdex 链接，原文件字节不改动。宠物原画由 Petdex 与各包作者提供，不随本插件发布。
 
 ### 子代理模型

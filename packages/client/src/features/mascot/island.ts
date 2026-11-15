@@ -21,7 +21,7 @@ import type manifest from './mascot.manifest'
  */
 
 /** The pet ids the settings page and `chatPet` write for the shipped island characters. */
-export const ISLAND_PETS = ['cindy', 'annie', 'blackcat', 'boli', 'chaku', 'erika', 'muffin', 'tarara', 'whitesnow'] as const
+export const ISLAND_PETS = ['cindy', 'annie', 'blackcat', 'boli', 'chaku', 'erika', 'muffin', 'pululu', 'tarara', 'whitesnow'] as const
 
 /** The pet id of the reference character, kept for callers that name it directly. */
 export const ISLAND_PET_CINDY: IslandPetId = 'cindy'
@@ -61,7 +61,7 @@ const BEATS: Readonly<Record<string, number>> = {
  * The character's face: the dot centres and sizes the island source states
  * (AgentIslandSection's per-skin table), as fractions of the 128px sprite.
  * `left`/`right` are the eye centres; `imageScale` is the sprite's own scale
- * inside its stage.
+ * inside its stage. Pululu paints its whole face and gets a `null` entry.
  */
 interface IslandFace {
   eyeColor: string
@@ -73,7 +73,7 @@ interface IslandFace {
   imageScale?: number
 }
 
-const FACES: Readonly<Record<IslandPetId, IslandFace>> = {
+const FACES: Readonly<Record<IslandPetId, IslandFace | null>> = {
   cindy: { eyeColor: 'rgb(107 61 50)', leftX: 6.71 / 16, rightX: 9.3 / 16, eyeY: 9.5 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
   blackcat: { eyeColor: 'rgb(253 207 69)', leftX: 5.95 / 16, rightX: 10.05 / 16, eyeY: 9.05 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
   erika: { eyeColor: 'rgb(135 93 66)', leftX: 6.84 / 16, rightX: 9.16 / 16, eyeY: 10.75 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
@@ -83,6 +83,7 @@ const FACES: Readonly<Record<IslandPetId, IslandFace>> = {
   annie: { eyeColor: 'rgb(174 33 70)', leftX: 6.31 / 16, rightX: 9.56 / 16, eyeY: 11.69 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
   chaku: { eyeColor: 'rgb(253 207 69)', leftX: 6.19 / 16, rightX: 9.69 / 16, eyeY: 9.69 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
   muffin: { eyeColor: 'black', leftX: 5.56 / 16, rightX: 10.56 / 16, eyeY: 9.31 / 16, eyeRx: 0.585 / 16, eyeRy: 0.98 / 16 },
+  pululu: null,
 }
 
 function sheet(key: string): MascotSheet {
@@ -115,22 +116,25 @@ export function createIslandMascot(ctx: HostContext, ui: FeatureUi<typeof manife
     petId,
     extras: ['waving', 'jumping'],
     decorate(sprite, strip) {
-      // A skin may stand inside its stage smaller than the frame (boli).
-      if (face.imageScale !== undefined) sprite.style.setProperty('--dsh-deepcraft-island-image-scale', `${face.imageScale}`)
-      // The face is drawn over the sprite it belongs to, in the sprite's own
-      // coordinates: the eye dots sit inside a box spanning both pupils.
-      const eyes = buildElement('span', 'dsh-deepcraft-island-eyes')
-      eyes.style.setProperty('--dsh-deepcraft-island-eye-x', `${face.leftX - face.eyeRx}`)
-      eyes.style.setProperty('--dsh-deepcraft-island-eye-y', `${face.eyeY - face.eyeRy}`)
-      eyes.style.setProperty('--dsh-deepcraft-island-eye-w', `${face.rightX - face.leftX + face.eyeRx * 2}`)
-      eyes.style.setProperty('--dsh-deepcraft-island-eye-h', `${face.eyeRy * 2}`)
-      eyes.style.setProperty('--dsh-deepcraft-island-eye-color', face.eyeColor)
-      for (const side of ['left', 'right']) {
-        const dot = buildElement('span', `dsh-deepcraft-island-eye dsh-deepcraft-island-eye-${side}`)
-        dot.style.setProperty('--dsh-deepcraft-island-eye-width', `${face.eyeRx * 2}`)
-        eyes.appendChild(dot)
+      // A skin may stand inside its stage smaller than the frame (boli), and a
+      // skin that paints its own whole face (pululu) takes no eye dots.
+      if (face?.imageScale !== undefined) sprite.style.setProperty('--dsh-deepcraft-island-image-scale', `${face.imageScale}`)
+      if (face !== null) {
+        // The face is drawn over the sprite it belongs to, in the sprite's own
+        // coordinates: the eye dots sit inside a box spanning both pupils.
+        const eyes = buildElement('span', 'dsh-deepcraft-island-eyes')
+        eyes.style.setProperty('--dsh-deepcraft-island-eye-x', `${face.leftX - face.eyeRx}`)
+        eyes.style.setProperty('--dsh-deepcraft-island-eye-y', `${face.eyeY - face.eyeRy}`)
+        eyes.style.setProperty('--dsh-deepcraft-island-eye-w', `${face.rightX - face.leftX + face.eyeRx * 2}`)
+        eyes.style.setProperty('--dsh-deepcraft-island-eye-h', `${face.eyeRy * 2}`)
+        eyes.style.setProperty('--dsh-deepcraft-island-eye-color', face.eyeColor)
+        for (const side of ['left', 'right']) {
+          const dot = buildElement('span', `dsh-deepcraft-island-eye dsh-deepcraft-island-eye-${side}`)
+          dot.style.setProperty('--dsh-deepcraft-island-eye-width', `${face.eyeRx * 2}`)
+          eyes.appendChild(dot)
+        }
+        strip.appendChild(eyes)
       }
-      strip.appendChild(eyes)
       // Three sparkles for the win: the stylesheet times them apart.
       for (let at = 0; at < 3; at++) {
         const sparkle = buildElement('span', 'dsh-deepcraft-island-sparkle')

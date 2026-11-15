@@ -279,6 +279,10 @@
     "zh": "苹果少女",
     "en": "Apple Girl"
   },
+  "petIsland_pululu": {
+    "zh": "Pululu",
+    "en": "Pululu"
+  },
   "fontHarmony": { "zh": "HarmonyOS Sans SC", "en": "HarmonyOS Sans SC" },
   "fontUiTitle": { "zh": "界面字体", "en": "Interface font" },
   "fontUiDesc": { "zh": "侧栏、按钮和设置页的字体；正文字号和行高仍取宿主。", "en": "The sidebar, buttons and settings page; sizes and line heights stay the host's." },

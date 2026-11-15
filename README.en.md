@@ -42,7 +42,7 @@ Cindy's warm ivory and near-black canvas, ink-ladder text, the inverted monochro
 
 ### Pets
 
-- The pet standing on the input area is one choice, changed by neither palette nor brand: Whaledou by default, or one of the nine island companions shipped with the plugin — Cindy, Annie, Black Cat, Boli, Chaku, Erika, Muffin, Tarara and Apple Girl, drawn for the open-source app Cindy (Apache-2.0) — or another character from the Petdex library through "Chat pet package", or off — and it can be kept to the home page.
+- The pet standing on the input area is one choice, changed by neither palette nor brand: Whaledou by default, or one of the ten island companions shipped with the plugin — Cindy, Annie, Black Cat, Boli, Chaku, Erika, Muffin, Pululu, Tarara and Apple Girl, drawn for the open-source app Cindy (Apache-2.0) — or another character from the Petdex library through "Chat pet package", or off — and it can be kept to the home page.
 - "Chat pet package" in the settings page takes a complete package — a folder, a ZIP or a Petdex link holding `pet.json` and an atlas — keeping the original bytes. The pet art belongs to Petdex and each package's author and is not shipped with this plugin.
 
 ### Subagent models
