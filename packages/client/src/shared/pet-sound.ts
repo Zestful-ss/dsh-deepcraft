@@ -1,7 +1,7 @@
 import { PET_SOUND_EVENTS } from '@dsh-deepcraft/contracts/pet-sound'
 import type { PetSoundAnswer, PetSoundEvent, PetSoundState } from '@dsh-deepcraft/contracts/pet-sound'
 import { PET_SOUNDS_PATH, PET_SOUND_FILE_PATH } from '@dsh-deepcraft/contracts/routes'
-import { changeJson, readJson } from './host-json'
+import { changeJson, createWriteLane, readJson } from './host-json'
 import { notifyAll } from '@dsh-deepcraft/engine/notify'
 
 /**
@@ -19,7 +19,7 @@ let generation = 0
 const listeners: ((sounds: PetSounds) => void)[] = []
 
 /** A write still in flight answers after a read that started before it: reads wait on it, same as brand/wallpaper. */
-let inFlightChange: Promise<unknown> | null = null
+const lane = createWriteLane()
 
 /** The sounds in hand (live object; treat as read-only). */
 export function readPetSounds() {
@@ -43,7 +43,8 @@ export function subscribePetSounds(listener: (sounds: PetSounds) => void) {
 
 /** Read the host half's status once per arming; a host half that does not answer leaves no custom sound. */
 export function loadPetSounds(): void {
-  if (inFlightChange !== null) { void inFlightChange.then(loadPetSounds, loadPetSounds); return }
+  const busy = lane.busy()
+  if (busy !== null) { void busy.then(loadPetSounds, loadPetSounds); return }
   if (requested) return
   requested = true
   const at = ++generation
@@ -72,13 +73,10 @@ function adopt(answer: PetSoundAnswer, at: number) {
  */
 function change(event: PetSoundEvent, init: RequestInit) {
   const at = ++generation
-  const work = (inFlightChange ?? Promise.resolve()).then(() => changeJson<PetSoundAnswer>(`${PET_SOUND_FILE_PATH}?event=${event}`, init))
+  return lane.run(() => changeJson<PetSoundAnswer>(`${PET_SOUND_FILE_PATH}?event=${event}`, init))
     .then(answer => { adopt(answer, at) })
-  inFlightChange = work.finally(() => {
-    if (inFlightChange === work) inFlightChange = null
-  })
-  return work
 }
+
 
 /** Replace one event's custom sound with a file the reader picked; the content type names its format. */
 export function uploadPetSound(event: PetSoundEvent, file: File) {

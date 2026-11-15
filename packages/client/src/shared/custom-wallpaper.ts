@@ -1,5 +1,5 @@
+import { changeJson, createWriteLane, readJson } from './host-json'
 import { WALLPAPER_FILE_ROUTE, WALLPAPER_ROUTE } from '../constants'
-import { changeJson, readJson } from './host-json'
 import type { WallpaperAnswer, WallpaperState } from '@dsh-deepcraft/contracts/wallpaper'
 import { notifyAll } from '@dsh-deepcraft/engine/notify'
 
@@ -59,7 +59,8 @@ export function loadWallpaper(fresh = false): Promise<WallpaperFile | null> {
   // A write still in flight answers after a read that started before it:
   // ordering by send lets the read's stale answer win for good, so the read
   // waits for the write first.
-  if (inFlightChange !== null) return inFlightChange.then(() => loadWallpaper(fresh), () => loadWallpaper(fresh))
+  const busy = lane.busy()
+  if (busy !== null) return busy.then(() => loadWallpaper(fresh), () => loadWallpaper(fresh))
   if (requested && !fresh) return Promise.resolve(file)
   requested = true
   const at = ++generation
@@ -68,18 +69,14 @@ export function loadWallpaper(fresh = false): Promise<WallpaperFile | null> {
 }
 
 /** A PUT/DELETE the route has not answered yet; reads wait on it. */
-let inFlightChange: Promise<WallpaperFile | null> | null = null
+const lane = createWriteLane()
 
 /** One change through the file route: `PUT` the bytes, `DELETE` removes them. */
 function change(init: RequestInit) {
   const at = ++generation
-  const work = changeJson<WallpaperAnswer>(WALLPAPER_FILE_ROUTE, init)
-    .then(answer => adopt(answer, at))
-  inFlightChange = work.finally(() => {
-    if (inFlightChange === work) inFlightChange = null
-  })
-  return work
+  return lane.run(() => changeJson<WallpaperAnswer>(WALLPAPER_FILE_ROUTE, init)).then(answer => adopt(answer, at))
 }
+
 
 /** Replace the wallpaper with a file the reader picked; the content type names its format. */
 export function uploadWallpaper(picked: File) {

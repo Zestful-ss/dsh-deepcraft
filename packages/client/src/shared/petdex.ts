@@ -27,6 +27,8 @@ export interface PetLibrary {
 let library: PetLibrary = { pets: [], invalid: [] }
 const listeners: ((library: PetLibrary) => void)[] = []
 let loading: Promise<PetLibrary> | null = null
+/** Bumped by every write (adoptPet), so a whole-list read that raced one is dropped. */
+let generation = 0
 
 /** The library in hand (live object; treat as read-only). */
 export function readPetLibrary() {
@@ -49,6 +51,8 @@ function adopt(next: PetLibrary) {
 
 /** Add or replace one descriptor the host answered with, keeping the rest of the list. */
 function adoptPet(pet: PetDescriptor) {
+  // A write landed: a whole-list snapshot read before it is stale.
+  generation++
   const pets = library.pets.filter(item => item.id !== pet.id)
   pets.push(pet)
   pets.sort((a, b) => a.id.localeCompare(b.id))
@@ -66,11 +70,14 @@ async function refusal(response: Response) {
 export function loadPetLibrary(force = false): Promise<PetLibrary> {
   if (loading !== null) return loading
   if (!force && library.pets.length > 0) return Promise.resolve(library)
+  const at = generation
   loading = fetch(PETS_ROUTE, { headers: { accept: 'application/json' } })
     .then(async (response) => {
       if (!response.ok) throw await refusal(response)
       const body = await response.json() as { pets?: PetDescriptor[], invalid?: PetLibraryError[] }
-      adopt({ pets: body.pets ?? [], invalid: body.invalid ?? [] })
+      // An install landing while this read was in flight wins: the snapshot
+      // it answers predates the new package and must not erase it.
+      if (at === generation) adopt({ pets: body.pets ?? [], invalid: body.invalid ?? [] })
       return library
     })
     .finally(() => {

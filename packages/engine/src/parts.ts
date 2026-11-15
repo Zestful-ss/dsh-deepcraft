@@ -44,6 +44,9 @@ export interface PartsVocabulary extends PartsTableVocabulary {
 /** The vocabulary the current generation installed, or null before one did. */
 let adopted: PartsVocabulary | null = null
 
+/** The generation whose marks are on the page; a stale teardown never clears a newer one's (D9). */
+let partsGeneration = 0
+
 /**
  * The vocabulary, or a refusal: the marking pass writes the skin's own
  * attributes, so a pass running before the hand-over is a wiring mistake.
@@ -356,6 +359,7 @@ export function installParts(next: PartsVocabulary, onMarked?: () => void) {
   HELD_SELECTOR = holdRelations(next).map((relation) => relation.held).join(', ')
   HOLD_ATTRIBUTES = new Set(holdRelations(next).flatMap((relation) => relation.attributes))
   const settle = () => { if (onMarked !== undefined) onMarked() }
+  const mine = ++partsGeneration
   if (walk(document.body, [], null)) settle()
   const stop = subscribeMutations(document.body, {
     childList: true,
@@ -403,6 +407,6 @@ export function installParts(next: PartsVocabulary, onMarked?: () => void) {
   })
   return () => {
     stop()
-    clearParts()
+    if (mine === partsGeneration) clearParts()
   }
 }

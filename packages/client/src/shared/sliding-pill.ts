@@ -91,6 +91,9 @@ export function createSlidingPill(activeSelector: string) {
     const fresh = !next.hasAttribute(PILL_ATTR)
     if (fresh) {
       measure(next)
+      // place consumed this reading at once: leaving `taken` armed would let
+      // the next sync reuse it instead of measuring the layout it renders in.
+      taken = false
       measured = reading
     }
     if (measured === null) {

@@ -309,13 +309,13 @@ export function registerSubagentChoice(ctx: DshContext, config: unknown, store: 
       },
     })
   }
-  /** Run one registration inside this generation, dropping its answer with it. */
-  const within = (register: () => (() => void) | undefined) => {
-    if (typeof ctx.effect !== 'function') {
+  /** Run one registration inside the generation `scope` names, dropping its answer with it. */
+  const within = (scope: DshContext, register: () => (() => void) | undefined) => {
+    if (typeof scope.effect !== 'function') {
       register()
       return
     }
-    ctx.effect(() => {
+    scope.effect(() => {
       const stop = register()
       return () => {
         if (typeof stop === 'function') stop()
@@ -325,10 +325,10 @@ export function registerSubagentChoice(ctx: DshContext, config: unknown, store: 
   // Each waits on its own service: a host without prompts still gets the rule,
   // and one without tools still gets the sentence.
   if (typeof ctx.inject === 'function') {
-    ctx.inject(['tools'], () => { within(installGuard) })
-    ctx.inject(['systemPrompt'], () => { within(installPrompt) })
+    ctx.inject(['tools'], (scope) => { within(scope, installGuard) })
+    ctx.inject(['systemPrompt'], (scope) => { within(scope, installPrompt) })
     return
   }
-  within(installGuard)
-  within(installPrompt)
+  within(ctx, installGuard)
+  within(ctx, installPrompt)
 }

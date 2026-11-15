@@ -17,6 +17,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 - 修复壁纸与品牌图的并发写竞态：上传壁纸时并发读到旧状态会永久盖回界面，品牌标志与文字标志的快写会让后到的响应丢掉先到的成功；两项写现在都串行化。同时让图像壁纸的可见度与模糊滑杆拖动即时预览，不再等到松手提交。
 - 修复若干界面行为：删除会话的确认卡不再失去锚点定位，重载时随功能一并关闭且异步回调不再撤销下一张卡；子代理模型在无会话页面的挂起读取不再落回旧路由，规则开关随主开关一起禁用；品牌名称输入框按 Esc 不再把取消的草稿当提交；ds-bot 返回操作在功能拆除后不再触发整页重载，页脚行被替换后能重新发现。
 - 修复三个会话与品牌界面的边界问题:置顶与最近会话的分区标题随语言切换重绘,不再停留在安装时的语言;子代理模型卡片在其触发按钮被卸载(会话切换等)时随之关闭,不再留下无主悬浮卡;品牌图与壁纸的读操作排在仍在途的写之后,热重载期间的读不再用旧快照盖回刚上传的图片。
+- 修复若干并发与生命周期问题：壁纸、品牌图与宠物音效的写入车道在一次上传后不再让页面卡死、一次拒绝不再毒化后续写入；宠物图库的整表刷新不再抹掉同时完成的安装；设置写入在存储故障后不再永久叠加草稿值；外观标记的卸载不再清掉下一代刚写的属性；匹配观察现在能听到仅靠属性翻转产生的匹配；主机资源在一次读取失败后恢复待命，子代理模型选择的提示与工具注册随注入代际卸载。
 
 <h3 id="en-unreleased">New Features</h3>
 
@@ -29,6 +30,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 - Fix the concurrent-write races on wallpaper and brand images: a read during an upload could permanently paint the old state, and two fast brand mutations could drop the first success — writes are serialized now. The image wallpaper's visibility and blur sliders also preview live while dragging instead of only on release.
 - Fix several surface behaviors: the delete-conversation card keeps its anchored positioning, closes with the feature on reload, and a late async reply no longer unregisters the next card; the subagent panel stops landing stale routes on a session-less page and the rule switch disables with its master; Escape in the brand name field no longer commits the cancelled draft; the ds-bot return action no longer reloads a page after teardown, and footer replacement is rediscovered.
 - Fix three session/brand surface edge cases: the pinned and recent block headings repaint on a locale switch instead of keeping the install-time language; the subagent model card closes when its trigger unmounts (session switch and similar) instead of floating ownerless; brand-image and wallpaper reads queue behind in-flight writes, so a reload-time read no longer paints a stale snapshot over a just-uploaded image.
+- Fix several concurrency and lifecycle issues: the wallpaper, brand-image and pet-sound write lanes no longer freeze the page after one upload and a refusal no longer poisons later writes; a petdex whole-list refresh no longer erases an install that landed in flight; a settings write that hit a storage fault no longer overlays the drafted value forever; parts teardown no longer strips a newer generation's marks; match observation now hears matches created by an attribute flip alone; a host resource re-arms after a failed read, and the subagent model choice's prompt and tool registrations unload with the injected generation.
 
 ## [0.41.0] - 2026-11-15
 

@@ -34,7 +34,12 @@ export function createHostResource<T>(route: string, adopt: (data: HostAnswer) =
       .then(data => {
         const value = adopt(data)
         if (value !== undefined) notifyAll(listeners, value)
-      }, () => { /* the host half did not answer: the caller's defaults stay */ })
+      }, () => {
+        // The host half did not answer: the caller's defaults stay (D12), and
+        // the resource re-arms so a transient fault is retried on the next ask
+        // rather than never loaded for the page's life.
+        requested = false
+      })
   }
 
   /** Register a listener for the adoption; the returned call removes it. */

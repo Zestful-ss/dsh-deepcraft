@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 25,
+  "at": "2026-11-16",
+  "external": false,
+  "zh": "修复若干并发与生命周期问题：壁纸、品牌图与宠物音效的写入车道在一次上传后不再让页面卡死、一次拒绝不再毒化后续写入；宠物图库的整表刷新不再抹掉同时完成的安装；设置写入在存储故障后不再永久叠加草稿值；外观标记的卸载不再清掉下一代刚写的属性；匹配观察现在能听到仅靠属性翻转产生的匹配；主机资源在一次读取失败后恢复待命，子代理模型选择的提示与工具注册随注入代际卸载。",
+  "en": "Fix several concurrency and lifecycle issues: the wallpaper, brand-image and pet-sound write lanes no longer freeze the page after one upload and a refusal no longer poisons later writes; a petdex whole-list refresh no longer erases an install that landed in flight; a settings write that hit a storage fault no longer overlays the drafted value forever; parts teardown no longer strips a newer generation's marks; match observation now hears matches created by an attribute flip alone; a host resource re-arms after a failed read, and the subagent model choice's prompt and tool registrations unload with the injected generation."
+}

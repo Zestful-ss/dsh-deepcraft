@@ -188,17 +188,29 @@ export function createSettingsBinding(options: SettingsBindingOptions) {
           return false
         }
         if (typeof pending === 'boolean' || pending === undefined) return typeof pending === 'boolean' ? pending : true
-        return pending.then((ok: unknown) => ok === true)
+        // A storage fault mid-write rejects set(): the write did not land, so
+        // the chain answers refused and the re-read restores the stored value.
+        return pending.then((ok: unknown) => ok === true, () => false)
       }
       let run = Promise.resolve(true)
       for (const key of Object.keys(patch)) run = run.then(step(key))
-      return run.then(accepted => {
-        release(generation)
-        // Refused (a stale revision, or a field this Config does not carry):
-        // re-read rather than guess.
-        read()
-        return accepted
-      })
+      return run.then(
+        accepted => {
+          release(generation)
+          // Refused (a stale revision, or a field this Config does not carry):
+          // re-read rather than guess.
+          read()
+          return accepted
+        },
+        error => {
+          // A storage fault mid-write rejects `set()`: release the held fields
+          // too, or every read keeps overlaying the value we hoped for (the
+          // same stale-write stomp `held` exists to prevent, made permanent).
+          release(generation)
+          read()
+          throw error
+        },
+      )
     },
 
     /** Release the form and directory subscriptions this binding opened. */

@@ -164,7 +164,14 @@ export function createSubagentModelStore(ctx: DshContext, log: { warn?(message: 
     const spec = domainSpec(zod)
     for (let attempt = 0; attempt < REOPEN_ATTEMPTS; attempt++) {
       try {
-        domain = await facility.open(spec)
+        const handle = await facility.open(spec)
+        if (disposed) {
+          // The generation ended while the open was in flight: the handle it
+          // just handed over belongs to nobody until it is closed here.
+          void handle.close().catch(() => {})
+          return
+        }
+        domain = handle
         owned = true
         failure = null
         return

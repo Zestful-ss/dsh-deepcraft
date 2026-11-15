@@ -27,3 +27,31 @@ export function changeJson<A extends Answer>(route: string, init: RequestInit): 
       return answer
     }))
 }
+
+/**
+ * One shared write lane (D75): `send` runs after the previous write settles,
+ * so two answers never land out of order. A refusal rejects the caller's
+ * promise but lets the next write through instead of poisoning the lane, and
+ * the lane clears only its own settled promise — comparing the entry against
+ * the work promise itself would leave a dead one armed and every read waiting
+ * on it forever.
+ */
+export function createWriteLane() {
+  let inFlight: Promise<unknown> | null = null
+  return {
+    /** Whether a write is still in flight; reads queue behind it. */
+    busy(): Promise<unknown> | null {
+      return inFlight
+    },
+    /** Run `send` after the previous write, keeping the caller's promise's own outcome. */
+    run<T>(send: () => Promise<T>): Promise<T> {
+      const work = (inFlight ?? Promise.resolve()).then(send, send)
+      const settled = work.then(() => undefined, () => undefined)
+      settled.then(() => {
+        if (inFlight === settled) inFlight = null
+      })
+      inFlight = settled
+      return work
+    },
+  }
+}

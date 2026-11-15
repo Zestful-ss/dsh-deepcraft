@@ -1,7 +1,7 @@
 import { BRAND_IMAGE_KINDS } from '@dsh-deepcraft/contracts/brand'
 import type { BrandAnswer, BrandImageKind, BrandImageState } from '@dsh-deepcraft/contracts/brand'
 import { BRAND_MARK_ROUTE, BRAND_ROUTE, BRAND_WORDMARK_ROUTE } from '../constants'
-import { changeJson, readJson } from './host-json'
+import { changeJson, createWriteLane, readJson } from './host-json'
 import { notifyAll } from '@dsh-deepcraft/engine/notify'
 
 /**
@@ -43,11 +43,12 @@ export function subscribeBrandImages(listener: (images: BrandImages) => void) {
 }
 
 /** A write still in flight answers after a read that started before it: reads wait on it, same as the wallpaper's. */
-let inFlightChange: Promise<unknown> | null = null
+const lane = createWriteLane()
 
 /** Read the host half's status once per arming; a host half that does not answer leaves no custom image. */
 export function loadBrandImages(): void {
-  if (inFlightChange !== null) { void inFlightChange.then(loadBrandImages, loadBrandImages); return }
+  const busy = lane.busy()
+  if (busy !== null) { void busy.then(loadBrandImages, loadBrandImages); return }
   if (requested) return
   requested = true
   const at = ++generation
@@ -102,12 +103,7 @@ function measure(kind: BrandImageKind, state: BrandImageState | null): Promise<B
  */
 function change(kind: BrandImageKind, init: RequestInit) {
   const at = ++generation
-  const work = (inFlightChange ?? Promise.resolve()).then(() => changeJson<BrandAnswer>(ROUTES[kind], init))
-    .then(answer => adopt(answer, at))
-  inFlightChange = work.finally(() => {
-    if (inFlightChange === work) inFlightChange = null
-  })
-  return work
+  return lane.run(() => changeJson<BrandAnswer>(ROUTES[kind], init)).then(answer => adopt(answer, at))
 }
 
 /** Replace one image with a file the reader picked; the content type names its format. */

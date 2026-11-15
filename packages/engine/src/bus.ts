@@ -207,7 +207,7 @@ function registryFor(selector: string): MatchRegistry {
     // match — and the check on them is one `matches` per topmost added node.
     stop: () => {},
   }
-  registry.stop = subscribeMutations(document.body, { childList: true, subtree: true }, records => {
+  registry.stop = subscribeMutations(document.body, { childList: true, subtree: true, attributes: true }, records => {
     let changed = false
     // The batch is one frame of the host's mounting, and a subtree usually
     // arrives with its own children in the same batch: the additions are
@@ -237,6 +237,15 @@ function registryFor(selector: string): MatchRegistry {
         registry.items.add(found[index])
         changed = true
       }
+    }
+    // An attribute flip can create or end a match in place: the target is
+    // re-asked rather than assumed to stand by its child list alone.
+    for (const record of records) {
+      if (record.type !== 'attributes' || !(record.target instanceof Element)) continue
+      const target = record.target
+      if (registry.items.has(target)) {
+        if (!target.matches(selector)) { registry.items.delete(target); changed = true }
+      } else if (target.matches(selector)) { registry.items.add(target); changed = true }
     }
     if (changed) registry.ordered = null
   })
