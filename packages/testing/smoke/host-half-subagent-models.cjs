@@ -57,7 +57,7 @@ function request(method, url, body, headers = { host: '127.0.0.1:3080' }) {
   emitter.method = method
   emitter.url = url
   emitter.headers = headers
-  emitter.socket = { remoteAddress: '127.0.0.1' }
+  emitter.socket = { remoteAddress: '127.0.0.1', end() {} }
   setImmediate(() => {
     if (body !== undefined) emitter.emit('data', Buffer.from(typeof body === 'string' ? body : JSON.stringify(body)))
     emitter.emit('end')
@@ -68,11 +68,13 @@ function request(method, url, body, headers = { host: '127.0.0.1:3080' }) {
 /** A response that records its status and parsed body. */
 function response() {
   const out = { status: 0, body: null }
+  const listeners = {}
   return {
     out,
     headersSent: false,
+    once(event, fn) { (listeners[event] ??= []).push(fn); return this },
     writeHead(status) { out.status = status; this.headersSent = true },
-    end(chunk) { if (chunk !== undefined) out.body = JSON.parse(Buffer.from(chunk).toString('utf8')) },
+    end(chunk) { if (chunk !== undefined) out.body = JSON.parse(Buffer.from(chunk).toString('utf8')); for (const fn of listeners.finish ?? []) fn() },
     destroy() {},
   }
 }
