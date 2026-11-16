@@ -47,6 +47,10 @@ export function petSoundRoutes(ctx: DshContext): { label: string, route: DshRout
     handler: (req: DshRequest, res: DshResponse) => {
       const event = eventOf(req)
       if (event === null) {
+        // The body arrives unread: the socket is ended gracefully once this
+        // answer is flushed, or its rest would meet the next request on the
+        // keep-alive connection (the media routes carry the same plug).
+        res.once('finish', () => setTimeout(() => req.socket.end(), 0))
         res.writeHead(400, { 'content-type': 'application/json' })
         res.end(JSON.stringify({ ok: false, error: 'unknown sound event' }))
         return

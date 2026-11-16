@@ -246,9 +246,16 @@ export function resolveSubagentSelection(ctx: DshContext, store: SubagentModelSt
     // that exists but cannot answer may hide a saved pick, and that is reported.
     if (read.kind === 'unavailable' && !read.permanent) return { kind: 'unavailable', detail: read.detail }
     const parentId = (current as DshSession).header?.parentSession
-    if (typeof parentId !== 'string' || parentId === '' || typeof sessions?.get !== 'function') return { kind: 'none' }
-    current = sessions.get(parentId)
-    if (current === undefined) return { kind: 'none' }
+    if (typeof parentId !== 'string' || parentId === '') return { kind: 'none' }
+    current = sessions?.get?.(parentId)
+    if (current !== undefined) continue
+    // A detached ancestor's session is gone, but its stored pick is not: the
+    // chain reads it before stopping — it is the last answer a link upward can
+    // give.
+    const stored = store.read(parentId)
+    if (stored.kind === 'routes') return { kind: 'routes', routes: stored.routes }
+    if (stored.kind === 'unavailable' && !stored.permanent) return { kind: 'unavailable', detail: stored.detail }
+    return { kind: 'none' }
   }
   return { kind: 'none' }
 }

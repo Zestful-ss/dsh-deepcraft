@@ -17,7 +17,7 @@
  * speak: none of those documents ships types, so the members this reader touches
  * are declared here.
  */
-import { existsSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 /** The ledger's document version this reader understands; anything else is ignored. */
@@ -92,8 +92,14 @@ export function addBuckets(target: Buckets, buckets: Partial<Buckets> | null | u
 export function readLedger(home: string): Map<string, DayBuckets> | null {
   // The cost meter is another plugin: no ledger means it is not installed.
   const file = join(home, 'storages', 'cost-meter', 'ledger.json')
-  if (!existsSync(file)) return null
-  const raw = readFileSync(file, 'utf8')
+  let raw: string
+  try {
+    raw = readFileSync(file, 'utf8')
+  } catch (error) {
+    // A file replaced mid-read reads as no ledger; any other failure travels.
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null
+    throw error
+  }
   let parsed: unknown
   try {
     parsed = JSON.parse(raw)

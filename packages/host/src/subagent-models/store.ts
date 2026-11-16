@@ -143,6 +143,10 @@ export function createSubagentModelStore(ctx: DshContext, log: { warn?(message: 
       return domain.table(TABLE_NAME)
     } catch (error) {
       failure = failureText(error)
+      // A fault on a handle this generation only adopted means the generation
+      // that opened it has closed: drop it, so the next warm opens a fresh one
+      // rather than reporting a dead handle forever.
+      if (!owned) domain = null
       return null
     }
   }
@@ -203,11 +207,16 @@ export function createSubagentModelStore(ctx: DshContext, log: { warn?(message: 
     }
     missing = false
     if (pending !== null) return
-    pending = open(facility).catch((error: unknown) => {
+    const attempt = open(facility).catch((error: unknown) => {
       // A rejected open is the store's own failure: recorded here, and reported
       // by every read and write that finds it.
       failure = failureText(error)
     })
+    // A settled attempt frees `pending` so a failed open is retried by the
+    // next warm; a successful one leaves `domain` set, and warm short-circuits
+    // on it before reaching here.
+    void attempt.then(() => { if (pending === attempt) pending = null })
+    pending = attempt
   }
 
   function read(sessionId: string): SubagentSelectionRead {
@@ -221,7 +230,15 @@ export function createSubagentModelStore(ctx: DshContext, log: { warn?(message: 
       // rather than treating the session as unchosen.
       return { kind: 'unavailable', detail: 'the selection store is still opening', permanent: false }
     }
-    const routes = routesOf(store.get(sessionId))
+    let row: unknown
+    try {
+      row = store.get(sessionId)
+    } catch (error) {
+      // A table fault here reports like an open one: the pick cannot be read,
+      // and the next warm retries the store itself.
+      return { kind: 'unavailable', detail: failureText(error), permanent: false }
+    }
+    const routes = routesOf(row)
     return routes.length === 0 ? { kind: 'none' } : { kind: 'routes', routes }
   }
 

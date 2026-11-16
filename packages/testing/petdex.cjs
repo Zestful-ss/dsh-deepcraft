@@ -28,7 +28,7 @@ const ROUTES = {
 const ROW = '.dsh-deepcraft-settings-row'
 const ROW_TITLE = '.dsh-deepcraft-settings-row-title'
 const TITLE = { chat: /聊天框宠物包|Chat pet package/, import: /导入宠物包|Import a pet package/ }
-const { sendPrompt, waitForTurn } = require('./prompt.cjs')
+const { sendPrompt, waitForTurn, PROMPT_HOST } = require('./prompt.cjs')
 
 /** The rows on the Appearance tab, in rank order. */
 const TAB = /^(外观|Appearance)$/
@@ -249,9 +249,22 @@ function petdexScenario({ check }) {
     async afterTurn({ page }) {
       // The first prompt's turn opened before the mascot reached the
       // conversation and followed the session, so its turn/start sat in feed
-      // history. A second turn on the followed session is the live event.
+      // history. A second turn on the followed session is the live event. The
+      // petdex card mounted on the conversation is the proof the mascot left
+      // the home stand and followed this session; `waitForTurn` alone would
+      // also settle while nothing but the first turn's tail exists, so the
+      // wait is on a NEW tail, not on any tail.
+      await page.waitForSelector('.dsh-deepcraft-petdex', { state: 'attached' })
+      const tailsBefore = await page.evaluate(
+        (selector) => document.querySelectorAll(selector).length,
+        PROMPT_HOST.turnTail,
+      )
       await page.evaluate(() => window.__petNotes?.splice(0))
       await sendPrompt(page, 'again')
+      await page.waitForFunction(
+        ({ selector, before }) => document.querySelectorAll(selector).length > before,
+        { selector: PROMPT_HOST.turnTail, before: tailsBefore },
+      )
       await waitForTurn(page)
       read.turnNotes = await page.evaluate(() => window.__petNotes?.splice(0) ?? null)
     },

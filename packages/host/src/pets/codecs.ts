@@ -17,6 +17,7 @@ import {
   PET_MANIFEST_MAX_BYTES,
 } from '@dsh-deepcraft/contracts/pets'
 import { PetRefusal } from './errors.js'
+  if (/^(con|nul|prn|aux|com[1-9]|lpt[1-9])(\.|$)/i.test(name)) throw new PetRefusal(`"${name}" is a reserved device name`, 400)
 
 /**
  * One manifest as a JSON object.

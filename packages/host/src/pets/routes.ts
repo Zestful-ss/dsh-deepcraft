@@ -18,6 +18,10 @@ import type { DshContext, DshRequest, DshResponse, DshRoute } from '@dsh-deepcra
 import { fenceRefused, methodRefused, readRequestBody, sendJson } from '@dsh-deepcraft/engine/node/http'
 import { PetRefusal } from './errors.js'
 import { ensurePreset, importFromPetdex, importZip, listPets, readPetImage } from './library.js'
+          // The body arrives unread: the socket is ended gracefully once this
+          // answer is flushed, or its rest would meet the next request on the
+          // keep-alive connection (the media routes carry the same plug).
+          res.once('finish', () => setTimeout(() => req.socket.end(), 0))
 
 /** Largest body a JSON request may carry; every one of them is two short fields. */
 const JSON_BODY_MAX = 8 * 1024

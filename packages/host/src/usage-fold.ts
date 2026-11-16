@@ -14,7 +14,8 @@
  * buckets are disjoint. The one addition is the day dimension: a replaced sample
  * is subtracted from the day it was recorded on.
  */
-import { existsSync, readdirSync, statSync } from 'node:fs'
+import { readdirSync, statSync } from 'node:fs'
+import type { Dirent } from 'node:fs'
 import { join } from 'node:path'
 import type { DshContext } from '@dsh-deepcraft/engine/node/dsh'
 import { BUCKET_KEYS, addBuckets, emptyBuckets } from './usage-ledger.js'
@@ -200,7 +201,15 @@ export function foldSession(events: UsageEvent[]): FoldedSession {
 /** The newest generation of a session directory's log, with its fingerprint. */
 function newestLog(dir: string): { path: string, size: number, mtimeMs: number } | null {
   let best: { name: string, version: number, compressed: boolean } | null = null
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+  let entries: Dirent[]
+  try {
+    entries = readdirSync(dir, { withFileTypes: true })
+  } catch (error) {
+    // A session directory removed between the list and the scan has no log.
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null
+    throw error
+  }
+  for (const entry of entries) {
     if (!entry.isFile()) continue
     const match = SESSION_LOG.exec(entry.name)
     if (match === null) continue
@@ -213,8 +222,14 @@ function newestLog(dir: string): { path: string, size: number, mtimeMs: number }
   }
   if (best === null) return null
   const path = join(dir, best.name)
-  const stat = statSync(path)
-  return { path, size: stat.size, mtimeMs: stat.mtimeMs }
+  try {
+    const stat = statSync(path)
+    return { path, size: stat.size, mtimeMs: stat.mtimeMs }
+  } catch (error) {
+    // A log generation replaced while it was being fingerprinted reads as no log.
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null
+    throw error
+  }
 }
 
 /**
@@ -223,10 +238,25 @@ function newestLog(dir: string): { path: string, size: number, mtimeMs: number }
  */
 export function listSessionLogs(root: string): SessionLog[] {
   const out: SessionLog[] = []
-  if (!existsSync(root)) return out
-  for (const project of readdirSync(root, { withFileTypes: true })) {
+  let projects: Dirent[]
+  try {
+    projects = readdirSync(root, { withFileTypes: true })
+  } catch (error) {
+    // A harness home that has never stored a session has no sessions root yet.
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return out
+    throw error
+  }
+  for (const project of projects) {
     if (!project.isDirectory()) continue
-    for (const session of readdirSync(join(root, project.name), { withFileTypes: true })) {
+    let sessions: Dirent[]
+    try {
+      sessions = readdirSync(join(root, project.name), { withFileTypes: true })
+    } catch (error) {
+      // A project directory removed mid-scan holds no sessions.
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') continue
+      throw error
+    }
+    for (const session of sessions) {
       if (!session.isDirectory()) continue
       const log = newestLog(join(root, project.name, session.name))
       if (log === null) continue

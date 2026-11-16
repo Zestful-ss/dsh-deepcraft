@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 22,
+  "at": "2026-11-16",
+  "external": false,
+  "zh": "修复宿主半边的一处路径逃逸与多处容错：宠物包的 spritesheetPath 不再能指到包目录之外，两个被提前拒绝的请求会收尾套接字而不是把剩余请求体留给下一个请求，已分离会话的子代理模型选择与选择存取在故障后可以重新打开，用量统计在文件或目录被途中移除时回退为本机汇总而不是报错，包文件名补齐对 Windows 保留设备名的检查。",
+  "en": "Fix one path escape and several host-half robustness faults: a pet package's spritesheetPath can no longer point outside its directory, two early-refused requests now end the socket instead of leaving their bodies for the next request, subagent picks survive a detached ancestor and the selection store reopens after a fault, the usage tally falls back to the local fold when a file or directory is removed mid-read, and package file names reject Windows reserved device names."
+}
