@@ -27,7 +27,9 @@ export interface ChunkSource {
  * bundle does. The element leaves the page once it has run.
  */
 function fetchFactory(url: string, packageName: string) {
-  return new Promise<ChunkFactory>((resolve, reject) => {
+  const { promise, resolve, reject } = Promise.withResolvers<ChunkFactory>()
+  let attempts = 0
+  const attach = () => {
     const script = document.createElement('script')
     script.src = url
     script.async = true
@@ -38,13 +40,19 @@ function fetchFactory(url: string, packageName: string) {
     }
     script.onerror = () => {
       script.remove()
-      // The route answers every chunk the build in lib/ wrote. A host still
-      // serving the bundle it read at boot asks for the chunks of the build
-      // before an update, which the update replaced.
-      reject(new Error(`${packageName}: the chunk ${url} failed to load; restart the host if the plugin was updated while it ran`))
+      // A page under load can drop a script fetch while the chunk still exists:
+      // it gets one retry before the feature is refused. The route answers
+      // every chunk the build in lib/ wrote; a host still serving the bundle
+      // it read at boot asks for the chunks of the build before an update,
+      // which the update replaced.
+      attempts += 1
+      if (attempts < 2) attach()
+      else reject(new Error(`${packageName}: the chunk ${url} failed to load; restart the host if the plugin was updated while it ran`))
     }
     document.head.appendChild(script)
-  })
+  }
+  attach()
+  return promise
 }
 
 /**
