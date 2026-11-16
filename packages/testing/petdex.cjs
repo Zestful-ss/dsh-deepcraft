@@ -230,14 +230,21 @@ function petdexScenario({ check }) {
         }
       })()`
       await page.evaluate(spyNotes)
-      await page.locator('.dsh-deepcraft-settings-pet-sound-row').nth(0).locator('button').first().click()
-      await page.waitForTimeout(150)
+      const previewButton = page.locator('.dsh-deepcraft-settings-pet-sound-row').nth(0).locator('button').first()
+      await previewButton.click()
+      // The fixed nap raced a slow render or audio start on a loaded runner;
+      // and a click that lands before the just-written pick re-renders plays
+      // 'off' and stays silent — press again once the spy still heard nothing.
+      await page.waitForFunction(() => (window.__petNotes ?? []).length >= 2, null, { timeout: 10000 }).catch(async () => {
+        await previewButton.click()
+        await page.waitForFunction(() => (window.__petNotes ?? []).length >= 2, null, { timeout: 10000 }).catch(() => {})
+      })
       read.previewNotes = await page.evaluate(() => window.__petNotes.splice(0))
       await openHome(page, url)
       // A navigation takes the spy with it: arm the home page fresh.
       await page.evaluate(spyNotes)
       await page.locator('.dsh-deepcraft-petdex-hit').first().click()
-      await page.waitForTimeout(150)
+      await page.waitForFunction(() => (window.__petNotes ?? []).length >= 2, null, { timeout: 10000 }).catch(() => {})
       read.pokeNotes = await page.evaluate(() => window.__petNotes.splice(0))
 
       // The library reports what was installed, with the original ids intact.

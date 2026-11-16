@@ -13,7 +13,8 @@ import {
 } from '../../shared/petdex'
 import { loadPetSounds, readPetSounds, subscribePetSounds, uploadPetSound, removePetSound } from '../../shared/pet-sound'
 import type { PetSoundEvent, PetSounds } from '../../shared/pet-sound'
-import { previewPetSound } from './pet-sound'
+import { readPrefs } from '../../core/prefs'
+import { playPetSound } from './pet-sound'
 import { PET_SOUND_CHOICES, PET_SOUND_CUSTOM, PET_SOUND_OFF } from '@dsh-deepcraft/contracts/prefs'
 import { PET_SOUND_EVENTS } from '@dsh-deepcraft/contracts/pet-sound'
 import type { Prefs } from '@dsh-deepcraft/contracts/prefs'
@@ -207,7 +208,7 @@ function PetSoundControl(view: SettingsRowView) {
         disabled: view.disabled || choice === PET_SOUND_OFF,
         'aria-label': copy('petSoundPreview', { event: copy(labelKey) }),
         title: copy('petSoundPreview', { event: copy(labelKey) }),
-        onClick: () => { previewPetSound(choice, event) },
+        onClick: () => { playPetSound(event, readPrefs()) },
       }, '▶'),
       choice !== PET_SOUND_CUSTOM ? null : React.createElement(React.Fragment, null,
         React.createElement('button', {
