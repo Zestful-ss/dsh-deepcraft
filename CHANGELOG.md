@@ -10,11 +10,13 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - 修复媒体上传按类型拒绝（415）时遗留的未读请求体：其余字节会在同一条 keep-alive 连接上混入下一个请求，现在与超限拒绝一样在应答冲刷后收尾套接字。
 - 修复删除确认卡的焦点行为：点按卡片外部关闭时焦点不再被拉回删除按钮，只有 Esc 或「取消」才把焦点交还触发它的行按钮。
+- 修复宿主半边的一处路径逃逸与多处容错：宠物包的 spritesheetPath 不再能指到包目录之外，两个被提前拒绝的请求会收尾套接字而不是把剩余请求体留给下一个请求，已分离会话的子代理模型选择与选择存取在故障后可以重新打开，用量统计在文件或目录被途中移除时回退为本机汇总而不是报错，包文件名补齐对 Windows 保留设备名的检查。
 
 <h3 id="en-unreleased">Bug Fixes</h3>
 
 - Fix the unread request body left behind by a media upload refused on type (415): its remaining bytes could bleed into the next request on the same keep-alive connection; the socket now ends after the answer flushes, as the oversized-file refusal already did.
 - Fix the delete confirmation's focus: closing it with an outside press no longer yanks focus back to the row's delete button; only Escape and the cancel button return focus to the trigger.
+- Fix one path escape and several host-half robustness faults: a pet package's spritesheetPath can no longer point outside its directory, two early-refused requests now end the socket instead of leaving their bodies for the next request, subagent picks survive a detached ancestor and the selection store reopens after a fault, the usage tally falls back to the local fold when a file or directory is removed mid-read, and package file names reject Windows reserved device names.
 
 ## [0.42.0] - 2026-11-16
 
