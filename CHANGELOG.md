@@ -9,10 +9,12 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 <h3 id="cn-unreleased">问题修复</h3>
 
 - 修复媒体上传按类型拒绝（415）时遗留的未读请求体：其余字节会在同一条 keep-alive 连接上混入下一个请求，现在与超限拒绝一样在应答冲刷后收尾套接字。
+- 修复删除确认卡的焦点行为：点按卡片外部关闭时焦点不再被拉回删除按钮，只有 Esc 或「取消」才把焦点交还触发它的行按钮。
 
 <h3 id="en-unreleased">Bug Fixes</h3>
 
 - Fix the unread request body left behind by a media upload refused on type (415): its remaining bytes could bleed into the next request on the same keep-alive connection; the socket now ends after the answer flushes, as the oversized-file refusal already did.
+- Fix the delete confirmation's focus: closing it with an outside press no longer yanks focus back to the row's delete button; only Escape and the cancel button return focus to the trigger.
 
 ## [0.42.0] - 2026-11-16
 
