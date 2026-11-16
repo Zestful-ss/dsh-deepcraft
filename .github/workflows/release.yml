@@ -44,11 +44,27 @@ jobs:
       - run: npm run smoke
       # The desktop player is native: this runner is the only one where the
       # official Windows build can be owned and its pid matched (D78).
+      - name: Read the newest host version
+        id: host-version
+        shell: pwsh
+        run: "version=$(node packages/testing/host-version.cjs) >> $env:GITHUB_OUTPUT"
+      - name: The global prefix npm writes into
+        shell: pwsh
+        run: "NPM_PREFIX=$(npm config get prefix) >> $env:GITHUB_ENV"
+      # The install of that prefix has wedged against the registry for twenty
+      # minutes at a stretch before: restore it by host version and only the
+      # first run after a host release pays it.
+      - uses: actions/cache@v6
+        id: harness-cache
+        with:
+          path: ${{ env.NPM_PREFIX }}
+          key: harness-${{ runner.os }}-${{ steps.host-version.outputs.version }}
       - name: Install the newest harness
+        if: steps.harness-cache.outputs.cache-hit != 'true'
         timeout-minutes: 10
         shell: pwsh
         run: |
-          $version = node packages/testing/host-version.cjs
+          $version = "${{ steps.host-version.outputs.version }}"
           # The registry has wedged this install past twenty minutes before,
           # and timeout-minutes does not reach a wedged child on this runner:
           # the shell bounds it and runs it once more on a stall or a failure.
