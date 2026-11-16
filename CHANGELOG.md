@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修复媒体上传按类型拒绝（415）时遗留的未读请求体：其余字节会在同一条 keep-alive 连接上混入下一个请求，现在与超限拒绝一样在应答冲刷后收尾套接字。
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Fix the unread request body left behind by a media upload refused on type (415): its remaining bytes could bleed into the next request on the same keep-alive connection; the socket now ends after the answer flushes, as the oversized-file refusal already did.
+
 ## [0.42.0] - 2026-11-16
 
 [中文](#cn-0.42.0) | [English](#en-0.42.0)
