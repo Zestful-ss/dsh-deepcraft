@@ -28,6 +28,7 @@ const ROUTES = {
 const ROW = '.dsh-deepcraft-settings-row'
 const ROW_TITLE = '.dsh-deepcraft-settings-row-title'
 const TITLE = { chat: /聊天框宠物包|Chat pet package/, import: /导入宠物包|Import a pet package/ }
+const { sendPrompt, waitForTurn } = require('./prompt.cjs')
 
 /** The rows on the Appearance tab, in rank order. */
 const TAB = /^(外观|Appearance)$/
@@ -202,11 +203,57 @@ function petdexScenario({ check }) {
       await openHome(page, url)
       read.chatBack = await waitForGuest(page, secondId)
 
+      // Pet sounds: four event rows with the full bundled set, a poke's own
+      // tone and the chime a turn opens with. The oscillator spy records each
+      // note the page synthesizes; splicing reads one stage at a time.
+      await openSettings(page)
+      read.soundSurface = await page.evaluate(() => ({
+        labels: [...document.querySelectorAll('.dsh-deepcraft-settings-pet-sound-label')].map(node => node.textContent),
+        options: [...document.querySelectorAll('.dsh-deepcraft-settings-pet-sound-select')].map(select => [...select.options].map(option => option.value)),
+      }))
+      await page.locator('.dsh-deepcraft-settings-pet-sound-select').nth(0).selectOption('ring-chime')
+      await page.locator('.dsh-deepcraft-settings-pet-sound-select').nth(1).selectOption('startup-chime')
+      const spyNotes = `(() => {
+        window.__petNotes = []
+        if (window.__petSpy) return
+        window.__petSpy = true
+        const createOscillator = AudioContext.prototype.createOscillator
+        const start = OscillatorNode.prototype.start
+        AudioContext.prototype.createOscillator = function () {
+          const osc = createOscillator.call(this)
+          // The tone assigns its frequency after creation: read at start.
+          osc.start = function () {
+            window.__petNotes.push(osc.frequency.value)
+            return start.apply(osc, arguments)
+          }
+          return osc
+        }
+      })()`
+      await page.evaluate(spyNotes)
+      await page.locator('.dsh-deepcraft-settings-pet-sound-row').nth(0).locator('button').first().click()
+      await page.waitForTimeout(150)
+      read.previewNotes = await page.evaluate(() => window.__petNotes.splice(0))
+      await openHome(page, url)
+      // A navigation takes the spy with it: arm the home page fresh.
+      await page.evaluate(spyNotes)
+      await page.locator('.dsh-deepcraft-petdex-hit').first().click()
+      await page.waitForTimeout(150)
+      read.pokeNotes = await page.evaluate(() => window.__petNotes.splice(0))
+
       // The library reports what was installed, with the original ids intact.
       read.library = await page.evaluate(async (route) => (await fetch(route)).json(), ROUTES.library)
       read.userHome = path.join(home, 'user', '.petdex', 'pets')
       read.stored = fs.existsSync(path.join(read.userHome, firstId, 'pet.json')) &&
         fs.existsSync(path.join(read.userHome, secondId, 'pet.json'))
+    },
+    async afterTurn({ page }) {
+      // The first prompt's turn opened before the mascot reached the
+      // conversation and followed the session, so its turn/start sat in feed
+      // history. A second turn on the followed session is the live event.
+      await page.evaluate(() => window.__petNotes?.splice(0))
+      await sendPrompt(page, 'again')
+      await waitForTurn(page)
+      read.turnNotes = await page.evaluate(() => window.__petNotes?.splice(0) ?? null)
     },
     async assert() {
       const first = read.first
@@ -237,6 +284,17 @@ function petdexScenario({ check }) {
         check('聊天位置的开关收起聊天宠物，随后重新出现',
           read.chatOff === null && read.chatBack?.id === 'e2e-whale',
           JSON.stringify({ off: read.chatOff, back: read.chatBack })),
+        check('宠物声音行列出全部四个事件与整套内置音色',
+          read.soundSurface?.labels?.length === 4 &&
+            read.soundSurface.options?.length === 4 && read.soundSurface.options.every((options) => options.includes('gem-collect') && options.includes('startup-chime')),
+          JSON.stringify(read.soundSurface)),
+        check('试听放出所选音色，点按宠物放出点按事件的音色',
+          Array.isArray(read.previewNotes) && read.previewNotes.length === 2 && read.previewNotes.every((n) => n === 932) &&
+            Array.isArray(read.pokeNotes) && read.pokeNotes.length === 2 && read.pokeNotes.every((n) => n === 932),
+          JSON.stringify({ preview: read.previewNotes, poke: read.pokeNotes })),
+        check('回合开始时放出自选的开场音色',
+          Array.isArray(read.turnNotes) && read.turnNotes.length === 3 && read.turnNotes.join(',') === '523,784,1047',
+          JSON.stringify(read.turnNotes)),
       ]
     },
   }

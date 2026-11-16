@@ -295,6 +295,46 @@
     "zh": "出错提醒",
     "en": "Error"
   },
+  "petSoundSelect": {
+    "zh": "点按互动",
+    "en": "Poke"
+  },
+  "petSoundStart": {
+    "zh": "回合开始",
+    "en": "Turn start"
+  },
+  "petSound_startup-chime": {
+    "zh": "开机铃",
+    "en": "Startup chime"
+  },
+  "petSound_ring-chime": {
+    "zh": "叮当",
+    "en": "Ring chime"
+  },
+  "petSound_item-found": {
+    "zh": "拾取",
+    "en": "Item found"
+  },
+  "petSound_gem-collect": {
+    "zh": "宝石",
+    "en": "Gem collect"
+  },
+  "petSound_item-fanfare": {
+    "zh": "物品号角",
+    "en": "Item fanfare"
+  },
+  "petSound_victory-fanfare": {
+    "zh": "胜利号角",
+    "en": "Victory fanfare"
+  },
+  "petSound_secret-chime": {
+    "zh": "秘音",
+    "en": "Secret chime"
+  },
+  "petSound_error-buzz": {
+    "zh": "出错嗡鸣",
+    "en": "Error buzz"
+  },
   "petSound_off": {
     "zh": "关闭",
     "en": "Off"

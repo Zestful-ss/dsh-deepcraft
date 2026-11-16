@@ -236,7 +236,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     if (root === null) root = build()
     if (signals === null) {
       stage.quietSince = Date.now()
-      signals = createMascotSignals(ctx, onMoment, refresh)
+      signals = createMascotSignals(ctx, onMoment, refresh, event => playPetSound(event, readPrefs()))
     }
     if (root.parentNode !== stand.element) stand.element.appendChild(root)
     anchorStamp.mark(stand.element, stand.place)
@@ -466,6 +466,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     const now = Date.now()
     if (stage.clicks.length > 0 && now - stage.clicks[stage.clicks.length - 1] > TICKLE_GAP_MS) stage.clicks = []
     stage.clicks.push(now)
+    playPetSound('select', readPrefs())
     if (stage.clicks.length >= TICKLE_CLICKS) {
       stage.clicks = []
       react('tickle', 'once')

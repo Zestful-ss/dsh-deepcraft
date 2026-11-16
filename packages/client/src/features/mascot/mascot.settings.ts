@@ -15,6 +15,8 @@ import { loadPetSounds, readPetSounds, subscribePetSounds, uploadPetSound, remov
 import type { PetSoundEvent, PetSounds } from '../../shared/pet-sound'
 import { previewPetSound } from './pet-sound'
 import { PET_SOUND_CHOICES, PET_SOUND_CUSTOM, PET_SOUND_OFF } from '@dsh-deepcraft/contracts/prefs'
+import { PET_SOUND_EVENTS } from '@dsh-deepcraft/contracts/pet-sound'
+import type { Prefs } from '@dsh-deepcraft/contracts/prefs'
 import { PET_SOUND_TYPES } from '@dsh-deepcraft/contracts/pet-sound'
 import type { PetLibrary } from '../../shared/petdex'
 import { ISLAND_PETS } from './island'
@@ -167,12 +169,27 @@ function PetSoundControl(view: SettingsRowView) {
   const pending = React.useRef<PetSoundEvent | null>(null)
   const [error, setError] = React.useState<string | null>(null)
 
-  function writePick(event: PetSoundEvent, value: string) {
-    view.write({ [event === 'error' ? 'petSoundError' : 'petSoundAttention']: value })
+  /** The pref key each event's pick lives under. */
+  const PREF_OF: Record<PetSoundEvent, keyof Prefs> = {
+    select: 'petSoundSelect',
+    start: 'petSoundStart',
+    attention: 'petSoundAttention',
+    error: 'petSoundError',
+  }
+  const LABEL_OF: Record<PetSoundEvent, CopyKey> = {
+    select: 'petSoundSelect',
+    start: 'petSoundStart',
+    attention: 'petSoundAttention',
+    error: 'petSoundError',
   }
 
-  function eventRow(event: PetSoundEvent, labelKey: CopyKey) {
-    const choice = event === 'error' ? view.prefs.petSoundError : view.prefs.petSoundAttention
+  function writePick(event: PetSoundEvent, value: string) {
+    view.write({ [PREF_OF[event]]: value } as Partial<Prefs>)
+  }
+
+  function eventRow(event: PetSoundEvent) {
+    const labelKey = LABEL_OF[event]
+    const choice = String(view.prefs[PREF_OF[event]])
     const stored = readPetSounds()[event]
     return React.createElement('div', { key: event, className: 'dsh-deepcraft-settings-pet-sound-row' },
       React.createElement('span', { className: 'dsh-deepcraft-settings-pet-sound-label' }, copy(labelKey)),
@@ -211,8 +228,7 @@ function PetSoundControl(view: SettingsRowView) {
 
   return React.createElement('div', { className: 'dsh-deepcraft-settings-pet-sound' },
     React.createElement('div', { className: 'dsh-deepcraft-settings-pet-sound-title' }, copy('petSounds')),
-    eventRow('attention', 'petSoundAttention'),
-    eventRow('error', 'petSoundError'),
+    PET_SOUND_EVENTS.map(event => eventRow(event)),
     React.createElement('input', {
       ref: fileInput,
       type: 'file',

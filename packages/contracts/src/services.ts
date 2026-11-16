@@ -310,6 +310,7 @@ export interface HostRemoteListAnswer {
  * adds another type is ignored by the reader, which compares the type first.
  */
 export type HostSessionEvent =
+  | { type: 'turn/start', data: { turn: number } }
   | { type: 'turn/end', data: { reason: { kind?: string } } }
   | { type: 'tool/result', data: { message: { isError?: boolean }, error?: { name?: string } } }
   | { type: 'compaction/start', data: { compactionId: string } }

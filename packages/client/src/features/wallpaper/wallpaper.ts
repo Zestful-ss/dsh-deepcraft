@@ -2,6 +2,7 @@ import { QUIET_ATTR, WALLPAPER_BUILTIN, WALLPAPER_MEDIA_ATTR, WALLPAPER_MOUNT_AT
 import { PALETTE_HOST } from '@dsh-deepcraft/contracts/prefs'
 import { WALLPAPERS } from 'virtual:dsh-deepcraft/generated'
 import { motionReduced, readPrefs, subscribePrefs } from '../../core/prefs'
+import { motionMs } from '../../shared/motion'
 import { loadWallpaper, readWallpaper, subscribeWallpaper } from '../../shared/custom-wallpaper'
 import { subscribeMutations } from '@dsh-deepcraft/engine/bus'
 import type { WallpaperFile } from '../../shared/custom-wallpaper'
@@ -32,6 +33,11 @@ const IMAGE_PROPERTY = '--dsh-deepcraft-wallpaper-image'
  * dials in with `wallpaperVisibility` sits in the same background as a
  * gradient layer above the image, and `wallpaperBlur` is baked into a canvas
  * copy of the file since a background cannot be filtered alone.
+ *
+ * A picture arriving over a painted one cross-fades: the outgoing picture
+ * holds a copy in the body's own layer while it fades out over the canvas,
+ * which already carries the new one — a background swap alone would flip
+ * whole-window in one frame.
  *
  * A video cannot be a background: it keeps the body's own layer at z-index -1,
  * and `data-dsh-deepcraft-wallpaper-media="video"` gates the stylesheet's
@@ -116,20 +122,71 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
       img.src = file.url
     })
 
-  /** Take both wallpaper surfaces down: the html canvas and the body's video layer. */
+  /**
+   * Show an outgoing picture one fade long, over the canvas already carrying
+   * the new one: the body's own layer sits above the html background, so the
+   * old picture dissolves into the new without a bare-canvas frame in
+   * between. A video mounts into the same layer, so a picture fading over it
+   * lands on top by document order. The element is a div and carries the
+   * picture as a background with the veil layered over it: the layer's own
+   * rules gate on img/video, and the outgoing copy must look like the veiled
+   * canvas it stood in for, not a second picture at full brightness.
+   */
+  const fadeOut = (url: string) => {
+    if (motionReduced()) {
+      if (url.startsWith('blob:')) URL.revokeObjectURL(url)
+      return
+    }
+    const ghost = document.createElement('div')
+    ghost.dataset.src = url
+    const veil = document.documentElement.style.getPropertyValue(VEIL_PROPERTY)
+    ghost.style.backgroundImage = `${veil === '' ? '' : `linear-gradient(${veil} 0 0), `}url("${url.replace(/["\\]/g, '\\$&')}")`
+    ghost.style.backgroundSize = '100% 100%, cover'
+    ghost.style.backgroundPosition = 'center'
+    layer.appendChild(ghost)
+    if (!mounted) {
+      document.body.appendChild(layer)
+      mounted = true
+    }
+    // On a layer wipe mid-fade the animation cancels; the blob and the
+    // mount still clean up exactly once.
+    let settled = false
+    const done = () => {
+      if (settled) return
+      settled = true
+      ghost.remove()
+      if (url.startsWith('blob:')) URL.revokeObjectURL(url)
+      if (video === null && layer.childElementCount === 0 && mounted) {
+        layer.remove()
+        mounted = false
+      }
+    }
+    ghost.animate([{ opacity: 1 }, { opacity: 0 }], {
+      duration: motionMs('--dsh-deepcraft-duration-fade'),
+      easing: 'linear',
+      fill: 'forwards',
+    }).finished.then(done, done)
+  }
+
+  /** Take both wallpaper surfaces down: the html canvas and the body's layer. */
   const clearSurfaces = () => {
     document.documentElement.removeAttribute(WALLPAPER_MOUNT_ATTR)
     document.documentElement.style.removeProperty(IMAGE_PROPERTY)
     document.documentElement.style.removeProperty(VEIL_PROPERTY)
     document.body.removeAttribute(WALLPAPER_MEDIA_ATTR)
     if (paintedUrl !== null) {
-      URL.revokeObjectURL(paintedUrl)
+      if (paintedUrl.startsWith('blob:')) URL.revokeObjectURL(paintedUrl)
       paintedUrl = null
     }
     paintedKey = null
+    if (video !== null) video.pause()
+    for (const ghost of layer.querySelectorAll('div[data-src]')) {
+      const src = ghost.getAttribute('data-src') ?? ''
+      if (src.startsWith('blob:')) URL.revokeObjectURL(src)
+      ghost.remove()
+    }
     if (mounted) {
       // A detached video keeps decoding unless it is told to stop.
-      if (video !== null) video.pause()
       layer.remove()
       mounted = false
     }
@@ -156,10 +213,11 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
           if (url.startsWith('blob:')) URL.revokeObjectURL(url)
           return
         }
-        if (paintedUrl !== null) URL.revokeObjectURL(paintedUrl)
-        paintedUrl = url.startsWith('blob:') ? url : null
+        const outgoing = paintedUrl
+        paintedUrl = url
         document.documentElement.style.setProperty(IMAGE_PROPERTY, `url("${url.replace(/["\\]/g, '\\$&')}")`)
         document.documentElement.setAttribute(WALLPAPER_MOUNT_ATTR, 'image')
+        if (outgoing !== null && outgoing !== url) fadeOut(outgoing)
       }, () => {
         // A blur pass that fails or a file that cannot decode leaves the page
         // without wallpaper rather than a broken half-state (D12).
@@ -196,10 +254,8 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
       document.documentElement.removeAttribute(WALLPAPER_MOUNT_ATTR)
       document.documentElement.style.removeProperty(IMAGE_PROPERTY)
       document.documentElement.style.removeProperty(VEIL_PROPERTY)
-      if (paintedUrl !== null) {
-        URL.revokeObjectURL(paintedUrl)
-        paintedUrl = null
-      }
+      const outgoing = paintedUrl
+      paintedUrl = null
       paintedKey = null
       if (video === null) {
         video = document.createElement('video')
@@ -216,6 +272,8 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
         document.body.appendChild(layer)
         mounted = true
       }
+      // The ghost lands after the video in the layer, so it dissolves over it.
+      if (outgoing !== null) fadeOut(outgoing)
       if (plays()) {
         // Autoplay can still be refused before the first gesture; the video
         // stays on its first frame, and the next state change tries again.

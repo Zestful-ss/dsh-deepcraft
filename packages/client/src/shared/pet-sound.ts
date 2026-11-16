@@ -12,7 +12,7 @@ import { notifyAll } from '@dsh-deepcraft/engine/notify'
 
 export type PetSounds = Record<PetSoundEvent, PetSoundState | null>
 
-let sounds: PetSounds = { attention: null, error: null }
+let sounds: PetSounds = Object.fromEntries(PET_SOUND_EVENTS.map(event => [event, null])) as PetSounds
 let requested = false
 /** Bumped by every read, so an answer that arrives after a newer one is dropped. */
 let generation = 0
@@ -56,7 +56,7 @@ export function loadPetSounds(): void {
 export function resetPetSounds() {
   requested = false
   generation++
-  sounds = { attention: null, error: null }
+  for (const event of PET_SOUND_EVENTS) sounds[event] = null
 }
 
 function adopt(answer: PetSoundAnswer, at: number) {

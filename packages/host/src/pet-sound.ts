@@ -37,10 +37,7 @@ export function petSoundRoutes(ctx: DshContext): { label: string, route: DshRout
     file === null ? null : { type: file.type, version: file.version }
   const answer = (): PetSoundAnswer => ({
     ok: true,
-    sounds: {
-      attention: stateOf(store.find('attention')),
-      error: stateOf(store.find('error')),
-    },
+    sounds: Object.fromEntries(PET_SOUND_EVENTS.map(event => [event, stateOf(store.find(event))])) as PetSoundAnswer['sounds'],
   })
 
   const status: DshRoute = { kind: 'exact', path: PET_SOUNDS_PATH, handler: mediaStatusRoute(ctx, answer) }

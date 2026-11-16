@@ -58,7 +58,7 @@ export const FONT_CUSTOM = 'custom'
 /** A pet sound pick: a bundled tone, `off`, or the reader's own uploaded file for the event. */
 export const PET_SOUND_OFF = 'off'
 export const PET_SOUND_CUSTOM = 'custom'
-export const PET_SOUND_CHOICES = [PET_SOUND_OFF, 'chime', 'ding', PET_SOUND_CUSTOM] as const
+export const PET_SOUND_CHOICES = [PET_SOUND_OFF, 'startup-chime', 'ring-chime', 'item-found', 'gem-collect', 'item-fanfare', 'victory-fanfare', 'secret-chime', 'error-buzz', 'chime', 'ding', PET_SOUND_CUSTOM] as const
 export const FONT_UI_INTER = 'inter'
 export const FONT_UI_HARMONY = 'harmony'
 export const FONT_UI_GEIST = 'geist'
@@ -184,6 +184,8 @@ export const PREFS = {
    */
   petSoundAttention: { type: 'choice', values: PET_SOUND_CHOICES, default: PET_SOUND_OFF },
   petSoundError: { type: 'choice', values: PET_SOUND_CHOICES, default: PET_SOUND_OFF },
+  petSoundSelect: { type: 'choice', values: PET_SOUND_CHOICES, default: PET_SOUND_OFF },
+  petSoundStart: { type: 'choice', values: PET_SOUND_CHOICES, default: PET_SOUND_OFF },
   /**
    * The reader's own wallpaper: `custom` mounts the layer the host half's
    * wallpaper file serves under; `builtin` mounts one of the bundled set;

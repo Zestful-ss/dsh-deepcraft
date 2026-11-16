@@ -4,12 +4,12 @@
  * route's answer (mirrors the wallpaper/brand media contract).
  */
 
-/** Events that can carry a notification sound. */
-export const PET_SOUND_EVENTS = ['attention', 'error'] as const
+/** Events that can carry a notification sound. `select` is the reader's own poke; `start` is a turn beginning. */
+export const PET_SOUND_EVENTS = ['select', 'start', 'attention', 'error'] as const
 export type PetSoundEvent = (typeof PET_SOUND_EVENTS)[number]
 
 /** Bundled sound ids; `off` mutes the event. */
-export const PET_SOUND_BUILTINS = ['off', 'chime', 'ding'] as const
+export const PET_SOUND_BUILTINS = ['off', 'startup-chime', 'ring-chime', 'item-found', 'gem-collect', 'item-fanfare', 'victory-fanfare', 'secret-chime', 'error-buzz', 'chime', 'ding'] as const
 export type PetSoundBuiltin = (typeof PET_SOUND_BUILTINS)[number]
 
 /** Accepted content types for a custom sound file, each with its extension. */

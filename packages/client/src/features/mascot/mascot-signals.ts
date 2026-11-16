@@ -127,7 +127,7 @@ export function mascotLevel(reading: MascotReading): MascotLevel {
  *     compaction started or ended.
  * @returns `{ follow, read, dispose }`.
  */
-export function createMascotSignals(ctx: HostContext, onMoment: (moment: MascotMoment) => void, onChange: () => void) {
+export function createMascotSignals(ctx: HostContext, onMoment: (moment: MascotMoment) => void, onChange: () => void, onSound: (event: 'start') => void) {
   /** The session whose feed is followed; null on the home page, undefined before the first follow. */
   let followed: string | null | undefined
   let stopFeed: (() => void) | null = null
@@ -201,7 +201,8 @@ export function createMascotSignals(ctx: HostContext, onMoment: (moment: MascotM
 
   /** One live event of the followed session. */
   function take(event: HostSessionEvent) {
-    if (event.type === 'turn/end') {
+    if (event.type === 'turn/start') onSound('start')
+    else if (event.type === 'turn/end') {
       const kind = event.data.reason.kind
       if (kind === 'completed' || kind === 'max-tokens') onMoment('attention')
       else if (kind === 'error' || kind === 'blocked') onMoment('error')
