@@ -157,13 +157,16 @@ function fakeHost(mod, options = {}) {
  */
 function request(host, route, method, body, headers, peer = '127.0.0.1') {
   const req = Readable.from(body ? [Buffer.from(body)] : [])
-  Object.assign(req, { method, url: route, headers, socket: { remoteAddress: peer } })
+  Object.assign(req, { method, url: route, headers, socket: { remoteAddress: peer, end() {} } })
   return new Promise((resolve) => {
+    const listeners = {}
     const res = {
       status: 0,
+      once(event, fn) { (listeners[event] ??= []).push(fn); return this },
       writeHead(status) { this.status = status },
       end(chunk) {
         const raw = chunk === undefined ? null : (Buffer.isBuffer(chunk) ? chunk : Buffer.from(String(chunk)))
+        for (const fn of listeners.finish ?? []) fn()
         resolve({ status: this.status, body: raw === null ? '' : raw.toString(), raw })
       },
     }
@@ -468,9 +471,11 @@ async function hostHalf() {
     Buffer.compare(fs.readFileSync(storedManifest), petManifest) === 0)
   const image = await new Promise((resolve) => {
     const req = Readable.from([])
-    Object.assign(req, { method: 'GET', url: '/dsh-deepcraft/pets/image/smoke-pet?v=one', headers: browser, socket: { remoteAddress: '127.0.0.1' } })
+    Object.assign(req, { method: 'GET', url: '/dsh-deepcraft/pets/image/smoke-pet?v=one', headers: browser, socket: { remoteAddress: '127.0.0.1', end() {} } })
     const res = {
-      status: 0, headers: {}, writeHead(status, headers) { this.status = status; this.headers = headers || {} },
+      status: 0, headers: {},
+      once() { return this },
+      writeHead(status, headers) { this.status = status; this.headers = headers || {} },
       end(chunk) { resolve({ status: this.status, headers: this.headers, raw: chunk ?? null }) },
     }
     petHost.routes['/dsh-deepcraft/pets/image'].handler(req, res)
@@ -520,6 +525,7 @@ function requestAsset(host, url, headers = {}) {
     const res = {
       status: 0,
       headers: {},
+      once() { return this },
       writeHead(status, headers) {
         this.status = status
         this.headers = headers || {}
