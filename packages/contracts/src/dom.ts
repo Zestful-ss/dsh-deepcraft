@@ -18,6 +18,8 @@ export const COMPOSER_CARD_SELECTOR = '[data-composer-card]'
 export const MODEL_SLOT_SELECTOR = '[data-slot="conversation.input.model"]'
 /** The composer's own right-hand list seat, where the subagent model entry stands beside the model slot. */
 export const COMPOSER_RIGHT_SLOT_SELECTOR = '[data-slot="conversation.input.right"]'
+/** The composer's stats dock: the pills under the card (turns, speed, tokens). */
+export const COMPOSER_DOCK_SELECTOR = '[data-composer-dock]'
 /** The composer card with the todo, goal and queue cards stacked above it. */
 export const COMPOSER_STACK_SELECTOR = '[data-dsh-deepcraft-part~="composer-stack"]'
 /** The host's own panel that replaces the composer card, which the mascot stands on. */
