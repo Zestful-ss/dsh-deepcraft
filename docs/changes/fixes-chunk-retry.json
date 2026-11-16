@@ -1,8 +1,0 @@
-{
-  "group": "fixes",
-  "order": 1,
-  "at": "2026-11-16",
-  "external": false,
-  "zh": "修复延后加载的功能在脚本取数失败一次后就被永久关闭的问题：同一地址重挂一次脚本，仍失败才按原样报错。",
-  "en": "Fix a deferred feature being switched off permanently after a single script fetch failure: the same address is attached once more, and only a second failure reports as before."
-}

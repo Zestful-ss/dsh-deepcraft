@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.42.4] - 2026-11-16
 
-<h3 id="cn-unreleased">问题修复</h3>
+[中文](#cn-0.42.4) | [English](#en-0.42.4)
+
+<h3 id="cn-0.42.4">问题修复</h3>
 
 - 修复延后加载的功能在脚本取数失败一次后就被永久关闭的问题：同一地址重挂一次脚本，仍失败才按原样报错。
 
-<h3 id="en-unreleased">Bug Fixes</h3>
+<h3 id="en-0.42.4">Bug Fixes</h3>
 
 - Fix a deferred feature being switched off permanently after a single script fetch failure: the same address is attached once more, and only a second failure reports as before.
 
