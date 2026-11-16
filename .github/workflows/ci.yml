@@ -189,7 +189,7 @@ jobs:
       - name: Read the newest host version
         id: host-version
         shell: pwsh
-        run: "version=$(node packages/testing/host-version.cjs) >> $env:GITHUB_OUTPUT"
+        run: '"version=$(node packages/testing/host-version.cjs)" >> $env:GITHUB_OUTPUT'
       - name: The global prefix npm writes into
         shell: pwsh
         run: "NPM_PREFIX=$(npm config get prefix) >> $env:GITHUB_ENV"
