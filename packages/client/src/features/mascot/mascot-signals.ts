@@ -275,6 +275,7 @@ export function createMascotSignals(ctx: HostContext, onMoment: (moment: MascotM
       const change = latest.change
       if (change.kind === 'replace') {
         adoptCompactions(latest.entries)
+        if (chat === null) armChat()
         onChange()
         return
       }

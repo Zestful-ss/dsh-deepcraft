@@ -277,7 +277,17 @@ export function syncSettingsNav() {
 /** This plugin's entry position in the settings slot, or -1 while unknown. */
 export function settingsSectionIndex() {
   if (slotsApi === null || typeof slotsApi.entries !== 'function') return -1
-  const entries = slotsApi.entries(SETTINGS_SECTION_SLOT)
+  // The slot answers entries in registration order, but the host's nav rows
+  // follow each entry's `order`: the index must walk the same projection.
+  const entries = slotsApi.entries(SETTINGS_SECTION_SLOT).slice().sort((a, b) => {
+    const orderOf = (entry: typeof a) => {
+      // The host sorts the section nav on each entry's `order`; the contract
+      // type only declares `id`, so the field is read through a widened shape.
+      const options = (entry === null || entry === undefined ? null : entry.options) as { order?: unknown } | null
+      return typeof options?.order === 'number' ? options.order : 0
+    }
+    return orderOf(a) - orderOf(b)
+  })
   for (let i = 0; i < entries.length; i++) {
     const options = entries[i] === null || entries[i] === undefined ? null : entries[i].options
     if (options !== null && options !== undefined && options.id === SETTINGS_SECTION_ID) return i

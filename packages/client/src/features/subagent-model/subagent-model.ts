@@ -502,6 +502,15 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       sync()
       markCapsule()
     },
+    // A scroll or a composer resize moves the card's anchor under it.
+    reposition() {
+      if (open) placeCard()
+    },
+    // Focus inside the composer or Escape sends the card away like its own
+    // document listeners do ('outside' never arrives: `owns` is undeclared).
+    close() {
+      closeCard()
+    },
     // The two seats sit on the composer, outside the streaming column.
     skipOnContentOnly: true,
   }

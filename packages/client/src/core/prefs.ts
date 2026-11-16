@@ -8,6 +8,10 @@ import { clampPrefs } from '@dsh-deepcraft/contracts/prefs'
 import { notifyAll } from '@dsh-deepcraft/engine/notify'
 import { createSettingsBinding } from '@dsh-deepcraft/engine/settings-binding'
 import { pageOwner } from '../shared/visual-owner'
+  // The mirrors belong to the page only while this skin owns it (D81); a
+  // system motion flip under a foreign owner writes nothing and changes
+  // nothing, so the listeners hear nothing either.
+  if (pageOwner() !== null) return
 
 /**
  * Skin preferences: the host settings namespace is the store, and every

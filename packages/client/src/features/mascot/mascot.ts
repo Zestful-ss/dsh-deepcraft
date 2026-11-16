@@ -42,24 +42,27 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
 
   async function openPetdex(id: string, conversation: boolean) {
     if (requested === id) return
+    if (failedId === id && Date.now() - failedAt < 10000) return
     // An island id answers at once: the sprite ships with the package.
     if (isIslandPet(id)) {
       requested = id
       generation += 1
       try {
         const next = createIslandMascot(ctx, ui, id)
+        next.sync(conversation)
         if (petdex !== null) petdex.player.dispose()
         petdex = { id, player: next }
-        petdex.player.sync(conversation)
       } catch (error) {
         // A broken island package names the pet it could not stand up; the
-        // previous guest keeps playing and the next pass may try another.
+        // previous guest keeps playing, and this id gets its own cooldown
+        // rather than rethrowing every pass.
         console.warn(`[dsh-deepcraft] the chat pet "${id}" could not be shown:`, error)
+        failedId = id
+        failedAt = Date.now()
         requested = null
       }
       return
     }
-    if (failedId === id && Date.now() - failedAt < 10000) return
     requested = id
     const token = ++generation
     let pet: PetDescriptor
@@ -84,11 +87,11 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
     failedId = null
     try {
       const next = createPetdexMascot(ctx, ui, pet)
+      // The scope was read before the fetch; the page the mascot lands on is
+      // the one the reader sees now. The guest is only seated once it plays.
+      next.sync(prefs.mascotScope === MASCOT_SCOPE_ALL)
       if (petdex !== null) petdex.player.dispose()
       petdex = { id, player: next }
-      // The scope was read before the fetch; the page the mascot lands on is
-      // the one the reader sees now.
-      petdex.player.sync(prefs.mascotScope === MASCOT_SCOPE_ALL)
     } catch (error) {
       // A malformed package can stand down the whole player: keep the guest
       // that was playing and leave the pick free for another try (D12).

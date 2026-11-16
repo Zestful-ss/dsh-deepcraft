@@ -95,6 +95,9 @@ export function createHostSettings(): HostSettings {
 
   /** Open the host's settings through whichever entry the host provides. */
   function openSettings() {
+    // A second request while the menu poll runs would orphan its chain: the
+    // timer handle is overwritten and teardown can no longer stop it.
+    if (lookTimer !== undefined) return
     const trigger = hostSettingsTrigger()
     if (trigger !== null) {
       trigger.click()

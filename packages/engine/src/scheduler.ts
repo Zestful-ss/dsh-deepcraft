@@ -272,6 +272,7 @@ export function installScheduler<Name extends string>(ctx: HostContext, ui: Sche
     if (failures >= SYNC_FAILURE_LIMIT) return
     try {
       feature.measure()
+      syncFailures[name] = 0
     } catch (error) {
       syncFailures[name] = failures + 1
       if (failures + 1 < SYNC_FAILURE_LIMIT) return
