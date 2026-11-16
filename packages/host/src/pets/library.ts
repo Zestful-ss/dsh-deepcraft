@@ -23,7 +23,7 @@ import {
 } from '@dsh-deepcraft/contracts/pets'
 import type { PetDescriptor, PetLibraryError } from '@dsh-deepcraft/contracts/pets'
 import { PETS_IMAGE_PATH } from '@dsh-deepcraft/contracts/routes'
-import { pickPetFiles, readAtlasSize, readManifestObject, readZip } from './codecs.js'
+import { checkedRootName, pickPetFiles, readAtlasSize, readManifestObject, readZip } from './codecs.js'
 import { PetRefusal } from './errors.js'
 import { MANIFEST_NAME, parsePet, usableDirectoryName } from './manifest.js'
 import type { ParsedPet } from './manifest.js'
@@ -80,7 +80,7 @@ function checkedName(name: string) {
 function atlasNameOf(manifestBytes: Uint8Array) {
   const path = readManifestObject(manifestBytes).spritesheetPath
   if (typeof path !== 'string') throw new PetRefusal('the manifest names no spritesheetPath', 400)
-  return path
+  return checkedRootName(path)
 }
 
 /** One directory's manifest and atlas stamps, for the cache. */
