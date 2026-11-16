@@ -18,10 +18,6 @@ import type { DshContext, DshRequest, DshResponse, DshRoute } from '@dsh-deepcra
 import { fenceRefused, methodRefused, readRequestBody, sendJson } from '@dsh-deepcraft/engine/node/http'
 import { PetRefusal } from './errors.js'
 import { ensurePreset, importFromPetdex, importZip, listPets, readPetImage } from './library.js'
-          // The body arrives unread: the socket is ended gracefully once this
-          // answer is flushed, or its rest would meet the next request on the
-          // keep-alive connection (the media routes carry the same plug).
-          res.once('finish', () => setTimeout(() => req.socket.end(), 0))
 
 /** Largest body a JSON request may carry; every one of them is two short fields. */
 const JSON_BODY_MAX = 8 * 1024
@@ -107,6 +103,10 @@ export function petRoutes(ctx: DshContext): { label: string, route: DshRoute }[]
         if (guarded(ctx, req, res, ['POST'])) return
         const type = String(req.headers['content-type'] ?? '').split(';')[0].trim().toLowerCase()
         if (type !== 'application/zip' && type !== 'application/x-zip-compressed') {
+          // The body arrives unread: the socket is ended gracefully once this
+          // answer is flushed, or its rest would meet the next request on the
+          // keep-alive connection (the media routes carry the same plug).
+          res.once('finish', () => setTimeout(() => req.socket.end(), 0))
           sendJson(res, 415, { ok: false, error: 'the import must be a ZIP archive' })
           return
         }
