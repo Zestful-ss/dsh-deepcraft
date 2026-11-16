@@ -4,6 +4,18 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+## [0.42.5] - 2026-11-16
+
+[中文](#cn-0.42.5) | [English](#en-0.42.5)
+
+<h3 id="cn-0.42.5">问题修复</h3>
+
+- 修复输入框下方统计行（轮次、速率、token 用量）悬在壁纸上的问题：托盘按叠层顺序会输给壁纸层时该行得不到底色，现在行自身携带与卡片相同的画布底色。
+
+<h3 id="en-0.42.5">Bug Fixes</h3>
+
+- Fix the stats row under the composer (turns, speed, token usage) floating on the wallpaper: the tray can lose the z-order to the wallpaper layer and leave the row without a ground, so the row now carries the same canvas ground as the card.
+
 ## [0.42.4] - 2026-11-16
 
 [中文](#cn-0.42.4) | [English](#en-0.42.4)
