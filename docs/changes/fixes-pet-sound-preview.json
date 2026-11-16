@@ -1,8 +1,0 @@
-{
-  "group": "fixes",
-  "order": 1,
-  "at": "2026-11-16",
-  "external": false,
-  "zh": "修复宠物音效的试听按钮在刚换完音色就点按时播放旧选项的问题：现在点按的那一刻读取已写入的偏好，与宠物本身的播放路径一致。",
-  "en": "Fix the pet sound preview button playing the stale pick when pressed right after changing the tone: it now reads the committed preference at click time, the same path the pet itself plays through."
-}

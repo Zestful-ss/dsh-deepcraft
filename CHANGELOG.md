@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.42.3] - 2026-11-16
 
-<h3 id="cn-unreleased">问题修复</h3>
+[中文](#cn-0.42.3) | [English](#en-0.42.3)
+
+<h3 id="cn-0.42.3">问题修复</h3>
 
 - 修复宠物音效的试听按钮在刚换完音色就点按时播放旧选项的问题：现在点按的那一刻读取已写入的偏好，与宠物本身的播放路径一致。
 
-<h3 id="en-unreleased">Bug Fixes</h3>
+<h3 id="en-0.42.3">Bug Fixes</h3>
 
 - Fix the pet sound preview button playing the stale pick when pressed right after changing the tone: it now reads the committed preference at click time, the same path the pet itself plays through.
 
