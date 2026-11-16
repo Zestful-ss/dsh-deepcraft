@@ -100,6 +100,10 @@ export async function storeMedia<K extends string>(
 ): Promise<Buffer | null> {
   const type = (req.headers['content-type'] ?? '').split(';')[0].trim().toLowerCase()
   if (opts.types[type] === undefined) {
+    // The body arrives unread: the socket is ended gracefully once this
+    // answer is flushed, or its rest would meet the next request on the
+    // keep-alive connection (same plug the 413 answer carries below).
+    res.once('finish', () => setTimeout(() => req.socket.end(), 0))
     sendJson(res, 415, { ok: false, error: 'unsupported media type' })
     return null
   }

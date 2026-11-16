@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 20,
+  "at": "2026-11-16",
+  "external": false,
+  "zh": "修复媒体上传按类型拒绝（415）时遗留的未读请求体：其余字节会在同一条 keep-alive 连接上混入下一个请求，现在与超限拒绝一样在应答冲刷后收尾套接字。",
+  "en": "Fix the unread request body left behind by a media upload refused on type (415): its remaining bytes could bleed into the next request on the same keep-alive connection; the socket now ends after the answer flushes, as the oversized-file refusal already did."
+}
