@@ -9,7 +9,8 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 <h3 id="cn-unreleased">新增功能</h3>
 
 - 随插件发布的岛屿伙伴再添 Pululu：开源应用 Cindy 的第十只可选皮肤，整脸原画随包发布，状态与手势与其他岛屿伙伴一致。
-- 新增宠物声音：聊天宠物在完成与出错时刻播放一声短音，每个时刻可选内置的「风铃」「叮」、关闭或自己的音频文件（MP3/WAV/OGG/M4A，不超过 5 MB），设置页可试听与上传；文件按事件存进宿主半边，版本化地址随字节更换。
+- 图像壁纸换图时以交叉淡化过渡：旧图带着遮罩淡出到新图之上，图片与视频之间同样生效，减少动画时直接切换。
+- 新增宠物声音：聊天宠物在点按、回合开始、完成与出错四个时刻各播放一声短音，每个时刻可选九种内置音色之一、关闭或自己的音频文件（MP3/WAV/OGG/M4A，不超过 5 MB），设置页可试听与上传；文件按事件存进宿主半边，版本化地址随字节更换。
 
 ### 问题修复
 
@@ -24,7 +25,8 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 <h3 id="en-unreleased">New Features</h3>
 
 - Pululu joins the shipped island companions: the tenth selectable skin drawn for the open-source app Cindy, its whole face painted into the sprite, keeping the same states and gestures as the other island pets.
-- Add pet sounds: the chat pet plays a short note on completion and error moments; each moment picks a bundled chime or ding, off, or the reader's own audio file (MP3/WAV/OGG/M4A, up to 5 MB), with preview and upload in settings; files live in the host half under a versioned address.
+- Add a crossfade to wallpaper swaps: the outgoing picture fades out, veil intact, over the incoming one — between images and on image↔video switches alike; under Reduced animation the swap stays instant.
+- Add pet sounds: the chat pet plays a short note on poke, turn start, completion and error; each moment picks one of nine bundled tones, off, or the reader's own audio file (MP3/WAV/OGG/M4A, up to 5 MB), with preview and upload in settings; files live in the host half under a versioned address.
 
 ### Bug Fixes
 
