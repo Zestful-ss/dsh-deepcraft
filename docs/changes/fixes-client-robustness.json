@@ -1,8 +1,0 @@
-{
-  "group": "fixes",
-  "order": 23,
-  "at": "2026-11-16",
-  "external": false,
-  "zh": "修复界面半边的一组时序与状态问题：设置导航标记按宿主排序后的次序落到本插件的栏目上，测量失败的计数不再跨轮次累积而误退功能，连按两次打开设置不再遗留一条无法停止的轮询，宠物在会话流整体替换后仍会接上聊天目标，模型选择卡片随滚动保持锚定并在进入编辑器或按 Esc 时收拢，系统动画偏好翻转不再向已让出的页面写属性，岛屿宠物创建失败同样进入重试冷却且同步失败的玩家不再被坐实。",
-  "en": "Fix a batch of timing and state faults on the browser half: the settings nav mark now lands on this plugin's section under the host's sorted order, a measure's failure count no longer accumulates across passes and retires the feature, a second open-settings request can no longer orphan a poll chain, the pet re-arms its chat watch after a wholesale feed replace, the model pick card stays anchored through scrolls and folds on composer focus or Escape, a system motion flip no longer writes attributes while the page is yielded, and a broken island pet now shares the retry cooldown while a player whose first sync throws is never seated."
-}

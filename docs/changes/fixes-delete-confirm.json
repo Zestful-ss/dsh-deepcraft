@@ -1,8 +1,0 @@
-{
-  "group": "fixes",
-  "order": 21,
-  "at": "2026-11-16",
-  "external": false,
-  "zh": "修复删除确认卡的焦点行为：点按卡片外部关闭时焦点不再被拉回删除按钮，只有 Esc 或「取消」才把焦点交还触发它的行按钮。",
-  "en": "Fix the delete confirmation's focus: closing it with an outside press no longer yanks focus back to the row's delete button; only Escape and the cancel button return focus to the trigger."
-}

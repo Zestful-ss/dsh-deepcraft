@@ -1,8 +1,0 @@
-{
-  "group": "fixes",
-  "order": 24,
-  "at": "2026-11-16",
-  "external": false,
-  "zh": "修复与岛屿宠物同名的导入包永远无法显示的问题：已安装的包现在优先于同名内置角色，读者自己导入的包才是所选的那一个。",
-  "en": "Fix an imported package that shares its id with a shipped island character being undisplayable: an installed package now wins over the same-named built-in, so the reader's own import is the one they picked."
-}

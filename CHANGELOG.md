@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.42.1] - 2026-11-16
 
-<h3 id="cn-unreleased">问题修复</h3>
+[中文](#cn-0.42.1) | [English](#en-0.42.1)
+
+<h3 id="cn-0.42.1">问题修复</h3>
 
 - 修复媒体上传按类型拒绝（415）时遗留的未读请求体：其余字节会在同一条 keep-alive 连接上混入下一个请求，现在与超限拒绝一样在应答冲刷后收尾套接字。
 - 修复删除确认卡的焦点行为：点按卡片外部关闭时焦点不再被拉回删除按钮，只有 Esc 或「取消」才把焦点交还触发它的行按钮。
@@ -14,7 +16,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 - 修复界面半边的一组时序与状态问题：设置导航标记按宿主排序后的次序落到本插件的栏目上，测量失败的计数不再跨轮次累积而误退功能，连按两次打开设置不再遗留一条无法停止的轮询，宠物在会话流整体替换后仍会接上聊天目标，模型选择卡片随滚动保持锚定并在进入编辑器或按 Esc 时收拢，系统动画偏好翻转不再向已让出的页面写属性，岛屿宠物创建失败同样进入重试冷却且同步失败的玩家不再被坐实。
 - 修复与岛屿宠物同名的导入包永远无法显示的问题：已安装的包现在优先于同名内置角色，读者自己导入的包才是所选的那一个。
 
-<h3 id="en-unreleased">Bug Fixes</h3>
+<h3 id="en-0.42.1">Bug Fixes</h3>
 
 - Fix the unread request body left behind by a media upload refused on type (415): its remaining bytes could bleed into the next request on the same keep-alive connection; the socket now ends after the answer flushes, as the oversized-file refusal already did.
 - Fix the delete confirmation's focus: closing it with an outside press no longer yanks focus back to the row's delete button; only Escape and the cancel button return focus to the trigger.
