@@ -211,7 +211,7 @@ jobs:
           # and timeout-minutes does not reach a wedged child on this runner:
           # the shell bounds it and runs it once more on a stall or a failure.
           function Install-Harness([string] $Version) {
-            $job = Start-Job -ScriptBlock { param($v) npm install --global "@deepseek-ai/dsh@$v" pnpm@11 | Out-Null; $LASTEXITCODE } -ArgumentList $Version
+            $job = Start-Job -ScriptBlock { param($v) npm install --global --no-audit --no-fund "@deepseek-ai/dsh@$v" pnpm@11 | Out-Null; $LASTEXITCODE } -ArgumentList $Version
             if (Wait-Job $job -Timeout 900) {
               $code = Receive-Job $job
               Remove-Job $job -Force
@@ -266,7 +266,7 @@ jobs:
         with:
           path: ${{ env.NPM_PREFIX }}
           key: harness-${{ runner.os }}-${{ steps.host-version.outputs.version }}
-      - run: npm install --global pnpm@11 @deepseek-ai/dsh@${{ steps.host-version.outputs.version }}
+      - run: npm install --global --no-audit --no-fund pnpm@11 @deepseek-ai/dsh@${{ steps.host-version.outputs.version }}
         if: steps.harness-cache.outputs.cache-hit != 'true'
         timeout-minutes: 20
       # A named scenario takes its own deadline; this is the shard's backstop.
