@@ -12,6 +12,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 - 修复删除确认卡的焦点行为：点按卡片外部关闭时焦点不再被拉回删除按钮，只有 Esc 或「取消」才把焦点交还触发它的行按钮。
 - 修复宿主半边的一处路径逃逸与多处容错：宠物包的 spritesheetPath 不再能指到包目录之外，两个被提前拒绝的请求会收尾套接字而不是把剩余请求体留给下一个请求，已分离会话的子代理模型选择与选择存取在故障后可以重新打开，用量统计在文件或目录被途中移除时回退为本机汇总而不是报错，包文件名补齐对 Windows 保留设备名的检查。
 - 修复界面半边的一组时序与状态问题：设置导航标记按宿主排序后的次序落到本插件的栏目上，测量失败的计数不再跨轮次累积而误退功能，连按两次打开设置不再遗留一条无法停止的轮询，宠物在会话流整体替换后仍会接上聊天目标，模型选择卡片随滚动保持锚定并在进入编辑器或按 Esc 时收拢，系统动画偏好翻转不再向已让出的页面写属性，岛屿宠物创建失败同样进入重试冷却且同步失败的玩家不再被坐实。
+- 修复与岛屿宠物同名的导入包永远无法显示的问题：已安装的包现在优先于同名内置角色，读者自己导入的包才是所选的那一个。
 
 <h3 id="en-unreleased">Bug Fixes</h3>
 
@@ -19,6 +20,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 - Fix the delete confirmation's focus: closing it with an outside press no longer yanks focus back to the row's delete button; only Escape and the cancel button return focus to the trigger.
 - Fix one path escape and several host-half robustness faults: a pet package's spritesheetPath can no longer point outside its directory, two early-refused requests now end the socket instead of leaving their bodies for the next request, subagent picks survive a detached ancestor and the selection store reopens after a fault, the usage tally falls back to the local fold when a file or directory is removed mid-read, and package file names reject Windows reserved device names.
 - Fix a batch of timing and state faults on the browser half: the settings nav mark now lands on this plugin's section under the host's sorted order, a measure's failure count no longer accumulates across passes and retires the feature, a second open-settings request can no longer orphan a poll chain, the pet re-arms its chat watch after a wholesale feed replace, the model pick card stays anchored through scrolls and folds on composer focus or Escape, a system motion flip no longer writes attributes while the page is yielded, and a broken island pet now shares the retry cooldown while a player whose first sync throws is never seated.
+- Fix an imported package that shares its id with a shipped island character being undisplayable: an installed package now wins over the same-named built-in, so the reader's own import is the one they picked.
 
 ## [0.42.0] - 2026-11-16
 
