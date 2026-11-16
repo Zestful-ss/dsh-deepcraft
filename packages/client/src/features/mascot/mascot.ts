@@ -2,7 +2,7 @@ import { MASCOT_OFF, MASCOT_PETDEX, MASCOT_SCOPE_ALL } from '../../constants'
 import { readPrefs, resolveMascot } from '../../core/prefs'
 import { createPetdexMascot } from './petdex'
 import { createIslandMascot, isIslandPet } from './island'
-import { decodePet, ensurePet } from '../../shared/petdex'
+import { decodePet, ensurePet, loadPetLibrary } from '../../shared/petdex'
 import { loadPetSounds, resetPetSounds } from '../../shared/pet-sound'
 import type { PetDescriptor } from '@dsh-deepcraft/contracts/pets'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
@@ -43,10 +43,16 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
   async function openPetdex(id: string, conversation: boolean) {
     if (requested === id) return
     if (failedId === id && Date.now() - failedAt < 10000) return
-    // An island id answers at once: the sprite ships with the package.
-    if (isIslandPet(id)) {
-      requested = id
-      generation += 1
+    requested = id
+    const token = ++generation
+    // An installed package wins over a shipped island id it collides with:
+    // the reader's own package is what they picked. The library read fails
+    // open: a host that cannot list its packages keeps the island answer.
+    const installed = isIslandPet(id)
+      ? await loadPetLibrary(true).then(lib => lib.pets.find(pet => pet.id === id) !== undefined, () => true)
+      : false
+    if (token !== generation) return
+    if (isIslandPet(id) && !installed) {
       try {
         const next = createIslandMascot(ctx, ui, id)
         next.sync(conversation)
@@ -63,8 +69,6 @@ export function install(ctx: HostContext, ui: FeatureUi<typeof manifest>) {
       }
       return
     }
-    requested = id
-    const token = ++generation
     let pet: PetDescriptor
     try {
       pet = await ensurePet(id)
