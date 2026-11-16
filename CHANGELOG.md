@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.42.2] - 2026-11-16
 
-<h3 id="cn-unreleased">问题修复</h3>
+[中文](#cn-0.42.2) | [English](#en-0.42.2)
+
+<h3 id="cn-0.42.2">问题修复</h3>
 
 - 修复三个请求与资源层的遗留问题：405 与身份拒绝在应答冲刷后同样收尾套接字并收拢到共享收尾助手，一次性 JSON 资源在宿主未应答或答案不可用时重新武装而不是永远停在已请求状态，静态文件在清单与读取之间被移除时回 404 而不是让整个路由报错。
 
-<h3 id="en-unreleased">Bug Fixes</h3>
+<h3 id="en-0.42.2">Bug Fixes</h3>
 
 - Fix three leftovers in the request and resource layer: 405 and fence refusals now end the socket after the answer flushes through a shared helper, a one-shot JSON resource re-arms when the host does not answer or the answer is unusable instead of staying latched forever, and a static file removed between the manifest's read and its own answers 404 rather than failing the whole route.
 
