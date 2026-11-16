@@ -48,15 +48,19 @@ const motionLanded = (frames) => frames.some((frame) => frame.running) && !frame
 async function readSwitch(page) {
   const control = page.locator(SKIN.switch).first()
   const before = await page.evaluate(knobInPage, SKIN)
+  // Recording starts before the press: on a loaded runner the evaluate
+  // round-trip can outlast the spring, and a post-press start can miss every
+  // running frame.
+  const frames = recordUntil(page, knobInPage, motionLanded, SKIN, 8000, 'the switch knob landing')
   await control.click()
-  const frames = await recordUntil(page, knobInPage, motionLanded, SKIN, 8000, 'the switch knob landing')
-  let after = frames[frames.length - 1]
+  const pressed = await frames
+  let after = pressed[pressed.length - 1]
   if (after.on !== before.on) {
+    const back = recordUntil(page, knobInPage, motionLanded, SKIN, 8000, 'the switch knob landing again')
     await control.click()
-    const back = await recordUntil(page, knobInPage, motionLanded, SKIN, 8000, 'the switch knob landing again')
-    after = back[back.length - 1]
+    after = (await back).at(-1)
   }
-  return { before, pressed: frames.filter((frame) => frame.animation !== 'none'), after }
+  return { before, pressed: pressed.filter((frame) => frame.animation !== 'none'), after }
 }
 
 /** The settings page's rows and the still copy of a tab leaving, read inside the page. */
@@ -79,9 +83,12 @@ const slideLanded = (frames) => frames.some((frame) => frame.leaving > 0) && fra
 
 /** A tab change: every frame of the slide, from the press until it has landed. */
 async function readTabSlide(page, tab) {
+  // The recorder goes in first: on a loaded runner the evaluate round-trip can
+  // outlast the slide, and a post-click start can miss every leaving frame.
+  const frames = recordUntil(page, slideInPage, slideLanded, SKIN, 8000, 'the settings tab slide landing')
   await page.locator(SKIN.tab).nth(tab).click()
-  const frames = await recordUntil(page, slideInPage, slideLanded, SKIN, 8000, 'the settings tab slide landing')
-  return { during: frames.filter((frame) => frame.leaving > 0), after: frames[frames.length - 1].leaving }
+  const recorded = await frames
+  return { during: recorded.filter((frame) => frame.leaving > 0), after: recorded[recorded.length - 1].leaving }
 }
 
 function motionScenario({ check }) {
