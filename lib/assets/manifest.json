@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "assets": {
+    "f3c8ad07190c.png": {
+      "type": "image/png",
+      "encoding": null,
+      "bytes": 17805
+    },
+    "6ac04fef6046.png": {
+      "type": "image/png",
+      "encoding": null,
+      "bytes": 17215
+    },
+    "de9e0dc22353.mp4": {
+      "type": "video/mp4",
+      "encoding": null,
+      "bytes": 6312719
+    },
+    "2a2043b9207c.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 1790734
+    },
+    "bd4cad0dc270.mp4": {
+      "type": "video/mp4",
+      "encoding": null,
+      "bytes": 14085969
+    },
+    "e8a38fc4e291.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 192046
+    },
+    "e56374d60a82.mp4": {
+      "type": "video/mp4",
+      "encoding": null,
+      "bytes": 14780511
+    },
+    "091d6d0ad4c6.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 799156
+    },
+    "1a7f7f9dae1e.mp4": {
+      "type": "video/mp4",
+      "encoding": null,
+      "bytes": 22641879
+    },
+    "84c73fc02a12.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 369734
+    },
+    "2e4f78d07aa9.mp4": {
+      "type": "video/mp4",
+      "encoding": null,
+      "bytes": 16397997
+    },
+    "4cecd5b6ebef.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 677244
+    },
+    "b33f9b527584.mp4": {
+      "type": "video/mp4",
+      "encoding": null,
+      "bytes": 3606656
+    },
+    "7d2af2acb2df.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 1649522
+    },
+    "5a292e50cac2.mp4": {
+      "type": "video/mp4",
+      "encoding": null,
+      "bytes": 18353638
+    },
+    "20c6046e462d.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 570506
+    },
+    "10d72d8ab0f3.mp4": {
+      "type": "video/mp4",
+      "encoding": null,
+      "bytes": 6091872
+    },
+    "bfbb37f4a710.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 1101332
+    },
+    "070c9dc925c3.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 282116
+    },
+    "5ebc0912b68f.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 381164
+    },
+    "21cb022d1a49.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 323432
+    },
+    "81b6f3807eea.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 406080
+    },
+    "d7852f504678.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 261362
+    },
+    "5c0034d6e9e0.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 404226
+    },
+    "c627ee2ae28c.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 622300
+    },
+    "21a4135ae41e.webp": {
+      "type": "image/webp",
+      "encoding": null,
+      "bytes": 710060
+    },
+    "6fe734b2f702.js": {
+      "type": "text/javascript; charset=utf-8",
+      "encoding": "br",
+      "bytes": 3542
+    },
+    "e41ffcbcbcea.js.map": {
+      "type": "application/json; charset=utf-8",
+      "encoding": "br",
+      "bytes": 12288
+    },
+    "d6d14a71ddc1.js": {
+      "type": "text/javascript; charset=utf-8",
+      "encoding": "br",
+      "bytes": 45842
+    },
+    "9a16ea2417c2.js.map": {
+      "type": "application/json; charset=utf-8",
+      "encoding": "br",
+      "bytes": 165867
+    }
+  }
+}
