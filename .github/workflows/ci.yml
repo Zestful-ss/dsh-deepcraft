@@ -191,9 +191,21 @@ jobs:
         shell: pwsh
         run: |
           $version = node packages/testing/host-version.cjs
-          # A registry stall has wedged this install past twenty minutes before:
-          # one retry inside a bounded step instead of an unbounded hang.
-          npm install --global "@deepseek-ai/dsh@$version" pnpm@11; if ($LASTEXITCODE -ne 0) { npm install --global "@deepseek-ai/dsh@$version" pnpm@11 }
+          # The registry has wedged this install past twenty minutes before,
+          # and timeout-minutes does not reach a wedged child on this runner:
+          # the shell bounds it and runs it once more on a stall or a failure.
+          function Install-Harness([string] $Version) {
+            $job = Start-Job -ScriptBlock { param($v) npm install --global "@deepseek-ai/dsh@$v" pnpm@11 | Out-Null; $LASTEXITCODE } -ArgumentList $Version
+            if (Wait-Job $job -Timeout 540) {
+              $code = Receive-Job $job
+              Remove-Job $job -Force
+              return $code -eq 0
+            }
+            Stop-Job $job
+            Remove-Job $job -Force
+            return $false
+          }
+          if (-not (Install-Harness $version)) { if (-not (Install-Harness $version)) { exit 1 } }
       - run: node packages/testing/e2e.cjs --scenario petdex
         timeout-minutes: 15
 
