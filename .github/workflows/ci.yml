@@ -203,7 +203,7 @@ jobs:
           key: harness-${{ runner.os }}-${{ steps.host-version.outputs.version }}
       - name: Install the newest harness
         if: steps.harness-cache.outputs.cache-hit != 'true'
-        timeout-minutes: 10
+        timeout-minutes: 40
         shell: pwsh
         run: |
           $version = "${{ steps.host-version.outputs.version }}"
@@ -212,7 +212,7 @@ jobs:
           # the shell bounds it and runs it once more on a stall or a failure.
           function Install-Harness([string] $Version) {
             $job = Start-Job -ScriptBlock { param($v) npm install --global "@deepseek-ai/dsh@$v" pnpm@11 | Out-Null; $LASTEXITCODE } -ArgumentList $Version
-            if (Wait-Job $job -Timeout 540) {
+            if (Wait-Job $job -Timeout 900) {
               $code = Receive-Job $job
               Remove-Job $job -Force
               return $code -eq 0
@@ -254,9 +254,21 @@ jobs:
       - run: npm run build
         timeout-minutes: 15
       # The lane boots the host's own CLI, which needs pnpm to install a
-      # profile's plugins.
-      - run: npm install --global pnpm@11 @deepseek-ai/dsh@$(node packages/testing/host-version.cjs)
-        timeout-minutes: 10
+      # profile's plugins. The prefix is cached by host version: a miss pays
+      # the install once and later runs on the same host restore it.
+      - name: Read the newest host version
+        id: host-version
+        run: echo "version=$(node packages/testing/host-version.cjs)" >> $GITHUB_OUTPUT
+      - name: The global prefix npm writes into
+        run: echo "NPM_PREFIX=$(npm config get prefix)" >> $GITHUB_ENV
+      - uses: actions/cache@v6
+        id: harness-cache
+        with:
+          path: ${{ env.NPM_PREFIX }}
+          key: harness-${{ runner.os }}-${{ steps.host-version.outputs.version }}
+      - run: npm install --global pnpm@11 @deepseek-ai/dsh@${{ steps.host-version.outputs.version }}
+        if: steps.harness-cache.outputs.cache-hit != 'true'
+        timeout-minutes: 20
       # A named scenario takes its own deadline; this is the shard's backstop.
       - run: node packages/testing/e2e.cjs --shard ${{ matrix.shard }}:4
         timeout-minutes: 25
