@@ -1,8 +1,0 @@
-{
-  "group": "fixes",
-  "order": 21,
-  "at": "2026-11-16",
-  "external": false,
-  "zh": "修复子代理模型卡片在每次调度时整卡重绘，使弹层里的点击始终落空、选择无法写入；同时修复会话切走后遗留的目录监听，以及宿主重绘座位时打开的卡片错误关闭。",
-  "en": "Fix the subagent model card repainting on every scheduler pass, which made every click inside the popover miss its target and selections never save; also fix the catalog watch left armed after the session is left, and an open card closing whenever the host repaints its seat."
-}

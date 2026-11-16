@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.42.0] - 2026-11-16
 
-<h3 id="cn-unreleased">新增功能</h3>
+[中文](#cn-0.42.0) | [English](#en-0.42.0)
+
+<h3 id="cn-0.42.0">新增功能</h3>
 
 - 随插件发布的岛屿伙伴再添 Pululu：开源应用 Cindy 的第十只可选皮肤，整脸原画随包发布，状态与手势与其他岛屿伙伴一致。
 - 图像壁纸换图时以交叉淡化过渡：旧图带着遮罩淡出到新图之上，图片与视频之间同样生效，减少动画时直接切换。
@@ -22,7 +24,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 - 修复三个会话与品牌界面的边界问题:置顶与最近会话的分区标题随语言切换重绘,不再停留在安装时的语言;子代理模型卡片在其触发按钮被卸载(会话切换等)时随之关闭,不再留下无主悬浮卡;品牌图与壁纸的读操作排在仍在途的写之后,热重载期间的读不再用旧快照盖回刚上传的图片。
 - 修复若干并发与生命周期问题：壁纸、品牌图与宠物音效的写入车道在一次上传后不再让页面卡死、一次拒绝不再毒化后续写入；宠物图库的整表刷新不再抹掉同时完成的安装；设置写入在存储故障后不再永久叠加草稿值；外观标记的卸载不再清掉下一代刚写的属性；匹配观察现在能听到仅靠属性翻转产生的匹配；主机资源在一次读取失败后恢复待命，子代理模型选择的提示与工具注册随注入代际卸载。
 
-<h3 id="en-unreleased">New Features</h3>
+<h3 id="en-0.42.0">New Features</h3>
 
 - Pululu joins the shipped island companions: the tenth selectable skin drawn for the open-source app Cindy, its whole face painted into the sprite, keeping the same states and gestures as the other island pets.
 - Add a crossfade to wallpaper swaps: the outgoing picture fades out, veil intact, over the incoming one — between images and on image↔video switches alike; under Reduced animation the swap stays instant.

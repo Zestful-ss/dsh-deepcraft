@@ -1,8 +1,0 @@
-{
-  "group": "fixes",
-  "order": 20,
-  "at": "2026-11-16",
-  "external": false,
-  "zh": "修复岛屿伙伴常驻不播动画：单帧精灵表上的 Web Animations 变换压过自身 CSS 的漂浮、跳动与抖动；同时修复长按拖动超过安静时限后空转计时器忙循环、宠物范围切换期间加载落错页面，以及第二次选择 ZIP 导入读到空文件列表。",
-  "en": "Fix the island companions never animating: a Web Animations transform on their single-frame sheets out-painted the strip's own CSS float, hop and shake; also fix a busy timer loop when a drag outlives the quiet deadline, a scope switch landing a loaded pet on the wrong page, and a second ZIP pick reading an empty selection."
-}

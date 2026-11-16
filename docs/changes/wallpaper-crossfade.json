@@ -1,8 +1,0 @@
-{
-  "group": "new",
-  "order": 11,
-  "at": "2026-11-16",
-  "external": false,
-  "zh": "图像壁纸换图时以交叉淡化过渡：旧图带着遮罩淡出到新图之上，图片与视频之间同样生效，减少动画时直接切换。",
-  "en": "Add a crossfade to wallpaper swaps: the outgoing picture fades out, veil intact, over the incoming one — between images and on image↔video switches alike; under Reduced animation the swap stays instant."
-}
