@@ -15,7 +15,7 @@ import {
   PETS_PATH,
 } from '@dsh-deepcraft/contracts/routes'
 import type { DshContext, DshRequest, DshResponse, DshRoute } from '@dsh-deepcraft/engine/node/dsh'
-import { fenceRefused, methodRefused, readRequestBody, sendJson } from '@dsh-deepcraft/engine/node/http'
+import { endSocketAfterAnswer, fenceRefused, methodRefused, readRequestBody, sendJson } from '@dsh-deepcraft/engine/node/http'
 import { PetRefusal } from './errors.js'
 import { ensurePreset, importFromPetdex, importZip, listPets, readPetImage } from './library.js'
 
