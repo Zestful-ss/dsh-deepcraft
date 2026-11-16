@@ -65,8 +65,10 @@ export function confirmDelete(options: { anchor: HTMLElement, title: string, ses
   card.append(body)
   document.body.append(card)
 
-  /** Take the card down and give the page back its listeners. */
-  function close() {
+  /** Take the card down and give the page back its listeners. `restored`
+   * asks for the anchor's focus back: Escape and Cancel hand it back, a press
+   * outside leaves the focus where the reader put it. */
+  function close(restored = false) {
     // Only the current card may unregister itself: a pending delete whose
     // promise answers after its card closed would otherwise strip the next
     // confirmation's registry entry.
@@ -76,7 +78,7 @@ export function confirmDelete(options: { anchor: HTMLElement, title: string, ses
     document.removeEventListener('keydown', onKey, true)
     unregisterPopover(POPOVER)
     card.remove()
-    options.anchor.focus()
+    if (restored) options.anchor.focus()
   }
   function onOutside(event: Event) {
     if (!card.contains(event.target as Node)) close()
@@ -84,10 +86,10 @@ export function confirmDelete(options: { anchor: HTMLElement, title: string, ses
   function onKey(event: KeyboardEvent) {
     if (event.key === 'Escape') {
       event.preventDefault()
-      close()
+      close(true)
     }
   }
-  cancel.addEventListener('click', () => close())
+  cancel.addEventListener('click', () => close(true))
   remove.addEventListener('click', () => {
     if (remove.hasAttribute('data-busy')) return
     remove.setAttribute('data-busy', '')
