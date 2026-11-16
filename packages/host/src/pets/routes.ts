@@ -103,10 +103,7 @@ export function petRoutes(ctx: DshContext): { label: string, route: DshRoute }[]
         if (guarded(ctx, req, res, ['POST'])) return
         const type = String(req.headers['content-type'] ?? '').split(';')[0].trim().toLowerCase()
         if (type !== 'application/zip' && type !== 'application/x-zip-compressed') {
-          // The body arrives unread: the socket is ended gracefully once this
-          // answer is flushed, or its rest would meet the next request on the
-          // keep-alive connection (the media routes carry the same plug).
-          res.once('finish', () => setTimeout(() => req.socket.end(), 0))
+          endSocketAfterAnswer(req, res)
           sendJson(res, 415, { ok: false, error: 'the import must be a ZIP archive' })
           return
         }

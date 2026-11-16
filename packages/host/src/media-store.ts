@@ -10,7 +10,7 @@ import { createReadStream, mkdirSync, renameSync, rmSync, statSync, writeFileSyn
 import { join } from 'node:path'
 import type { DshContext, DshRequest, DshResponse } from '@dsh-deepcraft/engine/node/dsh'
 import { pluginPath } from './harness-home.js'
-import { fenceRefused, methodRefused, readRequestBody, sendJson } from '@dsh-deepcraft/engine/node/http'
+import { endSocketAfterAnswer, fenceRefused, methodRefused, readRequestBody, sendJson } from '@dsh-deepcraft/engine/node/http'
 
 export type MediaSignatures = Readonly<Record<string, readonly { offset: number, bytes: Buffer }[]>>
 
@@ -100,19 +100,15 @@ export async function storeMedia<K extends string>(
 ): Promise<Buffer | null> {
   const type = (req.headers['content-type'] ?? '').split(';')[0].trim().toLowerCase()
   if (opts.types[type] === undefined) {
-    // The body arrives unread: the socket is ended gracefully once this
-    // answer is flushed, or its rest would meet the next request on the
-    // keep-alive connection (same plug the 413 answer carries below).
-    res.once('finish', () => setTimeout(() => req.socket.end(), 0))
+    // The body arrives unread: the socket is ended once this answer is
+    // flushed, or its rest would meet the next request on the connection.
+    endSocketAfterAnswer(req, res)
     sendJson(res, 415, { ok: false, error: 'unsupported media type' })
     return null
   }
   const bytes = await readRequestBody(req, opts.maxBytes)
   if (bytes === null) {
-    // The remainder of an oversized body stays unread: the socket is ended
-    // gracefully once this answer is flushed — `destroy()` would RST it and
-    // drop the response itself.
-    res.once('finish', () => setTimeout(() => req.socket.end(), 0))
+    endSocketAfterAnswer(req, res)
     sendJson(res, 413, { ok: false, error: 'file too large' })
     return null
   }

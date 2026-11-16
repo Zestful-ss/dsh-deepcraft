@@ -28,16 +28,21 @@ export function createStaticFiles(ctx: DshContext, packageName: string, assetsDi
    * @param body - the payload, when the caller already holds it.
    */
   function sendFile(res: DshResponse, method: string, path: string, headers: Record<string, string>, body: Buffer | null = null) {
-    // An optional file the user never dropped in, or a name no build shipped,
-    // is absent: 404.
-    if (body === null && !existsSync(path)) {
-      res.writeHead(404)
-      res.end()
-      return
-    }
     // Read per request: the files are small, and an in-place edit then shows
-    // up on reload without restarting the host.
-    const payload = body ?? readFileSync(path)
+    // up on reload without restarting the host. An optional file the user
+    // never dropped in, or a name no build shipped — including one removed
+    // between the manifest's read and this one — is absent: 404.
+    let payload: Buffer
+    try {
+      payload = body ?? readFileSync(path)
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+        res.writeHead(404)
+        res.end()
+        return
+      }
+      throw error
+    }
     res.writeHead(200, {
       ...headers,
       'content-length': String(payload.byteLength),
@@ -102,10 +107,19 @@ export function createStaticFiles(ctx: DshContext, packageName: string, assetsDi
       res.end()
       return true
     }
-    const body = brotliDecompressSync(readFileSync(stored))
-    unpressed.set(name, body)
-    sendFile(res, method, stored, headers, body)
-    return true
+    try {
+      const body = brotliDecompressSync(readFileSync(stored))
+      unpressed.set(name, body)
+      sendFile(res, method, stored, headers, body)
+      return true
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+        res.writeHead(404)
+        res.end()
+        return true
+      }
+      throw error
+    }
   }
 
   return { sendFile, sendAsset }

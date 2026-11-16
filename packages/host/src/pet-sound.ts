@@ -11,6 +11,7 @@ import type { PetSoundAnswer, PetSoundEvent, PetSoundState } from '@dsh-deepcraf
 import { PET_SOUNDS_PATH, PET_SOUND_FILE_PATH } from '@dsh-deepcraft/contracts/routes'
 import type { DshContext, DshRequest, DshResponse, DshRoute } from '@dsh-deepcraft/engine/node/dsh'
 import { createMediaStore, mediaFileRoute, mediaStatusRoute } from './media-store.js'
+import { endSocketAfterAnswer } from '@dsh-deepcraft/engine/node/http'
 import type { MediaFile } from './media-store.js'
 
 const OPTIONS = {
@@ -47,10 +48,7 @@ export function petSoundRoutes(ctx: DshContext): { label: string, route: DshRout
     handler: (req: DshRequest, res: DshResponse) => {
       const event = eventOf(req)
       if (event === null) {
-        // The body arrives unread: the socket is ended gracefully once this
-        // answer is flushed, or its rest would meet the next request on the
-        // keep-alive connection (the media routes carry the same plug).
-        res.once('finish', () => setTimeout(() => req.socket.end(), 0))
+        endSocketAfterAnswer(req, res)
         res.writeHead(400, { 'content-type': 'application/json' })
         res.end(JSON.stringify({ ok: false, error: 'unknown sound event' }))
         return

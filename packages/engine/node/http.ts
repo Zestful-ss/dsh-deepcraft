@@ -67,11 +67,24 @@ export function sendJson(res: DshResponse, status: number, payload: unknown) {
 }
 
 /**
+ * End the keep-alive socket gracefully once this answer has flushed. A refusal
+ * that never read the body leaves the rest of it on the wire, where the
+ * connection's next request would meet it as garbage; `destroy()` instead
+ * would RST the socket and take the answer down with it.
+ */
+export function endSocketAfterAnswer(req: DshRequest, res: DshResponse) {
+  res.once('finish', () => setTimeout(() => req.socket.end(), 0))
+}
+
+/**
  * Answer 405 for a request whose method the route does not take.
  * @returns whether the request was turned away.
  */
 export function methodRefused(req: DshRequest, res: DshResponse, methods: string[]) {
   if (req.method !== undefined && methods.includes(req.method)) return false
+  // A refused request may carry a body nobody reads: let the socket close
+  // cleanly after the answer rather than poison the next request on it.
+  endSocketAfterAnswer(req, res)
   res.writeHead(405, { allow: methods.join(', ') })
   res.end()
   return true
@@ -86,6 +99,7 @@ export function methodRefused(req: DshRequest, res: DshResponse, methods: string
 export function fenceRefused(ctx: DshContext, req: DshRequest, res: DshResponse) {
   const refused = refusalOf(ctx, req)
   if (refused === undefined) return false
+  endSocketAfterAnswer(req, res)
   sendJson(res, refused, { ok: false, error: refused === 401 ? 'unauthorized' : 'forbidden' })
   return true
 }

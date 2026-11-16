@@ -18,7 +18,7 @@ import { brandRoutes } from './brand.js'
 import type { DshContext, DshRequest, DshResponse, DshRoute, DshScope } from '@dsh-deepcraft/engine/node/dsh'
 import { harnessPath } from '@dsh-deepcraft/engine/node/harness-home'
 import { pluginPath } from './harness-home.js'
-import { fenceRefused, methodRefused, readRequestBody, refusalOf, sendJson } from '@dsh-deepcraft/engine/node/http'
+import { endSocketAfterAnswer, fenceRefused, methodRefused, readRequestBody, refusalOf, sendJson } from '@dsh-deepcraft/engine/node/http'
 import { createStaticFiles } from '@dsh-deepcraft/engine/node/static-files'
 import { packageRoot } from './package-root.js'
 import { petRoutes } from './pets/routes.js'
@@ -192,7 +192,7 @@ async function deleteSession(ctx: DshContext, req: DshRequest, res: DshResponse)
     // An oversized body leaves its remainder unread: the socket is ended
     // gracefully once this answer is out — `destroy()` would RST it and drop
     // the response itself.
-    res.once('finish', () => req.socket.end())
+    endSocketAfterAnswer(req, res)
   }
   let request = null
   try {

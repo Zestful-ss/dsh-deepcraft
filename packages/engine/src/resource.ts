@@ -32,8 +32,19 @@ export function createHostResource<T>(route: string, adopt: (data: HostAnswer) =
         return response.json()
       })
       .then(data => {
-        const value = adopt(data)
-        if (value !== undefined) notifyAll(listeners, value)
+        let value: T | undefined
+        try {
+          value = adopt(data)
+        } catch (error) {
+          // An adopter that throws over a malformed answer is the resource's
+          // own failure to land: report it, re-arm like a non-answer, and let
+          // the defaults stay (D12).
+          reportError(error)
+          requested = false
+          return
+        }
+        if (value === undefined) requested = false
+        else notifyAll(listeners, value)
       }, () => {
         // The host half did not answer: the caller's defaults stay (D12), and
         // the resource re-arms so a transient fault is retried on the next ask
