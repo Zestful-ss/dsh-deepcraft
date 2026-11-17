@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 1,
+  "at": "2026-11-17",
+  "external": false,
+  "zh": "修复壁纸下右侧栏与浮层仍是实底、没有透出壁纸的问题：壁纸状态下浮层、输入卡、菜单与皮肤卡片改为半透明并模糊其下的画面，壁纸成为整页统一的底。",
+  "en": "Fix the right sidebar and floating surfaces staying opaque over a wallpaper: while a wallpaper is up, raised surfaces, the composer card, menus and the skin's own cards go translucent and blur the picture beneath them, so it reads as one continuous page."
+}

@@ -26,7 +26,7 @@
       r.palettes = {}
       for (var at = 0; at < ['cindy'].length; at++) {
         var id = ['cindy'][at]
-        window.__pushForm({ palette: id })
+        window.__pushForm({ palette: id, wallpaperSource: 'off' })
         await sleep(150)
         var light = readTheme()
         document.body.setAttribute('data-ds-dark-theme', '')

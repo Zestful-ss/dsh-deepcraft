@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修复壁纸下右侧栏与浮层仍是实底、没有透出壁纸的问题：壁纸状态下浮层、输入卡、菜单与皮肤卡片改为半透明并模糊其下的画面，壁纸成为整页统一的底。
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Fix the right sidebar and floating surfaces staying opaque over a wallpaper: while a wallpaper is up, raised surfaces, the composer card, menus and the skin's own cards go translucent and blur the picture beneath them, so it reads as one continuous page.
+
 ## [0.42.5] - 2026-11-16
 
 [中文](#cn-0.42.5) | [English](#en-0.42.5)

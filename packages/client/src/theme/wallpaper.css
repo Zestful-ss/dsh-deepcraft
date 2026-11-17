@@ -79,6 +79,77 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
   background: var(--dsh-deepcraft-canvas);
 }
 
+/* ---------- glass surfaces over the wallpaper ---------- */
+/* The columns stand down, but the cards on them still paint their opaque
+   fills — the guide entries in the right column, the composer card, the
+   docked panels — so over a wallpaper the shell reads as a bare picture
+   with solid boxes on it. The wallpaper state's answer is the reference
+   theme's acrylic: every raised surface goes translucent and blurs what it
+   covers, so the picture stays one continuous ground and the cards read as
+   panes over it. The host's own tokens are restated on the body under the
+   same wallpaper gate, so menus, guide entries, the composer card and the
+   skin's own cards all take the glass without a selector per surface. The
+   fills keep most of the canvas colour — 70% of it — so the ink on them
+   stays readable over any picture, and a lighter blur just settles what
+   still shows through instead of frosting the pane. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) {
+  --dsw-alias-bg-overlay: color-mix(in srgb, var(--dsh-deepcraft-canvas) 70%, transparent);
+  --dsw-specific-input-major: color-mix(in srgb, var(--dsh-deepcraft-canvas) 70%, transparent);
+  --dsw-specific-menu: color-mix(in srgb, var(--dsh-deepcraft-canvas) 70%, transparent);
+  --dsh-deepcraft-raised: color-mix(in srgb, var(--dsh-deepcraft-canvas) 70%, transparent);
+  --dsh-deepcraft-card: color-mix(in srgb, var(--dsh-deepcraft-canvas) 70%, transparent);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) :is([data-composer-card], [data-dsh-deepcraft-part~="rightbar-column"] :is([data-dsh-deepcraft-part~="panel"], [data-sidebar-right-guide-entry]), .dsh-deepcraft-popover-card, [role="menu"], [role="dialog"]) {
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  backdrop-filter: blur(12px) saturate(1.4);
+}
+
+/* The right column's docked panels and the start page's guide are containers,
+   not cards: the entries inside them carry their own fill and blur, so the
+   container keeps none. A pane of its own here would put the picture behind
+   two layers of glass and leave the column reading darker than the column
+   beside it. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) [data-dsh-deepcraft-part~="rightbar-column"] :is([data-dsh-deepcraft-part~="panel"], [data-dsh-deepcraft-part~="panel-guide"]) {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* The cindy sidebar is a pane of liquid glass (theme/material.css): its tint
+   already yields to the transparent column above, and its blur pseudo would
+   still read as a milky sheet over the picture. Under a wallpaper the column
+   shows the picture the way the conversation column does. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) [data-dsh-deepcraft-part~="sidebar-column"]::before {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+/* The right column's dock pane is a host surface of its own: the dockkit
+   paints `._tabHost:not(._float)` in the canvas colour across the whole
+   column, which flattens the picture behind the guide cards. The pane keeps
+   its border and its layout and gives up the fill; a floating pane is not
+   this element and keeps its own card. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) [data-dsh-deepcraft-part~="rightbar-column"] [data-dockkit-pane] {
+  background: transparent;
+}
+
+/* The composer's seat paints the full canvas across the column, which over the
+   mask shows as a brighter band; it stands down, and its tray — the strip
+   from the card's top edge to the window's bottom — stands down with it: over
+   a wallpaper that strip reads as a beige rectangle under the card. The stats
+   dock under the card gives up its strip too; the pills read on the picture
+   the way the transcript does. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) :is([data-phase="active"], [data-content-phase="active"]) [data-composer-seat]::after {
+  display: none;
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) :is([data-phase="active"], [data-content-phase="active"]) [data-composer-dock] {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
 /* ---------- the reader's own wallpaper ---------- */
 /* `wallpaperSource = custom|builtin` installs features/wallpaper/wallpaper.ts.
    An image paints into the document element's canvas background: the canvas

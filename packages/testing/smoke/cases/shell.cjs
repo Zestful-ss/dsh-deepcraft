@@ -117,18 +117,19 @@ module.exports = {
       cindy.base === '#f2f2ed' && cindy.body === 'rgb(242, 242, 237)' && cindy.popover === 'rgb(253, 253, 248)',
       JSON.stringify(cindy))
     // A wallpaper under the skin palette. The shell canvases stand down and
-    // one fixed mask in the canvas colour lies over the wallpaper; the base
-    // canvas the host paints its dialogs and cards with stays opaque. Taking
-    // the marker away brings the fills back and lifts the mask. The document
-    // element's canvas stays behind the layer.
+    // one fixed mask in the canvas colour lies over the wallpaper; the raised
+    // surfaces — dialogs, cards, menus — go translucent and blur the ground
+    // behind them, so the picture stays one continuous page. Taking the marker
+    // away brings the fills back and lifts the mask. The document element's
+    // canvas stays behind the layer.
     const wallCindy = hp.cindyWallpaper || {}
     check('with a skin palette and a wallpaper up the shell stands down under one mask',
       CINDY_SHELL.every((key) => wallCindy[key] === 'rgba(0, 0, 0, 0)') && wallCindy.sidebarFill === 'transparent' &&
         wallCindy.maskPosition === 'fixed' && /^color\(srgb /.test(wallCindy.mask || '') &&
         wallCindy.html === 'rgb(242, 242, 237)',
       JSON.stringify(wallCindy))
-    check('and the base canvas keeps its fill',
-      wallCindy.base === '#f2f2ed' && wallCindy.popover === cindy.popover,
+    check('and the base canvas keeps its fill while the raised surfaces go to glass',
+      wallCindy.base === '#f2f2ed' && /^color\(srgb /.test(wallCindy.popover) && /blur\(12px\)/.test(wallCindy.popoverBlur || ''),
       JSON.stringify({ wallpaper: wallCindy, cindy }))
     check('with the wallpaper gone the skin\'s own fills are back and the mask is lifted',
       CINDY_FILLS.every(([key, value]) => cindy[key] === value) && cindy.sidebarFill === '#eeeee9' &&
