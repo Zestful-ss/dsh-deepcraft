@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.42.7] - 2026-11-17
 
-<h3 id="cn-unreleased">体验优化</h3>
+[中文](#cn-0.42.7) | [English](#en-0.42.7)
+
+<h3 id="cn-0.42.7">体验优化</h3>
 
 - 改善壁纸下卡片的读处：宿主用底色令牌画的卡片、按钮与标签页一并改为半透明，画面从这些表面透出。
 
-<h3 id="en-unreleased">Improvements</h3>
+<h3 id="en-0.42.7">Improvements</h3>
 
 - Improve what shows through the cards over a wallpaper: the host surfaces painted from its fill tokens — cards, buttons and pane tabs — go translucent too, so the picture shows through them.
 
