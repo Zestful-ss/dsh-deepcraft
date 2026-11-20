@@ -77,7 +77,7 @@ const MARKS = [
   ['custom brand tint', 'data-dsh-deepcraft-custom-tint', ''],
   ['custom brand accent', 'data-dsh-deepcraft-accent', '#d97757'],
   ['material radius', 'data-dsh-deepcraft-material-radius', 'reference'],
-  ['material shadow', 'data-dsh-deepcraft-material-shadow', 'flat'],
+  ['material shadow', 'data-dsh-deepcraft-material-shadow', 'reference'],
   ['material motion', 'data-dsh-deepcraft-material-motion', 'reference'],
   ['material glass', 'data-dsh-deepcraft-material-glass', '1'],
   ['material ambient', 'data-dsh-deepcraft-material-ambient', '1'],
@@ -146,6 +146,48 @@ function importanceScenario(lane) {
   /** The host's own menus and dialogs: every visible trigger the page offers. */
   const HOST_TRIGGERS = '[aria-haspopup="menu"]:not(:is([class^="dsh-deepcraft"], [class*=" dsh-deepcraft"])), button[aria-haspopup="dialog"]:not(:is([class^="dsh-deepcraft"], [class*=" dsh-deepcraft"]))'
   /**
+   * What pressing a settings button mirrors onto `<body>` (core/prefs.ts).
+   * Waiting for the mirrored attribute prevents a slower host `savePrefs`
+   * round-trip from racing the audit while keeping 500ms for unmirrored ones.
+   */
+  const mirroredControlTarget = (el) => {
+    const title = el.closest('.dsh-deepcraft-settings-row')?.querySelector('.dsh-deepcraft-settings-row-title')?.textContent?.trim() ?? ''
+    if (el.getAttribute('role') === 'switch') {
+      const expected = el.getAttribute('aria-checked') === 'true' ? '' : '1'
+      const switches = [
+        [/^(玻璃侧栏|Glass sidebar)$/, 'data-dsh-deepcraft-material-glass'],
+        [/^(环境光|Ambient light)$/, 'data-dsh-deepcraft-material-ambient'],
+        [/^(低功耗|Low power)$/, 'data-dsh-deepcraft-wallpaper-lite'],
+      ]
+      const hit = switches.find(([re]) => re.test(title))
+      return hit === undefined ? null : { attr: hit[1], expected }
+    }
+    if (el.getAttribute('aria-pressed') === 'true') return null
+    const label = el.textContent?.trim() ?? ''
+    const systemMotion = () => (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'reduced' : 'full')
+    const segments = [
+      [/^(配色|Colours)$/, 'data-dsh-deepcraft-palette', [[/^Cindy$/, 'cindy'], [/^(跟随宿主|Follow the host)$/, 'host']]],
+      [/^(动画效果|Animation)$/, 'data-dsh-deepcraft-motion', [[/^(随系统|Follow the system)$/, systemMotion], [/^(减弱|Reduced)$/, 'reduced'], [/^(总是|Always)$/, 'full']]],
+      [/^(聊天框宠物|Chat pet)$/, 'data-dsh-deepcraft-mascot', [[/^(Petdex 宠物|Petdex pet)$/, 'petdex'], [/^(关闭|Off)$/, 'off']]],
+      [/^(圆角|Corners)$/, 'data-dsh-deepcraft-material-radius', [[/^(参考档位|Reference scale)$/, 'reference'], [/^(跟随宿主|Follow the host)$/, 'host']]],
+      [/^(阴影|Shadows)$/, 'data-dsh-deepcraft-material-shadow', [[/^(参考阴影|Reference shadows)$/, 'reference'], [/^(平铺|Flat)$/, 'flat'], [/^(跟随宿主|Follow the host)$/, 'host']]],
+      [/^(动效节奏|Motion timing)$/, 'data-dsh-deepcraft-material-motion', [[/^(参考节奏|Reference timing)$/, 'reference'], [/^(跟随宿主|Follow the host)$/, 'host']]],
+      [/^(壁纸|Wallpaper)$/, 'data-dsh-deepcraft-wallpaper', [[/^(关闭|Off)$/, 'off'], [/^(自定义|Custom)$/, 'custom'], [/^(内置|Built-in)$/, 'builtin']]],
+    ]
+    for (const [rowRe, attr, choices] of segments) {
+      if (!rowRe.test(title)) continue
+      for (const [labelRe, value] of choices) {
+        if (labelRe.test(label)) return { attr, expected: typeof value === 'function' ? value() : value }
+      }
+      return null
+    }
+    if (/^(内置壁纸|Built-in wallpaper)$/.test(title)) {
+      return { attr: 'data-dsh-deepcraft-wallpaper', expected: 'builtin' }
+    }
+    return null
+  }
+
+  /**
    * Every control the open settings tab offers, one state each: a preference
    * that renders the skin's own markup (the mascot, the workspace pin block, a
    * search style's own box) only puts its elements on the page once the
@@ -159,8 +201,15 @@ function importanceScenario(lane) {
     for (let index = 0; index < many; index++) {
       const control = controls.nth(index)
       if (!await control.isVisible()) continue
+      const target = await control.evaluate(mirroredControlTarget)
+      const current = target === null ? null : await page.evaluate((key) => document.body.getAttribute(key), target.attr)
       await control.click({ force: true })
-      await page.waitForTimeout(500)
+      if (target !== null && current !== target.expected) {
+        await page.waitForFunction(([key, want]) => document.body.getAttribute(key) === want, [target.attr, target.expected], { timeout: 5000 }).catch(() => {})
+        await page.waitForTimeout(100)
+      } else {
+        await page.waitForTimeout(500)
+      }
       await audit.state(`settings control ${tab}.${index + 1}`)
     }
   }
@@ -314,11 +363,15 @@ function importanceScenario(lane) {
       for (const [, key] of MATERIAL_ATTRS) await attribute(page, key, null)
       await audit.state('host material')
       for (const [label, key] of MATERIAL_ATTRS) {
-        await attribute(page, key, key === 'data-dsh-deepcraft-material-glass' || key === 'data-dsh-deepcraft-material-ambient'
-          ? '1'
-          : key === 'data-dsh-deepcraft-material-shadow' ? 'flat' : 'reference')
+        await attribute(page, key, key === 'data-dsh-deepcraft-material-glass' || key === 'data-dsh-deepcraft-material-ambient' ? '1' : 'reference')
         await audit.state(`material ${label}`)
       }
+      await attribute(page, 'data-ds-dark-theme', '')
+      await audit.state('material ambient dark')
+      await attribute(page, 'data-ds-dark-theme', null)
+      await attribute(page, 'data-dsh-deepcraft-material-shadow', 'flat')
+      await audit.state('material shadow flat')
+      await attribute(page, 'data-dsh-deepcraft-material-shadow', 'reference')
       await attribute(page, 'data-dsh-deepcraft-palette', 'host')
       await attribute(page, 'data-dsh-deepcraft-font-ui', 'host')
       await attribute(page, 'data-dsh-deepcraft-font-prose', 'follow')
@@ -416,22 +469,49 @@ function importanceScenario(lane) {
       await uploadPng(page, WALLPAPER_FILE_ROUTE)
       await openSkinSettings(page)
       await appearanceTab(page)
-      await rowTitled(page, /^(壁纸|Wallpaper)$/).getByRole('button', { name: /^(自定义|Custom)$/ }).click()
+      await rowTitled(page, /^(配色|Colours)$/).getByRole('button', { name: /^Cindy$/ }).click()
+      await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-palette') === 'cindy', undefined, { timeout: 5000 })
+      const wallpaperRow = rowTitled(page, /^(壁纸|Wallpaper)$/)
+      const customButton = wallpaperRow.getByRole('button', { name: /^(自定义|Custom)$/ })
+      if (await customButton.getAttribute('aria-pressed') === 'true') {
+        await wallpaperRow.getByRole('button', { name: /^(关闭|Off)$/ }).click()
+      }
+      await customButton.click()
       await page.keyboard.press('Escape')
-      await page.waitForTimeout(900)
+      await page.waitForFunction(() => document.documentElement.getAttribute('data-dsh-deepcraft-wallpaper-mount') === 'image', undefined, { timeout: 5000 }).catch(() => {})
+      await page.waitForTimeout(400)
       await audit.state('own wallpaper layer')
       await openSkinSettings(page)
       await appearanceTab(page)
       await rowTitled(page, /^(壁纸|Wallpaper)$/).getByRole('button', { name: /^(关闭|Off)$/ }).click()
+      await rowTitled(page, /^(聊天框宠物|Chat pet)$/).getByRole('button', { name: /^(Petdex 宠物|Petdex pet)$/ }).click()
+      await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-mascot') === 'petdex', undefined, { timeout: 5000 }).catch(() => {})
+      await page.locator('.dsh-deepcraft-settings-row .dsh-deepcraft-settings-pet-select').first().selectOption('cindy')
+      await page.waitForTimeout(300)
       await page.keyboard.press('Escape')
       await page.evaluate(async () => { await fetch('/dsh-deepcraft/wallpaper/file', { method: 'DELETE' }) })
       await page.waitForTimeout(400)
-      // The preferences the controls set render their own markup on the empty
-      // page — the mascot above all — so the walk goes back to it and audits
-      // what they put there.
-      const home = page.locator('button[data-dsh-deepcraft-part~="new-session"]').first()
-      if (await home.count() > 0 && await home.isVisible()) {
-        await home.click({ force: true })
+      // Switch to an island pet and audit its stack mount plus a held drag
+      // lift, then open a fresh session via the host's workspace + control.
+      const island = page.locator('.dsh-deepcraft-island[data-ready]')
+      await island.waitFor({ state: 'visible', timeout: 10000 }).catch(() => {})
+      await audit.state('island idle')
+      const hitBox = await page.locator('.dsh-deepcraft-island-hit').first().boundingBox()
+      if (hitBox !== null) {
+        const cx = hitBox.x + hitBox.width / 2
+        const cy = hitBox.y + hitBox.height / 2
+        await page.mouse.move(cx, cy)
+        await page.mouse.down()
+        await page.mouse.move(cx, cy - 12)
+        await page.locator('.dsh-deepcraft-island[data-animation="drag"]').waitFor({ state: 'attached', timeout: 5000 }).catch(() => {})
+        await audit.state('island drag')
+        await page.mouse.up()
+        await page.waitForTimeout(300)
+      }
+      const workspaceRow = page.locator('[data-row-key^="workspace:"]').first()
+      if (await workspaceRow.count() > 0 && await workspaceRow.isVisible()) {
+        await workspaceRow.hover()
+        await workspaceRow.locator('button').nth(1).click()
         await page.waitForTimeout(1500)
         await audit.state('hero after preferences')
       }

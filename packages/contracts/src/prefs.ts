@@ -49,7 +49,7 @@ export const MATERIAL_REFERENCE = 'reference'
 export const MATERIAL_HOST = 'host'
 export const MATERIAL_RADII = [MATERIAL_REFERENCE, MATERIAL_HOST] as const
 export const MATERIAL_SHADOWS_FLAT = 'flat'
-export const MATERIAL_SHADOWS = [MATERIAL_SHADOWS_FLAT, MATERIAL_HOST] as const
+export const MATERIAL_SHADOWS = [MATERIAL_REFERENCE, MATERIAL_SHADOWS_FLAT, MATERIAL_HOST] as const
 export const MATERIAL_MOTIONS = [MATERIAL_REFERENCE, MATERIAL_HOST] as const
 /** Who sets each type role: the host's own face, one of the skin's, or a family list the reader types. */
 export const FONT_HOST = 'host'
@@ -154,8 +154,8 @@ export const PREFS = {
   motion: { type: 'choice', values: MOTION_MODES, default: MOTION_SYSTEM },
   /** The material layer's corner scale: the reference theme's 4/8/12, or the host's own (D84). */
   materialRadius: { type: 'choice', values: MATERIAL_RADII, default: MATERIAL_REFERENCE },
-  /** Its shadows: flat (levels off, elevation drawn as a stroke), or the host's. */
-  materialShadow: { type: 'choice', values: MATERIAL_SHADOWS, default: MATERIAL_SHADOWS_FLAT },
+  /** Its shadows: the reference theme's three levels, flat (levels off, elevation drawn as a stroke), or the host's. */
+  materialShadow: { type: 'choice', values: MATERIAL_SHADOWS, default: MATERIAL_REFERENCE },
   /** Its durations: the reference theme's 150/200/250ms, or the host's. */
   materialMotion: { type: 'choice', values: MATERIAL_MOTIONS, default: MATERIAL_REFERENCE },
   /** The sidebar's liquid glass: a translucent tint, a blur and an inner hairline. */
@@ -168,7 +168,7 @@ export const PREFS = {
   subagentModelPicker: { type: 'boolean', default: true },
   palette: { type: 'choice', values: PALETTES, default: PALETTE_CINDY },
   fontUi: { type: 'choice', values: FONT_UI_VALUES, default: FONT_UI_HARMONY },
-  fontProse: { type: 'choice', values: FONT_PROSE_VALUES, default: FONT_PROSE_ANTHROPIC },
+  fontProse: { type: 'choice', values: FONT_PROSE_VALUES, default: FONT_FOLLOW },
   fontCode: { type: 'choice', values: FONT_CODE_VALUES, default: FONT_CODE_ANTHROPIC },
   fontUiCustom: { type: 'text', default: '', max: FONT_LIST_MAX },
   fontProseCustom: { type: 'text', default: '', max: FONT_LIST_MAX },

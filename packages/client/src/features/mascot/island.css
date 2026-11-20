@@ -103,9 +103,9 @@ body[data-dsh-deepcraft] .dsh-deepcraft-island-sparkle {
   pointer-events: none;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-island-sparkle:nth-of-type(3) { left: 12px; top: 14px; }
-body[data-dsh-deepcraft] .dsh-deepcraft-island-sparkle:nth-of-type(4) { right: 12px; top: 18px; }
-body[data-dsh-deepcraft] .dsh-deepcraft-island-sparkle:nth-of-type(5) { right: 18px; bottom: 16px; }
+body[data-dsh-deepcraft] .dsh-deepcraft-island-sparkle:nth-last-of-type(3) { left: 12px; top: 14px; }
+body[data-dsh-deepcraft] .dsh-deepcraft-island-sparkle:nth-last-of-type(2) { right: 12px; top: 18px; }
+body[data-dsh-deepcraft] .dsh-deepcraft-island-sparkle:nth-last-of-type(1) { right: 18px; bottom: 16px; }
 
 /* ── The states the stage names (data-animation on the root) ─────────────── */
 body[data-dsh-deepcraft] .dsh-deepcraft-island[data-animation="idle"] .dsh-deepcraft-island-strip {

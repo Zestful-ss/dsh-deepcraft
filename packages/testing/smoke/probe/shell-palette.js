@@ -52,6 +52,10 @@
           popover: getComputedStyle(hostNodes.popover).backgroundColor,
           popoverBlur: getComputedStyle(hostNodes.popover).backdropFilter,
           heading: getComputedStyle(hostNodes.heading).fontFamily,
+          bubble: bodyStyle.getPropertyValue('--dsw-specific-bubble').trim(),
+          cardFill: bodyStyle.getPropertyValue('--dsw-alias-card-fill').trim(),
+          menuFill: bodyStyle.getPropertyValue('--dsw-menu-surface-fill').trim(),
+          shikiKeyword: bodyStyle.getPropertyValue('--shiki-token-keyword').trim(),
           code: getComputedStyle(hostNodes.code.firstChild).fontFamily,
         }
       }

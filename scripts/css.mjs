@@ -198,7 +198,7 @@ function checkTokenGates(label, rule, selectors, gates, names) {
     const name = node.prop
     const where = `${label}:${node.source.start.line}`
     if (name.startsWith('--dsw-font-')) continue
-    if (name.startsWith('--dsw-')) {
+    if (name.startsWith('--dsw-') || name.startsWith('--shiki-token-')) {
       if (!every((selector) => paletteGated(selector, gates) || materialGated(selector, gates))) throw new Error(`build: ${where} writes ${name} outside a palette or material gate`)
     }
     if (!name.startsWith('--dsh-deepcraft-')) continue

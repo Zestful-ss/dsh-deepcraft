@@ -14,7 +14,7 @@
  * name (packages/contracts/src/services.ts, 0.2.1-alpha.1), and the lane's
  * `contract` scenario walks every `probe` below against a live host (D3, D66).
  */
-import { ACCOUNT_TRIGGER_SELECTOR, COMPOSER_DOCK_SELECTOR, DS_BOT_ACCOUNT_MENU_SELECTOR, DS_BOT_SET_ROW_SELECTOR, DS_BOT_SETTINGS_LAYER_SELECTOR, DS_BOT_SOFT_BUTTON_SELECTOR, CHAIN_OVERLAY_FALLBACK_ATTRIBUTE, COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, COMPOSER_RIGHT_SLOT_SELECTOR, COMPOSER_SELECTOR, COMPOSER_STACK_SELECTOR, CONVERSATION_HEADER_SLOT_SELECTOR, CONVERSATION_SCROLL_SELECTOR, CONVERSATION_SESSION_ATTRIBUTE, CONVERSATION_SESSION_SELECTOR, DARK_THEME_ATTRIBUTE, DS_BOT_ACCOUNT_SELECTOR, DS_BOT_FOOT_SELECTOR, DS_BOT_SURFACE_ATTRIBUTE, FOOT_AREA_SELECTOR, MENU_ROLE_SELECTOR, MODEL_SLOT_SELECTOR, PHASE_ATTRIBUTE, RIGHTBAR_COLUMN_SELECTOR, ROOT_SLOT_SELECTOR, SETTINGS_BUTTON_SELECTOR, SIDEBAR_ROOT_SELECTOR, SIDEBAR_SLOT_SELECTOR, SKIN_CENTER_ATTRIBUTE, UNTAGGED_SHEET_SELECTOR, WORKSPACE_LIST_AREA_SELECTOR, WORKSPACE_SECTION_LABEL_SELECTOR, WORKSPACE_TREE_ROW_SELECTOR } from './dom'
+import { ACCOUNT_TRIGGER_SELECTOR, CHECKED_SWITCH_SELECTOR, COMPOSER_DOCK_SELECTOR, DS_BOT_ACCOUNT_MENU_SELECTOR, DS_BOT_SET_ROW_SELECTOR, DS_BOT_SETTINGS_LAYER_SELECTOR, DS_BOT_SOFT_BUTTON_SELECTOR, CHAIN_OVERLAY_FALLBACK_ATTRIBUTE, COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, COMPOSER_RIGHT_SLOT_SELECTOR, COMPOSER_SELECTOR, COMPOSER_STACK_SELECTOR, CONVERSATION_HEADER_SLOT_SELECTOR, CONVERSATION_SCROLL_SELECTOR, CONVERSATION_SESSION_ATTRIBUTE, CONVERSATION_SESSION_SELECTOR, DARK_THEME_ATTRIBUTE, DS_BOT_ACCOUNT_SELECTOR, DS_BOT_FOOT_SELECTOR, DS_BOT_SURFACE_ATTRIBUTE, FOOT_AREA_SELECTOR, MENU_ROLE_SELECTOR, MODEL_SLOT_SELECTOR, PHASE_ATTRIBUTE, RIGHTBAR_COLUMN_SELECTOR, ROOT_SLOT_SELECTOR, SETTINGS_BUTTON_SELECTOR, SIDEBAR_ROOT_SELECTOR, SIDEBAR_SLOT_SELECTOR, SKIN_CENTER_ATTRIBUTE, UNTAGGED_SHEET_SELECTOR, WORKSPACE_LIST_AREA_SELECTOR, WORKSPACE_SECTION_LABEL_SELECTOR, WORKSPACE_TREE_ROW_SELECTOR } from './dom'
 
 /**
  * The page state an entry is checked in (D66): the empty page, the moment a
@@ -22,7 +22,7 @@ import { ACCOUNT_TRIGGER_SELECTOR, COMPOSER_DOCK_SELECTOR, DS_BOT_ACCOUNT_MENU_S
  * turns, the host's own account menu open, or the host's dark flip. `any` holds
  * everywhere the page is served.
  */
-type HostDomProbeState = 'any' | 'hero' | 'sending' | 'streaming' | 'conversation' | 'menu' | 'dark'
+type HostDomProbeState = 'any' | 'hero' | 'sending' | 'streaming' | 'conversation' | 'menu' | 'settings' | 'dark'
 
 /**
  * How the literal is checked:
@@ -88,6 +88,7 @@ export const HOST_DOM: HostDomEntry[] = [
   { id: 'workspace.tree-row', value: WORKSPACE_TREE_ROW_SELECTOR, probe: { state: 'any', kind: 'selector', within: 'workspace.list-area' }, use: 'a workspace tree row, by the host\u2019s own row key or either row part: the list area is recognised by holding one' },
   { id: 'shell.foot-area', value: FOOT_AREA_SELECTOR, probe: { state: 'any', kind: 'selector' }, use: 'the sidebar footer block holding the host\u2019s settings entry and account trigger; the settings page\u2019s Ctrl+, drive presses them there' },
   { id: 'shell.menu', value: MENU_ROLE_SELECTOR, probe: { state: 'menu', kind: 'selector' }, use: 'an open host menu, read as the account menu when the account trigger reports it open' },
+  { id: 'shell.checked-switch', value: CHECKED_SWITCH_SELECTOR, probe: { state: 'settings', kind: 'selector' }, use: 'a checked switch control, whose active track theme/tokens.css paints with --dsw-alias-state-business-primary under skin palettes', owner: 'core' },
   { id: 'shell.account-trigger', value: ACCOUNT_TRIGGER_SELECTOR, probe: { state: 'any', kind: 'none' }, use: 'the host\u2019s own account trigger in the footer, marked with the sign-in state; on a host without a settings button its menu carries the settings row the page opens' },
   { id: 'shell.settings-button', value: SETTINGS_BUTTON_SELECTOR, probe: { state: 'any', kind: 'selector' }, use: 'the popup-opening control in the footer\u2019s settings area: the host\u2019s settings dialog trigger where that launcher fills the slot, the account trigger on the desktop, which the caller turns away' },
   { id: 'shell.root-slot', value: ROOT_SLOT_SELECTOR, probe: { state: 'any', kind: 'selector' }, use: 'the root slot: the shell frame is its own element child, and the three columns are what the part walk reads inside it (D3)', owner: 'core' },

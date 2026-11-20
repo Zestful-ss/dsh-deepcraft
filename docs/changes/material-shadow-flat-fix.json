@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-20",
+  "group": "fixes",
+  "order": 0,
+  "external": false,
+  "zh": "修复外观材质「阴影」设为「平铺」时在 Cindy 配色下仍显示三级阴影的问题，拆分为默认「参考阴影」与「平铺」两档。",
+  "en": "Fix flat shadows still rendering three-level elevation under the Cindy palette by separating the reference shadow default from the flat stroke option."
+}

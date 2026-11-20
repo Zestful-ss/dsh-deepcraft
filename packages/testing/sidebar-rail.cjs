@@ -11,6 +11,8 @@
  * wraps differently because a font arrived late is not a layout difference.
  */
 'use strict'
+const { withSkinSheetOff } = require('./lane.cjs')
+
 
 /** Every row the host draws in the sidebar: its tree items and keyed rows. */
 function readRows() {
@@ -60,18 +62,9 @@ function sidebarRailScenario({ check }) {
     script: 'greeting',
     prompt: 'hello there',
     async assert({ page, session, notes }) {
-      notes.on = await page.evaluate(readRows)
-      await page.evaluate(() => {
-        const sheet = document.getElementById('dsh-deepcraft-style')
-        if (sheet === null) throw new Error('the skin mounted no stylesheet')
-        sheet.disabled = true
-      })
-      await page.waitForTimeout(300)
-      notes.off = await page.evaluate(readRows)
-      await page.evaluate(() => {
-        document.getElementById('dsh-deepcraft-style').disabled = false
-      })
-      await page.waitForTimeout(300)
+      const { withSheet, withoutSheet } = await withSkinSheetOff(page, () => page.evaluate(readRows), 300)
+      notes.on = withSheet
+      notes.off = withoutSheet
       const diff = differences(notes.on, notes.off)
       // The skin's sidebar presence is its own conversation blocks (D85); any
       // other node of its making inside the host's sidebar would be a redraw of

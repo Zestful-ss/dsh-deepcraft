@@ -7,6 +7,7 @@
 const path = require('node:path')
 const { HOST, readFlow, check, observe } = require('./lane.cjs')
 const { recordProbes } = require('./contract-probe.cjs')
+const { openSkinSettings } = require('./settings-route.cjs')
 const { sendPrompt, waitForTurn } = require('./prompt.cjs')
 const { importanceScenario } = require('./importance.cjs')
 const { motionScenario } = require('./motion.cjs')
@@ -223,6 +224,10 @@ const SCENARIOS = {
         await recordProbes(context, 'menu', 3000)
         await context.page.keyboard.press('Escape')
       }
+      await openSkinSettings(context.page)
+      await recordProbes(context, 'settings', 3000)
+      await context.page.keyboard.press('Escape')
+      await context.page.waitForTimeout(300)
       await context.page.evaluate(() => document.body.setAttribute('data-ds-dark-theme', ''))
       await recordProbes(context, 'dark')
     },

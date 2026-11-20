@@ -4,6 +4,26 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">体验优化</h3>
+
+- 补齐 Cindy 配色对发送按钮、行内代码、代码高亮、开关、提示框、轻提示、滚动条、平台控件、导航激活项、菜单表面、标准圆角、暗色玻璃侧栏与壁纸玻璃的覆盖。
+- 将正文字体默认预设改为跟随界面字体。
+
+### 问题修复
+
+- 修复外观材质「阴影」设为「平铺」时在 Cindy 配色下仍显示三级阴影的问题，拆分为默认「参考阴影」与「平铺」两档。
+
+<h3 id="en-unreleased">Improvements</h3>
+
+- Complete Cindy palette coverage for the send button, inline code, syntax highlighting, switches, tooltips, toasts, scrollbars, platform controls, active navigation, menu surfaces, circular corners, the dark glass sidebar, and wallpaper glass.
+- Change the default prose font preference to follow the interface font.
+
+### Bug Fixes
+
+- Fix flat shadows still rendering three-level elevation under the Cindy palette by separating the reference shadow default from the flat stroke option.
+
 ## [0.42.7] - 2026-11-17
 
 [中文](#cn-0.42.7) | [English](#en-0.42.7)

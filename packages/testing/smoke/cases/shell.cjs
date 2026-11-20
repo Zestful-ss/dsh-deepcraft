@@ -43,15 +43,32 @@ module.exports = {
           dark.accent === (want.darkAccent ?? want.accent) && dark.buttonFill === (want.darkButton ?? want.button),
         JSON.stringify({ light: { canvas: palette.canvas, accent: palette.accent, button: palette.buttonFill }, dark: { canvas: dark.canvas, accent: dark.accent, button: dark.buttonFill } }))
       check(`${id}: the dark canvas keeps the palette's own raised surface`, dark.raised === want.raised, JSON.stringify(dark))
+      check(`${id}: the send button, inline code, switch, platform, menu and Shiki tokens follow Cindy while body keeps host on-color`,
+        palette.infoFill === '#3c3f43' && dark.infoFill === '#eeeeee' &&
+          palette.sendOnColor === '#fcfcfc' && dark.sendOnColor === '#151515' &&
+          palette.bodyOnColor === '' && dark.bodyOnColor === '' &&
+          palette.shikiKeyword === '#d73a49' && dark.shikiKeyword === '#ff7b72' &&
+          palette.inlineCode === 'rgba(175, 184, 193, .2)' && dark.inlineCode === 'rgba(110, 118, 129, .22)' &&
+          palette.switchThumb === '#fdfdf8' && dark.switchThumb === '#fcfcfc' &&
+          palette.platformBg === '#eeeee9' && dark.platformBg === '#272727' &&
+          palette.menuFill === 'rgba(251, 251, 246, .9)' && dark.menuFill === 'rgba(21, 21, 21, .8)',
+        JSON.stringify({ light: palette, dark }))
     }
     const material = r.material || {}
     const off = r.materialOff || {}
-    check('the material layer answers its own values: the 12px corners, cindy flat shadow, 150ms fast step, glass sidebar and ambient light (D84)',
-      material.radius === '12px' && /^0 1px 2px rgba\(0, 0, 0, 0?\.12\)$/.test(material.shadow) &&
+    const flat = r.materialFlat || {}
+    check('the material layer answers its own values: the 12px circular corners, cindy reference shadows, 150ms fast step, glass sidebar, blue switch track and ambient light (D84)',
+      material.radius === '12px' && material.cornerShape === 'round' &&
+        /^0 1px 2px rgba\(0, 0, 0, 0?\.12\)$/.test(material.shadow) &&
+        material.darkGlass === 'rgba(24, 24, 24, 0.62)' &&
+        material.switchTrack === 'rgb(65, 124, 221)' &&
         /^(150ms|\.15s)$/.test(material.fast) && /blur\(42px\)/.test(material.glass || '') && /radial-gradient/.test(material.ambient || ''),
       JSON.stringify(material))
+    check('flat shadows drop all elevation levels even under the cindy palette',
+      flat.shadow === 'none' && flat.shadowLv2 === 'none' && /rgba\(0, 0, 0, 0?\.1\)/.test(flat.elevation),
+      JSON.stringify(flat))
     check('every material aspect returns to the host on its own, with no palette involved (D84)',
-      off.radius === '' && off.shadow === '' && off.glass === 'none' && off.ambient === 'none',
+      off.radius === '' && off.cornerShape === '' && off.shadow === '' && off.shadowLv2 === '' && off.glass === 'none' && off.ambient === 'none',
       JSON.stringify(off))
     commonChecks(r)
   },
@@ -99,6 +116,8 @@ module.exports = {
     const host = hp.host || {}
     check('under the host\'s colours and type the skin writes none of the host\'s tokens',
       host.base === 'rgb(250, 250, 252)' && host.family === '"Host Sans", sans-serif', JSON.stringify(host))
+    check('host leaves Shiki tokens unset under Follow the host',
+      host.shikiKeyword === '', JSON.stringify(host.shikiKeyword))
     check('and paints none of the host\'s frame: the sidebar keeps the host\'s fill, the conversation column and the canvases stay unpainted',
       host.sidebar === 'rgb(244, 245, 250)' && host.conversation === 'rgba(0, 0, 0, 0)' &&
         host.body === 'rgba(0, 0, 0, 0)' && host.html === 'rgba(0, 0, 0, 0)',
@@ -131,6 +150,9 @@ module.exports = {
     check('and the base canvas keeps its fill while the raised surfaces go to glass',
       wallCindy.base === '#f2f2ed' && /^color\(srgb /.test(wallCindy.popover) && /blur\(12px\)/.test(wallCindy.popoverBlur || ''),
       JSON.stringify({ wallpaper: wallCindy, cindy }))
+    check('wallpaper turns bubbles, cards and menu surfaces translucent under a skin palette',
+      /^color-mix\(/.test(wallCindy.bubble || '') && /^color-mix\(/.test(wallCindy.cardFill || '') && /^color-mix\(/.test(wallCindy.menuFill || ''),
+      JSON.stringify({ bubble: wallCindy.bubble, cardFill: wallCindy.cardFill, menuFill: wallCindy.menuFill }))
     check('with the wallpaper gone the skin\'s own fills are back and the mask is lifted',
       CINDY_FILLS.every(([key, value]) => cindy[key] === value) && cindy.sidebarFill === '#eeeee9' &&
         cindy.mask === 'rgba(0, 0, 0, 0)',

@@ -17,6 +17,8 @@
  * button. The skin neither moves nor replaces any of them, so each has to work.
  */
 'use strict'
+const { withSkinSheetOff } = require('./lane.cjs')
+
 
 /** The host seats compared with the sheet on and off, and the shape read off each. */
 const SEATS = [
@@ -83,21 +85,7 @@ function nativeLayoutScenario({ check }) {
     prompt: 'hello there',
     profilePatch: ['- id: ui-skin-deepcraft', '  config:', '    palette: host', '    fontUi: host', '    fontProse: follow', '    fontCode: host', '    mascot: \'off\''],
     async assert({ page, session, notes }) {
-      const withSheet = await page.evaluate(readSeats, SEATS)
-      // The skin's one sheet, taken off the page for a frame: every rule it
-      // carries is scoped under the body attribute, so disabling it is the
-      // same page the host serves with no skin installed.
-      await page.evaluate(() => {
-        const sheet = document.getElementById('dsh-deepcraft-style')
-        if (sheet === null) throw new Error('the skin mounted no stylesheet')
-        sheet.disabled = true
-      })
-      await page.waitForTimeout(250)
-      const withoutSheet = await page.evaluate(readSeats, SEATS)
-      await page.evaluate(() => {
-        document.getElementById('dsh-deepcraft-style').disabled = false
-      })
-      await page.waitForTimeout(250)
+      const { withSheet, withoutSheet } = await withSkinSheetOff(page, () => page.evaluate(readSeats, SEATS), 250)
       const diff = differences(withSheet, withoutSheet)
 
       // The host's own controls, with the sheet back on.

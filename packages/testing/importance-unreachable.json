@@ -53,12 +53,6 @@
       ]
     },
     {
-      "reason": "环境光的暗色块：走查开着环境光的页面形态是浅色",
-      "selectors": [
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-material-ambient=\"1\"][data-ds-dark-theme]"
-      ]
-    },
-    {
       "reason": "壁纸错误行：走查不开文件选择器，设置页的失败提示不出现",
       "selectors": [
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-error"
@@ -97,14 +91,15 @@
       "selectors": [
         "body[data-dsh-deepcraft] .dsh-deepcraft-settings-pet-status",
         "body[data-dsh-deepcraft] [data-dsh-deepcraft-petdex-anchor=panel]",
-        "body[data-dsh-deepcraft] [data-dsh-deepcraft-petdex-anchor=panel]>.dsh-deepcraft-petdex"
+        "body[data-dsh-deepcraft] [data-dsh-deepcraft-petdex-anchor=panel]>.dsh-deepcraft-petdex",
+        "body[data-dsh-deepcraft] [data-dsh-deepcraft-island-anchor=panel]",
+        "body[data-dsh-deepcraft] [data-dsh-deepcraft-island-anchor=panel]>.dsh-deepcraft-island"
       ]
     },
     {
-      "reason": "壁纸层：插件壁纸的暗色遮罩要那个插件在页面上；低功耗遮罩要层和低功耗一起开着，走查只放一个标记",
+      "reason": "壁纸层：插件壁纸的暗色遮罩要那个插件在页面上",
       "selectors": [
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette=host])[data-ds-dark-theme][data-we-wallpaper]",
-        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette=host]):is([data-dsh-deepcraft-wallpaper=custom],[data-dsh-deepcraft-wallpaper=builtin])[data-dsh-deepcraft-wallpaper-lite=\"1\"]"
+        "body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette=host])[data-ds-dark-theme][data-we-wallpaper]"
       ]
     }
   ]

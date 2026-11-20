@@ -222,6 +222,7 @@ const CONSTANTS = (() => {
       palette: { attribute: PALETTE_ATTR, ids: [...SKIN_PALETTES], host: PALETTE_HOST },
       material: [
         { attribute: MATERIAL_RADIUS_ATTR, value: 'reference' },
+        { attribute: MATERIAL_SHADOW_ATTR, value: 'reference' },
         { attribute: MATERIAL_SHADOW_ATTR, value: 'flat' },
         { attribute: MATERIAL_MOTION_ATTR, value: 'reference' },
         { attribute: MATERIAL_GLASS_ATTR, value: '1' },

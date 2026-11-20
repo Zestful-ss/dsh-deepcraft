@@ -20,7 +20,7 @@ const SRC = path.join(ROOT, 'packages', 'client', 'src')
 const { PREFS } = await loadModuleEsm('packages/contracts/src/prefs.ts')
 
 /** The page states and check kinds packages/contracts/src/table.ts records (D3, D66). */
-const PROBE_STATES = new Set(['any', 'hero', 'sending', 'streaming', 'conversation', 'menu', 'dark'])
+const PROBE_STATES = new Set(['any', 'hero', 'sending', 'streaming', 'conversation', 'menu', 'settings', 'dark'])
 const PROBE_KINDS = new Set(['selector', 'attribute', 'property', 'global', 'value', 'rail-geometry', 'none'])
 
 /**

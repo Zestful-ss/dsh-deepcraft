@@ -63,6 +63,7 @@ export function createSettingsAppearanceTab(): SettingsTab {
       { value: MATERIAL_HOST, label: copy('materialHost') },
     ]
     const shadowOptions: SegmentOption<Prefs['materialShadow']>[] = [
+      { value: MATERIAL_REFERENCE, label: copy('materialShadowReference') },
       { value: MATERIAL_SHADOWS_FLAT, label: copy('materialShadowFlat') },
       { value: MATERIAL_HOST, label: copy('materialHost') },
     ]

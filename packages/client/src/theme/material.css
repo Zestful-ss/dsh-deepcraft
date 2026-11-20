@@ -6,6 +6,7 @@
    leaves the sidebar's collapse geometry to the host. */
 
 body[data-dsh-deepcraft][data-dsh-deepcraft-palette][data-dsh-deepcraft-material-radius="reference"] {
+  --dsw-corner-shape: round;
   --dsw-radius-xs: 4px;
   --dsw-radius-sm: 8px;
   --dsw-radius-md: 12px;
@@ -14,6 +15,23 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette][data-dsh-deepcraft-material
   --dsw-radius-panel: 12px;
 }
 
+/* Reference shadows: Cindy's three shadow rungs — the chip's raised edge, a
+   soft panel and the menu's drop — with dark strengths tuned for low-light
+   contrast. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette][data-dsh-deepcraft-material-shadow="reference"] {
+  --dsw-shadow-lv1: 0 1px 2px rgba(0, 0, 0, 0.12);
+  --dsw-shadow-lv2: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --dsw-shadow-lv3: 0 4px 16px rgba(0, 0, 0, 0.15);
+  --dsw-elevation-soft: var(--dsw-shadow-lv1);
+  --dsw-elevation-panel: var(--dsw-shadow-lv2);
+  --dsw-elevation-prominent: var(--dsw-shadow-lv3);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette][data-dsh-deepcraft-material-shadow="reference"][data-ds-dark-theme] {
+  --dsw-shadow-lv1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --dsw-shadow-lv2: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --dsw-shadow-lv3: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
 /* Flat: the three shadow levels come off and elevation is drawn as the host's
    own stroke, so a raised surface still separates from what it covers. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-palette][data-dsh-deepcraft-material-shadow="flat"] {
@@ -31,10 +49,8 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette][data-dsh-deepcraft-material
   --ds-transition-duration-slow: var(--dsh-deepcraft-duration-material-slow);
 }
 
-/* The cindy palette carries Cindy's own shape language (docs/STYLE.md): its
-   4/8/12/16/24px corner ladder and its three shadow rungs — the chip's raised
-   edge, a soft panel and the menu's drop — while the reader's flat and
-   reference choices stand. */
+/* The cindy palette carries Cindy's own 4/8/12/16/24px corner ladder
+   (docs/STYLE.md) when the reference corner scale is active. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-palette="cindy"][data-dsh-deepcraft-material-radius="reference"] {
   --dsw-radius-xs: 4px;
   --dsw-radius-sm: 8px;
@@ -42,21 +58,6 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette="cindy"][data-dsh-deepcraft-
   --dsw-radius-lg: 16px;
   --dsw-radius-xl: 24px;
   --dsw-radius-panel: 24px;
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette="cindy"][data-dsh-deepcraft-material-shadow="flat"] {
-  --dsw-shadow-lv1: 0 1px 2px rgba(0, 0, 0, 0.12);
-  --dsw-shadow-lv2: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --dsw-shadow-lv3: 0 4px 16px rgba(0, 0, 0, 0.15);
-  --dsw-elevation-soft: var(--dsw-shadow-lv1);
-  --dsw-elevation-panel: var(--dsw-shadow-lv2);
-  --dsw-elevation-prominent: var(--dsw-shadow-lv3);
-}
-
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette="cindy"][data-dsh-deepcraft-material-shadow="flat"][data-ds-dark-theme] {
-  --dsw-shadow-lv1: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --dsw-shadow-lv2: 0 4px 12px rgba(0, 0, 0, 0.3);
-  --dsw-shadow-lv3: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
 /* The ambient light: three soft washes behind the whole shell. Light and dark
@@ -123,7 +124,7 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette="cindy"][data-dsh-deepcraft-
 }
 
 body[data-dsh-deepcraft][data-dsh-deepcraft-palette="cindy"][data-dsh-deepcraft-material-glass="1"][data-ds-dark-theme] [data-dsh-deepcraft-part~="sidebar-column"] {
-  background-color: rgba(5, 5, 5, 0.62);
+  background-color: rgba(24, 24, 24, 0.62);
   background-image: none;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), inset -1px 0 0 rgba(255, 255, 255, 0.08);
 }

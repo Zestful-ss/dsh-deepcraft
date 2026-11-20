@@ -43,8 +43,8 @@ back to another palette's; `—` is a token that palette leaves unset.
 | `--dsw-alias-button-elevated-fill` | `#fdfdf8` | `#1f1f1f` | host's own |  |
 | `--dsw-alias-button-floating-fill` | `#fdfdf8` | `#1f1f1f` | host's own |  |
 | `--dsw-alias-button-floating-hover` | `#eeeee9` | `#1d1d1d` | host's own |  |
-| `--dsw-alias-button-info-fill` | `#417cdd` | `#417cdd` | host's own |  |
-| `--dsw-alias-button-info-hover` | `#417cdd` | `#417cdd` | host's own |  |
+| `--dsw-alias-button-info-fill` | `#3c3f43` | `#eeeeee` | host's own |  |
+| `--dsw-alias-button-info-hover` | `#2e3237` | `#e2e2e2` | host's own |  |
 | `--dsw-alias-interactive-bg-active` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | host's own |  |
 | `--dsh-deepcraft-hover-bg` | `rgba(0, 0, 0, 0.05)` | `rgba(255, 255, 255, 0.06)` | `var(--dsw-alias-interactive-bg-hover)` | hover wash |
 | `--dsh-deepcraft-link` | `#1d4ed8` | `#93c5fd` | `var(--dsw-alias-link)` | markdown links |
@@ -62,7 +62,6 @@ back to another palette's; `—` is a token that palette leaves unset.
 | `--dsw-alias-state-business-primary` | `#417cdd` | `#417cdd` | host's own |  |
 | `--dsw-alias-state-business-tertiary` | `#eeeee9` | `#1d1d1d` | host's own |  |
 | `--dsw-alias-link` | `#1d4ed8` | `#93c5fd` | host's own | text link at rest |
-| `--dsw-shadow-lv2` | `none` | `none` | host's own |  |
 | `--dsw-specific-input-major` | `#fdfdf8` | `#1f1f1f` | host's own |  |
 | `--dsw-specific-selector` | `#fdfdf8` | `#353535` | host's own |  |
 | `--dsw-specific-sidebar-fill` | `#eeeee9` | `#181818` | host's own |  |
@@ -77,6 +76,39 @@ back to another palette's; `—` is a token that palette leaves unset.
 | `--dsw-specific-bubble` | `#fdfdf8` | `#1f1f1f` | host's own | user message bubble |
 | `--dsh-deepcraft-chip` | `rgba(0, 0, 0, 0.05)` | `rgba(255, 255, 255, 0.06)` | `var(--dsw-specific-selector)` | segmented control and switch at rest |
 | `--dsw-alias-label-primary-foreground` | `#fcfcfc` | `#151515` | host's own | the ink on a filled primary button: light on the accent in both palettes |
+| `--dsw-alias-markdown-inline-code` | `rgba(175, 184, 193, 0.2)` | `rgba(110, 118, 129, 0.22)` | host's own |  |
+| `--dsw-alias-bg-module-platform` | `#eeeee9` | `#272727` | host's own |  |
+| `--dsw-alias-card-fill` | `#fafaf5` | `#1f1f1f` | host's own |  |
+| `--dsw-alias-card-fill-hover` | `#eeeee9` | `#292929` | host's own |  |
+| `--dsw-alias-settings-card-fill` | `#fafaf5` | `#1d1d1d` | host's own |  |
+| `--dsw-alias-settings-card-stroke` | `rgba(0, 0, 0, 0.10)` | `rgba(255, 255, 255, 0.13)` | host's own |  |
+| `--dsw-specific-sidebar-nav-item-active` | `#fdfdf8` | `#353535` | host's own |  |
+| `--dsw-specific-sidebar-nav-item-active-accent` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | host's own |  |
+| `--dsw-specific-sidebar-glass-fill` | `rgba(253, 253, 248, 0.55)` | `rgba(255, 255, 255, 0.15)` | host's own |  |
+| `--dsw-specific-sidebar-glass-hover` | `rgba(253, 253, 248, 0.32)` | `rgba(255, 255, 255, 0.20)` | host's own |  |
+| `--dsw-specific-sidebar-glass-collapsed-fill` | `transparent` | `rgba(255, 255, 255, 0.15)` | host's own |  |
+| `--dsw-specific-sidebar-glass-collapsed-hover` | `var(--dsh-deepcraft-hover-bg)` | `rgba(255, 255, 255, 0.20)` | host's own |  |
+| `--dsw-alias-switch-thumb` | `#fdfdf8` | `#fcfcfc` | host's own |  |
+| `--dsw-alias-tooltip-bg` | `#3c3f43` | `#181818` | host's own |  |
+| `--dsw-alias-tooltip-label` | `#ffffff` | `#ffffff` | host's own |  |
+| `--dsw-alias-toast-bg` | `#3c3f43` | `#1f1f1f` | host's own |  |
+| `--dsw-alias-toast-label` | `#ffffff` | `#ffffff` | host's own |  |
+| `--dsw-alias-toast-action` | `#93c5fd` | `#93c5fd` | host's own |  |
+| `--dsw-alias-scrollbar-bg-l1` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | host's own |  |
+| `--dsw-alias-scrollbar-bg-l2` | `rgba(0, 0, 0, 0.10)` | `rgba(255, 255, 255, 0.13)` | host's own |  |
+| `--dsw-alias-scrollbar-hover-l1` | `rgba(0, 0, 0, 0.14)` | `rgba(255, 255, 255, 0.16)` | host's own |  |
+| `--dsw-alias-scrollbar-hover-l2` | `rgba(0, 0, 0, 0.18)` | `rgba(255, 255, 255, 0.20)` | host's own |  |
+| `--dsw-menu-surface-fill` | `rgba(251, 251, 246, 0.90)` | `rgba(21, 21, 21, 0.80)` | host's own |  |
+| `--dsw-alias-menu-group-header-fill` | `rgba(251, 251, 246, 0.96)` | `rgba(21, 21, 21, 0.94)` | host's own |  |
+| `--shiki-token-constant` | `#005cc5` | `#79c0ff` | host's own |  |
+| `--shiki-token-string` | `#032f62` | `#a5d6ff` | host's own |  |
+| `--shiki-token-comment` | `#6a737d` | `#8b949e` | host's own |  |
+| `--shiki-token-keyword` | `#d73a49` | `#ff7b72` | host's own |  |
+| `--shiki-token-parameter` | `#e36209` | `#ffa657` | host's own |  |
+| `--shiki-token-function` | `#6f42c1` | `#d2a8ff` | host's own |  |
+| `--shiki-token-string-expression` | `#22863a` | `#7ee787` | host's own |  |
+| `--shiki-token-punctuation` | `#24292e` | `#c9d1d9` | host's own |  |
+| `--shiki-token-link` | `#005cc5` | `#79c0ff` | host's own |  |
 <!-- /generated:tokens -->
 
 ## Palettes, material and font roles · 配色、材质与字体归属
@@ -89,11 +121,13 @@ or another theme plugin's, such as a wallpaper plugin that clears the canvas
 and turns the overlays to glass (D80).
 
 The **material** layer is orthogonal to the palette (D84): five own rows choose
-the corner scale (4 / 8 / 12px or the host's), flat shadows (levels off,
-elevation drawn as a stroke) or the host's, the durations (150 / 200 / 250ms or
-the host's), the sidebar's glass and the ambient light. The shipped defaults are
-the reference theme's, so a fresh install wears 12px corners, flat shadows and
-the reference timing; each aspect falls back to the host's value on its own.
+the corner scale (4 / 8 / 12px, or 4 / 8 / 12 / 16 / 24px under Cindy, with
+circular corners, or the host's), the shadow style (Cindy's three elevation
+levels, flat strokes without shadows, or the host's), the durations (150 / 200 /
+250ms or the host's), the sidebar's glass and the ambient light. The shipped
+defaults match Cindy (`reference` corners, `reference` shadows, `reference`
+timing, glass sidebar on, ambient light off); each aspect falls back to the
+host's value on its own.
 `packages/client/src/theme/material.css` holds the rules, gated on the five
 `data-dsh-deepcraft-material-*` attributes rather than on a palette — the build
 accepts a host-token write under either gate. A palette's aliases (focus ring,

@@ -193,8 +193,9 @@ function paletteScenario({ check }) {
           light.palette === id && light.accent === want.accent && light.prose === want.prose &&
             dark.accent === (want.darkAccent ?? want.accent) && dark.canvas === want.darkCanvas,
           JSON.stringify({ light, dark })))
+        const isPaint = (value) => /^(#|rgba?\(|color-mix\()/.test(value || '')
         checks.push(check(`${id}：选中、悬停与气泡的底色都跟着这套配色`,
-          /^(#|rgba?\()/.test(light.bubble || '') && /^(#|rgba?\()/.test(light.selector || '') && /^(#|rgba?\()/.test(light.hover || ''),
+          isPaint(light.bubble) && isPaint(light.selector) && isPaint(light.hover),
           JSON.stringify({ bubble: light.bubble, selector: light.selector, hover: light.hover })))
         checks.push(check(`${id}：主体文字、按钮文字与正文链接在画布上的对比度不低于 4.5:1`,
           contrast(light.ink, light.canvas) >= 4.5 && contrast(dark.ink, dark.canvas) >= 4.5 &&

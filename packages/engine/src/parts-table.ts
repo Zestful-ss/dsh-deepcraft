@@ -22,7 +22,7 @@ export interface PartsTableVocabulary {
  * part gate) and holds every part a stylesheet reads to the table here. A host
  * rename is one line in this file.
  */
-import { CONVERSATION_SCROLL_SELECTOR, RIGHTBAR_COLUMN_SELECTOR, ROOT_SLOT_SELECTOR, SIDEBAR_SLOT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
+import { COMPOSER_CARD_SELECTOR, CONVERSATION_SCROLL_SELECTOR, RIGHTBAR_COLUMN_SELECTOR, ROOT_SLOT_SELECTOR, SIDEBAR_SLOT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 
 /** Host CSS-module local name → the skin's part name. */
 export type PartTable = Record<string, string>
@@ -61,6 +61,11 @@ export const SIDEBAR_PARTS: PartTable = {
 export const CONVERSATION_PARTS: PartTable = {
   composerStack: 'composer-stack',
   fishHitbox: 'hero-mark',
+}
+
+/** The composer card's own send trigger. */
+export const COMPOSER_CARD_PARTS: PartTable = {
+  primary: 'send-button',
 }
 
 /** The right sidebar's docked panels. */
@@ -115,6 +120,7 @@ export function partRegions(): PartRegion[] {
     rootParts: { root: 'sidebar-root' },
     },
     { within: CONVERSATION_SCROLL_SELECTOR, parts: CONVERSATION_PARTS },
+    { within: COMPOSER_CARD_SELECTOR, parts: COMPOSER_CARD_PARTS },
     { within: RIGHTBAR_COLUMN_SELECTOR, parts: RIGHTBAR_PARTS },
   ]
 }

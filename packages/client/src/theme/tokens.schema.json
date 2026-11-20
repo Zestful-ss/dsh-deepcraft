@@ -70,7 +70,7 @@
     }
   },
   "$defs": {
-    "token": { "type": "string", "pattern": "^--(dsw|dsh-deepcraft)-[a-z0-9-]+$" },
+    "token": { "type": "string", "pattern": "^--(dsw|dsh-deepcraft|shiki-token)-[a-z0-9-]+$" },
     "value": { "type": "string", "minLength": 1, "pattern": "^[^;{}]+$" },
     "note": { "description": "Why the value has this shape; kept for maintainers, not emitted.", "type": "string", "minLength": 1 },
     "fullThemes": {

@@ -152,8 +152,12 @@
     "en": "Shadows"
   },
   "materialShadowDesc": {
-    "zh": "平铺：去掉三层阴影，抬升改画描边；或宿主自己的阴影。",
-    "en": "Flat drops the three shadow levels and draws elevation as a stroke; or keep the host's shadows."
+    "zh": "参考主题的三级投影、去掉阴影改画描边的平铺，或宿主自己的阴影。",
+    "en": "The reference theme's three shadow levels, flat strokes without shadows, or the host's own shadows."
+  },
+  "materialShadowReference": {
+    "zh": "参考阴影",
+    "en": "Reference shadows"
   },
   "materialShadowFlat": {
     "zh": "平铺",

@@ -154,5 +154,45 @@ function recordUntil(page, read, reached, arg, limitMs, what) {
     look()
   }), { readSource: read.toString(), reachedSource: reached.toString(), arg, limit: limitMs, label: what })
 }
+/**
+ * Run `read` twice — once with the skin's stylesheet enabled and once with it
+ * disabled — while hiding the skin's own sidebar session blocks for both
+ * readings so their unstyled fallback height does not move host elements below.
+ */
+async function withSkinSheetOff(page, read, settleMs = 250) {
+  const saved = await page.evaluate(() => {
+    const list = []
+    for (const block of document.querySelectorAll('.dsh-deepcraft-session-block')) {
+      list.push([block.style.getPropertyValue('display'), block.style.getPropertyPriority('display')])
+      block.style.setProperty('display', 'none', 'important')
+    }
+    return list
+  })
+  try {
+    const withSheet = await read()
+    await page.evaluate(() => {
+      const sheet = document.getElementById('dsh-deepcraft-style')
+      if (sheet === null) throw new Error('the skin mounted no stylesheet')
+      sheet.disabled = true
+    })
+    await page.waitForTimeout(settleMs)
+    const withoutSheet = await read()
+    await page.evaluate(() => {
+      document.getElementById('dsh-deepcraft-style').disabled = false
+    })
+    await page.waitForTimeout(settleMs)
+    return { withSheet, withoutSheet }
+  } finally {
+    await page.evaluate((entries) => {
+      const blocks = document.querySelectorAll('.dsh-deepcraft-session-block')
+      blocks.forEach((block, index) => {
+        const entry = entries[index]
+        if (entry === undefined || entry[0] === '') block.style.removeProperty('display')
+        else block.style.setProperty('display', entry[0], entry[1])
+      })
+    }, saved)
+  }
+}
 
-module.exports = { HOST, MARKS, readFlow, check, observe, measureFrameMs, watchPage, settlePage, recordUntil }
+
+module.exports = { HOST, MARKS, readFlow, check, observe, measureFrameMs, watchPage, settlePage, recordUntil, withSkinSheetOff }

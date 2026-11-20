@@ -73,6 +73,13 @@ const TRANSIENT_SELECTORS = [
   '[data-dsh-theme-transitioning]',
   // The delete card's confirm while its request is out: one round trip long.
   '.dsh-deepcraft-session-delete-button[data-busy]',
+  // Island mascot states outside the idle/drag snapshots: one-shot reactions,
+  // idle extras, 60s sleep, and turn/multi-session/approval/error states.
+  ...[
+    'waking', 'typing', 'music', 'conducting', 'building', 'compacting',
+    'thinking', 'notification', 'happy', 'jumping', 'tickle', 'waving',
+    'error', 'sleeping', 'poke-left', 'poke-right',
+  ].map((state) => `.dsh-deepcraft-island[data-animation=${state}]`),
 ]
 
 /**

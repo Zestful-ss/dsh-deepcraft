@@ -57,6 +57,8 @@ export const CONVERSATION_HEADER_SLOT_SELECTOR = '[data-slot="conversation.heade
 export const RIGHTBAR_COLUMN_SELECTOR = '[data-rightbar-col]'
 /** An open host menu, portalled to `<body>`. */
 export const MENU_ROLE_SELECTOR = '[role="menu"]'
+/** A checked switch control, whose active track reads the theme's business primary. */
+export const CHECKED_SWITCH_SELECTOR = '[role="switch"][aria-checked="true"]'
 /** The host's account trigger in the sidebar footer, marked with the sign-in state. */
 export const ACCOUNT_TRIGGER_SELECTOR = '[aria-haspopup="menu"][data-signed-out]'
 /**

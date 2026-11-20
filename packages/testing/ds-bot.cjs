@@ -77,6 +77,19 @@ function dsBotScenario({ check }) {
     script: 'greeting',
     prompt: 'hello there',
     plugins: [DS_BOT],
+    patch: [
+      '- id: ui-settings-general',
+      '  config:',
+      "    welcomeNoticeVersion: '2026-09-28.1'",
+      '- id: bot',
+      '  config:',
+      '    updateCheck: false',
+      '- id: connection',
+      '  config:',
+      '    trustedHosts: !!js ctx.webStartup.trustedHosts',
+      '    recovery:',
+      '      generationReadyWarnMs: 15000',
+    ],
     initScript: { content: INIT },
     async afterTurn(context) {
       const { page, notes } = context

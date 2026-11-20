@@ -134,7 +134,7 @@ function paletteName(id) {
 function tokenTable(doc, ids) {
   const cell = (value) => (value === undefined ? '—' : tableCell(value))
   const rows = doc.palette.map((item) => {
-    const host = item.host === undefined && item.token.startsWith('--dsw-') ? "host's own" : cell(item.host)
+    const host = item.host === undefined && (item.token.startsWith('--dsw-') || item.token.startsWith('--shiki-token-')) ? "host's own" : cell(item.host)
     const values = ids.flatMap((id) => [cell(item[id]?.light), cell(item[id]?.dark)])
     return `| \`${item.token}\` | ${values.join(' | ')} | ${host} | ${item.use ?? ''} |`
   })
