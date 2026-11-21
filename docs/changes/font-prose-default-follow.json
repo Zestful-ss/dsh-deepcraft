@@ -1,8 +1,0 @@
-{
-  "at": "2026-11-20",
-  "group": "improvements",
-  "order": 1,
-  "external": false,
-  "zh": "将正文字体默认预设改为跟随界面字体。",
-  "en": "Change the default prose font preference to follow the interface font."
-}

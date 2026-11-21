@@ -1,8 +1,0 @@
-{
-  "at": "2026-11-20",
-  "group": "improvements",
-  "order": 0,
-  "external": false,
-  "zh": "补齐 Cindy 配色对发送按钮、行内代码、代码高亮、开关、提示框、轻提示、滚动条、平台控件、导航激活项、菜单表面、标准圆角、暗色玻璃侧栏与壁纸玻璃的覆盖。",
-  "en": "Complete Cindy palette coverage for the send button, inline code, syntax highlighting, switches, tooltips, toasts, scrollbars, platform controls, active navigation, menu surfaces, circular corners, the dark glass sidebar, and wallpaper glass."
-}

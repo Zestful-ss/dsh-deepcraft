@@ -1,8 +1,0 @@
-{
-  "at": "2026-11-22",
-  "group": "improvements",
-  "order": 0,
-  "external": false,
-  "zh": "改善壁纸模式下插件市场页面的观感：其置顶工具栏、分类行与次级面板改为透光的玻璃填充，吸顶时带有模糊，插件管理页标题栏同样透出壁纸。",
-  "en": "Improve the plugin market page under a wallpaper: its sticky toolbar band, category row and secondary panels take the translucent glass fill with blur while pinned, and the plugin manager's title bar lets the picture through."
-}
