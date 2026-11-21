@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.42.8] - 2026-11-21
 
-<h3 id="cn-unreleased">体验优化</h3>
+[中文](#cn-0.42.8) | [English](#en-0.42.8)
+
+<h3 id="cn-0.42.8">体验优化</h3>
 
 - 补齐 Cindy 配色对发送按钮、行内代码、代码高亮、开关、提示框、轻提示、滚动条、平台控件、导航激活项、菜单表面、标准圆角、暗色玻璃侧栏与壁纸玻璃的覆盖。
 - 改善壁纸模式下插件市场页面的观感：其置顶工具栏、分类行与次级面板改为透光的玻璃填充，吸顶时带有模糊，插件管理页标题栏同样透出壁纸。
@@ -16,7 +18,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - 修复外观材质「阴影」设为「平铺」时在 Cindy 配色下仍显示三级阴影的问题，拆分为默认「参考阴影」与「平铺」两档。
 
-<h3 id="en-unreleased">Improvements</h3>
+<h3 id="en-0.42.8">Improvements</h3>
 
 - Complete Cindy palette coverage for the send button, inline code, syntax highlighting, switches, tooltips, toasts, scrollbars, platform controls, active navigation, menu surfaces, circular corners, the dark glass sidebar, and wallpaper glass.
 - Improve the plugin market page under a wallpaper: its sticky toolbar band, category row and secondary panels take the translucent glass fill with blur while pinned, and the plugin manager's title bar lets the picture through.
