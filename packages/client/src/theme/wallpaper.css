@@ -107,6 +107,32 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
   --dsw-menu-surface-fill: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
   --dsh-deepcraft-raised: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
   --dsh-deepcraft-card: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
+  --dsw-alias-bg-module-platform: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
+  /* The market plugin (`dshmarket`, another plugin's vocabulary like
+     `data-we-wallpaper`, D3) paints its sticky toolbar band and category row
+     from these two variables, falling back to the opaque canvas token. */
+  --dshm-sticky-bg: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
+  --dshm-stuck-bg: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
+}
+
+/* A stuck market band blurs what scrolls under it; the attribute lands only
+   while the row is pinned, so nothing frosts the page at rest. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) [data-dshm-stuck="true"] {
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  backdrop-filter: blur(12px) saturate(1.4);
+}
+
+/* The plugin manager's page head paints `--dsw-alias-bg-base` on the ::before
+   of its sticky bar: an opaque slab over the picture. The bar that holds the
+   header parts takes the glass fill and the blur, matching the other raised
+   surfaces. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) [data-dsh-deepcraft-holds~="plugin-head-bar"]::before {
+  background: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) [data-dsh-deepcraft-holds~="plugin-head-bar"] {
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  backdrop-filter: blur(12px) saturate(1.4);
 }
 
 body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) :is([data-composer-card], [data-dsh-deepcraft-part~="rightbar-column"] :is([data-dsh-deepcraft-part~="panel"], [data-sidebar-right-guide-entry]), .dsh-deepcraft-popover-card, [role="menu"], [role="dialog"]) {

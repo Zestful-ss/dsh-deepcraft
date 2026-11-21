@@ -173,5 +173,9 @@ export function holdRelations(vocabulary: PartsTableVocabulary): HoldRelation[] 
     { name: 'sidebar-column', holder: part('layout-frame'), held: part('sidebar-column'), direct: true, attributes: [] },
     // theme/wallpaper.css: the phase box holding the transcript paints the canvas.
     { name: 'conversation-scroll', holder: '[data-phase]', held: '[data-conversation-scroll]', attributes: ['data-phase', 'data-conversation-scroll'] },
+    // theme/wallpaper.css: the plugin manager's sticky header bar is marked by
+    // the host's `data-natural` and holds the parts it lays out; the sheet
+    // glasses the bar itself.
+    { name: 'plugin-head-bar', holder: '[data-natural]', held: '[data-plugin-header-part]', attributes: ['data-natural', 'data-plugin-header-part'] },
   ]
 }
