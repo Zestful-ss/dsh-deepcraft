@@ -1,8 +1,0 @@
-{
-  "at": "2026-11-22",
-  "group": "fixes",
-  "order": 0,
-  "external": false,
-  "zh": "修复按链接导入宠物包：Petdex 目录的搜索不索引 slug 且查不到带数字或连字符的词块，现改为按 slug 的字母词块搜索、并在未命中时翻页完整目录，像 columbinya-2、zero-two-2 这样的链接可以正常安装。",
-  "en": "Fix importing a pet package by link: the Petdex catalog's search indexes no slug and answers nothing for a query containing digits or hyphens, so the lookup now searches the slug's letter chunks and pages the complete catalog as a fallback, making links like columbinya-2 and zero-two-2 install."
-}

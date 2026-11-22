@@ -4,13 +4,15 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.42.9] - 2026-11-22
 
-<h3 id="cn-unreleased">问题修复</h3>
+[中文](#cn-0.42.9) | [English](#en-0.42.9)
+
+<h3 id="cn-0.42.9">问题修复</h3>
 
 - 修复按链接导入宠物包：Petdex 目录的搜索不索引 slug 且查不到带数字或连字符的词块，现改为按 slug 的字母词块搜索、并在未命中时翻页完整目录，像 columbinya-2、zero-two-2 这样的链接可以正常安装。
 
-<h3 id="en-unreleased">Bug Fixes</h3>
+<h3 id="en-0.42.9">Bug Fixes</h3>
 
 - Fix importing a pet package by link: the Petdex catalog's search indexes no slug and answers nothing for a query containing digits or hyphens, so the lookup now searches the slug's letter chunks and pages the complete catalog as a fallback, making links like columbinya-2 and zero-two-2 install.
 
