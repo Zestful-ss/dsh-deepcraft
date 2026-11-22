@@ -290,12 +290,7 @@ export function importFromPetdex(page: string): Promise<PetDescriptor> {
   return (async () => {
     const installed = await readPetAt(slug).catch(() => null)
     if (installed !== null && installed.sourceId === slug) return installed
-    const catalog = await downloadJson(`https://petdex.dev/api/pets/search?q=${encodeURIComponent(slug)}&sort=alpha&limit=8&includeMeta=0`)
-    const pets = Array.isArray(catalog.pets) ? catalog.pets : []
-    const found = pets.find(item => {
-      const entry = item !== null && typeof item === 'object' ? item as Record<string, unknown> : {}
-      return entry.slug === slug && typeof entry.zipUrl === 'string'
-    }) as Record<string, unknown> | undefined
+    const found = await findInCatalog(slug)
     if (found === undefined) throw new PetRefusal(`Petdex holds no pet named "${slug}"`, 404)
     const archiveUrl = new URL(found.zipUrl as string)
     if (archiveUrl.protocol !== 'https:' || archiveUrl.hostname !== 'assets.petdex.dev') {
@@ -305,6 +300,38 @@ export function importFromPetdex(page: string): Promise<PetDescriptor> {
     const unpacked = unpackZip(archive)
     return installParsed(unpacked.parsed, unpacked.manifest, unpacked.image, unpacked.extras)
   })()
+}
+
+/**
+ * One catalog entry carrying the pet one slug names.
+ *
+ * The catalog's keyword search does not index slugs and answers nothing for a
+ * query containing a digit or a hyphen, so a slug like `zero-two-2` (display
+ * name `02`) is unreachable through it. The query that goes first keeps only
+ * the slug's letter chunks joined by spaces; when that misses, the complete
+ * catalog is paged until the slug surfaces or the pages run out.
+ */
+async function findInCatalog(slug: string): Promise<Record<string, unknown> | undefined> {
+  const match = (item: unknown) => {
+    const entry = item !== null && typeof item === 'object' ? item as Record<string, unknown> : {}
+    return entry.slug === slug && typeof entry.zipUrl === 'string' ? entry : undefined
+  }
+  const words = slug.split('-').filter(chunk => /[a-z]/.test(chunk)).join(' ')
+  if (words !== '') {
+    const catalog = await downloadJson(`https://petdex.dev/api/pets/search?q=${encodeURIComponent(words)}&sort=alpha&limit=50&includeMeta=0`)
+    const pets = Array.isArray(catalog.pets) ? catalog.pets : []
+    const found = pets.find(match)
+    if (found !== undefined) return found
+  }
+  let cursor = 0
+  while (cursor >= 0) {
+    const page = await downloadJson(`https://petdex.dev/api/pets/search?q=&sort=alpha&limit=100&cursor=${cursor}&includeMeta=0`)
+    const pets = Array.isArray(page.pets) ? page.pets : []
+    const found = pets.find(match)
+    if (found !== undefined) return found
+    cursor = typeof page.nextCursor === 'number' ? page.nextCursor : -1
+  }
+  return undefined
 }
 
 /** One small JSON document from a fixed URL. */
