@@ -81,6 +81,7 @@ const MARKS = [
   ['material motion', 'data-dsh-deepcraft-material-motion', 'reference'],
   ['material glass', 'data-dsh-deepcraft-material-glass', '1'],
   ['material ambient', 'data-dsh-deepcraft-material-ambient', '1'],
+  ['surface opacity', 'data-dsh-deepcraft-background-opacity', '0.55'],
   ['the wallpaper plugin', 'data-we-wallpaper', ''],
   ['own wallpaper', 'data-dsh-deepcraft-wallpaper', 'custom'],
   ['own wallpaper lite', 'data-dsh-deepcraft-wallpaper-lite', '1'],
@@ -269,6 +270,10 @@ function importanceScenario(lane) {
     // The official subagent allow-list, so the host draws the model slot the
     // skin's capsule stands beside and the capsule's own card can be audited.
     patch: SUBAGENT_PATCH,
+    // A hundred-odd states, each trialing its declarations one pass at a time,
+    // is minutes of page work before the shared lane slows it further; the
+    // walk names the deadline it needs rather than squeezing the states.
+    deadlineMs: 10 * 60 * 1000,
     async beforeSend(context) {
       const { page } = context
       const reference = process.env.DSH_IMPORTANCE_REFERENCE
@@ -402,6 +407,17 @@ function importanceScenario(lane) {
         await audit.state(name)
         await attribute(page, key, null)
       }
+      // A lowered surface opacity in glass dark: the sidebar rules read all
+      // three attributes together, so the combination is one audited state of
+      // its own rather than one of the marks. Glass is applied here by hand:
+      // the marks loop above cleared it after its own state, and the mirror
+      // only writes it when the preferences are adopted again.
+      await attribute(page, 'data-dsh-deepcraft-material-glass', '1')
+      await attribute(page, 'data-dsh-deepcraft-background-opacity', '0.55')
+      await attribute(page, 'data-ds-dark-theme', '')
+      await audit.state('material opacity glass dark')
+      await attribute(page, 'data-ds-dark-theme', null)
+      await attribute(page, 'data-dsh-deepcraft-background-opacity', null)
       // A custom family list draws the input row's own field, so the settings
       // page is audited once with it on show.
       await withSettings(page, audit)
@@ -481,6 +497,23 @@ function importanceScenario(lane) {
       await page.waitForFunction(() => document.documentElement.getAttribute('data-dsh-deepcraft-wallpaper-mount') === 'image', undefined, { timeout: 5000 }).catch(() => {})
       await page.waitForTimeout(400)
       await audit.state('own wallpaper layer')
+      // The host's plugin manager page under the layer: its sticky head bar
+      // carries the skin's holds-mark only there, so the rules that glass it
+      // have their one state. The page keeps no route of its own and the
+      // entry does not toggle back, so the conversation is returned to with
+      // a reload, which lands on the session the workspace remembers.
+      const pluginsEntry = page.getByRole('button', { name: /^(插件|Plugins)$/, exact: true }).first()
+      if (await pluginsEntry.count() > 0) {
+        await pluginsEntry.click()
+        await page.waitForTimeout(1500)
+        await audit.state('plugin manager wallpaper')
+        await page.reload()
+        await page.waitForSelector('[data-composer-input]', { timeout: 20000 })
+        // A navigation wipes the audit's page helper; the skin mounts its sheet
+        // anew with the same text, so rebinding is all the audit needs.
+        await audit.rebind()
+        await page.waitForTimeout(1200)
+      }
       await openSkinSettings(page)
       await appearanceTab(page)
       await rowTitled(page, /^(壁纸|Wallpaper)$/).getByRole('button', { name: /^(关闭|Off)$/ }).click()

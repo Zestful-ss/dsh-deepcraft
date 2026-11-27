@@ -12,4 +12,14 @@ body[data-dsh-deepcraft] .agy-tv-badge {
   color: var(--dsw-alias-label-tertiary);
 }
 
+/* ---------- Third-party: dshmarket's stuck toolbar band ---------- */
+/* A stuck market band blurs what scrolls under it; the attribute lands only
+   while the row is pinned, so nothing frosts the page at rest. The fill comes
+   from `--dshm-stuck-bg`, which the wallpaper layer already fills with the
+   glass colour where the band itself is painted (theme/wallpaper.css). */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) [data-dshm-stuck="true"] {
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  backdrop-filter: blur(12px) saturate(1.4);
+}
+
 

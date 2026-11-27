@@ -115,13 +115,6 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
   --dshm-stuck-bg: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
 }
 
-/* A stuck market band blurs what scrolls under it; the attribute lands only
-   while the row is pinned, so nothing frosts the page at rest. */
-body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) [data-dshm-stuck="true"] {
-  -webkit-backdrop-filter: blur(12px) saturate(1.4);
-  backdrop-filter: blur(12px) saturate(1.4);
-}
-
 /* The plugin manager's page head paints `--dsw-alias-bg-base` on the ::before
    of its sticky bar: an opaque slab over the picture. The bar that holds the
    header parts takes the glass fill and the blur, matching the other raised

@@ -569,7 +569,10 @@ function sweepInPage(selectors) {
 async function createImportanceAudit(page, reference) {
   const original = await page.evaluate((sheet) => document.querySelector(sheet).textContent, SHEET)
   // The page functions below share one helper, defined on the page's window.
-  await page.evaluate(`(() => { ${SETTLE}\nwindow.settleTransitions = settleTransitions })()`)
+  // The page functions below share one helper, defined on the page's window.
+  // A navigation wipes it, so the injection is re-runnable through `rebind`.
+  const inject = () => page.evaluate(`(() => { ${SETTLE}\nwindow.settleTransitions = settleTransitions })()`)
+  await inject()
   const { annotated, rules, selectors } = planImportance(original)
   const tried = rules.filter((rule) => rule.keep === null)
   const props = [...new Set(rules.flatMap((rule) => rule.props))]
@@ -613,6 +616,7 @@ async function createImportanceAudit(page, reference) {
    * @param only - rule ids to try in this state; every rule when absent.
    */
   async function state(name, only) {
+    const started = Date.now()
     // The skin can mount its sheet anew between states; the audit's own text goes back in.
     const current = await page.evaluate((sheet) => document.querySelector(sheet).textContent, SHEET)
     if (current !== annotated && current !== original) throw new Error(`importance: the skin's stylesheet changed during the audit (state ${name})`)
@@ -666,7 +670,7 @@ async function createImportanceAudit(page, reference) {
       for (const selector of found.matched) swept.add(selector)
       for (const selector of found.unparsed) unparsed.add(selector)
     }
-    states.push({ name, removable: verdict.removable.length, needed: verdict.needed.length, sentBack })
+    states.push({ name, removable: verdict.removable.length, needed: verdict.needed.length, sentBack, ms: Date.now() - started })
   }
 
   /**
@@ -717,7 +721,17 @@ async function createImportanceAudit(page, reference) {
     return { states, declarations, drift, sheet: original, sweep, evidence: [...evidence].map(([key, value]) => ({ key, ...value })) }
   }
 
-  return { state, hoverTargets, result }
+  /**
+   * Put the page helper back after a navigation. The sheet the audit reads is
+   * the skin's own, which the page mounts anew on a reload with the same text,
+   * so the state's trials keep their meaning; what the reload takes away is
+   * only the window function the trials call.
+   */
+  async function rebind() {
+    await inject()
+  }
+
+  return { state, hoverTargets, result, rebind }
 }
 
 module.exports = { createImportanceAudit, planImportance, dropImportance, ruleKey, ruleKeys, sweepParts, ROOT }
