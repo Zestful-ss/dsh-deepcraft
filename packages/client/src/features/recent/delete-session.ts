@@ -33,7 +33,22 @@ export async function deleteSession(sessionId: string): Promise<DeleteOutcome> {
   const ok = isObject && 'ok' in answer ? answer.ok : undefined
   if (!response.ok || ok !== true) {
     const reason = isObject && 'error' in answer ? answer.error : undefined
-    throw new Error(typeof reason === 'string' ? reason : `HTTP ${response.status}`)
+    if (typeof reason === 'string') throw new Error(reason)
+    throw new Error(deleteFailureStatus(response.status))
   }
   return { kind: 'deleted', ghost: isObject && 'ghost' in answer && answer.ghost === true }
+}
+
+/**
+ * Why one deletion failed, for the answers that carry no reason of their own.
+ *
+ * The route speaks JSON in every outcome it produces, so a 405 or 404 reaches
+ * the browser half only when the host's own static fallback answered instead:
+ * the plugin's host half never came up in this process, which a live plugin
+ * update can leave behind. The bare status means nothing to the reader, so
+ * the copy names the restart instead.
+ */
+export function deleteFailureStatus(status: number): string {
+  if (status === 404 || status === 405) return 'HOST_NOT_RUNNING'
+  return `HTTP ${status}`
 }

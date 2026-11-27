@@ -9,5 +9,6 @@
   "deleteConfirm": { "zh": "删除", "en": "Delete" },
   "deleteCancel": { "zh": "取消", "en": "Cancel" },
   "deleteOpen": { "zh": "会话还开着，先关掉它再删除。", "en": "The conversation is still open; close it before deleting." },
-  "deleteFailed": { "zh": "删除失败：{value}", "en": "Deleting failed: {value}" }
+  "deleteFailed": { "zh": "删除失败：{value}", "en": "Deleting failed: {value}" },
+  "deleteHostDown": { "zh": "插件的宿主服务没有在这个进程里运行，完全重启应用后再试。", "en": "The plugin's host service is not running in this process; restart the application fully and try again." }
 }

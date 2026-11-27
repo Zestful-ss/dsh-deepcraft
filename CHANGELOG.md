@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">问题修复</h3>
+
+- 修复插件宿主端未在进程中运行时删除会话只提示裸的 HTTP 405 或 404 的问题：该状态只在请求落到宿主自己的静态资源回退时出现，现提示宿主服务没有运行并指引完全重启应用。
+
+<h3 id="en-unreleased">Bug Fixes</h3>
+
+- Fix deleting a conversation reporting a bare HTTP 405 or 404 while the plugin's host half is not running in the process: that status only reaches the browser when the host's own static fallback answered the request, so the card now says the host service is not running and asks for a full restart.
+
 ## [0.43.0] - 2026-11-27
 
 [中文](#cn-0.43.0) | [English](#en-0.43.0)

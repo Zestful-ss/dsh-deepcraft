@@ -104,7 +104,12 @@ export function confirmDelete(options: { anchor: HTMLElement, title: string, ses
       close()
     }, (error: unknown) => {
       remove.removeAttribute('data-busy')
-      note.textContent = copy('deleteFailed', { value: error instanceof Error ? error.message : String(error) })
+      const message = error instanceof Error ? error.message : String(error)
+      // A status the host half never produced means its routes were never
+      // registered in this process: say what to do, not the number.
+      note.textContent = message === 'HOST_NOT_RUNNING'
+        ? copy('deleteHostDown')
+        : copy('deleteFailed', { value: message })
     })
   })
 
