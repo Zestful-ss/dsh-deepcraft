@@ -61,21 +61,16 @@ jobs:
           key: harness-${{ runner.os }}-${{ steps.host-version.outputs.version }}
       - name: Install the newest harness
         if: steps.harness-cache.outputs.cache-hit != 'true'
-        timeout-minutes: 40
+        timeout-minutes: 25
         shell: pwsh
         run: |
           $version = "${{ steps.host-version.outputs.version }}"
-          # The registry has wedged this install past twenty minutes before,
-          # and neither timeout-minutes nor Wait-Job reaches a wedged child on
-          # this runner: a process with a hard WaitForExit deadline is killed
-          # and tried once more instead.
-          function Install-Harness([string] $Version) {
-            $proc = Start-Process -FilePath npm.cmd -ArgumentList 'install', '--global', '--no-audit', '--no-fund', "@deepseek-ai/dsh@$Version", 'pnpm@11' -PassThru -WindowStyle Hidden
-            if ($proc.WaitForExit(900000)) { return $proc.ExitCode -eq 0 }
-            $proc.Kill()
-            return $false
-          }
-          if (-not (Install-Harness $version)) { if (-not (Install-Harness $version)) { exit 1 } }
+          # A cache miss means the warm-harness workflow has not finished this
+          # host version yet. One attempt gets the whole remaining budget: a
+          # retry doubles the install the registry already charges fifteen
+          # minutes for, and a second try has never once beaten the job's own
+          # deadline.
+          npm install --global --no-audit --no-fund "@deepseek-ai/dsh@$version" pnpm@11 --loglevel=warn
       - run: node packages/testing/e2e.cjs --scenario petdex
         timeout-minutes: 15
 

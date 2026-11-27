@@ -1,0 +1,67 @@
+# warm-harness.yml — keep the harness install cache on master warm.
+#
+# The smoke-windows jobs in CI and Release install the newest published host
+# before walking it. That first install after a host release is slow on the
+# Windows runner — fifteen minutes and more for seven hundred packages — so the
+# lanes restore a cache keyed by the host version instead of paying it every
+# time. A cache is visible only on the branch that saved it, and the lanes
+# themselves run under a thirty-minute job budget the fresh install now eats
+# whole, which is how a host release once wedged every Windows lane behind a
+# cache that could never be written. This workflow exists only to pay that
+# first install without the clock the lanes carry: it runs on master after a
+# host release (a daily schedule catches it), skips everything when the cache
+# is already warm, and saves the entry only after the harness answers a
+# version query, so a partial install never poisons the key the lanes trust.
+name: Warm Harness
+on:
+  workflow_dispatch:
+  schedule:
+    # 17:00 UTC daily: quiet hours, ahead of the lanes that need the cache.
+    - cron: '0 17 * * *'
+
+permissions: {}
+
+jobs:
+  warm:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Read the newest host version
+        id: host-version
+        shell: pwsh
+        run: '"version=$(node packages/testing/host-version.cjs)" >> $env:GITHUB_OUTPUT'
+      - name: The global prefix npm writes into
+        shell: pwsh
+        run: '"NPM_PREFIX=$(npm config get prefix)" >> $env:GITHUB_ENV'
+      - uses: actions/cache/restore@v6
+        id: harness-cache
+        with:
+          path: ${{ env.NPM_PREFIX }}
+          key: harness-${{ runner.os }}-${{ steps.host-version.outputs.version }}
+      - name: Install the newest harness
+        if: steps.harness-cache.outputs.cache-hit != 'true'
+        timeout-minutes: 40
+        shell: pwsh
+        run: |
+          $version = "${{ steps.host-version.outputs.version }}"
+          # A single foreground install with the full budget: retrying a slow
+          # install doubles what the registry already charges, and the lanes'
+          # budget is not this job's to spend.
+          npm install --global --no-audit --no-fund "@deepseek-ai/dsh@$version" pnpm@11 --loglevel=warn
+      - name: Refuse a harness that cannot answer
+        if: steps.harness-cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          dsh --version
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+      - uses: actions/cache/save@v6
+        if: steps.harness-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ env.NPM_PREFIX }}
+          key: harness-${{ runner.os }}-${{ steps.host-version.outputs.version }}

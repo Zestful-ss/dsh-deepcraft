@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">其他变更</h3>
+
+- 修复宿主发布后 Windows 云端通道整体卡死的流程缺陷：宿主版本更新使安装缓存键失效，而缓存按分支隔离、通道内的全新安装在运行器上需要十五分钟以上，重试一次就必然超出作业时限，缓存因而永远无法写进主干；新增焐热工作流在日常调度中以免除时限压力的一次安装写入缓存并在写入前验证宿主可用，通道内的安装改为单次尝试。
+
+<h3 id="en-unreleased">Chores</h3>
+
+- Fix the structural failure that wedged every Windows cloud lane after a host release: a host release invalidates the install cache key, caches are scoped to the branch that saves them, and a fresh install inside the lanes takes more than fifteen minutes on the runner, so the retry once built into the step always outlived the job's own deadline and the cache could never be written on master; a warming workflow now pays that install on a daily schedule without the lanes' clock, verifies the harness answers before the entry is saved, and the lanes try the install once.
+
 ## [0.43.2] - 2026-11-27
 
 [中文](#cn-0.43.2) | [English](#en-0.43.2)
