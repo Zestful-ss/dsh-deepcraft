@@ -1,8 +1,0 @@
-{
-  "at": "2026-11-27",
-  "group": "fixes",
-  "order": 0,
-  "external": false,
-  "zh": "修复插件宿主端未在进程中运行时删除会话只提示裸的 HTTP 405 或 404 的问题：该状态只在请求落到宿主自己的静态资源回退时出现，现提示宿主服务没有运行并指引完全重启应用。",
-  "en": "Fix deleting a conversation reporting a bare HTTP 405 or 404 while the plugin's host half is not running in the process: that status only reaches the browser when the host's own static fallback answered the request, so the card now says the host service is not running and asks for a full restart."
-}
