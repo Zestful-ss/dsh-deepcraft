@@ -12,9 +12,16 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
 
 /* The document element sits above the body and cannot read its tokens, so the
    palette states its light canvas here. It stays painted under a wallpaper:
-   the layer sits above this canvas and below the shell. */
+   the layer sits above this canvas and below the shell. Under a surface
+   opacity it is the one opaque wall between the page and the window's own
+   backdrop, so it steps aside and the share the reader asked for reaches the
+   acrylic behind (theme/chrome.css). */
 html:has(body[data-dsh-deepcraft][data-dsh-deepcraft-palette="cindy"]:not([data-ds-dark-theme])) {
   background-color: #f2f2ed;
+}
+
+html:has(body[data-dsh-deepcraft][data-dsh-deepcraft-palette][data-dsh-deepcraft-background-opacity]) {
+  background-color: transparent;
 }
 
 /* The shell's own root paints the host's base fill over the body, so the skin's

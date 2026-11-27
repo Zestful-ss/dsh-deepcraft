@@ -49,6 +49,22 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette][data-dsh-deepcraft-material
   --ds-transition-duration-slow: var(--dsh-deepcraft-duration-material-slow);
 }
 
+/* Under a surface opacity the glass scales with the ground: the tint's own
+   share multiplies by the factor, so the sidebar joins the rest of the shell
+   in opening toward the acrylic backdrop. The variable is absent at 100, and
+   the fallback keeps the tint the paint it has always been. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-material-glass="1"][data-dsh-deepcraft-background-opacity] [data-dsh-deepcraft-part~="sidebar-column"] {
+  background-color: color-mix(in srgb, var(--dsw-specific-sidebar-fill) calc(62% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="cindy"][data-dsh-deepcraft-material-glass="1"][data-dsh-deepcraft-background-opacity] [data-dsh-deepcraft-part~="sidebar-column"] {
+  background-color: color-mix(in srgb, rgb(238, 238, 233) calc(62% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette="cindy"][data-dsh-deepcraft-material-glass="1"][data-dsh-deepcraft-background-opacity][data-ds-dark-theme] [data-dsh-deepcraft-part~="sidebar-column"] {
+  background-color: color-mix(in srgb, rgb(24, 24, 24) calc(62% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+}
+
 /* The cindy palette carries Cindy's own 4/8/12/16/24px corner ladder
    (docs/STYLE.md) when the reference corner scale is active. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-palette="cindy"][data-dsh-deepcraft-material-radius="reference"] {

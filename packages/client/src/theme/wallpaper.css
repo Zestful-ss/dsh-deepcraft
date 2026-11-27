@@ -93,26 +93,26 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
    stays readable over any picture, and a lighter blur just settles what
    still shows through instead of frosting the pane. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) {
-  --dsw-alias-bg-layer-1: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsw-alias-bg-layer-2: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsw-alias-button-elevated-fill: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsw-alias-button-floating-fill: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsw-alias-card-fill: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsw-alias-settings-card-fill: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsw-alias-markdown-tag: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsw-alias-bg-overlay: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsw-specific-bubble: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsw-specific-input-major: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsw-specific-menu: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsw-menu-surface-fill: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsh-deepcraft-raised: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsh-deepcraft-card: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dsw-alias-bg-module-platform: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
+  --dsw-alias-bg-layer-1: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsw-alias-bg-layer-2: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsw-alias-button-elevated-fill: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsw-alias-button-floating-fill: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsw-alias-card-fill: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsw-alias-settings-card-fill: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsw-alias-markdown-tag: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsw-alias-bg-overlay: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsw-specific-bubble: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsw-specific-input-major: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsw-specific-menu: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsw-menu-surface-fill: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsh-deepcraft-raised: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsh-deepcraft-card: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dsw-alias-bg-module-platform: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
   /* The market plugin (`dshmarket`, another plugin's vocabulary like
      `data-we-wallpaper`, D3) paints its sticky toolbar band and category row
      from these two variables, falling back to the opaque canvas token. */
-  --dshm-sticky-bg: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
-  --dshm-stuck-bg: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
+  --dshm-sticky-bg: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
+  --dshm-stuck-bg: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
 }
 
 /* A stuck market band blurs what scrolls under it; the attribute lands only
@@ -127,7 +127,7 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
    header parts takes the glass fill and the blur, matching the other raised
    surfaces. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) [data-dsh-deepcraft-holds~="plugin-head-bar"]::before {
-  background: color-mix(in srgb, var(--dsh-deepcraft-canvas) 55%, transparent);
+  background: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(55% * var(--dsh-deepcraft-background-opacity, 1)), transparent);
 }
 
 body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):is([data-we-wallpaper], [data-dsh-deepcraft-wallpaper="custom"], [data-dsh-deepcraft-wallpaper="builtin"]) [data-dsh-deepcraft-holds~="plugin-head-bar"] {
@@ -244,11 +244,11 @@ body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-pal
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc((1 - min(var(--dsh-deepcraft-wallpaper-visibility, 0.4), 1)) * 100%), transparent);
+  background: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc((1 - min(var(--dsh-deepcraft-wallpaper-visibility, 0.4), 1)) * var(--dsh-deepcraft-background-opacity, 1) * 100%), transparent);
 }
 
 /* The low-power choice stills the video in the feature and caps how much of
    the wallpaper shows through. */
 body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"])[data-dsh-deepcraft-wallpaper-media="video"][data-dsh-deepcraft-wallpaper-lite="1"]::after {
-  background: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc((1 - min(var(--dsh-deepcraft-wallpaper-visibility, 0.4), 0.6)) * 100%), transparent);
+  background: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc((1 - min(var(--dsh-deepcraft-wallpaper-visibility, 0.4), 0.6)) * var(--dsh-deepcraft-background-opacity, 1) * 100%), transparent);
 }

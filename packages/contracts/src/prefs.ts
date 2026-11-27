@@ -120,6 +120,16 @@ export const WALLPAPER_VISIBILITY_STEP = 0.05
 export const WALLPAPER_BLUR_MIN = 0
 export const WALLPAPER_BLUR_MAX = 20
 export const WALLPAPER_BLUR_STEP = 1
+
+/**
+ * The shell's surface opacity toward what stands behind the window, as a
+ * percentage: 100 paints every fill as it always did, lower lets the acrylic
+ * window's backdrop show through the canvas fills and scales a wallpaper's
+ * veil with the same factor.
+ */
+export const BACKGROUND_OPACITY_MIN = 30
+export const BACKGROUND_OPACITY_MAX = 100
+export const BACKGROUND_OPACITY_STEP = 5
 /* ---------- the table ---------- */
 
 interface PrefSpecBase {
@@ -203,6 +213,16 @@ export const PREFS = {
   wallpaperMotion: { type: 'choice', values: WALLPAPER_MOTIONS, default: WALLPAPER_MOTION_STATIC },
   /** Low power: stills the video and drops the wallpaper's blur. */
   wallpaperLite: { type: 'boolean', default: false },
+  /**
+   * The shell's surface opacity as a percentage (BACKGROUND_OPACITY_*): the
+   * canvas, the conversation column and the sidebar's glass scale toward
+   * transparent so the window's acrylic backdrop shows through, and a
+   * wallpaper's veil scales with the same factor. 100 leaves every fill the
+   * paint it has always been. The value reaches the sheet as
+   * `--dsh-deepcraft-background-opacity` and the attribute
+   * `data-dsh-deepcraft-background-opacity`, both absent at 100.
+   */
+  backgroundOpacity: { type: 'number', default: 100, min: BACKGROUND_OPACITY_MIN, max: BACKGROUND_OPACITY_MAX, step: BACKGROUND_OPACITY_STEP },
   /** The sidebar's recent block: conversations touched in the last day, at the top (D85). */
   recentSessions: { type: 'boolean', default: true },
 } as const satisfies Record<string, PrefSpec>

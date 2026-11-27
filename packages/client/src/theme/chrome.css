@@ -16,6 +16,28 @@ body[data-dsh-deepcraft] [data-dsh-deepcraft-part~="rightbar-column"] [data-dsh-
   margin-bottom: auto !important;
 }
 
+/* ---------- the shell's surface opacity ---------- */
+/* Below 100 (settings › Appearance) the canvas fills the skin paints — the
+   body, the shell's root and the conversation column — mix toward transparent
+   and the window's own acrylic backdrop shows through. Cards, menus and the
+   composer's tray keep their paint: an opacity is a property of the ground,
+   not of what stands on it. The document element's canvas steps aside in
+   tokens.css, and at 100 the attribute does not stand so nothing on this page
+   applies. The fills carry the wallpaper states' own gates: under a wallpaper
+   the columns already stand down (theme/wallpaper.css) and the dial scales
+   the veil and the glass there instead. */
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):not([data-we-wallpaper]):not([data-dsh-deepcraft-wallpaper="custom"]):not([data-dsh-deepcraft-wallpaper="builtin"])[data-dsh-deepcraft-background-opacity] {
+  background-color: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(var(--dsh-deepcraft-background-opacity) * 100%), transparent);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):not([data-we-wallpaper]):not([data-dsh-deepcraft-wallpaper="custom"]):not([data-dsh-deepcraft-wallpaper="builtin"])[data-dsh-deepcraft-background-opacity] #root {
+  background-color: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(var(--dsh-deepcraft-background-opacity) * 100%), transparent);
+}
+
+body[data-dsh-deepcraft][data-dsh-deepcraft-palette]:not([data-dsh-deepcraft-palette="host"]):not([data-we-wallpaper]):not([data-dsh-deepcraft-wallpaper="custom"]):not([data-dsh-deepcraft-wallpaper="builtin"])[data-dsh-deepcraft-background-opacity] :is([data-pane="conversation"], [data-dsh-deepcraft-part~="center-column"], [data-dsh-deepcraft-holds~="conversation-scroll"]) {
+  background: color-mix(in srgb, var(--dsh-deepcraft-canvas) calc(var(--dsh-deepcraft-background-opacity) * 100%), transparent);
+}
+
 /* ---------- the animation choice: reduced motion ---------- */
 /* The resolved choice rides <body data-dsh-deepcraft-motion> (packages/client/src/core/prefs.ts,
    D40), because a stylesheet cannot talk a media query out of the system's

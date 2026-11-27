@@ -4,6 +4,16 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+[中文](#cn-unreleased) | [English](#en-unreleased)
+
+<h3 id="cn-unreleased">新增功能</h3>
+
+- 新增外观页的「表面不透明度」调节：低于 100% 时窗口的画布填充按同一比例调向透明，无壁纸时透出桌面端的亚克力背景，有壁纸时薄纱与玻璃填充随之变薄，让壁纸真正显现。
+
+<h3 id="en-unreleased">New Features</h3>
+
+- Add a Surface opacity dial to the Appearance tab: below 100% the window's canvas fills mix toward transparent by one factor, opening the bare window onto the desktop's acrylic backdrop and thinning a wallpaper's veil and glass so the picture actually shows.
+
 ## [0.42.9] - 2026-11-22
 
 [中文](#cn-0.42.9) | [English](#en-0.42.9)

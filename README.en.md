@@ -15,7 +15,7 @@
 
 ## Preview
 
-The settings page switches between the Cindy palette and following the host, light and dark following the system; a palette changes colours alone, never the mark, the name or the pet. The Appearance tab also carries a material layer of its own, independent of the palette: 4 / 8 / 12px corners (4 / 8 / 12 / 16 / 24px with circular curvature under Cindy), reference or flat shadows, 150 / 200 / 250ms motion timing, a glass sidebar and ambient light, shipped at the reference theme's values and each one able to fall back to the host's own look. The same tab takes your own mark, wordmark, accent colour, pet and wallpaper — a bundled set of stills and videos, or an image or video of your own layered under the whole page, with visibility, blur and playback controls.
+The settings page switches between the Cindy palette and following the host, light and dark following the system; a palette changes colours alone, never the mark, the name or the pet. The Appearance tab also carries a material layer of its own, independent of the palette: 4 / 8 / 12px corners (4 / 8 / 12 / 16 / 24px with circular curvature under Cindy), reference or flat shadows, 150 / 200 / 250ms motion timing, a glass sidebar and ambient light, shipped at the reference theme's values and each one able to fall back to the host's own look. The same tab takes your own mark, wordmark, accent colour, pet and wallpaper — a bundled set of stills and videos, or an image or video of your own layered under the whole page, with visibility, blur and playback controls. Surface opacity mixes every canvas fill toward transparent by one factor: the bare window opens onto the desktop's acrylic backdrop, and under a wallpaper the veil and the glass thin with it.
 
 ### Cindy (default)
 

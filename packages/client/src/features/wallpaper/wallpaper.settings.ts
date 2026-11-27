@@ -1,5 +1,6 @@
 import * as React from 'react'
-import { WALLPAPER_BLUR_MAX, WALLPAPER_BLUR_MIN, WALLPAPER_BLUR_STEP, WALLPAPER_BUILTIN, WALLPAPER_CUSTOM, WALLPAPER_VISIBILITY_MAX, WALLPAPER_VISIBILITY_MIN, WALLPAPER_VISIBILITY_STEP } from '@dsh-deepcraft/contracts/prefs'
+import { BACKGROUND_OPACITY_MAX, BACKGROUND_OPACITY_MIN, BACKGROUND_OPACITY_STEP, WALLPAPER_BLUR_MAX, WALLPAPER_BLUR_MIN, WALLPAPER_BLUR_STEP, WALLPAPER_BUILTIN, WALLPAPER_CUSTOM, WALLPAPER_VISIBILITY_MAX, WALLPAPER_VISIBILITY_MIN, WALLPAPER_VISIBILITY_STEP } from '@dsh-deepcraft/contracts/prefs'
+import { BACKGROUND_OPACITY_ATTR, BACKGROUND_OPACITY_VAR } from '../../constants'
 import { WALLPAPER_MAX_BYTES, WALLPAPER_TYPES } from '@dsh-deepcraft/contracts/wallpaper'
 import { WALLPAPERS } from 'virtual:dsh-deepcraft/generated'
 import { loadWallpaper, readWallpaper, removeWallpaper, subscribeWallpaper, uploadWallpaper } from '../../shared/custom-wallpaper'
@@ -152,13 +153,16 @@ function WallpaperSourceControl(props: SettingsRowView) {
  * (or on a keyboard step, which fires `change` already).
  */
 function AmountControl(props: SettingsRowView & {
-  pref: 'wallpaperVisibility' | 'wallpaperBlur'
+  pref: 'wallpaperVisibility' | 'wallpaperBlur' | 'backgroundOpacity'
   min: number
   max: number
   step: number
-  property: string
+  /** The custom property the draft previews through; a control whose preview is more than one property writes nothing here and answers in `onDraft`. */
+  property?: string
   unit: '' | 'px'
   format(value: number): string
+  /** Extra preview work a draft carries beyond the custom property — the opacity dial's factor and gate attribute. */
+  onDraft?(value: number): void
 }) {
   const stored = props.prefs[props.pref]
   const [draft, setDraft] = React.useState<number | null>(null)
@@ -166,7 +170,8 @@ function AmountControl(props: SettingsRowView & {
   const shown = draft ?? stored
   const preview = (value: number) => {
     setDraft(value)
-    document.body.style.setProperty(props.property, `${value}${props.unit}`)
+    if (props.property !== undefined) document.body.style.setProperty(props.property, `${value}${props.unit}`)
+    props.onDraft?.(value)
   }
   return React.createElement(
     'div',
@@ -273,5 +278,28 @@ export const controls = {
     property: '--dsh-deepcraft-wallpaper-blur',
     unit: 'px',
     format: value => copy('wallpaperPixels', { value }),
+  }),
+  /**
+   * The surface opacity dial: the percentage is the stored preference, while
+   * the sheet reads a factor and the rules gate on the attribute, so the draft
+   * writes all three forms the way core/prefs.ts writes them on adoption.
+   */
+  backgroundOpacity: (props: SettingsRowView) => React.createElement(AmountControl, {
+    ...props,
+    pref: 'backgroundOpacity',
+    min: BACKGROUND_OPACITY_MIN,
+    max: BACKGROUND_OPACITY_MAX,
+    step: BACKGROUND_OPACITY_STEP,
+    unit: '',
+    format: value => copy('wallpaperPercent', { value: Math.round(value) }),
+    onDraft: value => {
+      if (value >= BACKGROUND_OPACITY_MAX) {
+        document.body.removeAttribute(BACKGROUND_OPACITY_ATTR)
+        document.body.style.removeProperty(BACKGROUND_OPACITY_VAR)
+        return
+      }
+      document.body.setAttribute(BACKGROUND_OPACITY_ATTR, String(value))
+      document.body.style.setProperty(BACKGROUND_OPACITY_VAR, String(value / 100))
+    },
   }),
 }

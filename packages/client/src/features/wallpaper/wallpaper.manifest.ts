@@ -11,6 +11,13 @@ export default {
   ],
   settingsRows: [{
     tab: 'appearance',
+    rank: 55,
+    pref: 'backgroundOpacity',
+    control: 'backgroundOpacity',
+    title: 'backgroundOpacityTitle',
+    desc: 'backgroundOpacityDesc',
+  }, {
+    tab: 'appearance',
     rank: 60,
     pref: 'wallpaperSource',
     control: 'wallpaperSource',

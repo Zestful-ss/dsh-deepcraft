@@ -86,13 +86,20 @@ export function install(_ctx: HostContext, _ui: FeatureUi<typeof manifest>) {
     return Number.isFinite(parsed) ? parsed : fallback
   }
 
-  /** The veil colour the stylesheet's gradient layer paints over the html image (theme/wallpaper.css's math). */
+  /**
+   * The veil colour the stylesheet's gradient layer paints over the html image
+   * (theme/wallpaper.css's math). The surface opacity scales the veil with the
+   * same factor the shell's fills take: under a wallpaper the dial is how much
+   * of the picture reaches the reader, the way it is how much of the acrylic
+   * backdrop reaches them in the bare window.
+   */
   const veilColor = () => {
     const prefs = readPrefs()
     const canvas = getComputedStyle(document.body).getPropertyValue('--dsh-deepcraft-canvas').trim() || 'transparent'
     const visibility = wallpaperAmount('--dsh-deepcraft-wallpaper-visibility', prefs.wallpaperVisibility)
     const cap = prefs.wallpaperLite ? Math.min(visibility, 0.6) : Math.min(visibility, 1)
-    return `color-mix(in srgb, ${canvas} ${(1 - cap) * 100}%, transparent)`
+    const opacity = wallpaperAmount('--dsh-deepcraft-background-opacity', prefs.backgroundOpacity / 100)
+    return `color-mix(in srgb, ${canvas} ${(1 - cap) * opacity * 100}%, transparent)`
   }
 
   /** A blur is baked into a bitmap copy: a background image cannot be filtered alone. */

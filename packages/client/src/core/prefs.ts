@@ -1,4 +1,4 @@
-import { FONT_CODE_ATTR, FONT_PROSE_ATTR, FONT_UI_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_PETDEX, MATERIAL_AMBIENT_ATTR, MATERIAL_GLASS_ATTR, MATERIAL_MOTION_ATTR, MATERIAL_RADIUS_ATTR, MATERIAL_SHADOW_ATTR, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PACKAGE_NAME, PALETTE_ATTR, SETTINGS_ENTRY_FALLBACK, WALLPAPER_ATTR, WALLPAPER_LITE_ATTR } from '../constants'
+import { BACKGROUND_OPACITY_ATTR, BACKGROUND_OPACITY_VAR, FONT_CODE_ATTR, FONT_PROSE_ATTR, FONT_UI_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_PETDEX, MATERIAL_AMBIENT_ATTR, MATERIAL_GLASS_ATTR, MATERIAL_MOTION_ATTR, MATERIAL_RADIUS_ATTR, MATERIAL_SHADOW_ATTR, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PACKAGE_NAME, PALETTE_ATTR, SETTINGS_ENTRY_FALLBACK, WALLPAPER_ATTR, WALLPAPER_LITE_ATTR } from '../constants'
 import { FONT_CUSTOM } from '@dsh-deepcraft/contracts/prefs'
 import { FONT_ROLES } from '../theme/fonts'
 import { customFontStack } from '../shared/fonts'
@@ -100,6 +100,7 @@ export function adoptPrefs(next: Prefs) {
     for (const mirror of MIRRORS) document.body.setAttribute(mirror.attr, mirror.value(next))
     writeFontCustoms(next)
     writeWallpaperNumbers(next)
+    writeBackgroundOpacity(next)
     writeMotionAttribute(next.motion)
   }
   notifyAll(prefsListeners, next)
@@ -126,12 +127,30 @@ function writeWallpaperNumbers(next: Prefs) {
   document.body.style.setProperty('--dsh-deepcraft-wallpaper-blur', `${next.wallpaperBlur}px`)
 }
 
+/**
+ * The surface opacity reaches the sheet two ways: the attribute the rules
+ * gate on, present only below 100, and the factor the calc() expressions
+ * multiply by. At 100 neither stands and the opaque default is the paint the
+ * sheet carries without them.
+ */
+function writeBackgroundOpacity(next: Prefs) {
+  if (next.backgroundOpacity >= 100) {
+    document.body.removeAttribute(BACKGROUND_OPACITY_ATTR)
+    document.body.style.removeProperty(BACKGROUND_OPACITY_VAR)
+    return
+  }
+  document.body.setAttribute(BACKGROUND_OPACITY_ATTR, String(next.backgroundOpacity))
+  document.body.style.setProperty(BACKGROUND_OPACITY_VAR, String(next.backgroundOpacity / 100))
+}
+
 /** Take back every attribute adoptPrefs mirrors onto the document: the page goes back to the host (entry.ts). */
 export function clearPrefsAttributes() {
   for (const name of MIRROR_ATTRS) document.body.removeAttribute(name)
+  document.body.removeAttribute(BACKGROUND_OPACITY_ATTR)
   for (const { role } of FONT_CUSTOMS) document.body.style.removeProperty(role.customProperty)
   document.body.style.removeProperty('--dsh-deepcraft-wallpaper-visibility')
   document.body.style.removeProperty('--dsh-deepcraft-wallpaper-blur')
+  document.body.style.removeProperty(BACKGROUND_OPACITY_VAR)
 }
 
 /** Whether the operating system asks for reduced motion right now. */

@@ -88,6 +88,15 @@ export const MATERIAL_MOTION_ATTR = 'data-dsh-deepcraft-material-motion'
 export const MATERIAL_GLASS_ATTR = 'data-dsh-deepcraft-material-glass'
 export const MATERIAL_AMBIENT_ATTR = 'data-dsh-deepcraft-material-ambient'
 /**
+ * The shell's surface opacity (D9): the attribute carries the percentage below
+ * 100 that turns the canvas fills into colour mixes toward transparent, and
+ * the property is the same answer as a factor the calc() expressions read.
+ * Neither stands at 100, so the opaque default is the pixel the sheet has
+ * always painted.
+ */
+export const BACKGROUND_OPACITY_ATTR = 'data-dsh-deepcraft-background-opacity'
+export const BACKGROUND_OPACITY_VAR = '--dsh-deepcraft-background-opacity'
+/**
  * The reader's wallpaper choices the stylesheet keys on (theme/wallpaper.css):
  * WALLPAPER_ATTR carries `wallpaperSource` (`custom` while the layer stands,
  * `none` while it does not), and LITE_ATTR is present (value `1`) while the

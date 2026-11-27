@@ -1,44 +1,178 @@
 {
-  "wallpaperTitle": { "zh": "壁纸", "en": "Wallpaper" },
-  "wallpaperDesc": { "zh": "在整页底层铺一张自己的图片或视频；只在选择本插件配色时可见。", "en": "Layers your own image or video under the whole page; visible only under one of this theme's own palettes." },
-  "wallpaperOff": { "zh": "关闭", "en": "Off" },
-  "wallpaperCustom": { "zh": "自定义", "en": "Custom" },
-  "wallpaperFileDesc": { "zh": "PNG、JPEG、WebP 图片或 MP4 视频，不超过 100 MB，保存在本机。", "en": "A PNG, JPEG or WebP image or an MP4 video, up to 100 MB, stored on this device." },
-  "wallpaperUpload": { "zh": "上传", "en": "Upload" },
-  "wallpaperReplace": { "zh": "更换", "en": "Replace" },
-  "wallpaperRemove": { "zh": "移除", "en": "Remove" },
-  "wallpaperType": { "zh": "只接受 PNG、JPEG、WebP 图片或 MP4 视频。", "en": "Only PNG, JPEG or WebP images and MP4 videos are accepted." },
-  "wallpaperSize": { "zh": "文件超过 100 MB。", "en": "The file is larger than 100 MB." },
-  "wallpaperFailed": { "zh": "保存失败：{value}", "en": "Saving failed: {value}" },
-  "wallpaperVisibilityTitle": { "zh": "壁纸可见度", "en": "Wallpaper visibility" },
-  "wallpaperVisibilityDesc": { "zh": "0% 完全遮住，100% 原样显示。", "en": "0% covers it completely, 100% shows it bare." },
-  "wallpaperBlurTitle": { "zh": "壁纸模糊", "en": "Wallpaper blur" },
-  "wallpaperBlurDesc": { "zh": "0 为关闭；模糊动画壁纸会多占显卡。", "en": "0 turns it off; blurring a video wallpaper costs more GPU." },
-  "wallpaperMotionTitle": { "zh": "显示方式", "en": "Display" },
-  "wallpaperMotionDesc": { "zh": "只对视频壁纸生效；静态显示停在第一帧。", "en": "Only a video wallpaper reads it; static holds the first frame." },
-  "wallpaperMotionStatic": { "zh": "静态", "en": "Static" },
-  "wallpaperMotionDynamic": { "zh": "动态", "en": "Dynamic" },
-  "wallpaperLiteTitle": { "zh": "低功耗", "en": "Low power" },
-  "wallpaperLiteDesc": { "zh": "停住视频并关掉壁纸模糊。", "en": "Stills the video and turns the wallpaper's blur off." },
-  "wallpaperPercent": { "zh": "{value}%", "en": "{value}%" },
-  "wallpaperPixels": { "zh": "{value}px", "en": "{value}px" },
-  "wallpaperBuiltin": { "zh": "内置", "en": "Built-in" },
-  "wallpaperBuiltinTitle": { "zh": "内置壁纸", "en": "Built-in wallpaper" },
-  "wallpaperBuiltinDesc": { "zh": "从随插件附带的壁纸中选择一张。", "en": "Pick one of the wallpapers that ship with the plugin." },
-  "wallpaperBuiltin_cindy-whisper": { "zh": "Cindy Whisper", "en": "Cindy Whisper" },
-  "wallpaperBuiltin_cindy-neon": { "zh": "Cindy Neon", "en": "Cindy Neon" },
-  "wallpaperBuiltin_cindy-prism": { "zh": "Cindy Prism", "en": "Cindy Prism" },
-  "wallpaperBuiltin_cindy-scarlet-stroll": { "zh": "Cindy Scarlet Stroll", "en": "Cindy Scarlet Stroll" },
-  "wallpaperBuiltin_cindy-night-glance": { "zh": "Cindy Night Glance", "en": "Cindy Night Glance" },
-  "wallpaperBuiltin_cindy-dream": { "zh": "Cindy Dream", "en": "Cindy Dream" },
-  "wallpaperBuiltin_cindy-studio": { "zh": "Cindy Studio", "en": "Cindy Studio" },
-  "wallpaperBuiltin_cindy-window": { "zh": "Cindy Window", "en": "Cindy Window" },
-  "wallpaperBuiltin_dune-dawn": { "zh": "Dune Dawn", "en": "Dune Dawn" },
-  "wallpaperBuiltin_dune-sphere": { "zh": "Dune Sphere", "en": "Dune Sphere" },
-  "wallpaperBuiltin_indigo-folds": { "zh": "Indigo Folds", "en": "Indigo Folds" },
-  "wallpaperBuiltin_night-launch": { "zh": "Night Launch", "en": "Night Launch" },
-  "wallpaperBuiltin_ocean-clouds": { "zh": "Ocean Clouds", "en": "Ocean Clouds" },
-  "wallpaperBuiltin_planet-dawn": { "zh": "Planet Dawn", "en": "Planet Dawn" },
-  "wallpaperBuiltin_rose-quartz": { "zh": "Rose Quartz", "en": "Rose Quartz" },
-  "wallpaperBuiltin_silent-orbits": { "zh": "Silent Orbits", "en": "Silent Orbits" }
+  "wallpaperTitle": {
+    "zh": "壁纸",
+    "en": "Wallpaper"
+  },
+  "wallpaperDesc": {
+    "zh": "在整页底层铺一张自己的图片或视频；只在选择本插件配色时可见。",
+    "en": "Layers your own image or video under the whole page; visible only under one of this theme's own palettes."
+  },
+  "wallpaperOff": {
+    "zh": "关闭",
+    "en": "Off"
+  },
+  "wallpaperCustom": {
+    "zh": "自定义",
+    "en": "Custom"
+  },
+  "wallpaperFileDesc": {
+    "zh": "PNG、JPEG、WebP 图片或 MP4 视频，不超过 100 MB，保存在本机。",
+    "en": "A PNG, JPEG or WebP image or an MP4 video, up to 100 MB, stored on this device."
+  },
+  "wallpaperUpload": {
+    "zh": "上传",
+    "en": "Upload"
+  },
+  "wallpaperReplace": {
+    "zh": "更换",
+    "en": "Replace"
+  },
+  "wallpaperRemove": {
+    "zh": "移除",
+    "en": "Remove"
+  },
+  "wallpaperType": {
+    "zh": "只接受 PNG、JPEG、WebP 图片或 MP4 视频。",
+    "en": "Only PNG, JPEG or WebP images and MP4 videos are accepted."
+  },
+  "wallpaperSize": {
+    "zh": "文件超过 100 MB。",
+    "en": "The file is larger than 100 MB."
+  },
+  "wallpaperFailed": {
+    "zh": "保存失败：{value}",
+    "en": "Saving failed: {value}"
+  },
+  "wallpaperVisibilityTitle": {
+    "zh": "壁纸可见度",
+    "en": "Wallpaper visibility"
+  },
+  "wallpaperVisibilityDesc": {
+    "zh": "0% 完全遮住，100% 原样显示。",
+    "en": "0% covers it completely, 100% shows it bare."
+  },
+  "wallpaperBlurTitle": {
+    "zh": "壁纸模糊",
+    "en": "Wallpaper blur"
+  },
+  "wallpaperBlurDesc": {
+    "zh": "0 为关闭；模糊动画壁纸会多占显卡。",
+    "en": "0 turns it off; blurring a video wallpaper costs more GPU."
+  },
+  "wallpaperMotionTitle": {
+    "zh": "显示方式",
+    "en": "Display"
+  },
+  "wallpaperMotionDesc": {
+    "zh": "只对视频壁纸生效；静态显示停在第一帧。",
+    "en": "Only a video wallpaper reads it; static holds the first frame."
+  },
+  "wallpaperMotionStatic": {
+    "zh": "静态",
+    "en": "Static"
+  },
+  "wallpaperMotionDynamic": {
+    "zh": "动态",
+    "en": "Dynamic"
+  },
+  "wallpaperLiteTitle": {
+    "zh": "低功耗",
+    "en": "Low power"
+  },
+  "wallpaperLiteDesc": {
+    "zh": "停住视频并关掉壁纸模糊。",
+    "en": "Stills the video and turns the wallpaper's blur off."
+  },
+  "wallpaperPercent": {
+    "zh": "{value}%",
+    "en": "{value}%"
+  },
+  "wallpaperPixels": {
+    "zh": "{value}px",
+    "en": "{value}px"
+  },
+  "wallpaperBuiltin": {
+    "zh": "内置",
+    "en": "Built-in"
+  },
+  "wallpaperBuiltinTitle": {
+    "zh": "内置壁纸",
+    "en": "Built-in wallpaper"
+  },
+  "wallpaperBuiltinDesc": {
+    "zh": "从随插件附带的壁纸中选择一张。",
+    "en": "Pick one of the wallpapers that ship with the plugin."
+  },
+  "wallpaperBuiltin_cindy-whisper": {
+    "zh": "Cindy Whisper",
+    "en": "Cindy Whisper"
+  },
+  "wallpaperBuiltin_cindy-neon": {
+    "zh": "Cindy Neon",
+    "en": "Cindy Neon"
+  },
+  "wallpaperBuiltin_cindy-prism": {
+    "zh": "Cindy Prism",
+    "en": "Cindy Prism"
+  },
+  "wallpaperBuiltin_cindy-scarlet-stroll": {
+    "zh": "Cindy Scarlet Stroll",
+    "en": "Cindy Scarlet Stroll"
+  },
+  "wallpaperBuiltin_cindy-night-glance": {
+    "zh": "Cindy Night Glance",
+    "en": "Cindy Night Glance"
+  },
+  "wallpaperBuiltin_cindy-dream": {
+    "zh": "Cindy Dream",
+    "en": "Cindy Dream"
+  },
+  "wallpaperBuiltin_cindy-studio": {
+    "zh": "Cindy Studio",
+    "en": "Cindy Studio"
+  },
+  "wallpaperBuiltin_cindy-window": {
+    "zh": "Cindy Window",
+    "en": "Cindy Window"
+  },
+  "wallpaperBuiltin_dune-dawn": {
+    "zh": "Dune Dawn",
+    "en": "Dune Dawn"
+  },
+  "wallpaperBuiltin_dune-sphere": {
+    "zh": "Dune Sphere",
+    "en": "Dune Sphere"
+  },
+  "wallpaperBuiltin_indigo-folds": {
+    "zh": "Indigo Folds",
+    "en": "Indigo Folds"
+  },
+  "wallpaperBuiltin_night-launch": {
+    "zh": "Night Launch",
+    "en": "Night Launch"
+  },
+  "wallpaperBuiltin_ocean-clouds": {
+    "zh": "Ocean Clouds",
+    "en": "Ocean Clouds"
+  },
+  "wallpaperBuiltin_planet-dawn": {
+    "zh": "Planet Dawn",
+    "en": "Planet Dawn"
+  },
+  "wallpaperBuiltin_rose-quartz": {
+    "zh": "Rose Quartz",
+    "en": "Rose Quartz"
+  },
+  "wallpaperBuiltin_silent-orbits": {
+    "zh": "Silent Orbits",
+    "en": "Silent Orbits"
+  },
+  "backgroundOpacityTitle": {
+    "zh": "表面不透明度",
+    "en": "Surface opacity"
+  },
+  "backgroundOpacityDesc": {
+    "zh": "低于 100% 时窗口的画布填充按同一比例调向透明：无壁纸时透出桌面端的亚克力背景，有壁纸时壁纸的薄纱与玻璃随之变薄",
+    "en": "Below 100% the window's canvas fills mix toward transparent by one factor: the bare window opens onto the desktop's acrylic backdrop, and under a wallpaper the veil and the glass thin with it"
+  }
 }

@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-27",
+  "group": "new",
+  "order": 0,
+  "external": false,
+  "zh": "新增外观页的「表面不透明度」调节：低于 100% 时窗口的画布填充按同一比例调向透明，无壁纸时透出桌面端的亚克力背景，有壁纸时薄纱与玻璃填充随之变薄，让壁纸真正显现。",
+  "en": "Add a Surface opacity dial to the Appearance tab: below 100% the window's canvas fills mix toward transparent by one factor, opening the bare window onto the desktop's acrylic backdrop and thinning a wallpaper's veil and glass so the picture actually shows."
+}
