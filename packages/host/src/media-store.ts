@@ -178,9 +178,9 @@ export function serveMedia(
 
 /** The status route beside the file route: `GET` answers the caller's status document. */
 export function mediaStatusRoute(ctx: DshContext, answer: () => unknown) {
-  return (req: DshRequest, res: DshResponse) => {
+  return (req: DshRequest, res: DshResponse, peer?: unknown) => {
     if (methodRefused(req, res, ['GET'])) return
-    if (fenceRefused(ctx, req, res)) return
+    if (fenceRefused(ctx, req, res, peer)) return
     sendJson(res, 200, answer())
   }
 }
@@ -199,9 +199,9 @@ export function mediaFileRoute<K extends string>(
   answer: () => unknown,
   headers: Readonly<Record<string, string>> = {},
 ) {
-  return (req: DshRequest, res: DshResponse) => {
+  return (req: DshRequest, res: DshResponse, peer?: unknown) => {
     if (methodRefused(req, res, ['GET', 'HEAD', 'PUT', 'DELETE'])) return
-    if (fenceRefused(ctx, req, res)) return
+    if (fenceRefused(ctx, req, res, peer)) return
     if (req.method === 'PUT' || req.method === 'DELETE') {
       const done = req.method === 'PUT'
         ? storeMedia(store, opts, kind, req, res).then(stored => {

@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-27",
+  "group": "fixes",
+  "order": 0,
+  "external": false,
+  "zh": "修复在宿主 0.2.3-alpha.2 上最近会话、置顶会话与会话宠物整体停用的问题：宿主把会话状态表从 uiSession 的字段拆成独立的 uiSession.sessionStatus 服务后，旧读取路径直接抛出，现按宿主版本分别读取。",
+  "en": "Fix the recent and pinned conversation blocks and the chat pet switching off entirely on host 0.2.3-alpha.2: the host moved the session status table off a uiSession field into its own uiSession.sessionStatus service, where the old read path threw outright; the read now follows the host build."
+}

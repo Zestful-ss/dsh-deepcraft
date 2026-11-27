@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-27",
+  "group": "fixes",
+  "order": 0,
+  "external": false,
+  "zh": "修复在宿主 0.2.3-alpha.2 上子代理模型入口完全不出现的问题：宿主把官方允许列表从会话投影改成全局的 subagentModelSelection 服务后，旧读取路径拿不到任何策略，现按宿主版本分别读取。",
+  "en": "Fix the subagent model entry never appearing on host 0.2.3-alpha.2: the host moved the official allowed-route list from a session projection to the global subagentModelSelection service, where the old read path found no policy at all; the read now follows the host build."
+}

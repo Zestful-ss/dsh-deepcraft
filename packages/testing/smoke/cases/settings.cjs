@@ -18,7 +18,7 @@ module.exports = {
     const expected = {
       general: { rows: ['recentSessions', 'subagentModelPicker', 'subagentModelChoice'], disabled: [] },
       appearance: {
-        rows: ['palette', 'brandAccent', 'fontUi', 'fontProse', 'fontCode', 'motion', 'mascot', 'chatPet', 'mascotScope', 'materialRadius', 'materialShadow', 'materialMotion', 'materialGlass', 'materialAmbient', 'brandName', 'brandMark', 'brandWordmark', 'brandInk', 'wallpaperSource', 'wallpaperVisibility', 'wallpaperBuiltinId', 'wallpaperBlur', 'wallpaperMotion', 'wallpaperLite'],
+        rows: ['palette', 'brandAccent', 'fontUi', 'fontProse', 'fontCode', 'motion', 'mascot', 'chatPet', 'mascotScope', 'materialRadius', 'materialShadow', 'materialMotion', 'materialGlass', 'materialAmbient', 'brandName', 'brandMark', 'brandWordmark', 'brandInk', 'backgroundOpacity', 'wallpaperSource', 'wallpaperVisibility', 'wallpaperBuiltinId', 'wallpaperBlur', 'wallpaperMotion', 'wallpaperLite'],
         // The shipped source is the bundled set, so every wallpaper child acts.
         disabled: [],
       },

@@ -1,4 +1,4 @@
-import { findChatTarget, hostSessions, hostUiSession, readTurnActivity } from '@dsh-deepcraft/engine/host'
+import { findChatTarget, hostSessions, hostSessionStatus, readTurnActivity } from '@dsh-deepcraft/engine/host'
 import type { HostContext } from '@dsh-deepcraft/engine/host'
 import type { HostChatSnapshot, HostChatTarget, HostFeedEntry, HostSessionEvent, HostSessionListSnapshot, HostSessionStatusSnapshot, HostSnapshotSource, HostSubagentEntry } from '@dsh-deepcraft/contracts/services'
 
@@ -149,7 +149,7 @@ export function createMascotSignals(ctx: HostContext, onMoment: (moment: MascotM
   let stopStatus: (() => void) | null = null
 
   function statusOf(): HostSessionStatusSnapshot | null {
-    const source = hostUiSession(ctx)?.sessionStatus
+    const source = hostSessionStatus(ctx) ?? undefined
     if (source !== statusSource) {
       if (stopStatus !== null) stopStatus()
       statusSource = source

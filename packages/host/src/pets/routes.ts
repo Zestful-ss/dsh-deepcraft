@@ -61,8 +61,8 @@ function answer(res: DshResponse, promise: Promise<object>) {
 }
 
 /** The fence and method check every route here runs first. */
-function guarded(ctx: DshContext, req: DshRequest, res: DshResponse, methods: string[]) {
-  return methodRefused(req, res, methods) || fenceRefused(ctx, req, res)
+function guarded(ctx: DshContext, req: DshRequest, res: DshResponse, methods: string[], peer?: unknown) {
+  return methodRefused(req, res, methods) || fenceRefused(ctx, req, res, peer)
 }
 
 /**
@@ -76,8 +76,8 @@ export function petRoutes(ctx: DshContext): { label: string, route: DshRoute }[]
     route: {
       kind: 'exact',
       path: PETS_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
-        if (guarded(ctx, req, res, ['GET', 'HEAD'])) return
+      handler: (req: DshRequest, res: DshResponse, peer?: unknown) => {
+        if (guarded(ctx, req, res, ['GET', 'HEAD'], peer)) return
         answer(res, listPets())
       },
     },
@@ -86,8 +86,8 @@ export function petRoutes(ctx: DshContext): { label: string, route: DshRoute }[]
     route: {
       kind: 'exact',
       path: PETS_ENSURE_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
-        if (guarded(ctx, req, res, ['POST'])) return
+      handler: (req: DshRequest, res: DshResponse, peer?: unknown) => {
+        if (guarded(ctx, req, res, ['POST'], peer)) return
         answer(res, jsonBody(req).then((body) => {
           if (typeof body.id !== 'string' || !isPetId(body.id)) throw new PetRefusal('the request names no pet id', 400)
           return ensurePreset(body.id).then(pet => ({ pet }))
@@ -99,8 +99,8 @@ export function petRoutes(ctx: DshContext): { label: string, route: DshRoute }[]
     route: {
       kind: 'exact',
       path: PETS_IMPORT_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
-        if (guarded(ctx, req, res, ['POST'])) return
+      handler: (req: DshRequest, res: DshResponse, peer?: unknown) => {
+        if (guarded(ctx, req, res, ['POST'], peer)) return
         const type = String(req.headers['content-type'] ?? '').split(';')[0].trim().toLowerCase()
         if (type !== 'application/zip' && type !== 'application/x-zip-compressed') {
           endSocketAfterAnswer(req, res)
@@ -118,8 +118,8 @@ export function petRoutes(ctx: DshContext): { label: string, route: DshRoute }[]
     route: {
       kind: 'exact',
       path: PETS_IMPORT_URL_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
-        if (guarded(ctx, req, res, ['POST'])) return
+      handler: (req: DshRequest, res: DshResponse, peer?: unknown) => {
+        if (guarded(ctx, req, res, ['POST'], peer)) return
         answer(res, jsonBody(req).then((body) => {
           if (typeof body.url !== 'string') throw new PetRefusal('the request names no Petdex link', 400)
           return importFromPetdex(body.url).then(pet => ({ pet }))
@@ -131,8 +131,8 @@ export function petRoutes(ctx: DshContext): { label: string, route: DshRoute }[]
     route: {
       kind: 'prefix',
       path: PETS_IMAGE_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
-        if (guarded(ctx, req, res, ['GET', 'HEAD'])) return
+      handler: (req: DshRequest, res: DshResponse, peer?: unknown) => {
+        if (guarded(ctx, req, res, ['GET', 'HEAD'], peer)) return
         const sub = new URL(req.url ?? '/', 'http://local').pathname.slice(PETS_IMAGE_PATH.length)
         const match = /^\/([^/]+)$/.exec(sub)
         let name = ''

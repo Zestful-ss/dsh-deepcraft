@@ -292,7 +292,12 @@ async function openPage(url, options = {}) {
 function consoleProblem(message) {
   if (DRIVER_MESSAGE.test(message.text())) return null
   if (message.type() !== 'error' && message.type() !== 'warning') return null
-  return `${message.type()}: ${message.text()}`
+  // A failed resource load names nothing in its text; the location is the
+  // failing URL, which is the difference between the host refusing a route
+  // and the skin's own asset going missing.
+  const where = message.location()?.url
+  const suffix = typeof where === 'string' && where !== '' && !message.text().includes(where) ? ` <${where.slice(0, 200)}>` : ''
+  return `${message.type()}: ${message.text()}${suffix}`
 }
 
 /** One page in a context of its own on a browser the caller owns. */

@@ -181,8 +181,8 @@ async function unarchiveSession(ctx: DshContext, sessionId: string) {
  * the set either way and the row is gone for good instead of coming back on
  * the next reload.
  */
-async function deleteSession(ctx: DshContext, req: DshRequest, res: DshResponse) {
-  const refused = refusalOf(ctx, req)
+async function deleteSession(ctx: DshContext, req: DshRequest, res: DshResponse, peer?: unknown) {
+  const refused = refusalOf(ctx, req, peer)
   if (refused !== undefined) {
     sendJson(res, refused, { ok: false, error: refused === 401 ? 'unauthorized' : 'forbidden' })
     return
@@ -344,12 +344,12 @@ export function registerRoutes(ctx: DshContext, scope: DshScope, models: Subagen
     register('session delete', {
       kind: 'exact',
       path: SESSION_DELETE_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
+      handler: (req: DshRequest, res: DshResponse, peer?: unknown) => {
         // POST only: the browser half sends one id, and a GET must never
         // reach the filesystem.
         if (methodRefused(req, res, ['POST'])) return
         // A fault anywhere in the deletion answers 500 with its message.
-        void deleteSession(ctx, req, res).catch((error: unknown) => {
+        void deleteSession(ctx, req, res, peer).catch((error: unknown) => {
           if (res.headersSent) res.destroy()
           else sendJson(res, 500, { ok: false, error: String((error as { message?: string } | null)?.message ?? String(error)) })
         })
@@ -359,14 +359,14 @@ export function registerRoutes(ctx: DshContext, scope: DshScope, models: Subagen
     register('usage', {
       kind: 'exact',
       path: USAGE_PATH,
-      handler: (req: DshRequest, res: DshResponse) => {
+      handler: (req: DshRequest, res: DshResponse, peer?: unknown) => {
         // Read-only and same-origin only: the answer is the plugin's own
         // aggregate over the user's session history, which is why it runs the
         // same fence as the username route. It answers with whatever is already
         // known: a cold pass reports `computing` and the browser half keeps its
         // skeleton up while it polls.
         if (methodRefused(req, res, ['GET', 'HEAD'])) return
-        if (fenceRefused(ctx, req, res)) return
+        if (fenceRefused(ctx, req, res, peer)) return
         let snapshot = usage.snapshot()
         const stale = snapshot.value === null
           || snapshot.computing === true

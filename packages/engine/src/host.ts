@@ -1,6 +1,6 @@
 import { COMPOSER_CARD_SELECTOR, COMPOSER_INPUT_SELECTOR, COMPOSER_SELECTOR, COMPOSER_STACK_SELECTOR, CONVERSATION_SCROLL_SELECTOR, CONVERSATION_SESSION_ATTRIBUTE, CONVERSATION_SESSION_SELECTOR, FOOT_AREA_SELECTOR, MENU_ROLE_SELECTOR, PHASE_ATTRIBUTE, SIDEBAR_ROOT_SELECTOR, WORKSPACE_LIST_AREA_SELECTOR, WORKSPACE_SECTION_LABEL_SELECTOR, WORKSPACE_TREE_ROW_SELECTOR } from '@dsh-deepcraft/contracts/dom'
 import { MODEL_SLOT_SELECTOR } from '@dsh-deepcraft/contracts/dom'
-import type { HostAccountService, HostAssistantStep, HostChatSnapshot, HostChatTarget, HostConfigFormsService, HostContextMenusService, HostConversationService, HostLocaleService, HostModelCatalogSnapshot, HostModelDirectoriesService, HostModelDirectory, HostServiceLookup, HostOutlineTurn, HostRunningCall, HostSession, HostSessionsService, HostShortcutsService, HostSlotOptions, HostSlotsService, HostTurn, HostUiConversationService, HostUiSessionService, HostWorkspacesService } from '@dsh-deepcraft/contracts/services'
+import type { HostAccountService, HostAssistantStep, HostChatSnapshot, HostChatTarget, HostConfigFormsService, HostContextMenusService, HostConversationService, HostLocaleService, HostModelCatalogSnapshot, HostModelDirectoriesService, HostModelDirectory, HostServiceLookup, HostOutlineTurn, HostRunningCall, HostSession, HostSessionsService, HostSessionStatusSnapshot, HostShortcutsService, HostSlotOptions, HostSlotsService, HostSnapshotSource, HostTurn, HostUiConversationService, HostUiSessionService, HostWorkspacesService } from '@dsh-deepcraft/contracts/services'
 import { observeMatches, subscribeMutations } from './bus'
 import type { MatchList } from './bus'
 import { closestFrom } from './dom'
@@ -310,6 +310,24 @@ export function hostSessions(lookup: HostServiceLookup | null | undefined): Host
 export function hostUiSession(lookup: HostServiceLookup | null | undefined): HostUiSessionService | null {
   const uiSession = lookup?.get('uiSession') as HostUiSessionService | undefined
   return uiSession ?? null
+}
+
+/**
+ * The live status map of every session (running, waiting, unread). dsh 0.2.3
+ * moved it off `uiSession.sessionStatus` onto a service of its own registered
+ * under the dotted name `uiSession.sessionStatus`. The standalone service is
+ * read first: on a host that registers it, reading the legacy field off the
+ * traceable `uiSession` is redirected to the dotted service's strict
+ * resolution, which throws for a fiber without the inject declaration. The
+ * `in` check does not go through that redirect, so the legacy read only
+ * happens where the field genuinely exists.
+ */
+export function hostSessionStatus(lookup: HostServiceLookup | null | undefined): HostSnapshotSource<HostSessionStatusSnapshot> | null {
+  const standalone = lookup?.get('uiSession.sessionStatus') as HostSnapshotSource<HostSessionStatusSnapshot> | undefined
+  if (standalone !== undefined) return standalone
+  const uiSession = hostUiSession(lookup)
+  if (uiSession !== null && 'sessionStatus' in uiSession) return uiSession.sessionStatus ?? null
+  return null
 }
 
 /** One session's model directory: the catalog, its load and the pick. */

@@ -96,7 +96,7 @@ function routeOf(ctx: DshContext, store: SubagentModelStore): DshRoute {
   async function read(sessionId: string): Promise<SubagentModelsAnswer> {
     const session = liveSession(sessionId)
     if (session === null) return { allowed: [], selected: [], reason: 'no-session' }
-    const policy = readPolicyRoutes(ctx.get('sessionProjections'), session)
+    const policy = readPolicyRoutes(ctx, session)
     if (policy === undefined) return { allowed: [], selected: [], reason: 'no-policy' }
     const allowed = copyRoutes(policy)
     const efforts = await routeEfforts(allowed)
@@ -147,7 +147,7 @@ function routeOf(ctx: DshContext, store: SubagentModelStore): DshRoute {
       refuse(res, 409, 'no-session', 'no live session carries that id')
       return
     }
-    const policy = readPolicyRoutes(ctx.get('sessionProjections'), session)
+    const policy = readPolicyRoutes(ctx, session)
     if (policy === undefined) {
       refuse(res, 409, 'no-policy', 'the session recorded no allowed subagent routes')
       return
@@ -207,9 +207,9 @@ function routeOf(ctx: DshContext, store: SubagentModelStore): DshRoute {
   return {
     kind: 'exact',
     path: SUBAGENT_MODELS_PATH,
-    handler: (req: DshRequest, res: DshResponse) => {
+    handler: (req: DshRequest, res: DshResponse, peer?: unknown) => {
       if (methodRefused(req, res, ['GET', 'POST'])) return
-      if (fenceRefused(ctx, req, res)) return
+      if (fenceRefused(ctx, req, res, peer)) return
       if (req.method === 'POST') {
         // A fault inside the write answers 500 with its message, so the page
         // keeps what it had and says the save failed.

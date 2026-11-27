@@ -1,0 +1,8 @@
+{
+  "at": "2026-11-27",
+  "group": "fixes",
+  "order": 0,
+  "external": false,
+  "zh": "修复在宿主 0.2.3-alpha.2 上品牌、壁纸、宠物声音等媒体路由全部拒绝访问的问题：宿主的网页服务器在派发插件路由前已经完成鉴权并把调用方交给处理器，插件重复执行的鉴权读取在新宿主上直接抛出，现携带调用方的请求直接视为已通过门禁。",
+  "en": "Fix the brand, wallpaper and pet sound media routes refusing every request on host 0.2.3-alpha.2: the host's web server now fences and authenticates a plugin route before dispatching it and hands the admitted caller to the handler, where the plugin's repeated authentication read threw outright; a request carrying the caller is now taken as already past the fence."
+}

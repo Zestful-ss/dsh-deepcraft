@@ -163,8 +163,17 @@ async function subagentChoiceChecks() {
     typeof guardPick === 'string' && guardPick.includes('not one of them'), String(guardPick))
   check('the live prompt section states the pick', sectionBox.spec.text({ agent: { session: parent } }).includes('the only route'))
   check('a null policy and a malformed route leave the rule out',
-    choice.readSubagentRoutes({ stateOf: () => null }, {}) === undefined &&
-      choice.readSubagentRoutes({ stateOf: () => [{ provider: '', model: 'x' }] }, {}) === undefined)
+    choice.readSubagentRoutes({ get: (name) => (name === 'sessionProjections' ? { stateOf: () => null } : undefined) }, {}) === undefined &&
+      choice.readSubagentRoutes({ get: (name) => (name === 'sessionProjections' ? { stateOf: () => [{ provider: '', model: 'x' }] } : undefined) }, {}) === undefined)
+  // dsh 0.2.3 reads one global service instead of the session projection: the
+  // service answers first where it stands, and a throwing one is a broken
+  // setting rather than a policy.
+  const alphaCtx = { get: (name) => (name === 'subagentModelSelection' ? { allowedRoutes: () => routes } : undefined) }
+  check('the global selection service answers the policy before any projection',
+    JSON.stringify(choice.readSubagentRoutes(alphaCtx, parent)) === JSON.stringify(routes))
+  const brokenSettingCtx = { get: (name) => (name === 'subagentModelSelection' ? { allowedRoutes() { throw new Error('INVALID_MODEL_SELECTION_SETTINGS') } } : undefined) }
+  check('a selection service that throws reads as no policy, not a crash',
+    choice.readSubagentRoutes(brokenSettingCtx, parent) === undefined)
 }
 
 module.exports = { subagentChoiceChecks }

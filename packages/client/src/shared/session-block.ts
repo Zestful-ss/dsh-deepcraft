@@ -2,10 +2,10 @@ import * as React from 'react'
 import * as primitives from '@deepseek-ai/dsh-client-ui-primitives'
 import * as reactDom from 'react-dom/client'
 import type { StateDotState } from '@deepseek-ai/dsh-client-ui-primitives'
-import { currentSessionId, findSidebarRoot, hostContextMenus, hostLocale, hostSessions, hostUiSession, hostUiWorkspace, hostWorkspaces, watchWorkspaceRegion } from '@dsh-deepcraft/engine/host'
+import { currentSessionId, findSidebarRoot, hostContextMenus, hostLocale, hostSessions, hostSessionStatus, hostUiSession, hostUiWorkspace, hostWorkspaces, watchWorkspaceRegion } from '@dsh-deepcraft/engine/host'
 import { removeStrayNodes } from './popover'
 import { workspaceTitles } from './openable-sessions'
-import type { HostContextMenusService, HostSessionListSnapshot, HostSessionStatus, HostSessionStatusSnapshot, HostSessionSummary, HostSessionsService, HostUiSessionService, HostWorkspacesService } from '@dsh-deepcraft/contracts/services'
+import type { HostContextMenusService, HostSessionListSnapshot, HostSessionStatus, HostSessionStatusSnapshot, HostSessionSummary, HostSessionsService, HostSnapshotSource, HostUiSessionService, HostWorkspacesService } from '@dsh-deepcraft/contracts/services'
 import type { HostContext, HostValue } from '@dsh-deepcraft/engine/host'
 
 /**
@@ -40,6 +40,8 @@ export interface SessionBlockServices {
   workspaces: HostWorkspacesService
   sessions: HostSessionsService
   uiSession: HostUiSessionService | null
+  /** The live status map, wherever this host build carries it (hostSessionStatus). */
+  status: HostSnapshotSource<HostSessionStatusSnapshot> | null
   menus: HostContextMenusService
   shell: HostValue
 }
@@ -116,9 +118,9 @@ export function runningSubagents(
 
 /** The host's own live status map, or null while it is unreachable. */
 function statusesSnapshot(ctx: HostContext, services: SessionBlockServices): HostSessionStatusSnapshot | null {
-  const service = services.uiSession ?? hostUiSession(ctx)
-  if (service === null || service.sessionStatus === undefined) return null
-  return service.sessionStatus.getSnapshot()
+  const source = services.status ?? hostSessionStatus(ctx)
+  if (source === null) return null
+  return source.getSnapshot()
 }
 
 /**
@@ -219,11 +221,11 @@ export function installSessionBlock(ctx: HostContext, options: SessionBlockOptio
       if (workspaces === null || workspaces.list === undefined) return false
       if (sessions === null || sessions.list === undefined) return false
       if (menus === null || shell === null || shell === undefined) return false
-      services = { workspaces, sessions, uiSession: hostUiSession(ctx), menus, shell }
+      services = { workspaces, sessions, uiSession: hostUiSession(ctx), status: hostSessionStatus(ctx), menus, shell }
       stopped.push(workspaces.list.subscribe(options.schedule))
       stopped.push(sessions.list.subscribe(options.schedule))
       if (services.uiSession?.current?.subscribe !== undefined) stopped.push(services.uiSession.current.subscribe(options.schedule))
-      if (services.uiSession?.sessionStatus !== undefined) stopped.push(services.uiSession.sessionStatus.subscribe(options.schedule))
+      if (services.status !== null) stopped.push(services.status.subscribe(options.schedule))
       stopped.push(menus.active.subscribe(options.schedule))
     } else {
       // A service can mount after the block: one that arrived late is taken on
@@ -232,7 +234,11 @@ export function installSessionBlock(ctx: HostContext, options: SessionBlockOptio
       if (uiSession !== null && uiSession !== services.uiSession) {
         services.uiSession = uiSession
         if (uiSession.current?.subscribe !== undefined) stopped.push(uiSession.current.subscribe(options.schedule))
-        if (uiSession.sessionStatus !== undefined) stopped.push(uiSession.sessionStatus.subscribe(options.schedule))
+      }
+      const status = services.status ?? hostSessionStatus(ctx)
+      if (status !== null && status !== services.status) {
+        services.status = status
+        stopped.push(status.subscribe(options.schedule))
       }
     }
     return true

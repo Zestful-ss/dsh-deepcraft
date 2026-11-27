@@ -26,7 +26,13 @@ import type { DshContext, DshRequest, DshResponse } from './dsh'
  * @param req - node request.
  * @returns 401 / 403, or undefined when the request may proceed.
  */
-export function refusalOf(ctx: DshContext, req: DshRequest) {
+export function refusalOf(ctx: DshContext, req: DshRequest, peer?: unknown) {
+  // dsh 0.2.3 fences and authenticates plugin routes in the web server itself
+  // and hands the admitted caller to the handler; a request carrying one has
+  // already passed the fence this function re-enacts, and re-running it is
+  // impossible there anyway: the check reads internals the traceable service
+  // resolves strictly (D3), which a lenient accessor cannot reach.
+  if (peer !== undefined) return undefined
   const connection = ctx.get('connection')
   if (typeof connection?.requestRejection === 'function') return connection.requestRejection(req)
   if (!isLoopbackPeer(req.socket.remoteAddress)) return 403
@@ -96,8 +102,8 @@ export function methodRefused(req: DshRequest, res: DshResponse, methods: string
  * otherwise (see refusalOf).
  * @returns whether the request was turned away.
  */
-export function fenceRefused(ctx: DshContext, req: DshRequest, res: DshResponse) {
-  const refused = refusalOf(ctx, req)
+export function fenceRefused(ctx: DshContext, req: DshRequest, res: DshResponse, peer?: unknown) {
+  const refused = refusalOf(ctx, req, peer)
   if (refused === undefined) return false
   endSocketAfterAnswer(req, res)
   sendJson(res, refused, { ok: false, error: refused === 401 ? 'unauthorized' : 'forbidden' })

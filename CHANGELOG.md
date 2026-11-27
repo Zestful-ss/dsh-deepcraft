@@ -10,9 +10,21 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - 新增外观页的「表面不透明度」调节：低于 100% 时窗口的画布填充按同一比例调向透明，无壁纸时透出桌面端的亚克力背景，有壁纸时薄纱与玻璃填充随之变薄，让壁纸真正显现。
 
+### 问题修复
+
+- 修复在宿主 0.2.3-alpha.2 上品牌、壁纸、宠物声音等媒体路由全部拒绝访问的问题：宿主的网页服务器在派发插件路由前已经完成鉴权并把调用方交给处理器，插件重复执行的鉴权读取在新宿主上直接抛出，现携带调用方的请求直接视为已通过门禁。
+- 修复在宿主 0.2.3-alpha.2 上最近会话、置顶会话与会话宠物整体停用的问题：宿主把会话状态表从 uiSession 的字段拆成独立的 uiSession.sessionStatus 服务后，旧读取路径直接抛出，现按宿主版本分别读取。
+- 修复在宿主 0.2.3-alpha.2 上子代理模型入口完全不出现的问题：宿主把官方允许列表从会话投影改成全局的 subagentModelSelection 服务后，旧读取路径拿不到任何策略，现按宿主版本分别读取。
+
 <h3 id="en-unreleased">New Features</h3>
 
 - Add a Surface opacity dial to the Appearance tab: below 100% the window's canvas fills mix toward transparent by one factor, opening the bare window onto the desktop's acrylic backdrop and thinning a wallpaper's veil and glass so the picture actually shows.
+
+### Bug Fixes
+
+- Fix the brand, wallpaper and pet sound media routes refusing every request on host 0.2.3-alpha.2: the host's web server now fences and authenticates a plugin route before dispatching it and hands the admitted caller to the handler, where the plugin's repeated authentication read threw outright; a request carrying the caller is now taken as already past the fence.
+- Fix the recent and pinned conversation blocks and the chat pet switching off entirely on host 0.2.3-alpha.2: the host moved the session status table off a uiSession field into its own uiSession.sessionStatus service, where the old read path threw outright; the read now follows the host build.
+- Fix the subagent model entry never appearing on host 0.2.3-alpha.2: the host moved the official allowed-route list from a session projection to the global subagentModelSelection service, where the old read path found no policy at all; the read now follows the host build.
 
 ## [0.42.9] - 2026-11-22
 

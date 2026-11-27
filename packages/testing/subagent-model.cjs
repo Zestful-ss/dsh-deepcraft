@@ -257,7 +257,7 @@ function readCapsuleEdge(page, selector) {
 /** The catalog's own name for the first route's model. */
 const PICKED = 'DeepSeek-V4.1-Flash'
 /** The catalog's own name for the provider group those routes belong to. */
-const PROVIDER_NAME = 'DeepSeek'
+const PROVIDER_NAME = 'DeepSeek API'
 
 /**
  * What the host's rule says when it refuses a call the reader's pick excludes,

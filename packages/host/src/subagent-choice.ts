@@ -197,8 +197,25 @@ export function readSubagentChoiceEnabled(config: unknown): boolean {
  * @param session - the calling agent's session.
  * @returns the routes in policy order, or `undefined` without a policy.
  */
-export function readSubagentRoutes(projections: unknown, session: unknown): readonly SubagentModelRoute[] | undefined {
+export function readSubagentRoutes(ctx: DshContext, session: unknown): readonly SubagentModelRoute[] | undefined {
+  // dsh 0.2.3 dropped the per-session projection and samples one live global
+  // setting through the `subagentModelSelection` service, which is the list
+  // the official tool validates against there; it is read first. A malformed
+  // setting throws from `allowedRoutes`, which is a fault in the host's own
+  // configuration rather than a policy, so it is isolated here and the rule
+  // stands down (D12).
+  const selection = ctx.get('subagentModelSelection') as { allowedRoutes?: () => readonly SubagentModelRoute[] | undefined } | undefined
+  if (typeof selection?.allowedRoutes === 'function') {
+    let global: readonly SubagentModelRoute[] | undefined
+    try {
+      global = selection.allowedRoutes()
+    } catch {
+      global = undefined
+    }
+    if (global !== undefined) return global
+  }
   if (session === null || session === undefined) return undefined
+  const projections = ctx.get('sessionProjections')
   if (projections === null || typeof projections !== 'object') return undefined
   if (!('stateOf' in projections) || typeof projections.stateOf !== 'function') return undefined
   const policy: unknown = projections.stateOf.call(projections, session, POLICY_KEY)
@@ -294,7 +311,7 @@ export function registerSubagentChoice(ctx: DshContext, config: unknown, store: 
         reasoningEffort: rawArguments !== null && typeof rawArguments === 'object' && 'reasoning_effort' in rawArguments
           ? rawArguments.reasoning_effort
           : undefined,
-        routes: readSubagentRoutes(ctx.get('sessionProjections'), session),
+        routes: readSubagentRoutes(ctx, session),
         selection: resolveSubagentSelection(ctx, store, session),
       })
     })
@@ -310,7 +327,7 @@ export function registerSubagentChoice(ctx: DshContext, config: unknown, store: 
         const session = context?.agent?.session
         return subagentChoicePrompt(
           readSubagentChoiceEnabled(config),
-          readSubagentRoutes(ctx.get('sessionProjections'), session),
+          readSubagentRoutes(ctx, session),
           resolveSubagentSelection(ctx, store, session),
         )
       },

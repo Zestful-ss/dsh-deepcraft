@@ -142,7 +142,9 @@ export interface DshRoute {
   path: string
   /** `prefix` matches every path under `path`; a route without it matches the path alone. */
   kind?: string
-  handler: (req: DshRequest, res: DshResponse) => void
+  // dsh 0.2.3 fences and authenticates a plugin route itself, then hands the
+  // admitted caller as the third argument; earlier hosts dispatch without one.
+  handler: (req: DshRequest, res: DshResponse, peer?: unknown) => void
 }
 
 /** The request the host's web server hands a route handler: Node's own. */
