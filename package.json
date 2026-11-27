@@ -1,7 +1,7 @@
 {
   "name": "dsh-deepcraft",
   "description": "DeepCraft — customizable branding, color palettes and interactions for the DeepSeek Harness web GUI",
-  "version": "0.43.1",
+  "version": "0.43.2",
   "type": "module",
   "main": "lib/host/index.js",
   "icon": "lib/deepcraft-mark.svg",
@@ -77,9 +77,9 @@
   "peerDependencies": {
     "@deepseek-ai/dsh-client-ui-primitives": ">=0.1.5-rc.1",
     "@deepseek-ai/schemastery": ">=3.18.0",
-    "zod": ">=4.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "zod": ">=4.0.0"
   },
   "devDependencies": {
     "@deepseek-ai/dsh-client-ui-primitives": "0.2.1-alpha.1",
@@ -94,7 +94,7 @@
     "fflate": "^0.8.3",
     "image-size": "^2.0.4",
     "jscpd": "5.3.3",
-    "playwright": "1.63.0",
+    "playwright": "1.65.1",
     "pngjs": "^7.0.0",
     "postcss": "8.5.29",
     "postcss-selector-parser": "7.1.6",

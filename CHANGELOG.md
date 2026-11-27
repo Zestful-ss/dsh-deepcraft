@@ -4,6 +4,18 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
+## [0.43.2] - 2026-11-27
+
+[中文](#cn-0.43.2) | [English](#en-0.43.2)
+
+<h3 id="cn-0.43.2">其他变更</h3>
+
+- 升级驱动测试的 Playwright 到 1.65.1，携带上游 microsoft/playwright#43871 对 Chromium 158 起浏览器自行开启 HTTPS 优先模式的修复：http 导航可能被升级为 https，测试通道的回环地址服务无法应答那样的握手。
+
+<h3 id="en-0.43.2">Chores</h3>
+
+- Upgrade the Playwright that drives the lanes to 1.65.1, which carries the upstream fix for microsoft/playwright#43871: from Chromium 158 the browser enables HTTPS-first balanced mode on its own, so http navigations may be upgraded to https, a handshake the lanes' loopback servers cannot answer.
+
 ## [0.43.1] - 2026-11-27
 
 [中文](#cn-0.43.1) | [English](#en-0.43.1)
