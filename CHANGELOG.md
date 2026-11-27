@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.43.0] - 2026-11-27
 
-<h3 id="cn-unreleased">新增功能</h3>
+[中文](#cn-0.43.0) | [English](#en-0.43.0)
+
+<h3 id="cn-0.43.0">新增功能</h3>
 
 - 新增外观页的「表面不透明度」调节：低于 100% 时窗口的画布填充按同一比例调向透明，无壁纸时透出桌面端的亚克力背景，有壁纸时薄纱与玻璃填充随之变薄，让壁纸真正显现。
 
@@ -16,7 +18,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 - 修复在宿主 0.2.3-alpha.2 上最近会话、置顶会话与会话宠物整体停用的问题：宿主把会话状态表从 uiSession 的字段拆成独立的 uiSession.sessionStatus 服务后，旧读取路径直接抛出，现按宿主版本分别读取。
 - 修复在宿主 0.2.3-alpha.2 上子代理模型入口完全不出现的问题：宿主把官方允许列表从会话投影改成全局的 subagentModelSelection 服务后，旧读取路径拿不到任何策略，现按宿主版本分别读取。
 
-<h3 id="en-unreleased">New Features</h3>
+<h3 id="en-0.43.0">New Features</h3>
 
 - Add a Surface opacity dial to the Appearance tab: below 100% the window's canvas fills mix toward transparent by one factor, opening the bare window onto the desktop's acrylic backdrop and thinning a wallpaper's veil and glass so the picture actually shows.
 
