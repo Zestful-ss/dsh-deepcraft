@@ -558,15 +558,15 @@ function subagentModelScenario({ check }) {
       await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: /^(外观|Appearance)$/ }).first().click()
       const paletteReadings = []
       const paletteIds = ['cindy', 'host']
-      for (let i = 0; i < paletteIds.length; i++) {
-        await page.locator('.dsh-deepcraft-palette-options button').nth(i).click()
-        await page.waitForFunction((id) => document.body.getAttribute('data-dsh-deepcraft-palette') === id, paletteIds[i], { timeout: 15000 }).catch(() => {})
+      for (const id of paletteIds) {
+        await page.locator(`.dsh-deepcraft-palette-card[data-palette="${id}"]`).click()
+        await page.waitForFunction((wanted) => document.body.getAttribute('data-dsh-deepcraft-palette') === wanted, id, { timeout: 15000 }).catch(() => {})
         const light = await readCapsuleEdge(page, '[data-dsh-deepcraft-model-capsule]')
         await page.evaluate(() => document.body.setAttribute('data-ds-dark-theme', ''))
         await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))))
         const dark = await readCapsuleEdge(page, '[data-dsh-deepcraft-model-capsule]')
         await page.evaluate(() => document.body.removeAttribute('data-ds-dark-theme'))
-        paletteReadings.push({ palette: paletteIds[i], light, dark })
+        paletteReadings.push({ palette: id, light, dark })
       }
       checks.push(check('内置配色与跟随宿主在浅色和深色下都把最高档画成当前强调色',
         paletteReadings.every(({ light, dark }) => light.value === '3' && dark.value === '3' &&
@@ -574,7 +574,7 @@ function subagentModelScenario({ check }) {
           light.palette !== null && dark.palette === light.palette),
         JSON.stringify(paletteReadings.map(({ palette, light, dark }) => ({ palette, light: [light.edge, light.expected], dark: [dark.edge, dark.expected] })))))
 
-      await page.locator('.dsh-deepcraft-palette-options button').nth(0).click()
+      await page.locator('.dsh-deepcraft-palette-card[data-palette="cindy"]').click()
       await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-palette') === 'cindy', undefined, { timeout: 15000 }).catch(() => {})
       await setAccentColor(page, '#1a7f5a')
       await page.waitForFunction(() => document.body.hasAttribute('data-dsh-deepcraft-accent'), undefined, { timeout: 15000 }).catch(() => {})

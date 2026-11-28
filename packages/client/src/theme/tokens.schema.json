@@ -27,14 +27,16 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["token", "cindy"],
+        "required": ["token"],
         "additionalProperties": false,
         "properties": {
           "token": { "$ref": "#/$defs/token" },
-          "cindy": { "$ref": "#/$defs/fullThemes" },
           "host": { "$ref": "#/$defs/value" },
           "use": { "description": "What the token paints, for the docs/STYLE.md table.", "type": "string", "minLength": 1 },
           "note": { "$ref": "#/$defs/note" }
+        },
+        "patternProperties": {
+          "^(?!token$|host$|use$|note$)[a-z][a-z0-9-]*$": { "$ref": "#/$defs/fullThemes" }
         }
       }
     },

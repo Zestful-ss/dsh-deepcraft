@@ -26,89 +26,89 @@ the table. Each palette states its own light and dark values, so no cell falls
 back to another palette's; `—` is a token that palette leaves unset.
 
 <!-- generated:tokens (packages/client/src/theme/tokens.json) -->
-| Token | Cindy light | Cindy dark | Host alias | Use |
-|---|---|---|---|---|
-| `--dsw-alias-bg-base` | `#f2f2ed` | `#181818` | host's own |  |
-| `--dsw-alias-bg-layer-1` | `#fdfdf8` | `#1f1f1f` | host's own |  |
-| `--dsw-alias-bg-layer-2` | `#fafaf5` | `#1d1d1d` | host's own |  |
-| `--dsw-alias-bg-layer-3` | `#eeeee9` | `#1d1d1d` | host's own |  |
-| `--dsw-alias-bg-overlay` | `#fdfdf8` | `#1f1f1f` | host's own |  |
-| `--dsw-alias-border-l1` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | host's own | the standard edge: card and panel outlines, dividers, field outlines |
-| `--dsw-alias-border-l2` | `rgba(0, 0, 0, 0.10)` | `rgba(255, 255, 255, 0.13)` | host's own |  |
-| `--dsw-alias-border-l3` | `rgba(0, 0, 0, 0.14)` | `rgba(255, 255, 255, 0.20)` | host's own |  |
-| `--dsw-alias-brand-primary` | `#3c3f43` | `#eeeeee` | host's own | the single accent: checks, focus rings, selected marks |
-| `--dsw-alias-brand-text` | `#fcfcfc` | `#151515` | host's own |  |
-| `--dsw-alias-button-primary-fill` | `#3c3f43` | `#eeeeee` | host's own |  |
-| `--dsw-alias-button-primary-hover` | `#2e3237` | `#e2e2e2` | host's own |  |
-| `--dsw-alias-button-elevated-fill` | `#fdfdf8` | `#1f1f1f` | host's own |  |
-| `--dsw-alias-button-floating-fill` | `#fdfdf8` | `#1f1f1f` | host's own |  |
-| `--dsw-alias-button-floating-hover` | `#eeeee9` | `#1d1d1d` | host's own |  |
-| `--dsw-alias-button-info-fill` | `#3c3f43` | `#eeeeee` | host's own |  |
-| `--dsw-alias-button-info-hover` | `#2e3237` | `#e2e2e2` | host's own |  |
-| `--dsw-alias-interactive-bg-active` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | host's own |  |
-| `--dsh-deepcraft-hover-bg` | `rgba(0, 0, 0, 0.05)` | `rgba(255, 255, 255, 0.06)` | `var(--dsw-alias-interactive-bg-hover)` | hover wash |
-| `--dsh-deepcraft-link` | `#1d4ed8` | `#93c5fd` | `var(--dsw-alias-link)` | markdown links |
-| `--dsw-alias-markdown-code-block` | `#fafaf5` | `#191919` | host's own |  |
-| `--dsw-alias-markdown-code-block-banner` | `#fafaf5` | `#1d1d1d` | host's own |  |
-| `--dsw-alias-interactive-bg-hover` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | host's own |  |
-| `--dsw-alias-interactive-bg-hover-solid` | `#eeeee9` | `#1d1d1d` | host's own | the host's solid hover chip |
-| `--dsw-alias-label-primary` | `rgba(0, 0, 0, 0.88)` | `rgba(255, 255, 255, 0.82)` | host's own |  |
-| `--dsw-alias-label-primary-bluish` | `rgba(0, 0, 0, 0.88)` | `rgba(255, 255, 255, 0.82)` | host's own |  |
-| `--dsw-alias-label-secondary` | `rgba(0, 0, 0, 0.56)` | `rgba(255, 255, 255, 0.55)` | host's own |  |
-| `--dsw-alias-label-tertiary` | `rgba(0, 0, 0, 0.44)` | `rgba(255, 255, 255, 0.40)` | host's own |  |
-| `--dsw-alias-label-caption` | `rgba(0, 0, 0, 0.32)` | `rgba(255, 255, 255, 0.30)` | host's own |  |
-| `--dsw-alias-label-shimmer` | `color-mix(in srgb, rgba(0, 0, 0, 0.88) 30%, transparent)` | `color-mix(in srgb, rgba(255, 255, 255, 0.82) 45%, transparent)` | host's own | the highlight band's tint over running words: the host's own rows and the skin's band (shared/sweep-band.ts) alike |
-| `--dsw-alias-label-deep-diving-shimmer` | `color-mix(in srgb, rgba(0, 0, 0, 0.88) 30%, transparent)` | `color-mix(in srgb, rgba(255, 255, 255, 0.82) 45%, transparent)` | host's own | the band's tint inside the running row, which the host points --dsw-alias-label-shimmer at; the warm palettes wear the same band as everywhere else |
-| `--dsw-alias-state-business-primary` | `#417cdd` | `#417cdd` | host's own |  |
-| `--dsw-alias-state-business-tertiary` | `#eeeee9` | `#1d1d1d` | host's own |  |
-| `--dsw-alias-link` | `#1d4ed8` | `#93c5fd` | host's own | text link at rest |
-| `--dsw-specific-input-major` | `#fdfdf8` | `#1f1f1f` | host's own |  |
-| `--dsw-specific-selector` | `#fdfdf8` | `#353535` | host's own |  |
-| `--dsw-specific-sidebar-fill` | `#eeeee9` | `#181818` | host's own |  |
-| `--dsw-alias-brand-primary-new-colorprimary-new-color` | `#3c3f43` | `#eeeeee` | host's own |  |
-| `--dsh-deepcraft-canvas` | `#f2f2ed` | `#181818` | `var(--dsw-alias-bg-base)` | the page canvas |
-| `--dsh-deepcraft-raised` | `#fdfdf8` | `#1f1f1f` | `var(--dsw-alias-bg-overlay)` | popovers and menus raised above the dark canvas |
-| `--dsh-deepcraft-card` | `#fdfdf8` | `#1f1f1f` | `var(--dsw-alias-bg-overlay)` | cards on the canvas: the subagent model card |
-| `--dsh-deepcraft-ink-strong` | `rgba(0, 0, 0, 0.95)` | `rgba(255, 255, 255, 1.00)` | `var(--dsw-alias-label-primary)` | active row ink |
-| `--dsh-deepcraft-session-ink` | `rgba(0, 0, 0, 0.56)` | `rgba(255, 255, 255, 0.55)` | `var(--dsw-alias-label-secondary)` | session title at rest |
-| `--dsh-deepcraft-logo-ink` | `rgba(0, 0, 0, 0.95)` | `rgba(255, 255, 255, 1.00)` | `var(--dsw-alias-label-primary)` | sidebar brand art: the whale and the wordmark |
-| `--dsw-specific-menu` | `rgba(251, 251, 246, 0.90)` | `rgba(21, 21, 21, 0.80)` | host's own |  |
-| `--dsw-specific-bubble` | `#fdfdf8` | `#1f1f1f` | host's own | user message bubble |
-| `--dsh-deepcraft-chip` | `rgba(0, 0, 0, 0.05)` | `rgba(255, 255, 255, 0.06)` | `var(--dsw-specific-selector)` | segmented control and switch at rest |
-| `--dsw-alias-label-primary-foreground` | `#fcfcfc` | `#151515` | host's own | the ink on a filled primary button: light on the accent in both palettes |
-| `--dsw-alias-markdown-inline-code` | `rgba(175, 184, 193, 0.2)` | `rgba(110, 118, 129, 0.22)` | host's own |  |
-| `--dsw-alias-bg-module-platform` | `#eeeee9` | `#272727` | host's own |  |
-| `--dsw-alias-card-fill` | `#fafaf5` | `#1f1f1f` | host's own |  |
-| `--dsw-alias-card-fill-hover` | `#eeeee9` | `#292929` | host's own |  |
-| `--dsw-alias-settings-card-fill` | `#fafaf5` | `#1d1d1d` | host's own |  |
-| `--dsw-alias-settings-card-stroke` | `rgba(0, 0, 0, 0.10)` | `rgba(255, 255, 255, 0.13)` | host's own |  |
-| `--dsw-specific-sidebar-nav-item-active` | `#fdfdf8` | `#353535` | host's own |  |
-| `--dsw-specific-sidebar-nav-item-active-accent` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | host's own |  |
-| `--dsw-specific-sidebar-glass-fill` | `rgba(253, 253, 248, 0.55)` | `rgba(255, 255, 255, 0.15)` | host's own |  |
-| `--dsw-specific-sidebar-glass-hover` | `rgba(253, 253, 248, 0.32)` | `rgba(255, 255, 255, 0.20)` | host's own |  |
-| `--dsw-specific-sidebar-glass-collapsed-fill` | `transparent` | `rgba(255, 255, 255, 0.15)` | host's own |  |
-| `--dsw-specific-sidebar-glass-collapsed-hover` | `var(--dsh-deepcraft-hover-bg)` | `rgba(255, 255, 255, 0.20)` | host's own |  |
-| `--dsw-alias-switch-thumb` | `#fdfdf8` | `#fcfcfc` | host's own |  |
-| `--dsw-alias-tooltip-bg` | `#3c3f43` | `#181818` | host's own |  |
-| `--dsw-alias-tooltip-label` | `#ffffff` | `#ffffff` | host's own |  |
-| `--dsw-alias-toast-bg` | `#3c3f43` | `#1f1f1f` | host's own |  |
-| `--dsw-alias-toast-label` | `#ffffff` | `#ffffff` | host's own |  |
-| `--dsw-alias-toast-action` | `#93c5fd` | `#93c5fd` | host's own |  |
-| `--dsw-alias-scrollbar-bg-l1` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | host's own |  |
-| `--dsw-alias-scrollbar-bg-l2` | `rgba(0, 0, 0, 0.10)` | `rgba(255, 255, 255, 0.13)` | host's own |  |
-| `--dsw-alias-scrollbar-hover-l1` | `rgba(0, 0, 0, 0.14)` | `rgba(255, 255, 255, 0.16)` | host's own |  |
-| `--dsw-alias-scrollbar-hover-l2` | `rgba(0, 0, 0, 0.18)` | `rgba(255, 255, 255, 0.20)` | host's own |  |
-| `--dsw-menu-surface-fill` | `rgba(251, 251, 246, 0.90)` | `rgba(21, 21, 21, 0.80)` | host's own |  |
-| `--dsw-alias-menu-group-header-fill` | `rgba(251, 251, 246, 0.96)` | `rgba(21, 21, 21, 0.94)` | host's own |  |
-| `--shiki-token-constant` | `#005cc5` | `#79c0ff` | host's own |  |
-| `--shiki-token-string` | `#032f62` | `#a5d6ff` | host's own |  |
-| `--shiki-token-comment` | `#6a737d` | `#8b949e` | host's own |  |
-| `--shiki-token-keyword` | `#d73a49` | `#ff7b72` | host's own |  |
-| `--shiki-token-parameter` | `#e36209` | `#ffa657` | host's own |  |
-| `--shiki-token-function` | `#6f42c1` | `#d2a8ff` | host's own |  |
-| `--shiki-token-string-expression` | `#22863a` | `#7ee787` | host's own |  |
-| `--shiki-token-punctuation` | `#24292e` | `#c9d1d9` | host's own |  |
-| `--shiki-token-link` | `#005cc5` | `#79c0ff` | host's own |  |
+| Token | Cindy light | Cindy dark | Ocean light | Ocean dark | Ember light | Ember dark | Forest light | Forest dark | Host alias | Use |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `--dsw-alias-bg-base` | `#f2f2ed` | `#181818` | `#fcfcfb` | `#202427` | `#fcfcfb` | `#141413` | `#fcfcfb` | `#141413` | host's own |  |
+| `--dsw-alias-bg-layer-1` | `#fdfdf8` | `#1f1f1f` | `#fcfcfb` | `#24282d` | `#fcfcfb` | `#1c1b1a` | `#fcfcfb` | `#1c1b1a` | host's own |  |
+| `--dsw-alias-bg-layer-2` | `#fafaf5` | `#1d1d1d` | `#f2f2ef` | `#2b3038` | `#fbfbf9` | `#242320` | `#fbfbf9` | `#242320` | host's own |  |
+| `--dsw-alias-bg-layer-3` | `#eeeee9` | `#1d1d1d` | `#ededea` | `#343b45` | `#f9f9f6` | `#2e2c29` | `#f9f9f6` | `#2e2c29` | host's own |  |
+| `--dsw-alias-bg-overlay` | `#fdfdf8` | `#1f1f1f` | `#fcfcfb` | `#2b3038` | `#ffffff` | `#242320` | `#ffffff` | `#242320` | host's own |  |
+| `--dsw-alias-border-l1` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | `#e5e5e1` | `#3b424c` | `#e8e6dc` | `rgba(255, 255, 255, 0.09)` | `#e8e6dc` | `rgba(255, 255, 255, 0.09)` | host's own | the standard edge: card and panel outlines, dividers, field outlines |
+| `--dsw-alias-border-l2` | `rgba(0, 0, 0, 0.10)` | `rgba(255, 255, 255, 0.13)` | `#d4d5d2` | `#505863` | `#dedcd2` | `rgba(255, 255, 255, 0.18)` | `#dedcd2` | `rgba(255, 255, 255, 0.18)` | host's own |  |
+| `--dsw-alias-border-l3` | `rgba(0, 0, 0, 0.14)` | `rgba(255, 255, 255, 0.20)` | `#b9bdc5` | `#6b7482` | `#d0cdc1` | `rgba(255, 255, 255, 0.30)` | `#d0cdc1` | `rgba(255, 255, 255, 0.30)` | host's own |  |
+| `--dsw-alias-brand-primary` | `#3c3f43` | `#eeeeee` | `#5368c9` | `#5368c9` | `#d97757` | `#d97757` | `#397657` | `#397657` | host's own | the single accent: checks, focus rings, selected marks |
+| `--dsw-alias-brand-text` | `#fcfcfc` | `#151515` | `#fcfcfb` | `#fcfcfb` | `#141413` | `#141413` | `#fcfcfb` | `#fcfcfb` | host's own |  |
+| `--dsw-alias-button-primary-fill` | `#3c3f43` | `#eeeeee` | `#5368c9` | `#5368c9` | `#d97757` | `#d97757` | `#397657` | `#397657` | host's own |  |
+| `--dsw-alias-button-primary-hover` | `#2e3237` | `#e2e2e2` | `#3e5bd6` | `#596dce` | `#c6613f` | `#e08a6d` | `#2c6046` | `#438061` | host's own |  |
+| `--dsw-alias-button-elevated-fill` | `#fdfdf8` | `#1f1f1f` | `#fcfcfb` | `#2b3038` | `#ffffff` | `#242320` | `#ffffff` | `#242320` | host's own |  |
+| `--dsw-alias-button-floating-fill` | `#fdfdf8` | `#1f1f1f` | `#fcfcfb` | `#2b3038` | `#ffffff` | `#242320` | `#ffffff` | `#242320` | host's own |  |
+| `--dsw-alias-button-floating-hover` | `#eeeee9` | `#1d1d1d` | `#ededea` | `#343b45` | `#ffffff` | `#2e2c29` | `#ffffff` | `#2e2c29` | host's own |  |
+| `--dsw-alias-button-info-fill` | `#3c3f43` | `#eeeeee` | `#5368c9` | `#5368c9` | `#d97757` | `#d97757` | `#397657` | `#397657` | host's own |  |
+| `--dsw-alias-button-info-hover` | `#2e3237` | `#e2e2e2` | `#3e5bd6` | `#596dce` | `#c6613f` | `#e08a6d` | `#2c6046` | `#438061` | host's own |  |
+| `--dsw-alias-interactive-bg-active` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | `rgba(83, 104, 201, 0.26)` | `rgba(142, 162, 242, 0.32)` | `rgba(217, 119, 87, 0.30)` | `rgba(217, 119, 87, 0.30)` | `rgba(57, 118, 87, 0.20)` | `rgba(134, 197, 162, 0.24)` | host's own |  |
+| `--dsh-deepcraft-hover-bg` | `rgba(0, 0, 0, 0.05)` | `rgba(255, 255, 255, 0.06)` | `rgba(83, 104, 201, 0.14)` | `rgba(142, 162, 242, 0.16)` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.08)` | `rgba(57, 118, 87, 0.10)` | `rgba(134, 197, 162, 0.12)` | `var(--dsw-alias-interactive-bg-hover)` | hover wash |
+| `--dsh-deepcraft-link` | `#1d4ed8` | `#93c5fd` | `#3e5bd6` | `#8ea2f2` | `#3d5f86` | `#a9c2df` | `#286649` | `#86c5a2` | `var(--dsw-alias-link)` | markdown links |
+| `--dsw-alias-markdown-code-block` | `#fafaf5` | `#191919` | `#f7f7f5` | `#252a30` | `#ffffff` | `#1c1b1a` | `#ffffff` | `#1c1b1a` | host's own |  |
+| `--dsw-alias-markdown-code-block-banner` | `#fafaf5` | `#1d1d1d` | `#f2f2ef` | `#2b3038` | `#ffffff` | `#242320` | `#ffffff` | `#242320` | host's own |  |
+| `--dsw-alias-interactive-bg-hover` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | `var(--dsh-deepcraft-hover-bg)` | host's own |  |
+| `--dsw-alias-interactive-bg-hover-solid` | `#eeeee9` | `#1d1d1d` | `#e4e8f8` | `#38415a` | `#f0efe9` | `#2e2c29` | `#e6efe9` | `#273b30` | host's own | the host's solid hover chip |
+| `--dsw-alias-label-primary` | `rgba(0, 0, 0, 0.88)` | `rgba(255, 255, 255, 0.82)` | `#202124` | `#eef0f3` | `#141413` | `#faf9f5` | `#141413` | `#faf9f5` | host's own |  |
+| `--dsw-alias-label-primary-bluish` | `rgba(0, 0, 0, 0.88)` | `rgba(255, 255, 255, 0.82)` | `#202124` | `#eef0f3` | `#141413` | `#faf9f5` | `#141413` | `#faf9f5` | host's own |  |
+| `--dsw-alias-label-secondary` | `rgba(0, 0, 0, 0.56)` | `rgba(255, 255, 255, 0.55)` | `#61646b` | `#adb2bb` | `#6e6a60` | `#b0aea5` | `#6e6a60` | `#b0aea5` | host's own |  |
+| `--dsw-alias-label-tertiary` | `rgba(0, 0, 0, 0.44)` | `rgba(255, 255, 255, 0.40)` | `#6c7078` | `#8b9099` | `#8f8a7e` | `#8f8d84` | `#8f8a7e` | `#8f8d84` | host's own |  |
+| `--dsw-alias-label-caption` | `rgba(0, 0, 0, 0.32)` | `rgba(255, 255, 255, 0.30)` | `#70747c` | `#8b9099` | `#a6a094` | `#6b6a65` | `#a6a094` | `#6b6a65` | host's own |  |
+| `--dsw-alias-label-shimmer` | `color-mix(in srgb, rgba(0, 0, 0, 0.88) 30%, transparent)` | `color-mix(in srgb, rgba(255, 255, 255, 0.82) 45%, transparent)` | `color-mix(in srgb, #202124 30%, transparent)` | `color-mix(in srgb, #eef0f3 45%, transparent)` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | host's own | the highlight band's tint over running words: the host's own rows and the skin's band (shared/sweep-band.ts) alike |
+| `--dsw-alias-label-deep-diving-shimmer` | `color-mix(in srgb, rgba(0, 0, 0, 0.88) 30%, transparent)` | `color-mix(in srgb, rgba(255, 255, 255, 0.82) 45%, transparent)` | `color-mix(in srgb, #202124 30%, transparent)` | `color-mix(in srgb, #eef0f3 45%, transparent)` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | `color-mix(in srgb, #141413 30%, transparent)` | `color-mix(in srgb, #faf9f5 45%, transparent)` | host's own | the band's tint inside the running row, which the host points --dsw-alias-label-shimmer at; the warm palettes wear the same band as everywhere else |
+| `--dsw-alias-state-business-primary` | `#417cdd` | `#417cdd` | `#5368c9` | `#8ea2f2` | `#d97757` | `#d97757` | `#397657` | `#86c5a2` | host's own |  |
+| `--dsw-alias-state-business-tertiary` | `#eeeee9` | `#1d1d1d` | `#e2e7fc` | `#313f6b` | `#e9dfd2` | `#3a2a22` | `#e3eee6` | `#243a2e` | host's own |  |
+| `--dsw-alias-link` | `#1d4ed8` | `#93c5fd` | `#3e5bd6` | `#8ea2f2` | `#b9542f` | `#e08a6d` | `#286649` | `#86c5a2` | host's own | text link at rest |
+| `--dsw-specific-input-major` | `#fdfdf8` | `#1f1f1f` | `#f7f7f5` | `#252a30` | `#ffffff` | `#0f0e0d` | `#ffffff` | `#0f0e0d` | host's own |  |
+| `--dsw-specific-selector` | `#fdfdf8` | `#353535` | `#eef0fa` | `#333a4a` | `#fbfbf9` | `#2e2c29` | `#eef4ef` | `#263a2e` | host's own |  |
+| `--dsw-specific-sidebar-fill` | `#eeeee9` | `#181818` | `#f2f2ef` | `#1d2124` | `#fbfbf9` | `#141413` | `#fbfbf9` | `#141413` | host's own |  |
+| `--dsw-alias-brand-primary-new-colorprimary-new-color` | `#3c3f43` | `#eeeeee` | `#5368c9` | `#5368c9` | `#d97757` | `#d97757` | `#397657` | `#397657` | host's own |  |
+| `--dsh-deepcraft-canvas` | `#f2f2ed` | `#181818` | `#fcfcfb` | `#202427` | `#fcfcfb` | `#141413` | `#fcfcfb` | `#141413` | `var(--dsw-alias-bg-base)` | the page canvas |
+| `--dsh-deepcraft-raised` | `#fdfdf8` | `#1f1f1f` | `#fcfcfb` | `#2b3038` | `var(--dsw-alias-bg-overlay)` | `#1e1e1d` | `var(--dsw-alias-bg-overlay)` | `#1e1e1d` | `var(--dsw-alias-bg-overlay)` | popovers and menus raised above the dark canvas |
+| `--dsh-deepcraft-card` | `#fdfdf8` | `#1f1f1f` | `#fcfcfb` | `#2b3038` | `#fcfcfb` | `#1e1e1d` | `#fcfcfb` | `#1e1e1d` | `var(--dsw-alias-bg-overlay)` | cards on the canvas: the subagent model card |
+| `--dsh-deepcraft-ink-strong` | `rgba(0, 0, 0, 0.95)` | `rgba(255, 255, 255, 1.00)` | `#202124` | `#eef0f3` | `var(--dsw-alias-label-primary)` | `#f5f4ef` | `var(--dsw-alias-label-primary)` | `#f5f4ef` | `var(--dsw-alias-label-primary)` | active row ink |
+| `--dsh-deepcraft-session-ink` | `rgba(0, 0, 0, 0.56)` | `rgba(255, 255, 255, 0.55)` | `#61646b` | `#adb2bb` | `var(--dsw-alias-label-secondary)` | `#8c8983` | `var(--dsw-alias-label-secondary)` | `#8c8983` | `var(--dsw-alias-label-secondary)` | session title at rest |
+| `--dsh-deepcraft-logo-ink` | `rgba(0, 0, 0, 0.95)` | `rgba(255, 255, 255, 1.00)` | `#202124` | `#eef0f3` | `#141413` | `#faf9f5` | `#141413` | `#faf9f5` | `var(--dsw-alias-label-primary)` | sidebar brand art: the whale and the wordmark |
+| `--dsw-specific-menu` | `rgba(251, 251, 246, 0.90)` | `rgba(21, 21, 21, 0.80)` | `#fcfcfb` | `#2b3038` | `#ffffff` | `var(--dsh-deepcraft-raised)` | `#ffffff` | `var(--dsh-deepcraft-raised)` | host's own |  |
+| `--dsw-specific-bubble` | `#fdfdf8` | `#1f1f1f` | `#e3e8fc` | `#303c55` | `#f0f0ef` | `rgba(255, 255, 255, 0.06)` | `#e6f1e8` | `#293e33` | host's own | user message bubble |
+| `--dsh-deepcraft-chip` | `rgba(0, 0, 0, 0.05)` | `rgba(255, 255, 255, 0.06)` | `#eef0fa` | `#333a4a` | `#f6f6f4` | `var(--dsw-specific-selector)` | `#eef4ef` | `#263a2e` | `var(--dsw-specific-selector)` | segmented control and switch at rest |
+| `--dsw-alias-label-primary-foreground` | `#fcfcfc` | `#151515` | `#fcfcfb` | `#fcfcfb` | `#141413` | `#141413` | `#141413` | `#141413` | host's own | the ink on a filled primary button: light on the accent in both palettes |
+| `--dsw-alias-markdown-inline-code` | `rgba(175, 184, 193, 0.2)` | `rgba(110, 118, 129, 0.22)` | `rgba(175, 184, 193, 0.2)` | `rgba(110, 118, 129, 0.22)` | `rgba(175, 184, 193, 0.2)` | `rgba(110, 118, 129, 0.22)` | `rgba(175, 184, 193, 0.2)` | `rgba(110, 118, 129, 0.22)` | host's own |  |
+| `--dsw-alias-bg-module-platform` | `#eeeee9` | `#272727` | `#ededea` | `#2b3038` | `#f9f9f6` | `#242320` | `#f9f9f6` | `#242320` | host's own |  |
+| `--dsw-alias-card-fill` | `#fafaf5` | `#1f1f1f` | `#ffffff` | `#2b3038` | `#ffffff` | `#242320` | `#ffffff` | `#242320` | host's own |  |
+| `--dsw-alias-card-fill-hover` | `#eeeee9` | `#292929` | `#e4e8f8` | `#38415a` | `#f0efe9` | `#2e2c29` | `#e6efe9` | `#273b30` | host's own |  |
+| `--dsw-alias-settings-card-fill` | `#fafaf5` | `#1d1d1d` | `#fcfcfb` | `#24282d` | `#ffffff` | `#1c1b1a` | `#ffffff` | `#1c1b1a` | host's own |  |
+| `--dsw-alias-settings-card-stroke` | `rgba(0, 0, 0, 0.10)` | `rgba(255, 255, 255, 0.13)` | `#d4d5d2` | `#505863` | `#dedcd2` | `rgba(255, 255, 255, 0.18)` | `#dedcd2` | `rgba(255, 255, 255, 0.18)` | host's own |  |
+| `--dsw-specific-sidebar-nav-item-active` | `#fdfdf8` | `#353535` | `#eef0fa` | `#333a4a` | `#fbfbf9` | `#2e2c29` | `#eef4ef` | `#263a2e` | host's own |  |
+| `--dsw-specific-sidebar-nav-item-active-accent` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | `rgba(83, 104, 201, 0.26)` | `rgba(142, 162, 242, 0.32)` | `rgba(217, 119, 87, 0.30)` | `rgba(217, 119, 87, 0.30)` | `rgba(57, 118, 87, 0.20)` | `rgba(134, 197, 162, 0.24)` | host's own |  |
+| `--dsw-specific-sidebar-glass-fill` | `rgba(253, 253, 248, 0.55)` | `rgba(255, 255, 255, 0.15)` | `rgba(252, 252, 251, 0.55)` | `rgba(255, 255, 255, 0.15)` | `rgba(255, 255, 255, 0.55)` | `rgba(255, 255, 255, 0.15)` | `rgba(255, 255, 255, 0.55)` | `rgba(255, 255, 255, 0.15)` | host's own |  |
+| `--dsw-specific-sidebar-glass-hover` | `rgba(253, 253, 248, 0.32)` | `rgba(255, 255, 255, 0.20)` | `rgba(252, 252, 251, 0.32)` | `rgba(255, 255, 255, 0.20)` | `rgba(255, 255, 255, 0.32)` | `rgba(255, 255, 255, 0.20)` | `rgba(255, 255, 255, 0.32)` | `rgba(255, 255, 255, 0.20)` | host's own |  |
+| `--dsw-specific-sidebar-glass-collapsed-fill` | `transparent` | `rgba(255, 255, 255, 0.15)` | `transparent` | `rgba(255, 255, 255, 0.15)` | `transparent` | `rgba(255, 255, 255, 0.15)` | `transparent` | `rgba(255, 255, 255, 0.15)` | host's own |  |
+| `--dsw-specific-sidebar-glass-collapsed-hover` | `var(--dsh-deepcraft-hover-bg)` | `rgba(255, 255, 255, 0.20)` | `var(--dsh-deepcraft-hover-bg)` | `rgba(255, 255, 255, 0.20)` | `var(--dsh-deepcraft-hover-bg)` | `rgba(255, 255, 255, 0.20)` | `var(--dsh-deepcraft-hover-bg)` | `rgba(255, 255, 255, 0.20)` | host's own |  |
+| `--dsw-alias-switch-thumb` | `#fdfdf8` | `#fcfcfc` | `#fdfdf8` | `#fcfcfc` | `#fdfdf8` | `#fcfcfc` | `#fdfdf8` | `#fcfcfc` | host's own |  |
+| `--dsw-alias-tooltip-bg` | `#3c3f43` | `#181818` | `#202124` | `#202427` | `#141413` | `#141413` | `#141413` | `#141413` | host's own |  |
+| `--dsw-alias-tooltip-label` | `#ffffff` | `#ffffff` | `#ffffff` | `#ffffff` | `#ffffff` | `#ffffff` | `#ffffff` | `#ffffff` | host's own |  |
+| `--dsw-alias-toast-bg` | `#3c3f43` | `#1f1f1f` | `#202124` | `#2b3038` | `#141413` | `#242320` | `#141413` | `#242320` | host's own |  |
+| `--dsw-alias-toast-label` | `#ffffff` | `#ffffff` | `#ffffff` | `#ffffff` | `#ffffff` | `#ffffff` | `#ffffff` | `#ffffff` | host's own |  |
+| `--dsw-alias-toast-action` | `#93c5fd` | `#93c5fd` | `#8ea2f2` | `#8ea2f2` | `#a9c2df` | `#a9c2df` | `#86c5a2` | `#86c5a2` | host's own |  |
+| `--dsw-alias-scrollbar-bg-l1` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | `rgba(0, 0, 0, 0.08)` | `rgba(255, 255, 255, 0.10)` | host's own |  |
+| `--dsw-alias-scrollbar-bg-l2` | `rgba(0, 0, 0, 0.10)` | `rgba(255, 255, 255, 0.13)` | `rgba(0, 0, 0, 0.10)` | `rgba(255, 255, 255, 0.13)` | `rgba(0, 0, 0, 0.10)` | `rgba(255, 255, 255, 0.13)` | `rgba(0, 0, 0, 0.10)` | `rgba(255, 255, 255, 0.13)` | host's own |  |
+| `--dsw-alias-scrollbar-hover-l1` | `rgba(0, 0, 0, 0.14)` | `rgba(255, 255, 255, 0.16)` | `rgba(0, 0, 0, 0.14)` | `rgba(255, 255, 255, 0.16)` | `rgba(0, 0, 0, 0.14)` | `rgba(255, 255, 255, 0.16)` | `rgba(0, 0, 0, 0.14)` | `rgba(255, 255, 255, 0.16)` | host's own |  |
+| `--dsw-alias-scrollbar-hover-l2` | `rgba(0, 0, 0, 0.18)` | `rgba(255, 255, 255, 0.20)` | `rgba(0, 0, 0, 0.18)` | `rgba(255, 255, 255, 0.20)` | `rgba(0, 0, 0, 0.18)` | `rgba(255, 255, 255, 0.20)` | `rgba(0, 0, 0, 0.18)` | `rgba(255, 255, 255, 0.20)` | host's own |  |
+| `--dsw-menu-surface-fill` | `rgba(251, 251, 246, 0.90)` | `rgba(21, 21, 21, 0.80)` | `rgba(252, 252, 251, 0.90)` | `rgba(43, 48, 56, 0.80)` | `rgba(255, 255, 255, 0.90)` | `rgba(30, 30, 29, 0.80)` | `rgba(255, 255, 255, 0.90)` | `rgba(30, 30, 29, 0.80)` | host's own |  |
+| `--dsw-alias-menu-group-header-fill` | `rgba(251, 251, 246, 0.96)` | `rgba(21, 21, 21, 0.94)` | `rgba(252, 252, 251, 0.96)` | `rgba(43, 48, 56, 0.94)` | `rgba(255, 255, 255, 0.96)` | `rgba(30, 30, 29, 0.94)` | `rgba(255, 255, 255, 0.96)` | `rgba(30, 30, 29, 0.94)` | host's own |  |
+| `--shiki-token-constant` | `#005cc5` | `#79c0ff` | `#005cc5` | `#79c0ff` | `#005cc5` | `#79c0ff` | `#005cc5` | `#79c0ff` | host's own |  |
+| `--shiki-token-string` | `#032f62` | `#a5d6ff` | `#032f62` | `#a5d6ff` | `#032f62` | `#a5d6ff` | `#032f62` | `#a5d6ff` | host's own |  |
+| `--shiki-token-comment` | `#6a737d` | `#8b949e` | `#6a737d` | `#8b949e` | `#6a737d` | `#8b949e` | `#6a737d` | `#8b949e` | host's own |  |
+| `--shiki-token-keyword` | `#d73a49` | `#ff7b72` | `#d73a49` | `#ff7b72` | `#d73a49` | `#ff7b72` | `#d73a49` | `#ff7b72` | host's own |  |
+| `--shiki-token-parameter` | `#e36209` | `#ffa657` | `#e36209` | `#ffa657` | `#e36209` | `#ffa657` | `#e36209` | `#ffa657` | host's own |  |
+| `--shiki-token-function` | `#6f42c1` | `#d2a8ff` | `#6f42c1` | `#d2a8ff` | `#6f42c1` | `#d2a8ff` | `#6f42c1` | `#d2a8ff` | host's own |  |
+| `--shiki-token-string-expression` | `#22863a` | `#7ee787` | `#22863a` | `#7ee787` | `#22863a` | `#7ee787` | `#22863a` | `#7ee787` | host's own |  |
+| `--shiki-token-punctuation` | `#24292e` | `#c9d1d9` | `#24292e` | `#c9d1d9` | `#24292e` | `#c9d1d9` | `#24292e` | `#c9d1d9` | host's own |  |
+| `--shiki-token-link` | `#005cc5` | `#79c0ff` | `#005cc5` | `#79c0ff` | `#005cc5` | `#79c0ff` | `#005cc5` | `#79c0ff` | host's own |  |
 <!-- /generated:tokens -->
 
 ## Palettes, material and font roles · 配色、材质与字体归属

@@ -1,0 +1,44 @@
+/* The picker tile: a grid of thumbnails one choice is picked out of (the
+   built-in wallpaper set, the palette cards). The grid lays the tiles out,
+   the tile is a framed button whose active state is the accent ring, and the
+   hover is the feedback hairline; what the thumbnail itself paints is each
+   picker's own. */
+
+body[data-dsh-deepcraft] .dsh-deepcraft-picker-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-picker-tile {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--dsw-alias-border-l2);
+  border-radius: var(--dsw-radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--dsw-specific-input-major);
+  font-size: 11px;
+  line-height: 1.2;
+  color: var(--dsw-alias-label-secondary);
+  transition: border-color var(--dsh-deepcraft-duration-feedback) var(--dsh-deepcraft-ease-standard),
+              box-shadow var(--dsh-deepcraft-duration-feedback) var(--dsh-deepcraft-ease-standard);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-picker-tile:hover:not([data-active]) {
+  border-color: var(--dsw-alias-border-l3);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-picker-tile[data-active] {
+  border-color: var(--dsw-alias-brand-primary);
+  box-shadow: inset 0 0 0 1px var(--dsw-alias-brand-primary);
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-picker-tile-name {
+  display: block;
+  padding: 4px 6px;
+  text-align: center;
+  color: var(--dsw-alias-label-secondary);
+}

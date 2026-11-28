@@ -25,10 +25,11 @@ const LAYER_BEGIN = '<!-- generated:layers (packages/client/src/theme/tokens.jso
 const LAYER_END = '<!-- /generated:layers -->'
 
 /**
- * Read and validate packages/client/src/theme/tokens.json: its declared shape, and each token
- * named once per group.
+ * Read and validate packages/client/src/theme/tokens.json: its declared shape, each token
+ * named once per group, and every skin palette's two themes stated on every row,
+ * so no palette inherits a value from another (D80).
  */
-export function loadTokens(srcDir) {
+export function loadTokens(srcDir, paletteIds) {
   const schema = JSON.parse(fs.readFileSync(path.join(srcDir, TOKEN_SCHEMA), 'utf8'))
   const validate = new Ajv2020({ allErrors: true }).compile(schema)
   const doc = JSON.parse(fs.readFileSync(path.join(srcDir, TOKEN_SHEET), 'utf8'))
@@ -40,7 +41,56 @@ export function loadTokens(srcDir) {
       seen.add(item.token)
     }
   }
+  for (const item of doc.palette) {
+    for (const id of paletteIds) {
+      if (item[id] === undefined) throw new Error(`build: packages/client/src/${TOKEN_SHEET} ${item.token} has no ${id} themes`)
+    }
+  }
   return doc
+}
+
+/** The tokens a palette card's swatch reads: the tile fill, the sample ink, and the dot row, in that order. */
+const SWATCH_CANVAS = '--dsh-deepcraft-canvas'
+const SWATCH_INK = '--dsw-alias-label-primary'
+const SWATCH_DOTS = [
+  '--dsw-alias-brand-primary',
+  '--dsh-deepcraft-link',
+  '--dsw-alias-state-business-primary',
+  '--dsw-alias-button-primary-hover',
+  '--dsh-deepcraft-chip',
+  '--dsw-alias-state-business-tertiary',
+]
+
+/**
+ * The palette cards' swatch colours, by palette id and theme. A var()
+ * reference is resolved against the same row inside the same palette: a card
+ * paints the palette it offers, so the colours the bundle carries must be
+ * literals — an inline style would otherwise resolve in the live document,
+ * where the tokens are the palette in force.
+ */
+export function paletteSwatches(doc, ids) {
+  const literal = (id, theme, token, hops = 0) => {
+    if (hops > 4) throw new Error(`build: ${token} in ${id} resolves through too many references`)
+    const row = doc.palette.find((item) => item.token === token)
+    const value = row?.[id]?.[theme]
+    if (value === undefined) throw new Error(`build: the palette card for ${id} needs ${token} in ${theme}`)
+    const reference = /^var\((--[a-z0-9-]+)\)$/.exec(value)
+    if (reference === null) return value
+    return literal(id, theme, reference[1], hops + 1)
+  }
+  const pick = literal
+  const swatches = {}
+  for (const id of ids) {
+    swatches[id] = {}
+    for (const theme of ['light', 'dark']) {
+      swatches[id][theme] = {
+        canvas: pick(id, theme, SWATCH_CANVAS),
+        ink: pick(id, theme, SWATCH_INK),
+        dots: SWATCH_DOTS.map((token) => pick(id, theme, token)),
+      }
+    }
+  }
+  return swatches
 }
 
 /** One rule of the token sheet; a block with nothing in it is left out. */
@@ -88,6 +138,20 @@ export function tokenSheet(doc, gates, images, scope, fonts) {
       tokenBlock(`${selector}${dark}`, declarationsOf(doc.palette, (item) => item[id]?.dark)),
     ]
   })
+  // The document element's own canvas per palette: html sits above the body
+  // and cannot read its tokens, so the stylesheet states the canvas colour
+  // for each palette and theme here. theme/tokens.css carries none of this —
+  // and the transparency gate there keeps winning under a surface opacity,
+  // since these blocks never name it.
+  const htmlCanvas = gates.palette.ids.flatMap((id) => {
+    const canvas = doc.palette.find((item) => item.token === '--dsh-deepcraft-canvas')
+    return ['light', 'dark'].flatMap((theme) => {
+      const value = canvas?.[id]?.[theme]
+      if (value === undefined || /^var\(/.test(value)) return []
+      const scheme = theme === 'dark' ? dark : light
+      return [`html:has(${scope}${gate(gates.palette, id)}${scheme}) {\n  background-color: ${value};\n}\n`]
+    })
+  })
   const faces = fonts.FONT_FACES.map((face) => {
     const format = face.format ?? (face.file.endsWith('.woff2') ? 'woff2' : 'truetype')
     const style = face.style === undefined ? '' : `;font-style:${face.style}`
@@ -108,6 +172,7 @@ export function tokenSheet(doc, gates, images, scope, fonts) {
     tokenBlock(`${scope}${dark}`, declarationsOf(doc.apex, (item) => item.dark)),
     tokenBlock(`${scope}${light}`, declarationsOf(doc.apex, (item) => item.light)),
     ...palettes,
+    ...htmlCanvas,
     tokenBlock(`${scope}${gate(gates.palette, gates.palette.host)}`, declarationsOf(doc.palette, (item) => item.host)),
   ].filter((block) => block !== '').join('\n')
 }

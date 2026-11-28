@@ -26,7 +26,7 @@ const { packageZip, upload, waitForGuest } = require('./petdex.cjs')
 
 const SKIN = {
   appearance: /^(外观|Appearance)$/,
-  palette: '.dsh-deepcraft-palette-options button',
+  palette: '.dsh-deepcraft-palette-card',
   brandName: '.dsh-deepcraft-settings-input',
   accent: '.dsh-deepcraft-settings-color',
   accentReset: '.dsh-deepcraft-brand-accent .dsh-deepcraft-settings-button',
@@ -72,20 +72,11 @@ async function readBoth(page) {
   return { light, dark }
 }
 
-/** The palette choices' order, as the settings page lists them. */
-const PALETTES = ['cindy', 'host']
-
-/** Answer any first-run notice that mounted late, then open the skin's settings page. */
-async function openSettings(page) {
-  await dismissOverlays(page)
-  await openSkinSettings(page)
-}
-
-/** Open the Appearance tab, press one palette's choice and wait for the page to carry it. */
+/** Open the Appearance tab, press one palette's card and wait for the page to carry it. */
 async function pickPalette(page, id) {
   await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: SKIN.appearance }).first().click()
   await page.waitForTimeout(200)
-  await page.locator(SKIN.palette).nth(PALETTES.indexOf(id)).click()
+  await page.locator(`.dsh-deepcraft-palette-card[data-palette="${id}"]`).click()
   await page.waitForFunction((wanted) => document.body.getAttribute('data-dsh-deepcraft-palette') === wanted, id, { timeout: 15000 })
   await page.waitForTimeout(150)
 }
@@ -142,8 +133,10 @@ function paletteScenario({ check }) {
       await waitForSkin(page)
       await openSettings(page)
       await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: SKIN.appearance }).first().click()
-      await pickPalette(page, 'cindy')
-      read.palettes.cindy = await readBoth(page)
+      for (const id of ['cindy', 'ocean', 'ember', 'forest']) {
+        await pickPalette(page, id)
+        read.palettes[id] = await readBoth(page)
+      }
       // The reader's accent over the skin palette.
       await pickPalette(page, 'cindy')
       await setAccentColor(page, '#1a7f5a')
@@ -183,6 +176,9 @@ function paletteScenario({ check }) {
       const palettes = read.palettes
       const expected = {
         cindy: { accent: '#3c3f43', darkAccent: '#eeeeee', prose: '#1d4ed8', darkCanvas: 'rgb(24, 24, 24)' },
+        ocean: { accent: '#5368c9', prose: '#3e5bd6', darkCanvas: 'rgb(32, 36, 39)' },
+        ember: { accent: '#d97757', prose: '#b9542f', darkCanvas: 'rgb(20, 20, 19)' },
+        forest: { accent: '#397657', prose: '#286649', darkCanvas: 'rgb(20, 20, 19)' },
       }
       const checks = []
       for (const [id, want] of Object.entries(expected)) {

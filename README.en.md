@@ -4,7 +4,7 @@
 
 **Customizable branding, a colour palette and typefaces for the DeepSeek Harness Web GUI.**
 
-> **Cindy by default, able to fall back to the host; the mark, name, accent and pet can all be your own.**
+> **Four palettes — Cindy, Ocean, Ember and Forest — free to switch or to fall back to the host; the mark, name, accent and pet can all be your own.**
 
 [![English](https://img.shields.io/badge/lang-English-blue.svg)](README.en.md) [![简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-red.svg)](README.md)
 
@@ -15,7 +15,7 @@
 
 ## Preview
 
-The settings page switches between the Cindy palette and following the host, light and dark following the system; a palette changes colours alone, never the mark, the name or the pet. The Appearance tab also carries a material layer of its own, independent of the palette: 4 / 8 / 12px corners (4 / 8 / 12 / 16 / 24px with circular curvature under Cindy), reference or flat shadows, 150 / 200 / 250ms motion timing, a glass sidebar and ambient light, shipped at the reference theme's values and each one able to fall back to the host's own look. The same tab takes your own mark, wordmark, accent colour, pet and wallpaper — a bundled set of stills and videos, or an image or video of your own layered under the whole page, with visibility, blur and playback controls. Surface opacity mixes every canvas fill toward transparent by one factor: the bare window opens onto the desktop's acrylic backdrop, and under a wallpaper the veil and the glass thin with it.
+The Appearance tab of the settings page switches the palette: Cindy, Ocean, Ember and Forest stand as cards, each painting that palette's light and dark canvases with its accent and functional colours side by side — hovering one previews the whole page, clicking commits it — and following the host stays a choice; light and dark follow the system. A palette changes colours alone, never the mark, the name or the pet, and combines freely with the wallpaper. The Appearance tab also carries a material layer of its own, independent of the palette: 4 / 8 / 12px corners (4 / 8 / 12 / 16 / 24px with circular curvature under Cindy), reference or flat shadows, 150 / 200 / 250ms motion timing, a glass sidebar and ambient light, shipped at the reference theme's values and each one able to fall back to the host's own look. The same tab takes your own mark, wordmark, accent colour, pet and wallpaper — a bundled set of stills and videos, or an image or video of your own layered under the whole page, with visibility, blur and playback controls. Surface opacity mixes every canvas fill toward transparent by one factor: the bare window opens onto the desktop's acrylic backdrop, and under a wallpaper the veil and the glass thin with it.
 
 ### Cindy (default)
 

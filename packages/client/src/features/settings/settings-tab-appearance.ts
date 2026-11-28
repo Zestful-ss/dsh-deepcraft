@@ -5,9 +5,10 @@ import {
   FONT_UI_ANTHROPIC, FONT_UI_ATKINSON, FONT_UI_FIXEL, FONT_UI_GEIST, FONT_UI_HARMONY, FONT_UI_INTER,
   MOTION_FULL, MOTION_REDUCED, MOTION_SYSTEM,
   MATERIAL_HOST, MATERIAL_REFERENCE, MATERIAL_SHADOWS_FLAT,
-  PALETTE_CINDY, PALETTE_HOST,
+  PALETTE_ATTR, PALETTE_HOST, SKIN_PALETTES,
 } from '../../constants'
 import { accentRow, brandRows } from './settings-brand'
+import { PALETTE_SWATCHES } from 'virtual:dsh-deepcraft/generated'
 import { copy } from './copy'
 import type { Prefs } from '../../constants'
 import type { SegmentOption, SettingsTab, SettingsView } from './settings-controls'
@@ -36,6 +37,83 @@ function FontCustomInput(props: { value: string, placeholder: string, onSave(val
   })
 }
 
+/** One palette card's two halves: the light theme on the left and the dark on the right, each half painting its own "Aa" and dot row (D80). */
+function SwatchHalf(props: { swatch: { canvas: string, ink: string, dots: string[] } }) {
+  return React.createElement(
+    'div',
+    { className: 'dsh-deepcraft-palette-half', style: { background: props.swatch.canvas } },
+    React.createElement('span', { className: 'dsh-deepcraft-palette-sample', style: { color: props.swatch.ink } }, 'Aa'),
+    React.createElement(
+      'div',
+      { className: 'dsh-deepcraft-palette-dots' },
+      props.swatch.dots.map((dot, index) => React.createElement('span', { key: index, className: 'dsh-deepcraft-palette-dot', style: { background: dot } })),
+    ),
+  )
+}
+
+/**
+ * The Colours row's picker: one card per skin palette — its two themes as two
+ * halves painted in the palette's own colours (the swatches the build reads
+ * out of theme/tokens.json) — followed by the host card. Hovering a card
+ * tries the palette on the document at once and clicking keeps it; the
+ * pointer leaving the grid hands the document back to the stored choice.
+ */
+function PalettePicker(props: { prefs: Prefs, write: SettingsView['write'], disabled?: boolean }) {
+  // The stored palette as of the latest render: the restore target for a
+  // hover that never became a pick. The props already carry it on every
+  // adoption, so the ref only keeps the latest value reachable from the
+  // unmount cleanup's empty dependency list.
+  const stored = React.useRef(props.prefs.palette)
+  stored.current = props.prefs.palette
+  const previewing = React.useRef(false)
+  React.useEffect(() => () => {
+    // The page unmounting mid-hover gives the document back to the stored palette.
+    if (previewing.current) document.body.setAttribute(PALETTE_ATTR, stored.current)
+  }, [])
+  const restore = () => {
+    previewing.current = false
+    document.body.setAttribute(PALETTE_ATTR, stored.current)
+  }
+  const preview = (palette: string) => {
+    previewing.current = true
+    document.body.setAttribute(PALETTE_ATTR, palette)
+  }
+  const card = (palette: Prefs['palette']) => {
+    const swatch = PALETTE_SWATCHES[palette]
+    return React.createElement(
+      'button',
+      {
+        key: palette,
+        type: 'button',
+        className: 'dsh-deepcraft-picker-tile dsh-deepcraft-palette-card',
+        'data-palette': palette,
+        'data-active': palette === props.prefs.palette ? '' : undefined,
+        'aria-pressed': palette === props.prefs.palette ? 'true' : 'false',
+        disabled: props.disabled,
+        onMouseEnter: () => preview(palette),
+        onClick: () => {
+          previewing.current = false
+          props.write({ palette })
+        },
+      },
+      React.createElement(
+        'div',
+        { className: 'dsh-deepcraft-palette-tile' },
+        swatch === undefined
+          ? React.createElement('div', { className: 'dsh-deepcraft-palette-half dsh-deepcraft-palette-host-tile' },
+              React.createElement('span', { className: 'dsh-deepcraft-palette-sample' }, 'Aa'))
+          : [React.createElement(SwatchHalf, { key: 'light', swatch: swatch.light }), React.createElement(SwatchHalf, { key: 'dark', swatch: swatch.dark })],
+      ),
+      React.createElement('span', { className: 'dsh-deepcraft-picker-tile-name' }, copy(`palette${palette.charAt(0).toUpperCase()}${palette.slice(1)}` as Parameters<typeof copy>[0])),
+    )
+  }
+  return React.createElement(
+    'div',
+    { className: 'dsh-deepcraft-picker-tile-grid dsh-deepcraft-palette-options', onMouseLeave: restore },
+    ([...SKIN_PALETTES, PALETTE_HOST] as Prefs['palette'][]).map(card),
+  )
+}
+
 /**
  * The settings page's Appearance tab: which palette paints the colours — with
  * the accent colour as that row's sub-row — the three font roles, how much
@@ -49,10 +127,6 @@ export function createSettingsAppearanceTab(): SettingsTab {
     const prefs = view.prefs
     const write = view.write
     const controls = view.controls
-    const paletteOptions: SegmentOption<Prefs['palette']>[] = [
-      { value: PALETTE_CINDY, label: copy('paletteCindy') },
-      { value: PALETTE_HOST, label: copy('paletteHost') },
-    ]
     const motionOptions: SegmentOption<Prefs['motion']>[] = [
       { value: MOTION_SYSTEM, label: copy('motionSystem') },
       { value: MOTION_REDUCED, label: copy('motionReduced') },
@@ -122,11 +196,7 @@ export function createSettingsAppearanceTab(): SettingsTab {
           'palette',
           copy('paletteTitle'),
           copy('paletteDesc'),
-          React.createElement(
-            'div',
-            { className: 'dsh-deepcraft-palette-options' },
-            controls.segment(paletteOptions, prefs.palette, value => { write({ palette: value }) }),
-          ),
+          React.createElement(PalettePicker, { prefs, write }),
           { block: true },
         ),
       },

@@ -261,19 +261,55 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-row-block > .dsh-deepcraft-sett
   padding-right: 0;
 }
 
-/* The four palette choices sit on one line while it holds them and wrap onto
-   the next rather than running past a narrow page (D80). The group's sliding
-   pill covers the chosen item on whichever line it lands
-   (shared/sliding-pill.css). */
+/* The palette cards: one per skin palette plus the host, each tile split into
+   the palette's light and dark halves painted in its own colours (D80). The
+   grid and the active ring are the shared picker tile's (shared/picker-tile.css). */
 body[data-dsh-deepcraft] .dsh-deepcraft-palette-options {
-  display: flex;
   align-self: stretch;
-  min-width: 0;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-palette-options > .dsh-deepcraft-segments {
-  flex: 0 1 auto;
-  flex-wrap: wrap;
+body[data-dsh-deepcraft] .dsh-deepcraft-palette-card {
+  display: flex;
+  flex-direction: column;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-palette-tile {
+  display: flex;
+  aspect-ratio: 16 / 7;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-palette-half {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-palette-sample {
+  font-size: 13px;
+  line-height: 1;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-palette-dots {
+  display: flex;
+  gap: 3px;
+}
+
+body[data-dsh-deepcraft] .dsh-deepcraft-palette-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+/* The host card paints nothing of its own: what the host's colours are is not
+   the skin's to know, so the tile is a neutral hatch over the input surface. */
+body[data-dsh-deepcraft] .dsh-deepcraft-palette-host-tile {
+  color: var(--dsw-alias-label-secondary);
+  background: repeating-linear-gradient(-45deg, var(--dsh-deepcraft-hover-bg) 0 3px, transparent 3px 7px), var(--dsw-specific-input-major);
 }
 
 /* The row title is UI text in the host's row metrics: the sans face, not the

@@ -81,7 +81,7 @@
 
   var palette = document.getElementById('preview-palette')
   var themeButton = document.getElementById('preview-theme')
-  var paletteNames = ['cindy', 'host']
+  var paletteNames = ['cindy', 'ocean', 'ember', 'forest', 'host']
 
   /** The palette the document carries, once the skin has mirrored the prefs. */
   function currentPalette() {

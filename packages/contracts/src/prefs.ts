@@ -30,14 +30,17 @@ export const MOTION_FULL = 'full'
 export const MOTION_MODES = [MOTION_SYSTEM, MOTION_REDUCED, MOTION_FULL] as const
 
 /**
- * Who paints the colours: the skin's Cindy palette, a full light and dark set
- * of its own (theme/tokens.json, D80), or the host's colour tokens left to the
- * host and other theme plugins.
+ * Who paints the colours: one of the skin's four palettes — each a full light
+ * and dark set of its own (theme/tokens.json, D80) — or the host's colour
+ * tokens left to the host and other theme plugins.
  */
 export const PALETTE_CINDY = 'cindy'
+export const PALETTE_OCEAN = 'ocean'
+export const PALETTE_EMBER = 'ember'
+export const PALETTE_FOREST = 'forest'
 export const PALETTE_HOST = 'host'
 /** The skin's own palettes, in the settings page's order; `PALETTE_HOST` follows them. */
-export const SKIN_PALETTES = [PALETTE_CINDY] as const
+export const SKIN_PALETTES = [PALETTE_CINDY, PALETTE_OCEAN, PALETTE_EMBER, PALETTE_FOREST] as const
 export const PALETTES = [...SKIN_PALETTES, PALETTE_HOST] as const
 
 /**
@@ -274,9 +277,10 @@ const LEGACY_BRAND_OFF = 'off'
 
 /**
  * The colour palette a stored configuration means (D80). A value this build
- * knows wins; the host's palette stands; everything else — the palettes this
- * build retired, the old brand's answer and the old claude id — reads as the
- * one palette left.
+ * knows wins — including the palettes a build from the palette-slim era wrote
+ * down before ocean, ember and forest returned — the host's palette stands,
+ * and everything else (the retired claude id, the old brand's answer) reads
+ * as the default.
  */
 function migratePalette(section: Record<string, unknown>) {
   const raw = section.palette

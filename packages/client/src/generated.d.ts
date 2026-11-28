@@ -18,6 +18,16 @@ declare module 'virtual:dsh-deepcraft/generated' {
   /** The bundled wallpapers the settings page offers, by their ids (packages/assets/src/wallpapers/, D72). */
   export const WALLPAPERS: Record<string, { url: string, video: boolean }>
 
+  /** The palette cards' swatch colours, by palette id and theme (theme/tokens.json, D80); every colour a literal, so a card paints the palette it offers rather than the one in force. */
+  export const PALETTE_SWATCHES: Record<string, { light: PaletteSwatchTheme, dark: PaletteSwatchTheme }>
+
+  /** One theme of one palette card: the canvas fill, the sample text ink, and the colour dots. */
+  export interface PaletteSwatchTheme {
+    canvas: string
+    ink: string
+    dots: string[]
+  }
+
   /** The bundled still-sprite mascots the chat pet choice offers, by their ids (packages/assets/src/mascot/). */
   export const PET_SPRITES: Record<string, string>
 }

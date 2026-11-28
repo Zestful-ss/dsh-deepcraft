@@ -28,7 +28,7 @@
  *
  * Usage:
  *   node packages/testing/shoot.cjs --token <launch-token> [--url http://127.0.0.1:3080]
- *     [--palette cindy] [--scene home|conversation] [--session <title>]
+ *     [--palette cindy|ocean|ember|forest] [--scene home|conversation] [--session <title>]
  *
  * The launch token comes from the `dsh web` banner (GUI URL `/?token=…`) or
  * the DSH_WEB_TOKEN env var. Chrome comes from packages/testing/browser.cjs and
@@ -58,6 +58,9 @@ const DEMO_TITLE = 'Markdown rendering tour'
  */
 const CANVAS = {
   cindy: { light: 'rgb(242, 242, 237)', dark: 'rgb(24, 24, 24)' },
+  ocean: { light: 'rgb(252, 252, 251)', dark: 'rgb(32, 36, 39)' },
+  ember: { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)' },
+  forest: { light: 'rgb(252, 252, 251)', dark: 'rgb(20, 20, 19)' },
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -158,7 +161,7 @@ async function captureOnce(page, options, scheme, outFile) {
 async function shoot(options) {
   const palette = options.palette || 'cindy'
   const scene = options.scene || 'home'
-  if (!CANVAS[palette]) throw new Error(`unknown palette "${palette}" (cindy)`)
+  if (!CANVAS[palette]) throw new Error(`unknown palette "${palette}" (${Object.keys(CANVAS).join(', ')})`)
   if (!HEIGHTS[scene]) throw new Error(`unknown scene "${scene}" (home or conversation)`)
   const base = (options.url || 'http://127.0.0.1:3080').replace(/\/+$/, '')
   const out = path.resolve(options.out || path.join(__dirname, '..', '..', 'docs', 'screenshots'))

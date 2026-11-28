@@ -116,12 +116,24 @@
     "en": "Colours"
   },
   "paletteDesc": {
-    "zh": "内置配色或跟随宿主；只换颜色，标识与宠物不变。形状、材质与动效在下面的材质层单独选择。",
-    "en": "The skin's palette or the host's; colours only, leaving the mark and pet alone. Shape, material and motion are the material layer's own choice below."
+    "zh": "悬停卡片即时试色，点击确认；配色只换颜色，标识、宠物与壁纸不变。形状、材质与动效在下面的材质层单独选择。",
+    "en": "Hover a card to try its palette, click to keep it; colours only, leaving the mark, pet and wallpaper alone. Shape, material and motion are the material layer's own choice below."
   },
   "paletteCindy": {
     "zh": "Cindy",
     "en": "Cindy"
+  },
+  "paletteOcean": {
+    "zh": "Ocean",
+    "en": "Ocean"
+  },
+  "paletteEmber": {
+    "zh": "Ember",
+    "en": "Ember"
+  },
+  "paletteForest": {
+    "zh": "Forest",
+    "en": "Forest"
   },
   "paletteHost": {
     "zh": "跟随宿主",

@@ -56,15 +56,13 @@ const readSettingsPage = (page) => page.evaluate((skin) => {
   }
 }, { page: SKIN.page, rows: SKIN.rows, error: SKIN.error })
 
-/** The skin's own palettes, in the settings page's order (contracts/prefs.ts); the host choice follows them. */
-const PALETTES = ['cindy', 'host']
-
-/** Open the Appearance tab and press one palette's choice. */
+/** Press one palette's card; the attribute picks the card, so a new palette's place in the row never moves another's. */
 async function pickPalette(page, palette) {
   await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: SKIN.appearanceTab }).first().click()
   await page.waitForTimeout(200)
-  await page.locator('.dsh-deepcraft-palette-options button').nth(PALETTES.indexOf(palette)).click()
+  await page.locator(`.dsh-deepcraft-palette-card[data-palette="${palette}"]`).click()
 }
+
 
 function remoteSettingsScenario({ check }) {
   return {

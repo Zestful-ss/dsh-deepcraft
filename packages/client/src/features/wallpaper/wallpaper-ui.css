@@ -104,31 +104,9 @@ body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-value {
   font-variant-numeric: tabular-nums;
 }
 
-body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-builtin {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 8px;
-  width: 100%;
-}
-
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-builtin-item {
-  font-size: 11px;
-  line-height: 1.2;
-  padding: 0;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: border-color var(--dsh-deepcraft-duration-feedback) var(--dsh-deepcraft-ease-standard),
-              box-shadow var(--dsh-deepcraft-duration-feedback) var(--dsh-deepcraft-ease-standard);
-}
-
-body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-builtin-item:hover:not([data-active]) {
-  border-color: var(--dsw-alias-border-l3);
-}
-
-body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-builtin-item[data-active] {
-  border-color: var(--dsh-deepcraft-accent);
-  box-shadow: inset 0 0 0 1px var(--dsh-deepcraft-accent);
 }
 
 body[data-dsh-deepcraft] .dsh-deepcraft-settings-wallpaper-builtin-item img,

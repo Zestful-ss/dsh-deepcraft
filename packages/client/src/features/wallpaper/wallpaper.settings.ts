@@ -230,7 +230,7 @@ function WallpaperBuiltinControl(props: SettingsRowView) {
   const active = props.prefs.wallpaperBuiltinId
   return React.createElement(
     'div',
-    { className: 'dsh-deepcraft-settings-wallpaper-builtin' },
+    { className: 'dsh-deepcraft-picker-tile-grid dsh-deepcraft-settings-wallpaper-builtin' },
     BUILTIN_WALLPAPERS.map(id => {
       const wallpaper = WALLPAPERS[id]
       if (wallpaper === undefined) return null
@@ -239,7 +239,7 @@ function WallpaperBuiltinControl(props: SettingsRowView) {
         {
           key: id,
           type: 'button',
-          className: 'dsh-deepcraft-settings-wallpaper-button dsh-deepcraft-settings-wallpaper-builtin-item',
+          className: 'dsh-deepcraft-picker-tile dsh-deepcraft-settings-wallpaper-builtin-item',
           disabled: props.disabled,
           'data-active': id === active ? '' : undefined,
           'aria-pressed': id === active ? 'true' : 'false',
@@ -249,7 +249,7 @@ function WallpaperBuiltinControl(props: SettingsRowView) {
         wallpaper.video
           ? React.createElement('video', { src: wallpaper.url, muted: true, playsInline: true, preload: 'metadata' })
           : React.createElement('img', { src: wallpaper.url, alt: '' }),
-        React.createElement('span', { className: 'dsh-deepcraft-settings-wallpaper-builtin-name' }, copy(`wallpaperBuiltin_${id}` as keyof typeof COPY)),
+        React.createElement('span', { className: 'dsh-deepcraft-picker-tile-name' }, copy(`wallpaperBuiltin_${id}` as keyof typeof COPY)),
       )
     }),
   )

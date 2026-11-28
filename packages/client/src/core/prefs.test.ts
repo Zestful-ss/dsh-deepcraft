@@ -21,16 +21,16 @@ test('a choice outside its set reads as its default', () => {
   expect(normalizePrefs({ motion: 1 }).motion).toBe(PREF_DEFAULTS.motion)
 })
 
-test('the older brand and palette choices land on the one palette (D80)', () => {
+test('a stored palette this build knows wins; the older brand ids and retired palettes read as the default (D80)', () => {
   expect(normalizePrefs({ brand: 'off', palette: 'claude' }).palette).toBe('cindy')
   expect(normalizePrefs({ brand: 'deepseek' }).palette).toBe('cindy')
   expect(normalizePrefs({ brand: 'claude' }).palette).toBe('cindy')
   expect(normalizePrefs({ brand: 'anthropic' }).palette).toBe('cindy')
   expect(normalizePrefs({ palette: 'claude' }).palette).toBe('cindy')
   expect(normalizePrefs({ palette: 'host' }).palette).toBe('host')
-  expect(normalizePrefs({ palette: 'forest' }).palette).toBe('cindy')
-  expect(normalizePrefs({ palette: 'ocean' }).palette).toBe('cindy')
-  expect(normalizePrefs({ palette: 'ember' }).palette).toBe('cindy')
+  expect(normalizePrefs({ palette: 'forest' }).palette).toBe('forest')
+  expect(normalizePrefs({ palette: 'ocean' }).palette).toBe('ocean')
+  expect(normalizePrefs({ palette: 'ember' }).palette).toBe('ember')
   expect(normalizePrefs({ palette: 'cindy' }).palette).toBe('cindy')
   expect(normalizePrefs({}).palette).toBe('cindy')
 })

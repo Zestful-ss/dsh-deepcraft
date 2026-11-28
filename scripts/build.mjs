@@ -56,7 +56,7 @@ import { openBuildCache } from './build-cache.mjs'
 import { checkContracts, checkCycles, checkDependencies, checkListed, checkManifests, checkMotionSources, checkTypes } from './build-checks.mjs'
 import { chunkFiles, chunkModules, ownModuleIds, splitChunks } from './chunks.mjs'
 import { buildStylesheet } from './css.mjs'
-import { TOKEN_SHEET, loadTokens, writeLayerTable, writeMotionTable, writeTokenTable } from './shared/design-tokens.mjs'
+import { TOKEN_SHEET, loadTokens, paletteSwatches, writeLayerTable, writeMotionTable, writeTokenTable } from './shared/design-tokens.mjs'
 import { motionValues } from './shared/motion-tokens.mjs'
 import { readSourceTree } from './source-tree.mjs'
 import { MODEL_COPY, validateModelCopy } from './model-copy.mjs'
@@ -109,6 +109,8 @@ const THEME_SHEETS = [
   { file: 'shared/segment-control.css', rank: 38 },
   { file: 'shared/sliding-pill.css', rank: 40 },
   { file: 'shared/masked.css', rank: 45 },
+  // The picker tile grid the palette cards and the wallpaper set share.
+  { file: 'shared/picker-tile.css', rank: 48 },
   { file: 'theme/chrome.css', rank: 50 },
   { file: 'theme/material.css', rank: 55 },
   { file: 'theme/hero.css', rank: 70 },
@@ -408,7 +410,7 @@ async function main() {
   const wallpapers = loadWallpapers(plan, claimed)
   checkClaimed(plan, claimed)
 
-  const tokenDoc = loadTokens(SRC)
+  const tokenDoc = loadTokens(SRC, CONSTANTS.gates.palette.ids)
   const fontCatalog = loadModule('packages/client/src/theme/fonts.ts')
   const css = buildStylesheet({ sheets, srcDir: SRC, sources, tokenDoc, fonts: fontCatalog, gates: CONSTANTS.gates, images })
   if (writeTokenTable(STYLE_GUIDE, tokenDoc, CONSTANTS.gates.palette.ids)) console.log('built docs/STYLE.md token table from packages/client/src/theme/tokens.json')
@@ -440,6 +442,8 @@ async function main() {
     WALLPAPERS: wallpapers,
     // The bundled still-sprite mascots, by their ids (packages/assets/src/mascot/).
     PET_SPRITES: petSprites,
+    // The palette cards' swatch colours the settings page's Colours row paints, by palette id and theme.
+    PALETTE_SWATCHES: paletteSwatches(tokenDoc, CONSTANTS.gates.palette.ids),
   })
 
   /**
