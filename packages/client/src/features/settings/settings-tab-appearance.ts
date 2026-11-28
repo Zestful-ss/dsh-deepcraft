@@ -71,6 +71,11 @@ function PalettePicker(props: { prefs: Prefs, write: SettingsView['write'], disa
     if (previewing.current) document.body.setAttribute(PALETTE_ATTR, stored.current)
   }, [])
   const restore = () => {
+    // Only a hover that never became a pick hands the document back: a
+    // committed pick's mirrored attribute is newer than the stored value this
+    // render still holds, and writing it back would paint the page in the
+    // palette the reader just left.
+    if (!previewing.current) return
     previewing.current = false
     document.body.setAttribute(PALETTE_ATTR, stored.current)
   }
