@@ -132,9 +132,9 @@ async function waitForGuest(page, id) {
   return readGuest(page)
 }
 
-/** The palette choices on the Appearance tab, in the settings page's order. */
-async function pickPalette(page, at) {
-  await page.locator('.dsh-deepcraft-palette-options button').nth(at).click()
+/** Press one palette's card on the Appearance tab, picked by its attribute so a new card never moves another's. */
+async function pickPalette(page, palette) {
+  await page.locator(`.dsh-deepcraft-palette-card[data-palette="${palette}"]`).click()
   await page.waitForTimeout(300)
 }
 
@@ -175,11 +175,11 @@ function petdexScenario({ check }) {
 
       // The palettes change colours alone: the same guest stays through both.
       await openSettings(page)
-      await pickPalette(page, 1)
+      await pickPalette(page, 'host')
       await openHome(page, url)
       read.hostPalette = await waitForGuest(page, firstId)
       await openSettings(page)
-      await pickPalette(page, 0)
+      await pickPalette(page, 'cindy')
       await openHome(page, url)
       read.backPalette = await waitForGuest(page, firstId)
 

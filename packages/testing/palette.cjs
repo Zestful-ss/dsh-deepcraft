@@ -103,7 +103,7 @@ function paletteScenario({ check }) {
     deadlineMs: 360000,
     async beforeSend({ page, url }) {
       read.palettes = {}
-      await openSettings(page)
+      await openSkinSettings(page)
       await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: SKIN.appearance }).first().click()
       read.mascotChoices = await page.locator('.dsh-deepcraft-settings-row').filter({ has: page.locator('.dsh-deepcraft-settings-row-title').filter({ hasText: /^(聊天框宠物|Chat pet)$/ }) }).first()
         .getByRole('button').allTextContents()
@@ -131,7 +131,7 @@ function paletteScenario({ check }) {
       })
       await page.reload({ waitUntil: 'domcontentloaded' })
       await waitForSkin(page)
-      await openSettings(page)
+      await openSkinSettings(page)
       await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: SKIN.appearance }).first().click()
       for (const id of ['cindy', 'ocean', 'ember', 'forest']) {
         await pickPalette(page, id)
@@ -256,13 +256,13 @@ function legacyScenario(name, { check }) {
     profilePatch: spec.profile,
     deadlineMs: 360000,
     async beforeSend({ page, url }) {
-      await openSettings(page)
+      await openSkinSettings(page)
       // A complete package through the host half's own import route, so the
       // migrated choice names something that really exists.
       read.imported = await upload(page, packageZip(spec.id, name === 'claude' ? 5 : 6))
       await page.reload({ waitUntil: 'domcontentloaded' })
       await waitForSkin(page)
-      await openSettings(page)
+      await openSkinSettings(page)
       await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: SKIN.appearance }).first().click()
       read.paletteAttr = await page.evaluate(() => document.body.getAttribute('data-dsh-deepcraft-palette'))
       read.pet = await page.locator('.dsh-deepcraft-settings-row .dsh-deepcraft-settings-pet-select').first().inputValue()

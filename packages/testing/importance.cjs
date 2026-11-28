@@ -167,7 +167,7 @@ function importanceScenario(lane) {
     const label = el.textContent?.trim() ?? ''
     const systemMotion = () => (matchMedia('(prefers-reduced-motion: reduce)').matches ? 'reduced' : 'full')
     const segments = [
-      [/^(配色|Colours)$/, 'data-dsh-deepcraft-palette', [[/^Cindy$/, 'cindy'], [/^(跟随宿主|Follow the host)$/, 'host']]],
+      [/^(配色|Colours)$/, 'data-dsh-deepcraft-palette', [[/Cindy$/, 'cindy'], [/(跟随宿主|Follow the host)$/, 'host']]],
       [/^(动画效果|Animation)$/, 'data-dsh-deepcraft-motion', [[/^(随系统|Follow the system)$/, systemMotion], [/^(减弱|Reduced)$/, 'reduced'], [/^(总是|Always)$/, 'full']]],
       [/^(聊天框宠物|Chat pet)$/, 'data-dsh-deepcraft-mascot', [[/^(Petdex 宠物|Petdex pet)$/, 'petdex'], [/^(关闭|Off)$/, 'off']]],
       [/^(圆角|Corners)$/, 'data-dsh-deepcraft-material-radius', [[/^(参考档位|Reference scale)$/, 'reference'], [/^(跟随宿主|Follow the host)$/, 'host']]],
@@ -485,7 +485,7 @@ function importanceScenario(lane) {
       await uploadPng(page, WALLPAPER_FILE_ROUTE)
       await openSkinSettings(page)
       await appearanceTab(page)
-      await rowTitled(page, /^(配色|Colours)$/).getByRole('button', { name: /^Cindy$/ }).click()
+      await rowTitled(page, /^(配色|Colours)$/).locator('.dsh-deepcraft-palette-card[data-palette="cindy"]').click()
       await page.waitForFunction(() => document.body.getAttribute('data-dsh-deepcraft-palette') === 'cindy', undefined, { timeout: 5000 })
       const wallpaperRow = rowTitled(page, /^(壁纸|Wallpaper)$/)
       const customButton = wallpaperRow.getByRole('button', { name: /^(自定义|Custom)$/ })
