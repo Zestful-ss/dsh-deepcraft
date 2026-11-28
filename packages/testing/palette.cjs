@@ -72,12 +72,18 @@ async function readBoth(page) {
   return { light, dark }
 }
 
-/** Open the Appearance tab, press one palette's card and wait for the page to carry it. */
+/** Wait until no preference write is in flight: only then does a mirrored attribute mean a settled value. */
+async function waitForSaved(page) {
+  await page.waitForFunction(() => !document.body.hasAttribute('data-dsh-deepcraft-saving'), null, { timeout: 15000 })
+}
+
+/** Open the Appearance tab, press one palette's card and wait for the write to settle. */
 async function pickPalette(page, id) {
   await page.locator('.dsh-deepcraft-settings-tabs [role="tab"]').filter({ hasText: SKIN.appearance }).first().click()
   await page.waitForTimeout(200)
   await page.locator(`.dsh-deepcraft-palette-card[data-palette="${id}"]`).click()
   await page.waitForFunction((wanted) => document.body.getAttribute('data-dsh-deepcraft-palette') === wanted, id, { timeout: 15000 })
+  await waitForSaved(page)
   await page.waitForTimeout(150)
 }
 
@@ -141,6 +147,7 @@ function paletteScenario({ check }) {
       await pickPalette(page, 'cindy')
       await setAccentColor(page, '#1a7f5a')
       await page.waitForFunction(() => document.body.hasAttribute('data-dsh-deepcraft-accent'), null, { timeout: 15000 })
+      await waitForSaved(page)
       read.tinted = { cindy: await readPage(page) }
       // The host palette takes none of the override; back on a skin palette the
       // stored colour returns, and the reset hands the palette's own back.
@@ -150,12 +157,14 @@ function paletteScenario({ check }) {
       await pickPalette(page, 'cindy')
       read.tinted.back = await readPage(page)
       await page.locator(SKIN.accentReset).click()
-      await page.waitForFunction(() => !document.body.hasAttribute('data-dsh-deepcraft-accent'), null, { timeout: 15000 })
+      await waitForSaved(page)
       read.reset = await readPage(page)
       await page.keyboard.press('Escape')
       await page.waitForTimeout(300)
 
-      // The home page, then a conversation: the identity stands on both.
+      // The home page, then a conversation: the identity stands on both — read
+      // only once every write the walk queued has settled into the store.
+      await waitForSaved(page)
       await page.goto(new URL('/', url).href)
       await waitForSkin(page)
       await page.waitForTimeout(600)

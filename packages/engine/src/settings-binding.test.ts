@@ -130,17 +130,21 @@ test('a field the Config does not carry is released when set() refuses it', asyn
   expect(seen()).toEqual({ turnNav: true })
 })
 
-test('an earlier write settling does not drop a later write to the same field', async () => {
+test('a save waits for the one before it, and neither drops the other', async () => {
   const { host, binding, seen } = boundHost({ turnNav: true })
   const first = binding.save({ turnNav: false })
   const second = binding.save({ turnNav: true })
   await sent()
+  // The second write has not reached the form yet: two writes crossing at once
+  // settle out of order on a slow store, and the loser's re-read paints the
+  // document in the value the reader already changed away from.
   host.settle(true)
   await first
   // The document holds the first write's value while the second still crosses:
   // the reader's latest choice stands until that one answers.
   host.publish()
   expect(seen()).toEqual({ turnNav: true })
+  await sent()
   host.settle(true)
   await second
   expect(seen()).toEqual({ turnNav: true })

@@ -52,6 +52,8 @@ export function createSettingsBinding(options: SettingsBindingOptions) {
   const held = new Map<string, { value: unknown, generation: number }>()
   /** Writes of ours so far: a field is released by the write that holds it last. */
   let holds = 0
+  /** The write queue's tail: every save runs after the one before it settles. */
+  let writes: Promise<void> = Promise.resolve()
 
   /**
    * Namespaces to try, best first: loader entry id, then the package's own
@@ -165,9 +167,12 @@ export function createSettingsBinding(options: SettingsBindingOptions) {
     /**
      * Write a partial change through the official form: one `set()` per field,
      * chained, because the controller owns the write queue and takes its
-     * revision fence from the last settlement. The fields stay held until the
-     * answer lands, and the host's answer is read back then, so a refusal ends
-     * on the stored value rather than on the value we hoped for.
+     * revision fence from the last settlement. Saves themselves are serialized
+     * here too: two writes in flight over the same fields settle out of order
+     * on a slow store, and the loser's stale re-read paints the document in the
+     * value the reader already changed away from. The fields stay held until
+     * the answer lands, and the host's answer is read back then, so a refusal
+     * ends on the stored value rather than on the value we hoped for.
      *
      * @returns a promise for whether the host accepted every field, or null
      *          when the form does not carry values yet.
@@ -192,25 +197,30 @@ export function createSettingsBinding(options: SettingsBindingOptions) {
         // the chain answers refused and the re-read restores the stored value.
         return pending.then((ok: unknown) => ok === true, () => false)
       }
-      let run = Promise.resolve(true)
-      for (const key of Object.keys(patch)) run = run.then(step(key))
-      return run.then(
-        accepted => {
-          release(generation)
-          // Refused (a stale revision, or a field this Config does not carry):
-          // re-read rather than guess.
-          read()
-          return accepted
-        },
-        error => {
-          // A storage fault mid-write rejects `set()`: release the held fields
-          // too, or every read keeps overlaying the value we hoped for (the
-          // same stale-write stomp `held` exists to prevent, made permanent).
-          release(generation)
-          read()
-          throw error
-        },
-      )
+      const write = () => {
+        let run: Promise<boolean> = Promise.resolve(true)
+        for (const key of Object.keys(patch)) run = run.then(step(key))
+        return run.then(
+          accepted => {
+            release(generation)
+            // Refused (a stale revision, or a field this Config does not carry):
+            // re-read rather than guess.
+            read()
+            return accepted
+          },
+          error => {
+            // A storage fault mid-write rejects `set()`: release the held fields
+            // too, or every read keeps overlaying the value we hoped for (the
+            // same stale-write stomp `held` exists to prevent, made permanent).
+            release(generation)
+            read()
+            throw error
+          },
+        )
+      }
+      const settle = writes.then(write, write)
+      writes = settle.then(() => undefined, () => undefined)
+      return settle
     },
 
     /** Release the form and directory subscriptions this binding opened. */

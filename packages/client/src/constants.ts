@@ -74,6 +74,8 @@ export const MOTION_ATTR = 'data-dsh-deepcraft-motion'
 
 /** The document attributes the choices below resolve onto; the values themselves are in the table (contracts/prefs.ts). */
 export const PALETTE_ATTR = 'data-dsh-deepcraft-palette'
+/** Present while a preference write is in flight: the document's own attributes mirror only settled values. */
+export const SAVING_ATTR = 'data-dsh-deepcraft-saving'
 export { FONT_CODE_ATTR, FONT_PROSE_ATTR, FONT_UI_ATTR } from './theme/fonts'
 export const MASCOT_ATTR = 'data-dsh-deepcraft-mascot'
 /**

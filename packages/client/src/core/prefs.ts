@@ -1,4 +1,4 @@
-import { BACKGROUND_OPACITY_ATTR, BACKGROUND_OPACITY_VAR, FONT_CODE_ATTR, FONT_PROSE_ATTR, FONT_UI_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_PETDEX, MATERIAL_AMBIENT_ATTR, MATERIAL_GLASS_ATTR, MATERIAL_MOTION_ATTR, MATERIAL_RADIUS_ATTR, MATERIAL_SHADOW_ATTR, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PACKAGE_NAME, PALETTE_ATTR, SETTINGS_ENTRY_FALLBACK, WALLPAPER_ATTR, WALLPAPER_LITE_ATTR } from '../constants'
+import { BACKGROUND_OPACITY_ATTR, BACKGROUND_OPACITY_VAR, FONT_CODE_ATTR, FONT_PROSE_ATTR, FONT_UI_ATTR, MASCOT_ATTR, MASCOT_BRAND, MASCOT_PETDEX, MATERIAL_AMBIENT_ATTR, MATERIAL_GLASS_ATTR, MATERIAL_MOTION_ATTR, MATERIAL_RADIUS_ATTR, MATERIAL_SHADOW_ATTR, MOTION_ATTR, MOTION_FULL, MOTION_REDUCED, PACKAGE_NAME, PALETTE_ATTR, SAVING_ATTR, SETTINGS_ENTRY_FALLBACK, WALLPAPER_ATTR, WALLPAPER_LITE_ATTR } from '../constants'
 import { FONT_CUSTOM } from '@dsh-deepcraft/contracts/prefs'
 import { FONT_ROLES } from '../theme/fonts'
 import { customFontStack } from '../shared/fonts'
@@ -200,12 +200,33 @@ export function resolveMascot(current: Prefs) {
   return MASCOT_PETDEX
 }
 
+/** Writes in flight: while any stands, the document carries `SAVING_ATTR` so a reader can wait for every mirror to mean a settled value. */
+let saving = 0
+
 /**
- * Write a partial preference change through the official form.
+ * Write a partial preference change through the official form. The document
+ * carries `SAVING_ATTR` from the call until the write settles — the mirrored
+ * attributes mean a settled value only once it is gone, which is what a test
+ * waiting on a write reads.
  *
  * @returns a promise for the resolved preferences, or null when the form does
  *          not carry values yet or refused the change.
  */
 export function savePrefs(patch: Partial<Prefs>): Promise<Prefs | null> {
-  return binding.save(patch).then(accepted => accepted === null || accepted === false ? null : prefs)
+  saving += 1
+  document.body.setAttribute(SAVING_ATTR, '')
+  const settle = () => {
+    saving -= 1
+    if (saving === 0) document.body.removeAttribute(SAVING_ATTR)
+  }
+  return binding.save(patch).then(
+    accepted => {
+      settle()
+      return accepted === null || accepted === false ? null : prefs
+    },
+    error => {
+      settle()
+      throw error
+    },
+  )
 }
