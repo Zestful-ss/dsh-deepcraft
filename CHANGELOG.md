@@ -4,9 +4,11 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 ## [Unreleased]
 
-[中文](#cn-unreleased) | [English](#en-unreleased)
+## [0.44.0] - 2026-11-28
 
-<h3 id="cn-unreleased">新增功能</h3>
+[中文](#cn-0.44.0) | [English](#en-0.44.0)
+
+<h3 id="cn-0.44.0">新增功能</h3>
 
 - 配色扩展为 Cindy、Ocean、Ember、Forest 四套并各自独立携带亮暗双色，与壁纸自由组合：外观页的配色行改为卡片网格，每张卡片并排画出该套配色的浅色与深色画布、强调与功能色样，悬停即时预览整页、点击提交，移出网格即还原；旧版品牌选择 ocean、ember、forest 的存档自动迁移到同名配色。
 
@@ -14,7 +16,7 @@ All notable changes to `dsh-claude-style` are documented here, newest first.
 
 - 修复宿主发布后 Windows 云端通道整体卡死的流程缺陷：宿主版本更新使安装缓存键失效，而缓存按分支隔离、通道内的全新安装在运行器上需要十五分钟以上，重试一次就必然超出作业时限，缓存因而永远无法写进主干；新增焐热工作流在日常调度中以免除时限压力的一次安装写入缓存并在写入前验证宿主可用，通道内的安装改为单次尝试。
 
-<h3 id="en-unreleased">New Features</h3>
+<h3 id="en-0.44.0">New Features</h3>
 
 - The palette grows to four independent schemes — Cindy, Ocean, Ember and Forest — each carrying its own light and dark pair and combining freely with the wallpaper: the Appearance tab's colour row becomes a grid of cards, each painting that palette's light and dark canvases with its accent and functional colours side by side, hovering one previews the whole page at once, clicking commits it, and leaving the grid restores the stored choice; profiles holding the retired brand choices ocean, ember or forest migrate to the palettes of the same names.
 

@@ -1,8 +1,0 @@
-{
-  "at": "2026-11-28",
-  "group": "new",
-  "order": 0,
-  "external": false,
-  "zh": "配色扩展为 Cindy、Ocean、Ember、Forest 四套并各自独立携带亮暗双色，与壁纸自由组合：外观页的配色行改为卡片网格，每张卡片并排画出该套配色的浅色与深色画布、强调与功能色样，悬停即时预览整页、点击提交，移出网格即还原；旧版品牌选择 ocean、ember、forest 的存档自动迁移到同名配色。",
-  "en": "The palette grows to four independent schemes — Cindy, Ocean, Ember and Forest — each carrying its own light and dark pair and combining freely with the wallpaper: the Appearance tab's colour row becomes a grid of cards, each painting that palette's light and dark canvases with its accent and functional colours side by side, hovering one previews the whole page at once, clicking commits it, and leaving the grid restores the stored choice; profiles holding the retired brand choices ocean, ember or forest migrate to the palettes of the same names."
-}
